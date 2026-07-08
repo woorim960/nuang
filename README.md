@@ -10,6 +10,7 @@
 | 2 | [STEP_02_DECISION_REGISTER.md](./01_project_control/STEP_02_DECISION_REGISTER.md) | 활성 결정 정본 |
 | 3 | [COLLABORATION.md](./COLLABORATION.md) | 협업·핸드오프 규칙 |
 | 4 | [02_app/nuang-web/README.md](./02_app/nuang-web/README.md) | 앱 실행·검증 |
+| 5 | [02_app/nuang-web/AGENTS.md](./02_app/nuang-web/AGENTS.md) | 앱 코드 작업 전 참고 규칙 |
 
 ## 저장소 구조
 
@@ -18,8 +19,6 @@
 ├── NUANG_PROJECT_MASTER_PLAN.md   # 100단계 마스터 플랜
 ├── README.md                      # 이 파일
 ├── COLLABORATION.md               # 협업 가이드
-├── AGENTS.md                      # AI 에이전트 온보딩
-├── CURSOR_MASTER_BOOTSTRAP_PROMPT.md
 ├── 00_source_packages/            # 원본 Stage 패키지 (수정 금지)
 ├── 01_project_control/            # STEP 문서·결정·게이트
 └── 02_app/nuang-web/              # Next.js 앱
@@ -40,12 +39,20 @@ npm run dev
 npm run qa:precredential
 ```
 
-## 현재 상태 (2026-07-04)
+## 현재 상태 (2026-07-09)
 
-- **완료:** Step 1 ~ 114
-- **다음 후보:** Step 115 (커뮤니티 피드 정렬·필터 preview 등)
+- **완료:** Step 1 ~ 177
+- **다음 후보:** Step 146 (실제 Supabase/Auth 연결) — credential 투입 후 진행
 - **출시:** `NO-GO` — credential·법률·문항 승인 전
 - **Blocker:** Supabase/OAuth credential (Step 46)
+
+## GitHub 운영 원칙
+
+- 원격 저장소: [woorim960/nuang](https://github.com/woorim960/nuang)
+- `.env`, `.env.local`, Supabase service role key, OAuth secret은 커밋하지 않는다.
+- 예시 환경 파일은 `02_app/nuang-web/.env.example`만 추적한다.
+- `node_modules`, `.next`, coverage, test output은 Git에 올리지 않는다.
+- `00_source_packages`는 원본 보존 영역이므로 직접 수정하지 않는다.
 
 ## 핵심 원칙
 
@@ -57,5 +64,4 @@ npm run qa:precredential
 
 ## 문의·핸드오프
 
-새 개발자·AI는 [CURSOR_MASTER_BOOTSTRAP_PROMPT.md](./CURSOR_MASTER_BOOTSTRAP_PROMPT.md)와 [COLLABORATION.md](./COLLABORATION.md)를 먼저 읽으세요.
-# nuang
+새 개발자·AI는 [COLLABORATION.md](./COLLABORATION.md)와 [02_app/nuang-web/AGENTS.md](./02_app/nuang-web/AGENTS.md)를 먼저 읽으세요.
