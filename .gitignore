@@ -9,6 +9,14 @@ node_modules/
 !.env.example
 !.env.*.example
 
+# Private NUANG planning/source materials
+00_source_packages/
+01_project_control/
+NUANG_PROJECT_MASTER_PLAN.md
+COLLABORATION.md
+.private/
+private/
+
 # Build output and caches
 .next/
 out/
