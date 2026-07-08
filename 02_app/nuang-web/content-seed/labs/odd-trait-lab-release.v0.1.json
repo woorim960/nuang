@@ -1,0 +1,58 @@
+{
+  "$schema": "nuang.lab.release.v0.1",
+  "release_id": "ODD_TRAIT_LAB_RELEASE_v0.1",
+  "release_version": "0.1",
+  "result_copy_version": "odd-trait-lab-result-copy.v0.1",
+  "status": "provisional_internal",
+  "updated_at": "2026-07-03",
+  "policy": {
+    "allowed_sensitivity_levels": ["S1", "S2"],
+    "excluded_topics": [
+      "suicide",
+      "self_harm",
+      "depression",
+      "adhd",
+      "addiction",
+      "trauma",
+      "psychopathy",
+      "violence_risk",
+      "sexual_orientation",
+      "drug_use"
+    ],
+    "core_map_impact": "none",
+    "server_upload": false,
+    "share_enabled": false
+  },
+  "assessments": [
+    {
+      "slug": "conversation-temperature",
+      "title": "대화 온도 실험",
+      "card_title": "관계 대화 스타일",
+      "sensitivity": "S1",
+      "estimated_minutes": 2,
+      "question_count": 6,
+      "profile_ids": ["spark", "warmup", "draft"],
+      "review_status": "internal_qa"
+    },
+    {
+      "slug": "recharge-ritual",
+      "title": "충전 루틴 실험",
+      "card_title": "휴식과 회복 방식",
+      "sensitivity": "S1",
+      "estimated_minutes": 2,
+      "question_count": 6,
+      "profile_ids": ["quiet", "sensory", "together"],
+      "review_status": "internal_qa"
+    },
+    {
+      "slug": "conflict-repair",
+      "title": "갈등 회복 실험",
+      "card_title": "갈등 뒤 회복 방식",
+      "sensitivity": "S2",
+      "estimated_minutes": 3,
+      "question_count": 6,
+      "profile_ids": ["quick-check", "time-space", "meaning-bridge"],
+      "review_status": "safety_copy_required"
+    }
+  ]
+}
