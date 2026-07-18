@@ -37,6 +37,13 @@ describe("HomeDashboard", () => {
         name: "서로 다른 사람과 편하게 지내는 방법",
       }),
     ).toBeInTheDocument();
+    expect(screen.getByText("오늘 만나는 성향")).toBeInTheDocument();
+    const profileLink = await screen.findByRole("link", {
+      name: /성향지도에서 더 알아보기/,
+    });
+    expect(profileLink.getAttribute("href")).toMatch(
+      /^\/map\?code=[EI][RN][GA][KM][CQ]&from=home$/,
+    );
     expect(screen.getByText("지금 나누는 이야기")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "피드에서 더 보기" }),

@@ -2,7 +2,7 @@
 
 import { ArrowRight, LockKeyhole, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { FeedPollCard } from "@/features/feed/FeedPollCard";
 import {
@@ -16,6 +16,10 @@ import {
   type HomeHeroModel,
   type HomeResultModel,
 } from "@/features/home/home-dashboard-model";
+import {
+  type CandidateProfileDefinition,
+  candidateProfileDefinitions,
+} from "@/features/nuang-code/candidate-profile-names";
 import styles from "./HomeDashboard.module.css";
 
 type HomeDashboardProps = {
@@ -27,6 +31,11 @@ export function HomeDashboard({
 }: HomeDashboardProps = {}) {
   const [attempts, setAttempts] = useState<LocalAssessmentAttempt[]>([]);
   const [loaded, setLoaded] = useState(false);
+  const featuredProfile = useSyncExternalStore(
+    subscribeToFeaturedProfile,
+    getFeaturedProfileSnapshot,
+    getServerFeaturedProfileSnapshot,
+  );
 
   useEffect(() => {
     let isMounted = true;
@@ -63,6 +72,8 @@ export function HomeDashboard({
       </header>
 
       {loaded ? <HomeHero hero={model.hero} /> : <HomeHeroSkeleton />}
+
+      <HomeProfileDiscovery profile={featuredProfile} />
 
       {dailyPlay ? <HomeDailyPlay item={dailyPlay} /> : null}
 
@@ -278,6 +289,59 @@ function HomeHeroSkeleton() {
   );
 }
 
+function HomeProfileDiscovery({
+  profile,
+}: {
+  profile: CandidateProfileDefinition | null;
+}) {
+  return (
+    <section className={styles.section}>
+      <SectionHeading
+        description="32가지 성향 중 하나를 가볍게 둘러보세요."
+        title="오늘 만나는 성향"
+      />
+      {profile ? (
+        <Link
+          aria-label={`${profile.accessibleName} 성향지도에서 더 알아보기`}
+          className={styles.profileDiscovery}
+          href={`/map?code=${profile.code}&from=home`}
+        >
+          <div className={styles.profileDiscoveryTop}>
+            <span className={styles.profilePreviewLabel}>성향 미리보기</span>
+            <p
+              aria-label={`뉴앙 코드 ${profile.code}`}
+              className={styles.profileCode}
+            >
+              {profile.code.split("").map((letter, index) => (
+                <span aria-hidden="true" key={`${letter}-${index}`}>
+                  {letter}
+                </span>
+              ))}
+            </p>
+          </div>
+          <h3>{profile.displayName}</h3>
+          <p className={styles.profileSummary}>{profile.overview[0].text}</p>
+          <div aria-label="성향 핵심 키워드" className={styles.profileTokens}>
+            {profile.codeTokens.map((token) => (
+              <span key={token}>{token}</span>
+            ))}
+          </div>
+          <span className={styles.profileDiscoveryAction}>
+            성향지도에서 더 알아보기
+            <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
+          </span>
+        </Link>
+      ) : (
+        <div
+          aria-busy="true"
+          aria-label="오늘의 성향을 고르는 중"
+          className={`${styles.profileDiscovery} ${styles.profileDiscoverySkeleton}`}
+        />
+      )}
+    </section>
+  );
+}
+
 function HomeDailyPlay({ item }: { item: FeedItem }) {
   return (
     <section className={styles.section}>
@@ -388,4 +452,62 @@ function getFeedKindLabel(kind: FeedItem["kind"]) {
   if (kind === "balance_game") return "둘 중 하나를 골라보세요";
   if (kind === "daily_mood") return "지금 내 모습은 어느 쪽인가요?";
   return "한 문장으로 생각해 봐요";
+}
+
+function selectFeaturedProfile() {
+  const profiles = Object.values(candidateProfileDefinitions);
+  const dateKey = new Date().toISOString().slice(0, 10);
+  const storageKey = `nuang:home:featured-profile:${dateKey}`;
+
+  try {
+    const storedCode = window.sessionStorage.getItem(storageKey);
+    if (storedCode && candidateProfileDefinitions[storedCode]) {
+      return candidateProfileDefinitions[storedCode];
+    }
+  } catch {
+    // Storage can be unavailable in privacy-restricted browsers.
+  }
+
+  const index = getRandomIndex(profiles.length);
+  const profile = profiles[index] ?? profiles[0];
+
+  if (!profile) return null;
+
+  try {
+    window.sessionStorage.setItem(storageKey, profile.code);
+  } catch {
+    // The preview still works when storage cannot be written.
+  }
+
+  return profile;
+}
+
+let cachedFeaturedProfile: CandidateProfileDefinition | null | undefined;
+
+function subscribeToFeaturedProfile() {
+  return () => undefined;
+}
+
+function getFeaturedProfileSnapshot() {
+  if (cachedFeaturedProfile === undefined) {
+    cachedFeaturedProfile = selectFeaturedProfile();
+  }
+
+  return cachedFeaturedProfile;
+}
+
+function getServerFeaturedProfileSnapshot() {
+  return null;
+}
+
+function getRandomIndex(length: number) {
+  if (length <= 1) return 0;
+
+  if (typeof window.crypto?.getRandomValues === "function") {
+    const value = new Uint32Array(1);
+    window.crypto.getRandomValues(value);
+    return value[0] % length;
+  }
+
+  return Math.floor(Math.random() * length);
 }

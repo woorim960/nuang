@@ -228,6 +228,7 @@
 
 .primaryAction:focus-visible,
 .textAction:focus-visible,
+.profileDiscovery:focus-visible,
 .playLink:focus-visible,
 .conversation:focus-visible,
 .sectionHeading a:focus-visible,
@@ -275,6 +276,144 @@
   color: #5d43bd;
   font-size: 0.75rem;
   font-weight: 720;
+}
+
+.profileDiscovery {
+  position: relative;
+  display: block;
+  min-height: 244px;
+  padding: 1.2rem;
+  overflow: hidden;
+  border: 1px solid #dfe8f2;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 92% 8%, rgb(138 193 219 / 22%), transparent 34%),
+    linear-gradient(145deg, #f8fbff 0%, #f6f3ff 100%);
+  color: #252230;
+  box-shadow: 0 14px 34px rgb(62 73 113 / 8%);
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    transform 140ms ease;
+  animation: discovery-in 440ms 80ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.profileDiscovery::after {
+  position: absolute;
+  top: -2.5rem;
+  right: -2.8rem;
+  width: 8rem;
+  height: 8rem;
+  border: 1px solid rgb(95 67 199 / 10%);
+  border-radius: 999px;
+  content: "";
+  pointer-events: none;
+}
+
+.profileDiscovery:hover {
+  border-color: #cec3ee;
+  box-shadow: 0 18px 38px rgb(62 73 113 / 12%);
+  transform: translateY(-2px);
+}
+
+.profileDiscovery:active {
+  transform: scale(0.995);
+}
+
+.profileDiscoveryTop {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.profilePreviewLabel {
+  color: #55758a;
+  font-size: 0.6875rem;
+  font-weight: 760;
+}
+
+.profileCode {
+  display: flex;
+  gap: 0.2rem;
+  margin: 0;
+}
+
+.profileCode span {
+  display: grid;
+  width: 1.55rem;
+  height: 1.7rem;
+  place-items: center;
+  border: 1px solid rgb(101 70 215 / 14%);
+  border-radius: 9px;
+  background: rgb(255 255 255 / 72%);
+  color: #5b41c1;
+  font-size: 0.75rem;
+  font-weight: 850;
+  box-shadow: 0 4px 10px rgb(81 67 131 / 5%);
+}
+
+.profileDiscovery h3 {
+  position: relative;
+  z-index: 1;
+  margin: 0.85rem 0 0;
+  color: #282432;
+  font-size: 1.25rem;
+  font-weight: 820;
+  letter-spacing: -0.03em;
+  line-height: 1.4;
+}
+
+.profileSummary {
+  position: relative;
+  z-index: 1;
+  max-width: 38ch;
+  margin: 0.45rem 0 0;
+  color: #6e6a78;
+  font-size: 0.8125rem;
+  line-height: 1.62;
+  text-wrap: pretty;
+}
+
+.profileTokens {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin-top: 0.8rem;
+}
+
+.profileTokens span {
+  padding: 0.3rem 0.5rem;
+  border: 1px solid rgb(93 110 142 / 11%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 66%);
+  color: #626778;
+  font-size: 0.625rem;
+  font-weight: 680;
+  line-height: 1.35;
+}
+
+.profileDiscoveryAction {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+  color: #5d43bd;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.profileDiscoverySkeleton {
+  background: linear-gradient(90deg, #eef2f7, #fafbfe, #eef2f7);
+  background-size: 220% 100%;
+  animation: skeleton-wave 1.35s ease-in-out infinite;
 }
 
 .playCard {
@@ -539,12 +678,14 @@
   .hero,
   .character,
   .progressValue,
+  .profileDiscovery,
   .skeletonAction {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
   }
 
   .primaryAction,
+  .profileDiscovery,
   .playLink {
     transition: none;
   }
@@ -576,6 +717,17 @@
   }
   to {
     transform: scaleX(1);
+  }
+}
+
+@keyframes discovery-in {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
