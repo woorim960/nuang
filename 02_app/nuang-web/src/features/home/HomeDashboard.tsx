@@ -1,10 +1,9 @@
 "use client";
 
-import { ArrowRight, LockKeyhole, MessageCircle } from "lucide-react";
+import { ArrowRight, Check, LockKeyhole, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
-import { FeedPollCard } from "@/features/feed/FeedPollCard";
 import {
   type FeedItem,
   listHomeFeedPreviewItems,
@@ -59,8 +58,7 @@ export function HomeDashboard({
   }, []);
 
   const model = useMemo(() => buildHomeDashboardModel(attempts), [attempts]);
-  const dailyPlay = selectDailyPlay(feedPreviewItems);
-  const conversations = selectConversations(feedPreviewItems, dailyPlay?.id);
+  const conversations = selectConversations(feedPreviewItems);
 
   return (
     <div className={styles.home}>
@@ -73,9 +71,9 @@ export function HomeDashboard({
 
       {loaded ? <HomeHero hero={model.hero} /> : <HomeHeroSkeleton />}
 
-      <HomeProfileDiscovery profile={featuredProfile} />
+      <HomeDailyChoice />
 
-      {dailyPlay ? <HomeDailyPlay item={dailyPlay} /> : null}
+      <HomeProfileDiscovery profile={featuredProfile} />
 
       <HomeConversations items={conversations} />
 
@@ -342,26 +340,73 @@ function HomeProfileDiscovery({
   );
 }
 
-function HomeDailyPlay({ item }: { item: FeedItem }) {
+function HomeDailyChoice() {
+  const selectedOptionId = useSyncExternalStore(
+    subscribeToHomeDailyChoice,
+    getHomeDailyChoiceSnapshot,
+    getServerHomeDailyChoiceSnapshot,
+  );
+  const selectedOption = homeDailyChoice.options.find(
+    (option) => option.id === selectedOptionId,
+  );
+
   return (
     <section className={styles.section}>
       <SectionHeading
-        description="가볍게 고르고 다른 사람들의 생각도 만나보세요."
-        title={item.poll ? "오늘의 성향 게임" : "오늘의 성향 질문"}
+        description="지금 더 끌리는 쪽을 가볍게 골라보세요."
+        title="오늘의 성향 질문"
       />
-      <div className={styles.playCard}>
-        {item.poll ? (
-          <FeedPollCard poll={item.poll} returnTo="/home" />
+      <div className={styles.dailyChoiceCard}>
+        <div className={styles.dailyChoiceMeta}>
+          <span>오늘의 가벼운 선택</span>
+          <span>검사 결과에는 반영되지 않아요</span>
+        </div>
+        <h3>{homeDailyChoice.question}</h3>
+        <div
+          aria-label="오늘의 선택지"
+          className={styles.dailyChoiceOptions}
+          role="group"
+        >
+          {homeDailyChoice.options.map((option) => {
+            const selected = option.id === selectedOptionId;
+
+            return (
+              <button
+                aria-pressed={selected}
+                className={styles.dailyChoiceOption}
+                data-selected={selected ? "true" : "false"}
+                key={option.id}
+                onClick={() => saveHomeDailyChoice(option.id)}
+                type="button"
+              >
+                <span>
+                  <strong>{option.label}</strong>
+                  <small>{option.detail}</small>
+                </span>
+                {selected ? (
+                  <span aria-hidden="true" className={styles.choiceCheck}>
+                    <Check size={16} strokeWidth={2.4} />
+                  </span>
+                ) : null}
+              </button>
+            );
+          })}
+        </div>
+        {selectedOption ? (
+          <div className={styles.dailyChoiceResult}>
+            <p aria-live="polite" role="status">
+              {selectedOption.resultTitle}
+            </p>
+            <p>{selectedOption.resultBody}</p>
+            <Link href="/feed">
+              다른 사람들의 생각도 보기
+              <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
+            </Link>
+          </div>
         ) : (
-          <Link className={styles.playLink} href="/feed">
-            <p className={styles.playLabel}>{getFeedKindLabel(item.kind)}</p>
-            <h3>{item.title}</h3>
-            <p>{item.body}</p>
-            <span className={styles.playAction}>
-              다른 사람들의 답 보기
-              <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
-            </span>
-          </Link>
+          <p className={styles.dailyChoiceHint}>
+            하나를 고르면 선택에 맞는 설명을 바로 보여드려요.
+          </p>
         )}
       </div>
     </section>
@@ -373,9 +418,9 @@ function HomeConversations({ items }: { items: FeedItem[] }) {
     <section className={styles.section}>
       <SectionHeading
         actionHref="/feed"
-        actionLabel="피드에서 더 보기"
-        description="다른 사람들은 어떤 생각을 나누고 있는지 둘러보세요."
-        title="지금 나누는 이야기"
+        actionLabel="더 보기"
+        description="나와 다른 관점과 오늘의 이야기를 만나보세요."
+        title="다른 사람들은 이렇게 생각해요"
       />
       {items.length > 0 ? (
         <div className={styles.conversationList}>
@@ -429,17 +474,11 @@ function SectionHeading({
   );
 }
 
-function selectDailyPlay(items: FeedItem[]) {
-  return (
-    items.find((item) => item.kind === "balance_game" && item.poll) ??
-    items.find((item) => item.kind === "daily_question") ??
-    items.find((item) => item.kind === "daily_mood")
-  );
-}
-
-function selectConversations(items: FeedItem[], dailyPlayId?: string) {
+function selectConversations(items: FeedItem[]) {
   return items
-    .filter((item) => item.id !== dailyPlayId && isCurrentCodeContent(item))
+    .filter(
+      (item) => item.kind !== "daily_question" && isCurrentCodeContent(item),
+    )
     .slice(0, 2);
 }
 
@@ -448,10 +487,78 @@ function isCurrentCodeContent(item: FeedItem) {
   return /^[EI][RN][GA][KM][CQ]$/.test(item.reportShare.profileCode);
 }
 
-function getFeedKindLabel(kind: FeedItem["kind"]) {
-  if (kind === "balance_game") return "둘 중 하나를 골라보세요";
-  if (kind === "daily_mood") return "지금 내 모습은 어느 쪽인가요?";
-  return "한 문장으로 생각해 봐요";
+const homeDailyChoice = {
+  id: "free-day-choice-v1",
+  question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
+  options: [
+    {
+      detail: "대화하거나 함께 무언가 하기",
+      id: "together",
+      label: "사람을 만나 함께 보낸다",
+      resultBody:
+        "그날의 상황에 따라 선택은 달라질 수 있어요. 한 번의 선택만으로 성향을 판단하지 않아요.",
+      resultTitle: "오늘은 누군가와 시간을 나누는 쪽이 더 끌렸네요.",
+    },
+    {
+      detail: "쉬거나 좋아하는 것에 집중하기",
+      id: "solo",
+      label: "혼자 여유롭게 보낸다",
+      resultBody:
+        "그날의 상황에 따라 선택은 달라질 수 있어요. 한 번의 선택만으로 성향을 판단하지 않아요.",
+      resultTitle: "오늘은 혼자 내 시간을 채우는 쪽이 더 끌렸네요.",
+    },
+  ],
+} as const;
+
+const homeDailyChoiceStorageKey = `nuang:home:daily-choice:${homeDailyChoice.id}`;
+const homeDailyChoiceListeners = new Set<() => void>();
+let homeDailyChoiceMemory: string | null = null;
+
+function subscribeToHomeDailyChoice(listener: () => void) {
+  homeDailyChoiceListeners.add(listener);
+
+  function handleStorage(event: StorageEvent) {
+    if (event.key === homeDailyChoiceStorageKey) listener();
+  }
+
+  window.addEventListener("storage", handleStorage);
+
+  return () => {
+    homeDailyChoiceListeners.delete(listener);
+    window.removeEventListener("storage", handleStorage);
+  };
+}
+
+function getHomeDailyChoiceSnapshot() {
+  try {
+    homeDailyChoiceMemory = window.localStorage.getItem(
+      homeDailyChoiceStorageKey,
+    );
+  } catch {
+    // Use the in-memory choice when browser storage is unavailable.
+  }
+
+  return homeDailyChoice.options.some(
+    (option) => option.id === homeDailyChoiceMemory,
+  )
+    ? homeDailyChoiceMemory
+    : null;
+}
+
+function getServerHomeDailyChoiceSnapshot() {
+  return null;
+}
+
+function saveHomeDailyChoice(optionId: string) {
+  homeDailyChoiceMemory = optionId;
+
+  try {
+    window.localStorage.setItem(homeDailyChoiceStorageKey, optionId);
+  } catch {
+    // The current visit still keeps the choice in memory.
+  }
+
+  homeDailyChoiceListeners.forEach((listener) => listener());
 }
 
 function selectFeaturedProfile() {

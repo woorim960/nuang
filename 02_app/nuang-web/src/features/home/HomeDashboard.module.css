@@ -1,6 +1,6 @@
 .home {
   display: grid;
-  gap: 1.9rem;
+  gap: 2.1rem;
   margin: calc(-20px - env(safe-area-inset-top)) -1.25rem -0.5rem;
   padding: calc(22px + env(safe-area-inset-top)) 1.25rem 1.5rem;
   overflow-x: clip;
@@ -29,7 +29,7 @@
   overflow: hidden;
   margin: 0;
   color: #817c8d;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 650;
   text-align: right;
   text-overflow: ellipsis;
@@ -62,7 +62,7 @@
 .eyebrow {
   margin: 0;
   color: #6546d7;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 750;
   letter-spacing: -0.01em;
 }
@@ -81,7 +81,7 @@
   max-width: 31ch;
   margin: 0.75rem 0 0;
   color: #706c7c;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 520;
   line-height: 1.65;
   text-wrap: pretty;
@@ -199,7 +199,7 @@
   border-radius: 15px;
   background: #252230;
   color: #fff;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   font-weight: 740;
   box-shadow: 0 10px 20px rgb(37 34 48 / 16%);
   transition:
@@ -222,14 +222,15 @@
   gap: 0.35rem;
   margin-top: 0.35rem;
   color: #5f43c7;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 720;
 }
 
 .primaryAction:focus-visible,
 .textAction:focus-visible,
 .profileDiscovery:focus-visible,
-.playLink:focus-visible,
+.dailyChoiceOption:focus-visible,
+.dailyChoiceResult a:focus-visible,
 .conversation:focus-visible,
 .sectionHeading a:focus-visible,
 .emptyConversation:focus-visible {
@@ -255,7 +256,7 @@
 
 .sectionHeading h2 {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.2rem;
   font-weight: 800;
   letter-spacing: -0.025em;
   line-height: 1.4;
@@ -264,7 +265,7 @@
 .sectionHeading p {
   margin: 0.25rem 0 0;
   color: #777281;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 520;
   line-height: 1.55;
 }
@@ -274,7 +275,7 @@
   flex: 0 0 auto;
   align-content: center;
   color: #5d43bd;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 720;
 }
 
@@ -331,7 +332,7 @@
 
 .profilePreviewLabel {
   color: #55758a;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 760;
 }
 
@@ -372,7 +373,7 @@
   max-width: 38ch;
   margin: 0.45rem 0 0;
   color: #6e6a78;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   line-height: 1.62;
   text-wrap: pretty;
 }
@@ -392,7 +393,7 @@
   border-radius: 999px;
   background: rgb(255 255 255 / 66%);
   color: #626778;
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   font-weight: 680;
   line-height: 1.35;
 }
@@ -406,7 +407,7 @@
   gap: 0.4rem;
   margin-top: 0.65rem;
   color: #5d43bd;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 750;
 }
 
@@ -416,66 +417,155 @@
   animation: skeleton-wave 1.35s ease-in-out infinite;
 }
 
-.playCard {
-  overflow: hidden;
-  border: 1px solid #eee1cd;
-  border-radius: 22px;
-  background: #fff6e9;
-  box-shadow: 0 12px 28px rgb(99 72 35 / 7%);
+.dailyChoiceCard {
+  padding: 1.2rem;
+  border: 1px solid #e7e2dc;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(69 58 49 / 7%);
 }
 
-.playLink {
-  display: block;
-  min-height: 188px;
-  padding: 1.15rem;
-  color: #352d26;
-  transition:
-    transform 120ms ease,
-    background-color 160ms ease;
+.dailyChoiceMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #7b756f;
+  font-size: 0.6875rem;
+  font-weight: 680;
 }
 
-.playLink:hover {
-  background: #fff2df;
+.dailyChoiceMeta span:first-child {
+  color: #7053c7;
+  font-weight: 780;
 }
 
-.playLink:active {
-  transform: scale(0.995);
+.dailyChoiceMeta span:last-child {
+  text-align: right;
 }
 
-.playLabel {
-  margin: 0;
-  color: #9a641e;
-  font-size: 0.75rem;
-  font-weight: 750;
-}
-
-.playLink h3 {
-  max-width: 22ch;
-  margin: 0.7rem 0 0;
-  font-size: 1.25rem;
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  line-height: 1.4;
+.dailyChoiceCard h3 {
+  max-width: 25ch;
+  margin: 0.8rem 0 0;
+  color: #28242f;
+  font-size: 1.2rem;
+  font-weight: 810;
+  letter-spacing: -0.027em;
+  line-height: 1.45;
   text-wrap: balance;
 }
 
-.playLink > p:not(.playLabel) {
-  max-width: 36ch;
-  margin: 0.55rem 0 0;
-  color: #7a6b5c;
-  font-size: 0.8125rem;
-  line-height: 1.6;
-  text-wrap: pretty;
+.dailyChoiceOptions {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
 }
 
-.playAction {
-  display: inline-flex;
-  min-height: 44px;
+.dailyChoiceOption {
+  display: flex;
+  width: 100%;
+  min-height: 70px;
   align-items: center;
-  gap: 0.4rem;
-  margin-top: 0.75rem;
-  color: #684414;
+  justify-content: space-between;
+  gap: 0.85rem;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid #e5e1e7;
+  border-radius: 16px;
+  background: #fbfafb;
+  color: #302c35;
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    box-shadow 160ms ease,
+    transform 120ms ease;
+}
+
+.dailyChoiceOption:hover {
+  border-color: #cfc4e8;
+  background: #faf8ff;
+}
+
+.dailyChoiceOption:active {
+  transform: scale(0.995);
+}
+
+.dailyChoiceOption[data-selected="true"] {
+  border-color: #8169d5;
+  background: #f5f1ff;
+  box-shadow: 0 7px 18px rgb(101 70 215 / 9%);
+}
+
+.dailyChoiceOption > span:first-child {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.dailyChoiceOption strong {
+  font-size: 0.875rem;
+  font-weight: 760;
+  line-height: 1.4;
+}
+
+.dailyChoiceOption small {
+  color: #77717c;
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.choiceCheck {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 999px;
+  background: #6546d7;
+  color: #fff;
+  animation: choice-in 180ms ease-out both;
+}
+
+.dailyChoiceHint {
+  margin: 0.8rem 0 0;
+  color: #77717c;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.dailyChoiceResult {
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 16px;
+  background: #f6f4fa;
+  animation: result-in 240ms ease-out both;
+}
+
+.dailyChoiceResult p {
+  margin: 0;
+}
+
+.dailyChoiceResult p:first-child {
+  color: #3b3448;
   font-size: 0.8125rem;
+  font-weight: 760;
+  line-height: 1.5;
+}
+
+.dailyChoiceResult p:nth-child(2) {
+  margin-top: 0.35rem;
+  color: #756f7d;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.dailyChoiceResult a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+  color: #5d43bd;
+  font-size: 0.75rem;
   font-weight: 750;
 }
 
@@ -508,14 +598,14 @@
   align-items: center;
   gap: 0.35rem;
   color: #837e8c;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 650;
 }
 
 .conversation h3 {
   margin: 0.5rem 0 0;
   color: #292531;
-  font-size: 0.9375rem;
+  font-size: 1rem;
   font-weight: 780;
   letter-spacing: -0.018em;
   line-height: 1.45;
@@ -526,7 +616,7 @@
   margin: 0.35rem 0 0;
   overflow: hidden;
   color: #746f7c;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.55;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 1;
@@ -538,7 +628,7 @@
   gap: 0.3rem;
   margin-top: 0.6rem;
   color: #7d7787;
-  font-size: 0.6875rem;
+  font-size: 0.75rem;
   font-weight: 650;
 }
 
@@ -575,13 +665,13 @@
 .privacyNote h2 {
   margin: 0;
   color: #45404b;
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 760;
 }
 
 .privacyNote p {
   margin: 0.25rem 0 0;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   line-height: 1.55;
 }
 
@@ -672,6 +762,16 @@
     max-width: 5.5rem;
     text-align: right;
   }
+
+  .dailyChoiceMeta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .dailyChoiceMeta span:last-child {
+    text-align: left;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -679,6 +779,8 @@
   .character,
   .progressValue,
   .profileDiscovery,
+  .choiceCheck,
+  .dailyChoiceResult,
   .skeletonAction {
     animation-duration: 1ms !important;
     animation-iteration-count: 1 !important;
@@ -686,7 +788,7 @@
 
   .primaryAction,
   .profileDiscovery,
-  .playLink {
+  .dailyChoiceOption {
     transition: none;
   }
 }
@@ -724,6 +826,28 @@
   from {
     opacity: 0;
     transform: translateY(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes choice-in {
+  from {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes result-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
   }
   to {
     opacity: 1;

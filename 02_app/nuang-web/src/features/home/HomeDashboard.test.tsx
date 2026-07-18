@@ -1,4 +1,5 @@
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
 import { betaCoreAssessment } from "@/features/assessment/beta-core-seed";
@@ -17,6 +18,14 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
 describe("HomeDashboard", () => {
   beforeEach(() => {
     vi.mocked(listLocalAttempts).mockResolvedValue([]);
+    Object.defineProperty(window, "localStorage", {
+      configurable: true,
+      value: createMemoryStorage(),
+    });
+    Object.defineProperty(window, "sessionStorage", {
+      configurable: true,
+      value: createMemoryStorage(),
+    });
   });
 
   it("renders a focused first-visit home without duplicate menu sections", async () => {
@@ -34,7 +43,7 @@ describe("HomeDashboard", () => {
     expect(screen.getByText("오늘의 성향 질문")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        name: "서로 다른 사람과 편하게 지내는 방법",
+        name: "오늘 나는 어느 쪽에 가까울까요?",
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("오늘 만나는 성향")).toBeInTheDocument();
@@ -44,10 +53,13 @@ describe("HomeDashboard", () => {
     expect(profileLink.getAttribute("href")).toMatch(
       /^\/map\?code=[EI][RN][GA][KM][CQ]&from=home$/,
     );
-    expect(screen.getByText("지금 나누는 이야기")).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "피드에서 더 보기" }),
-    ).toHaveAttribute("href", "/feed");
+      screen.getByText("다른 사람들은 이렇게 생각해요"),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "더 보기" })).toHaveAttribute(
+      "href",
+      "/feed",
+    );
     expect(screen.getByText("내 답변은 나만 볼 수 있어요")).toBeInTheDocument();
 
     expect(screen.queryByText("오늘의 메뉴")).not.toBeInTheDocument();
@@ -82,7 +94,29 @@ describe("HomeDashboard", () => {
       "href",
       "/feed",
     );
-    expect(screen.queryByText("오늘의 성향 질문")).not.toBeInTheDocument();
+    expect(screen.getByText("오늘의 성향 질문")).toBeInTheDocument();
+  });
+
+  it("lets a visitor answer the daily choice without signing in", async () => {
+    const user = userEvent.setup();
+
+    render(<HomeDashboard />);
+
+    const option = await screen.findByRole("button", {
+      name: /사람을 만나 함께 보낸다/,
+    });
+    await user.click(option);
+
+    expect(option).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "누군가와 시간을 나누는 쪽이 더 끌렸네요",
+    );
+    expect(
+      window.localStorage.getItem("nuang:home:daily-choice:free-day-choice-v1"),
+    ).toBe("together");
+    expect(
+      screen.getByRole("link", { name: /다른 사람들의 생각도 보기/ }),
+    ).toHaveAttribute("href", "/feed");
   });
 
   it("resumes the current full assessment with accurate base-item progress", async () => {
@@ -158,5 +192,24 @@ function createInProgressAttempt(
     ),
     state: "in_progress",
     updatedAt,
+  };
+}
+
+function createMemoryStorage(): Storage {
+  const values = new Map<string, string>();
+
+  return {
+    get length() {
+      return values.size;
+    },
+    clear: () => values.clear(),
+    getItem: (key) => values.get(key) ?? null,
+    key: (index) => [...values.keys()][index] ?? null,
+    removeItem: (key) => {
+      values.delete(key);
+    },
+    setItem: (key, value) => {
+      values.set(key, value);
+    },
   };
 }
