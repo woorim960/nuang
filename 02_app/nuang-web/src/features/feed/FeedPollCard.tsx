@@ -12,7 +12,13 @@ type VoteStatus =
   | { status: "pending" }
   | { message: string; status: "error" };
 
-export function FeedPollCard({ poll }: { poll: FeedPollSummary }) {
+export function FeedPollCard({
+  poll,
+  returnTo = "/feed",
+}: {
+  poll: FeedPollSummary;
+  returnTo?: string;
+}) {
   const router = useRouter();
   const [status, setStatus] = useState<VoteStatus>({ status: "idle" });
   const hasVoted = Boolean(poll.viewerVoteOptionId);
@@ -37,7 +43,7 @@ export function FeedPollCard({ poll }: { poll: FeedPollSummary }) {
       });
 
       if (response.status === 401) {
-        router.push(`/login?next=${encodeURIComponent("/feed")}`);
+        router.push(`/login?next=${encodeURIComponent(returnTo)}`);
         return;
       }
 

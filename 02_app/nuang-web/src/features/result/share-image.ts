@@ -5,18 +5,20 @@ import {
 import type { DomainScore } from "@/lib/scoring/types";
 
 type ShareImageInput = {
+  characterAssetPath?: string;
   code: string;
   domains: DomainScore[];
   motif: ShareImageMotif;
   profileName: string;
   resultLabel: string;
+  showDomainScores?: boolean;
 };
 
 type ShareImageMotif = NuangCharacterMotif;
 
 const width = 1080;
 const height = 1350;
-const characterImageCache = new Map<ShareImageMotif, Promise<HTMLImageElement>>();
+const characterImageCache = new Map<string, Promise<HTMLImageElement>>();
 
 export async function shareResultImage(input: ShareImageInput) {
   const blob = await createResultImageBlob(input);
@@ -92,7 +94,14 @@ async function paintCard(ctx: CanvasRenderingContext2D, input: ShareImageInput) 
     '700 44px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif';
   ctx.fillText(input.code, 120, 520);
 
-  await drawCharacter(ctx, 700, 230, 290, input.motif);
+  await drawCharacter(
+    ctx,
+    700,
+    230,
+    290,
+    input.motif,
+    input.characterAssetPath,
+  );
 
   ctx.fillStyle = "#202232";
   ctx.font =
@@ -106,17 +115,29 @@ async function paintCard(ctx: CanvasRenderingContext2D, input: ShareImageInput) 
     ctx.font =
       '600 34px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif';
     ctx.fillText(domain.label, 120, y);
-    ctx.fillStyle = "#6b6f82";
-    ctx.textAlign = "right";
-    ctx.fillText(String(score), 960, y);
-    ctx.textAlign = "left";
+    if (input.showDomainScores === false) {
+      ctx.fillStyle = domainColor(domain.domainId);
+      ctx.textAlign = "right";
+      ctx.font =
+        '800 36px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif';
+      ctx.fillText(domain.symbol ?? "", 960, y);
+      ctx.textAlign = "left";
+      roundRect(ctx, 120, y + 28, 840, 5, 3);
+      ctx.fillStyle = "#eceaf4";
+      ctx.fill();
+    } else {
+      ctx.fillStyle = "#6b6f82";
+      ctx.textAlign = "right";
+      ctx.fillText(String(score), 960, y);
+      ctx.textAlign = "left";
 
-    roundRect(ctx, 120, y + 28, 840, 22, 12);
-    ctx.fillStyle = "#eceaf4";
-    ctx.fill();
-    roundRect(ctx, 120, y + 28, Math.max(10, score * 8.4), 22, 12);
-    ctx.fillStyle = domainColor(domain.domainId);
-    ctx.fill();
+      roundRect(ctx, 120, y + 28, 840, 22, 12);
+      ctx.fillStyle = "#eceaf4";
+      ctx.fill();
+      roundRect(ctx, 120, y + 28, Math.max(10, score * 8.4), 22, 12);
+      ctx.fillStyle = domainColor(domain.domainId);
+      ctx.fill();
+    }
   });
 
   ctx.fillStyle = "#6b6f82";
@@ -142,14 +163,17 @@ async function drawCharacter(
   y: number,
   size: number,
   motif: ShareImageMotif,
+  characterAssetPath?: string,
 ) {
-  const image = await loadCharacterImage(motif);
+  const image = await loadCharacterImage(
+    characterAssetPath ?? nuangCharacterAssetPaths[motif],
+  );
 
   ctx.drawImage(image, x, y, size, size);
 }
 
-function loadCharacterImage(motif: ShareImageMotif) {
-  const cached = characterImageCache.get(motif);
+function loadCharacterImage(assetPath: string) {
+  const cached = characterImageCache.get(assetPath);
   if (cached) return cached;
 
   const promise = new Promise<HTMLImageElement>((resolve, reject) => {
@@ -157,11 +181,11 @@ function loadCharacterImage(motif: ShareImageMotif) {
     image.decoding = "async";
     image.onload = () => resolve(image);
     image.onerror = () =>
-      reject(new Error(`Failed to load NUANG character asset: ${motif}`));
-    image.src = nuangCharacterAssetPaths[motif];
+      reject(new Error(`Failed to load NUANG character asset: ${assetPath}`));
+    image.src = assetPath;
   });
 
-  characterImageCache.set(motif, promise);
+  characterImageCache.set(assetPath, promise);
   return promise;
 }
 

@@ -935,12 +935,12 @@ export function AssessmentRunner({
               <legend className={styles.legend}>
                 {isAdaptiveQuestion
                   ? "반반보다 조금이라도 더 가까운 쪽은?"
-                  : "이 문장은 나와 얼마나 비슷한가요?"}
+                  : "이럴 때 내 모습은?"}
               </legend>
               <span className="sr-only" id="assessment-answer-guide">
                 {isAdaptiveQuestion
                   ? "두 방향 중 조금이라도 더 가까운 쪽을 선택해 주세요."
-                  : "최근 6개월의 평소 모습을 떠올리며, 이 문장이 나와 얼마나 비슷한지 하나 선택해 주세요."}
+                  : "최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 이 모습이 얼마나 자주 나타나는지 하나 선택해 주세요."}
               </span>
               <div
                 aria-describedby="assessment-answer-guide"
@@ -1068,7 +1068,7 @@ export function AssessmentRunner({
 
       {isHelpOpen ? (
         <BottomSheet
-          copy="특별했던 한 번보다 최근 6개월에 반복해서 나타난 평소 모습을 떠올리며, 각 문장이 나와 얼마나 비슷한지 답해 주세요."
+          copy="특별했던 한 번보다 최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 문장 속 모습이 얼마나 자주 나타나는지 답해 주세요."
           onClose={() => setIsHelpOpen(false)}
           title="어떤 모습을 떠올리면 될까요?"
         >

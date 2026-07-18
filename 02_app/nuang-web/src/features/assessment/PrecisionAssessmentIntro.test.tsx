@@ -8,6 +8,7 @@ import {
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { PrecisionAssessmentIntro } from "@/features/assessment/PrecisionAssessmentIntro";
 import { betaCoreAssessment } from "@/features/assessment/beta-core-seed";
+import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
 import { fullCoreAssessment } from "@/features/assessment/full-core-seed";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 
@@ -108,9 +109,11 @@ describe("PrecisionAssessmentIntro", () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("뉴앙 코드 예시 ENAKQ")).toBeInTheDocument();
-    expect(screen.getByText("내 뉴앙 코드와 자세한 설명")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "내 뉴앙 코드 알아보기" }),
+      screen.getByText("내 뉴앙 코드와 자세한 성향 리포트"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "정밀 검사 시작하기" }),
     ).toBeInTheDocument();
   });
 
@@ -160,6 +163,75 @@ describe("PrecisionAssessmentIntro", () => {
     expect(
       await screen.findByRole("heading", { name: "정밀 검사 실행기" }),
     ).toBeInTheDocument();
+  });
+
+  it("uses the current five-code language for a first-result entry", async () => {
+    const sourceAttempt = {
+      id: "local_candidate_quick",
+    } as LocalAssessmentAttempt;
+    mocks.resolveLocalPrecisionEntry.mockReturnValue({
+      action: "show_intro",
+      provisionalCode: "ENAKQ",
+      reusableAnswerCount: 22,
+      sourceAttempt,
+    });
+
+    render(
+      <PrecisionAssessmentIntro
+        assessment={candidateFullCoreAssessment}
+        backDestination="/results/local/local_candidate_quick"
+        entrySource="first-result"
+        returnDestination="/home"
+      />,
+    );
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "다섯 글자 속 내 모습을 더 자세히 알아볼까요?",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("방금 확인한 코드 ENAKQ")).toBeInTheDocument();
+    expect(
+      screen.getByText(/처음 드는 생각·실제 나타나는 반응/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("원하는 사람과 성향을 비교할 수 있어요"),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(/60문항/)).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "정밀 검사 시작하기" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "첫 성향 결과로 돌아가기" }),
+    ).toHaveAttribute("href", "/results/local/local_candidate_quick");
+
+    fireEvent.click(screen.getByRole("button", { name: "나중에 할게요" }));
+    expect(mocks.router.push).toHaveBeenCalledWith("/home");
+  });
+
+  it("resumes an active precision attempt without showing the intro", async () => {
+    const activeAttempt = {
+      id: "local_full_active",
+    } as LocalAssessmentAttempt;
+    mocks.resolveLocalPrecisionEntry.mockReturnValue({
+      action: "redirect_attempt",
+      attempt: activeAttempt,
+    });
+    mocks.getOrCreateLocalAttempt.mockResolvedValue(activeAttempt);
+
+    renderIntro({ returnDestination: "/together" });
+
+    expect(
+      await screen.findByRole("heading", { name: "정밀 검사 실행기" }),
+    ).toBeInTheDocument();
+    expect(mocks.getOrCreateLocalAttempt).toHaveBeenCalledWith(
+      fullCoreAssessment,
+      undefined,
+      "/together",
+    );
+    expect(
+      screen.queryByText("내 성향을 더 자세히 알아볼까요?"),
+    ).not.toBeInTheDocument();
   });
 
   it("keeps the intro visible and provides retry after start failure", async () => {

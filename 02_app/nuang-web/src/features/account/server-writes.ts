@@ -28,6 +28,14 @@ import {
   quickCoreAssessment,
   quickScoringRelease,
 } from "@/features/assessment/quick-core-seed";
+import {
+  candidateFullCoreAssessment,
+  candidateFullScoringRelease,
+} from "@/features/assessment/candidate-full-core-seed";
+import {
+  candidateQuickCoreAssessment,
+  candidateQuickScoringRelease,
+} from "@/features/assessment/candidate-quick-core-seed";
 import { isRequiredConsentComplete } from "@/features/consent/consent-draft";
 import { getAppOrigin } from "@/lib/supabase/env";
 import { getSupabaseServiceEnv } from "@/lib/supabase/service";
@@ -196,7 +204,7 @@ export async function claimResultToAccount({
 }
 
 function getTrustedClaimRelease(payload: ClaimResultPayload) {
-  const expected =
+  const stableRelease =
     payload.assessmentKind === "full"
       ? {
           assessmentReleaseId: fullCoreAssessment.releaseId,
@@ -211,12 +219,34 @@ function getTrustedClaimRelease(payload: ClaimResultPayload) {
           scoringReleaseId: quickScoringRelease.scoringReleaseId,
         };
 
-  return Object.entries(expected).every(
-    ([key, value]) =>
-      payload.versionBundle[key as keyof typeof expected] === value,
-  )
-    ? expected
-    : null;
+  const candidateRelease =
+    payload.assessmentKind === "full"
+      ? {
+          assessmentReleaseId: candidateFullCoreAssessment.releaseId,
+          codeSchemeVersion: candidateFullScoringRelease.codeSchemeVersion,
+          scoringModelVersion: candidateFullScoringRelease.scoringModelVersion,
+          scoringReleaseId: candidateFullScoringRelease.scoringReleaseId,
+        }
+      : {
+          assessmentReleaseId: candidateQuickCoreAssessment.releaseId,
+          codeSchemeVersion: candidateQuickScoringRelease.codeSchemeVersion,
+          scoringModelVersion: candidateQuickScoringRelease.scoringModelVersion,
+          scoringReleaseId: candidateQuickScoringRelease.scoringReleaseId,
+        };
+
+  const allowedReleases =
+    process.env.NODE_ENV === "production"
+      ? [stableRelease]
+      : [stableRelease, candidateRelease];
+
+  return (
+    allowedReleases.find((expected) =>
+      Object.entries(expected).every(
+        ([key, value]) =>
+          payload.versionBundle[key as keyof typeof expected] === value,
+      ),
+    ) ?? null
+  );
 }
 
 async function restoreClaimedResult({

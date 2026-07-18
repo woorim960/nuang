@@ -7,11 +7,11 @@ import type {
 import { nuangProfileNames } from "@/features/nuang-code/nuang-code-dictionary";
 
 export const responseOptions = [
-  { value: 1 as const, label: "나와 전혀 달라요" },
-  { value: 2 as const, label: "나와 다른 편이에요" },
+  { value: 1 as const, label: "거의 그렇지 않아요" },
+  { value: 2 as const, label: "드문 편이에요" },
   { value: 3 as const, label: "반반이에요" },
-  { value: 4 as const, label: "나와 비슷한 편이에요" },
-  { value: 5 as const, label: "나와 매우 비슷해요" },
+  { value: 4 as const, label: "자주 그래요" },
+  { value: 5 as const, label: "거의 항상 그래요" },
 ];
 
 export const quickCoreAssessment: AssessmentDefinition = {

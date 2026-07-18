@@ -10,11 +10,11 @@ describe("quick core seed", () => {
     expect(quickCoreAssessment.items).toHaveLength(20);
     expect(responseOptions).toHaveLength(5);
     expect(responseOptions.map((option) => option.label)).toEqual([
-      "나와 전혀 달라요",
-      "나와 다른 편이에요",
+      "거의 그렇지 않아요",
+      "드문 편이에요",
       "반반이에요",
-      "나와 비슷한 편이에요",
-      "나와 매우 비슷해요",
+      "자주 그래요",
+      "거의 항상 그래요",
     ]);
     expect(quickCoreAssessment.items[0].itemId).toBe("NU-C17-SERE-01");
     expect(quickCoreAssessment.items[1].domainId).toBe("ER");

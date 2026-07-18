@@ -57,6 +57,7 @@ import {
   CandidateResultLoadingState,
   CandidateUndeterminedResultView,
 } from "@/features/result/CandidateCoreResultView";
+import type { CandidateShareAccountController } from "@/features/result/CandidateResultShareSheet";
 import type { ConsentDraft } from "@/features/consent/consent-draft";
 import { isCoreResultUndetermined } from "@/lib/scoring/core";
 
@@ -141,11 +142,7 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
 
   useEffect(() => {
     if (!attempt) return;
-    if (
-      attempt.assessmentId === betaCoreAssessment.assessmentId ||
-      isCandidateQuickRelease(attempt) ||
-      isCandidateFullRelease(attempt)
-    ) {
+    if (attempt.assessmentId === betaCoreAssessment.assessmentId) {
       return;
     }
 
@@ -206,7 +203,6 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
     if (
       !attempt ||
       !resultSnapshot ||
-      isCandidateResult ||
       !result?.code ||
       !result.profileName ||
       claimState !== "idle"
@@ -262,7 +258,7 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
     return () => {
       isMounted = false;
     };
-  }, [attempt, claimState, isCandidateResult, result, resultSnapshot]);
+  }, [attempt, claimState, result, resultSnapshot]);
 
   if (isMissing) {
     return (
@@ -298,7 +294,137 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
   }
 
   if (isCandidateResult) {
-    return <CandidateCoreResultView attempt={attempt} result={result} />;
+    const isPersistableCandidate =
+      isCandidateQuickRelease(attempt) || isCandidateFullRelease(attempt);
+    const candidateCode = result.code;
+    const candidateProfileName = result.profileName;
+
+    if (!isPersistableCandidate) {
+      return <CandidateCoreResultView attempt={attempt} result={result} />;
+    }
+
+    async function handleCandidateCreateShareLink(copyToClipboard = true) {
+      const consentDraft = readStoredConsentDraft();
+
+      if (!serverResultReportId || !consentDraft) {
+        setShareLinkState("error");
+        return null;
+      }
+
+      if (serverShareUrl) {
+        if (copyToClipboard) {
+          try {
+            await copyShareUrlToClipboard(serverShareUrl);
+            setShareLinkState("copied");
+          } catch {
+            setShareLinkState("ready");
+          }
+        }
+        return serverShareUrl;
+      }
+
+      try {
+        setShareLinkState("making");
+        const response = await fetch("/api/share-links", {
+          body: JSON.stringify({
+            consentDraft,
+            resultReportId: serverResultReportId,
+            ttlDays: 30,
+            visibility: "summary",
+          }),
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "POST",
+        });
+        const body = (await response.json()) as {
+          ok?: boolean;
+          shareLink?: { url?: string };
+        };
+        const shareUrl = body.shareLink?.url;
+
+        if (!response.ok || !body.ok || !shareUrl) {
+          setShareLinkState("error");
+          return null;
+        }
+
+        setServerShareUrl(shareUrl);
+        if (copyToClipboard) {
+          try {
+            await copyShareUrlToClipboard(shareUrl);
+            setShareLinkState("copied");
+          } catch {
+            setShareLinkState("ready");
+          }
+        } else {
+          setShareLinkState("ready");
+        }
+        return shareUrl;
+      } catch {
+        setShareLinkState("error");
+        return null;
+      }
+    }
+
+    async function handleCandidateShareToFeed() {
+      if (!serverResultReportId) {
+        setFeedShareState("error");
+        return;
+      }
+
+      try {
+        setFeedShareState("posting");
+        const response = await fetch("/api/feed", {
+          body: JSON.stringify({
+            action: "create_post",
+            attachments: [
+              {
+                id: serverResultReportId,
+                type: "result_summary",
+              },
+            ],
+            body: `${candidateCode} ${candidateProfileName} 결과를 공유했어요.`,
+            source: "report_share",
+            visibility: "public",
+          }),
+          headers: {
+            "content-type": "application/json",
+          },
+          method: "POST",
+        });
+        const payload = (await response.json().catch(() => null)) as {
+          ok?: boolean;
+        } | null;
+
+        if (!response.ok || !payload?.ok) {
+          setFeedShareState("error");
+          return;
+        }
+
+        setFeedShareState("posted");
+        router.push("/feed");
+        router.refresh();
+      } catch {
+        setFeedShareState("error");
+      }
+    }
+
+    const candidateShareAccount: CandidateShareAccountController = {
+      claimState,
+      feedShareState,
+      onCreateShareLink: handleCandidateCreateShareLink,
+      onShareToFeed: handleCandidateShareToFeed,
+      shareLinkState,
+      shareUrl: serverShareUrl,
+    };
+
+    return (
+      <CandidateCoreResultView
+        attempt={attempt}
+        result={result}
+        shareAccount={candidateShareAccount}
+      />
+    );
   }
 
   const code = result.code;
@@ -950,12 +1076,16 @@ function formatCompletedDate(value: string) {
 async function readAccountStatus(
   localResultId: string,
 ): Promise<ResultAccountStatus | null> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 2500);
+
   try {
     const response = await fetch(
       `/api/claim-result?localResultId=${encodeURIComponent(localResultId)}`,
       {
         cache: "no-store",
         method: "GET",
+        signal: controller.signal,
       },
     );
 
@@ -969,6 +1099,8 @@ async function readAccountStatus(
     return body.ok ? (body.result ?? null) : null;
   } catch {
     return null;
+  } finally {
+    clearTimeout(timeoutId);
   }
 }
 
@@ -997,10 +1129,13 @@ async function claimLocalResult({
       state: "error" | "unauthenticated";
     }
 > {
-  const assessment =
-    attempt.assessmentId === "nu-core-full"
-      ? fullCoreAssessment
-      : quickCoreAssessment;
+  const assessment = isCandidateQuickRelease(attempt)
+    ? candidateQuickCoreAssessment
+    : isCandidateFullRelease(attempt)
+      ? candidateFullCoreAssessment
+      : attempt.assessmentId === "nu-core-full"
+        ? fullCoreAssessment
+        : quickCoreAssessment;
   const response = await fetch("/api/claim-result", {
     body: JSON.stringify({
       assessmentKind: attempt.mode,

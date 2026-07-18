@@ -15,16 +15,21 @@ describe("FeedPage", () => {
     render(await FeedPage());
 
     expect(screen.getByRole("heading", { name: "피드" })).toBeInTheDocument();
-    expect(screen.getByText("오늘 내 리듬은 어떤 쪽인가요?")).toBeInTheDocument();
+    expect(
+      screen.getByText("오늘 나는 어느 쪽에 가까울까요?"),
+    ).toBeInTheDocument();
     expect(
       screen.getByPlaceholderText("오늘의 생각을 공유해보세요."),
     ).toBeInTheDocument();
-    expect(screen.getByText("다른 리듬과 맞춰가는 방법")).toBeInTheDocument();
-    expect(screen.getByText("내 성향을 한 장으로 소개한다면")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "홈으로 돌아가기" })).toHaveAttribute(
-      "href",
-      "/home",
-    );
+    expect(
+      screen.getByText("서로 다른 사람과 편하게 지내는 방법"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("내 성향을 한 장으로 소개한다면"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "홈으로 돌아가기" }),
+    ).toHaveAttribute("href", "/home");
     expect(document.body).not.toHaveTextContent("커뮤니티");
     expect(document.body).not.toHaveTextContent("함께 탭");
   });
@@ -38,15 +43,21 @@ describe("FeedPage", () => {
 
     render(await FeedPage());
 
-    await user.click(screen.getAllByRole("button", { name: "성향 카드 프로필 보기" })[0]);
+    await user.click(
+      screen.getAllByRole("button", { name: "성향 카드 프로필 보기" })[0],
+    );
 
-    expect(screen.getByRole("dialog", { name: "성향 카드" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("dialog", { name: "성향 카드" }),
+    ).toBeInTheDocument();
     expect(
       screen.getAllByRole("img", { name: "성향 카드 프로필 이미지" }).length,
     ).toBeGreaterThan(0);
     expect(screen.getByText("TVOAE")).toBeInTheDocument();
     expect(screen.getByText("불꽃의 온기 탐험가")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "나와 비교하기" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "나와 비교하기" }),
+    ).toBeInTheDocument();
     expect(document.body).not.toHaveTextContent("공개 코드");
   });
 });

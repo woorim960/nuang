@@ -218,14 +218,14 @@ describe("AssessmentRunner", () => {
       screen.getByRole("radiogroup", { name: "응답 선택" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("이 문장은 나와 얼마나 비슷한가요?"),
+      screen.getByText("이럴 때 내 모습은?"),
     ).toBeInTheDocument();
     expect(screen.getAllByRole("radio")).toHaveLength(5);
     expect(
-      screen.getByRole("radio", { name: "나와 전혀 달라요" }),
+      screen.getByRole("radio", { name: "거의 그렇지 않아요" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("radio", { name: "나와 매우 비슷해요" }),
+      screen.getByRole("radio", { name: "거의 항상 그래요" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "이 상황은 답하기 어려워요" }),
@@ -238,7 +238,7 @@ describe("AssessmentRunner", () => {
     render(<AssessmentRunner assessment={quickCoreAssessment} />);
 
     const response = await screen.findByRole("radio", {
-      name: "나와 비슷한 편이에요",
+      name: "자주 그래요",
     });
     fireEvent.click(response);
 
@@ -256,7 +256,7 @@ describe("AssessmentRunner", () => {
     render(<AssessmentRunner assessment={quickCoreAssessment} />);
 
     const response = await screen.findByRole("radio", {
-      name: "나와 매우 비슷해요",
+      name: "거의 항상 그래요",
     });
     fireEvent.click(response);
 
@@ -299,6 +299,31 @@ describe("AssessmentRunner", () => {
     expect(
       screen.getByRole("button", { name: "상황에 따라 많이 달라져요" }),
     ).toBeInTheDocument();
+  });
+
+  it("restores the saved full-assessment position and leaves through the pause sheet", async () => {
+    const attempt = createAttempt(fullCoreAssessment, {
+      answeredItemCount: 18,
+      currentIndex: 18,
+    });
+    vi.mocked(getOrCreateLocalAttempt).mockResolvedValue(attempt);
+
+    render(<AssessmentRunner assessment={fullCoreAssessment} />);
+
+    expect(
+      await screen.findByRole("heading", {
+        name: fullCoreAssessment.items[18].text,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("19 / 60")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "검사 닫기" }));
+    expect(
+      screen.getByRole("heading", { name: "검사를 잠시 멈출까요?" }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "홈에서 이어하기" }));
+
+    expect(mockPush).toHaveBeenCalledWith("/home");
   });
 
   it("opens the one-time midpoint checkpoint in the full assessment", async () => {
@@ -649,7 +674,9 @@ describe("AssessmentRunner", () => {
 
       fireEvent.click(
         screen.getByRole("radio", {
-          name: item.isReverse ? "나와 전혀 달라요" : "나와 매우 비슷해요",
+          name: item.isReverse
+            ? "거의 그렇지 않아요"
+            : "거의 항상 그래요",
         }),
       );
       await waitFor(() => {

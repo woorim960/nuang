@@ -11,7 +11,6 @@ import {
   parsePrecisionEntrySource,
   sanitizePrecisionDestination,
 } from "@/features/assessment/precision-entry";
-import { quickCoreAssessment } from "@/features/assessment/quick-core-seed";
 import { M05ParticipantRunner } from "@/features/research/m05/M05ParticipantRunner";
 
 type AssessmentStartPageProps = {
@@ -49,14 +48,9 @@ export default async function AssessmentStartPage({
   }
 
   if (slug === "nu-core-quick") {
-    const assessment =
-      process.env.NODE_ENV === "development"
-        ? candidateQuickCoreAssessment
-        : quickCoreAssessment;
-
     return (
       <AssessmentRunner
-        assessment={assessment}
+        assessment={candidateQuickCoreAssessment}
         returnDestination={sanitizePrecisionDestination(
           readQuery(query.returnTo),
         )}
@@ -65,7 +59,6 @@ export default async function AssessmentStartPage({
   }
 
   if (slug === "nu-core-full") {
-    const useCandidateAssessment = process.env.NODE_ENV === "development";
     const entrySource = parsePrecisionEntrySource(readQuery(query.from));
     const defaultBack =
       entrySource === "home"
@@ -78,9 +71,7 @@ export default async function AssessmentStartPage({
 
     return (
       <PrecisionAssessmentIntro
-        assessment={
-          useCandidateAssessment ? candidateFullCoreAssessment : undefined
-        }
+        assessment={candidateFullCoreAssessment}
         backDestination={
           sanitizePrecisionDestination(readQuery(query.backTo)) ?? defaultBack
         }

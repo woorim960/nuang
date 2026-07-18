@@ -9,10 +9,10 @@ import {
   MessagesSquare,
   ScanSearch,
 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState, type CSSProperties } from "react";
-import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { AssessmentRunner } from "@/features/assessment/AssessmentRunner";
 import { AssessmentLoadingState } from "@/features/assessment/AssessmentLoadingState";
 import styles from "@/features/assessment/PrecisionAssessmentIntro.module.css";
@@ -63,21 +63,21 @@ const benefits = [
 const candidateBenefits = [
   {
     description:
-      "질문마다 구체적인 상황이 함께 나와요. 최근 6개월의 평소 모습을 떠올리면 돼요.",
+      "여러 생활 상황에서 반복해서 나타나는 방향을 함께 살펴봐요.",
     icon: ScanSearch,
-    title: "상황을 떠올리며 쉽게 답해요",
+    title: "다섯 글자의 의미가 더 분명해져요",
   },
   {
     description:
-      "E/I · R/N · G/A · K/M · C/Q 순서로 코드와 내 성향을 함께 설명해 드려요.",
+      "일상에서 보이는 모습과, 일부 관계 상황의 처음 드는 생각·실제 나타나는 반응을 더 구체적으로 정리해요.",
     icon: Layers3,
-    title: "다섯 글자의 뜻을 쉽게 풀어드려요",
+    title: "내 생활 속 모습을 더 자세히 알려드려요",
   },
   {
     description:
-      "능력이나 우열을 판단하지 않고, 이번 답에서 나와 가까운 모습을 보여드려요.",
+      "가족·친구·연인과 공통점과 차이점을 더 자세히 살펴볼 수 있어요.",
     icon: MessagesSquare,
-    title: "좋고 나쁨 없이 내 모습을 설명해요",
+    title: "원하는 사람과 성향을 비교할 수 있어요",
   },
 ] as const;
 
@@ -266,17 +266,21 @@ export function PrecisionAssessmentIntro({
         <section className={styles.hero}>
           <p className={styles.eyebrow}>
             {isCandidateAssessment
-              ? "60문항으로 알아보는 내 성향"
+              ? "생활 속 다양한 상황으로 알아보는 내 성향"
               : "내 대표 코드를 찾는 다음 단계"}
           </p>
           <h1>
             {isCandidateAssessment
-              ? "내 성향을 다섯 글자로 알아볼까요?"
+              ? hasQuickResult
+                ? "다섯 글자 속 내 모습을 더 자세히 알아볼까요?"
+                : "내 성향을 다섯 글자로 알아볼까요?"
               : "내 성향을 더 자세히 알아볼까요?"}
           </h1>
           <p className={styles.heroDescription}>
             {isCandidateAssessment
-              ? "생활 속 여러 상황에 답하면, 지금 나와 가까운 다섯 가지 성향을 코드와 설명으로 보여드려요."
+              ? hasQuickResult
+                ? "방금 확인한 성향을 출발점으로, 더 다양한 생활 상황에서 내 모습을 구체적으로 살펴봐요."
+                : "생활 속 여러 상황에 답하면, 지금 나와 가까운 다섯 가지 성향을 코드와 설명으로 보여드려요."
               : hasQuickResult
               ? "방금 확인한 성향을 출발점으로, 더 다양한 생활 상황에서 나의 모습을 살펴봐요."
               : "더 다양한 생활 상황에서 나의 모습을 살펴보고, 다섯 글자 대표 코드와 상세 리포트로 정리해요."}
@@ -320,7 +324,7 @@ export function PrecisionAssessmentIntro({
                 />
                 <p className={styles.journeyOutcome}>
                   {isCandidateAssessment
-                    ? "내 뉴앙 코드와 자세한 설명"
+                    ? "내 뉴앙 코드와 자세한 성향 리포트"
                     : "내 대표 코드와 상세 리포트"}
                 </p>
               </div>
@@ -330,10 +334,13 @@ export function PrecisionAssessmentIntro({
                 </p>
               ) : null}
             </div>
-            <NuangCharacter
+            <Image
+              alt=""
               className={styles.mascot}
-              motif="purple"
-              size="md"
+              height={512}
+              priority
+              src="/assets/assessment/nuang-loading-mascot-v2.png"
+              width={512}
             />
           </div>
         </section>
@@ -341,24 +348,26 @@ export function PrecisionAssessmentIntro({
         <section className={styles.benefits}>
           <h2 className={styles.sectionTitle}>검사를 마치면</h2>
           <ul className={styles.benefitList}>
-            {(isCandidateAssessment ? candidateBenefits : benefits).map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <li
-                  className={styles.benefitItem}
-                  key={benefit.title}
-                  style={{ "--benefit-index": index } as CSSProperties}
-                >
-                  <span aria-hidden="true" className={styles.benefitIcon}>
-                    <Icon size={19} strokeWidth={1.9} />
-                  </span>
-                  <div>
-                    <h3>{benefit.title}</h3>
-                    <p>{benefit.description}</p>
-                  </div>
-                </li>
-              );
-            })}
+            {(isCandidateAssessment ? candidateBenefits : benefits).map(
+              (benefit, index) => {
+                const Icon = benefit.icon;
+                return (
+                  <li
+                    className={styles.benefitItem}
+                    key={benefit.title}
+                    style={{ "--benefit-index": index } as CSSProperties}
+                  >
+                    <span aria-hidden="true" className={styles.benefitIcon}>
+                      <Icon size={19} strokeWidth={1.9} />
+                    </span>
+                    <div>
+                      <h3>{benefit.title}</h3>
+                      <p>{benefit.description}</p>
+                    </div>
+                  </li>
+                );
+              },
+            )}
           </ul>
         </section>
 
@@ -389,7 +398,7 @@ export function PrecisionAssessmentIntro({
             {isStarting
                 ? "검사 준비 중"
                 : isCandidateAssessment
-                ? "내 뉴앙 코드 알아보기"
+                ? "정밀 검사 시작하기"
                 : "내 대표 코드 알아보기"}
           </button>
           {entrySource === "first-result" ? (

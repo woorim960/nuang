@@ -1,32 +1,22 @@
 "use client";
 
-import {
-  ArrowRight,
-  Bell,
-  BookOpen,
-  Compass,
-  FileText,
-  ShieldCheck,
-  Sparkles,
-} from "lucide-react";
+import { ArrowRight, LockKeyhole, MessageCircle } from "lucide-react";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
-import { ButtonLink } from "@/components/ui/Button";
-import { StatusPill } from "@/components/ui/StatusPill";
-import { listLocalAttempts } from "@/features/assessment/assessment-storage";
-import { getValidatedLocalResultSnapshot } from "@/features/assessment/assessment-result-snapshot";
-import type { LocalAssessmentAttempt } from "@/features/assessment/types";
+import { FeedPollCard } from "@/features/feed/FeedPollCard";
 import {
   type FeedItem,
   listHomeFeedPreviewItems,
 } from "@/features/feed/feed-seed";
-
-const titleByAssessmentId: Record<string, string> = {
-  "nu-core-full": "정밀 코어",
-  "nu-core-quick": "빠른 코어",
-};
+import { listLocalAttempts } from "@/features/assessment/assessment-storage";
+import type { LocalAssessmentAttempt } from "@/features/assessment/types";
+import {
+  buildHomeDashboardModel,
+  type HomeHeroModel,
+  type HomeResultModel,
+} from "@/features/home/home-dashboard-model";
+import styles from "./HomeDashboard.module.css";
 
 type HomeDashboardProps = {
   feedPreviewItems?: FeedItem[];
@@ -41,368 +31,361 @@ export function HomeDashboard({
   useEffect(() => {
     let isMounted = true;
 
-    listLocalAttempts().then((nextAttempts) => {
-      if (!isMounted) return;
-      setAttempts(nextAttempts);
-      setLoaded(true);
-    });
+    async function loadAttempts() {
+      try {
+        const nextAttempts = await listLocalAttempts();
+        if (isMounted) setAttempts(nextAttempts);
+      } catch {
+        if (isMounted) setAttempts([]);
+      } finally {
+        if (isMounted) setLoaded(true);
+      }
+    }
+
+    void loadAttempts();
 
     return () => {
       isMounted = false;
     };
   }, []);
 
-  const inProgressAttempt = getLatestInProgressAttempt(attempts);
-  const latestCompletedAttempt = getLatestCompletedAttempt(attempts);
-  const latestResult = useMemo(
-    () =>
-      latestCompletedAttempt
-        ? calculateAttemptResult(latestCompletedAttempt)
-        : null,
-    [latestCompletedAttempt],
-  );
-  const dailyPrompt = getDailyPrompt(feedPreviewItems);
+  const model = useMemo(() => buildHomeDashboardModel(attempts), [attempts]);
+  const dailyPlay = selectDailyPlay(feedPreviewItems);
+  const conversations = selectConversations(feedPreviewItems, dailyPlay?.id);
 
   return (
-    <div className="grid gap-6 pb-2">
-      <header className="flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <p className="text-lg font-black text-primary">NUANG</p>
-          <h1 className="mt-3 text-2xl font-black">오늘의 리듬을 열어볼까요</h1>
-          <p className="mt-2 text-sm leading-6 text-muted">
-            검사, 리포트, 피드를 한 흐름으로 이어서 나를 조금 더 선명하게
-            봅니다.
-          </p>
-        </div>
-        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line bg-white text-muted shadow-[0_10px_24px_rgb(63_56_118_/_8%)]">
-          <Bell aria-hidden="true" size={19} />
-        </div>
+    <div className={styles.home}>
+      <header className={styles.brandBar}>
+        <p className={styles.brand}>NUANG</p>
+        <p className={styles.brandDescription}>
+          나를 이해하고, 서로를 이해하는 곳
+        </p>
       </header>
 
-      <section className="-mx-5 border-y border-line bg-white px-5 py-5 sm:-mx-6 sm:px-6">
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <StatusPill tone="primary">오늘의 추천</StatusPill>
-            <DailyFocus
-              inProgressAttempt={inProgressAttempt}
-              latestCompletedAttempt={latestCompletedAttempt}
-              latestResult={latestResult}
-              loaded={loaded}
-            />
-          </div>
-          <NuangCharacter motif="purple" priority size="md" />
+      {loaded ? <HomeHero hero={model.hero} /> : <HomeHeroSkeleton />}
+
+      {dailyPlay ? <HomeDailyPlay item={dailyPlay} /> : null}
+
+      <HomeConversations items={conversations} />
+
+      <aside className={styles.privacyNote}>
+        <LockKeyhole aria-hidden="true" size={19} strokeWidth={1.9} />
+        <div>
+          <h2>내 답변은 나만 볼 수 있어요</h2>
+          <p>공유할 때도 뉴앙 코드와 공개 가능한 요약만 보여줘요.</p>
         </div>
-      </section>
-
-      <section className="grid gap-3">
-        <SectionHeader
-          description="앱을 오래 둘러보지 않아도 오늘 필요한 순서대로 이어져요."
-          title="오늘의 메뉴"
-        />
-        <div className="border-y border-line">
-          <ActionLine
-            body="내 코드, 캐릭터, 세부 신호를 한 번에 확인해요."
-            href="/my/profile"
-            icon={<Sparkles aria-hidden="true" size={18} />}
-            title="내 성향 자세히 보기"
-          />
-          <ActionLine
-            body="검사 결과와 1:1 비교 리포트를 다시 열어봐요."
-            href="/my/reports"
-            icon={<FileText aria-hidden="true" size={18} />}
-            title="내 리포트 모아보기"
-          />
-          <ActionLine
-            body="다른 리듬의 생각을 읽고 가볍게 반응해요."
-            href="/feed"
-            icon={<Compass aria-hidden="true" size={18} />}
-            title="피드에서 반응 보기"
-          />
-        </div>
-      </section>
-
-      {dailyPrompt && <DailyPrompt item={dailyPrompt} />}
-
-      <FeedPreview items={feedPreviewItems} />
-
-      <section className="-mx-5 border-y border-line bg-[#f7faf8] px-5 py-5 sm:-mx-6 sm:px-6">
-        <div className="flex items-start gap-3">
-          <ShieldCheck
-            aria-hidden="true"
-            className="mt-0.5 shrink-0 text-success"
-            size={20}
-          />
-          <div>
-            <h2 className="text-sm font-black">공유와 비교는 내가 정해요</h2>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              직접 응답, 원점수, 민감 항목은 공개 화면에 넣지 않습니다. 공유와
-              비교는 열어둔 범위 안에서만 작동해요.
-            </p>
-          </div>
-        </div>
-      </section>
+      </aside>
     </div>
   );
 }
 
-function DailyFocus({
-  inProgressAttempt,
-  latestCompletedAttempt,
-  latestResult,
-  loaded,
-}: {
-  inProgressAttempt?: LocalAssessmentAttempt;
-  latestCompletedAttempt?: LocalAssessmentAttempt;
-  latestResult: ReturnType<typeof calculateAttemptResult> | null;
-  loaded: boolean;
-}) {
-  if (!loaded) {
-    return (
-      <div className="mt-3">
-        <h2 className="text-xl font-black">오늘의 루틴을 불러오는 중</h2>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          기기에 남아 있는 검사 흐름을 확인하고 있어요.
-        </p>
-      </div>
-    );
-  }
-
-  if (inProgressAttempt) {
-    const title =
-      titleByAssessmentId[inProgressAttempt.assessmentId] ?? "코어 검사";
-    const answered = Object.keys(inProgressAttempt.responses).length;
-    const total = inProgressAttempt.itemIds.length;
-    const progress = total > 0 ? Math.round((answered / total) * 100) : 0;
+function HomeHero({ hero }: { hero: HomeHeroModel }) {
+  if (hero.kind === "in_progress") {
+    const isFresh = hero.answered === 0 && !hero.adaptive;
 
     return (
-      <div className="mt-3">
-        <h2 className="text-xl font-black">{title}를 이어갈 시간이에요</h2>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          {answered} / {total}문항까지 왔어요. 오늘은 남은 문항만 가볍게
-          마무리해도 충분합니다.
-        </p>
-        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#eceaf4]">
-          <div
-            className="h-full rounded-full bg-primary"
-            style={{ width: `${progress}%` }}
-          />
+      <section className={styles.hero}>
+        <HeroCharacter />
+        <div className={styles.heroCopy}>
+          <p className={styles.eyebrow}>{hero.assessmentLabel}</p>
+          <h1>
+            {hero.adaptive
+              ? "마지막 확인 질문을 이어가요"
+              : isFresh
+                ? "내 모습을 더 자세히 알아볼까요?"
+                : "답하던 곳부터 계속해요"}
+          </h1>
+          <p className={styles.heroBody}>
+            {hero.adaptive
+              ? "비슷하게 나온 코드 한 자리만 확인하면 결과를 볼 수 있어요."
+              : isFresh
+                ? "첫 결과를 바탕으로 더 다양한 상황 속 내 모습을 살펴봐요."
+                : "답한 내용은 잘 보관되어 있어요. 다음 질문부터 바로 이어갈 수 있어요."}
+          </p>
+
+          {!isFresh ? (
+            <div className={styles.progressBlock}>
+              <div className={styles.progressMeta}>
+                <span>
+                  {hero.adaptive ? "코드 확인 중" : "현재까지 저장됨"}
+                </span>
+                <strong>
+                  {hero.adaptive ? "거의 완료" : `${hero.progress}%`}
+                </strong>
+              </div>
+              <div
+                aria-label={`${hero.assessmentLabel} 진행률`}
+                aria-valuemax={hero.total}
+                aria-valuemin={0}
+                aria-valuenow={hero.answered}
+                aria-valuetext={`${hero.total}개 중 ${hero.answered}개 응답 저장`}
+                className={styles.progressTrack}
+                role="progressbar"
+              >
+                <span
+                  className={styles.progressValue}
+                  style={{ width: `${hero.adaptive ? 96 : hero.progress}%` }}
+                />
+              </div>
+            </div>
+          ) : null}
+
+          <HeroPrimaryLink href={hero.href}>
+            {isFresh
+              ? `${hero.assessmentLabel} 시작`
+              : `${hero.assessmentLabel} 이어가기`}
+          </HeroPrimaryLink>
+          {hero.latestResult ? (
+            <HeroTextLink href={hero.latestResult.href}>
+              저장된 내 결과 다시 보기
+            </HeroTextLink>
+          ) : null}
         </div>
-        <ButtonLink
-          className="mt-4 w-full"
-          href={`/assessments/${inProgressAttempt.assessmentId}`}
-        >
-          이어하기
-        </ButtonLink>
-      </div>
+      </section>
     );
   }
 
-  if (latestCompletedAttempt && latestResult) {
-    const title =
-      titleByAssessmentId[latestCompletedAttempt.assessmentId] ?? "코어 검사";
-    const isFullResult = latestCompletedAttempt.mode === "full";
-
+  if (hero.kind === "quick_complete") {
     return (
-      <div className="mt-3">
-        <h2 className="text-xl font-black">
-          {latestResult.profileName ?? "내 코드가 준비됐어요"}
-        </h2>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          {latestResult.code ?? "-----"} · {title} 기준으로{" "}
-          {isFullResult
-            ? "성향지도와 비교를 이어갈 수 있어요."
-            : "첫 성향 결과를 확인하고 정밀 검사로 이어갈 수 있어요."}
-        </p>
-        <div className="mt-4 grid grid-cols-3 divide-x divide-line border-y border-line text-center">
-          <MiniMetric label="코드" value={latestResult.code ?? "-----"} />
-          <MiniMetric
-            label="지도"
-            value={isFullResult ? "열림" : "정밀 후"}
-          />
-          <MiniMetric
-            label="비교"
-            value={isFullResult ? "가능" : "정밀 후"}
-          />
-        </div>
-        <ButtonLink
-          className="mt-4 w-full"
-          href={`/results/local/${latestCompletedAttempt.id}`}
-          variant="secondary"
-        >
-          리포트 다시 보기
-        </ButtonLink>
-      </div>
-    );
-  }
-
-  return (
-    <div className="mt-3">
-      <h2 className="text-xl font-black">빠른 코어로 오늘의 기준을 만들어요</h2>
-      <p className="mt-2 text-sm leading-6 text-muted">
-        로그인 없이 3분 정도면 첫 뉴앙 코드와 리포트를 볼 수 있어요.
-      </p>
-      <div className="mt-4 grid grid-cols-3 divide-x divide-line border-y border-line text-center">
-        <MiniMetric label="진행" value="간단하게" />
-        <MiniMetric label="시간" value="3분" />
-        <MiniMetric label="결과" value="첫 코드" />
-      </div>
-      <ButtonLink className="mt-4 w-full" href="/assessments/nu-core-quick">
-        빠른 코어 시작
-      </ButtonLink>
-    </div>
-  );
-}
-
-function SectionHeader({
-  description,
-  title,
-}: {
-  description: string;
-  title: string;
-}) {
-  return (
-    <div>
-      <h2 className="text-base font-black">{title}</h2>
-      <p className="mt-1 text-sm leading-6 text-muted">{description}</p>
-    </div>
-  );
-}
-
-function ActionLine({
-  body,
-  href,
-  icon,
-  title,
-}: {
-  body: string;
-  href: string;
-  icon: ReactNode;
-  title: string;
-}) {
-  return (
-    <Link
-      className="flex min-h-[76px] items-center gap-3 py-4 text-left"
-      href={href}
-    >
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-surface-soft text-primary">
-        {icon}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="block text-sm font-black text-foreground">
-          {title}
-        </span>
-        <span className="mt-1 block text-xs leading-5 text-muted">{body}</span>
-      </span>
-      <ArrowRight
-        aria-hidden="true"
-        className="shrink-0 text-muted"
-        size={17}
+      <ResultHero
+        eyebrow="나의 첫 뉴앙 코드"
+        primaryHref={hero.result.href}
+        primaryLabel="첫 결과 다시 보기"
+        result={hero.result}
+        secondaryHref={hero.precisionHref}
+        secondaryLabel="정밀 성향 검사로 더 자세히 보기"
       />
+    );
+  }
+
+  if (hero.kind === "full_complete") {
+    return (
+      <ResultHero
+        eyebrow="내 대표 코드"
+        primaryHref={hero.result.href}
+        primaryLabel="내 성향 자세히 보기"
+        result={hero.result}
+        secondaryHref="/map"
+        secondaryLabel="성향지도에서 다섯 자리 살펴보기"
+      />
+    );
+  }
+
+  return (
+    <section className={styles.hero}>
+      <HeroCharacter />
+      <div className={styles.heroCopy}>
+        <p className={styles.eyebrow}>처음이라면 여기부터</p>
+        <h1>3분이면 첫 뉴앙 코드를 만나요</h1>
+        <p className={styles.heroBody}>
+          부담 없는 질문에 답하고, 지금 내 모습과 가까운 5글자 코드와 특징을
+          확인해 보세요.
+        </p>
+        <div className={styles.heroFacts} aria-label="첫 성향 검사 특징">
+          <span>로그인 없이</span>
+          <span>중단해도 이어서</span>
+        </div>
+        <HeroPrimaryLink href={hero.href}>첫 성향 검사 시작</HeroPrimaryLink>
+      </div>
+    </section>
+  );
+}
+
+function ResultHero({
+  eyebrow,
+  primaryHref,
+  primaryLabel,
+  result,
+  secondaryHref,
+  secondaryLabel,
+}: {
+  eyebrow: string;
+  primaryHref: string;
+  primaryLabel: string;
+  result: HomeResultModel;
+  secondaryHref: string;
+  secondaryLabel: string;
+}) {
+  return (
+    <section className={styles.hero}>
+      <HeroCharacter />
+      <div className={styles.heroCopy}>
+        <p className={styles.eyebrow}>{eyebrow}</p>
+        <p aria-label={`뉴앙 코드 ${result.code}`} className={styles.code}>
+          {result.code.split("").map((letter, index) => (
+            <span aria-hidden="true" key={`${letter}-${index}`}>
+              {letter}
+            </span>
+          ))}
+        </p>
+        <h1>{result.profileName}</h1>
+        <p className={styles.heroBody}>{result.summary}</p>
+        <HeroPrimaryLink href={primaryHref}>{primaryLabel}</HeroPrimaryLink>
+        <HeroTextLink href={secondaryHref}>{secondaryLabel}</HeroTextLink>
+      </div>
+    </section>
+  );
+}
+
+function HeroCharacter() {
+  return (
+    <div className={styles.characterStage}>
+      <span aria-hidden="true" className={styles.characterGlow} />
+      <NuangCharacter
+        className={styles.character}
+        motif="purple"
+        priority
+        size="lg"
+      />
+    </div>
+  );
+}
+
+function HeroPrimaryLink({
+  children,
+  href,
+}: {
+  children: string;
+  href: string;
+}) {
+  return (
+    <Link className={styles.primaryAction} href={href}>
+      <span>{children}</span>
+      <ArrowRight aria-hidden="true" size={18} strokeWidth={2} />
     </Link>
   );
 }
 
-function DailyPrompt({ item }: { item: FeedItem }) {
+function HeroTextLink({ children, href }: { children: string; href: string }) {
   return (
-    <section className="-mx-5 border-y border-line bg-[#fffaf0] px-5 py-5 sm:-mx-6 sm:px-6">
-      <div className="flex items-start gap-3">
-        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-surface-soft text-primary">
-          <BookOpen aria-hidden="true" size={18} />
-        </span>
-        <div className="min-w-0">
-          <StatusPill tone="caution">오늘의 질문</StatusPill>
-          <h2 className="mt-2 text-lg font-black leading-6">{item.title}</h2>
-          <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted">
-            {item.body}
-          </p>
-          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted">
-            <span>{item.replyLabel}</span>
-            <span>{item.likeLabel}</span>
-          </div>
-        </div>
+    <Link className={styles.textAction} href={href}>
+      {children}
+      <ArrowRight aria-hidden="true" size={15} strokeWidth={2} />
+    </Link>
+  );
+}
+
+function HomeHeroSkeleton() {
+  return (
+    <section aria-busy="true" className={`${styles.hero} ${styles.skeleton}`}>
+      <div className={styles.heroCopy}>
+        <p className={styles.eyebrow}>내 홈을 준비하는 중</p>
+        <h1>오늘 이어갈 내용을 확인하고 있어요</h1>
+        <p className={styles.heroBody}>잠시만 기다려 주세요.</p>
+        <span className={styles.skeletonAction} />
       </div>
     </section>
   );
 }
 
-function MiniMetric({ label, value }: { label: string; value: string }) {
+function HomeDailyPlay({ item }: { item: FeedItem }) {
   return (
-    <div className="min-w-0 px-3 py-3">
-      <p className="truncate text-[11px] font-bold text-muted">{label}</p>
-      <p className="mt-1 truncate text-xs font-black text-foreground">
-        {value}
-      </p>
+    <section className={styles.section}>
+      <SectionHeading
+        description="가볍게 고르고 다른 사람들의 생각도 만나보세요."
+        title={item.poll ? "오늘의 성향 게임" : "오늘의 성향 질문"}
+      />
+      <div className={styles.playCard}>
+        {item.poll ? (
+          <FeedPollCard poll={item.poll} returnTo="/home" />
+        ) : (
+          <Link className={styles.playLink} href="/feed">
+            <p className={styles.playLabel}>{getFeedKindLabel(item.kind)}</p>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+            <span className={styles.playAction}>
+              다른 사람들의 답 보기
+              <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
+            </span>
+          </Link>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function HomeConversations({ items }: { items: FeedItem[] }) {
+  return (
+    <section className={styles.section}>
+      <SectionHeading
+        actionHref="/feed"
+        actionLabel="피드에서 더 보기"
+        description="다른 사람들은 어떤 생각을 나누고 있는지 둘러보세요."
+        title="지금 나누는 이야기"
+      />
+      {items.length > 0 ? (
+        <div className={styles.conversationList}>
+          {items.map((item) => (
+            <Link className={styles.conversation} href="/feed" key={item.id}>
+              <div className={styles.conversationMeta}>
+                <span>{item.authorName}</span>
+                <span aria-hidden="true">·</span>
+                <span>{item.timeLabel}</span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.body}</p>
+              <span className={styles.replyLabel}>
+                <MessageCircle aria-hidden="true" size={14} strokeWidth={1.9} />
+                {item.replyLabel}
+              </span>
+            </Link>
+          ))}
+        </div>
+      ) : (
+        <Link className={styles.emptyConversation} href="/feed">
+          새로운 이야기를 먼저 만나보세요
+          <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
+        </Link>
+      )}
+    </section>
+  );
+}
+
+function SectionHeading({
+  actionHref,
+  actionLabel,
+  description,
+  title,
+}: {
+  actionHref?: string;
+  actionLabel?: string;
+  description: string;
+  title: string;
+}) {
+  return (
+    <div className={styles.sectionHeading}>
+      <div>
+        <h2>{title}</h2>
+        <p>{description}</p>
+      </div>
+      {actionHref && actionLabel ? (
+        <Link href={actionHref}>{actionLabel}</Link>
+      ) : null}
     </div>
   );
 }
 
-function FeedPreview({ items }: { items: FeedItem[] }) {
+function selectDailyPlay(items: FeedItem[]) {
   return (
-    <section className="grid gap-3">
-      <SectionHeader
-        description="오늘의 질문, 밸런스 게임, 리포트 공유를 한 번에 훑어봐요."
-        title="피드 미리보기"
-      />
-      <div className="border-y border-line">
-        {items.slice(0, 3).map((item) => {
-          return (
-            <article
-              className="border-b border-line py-4 last:border-b-0"
-              key={item.id}
-            >
-              <div className="flex items-center gap-2 text-xs font-semibold text-muted">
-                <span>{item.authorHandle}</span>
-                <span>·</span>
-                <span>{item.timeLabel}</span>
-              </div>
-              <h3 className="mt-2 text-sm font-black leading-5">
-                {item.title}
-              </h3>
-              <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">
-                {item.body}
-              </p>
-              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted">
-                <span>{item.replyLabel}</span>
-                <span>{item.likeLabel}</span>
-              </div>
-            </article>
-          );
-        })}
-      </div>
-      <ButtonLink
-        className="w-full"
-        href="/feed"
-        icon={<Compass aria-hidden="true" size={17} />}
-      >
-        피드 전체 보기
-      </ButtonLink>
-    </section>
-  );
-}
-
-function getLatestInProgressAttempt(attempts: LocalAssessmentAttempt[]) {
-  return [...attempts]
-    .filter((attempt) => attempt.state === "in_progress")
-    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
-}
-
-function getLatestCompletedAttempt(attempts: LocalAssessmentAttempt[]) {
-  return [...attempts]
-    .filter((attempt) => attempt.state === "completed")
-    .sort((a, b) =>
-      (b.completedAt ?? b.updatedAt).localeCompare(
-        a.completedAt ?? a.updatedAt,
-      ),
-    )[0];
-}
-
-function getDailyPrompt(items: FeedItem[]) {
-  return (
+    items.find((item) => item.kind === "balance_game" && item.poll) ??
     items.find((item) => item.kind === "daily_question") ??
-    items.find((item) => item.kind === "balance_game")
+    items.find((item) => item.kind === "daily_mood")
   );
 }
 
-function calculateAttemptResult(attempt: LocalAssessmentAttempt) {
-  return getValidatedLocalResultSnapshot(attempt)?.scoreResult ?? null;
+function selectConversations(items: FeedItem[], dailyPlayId?: string) {
+  return items
+    .filter((item) => item.id !== dailyPlayId && isCurrentCodeContent(item))
+    .slice(0, 2);
+}
+
+function isCurrentCodeContent(item: FeedItem) {
+  if (!item.reportShare) return true;
+  return /^[EI][RN][GA][KM][CQ]$/.test(item.reportShare.profileCode);
+}
+
+function getFeedKindLabel(kind: FeedItem["kind"]) {
+  if (kind === "balance_game") return "둘 중 하나를 골라보세요";
+  if (kind === "daily_mood") return "지금 내 모습은 어느 쪽인가요?";
+  return "한 문장으로 생각해 봐요";
 }

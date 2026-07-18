@@ -459,6 +459,7 @@ describe("LocalResultView", () => {
   });
 
   it("opens a completed candidate quick result in the new five-code report", async () => {
+    const user = userEvent.setup();
     storageMock.getLocalAttempt.mockResolvedValue(
       buildCompletedAttempt(candidateQuickCoreAssessment),
     );
@@ -472,10 +473,37 @@ describe("LocalResultView", () => {
     ).toBeInTheDocument();
     expect(screen.getAllByRole("tab")).toHaveLength(5);
     expect(
-      fetchMock.mock.calls.some(([url]) =>
-        String(url).includes("claim-result"),
+      fetchMock.mock.calls.some(
+        ([url, init]) =>
+          String(url).includes("claim-result") && init?.method === "POST",
       ),
     ).toBe(false);
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        String(url).includes("claim-result?localResultId="),
+      ),
+    ).toBe(true);
+    expect(screen.getByRole("button", { name: "공유" })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "공유" }));
+    expect(
+      screen.getByRole("dialog", { name: "내 뉴앙 코드를 나눠볼까요?" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /결과 이미지 저장·공유/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "로그인하고 공유하기" }),
+    ).toHaveAttribute(
+      "href",
+      "/login?next=%2Fresults%2Flocal%2Flocal_nu-core-quick",
+    );
+
+    await user.keyboard("{Escape}");
+    expect(
+      screen.queryByRole("dialog", { name: "내 뉴앙 코드를 나눠볼까요?" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "공유" })).toHaveFocus();
   });
 
   it("opens a completed candidate precision result as the finished full flow", async () => {

@@ -1,10 +1,16 @@
 "use client";
 
-import { ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronDown, Share2, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useId, useState, type CSSProperties } from "react";
+import {
+  useCallback,
+  useId,
+  useRef,
+  useState,
+  type CSSProperties,
+} from "react";
 import { AssessmentCompletionState } from "@/features/assessment/AssessmentCompletionState";
 import {
   getAdaptiveItemsForDomains,
@@ -35,11 +41,16 @@ import {
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { CoreScoreResult } from "@/lib/scoring/types";
+import {
+  CandidateResultShareSheet,
+  type CandidateShareAccountController,
+} from "@/features/result/CandidateResultShareSheet";
 import styles from "@/features/result/CandidateCoreResultView.module.css";
 
 type CandidateCoreResultViewProps = {
   attempt: LocalAssessmentAttempt;
   result: CoreScoreResult;
+  shareAccount?: CandidateShareAccountController;
 };
 
 const candidateAxisTabLabels = ["사람", "생각", "관계", "일상", "마음"];
@@ -47,9 +58,13 @@ const candidateAxisTabLabels = ["사람", "생각", "관계", "일상", "마음"
 export function CandidateCoreResultView({
   attempt,
   result,
+  shareAccount,
 }: CandidateCoreResultViewProps) {
   const [selectedPosition, setSelectedPosition] = useState(0);
   const [isTrustOpen, setIsTrustOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
+  const closeShare = useCallback(() => setIsShareOpen(false), []);
   const detailId = useId();
   const trustId = useId();
   const profile = getCandidateProfileDefinition(result.code ?? "");
@@ -93,6 +108,11 @@ export function CandidateCoreResultView({
   const selectedRightDirection = selectedAxis.directions[selectedRightSymbol];
   const nextPosition = (selectedPosition + 1) % candidateAxisCopy.length;
   const isQuickResult = isCandidateQuickRelease(attempt);
+  const isShareAvailable = Boolean(
+    shareAccount &&
+      (isQuickResult || isCandidateFullRelease(attempt)),
+  );
+  const resultLabel = isQuickResult ? "첫 성향 결과" : "정밀 성향 결과";
   const precisionHref = isQuickResult
     ? buildPrecisionIntroHref({
         backDestination: `/results/local/${attempt.id}`,
@@ -110,7 +130,20 @@ export function CandidateCoreResultView({
       <header className={styles.appBar}>
         <span aria-hidden="true" />
         <p>검사 결과</p>
-        <span aria-hidden="true" />
+        {isShareAvailable ? (
+          <button
+            aria-haspopup="dialog"
+            className={styles.shareButton}
+            onClick={() => setIsShareOpen(true)}
+            ref={shareButtonRef}
+            type="button"
+          >
+            <Share2 aria-hidden="true" size={16} strokeWidth={1.9} />
+            공유
+          </button>
+        ) : (
+          <span aria-hidden="true" />
+        )}
       </header>
 
       <div className={styles.content}>
@@ -491,6 +524,17 @@ export function CandidateCoreResultView({
           )}
         </section>
       </div>
+      {shareAccount ? (
+        <CandidateResultShareSheet
+          account={shareAccount}
+          attempt={attempt}
+          isOpen={isShareOpen}
+          onClose={closeShare}
+          result={result}
+          resultLabel={resultLabel}
+          returnFocusRef={shareButtonRef}
+        />
+      ) : null}
     </main>
   );
 }
