@@ -1,0 +1,37 @@
+opaque_item_id,candidate_id,target_facet,keyed_direction,candidate_status,situation_bucket,target_response_process,context_label,prompt_text,pair_key,wording_polarity
+OX-001,OECI-C01,OE-CI,HIGH,PRIMARY_COGNITIVE,이야기 이어보기,자발적 후속 장면 생성,이야기의 다음 내용을 알기 전,이어질 장면을 머릿속으로 떠올려본다.,OE-CI-P01,affirmative
+OX-002,OECI-C11,OE-CI,HIGH,EXPLORATORY_COGNITIVE,가능성 이어보기,가능성 연쇄 확장,하나의 가벼운 가능성이 떠올랐을 때,뒤에 이어질 장면까지 펼쳐본다.,OE-CI-P06,affirmative
+OX-003,OEAE-C12,OE-AE,LOW,EXPLORATORY_COGNITIVE,남은 인상,인상 이탈,마음에 드는 장면이나 소리를 접한 뒤,곧 다른 생각으로 관심이 옮겨간다.,OE-AE-P06,affirmative
+OX-004,OEAE-C04,OE-AE,LOW,PRIMARY_COGNITIVE,음악,청각 인상 짧은 관여,일상에서 음악을 들을 때,그 인상에 머무는 시간은 짧다.,OE-AE-P02,affirmative
+OX-005,OECI-C09,OE-CI,HIGH,PRIMARY_COGNITIVE,중간 장면 이어보기,장면 전후 서사 생성,영화나 드라마의 중간 장면만 우연히 봤을 때,그 장면 앞뒤에 무슨 일이 있었을지 떠올려본다.,OE-CI-P05,affirmative
+OX-006,OECI-C10,OE-CI,LOW,PRIMARY_COGNITIVE,중간 장면 이어보기,전후 서사를 따로 생성하지 않음,영화나 드라마의 중간 장면만 우연히 봤을 때,그 장면만 보고 앞뒤 이야기는 따로 떠올려보지 않는다.,OE-CI-P05,negated
+OX-007,OEAE-C10,OE-AE,LOW,EXPLORATORY_COGNITIVE,미디어 장면,표현물 인상 짧은 관여,영상이나 사진의 한 장면을 볼 때,그 인상은 짧게 지나간다.,OE-AE-P05,affirmative
+OX-008,OECI-C06,OE-CI,LOW,EXPLORATORY_COGNITIVE,설명된 공간,설명 범위에서 사고 종료,가보지 않은 공간에 대한 설명을 접할 때,설명된 내용까지만 생각하고 넘어간다.,OE-CI-P03,limiter
+OX-009,OEIE-C10,OE-IE,LOW,EXPLORATORY_COGNITIVE,정보 연결하기,현재 정보에만 관여,대화 중 전에 들었던 것과 비슷한 설명이 나왔을 때,지금 들은 설명에만 관심을 둔다.,OE-IE-P05,limiter
+OX-010,OEIE-C05,OE-IE,HIGH,PRIMARY_COGNITIVE,다른 설명 비교하기,대안 설명 비교,인터넷에서 같은 주제를 다르게 설명하는 글 두 개를 발견했을 때,각 글이 어떤 근거로 설명하는지 비교해본다.,OE-IE-P03,affirmative
+OX-011,OECI-C03,OE-CI,HIGH,PRIMARY_COGNITIVE,일상 장면 바꾸기,일상 장면의 다른 전개 생성,평범한 일상 장면을 보고 있을 때,다르게 이어질 장면을 떠올려본다.,OE-CI-P02,affirmative
+OX-012,OEIE-C09,OE-IE,HIGH,EXPLORATORY_COGNITIVE,정보 연결하기,정보 연결 탐색,대화 중 전에 들었던 것과 비슷한 설명이 나왔을 때,예전에 들은 내용과 어떻게 연결되는지 생각해본다.,OE-IE-P05,affirmative
+OX-013,OECI-C04,OE-CI,LOW,PRIMARY_COGNITIVE,일상 장면 바꾸기,현재 장면에 머무는 관여,평범한 일상 장면을 보고 있을 때,보이는 장면만 살펴보고 그대로 지나간다.,OE-CI-P02,limiter
+OX-014,OEAE-C09,OE-AE,HIGH,EXPLORATORY_COGNITIVE,미디어 장면,표현물 인상 성찰,영상이나 사진의 한 장면을 볼 때,그 장면이 주는 인상을 곱씹어본다.,OE-AE-P05,affirmative
+OX-015,OEAE-C03,OE-AE,HIGH,PRIMARY_COGNITIVE,음악,청각 인상 관심,일상에서 음악을 들을 때,소리와 분위기가 주는 인상에 관심이 간다.,OE-AE-P02,affirmative
+OX-016,OEIE-C07,OE-IE,HIGH,EXPLORATORY_COGNITIVE,규칙의 배경 알아보기,규칙 배경 관심,앱이나 서비스에서 처음 보는 이용 규칙을 안내받았을 때,왜 그렇게 정해졌는지 배경이 궁금해진다.,OE-IE-P04,affirmative
+OX-017,OECI-C07,OE-CI,HIGH,PRIMARY_COGNITIVE,가벼운 가정,비위협 가정의 전개 확장,현실과 다른 가벼운 가정을 접할 때,그 안에서 일어날 장면을 이어서 떠올린다.,OE-CI-P04,affirmative
+OX-018,OEIE-C11,OE-IE,HIGH,PRIMARY_COGNITIVE,답 너머 알아보기,필요 범위 너머 탐색,궁금했던 질문의 답을 찾았을 때,그 답이 나온 이유나 배경까지 더 알아본다.,OE-IE-P06,affirmative
+OX-019,OEAE-C05,OE-AE,HIGH,PRIMARY_COGNITIVE,일상 풍경,환경 인상 관심,하늘이나 나무 같은 일상 풍경을 볼 때,색과 분위기가 주는 인상에 눈길이 간다.,OE-AE-P03,affirmative
+OX-020,OEIE-C03,OE-IE,HIGH,PRIMARY_COGNITIVE,처음 듣는 개념,개념 의미 탐색,영상을 보거나 대화하던 중 처음 듣는 개념이 나왔을 때,그 개념이 정확히 무엇을 뜻하는지 더 알아본다.,OE-IE-P02,affirmative
+OX-021,OEIE-C12,OE-IE,LOW,PRIMARY_COGNITIVE,답 너머 알아보기,답 확인에서 탐색 종료,궁금했던 질문의 답을 찾았을 때,답을 확인한 뒤에는 관련 내용을 더 찾아보지 않는다.,OE-IE-P06,negated
+OX-022,OEIE-C04,OE-IE,LOW,PRIMARY_COGNITIVE,처음 듣는 개념,필요한 의미 범위에서 탐색 종료,영상을 보거나 대화하던 중 처음 듣는 개념이 나왔을 때,영상이나 대화를 이해할 만큼만 뜻을 확인한다.,OE-IE-P02,limiter
+OX-023,OEIE-C08,OE-IE,LOW,EXPLORATORY_COGNITIVE,규칙의 배경 알아보기,적용 방법에서 탐색 종료,앱이나 서비스에서 처음 보는 이용 규칙을 안내받았을 때,이용에 필요한 방법만 확인한다.,OE-IE-P04,limiter
+OX-024,OEAE-C02,OE-AE,LOW,PRIMARY_COGNITIVE,색·빛,시각 인상 짧은 관여,일상에서 색과 빛이 어우러진 장면을 볼 때,잠깐 본 뒤 그대로 지나간다.,OE-AE-P01,affirmative
+OX-025,OEAE-C11,OE-AE,HIGH,EXPLORATORY_COGNITIVE,남은 인상,인상 재관여,마음에 드는 장면이나 소리를 접한 뒤,그때의 느낌을 다시 떠올려본다.,OE-AE-P06,affirmative
+OX-026,OEIE-C02,OE-IE,LOW,PRIMARY_COGNITIVE,작동 방식 알아보기,사용 범위에서 탐색 종료,처음 보는 기능이 있는 생활용품을 사용할 때,어떻게 쓰는지만 확인하고 바로 사용한다.,OE-IE-P01,limiter
+OX-027,OEIE-C01,OE-IE,HIGH,PRIMARY_COGNITIVE,작동 방식 알아보기,작동 이유 관심,처음 보는 기능이 있는 생활용품을 사용할 때,왜 그런 방식으로 작동하는지 궁금해진다.,OE-IE-P01,affirmative
+OX-028,OECI-C08,OE-CI,LOW,PRIMARY_COGNITIVE,가벼운 가정,가정에 짧게 관여,현실과 다른 가벼운 가정을 접할 때,그 상황을 잠시 생각한 뒤 현재 내용으로 돌아온다.,OE-CI-P04,affirmative
+OX-029,OEAE-C08,OE-AE,LOW,PRIMARY_COGNITIVE,일상 공간,공간 인상 짧은 관여,처음 들어간 일상 공간을 둘러볼 때,분위기에는 눈길이 짧게 머문다.,OE-AE-P04,affirmative
+OX-030,OECI-C12,OE-CI,LOW,EXPLORATORY_COGNITIVE,가능성 이어보기,첫 가능성에 머무는 관여,하나의 가벼운 가능성이 떠올랐을 때,처음 떠오른 장면만 생각하고 다른 일로 넘어간다.,OE-CI-P06,limiter
+OX-031,OECI-C02,OE-CI,LOW,PRIMARY_COGNITIVE,이야기 이어보기,현재 서사에 머무는 관여,이야기의 다음 내용을 알기 전,지금까지 나온 이야기만 되짚어보며 기다린다.,OE-CI-P01,limiter
+OX-032,OEIE-C06,OE-IE,LOW,PRIMARY_COGNITIVE,다른 설명 비교하기,단일 설명에서 탐색 종료,인터넷에서 같은 주제를 다르게 설명하는 글 두 개를 발견했을 때,한 글의 설명으로 이해되면 다른 글은 더 살펴보지 않는다.,OE-IE-P03,negated
+OX-033,OECI-C05,OE-CI,HIGH,EXPLORATORY_COGNITIVE,설명된 공간,공간 표상 생성,가보지 않은 공간에 대한 설명을 접할 때,그곳의 모습을 머릿속으로 그려본다.,OE-CI-P03,affirmative
+OX-034,OEAE-C01,OE-AE,HIGH,PRIMARY_COGNITIVE,색·빛,시각 인상 관여,일상에서 색과 빛이 어우러진 장면을 볼 때,그 인상에 눈길이 오래 머문다.,OE-AE-P01,affirmative
+OX-035,OEAE-C07,OE-AE,HIGH,PRIMARY_COGNITIVE,일상 공간,공간 인상 관심,처음 들어간 일상 공간을 둘러볼 때,그곳이 주는 분위기에 관심이 간다.,OE-AE-P04,affirmative
+OX-036,OEAE-C06,OE-AE,LOW,PRIMARY_COGNITIVE,일상 풍경,환경 인상 짧은 관여,하늘이나 나무 같은 일상 풍경을 볼 때,잠시 본 뒤 하던 일로 관심이 돌아간다.,OE-AE-P03,affirmative

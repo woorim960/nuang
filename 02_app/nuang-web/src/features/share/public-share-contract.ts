@@ -7,7 +7,10 @@ export type PublicShareDomainSummary = {
   symbol: string | null;
 };
 
+export type PublicShareAssessmentKind = "full" | "quick";
+
 export type PublicShareSuccessInput = {
+  assessmentKind: PublicShareAssessmentKind;
   completedAt: string;
   domains: PublicShareDomainSummary[];
   profileCode: string;
@@ -26,15 +29,15 @@ export const publicShareUnavailableStates: Record<
 > = {
   expired: {
     httpStatus: 410,
-    message: "만료된 공유 링크예요.",
+    message: "만료된 공유 주소예요.",
   },
   not_found: {
     httpStatus: 404,
-    message: "공유 결과를 찾을 수 없어요.",
+    message: "공유 리포트를 찾을 수 없어요.",
   },
   revoked: {
     httpStatus: 410,
-    message: "철회된 공유 링크예요.",
+    message: "더 이상 열 수 없는 공유 주소예요.",
   },
 };
 
@@ -44,6 +47,7 @@ export function createPublicShareSuccessPayload(input: PublicShareSuccessInput) 
     share: {
       status: "active",
       result: {
+        assessmentKind: input.assessmentKind,
         completedAt: input.completedAt,
         domains: input.domains.slice(0, publicShareMaxDomainCount).map((domain) => ({
           domainId: domain.domainId,

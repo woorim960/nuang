@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils/cn";
 
 type NuangCharacterProps = {
   motif?: NuangCharacterMotif;
+  priority?: boolean;
   size?: NuangCharacterSize;
   className?: string;
 };
@@ -23,6 +24,7 @@ const sizeClass: Record<NuangCharacterSize, string> = {
 
 export function NuangCharacter({
   motif = "purple",
+  priority = false,
   size = "md",
   className,
 }: NuangCharacterProps) {
@@ -40,7 +42,7 @@ export function NuangCharacter({
         className="h-full w-full object-contain"
         draggable={false}
         height={nuangCharacterPixelSizes[size]}
-        priority={size === "lg"}
+        priority={priority || size === "lg"}
         src={nuangCharacterAssetPaths[motif]}
         width={nuangCharacterPixelSizes[size]}
       />

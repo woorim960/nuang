@@ -10,7 +10,7 @@ export type ClaimResultWriteStepId =
 export type ClaimResultWriteFailureCode =
   | "account_link_missing"
   | "age_or_required_consent_missing"
-  | "local_result_already_claimed"
+  | "assessment_release_mismatch"
   | "assessment_attempt_write_failed"
   | "assessment_response_write_failed"
   | "score_snapshot_write_failed"
@@ -21,6 +21,7 @@ export type ClaimResultWriteSuccessInput = {
   claimedAt: string;
   profileCode: string;
   profileName: string;
+  restored?: boolean;
   resultReportId: string;
 };
 
@@ -87,9 +88,9 @@ export const claimResultWriteFailures: Record<
     retryable: false,
     step: "upsert_age_consent",
   },
-  local_result_already_claimed: {
+  assessment_release_mismatch: {
     httpStatus: 409,
-    message: "이미 계정에 저장된 결과예요.",
+    message: "검사 버전을 확인할 수 없어 결과를 저장하지 못했어요.",
     retryable: false,
     step: "create_assessment_attempt",
   },
@@ -144,6 +145,7 @@ export function createClaimResultWriteSuccessPayload(
       claimedAt: input.claimedAt,
       profileCode: input.profileCode,
       profileName: input.profileName,
+      restored: input.restored ?? false,
       resultReportId: input.resultReportId,
     },
     next: {

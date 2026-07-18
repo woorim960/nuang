@@ -64,7 +64,7 @@ describe("local export payload", () => {
 
     expect(payload.schema).toBe(localExportSchemaVersion);
     expect(payload.note).toBe(localExportPrivacyNote);
-    expect(payload.note).toContain("직접 응답이 포함될 수 있으니 공유에 주의");
+    expect(payload.note).toContain("검사 응답이 포함될 수 있으니 공유에 주의");
     expect(payload.coreAttempts[0]?.responses["item-1"]?.value).toBe(4);
     expect(payload.labResults[0]?.expiresAt).toBe("2026-08-07T00:00:00.000Z");
   });

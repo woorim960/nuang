@@ -1,0 +1,80 @@
+.root {
+  display: flex;
+  min-height: 100dvh;
+  max-width: 32.5rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-inline: auto;
+  color: var(--foreground);
+  background:
+    radial-gradient(
+      circle at 50% 45%,
+      color-mix(in srgb, var(--primary) 14%, transparent),
+      transparent 34%
+    ),
+    var(--background);
+}
+
+.visual {
+  position: relative;
+  display: grid;
+  width: 4.5rem;
+  height: 4.5rem;
+  place-items: center;
+}
+
+.orbit {
+  position: absolute;
+  inset: 0.2rem;
+  border: 1px solid color-mix(in srgb, var(--primary) 24%, transparent);
+  border-radius: 999px;
+  animation: entry-orbit 1.6s ease-in-out infinite;
+}
+
+.core {
+  display: grid;
+  width: 2.8rem;
+  height: 2.8rem;
+  place-items: center;
+  border-radius: 1rem;
+  color: var(--surface);
+  font-size: 1rem;
+  font-weight: 850;
+  background: var(--primary);
+  box-shadow: 0 0.8rem 1.8rem
+    color-mix(in srgb, var(--primary) 25%, transparent);
+}
+
+.wordmark {
+  margin-top: 0.75rem;
+  color: var(--primary-strong);
+  font-size: 0.82rem;
+  font-weight: 820;
+  letter-spacing: 0.18em;
+}
+
+.status {
+  margin-top: 0.65rem;
+  color: var(--muted);
+  font-size: 0.76rem;
+  font-weight: 620;
+}
+
+@keyframes entry-orbit {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit {
+    animation: none;
+  }
+}

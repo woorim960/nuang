@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     follow: false,
     index: false,
   },
-  title: "로컬 결과 확인 | NUANG",
+  title: "결과 리포트 | NUANG",
 };
 
 export default async function LocalResultPage({ params }: LocalResultPageProps) {

@@ -16,7 +16,7 @@ describe("AppShell", () => {
 
     const main = screen.getByRole("main");
 
-    expect(main).toHaveClass("pb-[calc(108px+env(safe-area-inset-bottom))]");
+    expect(main).toHaveClass("pb-[calc(82px+env(safe-area-inset-bottom))]");
     expect(main).toHaveClass("pt-[calc(20px+env(safe-area-inset-top))]");
     expect(screen.getByRole("navigation", { name: "하단 주요 메뉴" }))
       .toBeInTheDocument();

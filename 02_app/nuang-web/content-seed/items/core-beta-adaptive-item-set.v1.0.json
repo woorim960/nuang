@@ -1,0 +1,128 @@
+{
+  "item_set_id": "core-beta-adaptive-item-set.v1.0",
+  "assessment_release_id": "NUANG-CORE-BETA-1.0",
+  "status": "MVP_ADAPTIVE_FOLLOW_UP_CANDIDATE",
+  "items_per_tied_domain": 3,
+  "items": [
+    {
+      "item_id": "NU-BA-SE-01",
+      "domain_id": "SE",
+      "construct_id": "SE-RE",
+      "context_label": "처음 보는 사람들과 가벼운 모임에 있을 때",
+      "text_ko": "한두 사람과 이야기를 나누며 자리에 익숙해진다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-SE-02",
+      "domain_id": "SE",
+      "construct_id": "SE-RE",
+      "context_label": "사람들과 긴 시간을 함께 보낸 뒤",
+      "text_ko": "다음 일을 하기 전에 혼자 조용히 쉬는 시간이 필요하다.",
+      "scoring_key": "reverse"
+    },
+    {
+      "item_id": "NU-BA-SE-03",
+      "domain_id": "SE",
+      "construct_id": "SE-AI",
+      "context_label": "여럿이 대화를 시작하지 않고 있을 때",
+      "text_ko": "내가 가벼운 이야기를 꺼내 대화를 시작한다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-OE-01",
+      "domain_id": "OE",
+      "construct_id": "OE-CI",
+      "context_label": "익숙한 이야기를 다시 접했을 때",
+      "text_ko": "전에 생각하지 못한 다른 해석을 떠올려본다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-OE-02",
+      "domain_id": "OE",
+      "construct_id": "OE-IE",
+      "context_label": "새로운 기능을 처음 사용해볼 때",
+      "text_ko": "작동 원리보다 바로 쓸 수 있는 방법부터 확인한다.",
+      "scoring_key": "reverse"
+    },
+    {
+      "item_id": "NU-BA-OE-03",
+      "domain_id": "OE",
+      "construct_id": "OE-IE",
+      "context_label": "궁금했던 질문의 답을 이미 찾은 뒤",
+      "text_ko": "다른 설명이나 가능성도 더 찾아본다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-RO-01",
+      "domain_id": "RO",
+      "construct_id": "RO-EC",
+      "context_label": "가까운 사람이 문제를 이야기할 때",
+      "text_ko": "해결 방법을 말하기 전에 그 사람이 어떻게 느꼈는지 확인한다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-RO-02",
+      "domain_id": "RO",
+      "construct_id": "RO-EC",
+      "context_label": "누군가 갈등 상황을 설명할 때",
+      "text_ko": "상대의 마음보다 무엇이 문제를 만들었는지부터 정리한다.",
+      "scoring_key": "reverse"
+    },
+    {
+      "item_id": "NU-BA-RO-03",
+      "domain_id": "RO",
+      "construct_id": "RO-EC",
+      "context_label": "친구가 실수한 일을 털어놓을 때",
+      "text_ko": "잘잘못을 따지기 전에 그때 어떤 마음이었는지 궁금해진다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-SM-01",
+      "domain_id": "SM",
+      "construct_id": "SM-EP",
+      "context_label": "마감이 따로 없는 개인 할 일을 시작한 뒤",
+      "text_ko": "짧게라도 여러 날 이어간다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-SM-02",
+      "domain_id": "SM",
+      "construct_id": "SM-OS",
+      "context_label": "정해둔 순서가 예상과 다르게 틀어졌을 때",
+      "text_ko": "새 순서를 정하기보다 그날 상황에 맞춰 처리한다.",
+      "scoring_key": "reverse"
+    },
+    {
+      "item_id": "NU-BA-SM-03",
+      "domain_id": "SM",
+      "construct_id": "SM-EP",
+      "context_label": "해야 할 일을 잠시 멈춘 뒤",
+      "text_ko": "다시 시작할 시간을 정해 흐름을 이어간다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-ER-01",
+      "domain_id": "ER",
+      "construct_id": "ER-IR",
+      "context_label": "작은 실수를 뒤늦게 알았을 때",
+      "text_ko": "마음의 불편함이 빠르게 커진다.",
+      "scoring_key": "direct"
+    },
+    {
+      "item_id": "NU-BA-ER-02",
+      "domain_id": "ER",
+      "construct_id": "ER-IR",
+      "context_label": "예상하지 못한 문제가 생겼을 때",
+      "text_ko": "해결할 일을 살피는 동안 감정의 크기는 크게 달라지지 않는다.",
+      "scoring_key": "reverse"
+    },
+    {
+      "item_id": "NU-BA-ER-03",
+      "domain_id": "ER",
+      "construct_id": "ER-WD",
+      "context_label": "중요한 답을 기다리고 있을 때",
+      "text_ko": "좋지 않은 결과가 반복해서 떠오른다.",
+      "scoring_key": "direct"
+    }
+  ]
+}

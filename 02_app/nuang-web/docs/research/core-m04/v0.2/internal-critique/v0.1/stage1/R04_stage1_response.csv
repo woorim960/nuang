@@ -1,0 +1,9 @@
+protocol_version,reviewer_slot,sequence,opaque_item_id,context_label,prompt_text,first_construct_mapping,second_construct_mapping,direction_guess,clarity_rating_1_4,single_response_rating_1_4,universality_rating_1_4,scale_fit_rating_1_4,desirable_direction_guess,risk_flags,fatal_risk_note,stage1_notes
+m04-core-expert-kit.v0.2-targeted,R04,1,NV2-004,설명을 듣다가 필요한 답을 얻었을 때,거기까지 알아보고 넘어간다.,OE_IE,NONE,LOW,4,4,4,4,UNCLEAR,NONE,NONE,필요한 범위에서 탐색을 멈추는 반복 경향을 직접 묻고 있어 능력보다는 성향 신호가 뚜렷하다.
+m04-core-expert-kit.v0.2-targeted,R04,2,NV2-006,이번 주 안에 할 일이 생겼을 때,"언제 할지 미리 정하지 않고, 그때 가능한 시간에 시작한다.",SM_OS,NONE,LOW,4,3,3,4,HIGH,NONE,NONE,시점 구조화 경향이 중심이지만 실제 시간 여유와 일정 자율성이 응답을 좌우할 수 있다.
+m04-core-expert-kit.v0.2-targeted,R04,3,NV2-001,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,따로 알림이 없어도 약속한 일을 챙겨서 한다.,METHOD,SM_RL,UNCLEAR,3,2,3,4,HIGH,NONE,NONE,알림 없이 챙긴다는 조건이 전향기억과 알림 사용 습관을 크게 반영해 역할 이행 성향과 능력 효과가 분리되지 않는다.
+m04-core-expert-kit.v0.2-targeted,R04,4,NV2-007,여러 단계를 거친 일을 마무리할 때,"정해둔 확인 순서 없이, 그때 생각나는 부분부터 살핀다.",SM_OS,NONE,LOW,4,4,3,3,HIGH,NONE,NONE,확인 순서를 구조화하는 반복 경향은 선명하지만 직무 절차와 과업 복잡도에 따라 경험 빈도가 달라질 수 있다.
+m04-core-expert-kit.v0.2-targeted,R04,5,NV2-003,내가 한 것을 다른 사람이 확인할 예정일 때,잘못 보일까 하는 걱정이 생겨도 같은 생각이 반복되지는 않는다.,ER_WD,NONE,LOW,3,3,4,4,LOW,NONE,NONE,반복 걱정은 직접 다루지만 결정이나 착수 지연이 제시되지 않아 순간적 평가불안과 지속 성향의 경계가 남는다.
+m04-core-expert-kit.v0.2-targeted,R04,6,NV2-008,설명을 듣다가 이해되지 않는 부분이 생겼을 때,이유나 배경을 더 알아보고 싶어진다.,OE_IE,NONE,HIGH,3,3,3,4,HIGH,NONE,NONE,이유와 배경을 찾는 경향은 보이나 이해되지 않은 부분을 해소하려는 상황적 필요와 학습 역할의 영향도 함께 받는다.
+m04-core-expert-kit.v0.2-targeted,R04,7,NV2-002,나중에 다시 쓸 자료를 보관할 때,"따로 정해둔 자리 없이, 그때 두기 편한 곳에 둔다.",SM_OS,NONE,LOW,4,4,4,4,HIGH,NONE,NONE,자료 위치를 고정 기준으로 정하는지 묻는 단일 반응으로 반복적 정리 경향이 비교적 직접 관찰된다.
+m04-core-expert-kit.v0.2-targeted,R04,8,NV2-005,사소한 선택에서 상대와 원하는 것이 다를 때,"상대가 고를 수 있는 여지를 두기보다, 내가 원하는 쪽으로 정하려 한다.",RO_RN,NONE,LOW,4,3,3,4,HIGH,NONE,NONE,선택 여지 유지 여부는 직접적이나 바람직한 답이 뚜렷하고 관계 권력과 주장성 차이가 존중 성향처럼 응답될 수 있다.

@@ -20,22 +20,22 @@ describe("NuangNextActionFlow", () => {
         title: "검사",
       },
       {
+        href: "/feed",
+        id: "feed",
+        stepLabel: "2",
+        title: "피드",
+      },
+      {
         href: "/map",
         id: "map",
-        stepLabel: "2",
+        stepLabel: "3",
         title: "성향지도",
       },
       {
-        href: "/my",
-        id: "visibility",
-        stepLabel: "3",
-        title: "공개 범위",
-      },
-      {
-        href: "/together",
-        id: "together",
+        href: "/my/reports",
+        id: "reports",
         stepLabel: "4",
-        title: "함께",
+        title: "내 리포트",
       },
     ]);
   });
@@ -52,17 +52,17 @@ describe("NuangNextActionFlow", () => {
       "href",
       "/assessments",
     );
-    expect(screen.getByRole("link", { name: "2단계 성향지도 열기" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "2단계 피드 열기" })).toHaveAttribute(
+      "href",
+      "/feed",
+    );
+    expect(screen.getByRole("link", { name: "3단계 성향지도 열기" })).toHaveAttribute(
       "href",
       "/map",
     );
-    expect(screen.getByRole("link", { name: "3단계 공개 범위 열기" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "4단계 내 리포트 열기" })).toHaveAttribute(
       "href",
-      "/my",
-    );
-    expect(screen.getByRole("link", { name: "4단계 함께 열기" })).toHaveAttribute(
-      "href",
-      "/together",
+      "/my/reports",
     );
   });
 });

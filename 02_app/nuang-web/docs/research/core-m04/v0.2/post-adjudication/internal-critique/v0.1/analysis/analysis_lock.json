@@ -1,0 +1,13 @@
+{
+  "protocol_version": "m04-core-expert-kit.v0.2-smrl-r3",
+  "locked_at": "2026-07-18T22:16:27+0900",
+  "status": "INTERNAL_ADJUDICATION_COMPLETE_PASS_TO_COGNITIVE_NOT_EXTERNAL_VALIDATION",
+  "files": {
+    "analysis_summary.json": "f9d9507f8280445289f638933604fdc2f9adf0d44adfb2dec2a1b23b6126e179",
+    "item_metrics.csv": "cd659338fb371dca05277e49d465089ea56bebfd0865a3c37054b30bfbfea463",
+    "qualitative_evidence.csv": "f1033c37785ec747d25d2f60e357804a5656bf6781eec58aa7c574e23ebe488a",
+    "adjudication_decision.csv": "8d821fabd082153489c662b4c5a483510c8c211e9aefb2a6e15c5df03683c867",
+    "INTERNAL_ADJUDICATION.md": "93767fe5df56a238cdcb506a77e95281c7f31fcd042f93f742df4fc97e84888c"
+  },
+  "warning": "Internal AI critique aggregation only; not external expert validation, user evidence, psychometric validation, or production approval."
+}

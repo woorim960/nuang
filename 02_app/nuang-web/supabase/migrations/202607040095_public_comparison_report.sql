@@ -6,7 +6,6 @@ create table comparison.public_comparison_report (
   viewer_result_report_id uuid not null references report.result_report(id) on delete cascade,
   viewer_public_snapshot_id uuid references profile.profile_public_snapshot(id) on delete set null,
   target_public_snapshot_id uuid not null references profile.profile_public_snapshot(id) on delete restrict,
-  target_public_code_id uuid references profile.profile_public_code(id) on delete set null,
   policy_version text not null,
   report_payload jsonb not null,
   access_status text not null default 'active' check (access_status in ('active', 'stale', 'disabled', 'deleted')),
@@ -27,10 +26,6 @@ on comparison.public_comparison_report(viewer_result_report_id);
 
 create index public_comparison_target_snapshot_idx
 on comparison.public_comparison_report(target_public_snapshot_id, access_status);
-
-create index public_comparison_target_code_idx
-on comparison.public_comparison_report(target_public_code_id)
-where target_public_code_id is not null;
 
 create index public_comparison_access_status_idx
 on comparison.public_comparison_report(access_status, created_at desc);

@@ -2,7 +2,7 @@ import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import PublicComparisonReportPage, {
   metadata,
-} from "@/app/together/comparison/[comparisonReportId]/page";
+} from "@/app/reports/comparison/[comparisonReportId]/page";
 
 describe("PublicComparisonReportPage", () => {
   it("keeps the pending comparison report page noindex and scope-limited", async () => {
@@ -28,9 +28,9 @@ describe("PublicComparisonReportPage", () => {
     expect(screen.getByText("비공개 추정 없음")).toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "공통점" })).not.toBeInTheDocument();
     expect(screen.queryByRole("heading", { name: "차이점" })).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "리포트 구성 보기" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "내 리포트로" })).toHaveAttribute(
       "href",
-      "/together/comparison-preview",
+      "/my/reports",
     );
   });
 
@@ -42,8 +42,8 @@ describe("PublicComparisonReportPage", () => {
     );
 
     expect(screen.getByText("형식 확인 필요")).toBeInTheDocument();
-    expect(screen.getByText("유효하지 않은 리포트 ID")).toBeInTheDocument();
-    expect(screen.getByText(/유효한 리포트 ID가 필요합니다/)).toBeInTheDocument();
+    expect(screen.getByText("유효하지 않은 비교 링크")).toBeInTheDocument();
+    expect(screen.getByText(/비교 리포트 링크 형식을 확인해 주세요/)).toBeInTheDocument();
     expect(screen.queryByText("not-a-report")).not.toBeInTheDocument();
   });
 });

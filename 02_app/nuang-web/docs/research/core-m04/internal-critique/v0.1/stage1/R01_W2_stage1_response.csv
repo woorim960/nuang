@@ -1,0 +1,51 @@
+protocol_version,reviewer_slot,wave_id,sequence_in_wave,opaque_item_id,context_label,prompt_text,first_construct_mapping,second_construct_mapping,direction_guess,clarity_rating_1_4,single_response_rating_1_4,universality_rating_1_4,scale_fit_rating_1_4,desirable_direction_guess,risk_flags,fatal_risk_note,stage1_notes
+m04-core-expert-kit.v0.1,R01,W2,1,NX-089,가깝지는 않은 사람이 힘든 일에 대한 내 의견을 물을 때,처음에는 그 사람이 어떤 마음이었는지가 궁금해진다.,RO_EC,NONE,UNCLEAR,4,3,4,4,UNCLEAR,SOCIAL_DESIRABILITY,NONE,상대 마음 쪽 반응은 분명하지만 코드북만으로 어느 쪽이 HIGH인지는 확정하기 어렵다.
+m04-core-expert-kit.v0.1,R01,W2,2,NX-077,관심 있는 주제로 대화가 길어질 때,잠시 대화에서 벗어나고 싶어진다.,SE_RE,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,3,NX-113,처음 만난 사람들과 가볍게 이야기할 때,대화 흐름에 함께할수록 기운이 붙는다.,SE_RE,NONE,HIGH,4,4,3,4,SIMILAR,CULTURAL_ROLE,NONE,첫 만남의 규범과 긴장 수준이 에너지 반응에 영향을 줄 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,4,NX-054,가까운 사람이 계획한 일이 뜻대로 되지 않았다고 메시지를 보낼 때,처음에는 그 사람이 지금 어떤 마음일지가 궁금해진다.,RO_EC,NONE,UNCLEAR,4,3,3,4,UNCLEAR,RELATIONSHIP_STATUS;SOCIAL_DESIRABILITY,NONE,관계의 친밀도와 메시지 맥락에 따라 반응이 달라질 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,5,NX-085,여럿이 일을 나눠 맡았을 때,다른 사람이 물어볼 때 내 부분의 진행 상태를 확인한다.,SM_RL,NONE,LOW,4,3,3,4,HIGH,SOCIAL_DESIRABILITY;OCCUPATION;ADJACENT_CONSTRUCT,NONE,확인 시점만 제시되어 실제 역할 이행 여부는 드러나지 않는다.
+m04-core-expert-kit.v0.1,R01,W2,6,NX-001,해야 할 일이 몇 가지 겹쳐 있을 때,그때 눈에 띄는 일부터 처리한다.,SM_OS,SM_EP,LOW,4,3,4,4,HIGH,ATTENTION;ADJACENT_CONSTRUCT,NONE,주의를 끄는 정도와 일의 구조화가 함께 반영된다.
+m04-core-expert-kit.v0.1,R01,W2,7,NX-025,인터넷에서 같은 주제를 다르게 설명하는 글 두 개를 발견했을 때,각 글이 어떤 근거로 설명하는지 비교해본다.,OE_IE,METHOD,HIGH,4,3,3,4,SIMILAR,ABILITY;EDUCATION;DIGITAL_ACCESS;ADJACENT_CONSTRUCT,NONE,탐구 성향과 읽기 능력 및 온라인 접근성이 함께 작용한다.
+m04-core-expert-kit.v0.1,R01,W2,8,NX-095,처음 들어간 일상 공간을 둘러볼 때,분위기에는 눈길이 짧게 머문다.,OE_AE,NONE,LOW,4,4,3,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,9,NX-036,여럿의 일정을 맞출 때,내가 가능한 시간을 먼저 알린다.,SE_AI,SM_RL,HIGH,4,3,4,4,SIMILAR,CULTURAL_ROLE;ADJACENT_CONSTRUCT,NONE,먼저 표현하기와 일정 협력 행동이 겹친다.
+m04-core-expert-kit.v0.1,R01,W2,10,NX-047,누군가 속상한 일과 해결할 문제를 함께 이야기할 때,원인과 해결할 부분이 먼저 눈에 들어온다.,RO_EC,NONE,UNCLEAR,4,4,4,4,UNCLEAR,NONE,NONE,원인과 해결 쪽 반응은 직접적이지만 코드북에 HIGH 극이 명시되지 않았다.
+m04-core-expert-kit.v0.1,R01,W2,11,NX-017,가깝지는 않은 사람이 힘든 일을 꺼낼 때,그 사람이 느낀 마음보다 일어난 일이 먼저 궁금해진다.,RO_EC,NONE,UNCLEAR,4,4,3,4,UNCLEAR,RELATIONSHIP_STATUS,NONE,관계 거리와 대화 목적이 주의 순서에 영향을 줄 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,12,NX-039,결과를 확신하기 어려운 선택을 해야 할 때,걱정이 생겨도 필요한 시점에는 결정을 내린다.,ER_WD,NONE,LOW,4,3,4,4,LOW,SOCIAL_DESIRABILITY;ADJACENT_CONSTRUCT,NONE,걱정의 발생과 결정 행동이 한 문항 안에서 서로 다른 층위로 제시된다.
+m04-core-expert-kit.v0.1,R01,W2,13,NX-080,해보려던 일이 한 번 잘되지 않았을 때,다시 해도 잘되지 않을 장면이 반복해서 떠오른다.,ER_WD,NONE,HIGH,4,4,4,4,LOW,CLINICAL_CONTAMINATION,NONE,현재 불안이나 기분 상태가 반복적 실패 예상에 영향을 줄 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,14,NX-096,영상이나 사진의 한 장면을 볼 때,그 장면이 주는 인상을 곱씹어본다.,OE_AE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,15,NX-033,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,다시 생각났을 때 처리한다.,SM_RL,METHOD,LOW,4,2,4,4,HIGH,MEMORY;SOCIAL_DESIRABILITY;ADJACENT_CONSTRUCT,NONE,약속 이행보다 부탁을 다시 떠올리는 기억 효과가 답을 크게 좌우한다.
+m04-core-expert-kit.v0.1,R01,W2,16,NX-093,내가 한 것을 다른 사람이 확인할 예정일 때,해야 할 행동을 몇 번이고 다시 망설인다.,ER_WD,NONE,HIGH,2,3,3,3,LOW,CLINICAL_CONTAMINATION;LIMITER;SOCIAL_DESIRABILITY,NONE,해야 할 행동을 다시 망설인다는 표현이 구체적으로 어떤 행동인지 모호하다.
+m04-core-expert-kit.v0.1,R01,W2,17,NX-076,작은 불편이 짧은 시간 안에 반복될 때,처음보다 짜증이 빠르게 쌓인다.,ER_IR,NONE,HIGH,4,4,4,4,LOW,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,18,NX-043,상대와 의견이 달라 대화가 길어질 때,의견 차이가 이어져도 감정의 크기는 크게 달라지지 않는다.,ER_IR,NONE,LOW,4,4,4,4,LOW,NEGATION;SOCIAL_DESIRABILITY,NONE,
+m04-core-expert-kit.v0.1,R01,W2,19,NX-058,함께 준비한 일이 잘 풀리지 않았을 때,처음에는 함께한 사람들의 마음에 주의가 간다.,RO_EC,NONE,UNCLEAR,4,3,4,4,UNCLEAR,SOCIAL_DESIRABILITY,NONE,사람 마음 쪽 반응은 분명하지만 HIGH 방향은 코드북에서 확정할 수 없다.
+m04-core-expert-kit.v0.1,R01,W2,20,NX-028,마음에 드는 장면이나 소리를 접한 뒤,그때의 느낌을 다시 떠올려본다.,OE_AE,METHOD,HIGH,4,3,4,4,SIMILAR,MEMORY;ADJACENT_CONSTRUCT,NONE,미적 인상에 머무는 경향과 경험을 회상하는 능력이 겹친다.
+m04-core-expert-kit.v0.1,R01,W2,21,NX-079,반복해서 쓰는 물건이나 자료를 둘 때,다시 찾을 자리를 정해둔다.,SM_OS,NONE,HIGH,4,4,4,4,HIGH,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,22,NX-032,맡은 일을 약속한 때까지 마치기 어려워졌을 때,약속한 때가 가까워진 뒤 상황을 알린다.,SM_RL,NONE,LOW,4,3,3,4,HIGH,SOCIAL_DESIRABILITY;OCCUPATION,NONE,얼마나 가까운 시점인지 해석이 관계와 업무 관행에 따라 달라질 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,23,NX-072,처음 보는 기능이 있는 생활용품을 사용할 때,왜 그런 방식으로 작동하는지 궁금해진다.,OE_IE,NONE,HIGH,4,4,3,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,24,NX-056,미뤄도 당장 문제없는 할 일이 생겼을 때,해야 할 때가 가까워져야 첫 행동을 시작한다.,SM_EP,SM_OS,LOW,4,3,4,4,HIGH,SOCIAL_DESIRABILITY;ADJACENT_CONSTRUCT,NONE,착수 지속성과 일정 계획 여부가 함께 반영된다.
+m04-core-expert-kit.v0.1,R01,W2,25,NX-005,누군가 해결책을 묻지 않고 속상한 일을 이야기할 때,이야기의 원인과 결과가 먼저 궁금해진다.,RO_EC,NONE,UNCLEAR,4,4,4,4,UNCLEAR,NONE,NONE,원인과 결과 쪽 반응은 직접적이지만 코드북에 HIGH 극이 명시되지 않았다.
+m04-core-expert-kit.v0.1,R01,W2,26,NX-138,대화 중 전에 들었던 것과 비슷한 설명이 나왔을 때,예전에 들은 내용과 어떻게 연결되는지 생각해본다.,OE_IE,METHOD,HIGH,3,2,4,3,SIMILAR,MEMORY;ADJACENT_CONSTRUCT,NONE,개념 연결 탐구와 과거 설명을 기억하는 능력이 분리되지 않는다.
+m04-core-expert-kit.v0.1,R01,W2,27,NX-041,누군가 힘들었던 일을 이야기할 때,무슨 일이 있었는지부터 확인한다.,RO_EC,NONE,UNCLEAR,4,4,4,4,UNCLEAR,NONE,NONE,사건 쪽 주의는 분명하지만 HIGH 방향은 코드북에서 확정할 수 없다.
+m04-core-expert-kit.v0.1,R01,W2,28,NX-010,상대의 실수 때문에 함께한 일에 문제가 생겼을 때,그 사람의 태도나 성격까지 함께 말한다.,RO_RN,ER_IR,LOW,4,3,4,4,HIGH,SOCIAL_DESIRABILITY;ADJACENT_CONSTRUCT,NONE,사람을 평가하는 반응은 존중 저하와 감정 동요가 함께 반영될 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,29,NX-009,평범한 일상 장면을 보고 있을 때,보이는 장면만 살펴보고 그대로 지나간다.,OE_CI,NONE,LOW,4,4,4,4,SIMILAR,LIMITER,NONE,
+m04-core-expert-kit.v0.1,R01,W2,30,NX-050,공동 활동의 다음 순서가 정해지지 않았을 때,진행할 방법을 먼저 제안한다.,SE_AI,NONE,HIGH,4,4,3,4,SIMILAR,CULTURAL_ROLE,NONE,모임의 공식 역할이 먼저 제안하는 행동에 영향을 줄 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,31,NX-038,이야기의 다음 내용을 알기 전,이어질 장면을 머릿속으로 떠올려본다.,OE_CI,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,32,NX-090,다른 사람과 정한 내용이 여러 가지일 때,기억나는 내용을 기준으로 움직인다.,SM_RL,METHOD,LOW,4,2,3,4,HIGH,MEMORY;SOCIAL_DESIRABILITY;OCCUPATION,NONE,역할 이행 성향보다 합의 내용을 기억하는 정도가 답을 크게 좌우한다.
+m04-core-expert-kit.v0.1,R01,W2,33,NX-024,중요하게 생각하는 문제에서 의견이 다를 때,내 의견을 말한 뒤 상대가 선택할 여지를 남긴다.,RO_RN,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,
+m04-core-expert-kit.v0.1,R01,W2,34,NX-081,사소한 일이 꼬여 감정이 올라온 뒤,다음 일을 할 때는 감정의 크기가 줄어든다.,ER_IR,NONE,LOW,4,4,4,4,LOW,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,35,NX-051,익숙한 사람들과 대화가 이어질 때,기운이 점점 살아난다.,SE_RE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,36,NX-070,하나의 가벼운 가능성이 떠올랐을 때,처음 떠오른 장면만 생각하고 다른 일로 넘어간다.,OE_CI,NONE,LOW,4,4,4,4,SIMILAR,LIMITER,NONE,
+m04-core-expert-kit.v0.1,R01,W2,37,NX-127,내가 마쳐야 다른 사람이 이어갈 수 있을 때,상대가 요청한 뒤 필요한 부분을 넘긴다.,SM_RL,NONE,LOW,4,4,3,4,HIGH,SOCIAL_DESIRABILITY;OCCUPATION,NONE,
+m04-core-expert-kit.v0.1,R01,W2,38,NX-129,며칠 쉬었다가 다시 이어야 하는 일이 있을 때,어디서부터 다시 할지 확인하고 재개한다.,SM_EP,SM_OS,HIGH,4,3,4,4,HIGH,ADJACENT_CONSTRUCT,NONE,중단 뒤 복귀와 재개 지점 구조화가 함께 반영된다.
+m04-core-expert-kit.v0.1,R01,W2,39,NX-074,일상에서 색과 빛이 어우러진 장면을 볼 때,그 인상에 눈길이 오래 머문다.,OE_AE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,40,NX-069,상대의 답이나 반응이 늦어질 때,답이 오기 전까지 한 가지 좋지 않은 이유에 오래 머물지 않는다.,ER_WD,NONE,LOW,4,4,4,4,LOW,NEGATION;LIMITER,NONE,한 가지 이유에 머물지 않아도 여러 부정적 이유를 바꿔가며 걱정할 수 있다.
+m04-core-expert-kit.v0.1,R01,W2,41,NX-040,나중에 다시 쓸 자료를 보관할 때,종류나 쓰임에 따라 찾을 곳을 나눈다.,SM_OS,NONE,HIGH,4,4,4,4,HIGH,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,42,NX-123,끝내기까지 작은 마무리만 남았을 때,다른 일로 넘어가기 전에 남은 부분을 마친다.,SM_EP,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,
+m04-core-expert-kit.v0.1,R01,W2,43,NX-125,여럿이 가벼운 활동을 한동안 함께할 때,시간이 지날수록 기운이 줄어든다.,SE_RE,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,44,NX-131,가벼운 주제에서 의견이 엇갈릴 때,내 생각을 먼저 말한다.,SE_AI,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,45,NX-068,영상을 보거나 대화하던 중 처음 듣는 개념이 나왔을 때,그 개념이 정확히 무엇을 뜻하는지 더 알아본다.,OE_IE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,46,NX-020,부담 없는 소규모 대화가 이어질 때,자연스럽게 그 흐름에 함께하게 된다.,SE_RE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,
+m04-core-expert-kit.v0.1,R01,W2,47,NX-108,함께할 계획에서 상대가 다른 방향을 원한다고 다시 말했을 때,내가 원하는 방향의 이유를 계속 설명한다.,RO_RN,NONE,LOW,4,4,3,4,HIGH,SOCIAL_DESIRABILITY;RELATIONSHIP_STATUS,NONE,계속 설명하는 행동이 요청받은 추가 설명인지 선택 압박인지 맥락에 따라 달라진다.
+m04-core-expert-kit.v0.1,R01,W2,48,NX-124,가보지 않은 공간에 대한 설명을 접할 때,그곳의 모습을 머릿속으로 그려본다.,OE_CI,METHOD,HIGH,4,3,3,4,SIMILAR,ABILITY;ADJACENT_CONSTRUCT,NONE,상상 확장 경향과 시각적 심상 능력이 함께 반영된다.
+m04-core-expert-kit.v0.1,R01,W2,49,NX-111,해야 하지만 당장 재미나 보상이 적은 일을 할 때,한 번에 많이 하지 못해도 조금씩 이어간다.,SM_EP,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,
+m04-core-expert-kit.v0.1,R01,W2,50,NX-037,사소한 일이 생각대로 되지 않을 때,불편해도 감정의 크기는 천천히 변한다.,ER_IR,NONE,LOW,4,3,4,4,LOW,LIMITER,NONE,감정이 천천히 커져 결국 크게 동요하는 경우와 낮은 동요를 구분하기 어렵다.

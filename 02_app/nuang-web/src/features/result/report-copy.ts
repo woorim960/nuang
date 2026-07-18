@@ -117,7 +117,7 @@ const domainCopy: Record<string, DomainCopy> = {
     actionLow: "반복되는 일은 의지보다 알림, 체크리스트, 고정 장소에 맡겨보세요.",
   },
   RO: {
-    highName: "상대 마음과 경계를 함께 살피는 편",
+    highName: "상대 마음과 내 기준을 함께 살피는 편",
     lowName: "솔직한 선택과 거리 조절을 중시하는 편",
     highSummary:
       "상대의 마음과 부담을 살피며, 관계 안에서 부드럽게 조율하려는 경향이 큽니다.",
@@ -255,9 +255,9 @@ export function getDomainNarrative(domain: DomainScore) {
         "상황에 맞춰 다른 방식을 선택할 여지가 큽니다.",
       ],
       summary: copy.middleSummary,
-      title: `${domain.label}는 균형 구간에 가까워요`,
+      title: `${domain.label}${getTopicParticle(domain.label)} 균형 구간에 가까워요`,
       watch:
-        "경계 구간은 작은 응답 변화로 코드가 바뀔 수 있으니 이름보다 실제 설명을 더 중요하게 봐주세요.",
+        "균형 구간은 작은 응답 변화로 코드가 바뀔 수 있으니 이름보다 실제 설명을 더 중요하게 봐주세요.",
     };
   }
 
@@ -270,6 +270,19 @@ export function getDomainNarrative(domain: DomainScore) {
     title: direction === "high" ? copy.highName : copy.lowName,
     watch: direction === "high" ? copy.highWatch : copy.lowWatch,
   };
+}
+
+function getTopicParticle(value: string) {
+  const lastCodePoint = value.codePointAt(value.length - 1);
+
+  if (!lastCodePoint) return "은";
+
+  const hangulOffset = lastCodePoint - 0xac00;
+  const isHangulSyllable = hangulOffset >= 0 && hangulOffset <= 11171;
+
+  if (!isHangulSyllable) return "은";
+
+  return hangulOffset % 28 === 0 ? "는" : "은";
 }
 
 export function getFacetInsight(facet: FacetScore) {

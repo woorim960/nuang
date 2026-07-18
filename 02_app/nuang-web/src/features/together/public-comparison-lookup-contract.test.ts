@@ -15,7 +15,7 @@ import type { CoreScoreResult } from "@/lib/scoring/types";
 
 const result: CoreScoreResult = {
   alternativeCodes: [],
-  code: "FOAMT",
+  code: "TVOAE",
   domains: [
     {
       domainId: "SE",
@@ -27,7 +27,7 @@ const result: CoreScoreResult = {
     },
   ],
   facets: [],
-  profileName: "불꽃 온기 탐험가",
+  profileName: "불꽃의 온기 탐험가",
 };
 
 const validLookupPayload = {

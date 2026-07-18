@@ -1,0 +1,86 @@
+.completion {
+  display: grid;
+  flex: 1;
+  align-content: center;
+  justify-items: center;
+  padding: 2.5rem clamp(1.25rem, 6vw, 2rem) 3rem;
+  text-align: center;
+}
+
+.completionEyebrow {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.8125rem;
+  font-weight: 680;
+}
+
+.completionTitle {
+  max-width: 13ch;
+  margin: 0.45rem 0 0;
+  font-size: clamp(1.75rem, 7vw, 2.15rem);
+  font-weight: 720;
+  letter-spacing: -0.035em;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.completionCopy {
+  max-width: 29rem;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  text-wrap: balance;
+}
+
+.completionNote {
+  width: 100%;
+  max-width: 26rem;
+  margin: 1.5rem 0 0;
+  padding: 0.875rem 1rem;
+  border-radius: 15px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.completionActions {
+  display: grid;
+  width: 100%;
+  max-width: 26rem;
+  gap: 0.625rem;
+  margin-top: 1.25rem;
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  border: 0;
+  border-radius: 13px;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 680;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.primaryAction {
+  background: var(--foreground);
+  color: var(--surface);
+}
+
+.secondaryAction {
+  background: transparent;
+  color: var(--muted);
+}
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}

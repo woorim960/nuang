@@ -1,6 +1,26 @@
 import { fireEvent, render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AccountConnectPanel } from "@/features/consent/AccountConnectPanel";
+
+const { mockGetUser, mockSignOut } = vi.hoisted(() => ({
+  mockGetUser: vi.fn(),
+  mockSignOut: vi.fn(),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    refresh: vi.fn(),
+  }),
+}));
+
+vi.mock("@/lib/supabase/browser", () => ({
+  createBrowserSupabaseClient: () => ({
+    auth: {
+      getUser: mockGetUser,
+      signOut: mockSignOut,
+    },
+  }),
+}));
 
 vi.mock("@/features/auth/start-social-sign-in", () => ({
   startSocialSignIn: vi.fn(async () => ({
@@ -10,35 +30,77 @@ vi.mock("@/features/auth/start-social-sign-in", () => ({
 }));
 
 describe("AccountConnectPanel", () => {
-  it("links required consent copy to policy skeleton routes", () => {
-    render(<AccountConnectPanel />);
-
-    expect(
-      screen.getByRole("link", { name: "이용약관 준비 문서" }),
-    ).toHaveAttribute("href", "/policies/terms");
-    expect(
-      screen.getByRole("link", { name: "개인정보 준비 문서" }),
-    ).toHaveAttribute("href", "/policies/privacy");
-    expect(
-      screen.getByText(/약관과 개인정보 문서는 아직 최종 검토 전입니다/),
-    ).toBeInTheDocument();
+  beforeEach(() => {
+    mockGetUser.mockResolvedValue({ data: { user: null } });
+    mockSignOut.mockResolvedValue({ error: null });
   });
 
-  it("opens social auth buttons only after required consent checks", () => {
+  it("links required consent copy to policy skeleton routes", async () => {
     render(<AccountConnectPanel />);
 
-    const kakaoButton = screen.getByRole("button", {
+    expect(
+      await screen.findByRole("link", { name: "이용약관" }),
+    ).toHaveAttribute("href", "/policies/terms");
+    expect(
+      screen.getByRole("link", { name: "개인정보 처리방침" }),
+    ).toHaveAttribute("href", "/policies/privacy");
+  });
+
+  it("opens social auth buttons only after required consent checks", async () => {
+    render(<AccountConnectPanel />);
+
+    const kakaoButton = await screen.findByRole("button", {
       name: "카카오로 계속하기",
     });
 
     expect(kakaoButton).toBeDisabled();
 
-    fireEvent.click(screen.getByRole("button", { name: "만 14세 이상입니다" }));
-    fireEvent.click(screen.getByRole("button", { name: "이용약관에 동의합니다" }));
     fireEvent.click(
-      screen.getByRole("button", { name: "필수 개인정보 처리에 동의합니다" }),
+      screen.getByRole("checkbox", { name: "이용약관에 동의합니다" }),
+    );
+    fireEvent.click(
+      screen.getByRole("checkbox", {
+        name: "필수 개인정보 처리에 동의합니다",
+      }),
     );
 
     expect(kakaoButton).toBeEnabled();
+    expect(
+      screen.getByText("네이버", { selector: "span" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("준비 중")).toBeInTheDocument();
+  });
+
+  it("falls back to the sign-in form when account check fails", async () => {
+    mockGetUser.mockRejectedValue(new Error("auth unavailable"));
+
+    render(<AccountConnectPanel />);
+
+    expect(
+      await screen.findByRole("button", { name: "카카오로 계속하기" }),
+    ).toBeDisabled();
+  });
+
+  it("shows the connected account instead of repeating the sign-in form", async () => {
+    mockGetUser.mockResolvedValue({
+      data: {
+        user: {
+          app_metadata: { provider: "kakao" },
+          identities: [],
+          user_metadata: { nickname: "탐험가" },
+        },
+      },
+    });
+
+    render(<AccountConnectPanel />);
+
+    expect(
+      await screen.findByRole("heading", { name: "연결된 계정" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("탐험가")).toBeInTheDocument();
+    expect(screen.getByText("카카오 계정 연결됨")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "카카오로 계속하기" }),
+    ).not.toBeInTheDocument();
   });
 });

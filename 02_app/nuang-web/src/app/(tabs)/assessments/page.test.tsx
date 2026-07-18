@@ -7,28 +7,43 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
 }));
 
 describe("AssessmentsPage", () => {
-  it("explains the main assessment routes with clear labels", () => {
+  it("keeps the assessment home focused on core start, labs, and help", () => {
     render(<AssessmentsPage />);
 
     expect(screen.getByRole("heading", { name: "검사" })).toBeInTheDocument();
-    expect(screen.getByText("빠른 코어 20문항")).toBeInTheDocument();
-    expect(screen.getByText("3분 안에 예비 결과 · 처음이면 여기부터")).toBeInTheDocument();
-    expect(screen.getByText("정밀 코어 60문항")).toBeInTheDocument();
-    expect(screen.getByText("성향지도와 5글자 코드 · 대표 성향 확정")).toBeInTheDocument();
-    expect(screen.getByText("별난 연구소")).toBeInTheDocument();
-    expect(screen.getByText("재미형 주제 검사 · 코어 결과 미반영")).toBeInTheDocument();
+    expect(screen.getByText("무료 코어부터 가벼운 주제 검사까지, 나를 알아가는 시작점이에요.")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "20문항 빠른 코어" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "빠른 코어 시작: 20문항 빠른 코어" })).toHaveAttribute(
+      "href",
+      "/assessments/nu-core-quick",
+    );
+    expect(screen.getByRole("heading", { name: "코어 검사" })).toBeInTheDocument();
+    expect(screen.getByText("정밀 코어까지 무료로 제공되는 뉴앙의 기본 검사")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "무료 주제 검사" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /대화 온도:/ })).toHaveAttribute(
+      "href",
+      "/assessments/topics/conversation-temperature",
+    );
+    expect(screen.getByRole("link", { name: /위로 받는 방식:/ })).toHaveAttribute(
+      "href",
+      "/assessments/topics/comfort-style",
+    );
+    expect(screen.getByText("다음 업데이트 예정")).toBeInTheDocument();
+    expect(screen.getByText(/모임 후 회복/)).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "별난 성향 연구소" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "도움 연결 허브 열기" })).toHaveAttribute(
+      "href",
+      "/help",
+    );
   });
 
-  it("keeps the next-action flow on the assessment home", () => {
+  it("does not duplicate route-navigation and post-result explanation sections", () => {
     render(<AssessmentsPage />);
 
-    expect(
-      screen.getByRole("region", { name: "뉴앙 다음 행동 흐름" }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "결과가 쓰이는 순서" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "1단계 검사 열기" })).toHaveAttribute(
-      "href",
-      "/assessments",
-    );
+    expect(screen.queryByText("추천 루트")).not.toBeInTheDocument();
+    expect(screen.queryByText("오늘 바로 시작하기")).not.toBeInTheDocument();
+    expect(screen.queryByText("결과가 쓰이는 순서")).not.toBeInTheDocument();
+    expect(screen.queryByText("검사 후 바로 쓰이는 기능")).not.toBeInTheDocument();
+    expect(screen.queryByText("성향 카드 피드")).not.toBeInTheDocument();
   });
 });

@@ -152,7 +152,7 @@ export function LabRunner({ assessment }: { assessment: LabAssessment }) {
       </div>
 
       <p className="mt-4 text-center text-xs text-muted">
-        {answeredCount}개 응답이 이 기기에 임시 저장됨
+        {answeredCount}개 응답 · 자동 저장됨
       </p>
     </main>
   );

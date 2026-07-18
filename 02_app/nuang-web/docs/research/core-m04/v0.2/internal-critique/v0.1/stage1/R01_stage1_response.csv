@@ -1,0 +1,9 @@
+protocol_version,reviewer_slot,sequence,opaque_item_id,context_label,prompt_text,first_construct_mapping,second_construct_mapping,direction_guess,clarity_rating_1_4,single_response_rating_1_4,universality_rating_1_4,scale_fit_rating_1_4,desirable_direction_guess,risk_flags,fatal_risk_note,stage1_notes
+m04-core-expert-kit.v0.2-targeted,R01,1,NV2-004,설명을 듣다가 필요한 답을 얻었을 때,거기까지 알아보고 넘어간다.,OE_IE,NONE,LOW,4,4,4,4,UNCLEAR,NONE,NONE,필요한 답에서 탐구를 멈추는 반복 반응을 직접 묻는다.
+m04-core-expert-kit.v0.2-targeted,R01,2,NV2-008,설명을 듣다가 이해되지 않는 부분이 생겼을 때,이유나 배경을 더 알아보고 싶어진다.,OE_IE,NONE,HIGH,4,4,4,3,HIGH,NONE,NONE,이유와 배경을 더 알아보려는 지적 탐구 방향이 분명하다.
+m04-core-expert-kit.v0.2-targeted,R01,3,NV2-005,사소한 선택에서 상대와 원하는 것이 다를 때,"상대가 고를 수 있는 여지를 두기보다, 내가 원하는 쪽으로 정하려 한다.",RO_RN,NONE,LOW,4,4,4,3,HIGH,NONE,NONE,의견 차이에서 상대의 선택 여지를 좁히는 반응을 직접 묻는다.
+m04-core-expert-kit.v0.2-targeted,R01,4,NV2-007,여러 단계를 거친 일을 마무리할 때,"정해둔 확인 순서 없이, 그때 생각나는 부분부터 살핀다.",SM_OS,NONE,LOW,4,3,3,3,HIGH,NONE,NONE,확인 순서 부재와 즉흥적 점검이 같은 방향이지만 기회는 업무 유형에 좌우된다.
+m04-core-expert-kit.v0.2-targeted,R01,5,NV2-001,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,따로 알림이 없어도 약속한 일을 챙겨서 한다.,SM_RL,METHOD,HIGH,3,2,4,4,HIGH,NONE,NONE,약속 이행을 묻지만 알림 없이 기억하는 능력이 응답을 함께 좌우할 수 있다.
+m04-core-expert-kit.v0.2-targeted,R01,6,NV2-003,내가 한 것을 다른 사람이 확인할 예정일 때,잘못 보일까 하는 걱정이 생겨도 같은 생각이 반복되지는 않는다.,ER_WD,NONE,LOW,4,4,3,3,LOW,NONE,NONE,평가 걱정이 반복되어 지연되는지의 반대 방향을 분명히 묻는다.
+m04-core-expert-kit.v0.2-targeted,R01,7,NV2-006,이번 주 안에 할 일이 생겼을 때,"언제 할지 미리 정하지 않고, 그때 가능한 시간에 시작한다.",SM_OS,NONE,LOW,4,3,4,4,HIGH,NONE,NONE,시점의 사전 구조화보다 상황에 따라 시작 시점을 정하는 반응이다.
+m04-core-expert-kit.v0.2-targeted,R01,8,NV2-002,나중에 다시 쓸 자료를 보관할 때,"따로 정해둔 자리 없이, 그때 두기 편한 곳에 둔다.",SM_OS,NONE,LOW,4,3,4,4,HIGH,NONE,NONE,자료 위치를 고정 기준보다 당시 편의에 따라 정하는 반응이다.

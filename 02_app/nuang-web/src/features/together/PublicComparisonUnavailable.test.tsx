@@ -29,6 +29,8 @@ describe("PublicComparisonUnavailable", () => {
     expect(
       screen.getByRole("heading", { name: "삭제된 비교 리포트예요" }),
     ).toBeInTheDocument();
+    expect(screen.getByText("필요하면 상대 프로필에서 다시 비교를 시작해 주세요.")).toBeInTheDocument();
+    expect(screen.queryByText(/공개 프로필 코드/)).not.toBeInTheDocument();
   });
 
   it("recognizes only blocked comparison access statuses", () => {

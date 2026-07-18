@@ -1,18 +1,16 @@
 import { describe, expect, it } from "vitest";
 import { metadata as adminMetadata } from "@/app/admin/page";
-import { metadata as publicProfileMetadata } from "@/app/p/[code]/page";
 import { metadata as privacyPolicyMetadata } from "@/app/policies/privacy/page";
 import { metadata as termsPolicyMetadata } from "@/app/policies/terms/page";
 import { metadata as localResultMetadata } from "@/app/results/local/[localResultId]/page";
 import { metadata as shareMetadata } from "@/app/share/[token]/page";
-import { metadata as publicComparisonMetadata } from "@/app/together/comparison/[comparisonReportId]/page";
+import { metadata as publicComparisonMetadata } from "@/app/reports/comparison/[comparisonReportId]/page";
 import { metadata as publicComparisonUnavailableMetadata } from "@/app/together/comparison-unavailable/[status]/page";
 
 const noindexRoutes = [
   ["admin readiness", adminMetadata],
   ["local result", localResultMetadata],
   ["share pending", shareMetadata],
-  ["public profile pending", publicProfileMetadata],
   ["public comparison pending", publicComparisonMetadata],
   ["public comparison unavailable", publicComparisonUnavailableMetadata],
   ["terms skeleton", termsPolicyMetadata],

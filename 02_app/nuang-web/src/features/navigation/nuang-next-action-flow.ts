@@ -1,8 +1,8 @@
 export type NuangNextActionFlowItemId =
   | "assessment"
+  | "feed"
   | "map"
-  | "visibility"
-  | "together";
+  | "reports";
 
 export type NuangNextActionFlowItem = {
   body: string;
@@ -14,32 +14,32 @@ export type NuangNextActionFlowItem = {
 
 export const nuangNextActionFlowItems: ReadonlyArray<NuangNextActionFlowItem> = [
   {
-    body: "20문항부터 시작하고, 원하면 정밀 코어로 확장해요.",
+    body: "빠른 코어부터 시작하고, 원하면 정밀 코어로 확장해요.",
     href: "/assessments",
     id: "assessment",
     stepLabel: "1",
     title: "검사",
   },
   {
-    body: "5축과 10축 오각형으로 내 흐름을 확인해요.",
+    body: "성향 기반 질문과 사람들의 소식을 가볍게 둘러봐요.",
+    href: "/feed",
+    id: "feed",
+    stepLabel: "2",
+    title: "피드",
+  },
+  {
+    body: "코드 지도와 세부 신호로 내 흐름을 확인해요.",
     href: "/map",
     id: "map",
-    stepLabel: "2",
+    stepLabel: "3",
     title: "성향지도",
   },
   {
-    body: "기본 프로필은 공개, 민감 항목은 비공개로 확인해요.",
-    href: "/my",
-    id: "visibility",
-    stepLabel: "3",
-    title: "공개 범위",
-  },
-  {
-    body: "공개 범위 안에서 피드와 1:1 비교를 살펴봐요.",
-    href: "/together",
-    id: "together",
+    body: "검사 결과와 비교 리포트를 한곳에서 다시 확인해요.",
+    href: "/my/reports",
+    id: "reports",
     stepLabel: "4",
-    title: "함께",
+    title: "내 리포트",
   },
 ];
 

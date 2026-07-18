@@ -1,0 +1,406 @@
+.root {
+  min-height: 100dvh;
+  max-width: 32.5rem;
+  margin-inline: auto;
+  color: var(--foreground);
+  background:
+    radial-gradient(circle at 84% 18%, rgb(101 70 215 / 7%), transparent 25rem),
+    var(--background);
+}
+
+.appBar {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: grid;
+  height: 3.5rem;
+  grid-template-columns: 5.5rem minmax(0, 1fr) 5.5rem;
+  align-items: center;
+  padding-inline: clamp(1rem, 5vw, 1.5rem);
+  background: color-mix(in srgb, var(--background) 90%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.backLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.2rem;
+  border-radius: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 720;
+  color: var(--muted);
+}
+
+.appBarTitle {
+  overflow: hidden;
+  font-size: 0.88rem;
+  font-weight: 780;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.content {
+  padding: 1.5rem clamp(1.125rem, 5.8vw, 1.5rem)
+    calc(1.5rem + env(safe-area-inset-bottom));
+}
+
+.hero {
+  animation: intro-settle 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.eyebrow {
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.01em;
+  color: var(--primary);
+}
+
+.hero h1 {
+  max-width: 27rem;
+  margin-top: 0.7rem;
+  font-size: clamp(1.8rem, 7.2vw, 2.3rem);
+  font-weight: 880;
+  line-height: 1.26;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.heroDescription {
+  max-width: 28rem;
+  margin-top: 0.85rem;
+  font-size: 0.96rem;
+  line-height: 1.72;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+.journey {
+  position: relative;
+  display: grid;
+  min-height: 9rem;
+  grid-template-columns: minmax(0, 1fr) 5.25rem;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+  overflow: hidden;
+  border-block: 1px solid var(--line);
+  padding-block: 1.25rem;
+}
+
+.journey::before {
+  position: absolute;
+  right: 2.8rem;
+  width: 6rem;
+  height: 6rem;
+  border-radius: 999px;
+  background: rgb(101 70 215 / 8%);
+  content: "";
+  filter: blur(1.1rem);
+}
+
+.journeyCopy {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.journeyLabel {
+  font-size: 0.72rem;
+  font-weight: 760;
+  color: var(--muted);
+}
+
+.codeRail {
+  display: flex;
+  align-items: center;
+  gap: 0.38rem;
+  margin-top: 0.55rem;
+}
+
+.codeLetter {
+  display: grid;
+  width: 2rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--line));
+  border-radius: 0.68rem;
+  font-size: 0.94rem;
+  font-weight: 850;
+  color: var(--primary-strong);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  animation: code-reveal 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  animation-delay: calc(var(--code-index) * 60ms + 160ms);
+}
+
+.journeyLine {
+  display: flex;
+  width: min(15.5rem, 100%);
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+}
+
+.journeyLine::before {
+  width: 2.5rem;
+  height: 1px;
+  flex: 0 0 auto;
+  background: var(--primary);
+  content: "";
+  transform-origin: left;
+  animation: line-fill 420ms 360ms ease-out both;
+}
+
+.journeyOutcome {
+  font-size: 0.82rem;
+  font-weight: 780;
+}
+
+.mascot {
+  position: relative;
+  z-index: 2;
+  justify-self: end;
+  animation: mascot-arrive 500ms 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.preserveNote {
+  margin-top: 0.8rem;
+  font-size: 0.76rem;
+  font-weight: 650;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.benefits {
+  margin-top: 2.25rem;
+}
+
+.sectionTitle {
+  font-size: 1rem;
+  font-weight: 820;
+}
+
+.benefitList {
+  margin-top: 0.65rem;
+  padding: 0;
+  list-style: none;
+}
+
+.benefitItem {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  gap: 0.8rem;
+  border-bottom: 1px solid var(--line);
+  padding-block: 1rem;
+  animation: benefit-in 360ms ease-out both;
+  animation-delay: calc(var(--benefit-index) * 70ms + 320ms);
+}
+
+.benefitIcon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--primary) 14%, var(--line));
+  border-radius: 0.85rem;
+  color: var(--primary);
+  background: var(--surface);
+}
+
+.benefitItem h3 {
+  font-size: 0.9rem;
+  font-weight: 790;
+  line-height: 1.45;
+}
+
+.benefitItem p {
+  margin-top: 0.25rem;
+  font-size: 0.82rem;
+  line-height: 1.58;
+  color: var(--muted);
+}
+
+.assurance {
+  display: grid;
+  gap: 0.7rem;
+  margin-top: 2rem;
+  border-radius: 1.1rem;
+  padding: 1rem;
+  background: color-mix(in srgb, var(--surface-soft) 60%, var(--surface));
+}
+
+.assuranceRow {
+  display: grid;
+  grid-template-columns: 1.4rem minmax(0, 1fr);
+  align-items: start;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  font-weight: 650;
+  line-height: 1.55;
+  color: var(--muted);
+}
+
+.assuranceRow svg {
+  margin-top: 0.05rem;
+  color: var(--primary);
+}
+
+.actions {
+  display: grid;
+  gap: 0.3rem;
+  margin-top: 1.5rem;
+}
+
+.primaryAction,
+.secondaryAction,
+.retryAction {
+  min-height: 3.5rem;
+  border: 0;
+  border-radius: 1rem;
+  font-size: 0.9rem;
+  font-weight: 780;
+}
+
+.primaryAction,
+.retryAction {
+  color: white;
+  background: var(--foreground);
+  box-shadow: 0 0.8rem 1.8rem rgb(32 34 50 / 18%);
+  transition:
+    transform 160ms ease,
+    opacity 160ms ease;
+}
+
+.primaryAction:active,
+.retryAction:active {
+  transform: scale(0.987);
+}
+
+.primaryAction:disabled,
+.retryAction:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.secondaryAction {
+  min-height: 3rem;
+  color: var(--muted);
+  background: transparent;
+}
+
+.error {
+  margin-top: 0.75rem;
+  font-size: 0.8rem;
+  line-height: 1.55;
+  color: var(--danger);
+  text-align: center;
+}
+
+.statusShell {
+  display: grid;
+  min-height: 100dvh;
+  max-width: 32.5rem;
+  margin-inline: auto;
+  place-items: center;
+  padding: 1.5rem;
+}
+
+.statusCard {
+  width: 100%;
+  max-width: 22rem;
+  text-align: center;
+}
+
+.statusCard p {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+
+.retryAction {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+@keyframes intro-settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes code-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes line-fill {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes mascot-arrive {
+  from {
+    opacity: 0;
+    transform: translateX(8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+@keyframes benefit-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 21.25rem) {
+  .appBar {
+    grid-template-columns: 4.75rem minmax(0, 1fr) 4.75rem;
+  }
+
+  .content {
+    padding-inline: 1rem;
+  }
+
+  .journey {
+    grid-template-columns: minmax(0, 1fr) 4.6rem;
+  }
+
+  .codeLetter {
+    width: 1.75rem;
+    height: 2.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero,
+  .codeLetter,
+  .journeyLine::before,
+  .mascot,
+  .benefitItem {
+    animation: none;
+  }
+}

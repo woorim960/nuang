@@ -2,131 +2,39 @@
 
 import {
   ArrowRight,
-  BarChart3,
   Bell,
-  ChevronRight,
+  BookOpen,
   Compass,
-  HeartHandshake,
-  MessageCircle,
-  PlayCircle,
-  Search,
-  Send,
-  ShieldAlert,
+  FileText,
+  ShieldCheck,
   Sparkles,
-  UsersRound,
 } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { useEffect, useMemo, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { ButtonLink } from "@/components/ui/Button";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
-import {
-  fullCoreAssessment,
-  fullScoringRelease,
-} from "@/features/assessment/full-core-seed";
-import { quickScoringRelease } from "@/features/assessment/quick-core-seed";
+import { getValidatedLocalResultSnapshot } from "@/features/assessment/assessment-result-snapshot";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
-import { NuangNextActionFlow } from "@/features/navigation/NuangNextActionFlow";
-import { calculateCoreScore } from "@/lib/scoring/core";
-import type { ItemResponse } from "@/lib/scoring/types";
+import {
+  type FeedItem,
+  listHomeFeedPreviewItems,
+} from "@/features/feed/feed-seed";
 
 const titleByAssessmentId: Record<string, string> = {
   "nu-core-full": "정밀 코어",
   "nu-core-quick": "빠른 코어",
 };
 
-const quickStartLinks = [
-  {
-    caption: "20문항",
-    href: "/assessments/nu-core-quick",
-    label: "빠른 코어",
-    motif: "water",
-  },
-  {
-    caption: "60문항",
-    href: "/assessments/nu-core-full",
-    label: "정밀 코어",
-    motif: "purple",
-  },
-  {
-    caption: "오각형",
-    href: "/map",
-    label: "성향지도",
-    motif: "forest",
-  },
-  {
-    caption: "피드·비교",
-    href: "/together",
-    label: "함께",
-    motif: "flame",
-  },
-] as const;
+type HomeDashboardProps = {
+  feedPreviewItems?: FeedItem[];
+};
 
-const todayRouteCards = [
-  {
-    body: "3분 안에 예비 결과를 보고, 원하면 정밀 코어 60문항으로 확장해요.",
-    href: "/assessments/nu-core-quick",
-    icon: PlayCircle,
-    label: "빠른 코어 20문항",
-    tone: "primary",
-  },
-  {
-    body: "정밀 결과가 있으면 5축·10축 오각형 지도로 내 흐름을 확인해요.",
-    href: "/map",
-    icon: BarChart3,
-    label: "성향지도 확인",
-    tone: "water",
-  },
-  {
-    body: "공식 주제 피드와 공개 범위 기반 1:1 비교 흐름을 먼저 살펴봐요.",
-    href: "/together",
-    icon: Send,
-    label: "함께 피드 읽기",
-    tone: "forest",
-  },
-] as const;
-
-const featureLinks = [
-  {
-    caption: "빠른 코어, 정밀 코어, 별난 연구소",
-    href: "/assessments",
-    icon: Search,
-    label: "검사 홈 열기",
-  },
-  {
-    caption: "상대가 공개한 범위 안에서",
-    href: "/together",
-    icon: UsersRound,
-    label: "공개 범위 비교 준비",
-  },
-  {
-    caption: "위기 주제는 점수 대신 연결",
-    href: "/help",
-    icon: ShieldAlert,
-    label: "도움 연결 허브",
-  },
-] as const;
-
-const communityPreview = [
-  {
-    label: "오늘의 질문",
-    text: "나와 다른 리듬을 가진 사람과 맞추는 나만의 방법은?",
-    meta: "댓글형",
-  },
-  {
-    label: "성향 카드",
-    text: "대표 성향과 성향지도 요약만 골라 가볍게 소개하기",
-    meta: "카드형",
-  },
-  {
-    label: "공개 프로필",
-    text: "직접 응답 없이 공개 범위 안에서 서로 비교하기",
-    meta: "비교형",
-  },
-] as const;
-
-export function HomeDashboard() {
+export function HomeDashboard({
+  feedPreviewItems = listHomeFeedPreviewItems(),
+}: HomeDashboardProps = {}) {
   const [attempts, setAttempts] = useState<LocalAssessmentAttempt[]>([]);
   const [loaded, setLoaded] = useState(false);
 
@@ -144,12 +52,8 @@ export function HomeDashboard() {
     };
   }, []);
 
-  const inProgressAttempt = attempts.find(
-    (attempt) => attempt.state === "in_progress",
-  );
-  const latestCompletedAttempt = attempts.find(
-    (attempt) => attempt.state === "completed",
-  );
+  const inProgressAttempt = getLatestInProgressAttempt(attempts);
+  const latestCompletedAttempt = getLatestCompletedAttempt(attempts);
   const latestResult = useMemo(
     () =>
       latestCompletedAttempt
@@ -157,213 +61,265 @@ export function HomeDashboard() {
         : null,
     [latestCompletedAttempt],
   );
+  const dailyPrompt = getDailyPrompt(feedPreviewItems);
 
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-6 pb-2">
       <header className="flex items-start justify-between gap-4">
-        <div>
-          <p className="text-xl font-black tracking-normal text-primary">NUANG</p>
-          <h1 className="mt-4 text-2xl font-black tracking-normal">
-            안녕하세요, 탐험가님
-          </h1>
-          <p className="mt-1 text-sm text-muted">
-            검사하고, 지도 만들고, 공개 범위 안에서 함께 나눠요.
+        <div className="min-w-0">
+          <p className="text-lg font-black text-primary">NUANG</p>
+          <h1 className="mt-3 text-2xl font-black">오늘의 리듬을 열어볼까요</h1>
+          <p className="mt-2 text-sm leading-6 text-muted">
+            검사, 리포트, 피드를 한 흐름으로 이어서 나를 조금 더 선명하게
+            봅니다.
           </p>
         </div>
-        <div className="grid h-11 w-11 place-items-center rounded-full border border-line bg-white text-muted shadow-[0_10px_24px_rgb(63_56_118_/_8%)]">
+        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-line bg-white text-muted shadow-[0_10px_24px_rgb(63_56_118_/_8%)]">
           <Bell aria-hidden="true" size={19} />
         </div>
       </header>
 
-      <QuickStartRail />
-
-      <NuangNextActionFlow />
-
-      {!loaded && (
-        <section className="rounded-lg border border-line bg-white p-4 text-sm text-muted">
-          로컬 상태 확인 중
-        </section>
-      )}
-
-      {loaded && inProgressAttempt && (
-        <section className="overflow-hidden rounded-lg border border-line bg-white shadow-[var(--shadow-soft)]">
-          <div className="border-b border-line bg-surface-soft p-4">
-            <div className="flex items-center justify-between gap-4">
-              <div className="min-w-0">
-                <StatusPill tone="primary">진행 중인 검사</StatusPill>
-                <h2 className="mt-3 text-lg font-black">
-                  {titleByAssessmentId[inProgressAttempt.assessmentId] ?? "코어 검사"}
-                </h2>
-                <p className="mt-1 text-sm text-muted">
-                  {Object.keys(inProgressAttempt.responses).length} /{" "}
-                  {inProgressAttempt.itemIds.length}
-                </p>
-              </div>
-              <NuangCharacter motif="purple" size="md" />
-            </div>
+      <section className="-mx-5 border-y border-line bg-white px-5 py-5 sm:-mx-6 sm:px-6">
+        <div className="flex items-start justify-between gap-4">
+          <div className="min-w-0">
+            <StatusPill tone="primary">오늘의 추천</StatusPill>
+            <DailyFocus
+              inProgressAttempt={inProgressAttempt}
+              latestCompletedAttempt={latestCompletedAttempt}
+              latestResult={latestResult}
+              loaded={loaded}
+            />
           </div>
-          <div className="p-4">
-            <div className="h-2.5 overflow-hidden rounded-full bg-[#eceaf4]">
-              <div
-                className="h-full rounded-full bg-primary"
-                style={{
-                  width: `${Math.round(
-                    (Object.keys(inProgressAttempt.responses).length /
-                      inProgressAttempt.itemIds.length) *
-                      100,
-                  )}%`,
-                }}
-              />
-            </div>
-            <ButtonLink
-              className="mt-4 w-full"
-              href={`/assessments/${inProgressAttempt.assessmentId}`}
-            >
-              이어하기
-            </ButtonLink>
-          </div>
-        </section>
-      )}
-
-      {loaded && !inProgressAttempt && latestCompletedAttempt && latestResult && (
-        <section className="overflow-hidden rounded-lg border border-line bg-white shadow-[var(--shadow-soft)]">
-          <div className="border-b border-line bg-[#fff7f1] p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div className="min-w-0">
-                <StatusPill tone="success">최근 결과</StatusPill>
-                <h2 className="mt-3 text-lg font-black">
-                  {latestResult.profileName ?? "결과 확인 가능"}
-                </h2>
-                <p className="mt-1 text-sm text-muted">
-                  {latestResult.code ?? "-----"} ·{" "}
-                  {titleByAssessmentId[latestCompletedAttempt.assessmentId] ??
-                    "코어 검사"}
-                </p>
-              </div>
-              <NuangCharacter motif="forest" size="sm" />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 divide-x divide-line border-y border-line text-center">
-            <MiniMetric label="성향지도" value="열림" />
-            <MiniMetric label="비교" value="준비" />
-            <MiniMetric label="피드" value="카드 가능" />
-          </div>
-          <div className="p-4">
-            <ButtonLink
-              className="w-full"
-              href={`/results/local/${latestCompletedAttempt.id}`}
-              variant="secondary"
-            >
-              결과 다시 보기
-            </ButtonLink>
-          </div>
-        </section>
-      )}
-
-      {loaded && !inProgressAttempt && !latestCompletedAttempt && (
-        <section className="overflow-hidden rounded-lg border border-line bg-white shadow-[var(--shadow-soft)]">
-          <div className="border-b border-line bg-surface-soft p-4">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <StatusPill tone="primary">첫 검사</StatusPill>
-                <h2 className="mt-3 text-xl font-black">빠른 코어로 시작해요</h2>
-                <p className="mt-1 text-sm leading-6 text-muted">
-                  로그인 없이 20문항 예비 결과를 먼저 볼 수 있어요.
-                </p>
-              </div>
-              <NuangCharacter motif="purple" size="md" />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 divide-x divide-line border-y border-line text-center">
-            <MiniMetric label="문항" value="20개" />
-            <MiniMetric label="시간" value="3분" />
-            <MiniMetric label="결과" value="즉시" />
-          </div>
-          <div className="p-4">
-            <ButtonLink className="w-full" href="/assessments/nu-core-quick">
-              빠른 코어 시작
-            </ButtonLink>
-          </div>
-        </section>
-      )}
-
-      <TodayRouteDeck />
-
-      <section className="grid gap-3">
-        <div className="flex items-center justify-between gap-3">
-          <h2 className="text-base font-bold">지금 바로 할 수 있는 것</h2>
-          <StatusPill tone="neutral">바로 가능</StatusPill>
+          <NuangCharacter motif="purple" priority size="md" />
         </div>
-        {featureLinks.map((item) => {
-          const Icon = item.icon;
-
-          return (
-            <Link
-              className="flex min-h-20 items-center gap-3 rounded-lg border border-line bg-white p-4 shadow-[0_10px_24px_rgb(63_56_118_/_6%)] transition-transform active:scale-[0.99]"
-              href={item.href}
-              key={item.href}
-            >
-              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-surface-soft text-primary">
-                <Icon aria-hidden="true" size={20} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-bold">{item.label}</h3>
-                <p className="mt-1 text-sm text-muted">{item.caption}</p>
-              </div>
-              <ChevronRight aria-hidden="true" className="text-muted" size={17} />
-            </Link>
-          );
-        })}
       </section>
 
-      <CommunityPreview />
+      <section className="grid gap-3">
+        <SectionHeader
+          description="앱을 오래 둘러보지 않아도 오늘 필요한 순서대로 이어져요."
+          title="오늘의 메뉴"
+        />
+        <div className="border-y border-line">
+          <ActionLine
+            body="내 코드, 캐릭터, 세부 신호를 한 번에 확인해요."
+            href="/my/profile"
+            icon={<Sparkles aria-hidden="true" size={18} />}
+            title="내 성향 자세히 보기"
+          />
+          <ActionLine
+            body="검사 결과와 1:1 비교 리포트를 다시 열어봐요."
+            href="/my/reports"
+            icon={<FileText aria-hidden="true" size={18} />}
+            title="내 리포트 모아보기"
+          />
+          <ActionLine
+            body="다른 리듬의 생각을 읽고 가볍게 반응해요."
+            href="/feed"
+            icon={<Compass aria-hidden="true" size={18} />}
+            title="피드에서 반응 보기"
+          />
+        </div>
+      </section>
+
+      {dailyPrompt && <DailyPrompt item={dailyPrompt} />}
+
+      <FeedPreview items={feedPreviewItems} />
+
+      <section className="-mx-5 border-y border-line bg-[#f7faf8] px-5 py-5 sm:-mx-6 sm:px-6">
+        <div className="flex items-start gap-3">
+          <ShieldCheck
+            aria-hidden="true"
+            className="mt-0.5 shrink-0 text-success"
+            size={20}
+          />
+          <div>
+            <h2 className="text-sm font-black">공유와 비교는 내가 정해요</h2>
+            <p className="mt-2 text-sm leading-6 text-muted">
+              직접 응답, 원점수, 민감 항목은 공개 화면에 넣지 않습니다. 공유와
+              비교는 열어둔 범위 안에서만 작동해요.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }
 
-function TodayRouteDeck() {
-  return (
-    <section className="grid gap-3">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-base font-bold">오늘 추천 루트</h2>
-          <p className="mt-1 text-sm text-muted">처음 30초 안에 고를 수 있게</p>
-        </div>
-        <StatusPill tone="success">추천</StatusPill>
+function DailyFocus({
+  inProgressAttempt,
+  latestCompletedAttempt,
+  latestResult,
+  loaded,
+}: {
+  inProgressAttempt?: LocalAssessmentAttempt;
+  latestCompletedAttempt?: LocalAssessmentAttempt;
+  latestResult: ReturnType<typeof calculateAttemptResult> | null;
+  loaded: boolean;
+}) {
+  if (!loaded) {
+    return (
+      <div className="mt-3">
+        <h2 className="text-xl font-black">오늘의 루틴을 불러오는 중</h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          기기에 남아 있는 검사 흐름을 확인하고 있어요.
+        </p>
       </div>
-      <div className="grid gap-3">
-        {todayRouteCards.map((item) => {
-          const Icon = item.icon;
+    );
+  }
 
-          return (
-            <Link
-              className="group flex min-h-24 items-center gap-3 rounded-lg border border-line bg-white p-4 shadow-[0_12px_28px_rgb(63_56_118_/_7%)]"
-              href={item.href}
-              key={item.href}
-            >
-              <div
-                className={`grid h-12 w-12 shrink-0 place-items-center rounded-full text-white ${
-                  item.tone === "water"
-                    ? "bg-water"
-                    : item.tone === "forest"
-                      ? "bg-forest"
-                      : "bg-primary"
-                }`}
-              >
-                <Icon aria-hidden="true" size={21} />
-              </div>
-              <div className="min-w-0 flex-1">
-                <h3 className="font-black">{item.label}</h3>
-                <p className="mt-1 text-sm leading-6 text-muted">{item.body}</p>
-              </div>
-              <ArrowRight
-                aria-hidden="true"
-                className="shrink-0 text-muted transition-transform group-active:translate-x-0.5"
-                size={18}
-              />
-            </Link>
-          );
-        })}
+  if (inProgressAttempt) {
+    const title =
+      titleByAssessmentId[inProgressAttempt.assessmentId] ?? "코어 검사";
+    const answered = Object.keys(inProgressAttempt.responses).length;
+    const total = inProgressAttempt.itemIds.length;
+    const progress = total > 0 ? Math.round((answered / total) * 100) : 0;
+
+    return (
+      <div className="mt-3">
+        <h2 className="text-xl font-black">{title}를 이어갈 시간이에요</h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          {answered} / {total}문항까지 왔어요. 오늘은 남은 문항만 가볍게
+          마무리해도 충분합니다.
+        </p>
+        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#eceaf4]">
+          <div
+            className="h-full rounded-full bg-primary"
+            style={{ width: `${progress}%` }}
+          />
+        </div>
+        <ButtonLink
+          className="mt-4 w-full"
+          href={`/assessments/${inProgressAttempt.assessmentId}`}
+        >
+          이어하기
+        </ButtonLink>
+      </div>
+    );
+  }
+
+  if (latestCompletedAttempt && latestResult) {
+    const title =
+      titleByAssessmentId[latestCompletedAttempt.assessmentId] ?? "코어 검사";
+    const isFullResult = latestCompletedAttempt.mode === "full";
+
+    return (
+      <div className="mt-3">
+        <h2 className="text-xl font-black">
+          {latestResult.profileName ?? "내 코드가 준비됐어요"}
+        </h2>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          {latestResult.code ?? "-----"} · {title} 기준으로{" "}
+          {isFullResult
+            ? "성향지도와 비교를 이어갈 수 있어요."
+            : "첫 성향 결과를 확인하고 정밀 검사로 이어갈 수 있어요."}
+        </p>
+        <div className="mt-4 grid grid-cols-3 divide-x divide-line border-y border-line text-center">
+          <MiniMetric label="코드" value={latestResult.code ?? "-----"} />
+          <MiniMetric
+            label="지도"
+            value={isFullResult ? "열림" : "정밀 후"}
+          />
+          <MiniMetric
+            label="비교"
+            value={isFullResult ? "가능" : "정밀 후"}
+          />
+        </div>
+        <ButtonLink
+          className="mt-4 w-full"
+          href={`/results/local/${latestCompletedAttempt.id}`}
+          variant="secondary"
+        >
+          리포트 다시 보기
+        </ButtonLink>
+      </div>
+    );
+  }
+
+  return (
+    <div className="mt-3">
+      <h2 className="text-xl font-black">빠른 코어로 오늘의 기준을 만들어요</h2>
+      <p className="mt-2 text-sm leading-6 text-muted">
+        로그인 없이 3분 정도면 첫 뉴앙 코드와 리포트를 볼 수 있어요.
+      </p>
+      <div className="mt-4 grid grid-cols-3 divide-x divide-line border-y border-line text-center">
+        <MiniMetric label="진행" value="간단하게" />
+        <MiniMetric label="시간" value="3분" />
+        <MiniMetric label="결과" value="첫 코드" />
+      </div>
+      <ButtonLink className="mt-4 w-full" href="/assessments/nu-core-quick">
+        빠른 코어 시작
+      </ButtonLink>
+    </div>
+  );
+}
+
+function SectionHeader({
+  description,
+  title,
+}: {
+  description: string;
+  title: string;
+}) {
+  return (
+    <div>
+      <h2 className="text-base font-black">{title}</h2>
+      <p className="mt-1 text-sm leading-6 text-muted">{description}</p>
+    </div>
+  );
+}
+
+function ActionLine({
+  body,
+  href,
+  icon,
+  title,
+}: {
+  body: string;
+  href: string;
+  icon: ReactNode;
+  title: string;
+}) {
+  return (
+    <Link
+      className="flex min-h-[76px] items-center gap-3 py-4 text-left"
+      href={href}
+    >
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-surface-soft text-primary">
+        {icon}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-black text-foreground">
+          {title}
+        </span>
+        <span className="mt-1 block text-xs leading-5 text-muted">{body}</span>
+      </span>
+      <ArrowRight
+        aria-hidden="true"
+        className="shrink-0 text-muted"
+        size={17}
+      />
+    </Link>
+  );
+}
+
+function DailyPrompt({ item }: { item: FeedItem }) {
+  return (
+    <section className="-mx-5 border-y border-line bg-[#fffaf0] px-5 py-5 sm:-mx-6 sm:px-6">
+      <div className="flex items-start gap-3">
+        <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-surface-soft text-primary">
+          <BookOpen aria-hidden="true" size={18} />
+        </span>
+        <div className="min-w-0">
+          <StatusPill tone="caution">오늘의 질문</StatusPill>
+          <h2 className="mt-2 text-lg font-black leading-6">{item.title}</h2>
+          <p className="mt-2 line-clamp-3 text-sm leading-6 text-muted">
+            {item.body}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted">
+            <span>{item.replyLabel}</span>
+            <span>{item.likeLabel}</span>
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -373,100 +329,80 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 px-3 py-3">
       <p className="truncate text-[11px] font-bold text-muted">{label}</p>
-      <p className="mt-1 truncate text-xs font-black text-foreground">{value}</p>
+      <p className="mt-1 truncate text-xs font-black text-foreground">
+        {value}
+      </p>
     </div>
   );
 }
 
-function QuickStartRail() {
-  return (
-    <section aria-label="빠른 시작" className="-mx-5 overflow-x-auto px-5">
-      <div className="flex gap-3 pb-1">
-        {quickStartLinks.map((item) => (
-          <Link
-            className="grid min-w-[90px] justify-items-center gap-2 rounded-lg bg-white px-3 py-3 text-center shadow-[0_10px_24px_rgb(63_56_118_/_9%)] ring-1 ring-line"
-            href={item.href}
-            key={item.href}
-          >
-            <span className="rounded-full bg-white p-[2px] ring-1 ring-line">
-              <span className="block rounded-full bg-white p-1">
-                <NuangCharacter motif={item.motif} size="sm" />
-              </span>
-            </span>
-            <span className="text-xs font-black">{item.label}</span>
-            <span className="text-[11px] font-semibold text-muted">{item.caption}</span>
-          </Link>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function CommunityPreview() {
+function FeedPreview({ items }: { items: FeedItem[] }) {
   return (
     <section className="grid gap-3">
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h2 className="text-base font-bold">피드와 커뮤니티</h2>
-          <p className="mt-1 text-sm text-muted">
-            공개 범위 안에서 가볍게 나누는 공간
-          </p>
-        </div>
-        <StatusPill tone="caution">단계적 오픈</StatusPill>
-      </div>
-      <div className="-mx-5 overflow-x-auto px-5">
-        <div className="flex gap-3 pb-1">
-          {communityPreview.map((item) => (
+      <SectionHeader
+        description="오늘의 질문, 밸런스 게임, 리포트 공유를 한 번에 훑어봐요."
+        title="피드 미리보기"
+      />
+      <div className="border-y border-line">
+        {items.slice(0, 3).map((item) => {
+          return (
             <article
-              className="min-w-[230px] overflow-hidden rounded-lg border border-line bg-white shadow-[0_12px_28px_rgb(63_56_118_/_7%)]"
-              key={item.label}
+              className="border-b border-line py-4 last:border-b-0"
+              key={item.id}
             >
-              <div className="h-1.5 bg-primary" />
-              <div className="p-4">
-                <div className="flex items-center gap-2">
-                  <div className="grid h-9 w-9 place-items-center rounded-full bg-surface-soft text-primary">
-                    {item.label === "오늘의 질문" ? (
-                      <MessageCircle aria-hidden="true" size={18} />
-                    ) : item.label === "성향 카드" ? (
-                      <Sparkles aria-hidden="true" size={18} />
-                    ) : (
-                      <HeartHandshake aria-hidden="true" size={18} />
-                    )}
-                  </div>
-                  <div>
-                    <p className="text-sm font-black">{item.label}</p>
-                    <p className="text-[11px] font-bold text-muted">{item.meta}</p>
-                  </div>
-                </div>
-                <p className="mt-3 text-sm leading-6 text-muted">{item.text}</p>
+              <div className="flex items-center gap-2 text-xs font-semibold text-muted">
+                <span>{item.authorHandle}</span>
+                <span>·</span>
+                <span>{item.timeLabel}</span>
+              </div>
+              <h3 className="mt-2 text-sm font-black leading-5">
+                {item.title}
+              </h3>
+              <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted">
+                {item.body}
+              </p>
+              <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs font-semibold text-muted">
+                <span>{item.replyLabel}</span>
+                <span>{item.likeLabel}</span>
               </div>
             </article>
-          ))}
-        </div>
+          );
+        })}
       </div>
       <ButtonLink
         className="w-full"
-        href="/together"
+        href="/feed"
         icon={<Compass aria-hidden="true" size={17} />}
       >
-        함께 피드 보기
+        피드 전체 보기
       </ButtonLink>
     </section>
   );
 }
 
-function calculateAttemptResult(attempt: LocalAssessmentAttempt) {
-  const scoringRelease =
-    attempt.assessmentId === fullCoreAssessment.assessmentId
-      ? fullScoringRelease
-      : quickScoringRelease;
-  const responses: ItemResponse[] = Object.values(attempt.responses).map(
-    (response) => ({
-      isUnsure: response.isUnsure,
-      itemId: response.itemId,
-      value: response.value,
-    }),
-  );
+function getLatestInProgressAttempt(attempts: LocalAssessmentAttempt[]) {
+  return [...attempts]
+    .filter((attempt) => attempt.state === "in_progress")
+    .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
+}
 
-  return calculateCoreScore(scoringRelease, responses);
+function getLatestCompletedAttempt(attempts: LocalAssessmentAttempt[]) {
+  return [...attempts]
+    .filter((attempt) => attempt.state === "completed")
+    .sort((a, b) =>
+      (b.completedAt ?? b.updatedAt).localeCompare(
+        a.completedAt ?? a.updatedAt,
+      ),
+    )[0];
+}
+
+function getDailyPrompt(items: FeedItem[]) {
+  return (
+    items.find((item) => item.kind === "daily_question") ??
+    items.find((item) => item.kind === "balance_game")
+  );
+}
+
+function calculateAttemptResult(attempt: LocalAssessmentAttempt) {
+  return getValidatedLocalResultSnapshot(attempt)?.scoreResult ?? null;
 }

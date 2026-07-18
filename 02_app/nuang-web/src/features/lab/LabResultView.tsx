@@ -1,14 +1,20 @@
 "use client";
 
-import { ArrowLeft, FlaskConical } from "lucide-react";
+import { ArrowLeft, FlaskConical, Trash2 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ButtonLink } from "@/components/ui/Button";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { type LabAssessment } from "@/features/lab/lab-assessments";
-import { loadLabResult, type StoredLabResult } from "@/features/lab/lab-storage";
+import {
+  deleteLabResult,
+  loadLabResult,
+  type StoredLabResult,
+} from "@/features/lab/lab-storage";
 
 export function LabResultView({ assessment }: { assessment: LabAssessment }) {
+  const router = useRouter();
   const [storedResult, setStoredResult] = useState<StoredLabResult | null>(null);
   const [loaded, setLoaded] = useState(false);
 
@@ -42,6 +48,17 @@ export function LabResultView({ assessment }: { assessment: LabAssessment }) {
   const contentVersion = storedResult.contentVersion ?? assessment.contentVersion;
   const answeredCount = Object.keys(storedResult.answers).length;
 
+  function handleDelete() {
+    const confirmed = window.confirm(
+      "이 결과를 삭제할까요? 삭제하면 다시 열 수 없어요.",
+    );
+
+    if (!confirmed) return;
+
+    deleteLabResult(assessment.slug);
+    router.replace("/my");
+  }
+
   return (
     <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-5">
       <Link
@@ -68,8 +85,7 @@ export function LabResultView({ assessment }: { assessment: LabAssessment }) {
         </div>
         <p className="mt-4 text-sm leading-6 text-muted">{profile.summary}</p>
         <p className="mt-3 text-xs leading-5 text-muted">
-          검사일 {formatCompletedDate(storedResult.completedAt)} · 응답 {answeredCount}개 ·
-          로컬 저장 결과
+          검사일 {formatCompletedDate(storedResult.completedAt)} · 응답 {answeredCount}개
         </p>
         {hasTie && (
           <p className="mt-3 rounded-lg bg-[#fff7e8] p-3 text-sm leading-6 text-muted">
@@ -139,6 +155,15 @@ export function LabResultView({ assessment }: { assessment: LabAssessment }) {
         </ButtonLink>
         <ButtonLink href="/assessments">검사 홈</ButtonLink>
       </div>
+
+      <button
+        className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-muted hover:text-danger"
+        onClick={handleDelete}
+        type="button"
+      >
+        <Trash2 aria-hidden="true" size={17} />
+        결과 삭제
+      </button>
     </main>
   );
 }
@@ -203,10 +228,10 @@ function MissingLabResult({ assessment }: { assessment: LabAssessment }) {
   return (
     <section className="rounded-lg border border-line bg-white p-5">
       <StatusPill tone="neutral">결과 없음</StatusPill>
-      <h1 className="mt-4 text-xl font-black">저장된 결과를 찾을 수 없어요</h1>
+      <h1 className="mt-4 text-xl font-black">결과를 찾을 수 없어요</h1>
       <p className="mt-2 text-sm leading-6 text-muted">
-        이 기기에 남아 있는 별난 성향 연구소 결과가 없어요. 짧게 다시 확인할
-        수 있습니다.
+        보관 기간이 지났거나 삭제된 결과일 수 있어요. 짧게 다시 확인할 수
+        있습니다.
       </p>
       <ButtonLink className="mt-5 w-full" href={`/labs/${assessment.slug}`}>
         다시 하기

@@ -42,7 +42,7 @@ export async function startSocialSignIn(
   }
 
   const callbackUrl = new URL("/auth/callback", window.location.origin);
-  callbackUrl.searchParams.set("next", "/my");
+  callbackUrl.searchParams.set("next", getSafeNextPath());
 
   const { error } = await supabase.auth.signInWithOAuth({
     options: {
@@ -59,4 +59,14 @@ export async function startSocialSignIn(
   }
 
   return { status: "redirecting" };
+}
+
+function getSafeNextPath() {
+  const next = new URLSearchParams(window.location.search).get("next");
+
+  if (!next || !next.startsWith("/") || next.startsWith("//")) {
+    return "/my";
+  }
+
+  return next;
 }

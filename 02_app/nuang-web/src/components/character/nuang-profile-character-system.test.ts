@@ -48,7 +48,7 @@ describe("nuangProfileCharacterSystem", () => {
     expect(usedBaseAssets.size).toBe(4);
   });
 
-  it("rejects non-profile codes so public profile codes cannot leak into character rules", () => {
+  it("rejects non-profile identifiers so external IDs cannot leak into character rules", () => {
     expect(isNuangProfileCode("TVOAE")).toBe(true);
     expect(isNuangProfileCode("NUANG-A7K2M9")).toBe(false);
     expect(isNuangProfileCode("PURPLE")).toBe(false);

@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
+import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { coreAssessments } from "@/lib/product/mock-data";
 
@@ -40,31 +41,37 @@ export function AssessmentHomeCoreSection() {
     <>
       <section className="overflow-hidden rounded-lg border border-line bg-white shadow-[var(--shadow-soft)]">
         <div className="border-b border-line bg-surface-soft p-4">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <StatusPill tone="primary">{hero.eyebrow}</StatusPill>
-            <h2 className="mt-3 text-xl font-black">{hero.title}</h2>
-            <p className="mt-2 text-sm leading-6 text-muted">{hero.caption}</p>
-            <Link
-              aria-label={`${hero.cta}: ${hero.title}`}
-              className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-primary px-4 text-sm font-bold text-white shadow-[0_10px_24px_rgb(101_70_215_/_22%)]"
-              href={hero.href}
-            >
-              {hero.cta}
-            </Link>
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <StatusPill tone="primary">{hero.eyebrow}</StatusPill>
+              <h2 className="mt-3 text-xl font-black">{hero.title}</h2>
+              <p className="mt-2 text-sm leading-6 text-muted">
+                {hero.caption}
+              </p>
+              <Link
+                aria-label={`${hero.cta}: ${hero.title}`}
+                className="mt-4 inline-flex min-h-11 items-center rounded-lg bg-primary px-4 text-sm font-bold text-white shadow-[0_10px_24px_rgb(101_70_215_/_22%)]"
+                href={hero.href}
+              >
+                {hero.cta}
+              </Link>
+            </div>
+            <NuangCharacter motif="purple" size="lg" />
           </div>
-          <NuangCharacter motif="purple" size="lg" />
-        </div>
         </div>
       </section>
 
       <section className="grid gap-3">
         <SectionHeader
           label="코어 검사"
-          note="성향지도와 대표 성향을 만드는 기본 검사"
+          note="정밀 코어까지 무료로 제공되는 뉴앙의 기본 검사"
         />
         {coreAssessments.map((assessment) => {
-          const status = getCoreStatus(assessment.assessmentId, attempts, loaded);
+          const status = getCoreStatus(
+            assessment.assessmentId,
+            attempts,
+            loaded,
+          );
 
           return (
             <Link
@@ -86,14 +93,17 @@ export function AssessmentHomeCoreSection() {
                   <p className="mt-1 text-sm font-semibold text-muted">
                     {status.detail}
                   </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
-                    <TinyBadge>{assessment.mapImpact}</TinyBadge>
-                    <TinyBadge>{assessment.resultUse}</TinyBadge>
-                    <TinyBadge>{assessment.storage}</TinyBadge>
-                  </div>
+                  <p className="mt-2 text-xs font-semibold leading-5 text-muted">
+                    {assessment.mapImpact} · {assessment.resultUse} ·{" "}
+                    {assessment.storage}
+                  </p>
                 </div>
               </div>
-              <ChevronRight aria-hidden="true" className="shrink-0 text-muted" size={18} />
+              <ChevronRight
+                aria-hidden="true"
+                className="shrink-0 text-muted"
+                size={18}
+              />
             </Link>
           );
         })}
@@ -104,23 +114,10 @@ export function AssessmentHomeCoreSection() {
 
 function SectionHeader({ label, note }: { label: string; note: string }) {
   return (
-    <div className="flex items-start gap-3">
-      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-surface-soft text-primary">
-        <ChevronRight aria-hidden="true" size={18} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <h2 className="text-base font-bold">{label}</h2>
-        <p className="mt-1 text-sm leading-6 text-muted">{note}</p>
-      </div>
+    <div>
+      <h2 className="text-base font-bold">{label}</h2>
+      <p className="mt-1 text-sm leading-6 text-muted">{note}</p>
     </div>
-  );
-}
-
-function TinyBadge({ children }: { children: React.ReactNode }) {
-  return (
-    <span className="rounded-full bg-[#eff0f6] px-2.5 py-1 text-xs font-semibold text-muted">
-      {children}
-    </span>
   );
 }
 
@@ -131,7 +128,7 @@ function getCoreStatus(
 ): CoreStatus {
   if (!loaded) {
     return {
-      detail: "로컬 상태 확인 중",
+      detail: "진행 상태 확인 중",
       href: `/assessments/${assessmentId}`,
       label: "확인 중",
       tone: "neutral",
@@ -139,10 +136,12 @@ function getCoreStatus(
   }
 
   const completed = attempts.find(
-    (attempt) => attempt.assessmentId === assessmentId && attempt.state === "completed",
+    (attempt) =>
+      attempt.assessmentId === assessmentId && attempt.state === "completed",
   );
   const inProgress = attempts.find(
-    (attempt) => attempt.assessmentId === assessmentId && attempt.state === "in_progress",
+    (attempt) =>
+      attempt.assessmentId === assessmentId && attempt.state === "in_progress",
   );
   const quickCompleted = attempts.find(
     (attempt) =>
@@ -169,9 +168,12 @@ function getCoreStatus(
 
   if (assessmentId === "nu-core-full" && quickCompleted) {
     return {
-      detail: "빠른 코어 응답을 이어받아 확장해요",
-      href: "/assessments/nu-core-full",
-      label: "확장 가능",
+      detail: "공식 성향지도와 비교 기준을 만들어요",
+      href: buildPrecisionIntroHref({
+        backDestination: "/home",
+        entrySource: "home",
+      }),
+      label: "무료",
       tone: "caution",
     };
   }
@@ -191,7 +193,8 @@ function buildHeroState(attempts: LocalAssessmentAttempt[]) {
   );
   const fullInProgress = attempts.find(
     (attempt) =>
-      attempt.assessmentId === "nu-core-full" && attempt.state === "in_progress",
+      attempt.assessmentId === "nu-core-full" &&
+      attempt.state === "in_progress",
   );
   const quickCompleted = attempts.find(
     (attempt) =>
@@ -199,12 +202,13 @@ function buildHeroState(attempts: LocalAssessmentAttempt[]) {
   );
   const quickInProgress = attempts.find(
     (attempt) =>
-      attempt.assessmentId === "nu-core-quick" && attempt.state === "in_progress",
+      attempt.assessmentId === "nu-core-quick" &&
+      attempt.state === "in_progress",
   );
 
   if (fullCompleted) {
     return {
-      caption: "성향지도와 함께 기능의 기준이 되는 결과가 이 기기에 있어요.",
+      caption: "성향지도와 1:1 비교 기준으로 쓸 공식 결과가 준비됐어요.",
       cta: "정밀 결과 보기",
       eyebrow: "정밀 코어 완료",
       href: `/results/local/${fullCompleted.id}`,
@@ -224,11 +228,14 @@ function buildHeroState(attempts: LocalAssessmentAttempt[]) {
 
   if (quickCompleted) {
     return {
-      caption: "20문항 예비 결과를 바탕으로 정밀 코어를 이어갈 수 있어요.",
-      cta: "정밀 코어로 확장",
+      caption: "첫 성향 결과를 바탕으로 무료 정밀 코어를 이어갈 수 있어요.",
+      cta: "무료 정밀 코어 시작",
       eyebrow: "빠른 코어 완료",
-      href: "/assessments/nu-core-full",
-      title: "성향지도를 만들 준비가 됐어요",
+      href: buildPrecisionIntroHref({
+        backDestination: "/home",
+        entrySource: "home",
+      }),
+      title: "공식 성향지도를 만들 준비가 됐어요",
     };
   }
 
@@ -243,10 +250,11 @@ function buildHeroState(attempts: LocalAssessmentAttempt[]) {
   }
 
   return {
-    caption: "로그인 없이 예비 결과를 먼저 확인해요.",
+    caption:
+      "로그인 없이 첫 성향 결과를 확인하고, 정밀 코어까지 무료로 이어가요.",
     cta: "빠른 코어 시작",
     eyebrow: "처음이신가요?",
     href: "/assessments/nu-core-quick",
-    title: "20문항 빠른 코어",
+    title: "3분 빠른 코어",
   };
 }

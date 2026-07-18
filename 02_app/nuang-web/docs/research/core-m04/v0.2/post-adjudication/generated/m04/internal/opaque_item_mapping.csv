@@ -1,0 +1,2 @@
+protocol_version,opaque_item_id,source_opaque_item_id,source_revision_candidate_id,revision_candidate_id,revision_level,target_facet,keyed_direction,context_label,prompt_text,required_next_gate,status
+m04-core-expert-kit.v0.2-smrl-r3,NX3-001,NV2-001,SMRL-C11-r2,SMRL-C11-r3,MAJOR,SM-RL,HIGH,다른 사람과 함께할 일에서 내가 맡은 부분이 있을 때,정한 때에 맞춰 내 부분을 끝낸다.,LIMITED_M04_THEN_M05,PACKET_READY_NOT_REVIEWED

@@ -1,0 +1,1258 @@
+{
+  "protocol_version": "m04-core-expert-kit.v0.1",
+  "generated_at": "2026-07-18T00:00:00+09:00",
+  "candidate_count": 150,
+  "unique_opaque_id_count": 150,
+  "pair_count": 75,
+  "direction_counts": {
+    "LOW": 75,
+    "HIGH": 75
+  },
+  "domain_counts": {
+    "SM": 36,
+    "OE": 36,
+    "RO": 30,
+    "ER": 24,
+    "SE": 24
+  },
+  "facet_counts": {
+    "SM-OS": 12,
+    "OE-AE": 12,
+    "RO-EC": 18,
+    "OE-CI": 12,
+    "RO-RN": 12,
+    "SM-EP": 12,
+    "ER-IR": 12,
+    "ER-WD": 12,
+    "SE-AI": 12,
+    "SE-RE": 12,
+    "OE-IE": 12,
+    "SM-RL": 12
+  },
+  "evidence_role_counts": {
+    "CORE_BASELINE": 120,
+    "PRIVATE_DETAIL_RESEARCH": 12,
+    "CONDITIONAL_MAIN": 12,
+    "PROCESS_PROFILE_MODIFIER": 6
+  },
+  "wording_polarity_counts": {
+    "affirmative": 132,
+    "limiter": 8,
+    "negated": 10
+  },
+  "reviewer_count": 8,
+  "wave_count_per_reviewer": 3,
+  "items_per_wave": 50,
+  "unique_reviewer_order_count": 8,
+  "constraints": {
+    "paired_opposite_distance": 75,
+    "all_domains_each_wave": true,
+    "all_facets_each_wave": true,
+    "evidence_roles_balanced_across_full_reviewer_set": true,
+    "maximum_domain_run": 3,
+    "maximum_facet_run": 2,
+    "maximum_direction_run": 3,
+    "maximum_negated_run": 2,
+    "stage1_target_metadata_leak": false
+  },
+  "packets": [
+    {
+      "reviewer_slot": "R01",
+      "wave_id": "W1",
+      "generation_attempt": 301,
+      "stage1_path": "reviewer/R01_W1_stage1_blind.csv",
+      "stage1_sha256": "0192a76d00e533134a7347cbde8eed5ff128239d0115767eef2670655f67baed",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R01_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "3abc6a935ac31bb31e06457d95ae1b7277b11a62fdf61f97fe6d9aa92e0c04a8",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "OE": 13,
+        "RO": 9,
+        "SE": 9,
+        "SM": 12,
+        "ER": 7
+      },
+      "facetCounts": {
+        "OE-IE": 4,
+        "RO-EC": 3,
+        "RO-RN": 6,
+        "OE-CI": 6,
+        "SE-AI": 5,
+        "SM-RL": 3,
+        "ER-IR": 4,
+        "SE-RE": 4,
+        "SM-EP": 5,
+        "OE-AE": 3,
+        "ER-WD": 3,
+        "SM-OS": 4
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 39,
+        "PRIVATE_DETAIL_RESEARCH": 6,
+        "CONDITIONAL_MAIN": 3,
+        "PROCESS_PROFILE_MODIFIER": 2
+      },
+      "directionCounts": {
+        "LOW": 28,
+        "HIGH": 22
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 2,
+      "negativeAdjacent": true,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R01",
+      "wave_id": "W2",
+      "generation_attempt": 301,
+      "stage1_path": "reviewer/R01_W2_stage1_blind.csv",
+      "stage1_sha256": "abc2cfb4dce5cad41c03f3e9fa07a3e8e94e3fc20b0ee6e8a824c4df35cb772d",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R01_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "b832baa117d2baf3e39b7df3ca67fdb9f7351f80470752e3a3443c47f1c6d559",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "RO": 10,
+        "SE": 8,
+        "SM": 12,
+        "OE": 12,
+        "ER": 8
+      },
+      "facetCounts": {
+        "RO-EC": 7,
+        "SE-RE": 5,
+        "SM-RL": 5,
+        "SM-OS": 3,
+        "OE-IE": 4,
+        "OE-AE": 4,
+        "SE-AI": 3,
+        "ER-WD": 4,
+        "ER-IR": 4,
+        "SM-EP": 4,
+        "RO-RN": 3,
+        "OE-CI": 4
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 41,
+        "CONDITIONAL_MAIN": 5,
+        "PROCESS_PROFILE_MODIFIER": 1,
+        "PRIVATE_DETAIL_RESEARCH": 3
+      },
+      "directionCounts": {
+        "HIGH": 27,
+        "LOW": 23
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 4
+    },
+    {
+      "reviewer_slot": "R01",
+      "wave_id": "W3",
+      "generation_attempt": 301,
+      "stage1_path": "reviewer/R01_W3_stage1_blind.csv",
+      "stage1_sha256": "0b5c348330faab922273983afedfc2f924187baf1c920449564be33c9df70712",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R01_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "f0a94226290b69180cf8fb0a91abc18d3537f42c8c08708fd2579c13849d6464",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "SE": 7,
+        "SM": 12,
+        "ER": 9,
+        "OE": 11,
+        "RO": 11
+      },
+      "facetCounts": {
+        "SE-RE": 3,
+        "SM-OS": 5,
+        "ER-IR": 4,
+        "OE-AE": 5,
+        "OE-IE": 4,
+        "RO-RN": 3,
+        "RO-EC": 8,
+        "ER-WD": 5,
+        "OE-CI": 2,
+        "SE-AI": 4,
+        "SM-EP": 3,
+        "SM-RL": 4
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 40,
+        "PRIVATE_DETAIL_RESEARCH": 3,
+        "PROCESS_PROFILE_MODIFIER": 3,
+        "CONDITIONAL_MAIN": 4
+      },
+      "directionCounts": {
+        "HIGH": 26,
+        "LOW": 24
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R02",
+      "wave_id": "W1",
+      "generation_attempt": 138,
+      "stage1_path": "reviewer/R02_W1_stage1_blind.csv",
+      "stage1_sha256": "3406cd2861245358a502172438541bd36bd8566ade85f2dbc57f0feafe2a2619",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R02_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "e52c413696712a3a99ab725d2a166e054f763adf6a320112bf922276ab6326dc",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "SM": 12,
+        "ER": 10,
+        "OE": 13,
+        "SE": 8,
+        "RO": 7
+      },
+      "facetCounts": {
+        "SM-OS": 6,
+        "ER-WD": 5,
+        "OE-AE": 5,
+        "ER-IR": 5,
+        "SE-AI": 5,
+        "RO-RN": 2,
+        "SM-RL": 3,
+        "SM-EP": 3,
+        "RO-EC": 5,
+        "OE-IE": 4,
+        "SE-RE": 3,
+        "OE-CI": 4
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 44,
+        "PRIVATE_DETAIL_RESEARCH": 2,
+        "CONDITIONAL_MAIN": 3,
+        "PROCESS_PROFILE_MODIFIER": 1
+      },
+      "directionCounts": {
+        "LOW": 25,
+        "HIGH": 25
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R02",
+      "wave_id": "W2",
+      "generation_attempt": 138,
+      "stage1_path": "reviewer/R02_W2_stage1_blind.csv",
+      "stage1_sha256": "a9852c910d3a6713f9eb762c986774491af533d058c6018c3fffb8731d83d2bc",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R02_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "5da3f039e4ba86036eeeb9cacf578b60322031d500a3c1dd199e362b02fefdd6",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "SM": 13,
+        "RO": 10,
+        "ER": 10,
+        "OE": 9,
+        "SE": 8
+      },
+      "facetCounts": {
+        "SM-RL": 4,
+        "RO-RN": 5,
+        "ER-WD": 5,
+        "SM-EP": 5,
+        "OE-IE": 3,
+        "SE-RE": 4,
+        "RO-EC": 5,
+        "ER-IR": 5,
+        "OE-CI": 2,
+        "SE-AI": 4,
+        "OE-AE": 4,
+        "SM-OS": 4
+      },
+      "evidenceRoleCounts": {
+        "CONDITIONAL_MAIN": 4,
+        "PRIVATE_DETAIL_RESEARCH": 5,
+        "CORE_BASELINE": 41
+      },
+      "directionCounts": {
+        "HIGH": 27,
+        "LOW": 23
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R02",
+      "wave_id": "W3",
+      "generation_attempt": 138,
+      "stage1_path": "reviewer/R02_W3_stage1_blind.csv",
+      "stage1_sha256": "d75b99d909a15b7b3258bea3eea55c09164073dc2c3063f581574a047fc5e26a",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R02_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "7c4247ba39298da5da134d679fd3dca4f56018044b002ae81438029e6c2b66f3",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "SE": 8,
+        "SM": 11,
+        "ER": 4,
+        "OE": 14,
+        "RO": 13
+      },
+      "facetCounts": {
+        "SE-RE": 5,
+        "SM-RL": 5,
+        "ER-WD": 2,
+        "SE-AI": 3,
+        "OE-CI": 6,
+        "RO-EC": 8,
+        "OE-IE": 5,
+        "ER-IR": 2,
+        "RO-RN": 5,
+        "SM-OS": 2,
+        "OE-AE": 3,
+        "SM-EP": 4
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 35,
+        "CONDITIONAL_MAIN": 5,
+        "PROCESS_PROFILE_MODIFIER": 5,
+        "PRIVATE_DETAIL_RESEARCH": 5
+      },
+      "directionCounts": {
+        "HIGH": 23,
+        "LOW": 27
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 2,
+      "negativeAdjacent": true,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R03",
+      "wave_id": "W1",
+      "generation_attempt": 660,
+      "stage1_path": "reviewer/R03_W1_stage1_blind.csv",
+      "stage1_sha256": "39d00084c078134c8ed792d5853ccb63b813d93a05e4dcef53082e4757932afb",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R03_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "dbb3258363ef347babb431500363d131367fbda364e077cb0094c6f1a16b16ce",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "RO": 10,
+        "ER": 7,
+        "OE": 12,
+        "SE": 7,
+        "SM": 14
+      },
+      "facetCounts": {
+        "RO-RN": 4,
+        "ER-WD": 4,
+        "OE-IE": 4,
+        "SE-RE": 4,
+        "OE-CI": 4,
+        "SE-AI": 3,
+        "SM-OS": 3,
+        "SM-RL": 5,
+        "RO-EC": 6,
+        "SM-EP": 6,
+        "ER-IR": 3,
+        "OE-AE": 4
+      },
+      "evidenceRoleCounts": {
+        "PRIVATE_DETAIL_RESEARCH": 4,
+        "CORE_BASELINE": 40,
+        "CONDITIONAL_MAIN": 5,
+        "PROCESS_PROFILE_MODIFIER": 1
+      },
+      "directionCounts": {
+        "HIGH": 25,
+        "LOW": 25
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 2,
+      "negativeAdjacent": true,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R03",
+      "wave_id": "W2",
+      "generation_attempt": 660,
+      "stage1_path": "reviewer/R03_W2_stage1_blind.csv",
+      "stage1_sha256": "2b59889f2472842fbdc48aa2fff99fc1846a81a472381beecdf4e5d27c6345b4",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R03_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "513220310bfd2e96012b554fa8124124914a9f5de0ac23a7bee47d7b14debf3f",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "OE": 13,
+        "SE": 7,
+        "ER": 9,
+        "SM": 11,
+        "RO": 10
+      },
+      "facetCounts": {
+        "OE-IE": 6,
+        "SE-AI": 4,
+        "ER-IR": 5,
+        "ER-WD": 4,
+        "SE-RE": 3,
+        "SM-RL": 4,
+        "OE-CI": 4,
+        "RO-EC": 5,
+        "RO-RN": 5,
+        "SM-OS": 5,
+        "OE-AE": 3,
+        "SM-EP": 2
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 38,
+        "CONDITIONAL_MAIN": 4,
+        "PRIVATE_DETAIL_RESEARCH": 5,
+        "PROCESS_PROFILE_MODIFIER": 3
+      },
+      "directionCounts": {
+        "LOW": 25,
+        "HIGH": 25
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 1,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R03",
+      "wave_id": "W3",
+      "generation_attempt": 660,
+      "stage1_path": "reviewer/R03_W3_stage1_blind.csv",
+      "stage1_sha256": "f5412d2ee273dc84ed19b0618b561738cc4daa8dc9fceee2602705cebe4d8074",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R03_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "ddea08464a869881d56e66b1481893546356a6d601969b721406eca44af92376",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "OE": 11,
+        "SE": 10,
+        "SM": 11,
+        "RO": 10,
+        "ER": 8
+      },
+      "facetCounts": {
+        "OE-CI": 4,
+        "SE-AI": 5,
+        "SM-EP": 4,
+        "RO-EC": 7,
+        "ER-WD": 4,
+        "ER-IR": 4,
+        "OE-AE": 5,
+        "SE-RE": 5,
+        "SM-RL": 3,
+        "RO-RN": 3,
+        "SM-OS": 4,
+        "OE-IE": 2
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 42,
+        "CONDITIONAL_MAIN": 3,
+        "PROCESS_PROFILE_MODIFIER": 2,
+        "PRIVATE_DETAIL_RESEARCH": 3
+      },
+      "directionCounts": {
+        "LOW": 25,
+        "HIGH": 25
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R04",
+      "wave_id": "W1",
+      "generation_attempt": 441,
+      "stage1_path": "reviewer/R04_W1_stage1_blind.csv",
+      "stage1_sha256": "f10ffb69779172abe8b9e81eb4a25247bcd1f1b494da32d4d1f0b77d2e3f1603",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R04_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "36c90656c6f598a845863450023d7d9036782eec42a7fde1ffc20597cdb276cb",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "RO": 8,
+        "SM": 14,
+        "OE": 12,
+        "SE": 7,
+        "ER": 9
+      },
+      "facetCounts": {
+        "RO-EC": 5,
+        "SM-EP": 5,
+        "OE-IE": 3,
+        "SE-RE": 4,
+        "SM-OS": 4,
+        "OE-CI": 5,
+        "OE-AE": 4,
+        "SM-RL": 5,
+        "SE-AI": 3,
+        "ER-WD": 5,
+        "ER-IR": 4,
+        "RO-RN": 3
+      },
+      "evidenceRoleCounts": {
+        "PROCESS_PROFILE_MODIFIER": 2,
+        "CORE_BASELINE": 40,
+        "CONDITIONAL_MAIN": 5,
+        "PRIVATE_DETAIL_RESEARCH": 3
+      },
+      "directionCounts": {
+        "HIGH": 25,
+        "LOW": 25
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 4
+    },
+    {
+      "reviewer_slot": "R04",
+      "wave_id": "W2",
+      "generation_attempt": 441,
+      "stage1_path": "reviewer/R04_W2_stage1_blind.csv",
+      "stage1_sha256": "6a62bd0d1fdff7cfa1df762c397ed701c8b89580aa35abd3cc39141eef23359c",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R04_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "672461fb5a2363b8b333f33ebc68d40ae0d6b2a36ca419a93185e34009716254",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "RO": 8,
+        "ER": 7,
+        "SM": 14,
+        "OE": 12,
+        "SE": 9
+      },
+      "facetCounts": {
+        "RO-RN": 3,
+        "ER-IR": 4,
+        "SM-RL": 3,
+        "RO-EC": 5,
+        "OE-CI": 4,
+        "OE-IE": 4,
+        "OE-AE": 4,
+        "SM-OS": 5,
+        "SE-RE": 5,
+        "ER-WD": 3,
+        "SE-AI": 4,
+        "SM-EP": 6
+      },
+      "evidenceRoleCounts": {
+        "PRIVATE_DETAIL_RESEARCH": 3,
+        "CORE_BASELINE": 42,
+        "CONDITIONAL_MAIN": 3,
+        "PROCESS_PROFILE_MODIFIER": 2
+      },
+      "directionCounts": {
+        "HIGH": 21,
+        "LOW": 29
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R04",
+      "wave_id": "W3",
+      "generation_attempt": 441,
+      "stage1_path": "reviewer/R04_W3_stage1_blind.csv",
+      "stage1_sha256": "4a7ba12775d69899bed0b15bff4e835b6d99fbc5c75b202d2f61fbde0510b532",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R04_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "09a3e15ea2a2de07cabfb5db777f1e11609a2dda6c446cfcd0ff1fb8502d79a9",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "RO": 14,
+        "ER": 8,
+        "OE": 12,
+        "SM": 8,
+        "SE": 8
+      },
+      "facetCounts": {
+        "RO-RN": 6,
+        "ER-WD": 4,
+        "OE-IE": 5,
+        "RO-EC": 8,
+        "SM-RL": 4,
+        "SE-RE": 3,
+        "OE-CI": 3,
+        "ER-IR": 4,
+        "SE-AI": 5,
+        "OE-AE": 4,
+        "SM-OS": 3,
+        "SM-EP": 1
+      },
+      "evidenceRoleCounts": {
+        "PRIVATE_DETAIL_RESEARCH": 6,
+        "CORE_BASELINE": 38,
+        "PROCESS_PROFILE_MODIFIER": 2,
+        "CONDITIONAL_MAIN": 4
+      },
+      "directionCounts": {
+        "HIGH": 29,
+        "LOW": 21
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R05",
+      "wave_id": "W1",
+      "generation_attempt": 2230,
+      "stage1_path": "reviewer/R05_W1_stage1_blind.csv",
+      "stage1_sha256": "5e2dc8a1c388a9445599d0289c4d7a380151c64cf74417ce3752972362882c71",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R05_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "3029f67fe1010d9d18b989fc3c372ae1a253ff58ad9e6a1f7d1e26352c28c9a0",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "SM": 13,
+        "RO": 10,
+        "OE": 13,
+        "SE": 7,
+        "ER": 7
+      },
+      "facetCounts": {
+        "SM-RL": 4,
+        "SM-OS": 4,
+        "RO-EC": 5,
+        "OE-IE": 5,
+        "SE-AI": 3,
+        "ER-WD": 2,
+        "SM-EP": 5,
+        "ER-IR": 5,
+        "RO-RN": 5,
+        "OE-CI": 4,
+        "SE-RE": 4,
+        "OE-AE": 4
+      },
+      "evidenceRoleCounts": {
+        "CONDITIONAL_MAIN": 4,
+        "CORE_BASELINE": 39,
+        "PRIVATE_DETAIL_RESEARCH": 5,
+        "PROCESS_PROFILE_MODIFIER": 2
+      },
+      "directionCounts": {
+        "LOW": 24,
+        "HIGH": 26
+      },
+      "maximumDomainRun": 2,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R05",
+      "wave_id": "W2",
+      "generation_attempt": 2230,
+      "stage1_path": "reviewer/R05_W2_stage1_blind.csv",
+      "stage1_sha256": "ff78b908ce9fc7e647246577aa409f1e5a3df0376d73750e818c38dc1b028487",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R05_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "b5de6a34c7eca63a3e9d7587283016bea4c39b806761df7f2d329251f80e70d3",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "OE": 13,
+        "RO": 11,
+        "SE": 8,
+        "SM": 10,
+        "ER": 8
+      },
+      "facetCounts": {
+        "OE-AE": 5,
+        "RO-RN": 3,
+        "SE-AI": 4,
+        "OE-CI": 3,
+        "SE-RE": 4,
+        "SM-OS": 4,
+        "ER-WD": 5,
+        "RO-EC": 8,
+        "OE-IE": 5,
+        "SM-EP": 2,
+        "SM-RL": 4,
+        "ER-IR": 3
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 39,
+        "PRIVATE_DETAIL_RESEARCH": 3,
+        "PROCESS_PROFILE_MODIFIER": 4,
+        "CONDITIONAL_MAIN": 4
+      },
+      "directionCounts": {
+        "HIGH": 26,
+        "LOW": 24
+      },
+      "maximumDomainRun": 2,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R05",
+      "wave_id": "W3",
+      "generation_attempt": 2230,
+      "stage1_path": "reviewer/R05_W3_stage1_blind.csv",
+      "stage1_sha256": "1dbb5aa50032883aed7049ea6da56960afdff9b1a98593591ee97e623668cf2f",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R05_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "d7c7b4baae5a7748886797985c949341bf5a249656340837baa74f334a081389",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "ER": 9,
+        "SM": 13,
+        "SE": 9,
+        "OE": 10,
+        "RO": 9
+      },
+      "facetCounts": {
+        "ER-IR": 4,
+        "SM-RL": 4,
+        "SE-RE": 4,
+        "OE-IE": 2,
+        "OE-CI": 5,
+        "ER-WD": 5,
+        "SM-EP": 5,
+        "OE-AE": 3,
+        "SE-AI": 5,
+        "RO-EC": 5,
+        "SM-OS": 4,
+        "RO-RN": 4
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 42,
+        "CONDITIONAL_MAIN": 4,
+        "PRIVATE_DETAIL_RESEARCH": 4
+      },
+      "directionCounts": {
+        "HIGH": 23,
+        "LOW": 27
+      },
+      "maximumDomainRun": 2,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 4
+    },
+    {
+      "reviewer_slot": "R06",
+      "wave_id": "W1",
+      "generation_attempt": 29,
+      "stage1_path": "reviewer/R06_W1_stage1_blind.csv",
+      "stage1_sha256": "8e87d768ae93fb51baebe043af3318d5731c066f9ed77713d56c8273db597d6a",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R06_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "467208bdadaf1eac7e263386436ac2b27cf3ab365fbaa29e64b3d36f3d2d9241",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "ER": 8,
+        "SM": 10,
+        "SE": 8,
+        "OE": 12,
+        "RO": 12
+      },
+      "facetCounts": {
+        "ER-WD": 5,
+        "SM-EP": 3,
+        "SE-AI": 4,
+        "SM-RL": 2,
+        "OE-CI": 5,
+        "SM-OS": 5,
+        "RO-EC": 9,
+        "OE-AE": 4,
+        "RO-RN": 3,
+        "ER-IR": 3,
+        "SE-RE": 4,
+        "OE-IE": 3
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 42,
+        "CONDITIONAL_MAIN": 2,
+        "PROCESS_PROFILE_MODIFIER": 3,
+        "PRIVATE_DETAIL_RESEARCH": 3
+      },
+      "directionCounts": {
+        "LOW": 25,
+        "HIGH": 25
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 4
+    },
+    {
+      "reviewer_slot": "R06",
+      "wave_id": "W2",
+      "generation_attempt": 29,
+      "stage1_path": "reviewer/R06_W2_stage1_blind.csv",
+      "stage1_sha256": "ea8f5ca4cf2475dfbff8b204c80667892a87467a231b34d4c17ec383e64fc98d",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R06_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "1c5fa9a5e575ff4f8b80adb1c4497dfa4866ea0aed3164ef11146a80d11aae13",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "RO": 8,
+        "SE": 8,
+        "OE": 11,
+        "SM": 14,
+        "ER": 9
+      },
+      "facetCounts": {
+        "RO-RN": 5,
+        "SE-AI": 4,
+        "SE-RE": 4,
+        "OE-IE": 3,
+        "OE-AE": 5,
+        "SM-OS": 3,
+        "SM-EP": 6,
+        "ER-IR": 4,
+        "SM-RL": 5,
+        "ER-WD": 5,
+        "OE-CI": 3,
+        "RO-EC": 3
+      },
+      "evidenceRoleCounts": {
+        "PRIVATE_DETAIL_RESEARCH": 5,
+        "CORE_BASELINE": 38,
+        "CONDITIONAL_MAIN": 5,
+        "PROCESS_PROFILE_MODIFIER": 2
+      },
+      "directionCounts": {
+        "HIGH": 27,
+        "LOW": 23
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R06",
+      "wave_id": "W3",
+      "generation_attempt": 29,
+      "stage1_path": "reviewer/R06_W3_stage1_blind.csv",
+      "stage1_sha256": "6353d955052778fda0329135ffa1364b52317016b2c1ce6237f10ef215026a25",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R06_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "afee4f2845cbf47f5a92d105eca7c780691f7dba1be4e1d8c927d52a878c6b6e",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "OE": 13,
+        "RO": 10,
+        "ER": 7,
+        "SM": 12,
+        "SE": 8
+      },
+      "facetCounts": {
+        "OE-IE": 6,
+        "RO-EC": 6,
+        "ER-WD": 2,
+        "SM-OS": 4,
+        "SE-RE": 4,
+        "RO-RN": 4,
+        "SM-RL": 5,
+        "ER-IR": 5,
+        "SE-AI": 4,
+        "OE-AE": 3,
+        "OE-CI": 4,
+        "SM-EP": 3
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 40,
+        "PRIVATE_DETAIL_RESEARCH": 4,
+        "CONDITIONAL_MAIN": 5,
+        "PROCESS_PROFILE_MODIFIER": 1
+      },
+      "directionCounts": {
+        "HIGH": 23,
+        "LOW": 27
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R07",
+      "wave_id": "W1",
+      "generation_attempt": 746,
+      "stage1_path": "reviewer/R07_W1_stage1_blind.csv",
+      "stage1_sha256": "d8815c11660fb0e53c523e1a890d853ebd820729eff1f37228515fae8be7664d",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R07_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "ef344171f177b454c71449c267cc0e66dbe9a108f69a103881d5514b55b3a6b4",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "SM": 13,
+        "OE": 13,
+        "RO": 9,
+        "ER": 8,
+        "SE": 7
+      },
+      "facetCounts": {
+        "SM-EP": 2,
+        "OE-IE": 6,
+        "SM-OS": 5,
+        "RO-RN": 4,
+        "ER-IR": 4,
+        "SM-RL": 6,
+        "RO-EC": 5,
+        "SE-AI": 3,
+        "SE-RE": 4,
+        "OE-CI": 3,
+        "ER-WD": 4,
+        "OE-AE": 4
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 39,
+        "PRIVATE_DETAIL_RESEARCH": 4,
+        "CONDITIONAL_MAIN": 6,
+        "PROCESS_PROFILE_MODIFIER": 1
+      },
+      "directionCounts": {
+        "HIGH": 24,
+        "LOW": 26
+      },
+      "maximumDomainRun": 2,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R07",
+      "wave_id": "W2",
+      "generation_attempt": 746,
+      "stage1_path": "reviewer/R07_W2_stage1_blind.csv",
+      "stage1_sha256": "077139d509b607bd44b3b91a2c29cf0545befb80623a781cf77add1a73167346",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R07_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "fa5fdee14b7188f4590d18094222baf72e9f1e0ccd818e52a7a3a5f99b7be942",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "SE": 9,
+        "ER": 6,
+        "RO": 11,
+        "SM": 12,
+        "OE": 12
+      },
+      "facetCounts": {
+        "SE-RE": 5,
+        "ER-IR": 3,
+        "RO-EC": 8,
+        "SM-EP": 5,
+        "OE-AE": 2,
+        "SE-AI": 4,
+        "RO-RN": 3,
+        "ER-WD": 3,
+        "OE-CI": 6,
+        "SM-OS": 4,
+        "OE-IE": 4,
+        "SM-RL": 3
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 42,
+        "PROCESS_PROFILE_MODIFIER": 2,
+        "PRIVATE_DETAIL_RESEARCH": 3,
+        "CONDITIONAL_MAIN": 3
+      },
+      "directionCounts": {
+        "LOW": 26,
+        "HIGH": 24
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 2,
+      "negativeAdjacent": true,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R07",
+      "wave_id": "W3",
+      "generation_attempt": 746,
+      "stage1_path": "reviewer/R07_W3_stage1_blind.csv",
+      "stage1_sha256": "91ef50ef404193bc444b6cbdf0ce3e66274f41601f39e9cf4af27f3808222cef",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R07_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "15bfe090a965ada568e9c9c0362cdc1ddb39a451aeb483aae45ab3e4ec5628e1",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "SM": 11,
+        "RO": 10,
+        "OE": 11,
+        "ER": 10,
+        "SE": 8
+      },
+      "facetCounts": {
+        "SM-RL": 3,
+        "RO-RN": 5,
+        "OE-AE": 6,
+        "SM-EP": 5,
+        "ER-IR": 5,
+        "SE-RE": 3,
+        "SE-AI": 5,
+        "OE-IE": 2,
+        "ER-WD": 5,
+        "RO-EC": 5,
+        "SM-OS": 3,
+        "OE-CI": 3
+      },
+      "evidenceRoleCounts": {
+        "CONDITIONAL_MAIN": 3,
+        "PRIVATE_DETAIL_RESEARCH": 5,
+        "CORE_BASELINE": 39,
+        "PROCESS_PROFILE_MODIFIER": 3
+      },
+      "directionCounts": {
+        "HIGH": 27,
+        "LOW": 23
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 1,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    },
+    {
+      "reviewer_slot": "R08",
+      "wave_id": "W1",
+      "generation_attempt": 117,
+      "stage1_path": "reviewer/R08_W1_stage1_blind.csv",
+      "stage1_sha256": "7163606ab3d112d08c01f6593f494dfef9ff22256c29ed541413d74adadee5ee",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R08_W1_stage2_target_reveal.csv",
+      "stage2_sha256": "e5a1dd78d8391fcaebb1fe00af887c6b59bd8cc24199f897eedfb4bee21ccbcc",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W1",
+      "valid": true,
+      "domainCounts": {
+        "SE": 11,
+        "SM": 11,
+        "OE": 11,
+        "RO": 10,
+        "ER": 7
+      },
+      "facetCounts": {
+        "SE-RE": 5,
+        "SM-OS": 5,
+        "SE-AI": 6,
+        "OE-IE": 5,
+        "SM-EP": 4,
+        "RO-RN": 3,
+        "RO-EC": 7,
+        "OE-CI": 3,
+        "OE-AE": 3,
+        "ER-WD": 4,
+        "ER-IR": 3,
+        "SM-RL": 2
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 42,
+        "PRIVATE_DETAIL_RESEARCH": 3,
+        "PROCESS_PROFILE_MODIFIER": 3,
+        "CONDITIONAL_MAIN": 2
+      },
+      "directionCounts": {
+        "LOW": 23,
+        "HIGH": 27
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 4
+    },
+    {
+      "reviewer_slot": "R08",
+      "wave_id": "W2",
+      "generation_attempt": 117,
+      "stage1_path": "reviewer/R08_W2_stage1_blind.csv",
+      "stage1_sha256": "039601ac50edf380f16ad8f03ea27312f3f7a96255a66a6866f78e0df57cc4a3",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R08_W2_stage2_target_reveal.csv",
+      "stage2_sha256": "f225979a52562d564b4c4ea51d3b89336380d15cc464deab9743d7cab69bd805",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W2",
+      "valid": true,
+      "domainCounts": {
+        "OE": 14,
+        "SM": 11,
+        "ER": 7,
+        "RO": 10,
+        "SE": 8
+      },
+      "facetCounts": {
+        "OE-CI": 4,
+        "SM-EP": 4,
+        "OE-AE": 4,
+        "SM-OS": 3,
+        "SM-RL": 4,
+        "ER-IR": 3,
+        "ER-WD": 4,
+        "RO-RN": 5,
+        "RO-EC": 5,
+        "SE-RE": 5,
+        "OE-IE": 6,
+        "SE-AI": 3
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 41,
+        "CONDITIONAL_MAIN": 4,
+        "PRIVATE_DETAIL_RESEARCH": 5
+      },
+      "directionCounts": {
+        "LOW": 25,
+        "HIGH": 25
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 4
+    },
+    {
+      "reviewer_slot": "R08",
+      "wave_id": "W3",
+      "generation_attempt": 117,
+      "stage1_path": "reviewer/R08_W3_stage1_blind.csv",
+      "stage1_sha256": "3527a910ece01bc8787348e6dbc0d4536b19745e500a4730a28f12e41094e1f2",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_ALL_STAGE1_LOCKED_R08_W3_stage2_target_reveal.csv",
+      "stage2_sha256": "bca0fb2555da8fe622b7c97d069bf8465030701f4bf6359553e29264902e6484",
+      "item_count": 50,
+      "target_leak_detected": false,
+      "waveId": "W3",
+      "valid": true,
+      "domainCounts": {
+        "ER": 10,
+        "SM": 14,
+        "RO": 10,
+        "OE": 11,
+        "SE": 5
+      },
+      "facetCounts": {
+        "ER-IR": 6,
+        "SM-OS": 4,
+        "RO-RN": 4,
+        "OE-AE": 5,
+        "OE-CI": 5,
+        "SM-EP": 4,
+        "RO-EC": 6,
+        "SE-RE": 2,
+        "SE-AI": 3,
+        "ER-WD": 4,
+        "SM-RL": 6,
+        "OE-IE": 1
+      },
+      "evidenceRoleCounts": {
+        "CORE_BASELINE": 37,
+        "PRIVATE_DETAIL_RESEARCH": 4,
+        "PROCESS_PROFILE_MODIFIER": 3,
+        "CONDITIONAL_MAIN": 6
+      },
+      "directionCounts": {
+        "LOW": 27,
+        "HIGH": 23
+      },
+      "maximumDomainRun": 3,
+      "maximumFacetRun": 2,
+      "maximumDirectionRun": 3,
+      "maximumNegatedRun": 1,
+      "negativeAdjacent": false,
+      "firstTenDomainCount": 5
+    }
+  ],
+  "status": "PASS"
+}

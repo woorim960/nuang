@@ -1,0 +1,98 @@
+{
+  "protocol_version": "m04-core-expert-kit.v0.2-targeted",
+  "generated_at": "2026-07-18T21:00:00+09:00",
+  "purpose": "TARGETED_REVISION_REVIEW_NOT_FULL_M04",
+  "direction_anchor_count": 12,
+  "review_candidate_count": 8,
+  "major_revision_count": 7,
+  "new_candidate_count": 1,
+  "retired_no_replacement_count": 1,
+  "critical_decision_coverage": 5,
+  "seam_decision_coverage": 6,
+  "reviewer_count": 8,
+  "unique_reviewer_order_count": 8,
+  "stage1_target_metadata_leak": false,
+  "packets": [
+    {
+      "reviewer_slot": "R01",
+      "item_count": 8,
+      "order_sha256": "4a2bde8a6bb4487b91dbb0e713aafd630b0056f6383121e4ba88e868f9ed69bc",
+      "stage1_path": "reviewer/R01_stage1_blind.csv",
+      "stage1_sha256": "3b17ae5f4731e5277be5e775b1beef57d75dce10f5cc4cfc957b34867594deb7",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R01_stage2_target_reveal.csv",
+      "stage2_sha256": "f2567232de918cfd41d239c75702089c9b6b3a13c1f7735895598f1a772aec43",
+      "target_leak_detected": false
+    },
+    {
+      "reviewer_slot": "R02",
+      "item_count": 8,
+      "order_sha256": "6fd42d8923ae74c18ecdaff31662f0afc202815396ee45c9630abfb17294c1f1",
+      "stage1_path": "reviewer/R02_stage1_blind.csv",
+      "stage1_sha256": "09495f308e898d243c0f51a75ae2ba7c27a0969924ba864de21af59d03406786",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R02_stage2_target_reveal.csv",
+      "stage2_sha256": "f246672765bcd5a3fc30a8f25fb396cd7ecd46f3249186500ddd57c68b49ac10",
+      "target_leak_detected": false
+    },
+    {
+      "reviewer_slot": "R03",
+      "item_count": 8,
+      "order_sha256": "d4dd9ba65204a4be1c26ba64c9a0c135f0109cd687fc81696efdcc8699931f4e",
+      "stage1_path": "reviewer/R03_stage1_blind.csv",
+      "stage1_sha256": "8a5ed3de928af63371f7694860a8ee36117531a2d9273f8024f8cb612dd8217f",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R03_stage2_target_reveal.csv",
+      "stage2_sha256": "c1eec68c4b70418abce51cf158bdcc362156209ca8ea166288a65aac0be0c4b0",
+      "target_leak_detected": false
+    },
+    {
+      "reviewer_slot": "R04",
+      "item_count": 8,
+      "order_sha256": "fce2f63b6e2bd8a45709bca81d691c7dd37f0494eadd8bae397320babe45976f",
+      "stage1_path": "reviewer/R04_stage1_blind.csv",
+      "stage1_sha256": "eeda83b0094460656f75efed4e199788767af3fa60064ef18ae327e896db897f",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R04_stage2_target_reveal.csv",
+      "stage2_sha256": "88e6b1c685b1375d94e7d3b8ec54478f78ad4fabadd14a400977d73553ec187b",
+      "target_leak_detected": false
+    },
+    {
+      "reviewer_slot": "R05",
+      "item_count": 8,
+      "order_sha256": "b2a399a46de02bce0420a26b7c194d68d8627089187ef49a65b02945b2979dec",
+      "stage1_path": "reviewer/R05_stage1_blind.csv",
+      "stage1_sha256": "57619fa85f56cf747765973787ff714639afd492b637f06668024d9e92959dbd",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R05_stage2_target_reveal.csv",
+      "stage2_sha256": "28d1493717e1a6fbdb1eb904649836f88af2620582b71c7fb78f70c1ca4b1ead",
+      "target_leak_detected": false
+    },
+    {
+      "reviewer_slot": "R06",
+      "item_count": 8,
+      "order_sha256": "b3b025eb9277ccec1ffc37c8d93f7c6cfd8a9421978bee33693545fa6a02497a",
+      "stage1_path": "reviewer/R06_stage1_blind.csv",
+      "stage1_sha256": "d8040148f668508aa9fa4e25351f26e630208ca15ad51b6c84861e8cff34a3c5",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R06_stage2_target_reveal.csv",
+      "stage2_sha256": "ec8336008c8918f197fce85a0b4c9f3de22fc02a8932ff497208b4ff589bc45a",
+      "target_leak_detected": false
+    },
+    {
+      "reviewer_slot": "R07",
+      "item_count": 8,
+      "order_sha256": "d38b0c61003bb4a64d48945e7d8596a87501cecf0f12bbaf5d540fe23629232f",
+      "stage1_path": "reviewer/R07_stage1_blind.csv",
+      "stage1_sha256": "600fe6efa03ca41bbde77dc05f740dd2bb2bd81064016aec96729d05ed3932d0",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R07_stage2_target_reveal.csv",
+      "stage2_sha256": "1a44096a2b310c8169b1bf8329aa269eecb4e61295a7c3722e265fe77711424e",
+      "target_leak_detected": false
+    },
+    {
+      "reviewer_slot": "R08",
+      "item_count": 8,
+      "order_sha256": "8ea5e6fc9d9822ed3b205b7e3d8aa19ca8bd35f9c3c5f710b35d4481044addd5",
+      "stage1_path": "reviewer/R08_stage1_blind.csv",
+      "stage1_sha256": "71f0f8faa7e0ae402b9bfd40c71f12d79d430b502e58fa440bb9f881f2206a55",
+      "stage2_path": "internal/DO_NOT_RELEASE_UNTIL_STAGE1_LOCKED_R08_stage2_target_reveal.csv",
+      "stage2_sha256": "117904c1f7627903403ce92eb085263b2767d9f26b2740a28a12de9eb57121d4",
+      "target_leak_detected": false
+    }
+  ],
+  "status": "PASS"
+}

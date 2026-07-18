@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import {
-  isPublicComparisonBlockedStatus,
-  PublicComparisonUnavailable,
-} from "@/features/together/PublicComparisonUnavailable";
+import { notFound, redirect } from "next/navigation";
+import { isPublicComparisonBlockedStatus } from "@/features/together/PublicComparisonUnavailable";
 
 type PublicComparisonUnavailablePageProps = {
   params: Promise<{ status: string }>;
@@ -23,14 +20,10 @@ export default async function PublicComparisonUnavailablePage({
   const { status } = await params;
 
   if (!isPublicComparisonBlockedStatus(status)) {
-    notFound();
+    return notFound();
   }
 
-  return (
-    <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-8">
-      <PublicComparisonUnavailable status={status} />
-    </main>
-  );
+  redirect("/my/reports");
 }
 
 export function generateStaticParams() {

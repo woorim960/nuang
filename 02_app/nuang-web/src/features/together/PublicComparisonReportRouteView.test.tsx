@@ -9,7 +9,7 @@ import type { CoreScoreResult } from "@/lib/scoring/types";
 
 const result: CoreScoreResult = {
   alternativeCodes: [],
-  code: "FOAMT",
+  code: "TVOAE",
   domains: [
     {
       domainId: "SE",
@@ -21,7 +21,7 @@ const result: CoreScoreResult = {
     },
   ],
   facets: [],
-  profileName: "불꽃 온기 탐험가",
+  profileName: "불꽃의 온기 탐험가",
 };
 
 function createReport() {
@@ -77,8 +77,10 @@ describe("PublicComparisonReportRouteView", () => {
       />,
     );
 
-    expect(screen.getByRole("heading", { name: "우리는 이렇게 달라요" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "공통점" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "에너지가 시작되는 방식에서 비슷한 리듬이 보여요." }),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "뉴앙 코드 비교" })).toBeInTheDocument();
   });
 
   it("renders the unavailable state without report payloads", () => {
@@ -94,6 +96,6 @@ describe("PublicComparisonReportRouteView", () => {
     expect(
       screen.getByRole("heading", { name: "비교 리포트를 다시 확인해야 해요" }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "공통점" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("heading", { name: "뉴앙 코드 비교" })).not.toBeInTheDocument();
   });
 });

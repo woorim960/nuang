@@ -2,6 +2,7 @@ import {
   nuangCharacterAssetPaths,
   type NuangCharacterMotif,
 } from "@/components/character/nuang-character-assets";
+import { getNuangProfileName } from "@/features/nuang-code/nuang-code-dictionary";
 
 export const nuangProfileMotifPrefixes = ["TV", "TC", "SV", "SC"] as const;
 
@@ -173,7 +174,9 @@ function buildNuangProfileCharacterRule(
     motifPrefix,
     profileCode,
     roleCode,
-    displayName: `${motifRule.motifLabel} ${roleVariant.roleLabel}`,
+    displayName:
+      getNuangProfileName(profileCode) ??
+      `${motifRule.motifLabel}의 ${roleVariant.roleLabel}`,
     variantSeed: `${motifRule.motif}-${roleCode.toLowerCase()}`,
   };
 }

@@ -1,0 +1,6 @@
+protocol_version,opaque_item_id,item_revision_id,source_opaque_item_id,target_facet,keyed_direction,status
+m05-core-cognitive-kit.v0.2-targeted-remediation-smrl,CIT-001,SMRL-C11-r3,NV2-001,SM-RL,HIGH,PREPARED_NOT_RUN
+m05-core-cognitive-kit.v0.2-targeted-remediation-smrl,CIT-002,ERWD-C06-r3,NV2-003,ER-WD,LOW,PREPARED_NOT_RUN
+m05-core-cognitive-kit.v0.2-targeted-remediation-smrl,CIT-003,RORN-P05-B-r3,NV2-005,RO-RN,LOW,PREPARED_NOT_RUN
+m05-core-cognitive-kit.v0.2-targeted-remediation-smrl,CIT-004,SMOS-C08-r3,NV2-006,SM-OS,LOW,PREPARED_NOT_RUN
+m05-core-cognitive-kit.v0.2-targeted-remediation-smrl,CIT-005,OEIE-C09-r3,NV2-008,OE-IE,HIGH,PREPARED_NOT_RUN

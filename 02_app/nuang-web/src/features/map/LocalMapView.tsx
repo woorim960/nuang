@@ -11,8 +11,12 @@ import {
   getLatestCompletedAttempt,
   getLocalAttempt,
 } from "@/features/assessment/assessment-storage";
+import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import { fullScoringRelease } from "@/features/assessment/full-core-seed";
-import { getDomainNarrative, getHighestDomains } from "@/features/result/report-copy";
+import {
+  getDomainNarrative,
+  getHighestDomains,
+} from "@/features/result/report-copy";
 import { calculateCoreScore } from "@/lib/scoring/core";
 import type { ItemResponse } from "@/lib/scoring/types";
 
@@ -45,7 +49,7 @@ const facetShortLabel: Record<string, string> = {
   "OE-AS": "감각",
   "OE-IE": "아이디어",
   "RO-EC": "공감",
-  "RO-RN": "경계",
+  "RO-RN": "기준",
   "SE-AI": "표현",
   "SE-RE": "함께",
   "SM-EP": "실행",
@@ -165,19 +169,24 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
   return (
     <>
       <section className="overflow-hidden rounded-lg border border-line bg-white shadow-[var(--shadow-soft)]">
-        <div className="bg-[linear-gradient(135deg,#fff7f1_0%,#f6f3ff_52%,#eef8ff_100%)] p-4">
+        <div className="border-b border-line bg-surface-soft p-4">
           <div className="flex items-center justify-between gap-4">
             <div>
               <StatusPill tone="primary">현재 대표 성향</StatusPill>
-              <h2 className="mt-3 text-2xl font-black leading-8">{profileName}</h2>
+              <h2 className="mt-3 text-2xl font-black leading-8">
+                {profileName}
+              </h2>
               <p className="mt-2 text-sm font-semibold text-muted">{code}</p>
             </div>
             <NuangCharacter motif={motif} size="lg" />
           </div>
         </div>
         <div className="grid grid-cols-3 divide-x divide-line border-t border-line text-center">
-          <MetricTile label="대표 축" value={highestDomains[0]?.label ?? "계산 중"} />
-          <MetricTile label="지도" value="5축+10축" />
+          <MetricTile
+            label="대표 자리"
+            value={highestDomains[0]?.label ?? "계산 중"}
+          />
+          <MetricTile label="지도" value="코드+신호" />
           <MetricTile label="기준" value="정밀 코어" />
         </div>
         <div className="px-4 pb-4">
@@ -192,22 +201,17 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
       </section>
 
       <section className="grid gap-4 rounded-lg border border-line bg-white p-4 shadow-[var(--shadow-soft)]">
-        <div className="flex items-center justify-between gap-4">
-          <div>
-            <StatusPill tone="primary">오각형 성향지도</StatusPill>
-            <h2 className="mt-2 text-base font-bold">5개 영역 요약</h2>
-            <p className="mt-1 text-sm leading-6 text-muted">
-              중심에서 멀수록 해당 성향을 더 자주 쓰는 방향이에요.
-            </p>
-          </div>
-          <span className="rounded-full bg-[#eff0f6] px-3 py-1 text-xs font-bold text-muted">
-            동적 지표
-          </span>
+        <div>
+          <StatusPill tone="primary">오각형 성향지도</StatusPill>
+          <h2 className="mt-2 text-base font-bold">코드 자리 요약</h2>
+          <p className="mt-1 text-sm leading-6 text-muted">
+            중심에서 멀수록 해당 성향을 더 자주 쓰는 방향이에요.
+          </p>
         </div>
         <TraitRadarChart
-          ariaLabel="5개 영역 성향지도"
+          ariaLabel="코드 자리 성향지도"
           axes={domainAxes}
-          centerLabel="5축"
+          centerLabel="코드 지도"
         />
         {result.domains.map((domain) =>
           domain.score === null ? (
@@ -230,21 +234,21 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
 
       <section className="grid gap-4 rounded-lg border border-line bg-white p-4 shadow-[var(--shadow-soft)]">
         <div>
-          <StatusPill tone="neutral">10개 세부 성향</StatusPill>
-          <h2 className="mt-2 text-base font-bold">세부 성향 레이어</h2>
+          <StatusPill tone="neutral">세부 신호</StatusPill>
+          <h2 className="mt-2 text-base font-bold">세부 신호 레이어</h2>
           <p className="mt-1 text-sm leading-6 text-muted">
-            5개 영역 안에서 어떤 세부 성향이 더 도드라지는지 보여줘요.
+            코드 자리 안에서 어떤 세부 신호가 더 도드라지는지 보여줘요.
           </p>
         </div>
         <TraitRadarChart
-          ariaLabel="10개 세부 성향지도"
+          ariaLabel="세부 신호 지도"
           axes={facetAxes}
-          centerLabel="10축"
+          centerLabel="세부 신호"
         />
       </section>
 
       <section className="rounded-lg border border-line bg-white p-4">
-        <h2 className="text-base font-bold">지금 두드러지는 축</h2>
+        <h2 className="text-base font-bold">지금 두드러지는 자리</h2>
         <div className="mt-3 grid gap-3">
           {highestDomains.map((domain) => {
             const narrative = getDomainNarrative(domain);
@@ -266,8 +270,8 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
       <section className="rounded-lg border border-line bg-white p-4">
         <h2 className="text-base font-bold">최근 업데이트</h2>
         <p className="mt-2 text-sm leading-6 text-muted">
-          이 성향지도는 이 기기에 저장된 최신 정밀 코어 결과를 기준으로
-          보여줍니다. 계정 저장과 장기 변화 추적은 계정 서버 연결 후 이어집니다.
+          가장 최근에 완료한 정밀 코어 결과를 기준으로 보여줍니다. 다음 검사를
+          완료하면 변화도 함께 확인할 수 있어요.
         </p>
       </section>
     </>
@@ -278,9 +282,12 @@ function EmptyMapState({ hasQuickResult }: { hasQuickResult: boolean }) {
   return (
     <section className="grid gap-4">
       <div className="overflow-hidden rounded-lg border border-line bg-white shadow-[var(--shadow-soft)]">
-        <div className="bg-[linear-gradient(135deg,#fff7f1_0%,#f6f3ff_52%,#eef8ff_100%)] p-5 text-center">
+        <div className="bg-surface-soft p-5 text-center">
           <div className="mx-auto w-fit">
-            <NuangCharacter motif={hasQuickResult ? "water" : "purple"} size="lg" />
+            <NuangCharacter
+              motif={hasQuickResult ? "water" : "purple"}
+              size="lg"
+            />
           </div>
           <StatusPill tone={hasQuickResult ? "caution" : "neutral"}>
             정밀 코어 필요
@@ -292,27 +299,29 @@ function EmptyMapState({ hasQuickResult }: { hasQuickResult: boolean }) {
             성향지도는 60문항 정밀 코어 결과로만 만들어요. 빠른 코어 결과는 예비
             리포트로만 사용합니다.
           </p>
-          <ButtonLink className="mt-5 w-full" href="/assessments/nu-core-full">
+          <ButtonLink
+            className="mt-5 w-full"
+            href={buildPrecisionIntroHref({
+              backDestination: "/map",
+              entrySource: "code-map-gate",
+              returnDestination: "/map",
+            })}
+          >
             정밀 코어 시작
           </ButtonLink>
         </div>
       </div>
 
       <div className="rounded-lg border border-line bg-white p-4">
-        <div className="flex items-center justify-between gap-3">
-          <div>
-            <StatusPill tone="primary">지도 미리보기</StatusPill>
-            <h3 className="mt-2 text-base font-bold">검사 후 이렇게 열려요</h3>
-          </div>
-          <span className="rounded-full bg-[#eff0f6] px-3 py-1 text-xs font-bold text-muted">
-            예시
-          </span>
+        <div>
+          <StatusPill tone="primary">지도 미리보기</StatusPill>
+          <h3 className="mt-2 text-base font-bold">검사 후 이렇게 열려요</h3>
         </div>
         <TraitRadarChart
           ariaLabel="성향지도 예시"
           axes={previewDomainAxes}
           caption="예시 그래프이며, 실제 값은 정밀 코어 완료 후 계산돼요."
-          centerLabel="5축"
+          centerLabel="코드 지도"
         />
       </div>
     </section>
@@ -323,7 +332,9 @@ function MetricTile({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 px-3 py-3">
       <p className="truncate text-[11px] font-bold text-muted">{label}</p>
-      <p className="mt-1 truncate text-xs font-black text-foreground">{value}</p>
+      <p className="mt-1 truncate text-xs font-black text-foreground">
+        {value}
+      </p>
     </div>
   );
 }

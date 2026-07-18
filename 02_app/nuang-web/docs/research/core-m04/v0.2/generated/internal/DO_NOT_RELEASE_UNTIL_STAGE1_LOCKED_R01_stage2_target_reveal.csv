@@ -1,0 +1,9 @@
+protocol_version,reviewer_slot,sequence,opaque_item_id,context_label,prompt_text,target_facet,keyed_direction,source_candidate_id,revision_candidate_id,target_relevance_rating_1_4,key_direction_fit_rating_1_4,coverage_contribution_rating,adjacent_separation_rating_1_4,recommendation,final_rationale
+m04-core-expert-kit.v0.2-targeted,R01,1,NV2-004,설명을 듣다가 필요한 답을 얻었을 때,거기까지 알아보고 넘어간다.,OE-IE,LOW,OEIE-C10,OEIE-C10-r2,,,,,,
+m04-core-expert-kit.v0.2-targeted,R01,2,NV2-008,설명을 듣다가 이해되지 않는 부분이 생겼을 때,이유나 배경을 더 알아보고 싶어진다.,OE-IE,HIGH,OEIE-C09,OEIE-C09-r2,,,,,,
+m04-core-expert-kit.v0.2-targeted,R01,3,NV2-005,사소한 선택에서 상대와 원하는 것이 다를 때,"상대가 고를 수 있는 여지를 두기보다, 내가 원하는 쪽으로 정하려 한다.",RO-RN,LOW,RORN-P05-B,RORN-P05-B-r2,,,,,,
+m04-core-expert-kit.v0.2-targeted,R01,4,NV2-007,여러 단계를 거친 일을 마무리할 때,"정해둔 확인 순서 없이, 그때 생각나는 부분부터 살핀다.",SM-OS,LOW,SMOS-C12,SMOS-C13,,,,,,
+m04-core-expert-kit.v0.2-targeted,R01,5,NV2-001,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,따로 알림이 없어도 약속한 일을 챙겨서 한다.,SM-RL,HIGH,SMRL-C11,SMRL-C11-r2,,,,,,
+m04-core-expert-kit.v0.2-targeted,R01,6,NV2-003,내가 한 것을 다른 사람이 확인할 예정일 때,잘못 보일까 하는 걱정이 생겨도 같은 생각이 반복되지는 않는다.,ER-WD,LOW,ERWD-C06,ERWD-C06-r2,,,,,,
+m04-core-expert-kit.v0.2-targeted,R01,7,NV2-006,이번 주 안에 할 일이 생겼을 때,"언제 할지 미리 정하지 않고, 그때 가능한 시간에 시작한다.",SM-OS,LOW,SMOS-C08,SMOS-C08-r2,,,,,,
+m04-core-expert-kit.v0.2-targeted,R01,8,NV2-002,나중에 다시 쓸 자료를 보관할 때,"따로 정해둔 자리 없이, 그때 두기 편한 곳에 둔다.",SM-OS,LOW,SMOS-C10,SMOS-C10-r2,,,,,,

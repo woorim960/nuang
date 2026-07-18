@@ -10,11 +10,8 @@ describe("api closed state", () => {
 
   it("keeps every closed server feature in a standard payload shape", () => {
     expect(stateIds).toEqual([
-      "community_feed_write_db_pending",
-      "community_safety_action_db_write_pending",
-      "public_profile_code_issue_db_write_pending",
+      "feed_write_db_pending",
       "profile_visibility_db_write_pending",
-      "public_profile_resolver_lookup_pending",
       "public_comparison_db_write_pending",
       "public_comparison_lookup_pending",
       "result_claim_db_write_pending",
@@ -66,11 +63,8 @@ describe("api closed state", () => {
 
     [
       "result_claim_db_write_pending",
-      "community_feed_write_db_pending",
-      "community_safety_action_db_write_pending",
-      "public_profile_code_issue_db_write_pending",
+      "feed_write_db_pending",
       "profile_visibility_db_write_pending",
-      "public_profile_resolver_lookup_pending",
       "public_comparison_lookup_pending",
       "public_comparison_db_write_pending",
       "share_link_create_db_write_pending",

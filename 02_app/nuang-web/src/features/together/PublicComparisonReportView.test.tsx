@@ -9,7 +9,7 @@ import type { CoreScoreResult } from "@/lib/scoring/types";
 
 const viewerResult: CoreScoreResult = {
   alternativeCodes: [],
-  code: "FOAMT",
+  code: "TVOAE",
   domains: [
     {
       domainId: "SE",
@@ -29,12 +29,12 @@ const viewerResult: CoreScoreResult = {
     },
   ],
   facets: [],
-  profileName: "불꽃 온기 탐험가",
+  profileName: "불꽃의 온기 탐험가",
 };
 
 const targetResult: CoreScoreResult = {
   ...viewerResult,
-  code: "WESCI",
+  code: "SVODE",
   domains: [
     {
       domainId: "SE",
@@ -53,7 +53,7 @@ const targetResult: CoreScoreResult = {
       symbol: "V",
     },
   ],
-  profileName: "물결 새길 개척가",
+  profileName: "물결의 새길 개척가",
 };
 
 describe("PublicComparisonReportView", () => {
@@ -85,16 +85,27 @@ describe("PublicComparisonReportView", () => {
 
     render(<PublicComparisonReportView report={report} />);
 
-    expect(screen.getByRole("heading", { name: "우리는 이렇게 달라요" })).toBeInTheDocument();
-    expect(screen.getByText("불꽃 온기 탐험가")).toBeInTheDocument();
-    expect(screen.getByText("물결 새길 개척가")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "공통점" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "차이점" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "대화 질문" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "조절 가이드" })).toBeInTheDocument();
-    expect(screen.getByText("궁합 점수 없음")).toBeInTheDocument();
-    expect(screen.getByText("순위 없음")).toBeInTheDocument();
-    expect(screen.getByText("비공개 추정 없음")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: "편하게 맞는 자리는 마음이 흔들릴 때의 반응, 신호를 맞출 자리는 에너지가 시작되는 방식이에요.",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("불꽃의 온기 탐험가")).toBeInTheDocument();
+    expect(screen.getByText("물결의 새길 개척가")).toBeInTheDocument();
+    expect(screen.getByText("핵심 요약")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "뉴앙 코드 비교" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "에너지가 시작되는 방식" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "마음이 흔들릴 때의 반응" })).toBeInTheDocument();
+    expect(screen.getAllByText("먼저 움직이는 에너지")).toHaveLength(1);
+    expect(document.body).not.toHaveTextContent("나:");
+    expect(document.body).not.toHaveTextContent("상대:");
+    expect(screen.getAllByText(/먼저 움직이는 에너지/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/조용히 살피는 에너지/).length).toBeGreaterThan(0);
+    expect(screen.getByRole("heading", { name: "오해가 생길 수 있는 장면" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "대화 가이드" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "조율 가이드" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "공개 범위 기준" })).toBeInTheDocument();
+    expect(screen.getByText(/직접 응답, 원점수, 민감 항목/)).toBeInTheDocument();
     expect(screen.queryByText(/직접 문항 응답/)).not.toBeInTheDocument();
     expect(screen.queryByText(/score_payload/)).not.toBeInTheDocument();
     expect(screen.queryByText(/itemId/)).not.toBeInTheDocument();

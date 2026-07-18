@@ -40,7 +40,7 @@ describe("claim result write contract", () => {
       assessmentAttemptId: "11111111-1111-4111-8111-111111111111",
       claimedAt: "2026-07-04T00:00:00.000Z",
       profileCode: "TVOAE",
-      profileName: "불꽃 온기 탐험가",
+      profileName: "불꽃의 온기 탐험가",
       resultReportId: "22222222-2222-4222-8222-222222222222",
     });
     const failurePayload = createClaimResultWriteFailurePayload(
@@ -52,5 +52,19 @@ describe("claim result write contract", () => {
     expect(publicJson).not.toContain("value");
     expect(publicJson).not.toMatch(/"responses"\s*:/);
     expect(publicJson).not.toContain("score_payload");
+  });
+
+  it("marks an existing account result as a restored success", () => {
+    const payload = createClaimResultWriteSuccessPayload({
+      assessmentAttemptId: "11111111-1111-4111-8111-111111111111",
+      claimedAt: "2026-07-04T00:00:00.000Z",
+      profileCode: "TVOAE",
+      profileName: "불꽃의 온기 탐험가",
+      restored: true,
+      resultReportId: "22222222-2222-4222-8222-222222222222",
+    });
+
+    expect(payload.ok).toBe(true);
+    expect(payload.result.restored).toBe(true);
   });
 });

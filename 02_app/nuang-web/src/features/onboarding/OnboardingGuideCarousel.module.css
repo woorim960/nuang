@@ -1,0 +1,276 @@
+.root {
+  display: grid;
+  min-height: 100dvh;
+  max-width: 32.5rem;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  margin-inline: auto;
+  overflow: hidden;
+  color: var(--foreground);
+  background:
+    radial-gradient(
+      circle at 50% 18%,
+      color-mix(in srgb, var(--primary) 9%, transparent),
+      transparent 34%
+    ),
+    color-mix(in srgb, var(--surface-soft) 34%, var(--background));
+}
+
+.header {
+  z-index: 2;
+  display: flex;
+  min-height: 3.6rem;
+  align-items: center;
+  justify-content: space-between;
+  padding: max(0.7rem, env(safe-area-inset-top)) clamp(1rem, 5vw, 1.5rem) 0.5rem;
+}
+
+.wordmark {
+  color: var(--primary-strong);
+  font-size: 0.76rem;
+  font-weight: 840;
+  letter-spacing: 0.18em;
+}
+
+.count {
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.stage {
+  position: relative;
+  min-height: 0;
+}
+
+.glow {
+  position: absolute;
+  inset: 12% 9%;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 11%, transparent);
+  filter: blur(2.5rem);
+}
+
+.track {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+  outline: none;
+  cursor: grab;
+  user-select: none;
+}
+
+.track[data-dragging="true"] {
+  scroll-behavior: auto;
+  scroll-snap-type: none;
+  cursor: grabbing;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.track:focus-visible {
+  box-shadow: inset 0 0 0 2px
+    color-mix(in srgb, var(--primary) 38%, transparent);
+}
+
+.slide {
+  display: grid;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  flex: 0 0 100%;
+  place-items: center;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+  padding: 0.5rem clamp(1rem, 5vw, 1.5rem);
+}
+
+.imageFrame {
+  position: relative;
+  width: min(100%, 30.5rem);
+  max-height: calc(100dvh - 8.4rem);
+  aspect-ratio: 2 / 3;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--primary) 11%, var(--line));
+  border-radius: clamp(1.4rem, 6vw, 2rem);
+  background: #f9eee1;
+  box-shadow:
+    0 1.25rem 3.4rem color-mix(in srgb, var(--primary) 13%, transparent),
+    0 0.2rem 0.7rem rgb(41 34 70 / 6%);
+  animation: guide-arrive 440ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.image {
+  object-fit: cover;
+}
+
+.footer {
+  display: flex;
+  min-height: 7.4rem;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.25rem clamp(1rem, 5vw, 1.5rem)
+    max(0.85rem, env(safe-area-inset-bottom));
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  gap: 0.05rem;
+}
+
+.pagination button {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.pagination button > span {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--muted) 28%, transparent);
+  transition:
+    width 180ms ease,
+    background 180ms ease;
+}
+
+.pagination .activeDot > span {
+  width: 1.35rem;
+  background: var(--primary);
+}
+
+.pagination button:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--primary) 48%, transparent);
+  outline-offset: -0.2rem;
+}
+
+.actionSlot {
+  display: grid;
+  width: 100%;
+  min-height: 3.6rem;
+  place-items: center;
+}
+
+.swipeHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.swipeHint svg {
+  color: var(--primary);
+  animation: swipe-hint 1.8s ease-in-out infinite;
+}
+
+.startButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 3.5rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 1rem;
+  color: var(--surface);
+  font-size: 0.9rem;
+  font-weight: 770;
+  background: var(--foreground);
+  box-shadow: 0 0.8rem 1.8rem
+    color-mix(in srgb, var(--foreground) 16%, transparent);
+  cursor: pointer;
+  transition: transform 160ms ease;
+  animation: action-arrive 240ms ease-out both;
+}
+
+.startButton:active {
+  transform: scale(0.985);
+}
+
+.startButton svg {
+  transition: transform 180ms ease;
+}
+
+.startButton:hover svg {
+  transform: translateX(0.16rem);
+}
+
+@keyframes guide-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(0.65rem) scale(0.985);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes swipe-hint {
+  0%,
+  100% {
+    transform: translateX(-0.12rem);
+  }
+  50% {
+    transform: translateX(0.12rem);
+  }
+}
+
+@keyframes action-arrive {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-height: 700px) {
+  .header {
+    min-height: 3.2rem;
+  }
+
+  .footer {
+    min-height: 6.8rem;
+    padding-top: 0.25rem;
+  }
+
+  .imageFrame {
+    width: min(70vw, 20rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    scroll-behavior: auto;
+  }
+
+  .imageFrame {
+    animation: none;
+  }
+
+  .swipeHint svg,
+  .startButton {
+    animation: none;
+  }
+}

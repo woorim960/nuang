@@ -19,14 +19,19 @@ export type FacetDefinition = {
 };
 
 export type DomainDefinition = {
+  codePosition?: number;
   domainId: string;
   label: string;
   lowSymbol: string;
   highSymbol: string;
-  facetIds: [string, string];
+  facetIds: string[];
 };
 
 export type ScoringRelease = {
+  assessmentReleaseId: string;
+  scoringReleaseId: string;
+  scoringModelVersion: string;
+  codeSchemeVersion: string;
   items: ScoringItem[];
   facets: FacetDefinition[];
   domains: DomainDefinition[];

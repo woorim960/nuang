@@ -50,6 +50,10 @@ export const fullCoreAssessment: AssessmentDefinition = {
 };
 
 export const fullScoringRelease: ScoringRelease = {
+  assessmentReleaseId: fullCoreAssessment.releaseId,
+  scoringReleaseId: "NUANG-CORE-FULL-SCORING-0.9",
+  scoringModelVersion: "CORE_SCORING_ALGORITHM_SPEC_v1.0",
+  codeSchemeVersion: "NUANG-CODE-5AXIS-PROVISIONAL-0.9",
   items: fullCoreAssessment.items.map((item) => ({
     itemId: item.itemId,
     facetId: item.facetId,

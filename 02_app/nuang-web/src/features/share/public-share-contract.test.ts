@@ -18,15 +18,17 @@ const domainSummaries = [
 describe("public share contract", () => {
   it("returns only the summary result surface for an active share", () => {
     const payload = createPublicShareSuccessPayload({
+      assessmentKind: "full",
       completedAt: "2026-07-04T00:00:00.000Z",
       domains: domainSummaries,
       profileCode: "TVOAE",
-      profileName: "불꽃 온기 탐험가",
+      profileName: "불꽃의 온기 탐험가",
       resultLabel: "현재 가장 가까운 대표 성향",
     });
 
     expect(payload.ok).toBe(true);
     expect(payload.share.visibility).toBe("summary");
+    expect(payload.share.result.assessmentKind).toBe("full");
     expect(payload.share.result.domains).toHaveLength(publicShareMaxDomainCount);
     expect(payload.share.result.domains.map((domain) => domain.domainId)).toEqual([
       "SE",
@@ -44,10 +46,11 @@ describe("public share contract", () => {
 
   it("keeps public share payloads free of private responses and raw score payloads", () => {
     const payload = createPublicShareSuccessPayload({
+      assessmentKind: "full",
       completedAt: "2026-07-04T00:00:00.000Z",
       domains: domainSummaries,
       profileCode: "TVOAE",
-      profileName: "불꽃 온기 탐험가",
+      profileName: "불꽃의 온기 탐험가",
       resultLabel: "현재 가장 가까운 대표 성향",
     });
     const publicJson = JSON.stringify(payload);

@@ -12,7 +12,7 @@ import type { CoreScoreResult } from "@/lib/scoring/types";
 
 const viewerResult: CoreScoreResult = {
   alternativeCodes: [],
-  code: "FOAMT",
+  code: "TVOAE",
   domains: [
     {
       domainId: "SE",
@@ -48,12 +48,12 @@ const viewerResult: CoreScoreResult = {
       validResponses: 6,
     },
   ],
-  profileName: "불꽃 온기 탐험가",
+  profileName: "불꽃의 온기 탐험가",
 };
 
 const targetResult: CoreScoreResult = {
   ...viewerResult,
-  code: "WESCI",
+  code: "SVODE",
   domains: [
     {
       domainId: "SE",
@@ -80,7 +80,7 @@ const targetResult: CoreScoreResult = {
       symbol: "O",
     },
   ],
-  profileName: "물결 새길 개척가",
+  profileName: "물결의 새길 개척가",
 };
 
 describe("public profile comparison contract", () => {
@@ -166,6 +166,18 @@ describe("public profile comparison contract", () => {
       domainId: "ER",
       difference: 2,
     });
+    expect(report.comparison.sections.axisComparisons).toHaveLength(3);
+    expect(report.comparison.sections.axisComparisons[0]).toMatchObject({
+      domainId: "SE",
+      interpretation: expect.stringContaining("에너지가 시작되는 방식"),
+      targetSymbol: "S",
+      viewerSymbol: "T",
+    });
+    expect(report.comparison.sections.summary).toMatchObject({
+      closestAxisLabel: "마음이 흔들릴 때의 반응",
+      strongestDifferenceLabel: "에너지가 시작되는 방식",
+    });
+    expect(report.comparison.sections.misunderstandingScenes.length).toBeGreaterThan(0);
   });
 
   it("maps every comparison failure to a public response contract", () => {

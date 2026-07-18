@@ -16,13 +16,13 @@ const unavailableCopy: Record<
   stale: {
     action: "상대 공개 범위를 다시 확인한 뒤 새 비교를 만들어 주세요.",
     body:
-      "상대의 공개 범위나 공개 프로필 스냅샷이 바뀌어 이전 리포트를 그대로 열 수 없어요.",
+      "상대의 공개 범위가 바뀌어 이전 리포트를 그대로 열 수 없어요.",
     icon: RefreshCcw,
     statusLabel: "재확인 필요",
     title: "비교 리포트를 다시 확인해야 해요",
   },
   disabled: {
-    action: "함께 탭에서 공개 범위 조건을 확인해 주세요.",
+    action: "설정에서 공개 범위 조건을 확인해 주세요.",
     body:
       "현재 공개 범위 안에서 이 비교 리포트를 열 수 없어요. 비공개 항목은 추정하지 않습니다.",
     icon: LockKeyhole,
@@ -30,7 +30,7 @@ const unavailableCopy: Record<
     title: "현재 열 수 없는 비교 리포트예요",
   },
   deleted: {
-    action: "필요하면 새로운 공개 프로필 코드로 다시 비교해 주세요.",
+    action: "필요하면 상대 프로필에서 다시 비교를 시작해 주세요.",
     body:
       "삭제된 비교 리포트는 다시 열 수 없어요. 삭제된 결과나 공개 범위를 복원한다고 안내하지 않습니다.",
     icon: Trash2,
@@ -62,9 +62,7 @@ export function PublicComparisonUnavailable({
   return (
     <section className="grid gap-5">
       <header className="text-center">
-        <div className="mx-auto grid h-14 w-14 place-items-center rounded-lg bg-surface-soft text-primary">
-          <Icon aria-hidden="true" size={24} />
-        </div>
+        <Icon aria-hidden="true" className="mx-auto text-primary" size={28} />
         <div className="mt-5 flex justify-center">
           <StatusPill tone={status === "stale" ? "caution" : "neutral"}>
             {copy.statusLabel}
@@ -74,32 +72,27 @@ export function PublicComparisonUnavailable({
         <p className="mt-2 text-sm leading-6 text-muted">{copy.body}</p>
       </header>
 
-      <div className="rounded-lg border border-line bg-white p-4">
+      <div className="border-y border-line py-4">
         <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-surface-soft text-primary">
-            <AlertTriangle aria-hidden="true" size={18} />
-          </div>
+          <AlertTriangle aria-hidden="true" className="mt-0.5 shrink-0 text-primary" size={18} />
           <div>
             <h2 className="font-bold">다음 행동</h2>
             <p className="mt-1 text-sm leading-6 text-muted">{copy.action}</p>
           </div>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-4 grid divide-y divide-line text-sm font-semibold text-muted">
           {safetyLines.map((line) => (
-            <span
-              className="rounded-full bg-surface-soft px-3 py-1.5 text-xs font-semibold text-muted"
-              key={line}
-            >
+            <p className="py-2 first:pt-0 last:pb-0" key={line}>
               {line}
-            </span>
+            </p>
           ))}
         </div>
       </div>
 
       <div className="grid gap-2">
-        <ButtonLink href="/together">함께 탭으로</ButtonLink>
-        <ButtonLink href="/together/comparison-preview" variant="secondary">
-          리포트 구성 보기
+        <ButtonLink href="/my/reports">내 리포트로</ButtonLink>
+        <ButtonLink href="/my/settings/visibility" variant="secondary">
+          공개 범위 설정
         </ButtonLink>
       </div>
     </section>

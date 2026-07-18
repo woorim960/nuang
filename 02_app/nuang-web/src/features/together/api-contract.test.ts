@@ -12,7 +12,6 @@ import {
 
 const validConsentDraft = {
   analytics: false,
-  is14OrOlder: true,
   marketing: false,
   privacy: true,
   terms: true,
@@ -28,12 +27,10 @@ const validVisibilityPayload = {
 };
 
 const validComparisonPayload = {
-  consentDraft: validConsentDraft,
   policyVersion: profileVisibilityPolicyVersion,
   target: {
-    publicProfileCode: "NUANG-A7K2M9",
+    publicSnapshotId: "22222222-2222-4222-8222-222222222222",
   },
-  viewerResultReportId: "11111111-1111-4111-8111-111111111111",
 };
 
 describe("together api schemas", () => {
@@ -65,32 +62,39 @@ describe("together api schemas", () => {
     expect(parsed.success).toBe(false);
   });
 
-  it("accepts a public comparison request with a profile code", () => {
-    const parsed = createPublicComparisonRequestSchema.safeParse({
-      ...validComparisonPayload,
-      target: {
-        publicProfileCode: "nuang-a7k2m9",
-      },
-    });
+  it("accepts a public comparison request from a clicked public profile snapshot", () => {
+    const parsed = createPublicComparisonRequestSchema.safeParse(validComparisonPayload);
 
     expect(parsed.success).toBe(true);
     if (parsed.success) {
-      expect(parsed.data.target.publicProfileCode).toBe("NUANG-A7K2M9");
+      expect(parsed.data.target.publicSnapshotId).toBe(
+        "22222222-2222-4222-8222-222222222222",
+      );
+      expect(parsed.data.viewerResultReportId).toBeUndefined();
     }
   });
 
-  it("rejects public comparison codes that look like trait type codes", () => {
+  it("can pin a specific viewer result when the product later adds result selection", () => {
+    const parsed = createPublicComparisonRequestSchema.safeParse({
+      ...validComparisonPayload,
+      viewerResultReportId: "11111111-1111-4111-8111-111111111111",
+    });
+
+    expect(parsed.success).toBe(true);
+  });
+
+  it("rejects public comparison requests that try to use a public code", () => {
     const parsed = createPublicComparisonRequestSchema.safeParse({
       ...validComparisonPayload,
       target: {
-        publicProfileCode: "NUANG-FOAMT",
+        publicProfileCode: "NUANG-A7K2M9",
       },
     });
 
     expect(parsed.success).toBe(false);
   });
 
-  it("requires a target code or snapshot id for public comparison", () => {
+  it("requires a clicked public snapshot id for public comparison", () => {
     const parsed = createPublicComparisonRequestSchema.safeParse({
       ...validComparisonPayload,
       target: {},

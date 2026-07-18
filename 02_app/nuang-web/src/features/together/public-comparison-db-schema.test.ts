@@ -14,7 +14,8 @@ describe("public comparison db schema draft", () => {
     expect(migrationSql).toContain("viewer_result_report_id uuid not null");
     expect(migrationSql).toContain("viewer_public_snapshot_id uuid");
     expect(migrationSql).toContain("target_public_snapshot_id uuid not null");
-    expect(migrationSql).toContain("target_public_code_id uuid");
+    expect(migrationSql).not.toContain("target_public_code_id");
+    expect(migrationSql).not.toContain("profile.profile_public_code");
   });
 
   it("stores access revalidation flags and report status", () => {

@@ -1,0 +1,720 @@
+.runner {
+  display: flex;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  flex-direction: column;
+  background: var(--background);
+  color: var(--foreground);
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+
+.appBar {
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  display: grid;
+  min-height: 58px;
+  grid-template-columns: 52px minmax(0, 1fr) 64px;
+  align-items: center;
+  padding-inline: clamp(0.75rem, 3.8vw, 1rem);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  background: color-mix(in srgb, var(--background) 94%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.closeButton,
+.previousButton,
+.nextButton,
+.helpButton,
+.unsureButton,
+.changeButton,
+.sheetClose,
+.sheetAction,
+.sheetReason {
+  appearance: none;
+  border: 0;
+  font: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.closeButton {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  justify-self: start;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: background-color 170ms ease, color 170ms ease;
+}
+
+.closeButton:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+}
+
+.title {
+  overflow: hidden;
+  margin: 0;
+  padding-inline: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.count {
+  margin: 0;
+  justify-self: end;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.progressWrap {
+  padding: 0.75rem clamp(1rem, 5.1vw, 1.25rem) 0;
+}
+
+.progress {
+  width: 100%;
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 72%, var(--background));
+}
+
+.progressFill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  transition: width 230ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mainContent {
+  flex: 1;
+  padding: clamp(1.5rem, 6vw, 2rem) clamp(1rem, 5.1vw, 1.25rem) 1.25rem;
+}
+
+.helpButton {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 0.4rem;
+  margin: -0.25rem 0 1.5rem;
+  padding: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 560;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: color 170ms ease;
+}
+
+.helpButton:hover {
+  color: var(--foreground);
+}
+
+.questionRegion {
+  min-height: 128px;
+}
+
+.questionForward {
+  animation: question-forward 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.questionBackward {
+  animation: question-backward 220ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.context {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.875rem;
+  font-weight: 650;
+  line-height: 1.45;
+}
+
+.question {
+  max-width: 20ch;
+  margin: 0.5rem 0 0;
+  font-size: clamp(1.5rem, 6.3vw, 1.7rem);
+  font-weight: 650;
+  letter-spacing: -0.025em;
+  line-height: 1.38;
+  text-wrap: balance;
+}
+
+.questionWithoutContext {
+  margin-top: 0;
+}
+
+.responses {
+  min-width: 0;
+  margin: 1.75rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.legend {
+  margin-bottom: 0.75rem;
+  padding: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 560;
+}
+
+.options {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.option {
+  display: grid;
+  min-height: 54px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0.75rem 0.875rem;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: color-mix(in srgb, var(--surface) 96%, var(--background));
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 530;
+  line-height: 1.35;
+  cursor: pointer;
+  transition:
+    background-color 170ms ease,
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    transform 170ms ease;
+}
+
+.option:hover {
+  border-color: color-mix(in srgb, var(--primary) 38%, var(--line));
+}
+
+.option:active {
+  transform: scale(0.994);
+}
+
+.optionSelected {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 11%, transparent);
+  font-weight: 650;
+}
+
+.optionDisabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
+
+.radio {
+  appearance: none;
+  position: relative;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--muted) 38%, var(--line));
+  border-radius: 999px;
+  background: var(--surface);
+  cursor: inherit;
+  transition:
+    background-color 150ms ease,
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.radio::after {
+  position: absolute;
+  inset: 4px;
+  border-radius: inherit;
+  background: var(--surface);
+  content: "";
+  opacity: 0;
+  transform: scale(0.55);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.radio:checked {
+  border: 2px solid var(--primary);
+  background: var(--primary);
+}
+
+.radio:checked::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.radio:focus-visible,
+.closeButton:focus-visible,
+.helpButton:focus-visible,
+.unsureButton:focus-visible,
+.changeButton:focus-visible,
+.previousButton:focus-visible,
+.nextButton:focus-visible,
+.sheetClose:focus-visible,
+.sheetAction:focus-visible,
+.sheetReason:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.unsureSlot {
+  min-height: 52px;
+  margin-top: 0.75rem;
+}
+
+.unsureButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.875rem;
+  font-weight: 560;
+  cursor: pointer;
+  transition: background-color 170ms ease, color 170ms ease;
+}
+
+.unsureButton:hover {
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  color: var(--foreground);
+}
+
+.unsureButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.unsureSummary {
+  display: grid;
+  min-height: 52px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.65rem 0.55rem 0.875rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+}
+
+.unsureSummary p {
+  min-width: 0;
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.unsureSummary strong {
+  font-weight: 680;
+}
+
+.changeButton {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  padding-inline: 0.5rem;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.changeButton:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+}
+
+.inlineNotice,
+.inlineError {
+  margin: 1rem 0 0;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+
+.inlineNotice {
+  background: var(--surface-soft);
+  color: var(--muted);
+}
+
+.inlineError {
+  border: 1px solid color-mix(in srgb, var(--danger) 20%, transparent);
+  background: var(--surface);
+  color: var(--danger);
+}
+
+.dock {
+  position: sticky;
+  z-index: 30;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: 50px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.7rem clamp(1rem, 4.1vw, 1.25rem)
+    max(0.75rem, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--background) 94%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.previousButton,
+.nextButton {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  cursor: pointer;
+  transition:
+    background-color 170ms ease,
+    border-color 170ms ease,
+    opacity 170ms ease,
+    transform 170ms ease;
+}
+
+.previousButton {
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.previousButton:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+}
+
+.nextButton {
+  gap: 0.5rem;
+  padding-inline: 1.25rem;
+  background: var(--foreground);
+  color: var(--surface);
+  font-size: 0.875rem;
+  font-weight: 680;
+}
+
+.nextButton:active:not(:disabled),
+.previousButton:active:not(:disabled) {
+  transform: scale(0.985);
+}
+
+.previousButton:disabled,
+.nextButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+
+.layer {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  display: grid;
+  align-items: end;
+  justify-items: center;
+  padding: 0 clamp(1rem, 4.1vw, 1.25rem) 0.75rem;
+  background: color-mix(in srgb, var(--foreground) 30%, transparent);
+  backdrop-filter: blur(2px);
+  animation: backdrop-in 180ms ease-out both;
+}
+
+.backdropButton {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  cursor: default;
+}
+
+.sheet {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: 480px;
+  padding: 1.125rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--line) 82%, transparent);
+  border-radius: 20px;
+  background: var(--surface);
+  color: var(--foreground);
+  box-shadow: 0 18px 50px color-mix(in srgb, var(--foreground) 18%, transparent);
+  animation: sheet-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.sheetHeader {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.75rem;
+}
+
+.sheetTitle {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+
+.sheetCopy {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+.sheetClose {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+}
+
+.sheetClose:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+}
+
+.sheetBody {
+  margin-top: 1rem;
+}
+
+.sheetReasons,
+.sheetActions {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.sheetReason {
+  display: grid;
+  width: 100%;
+  min-height: 50px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 0.875rem;
+  font-weight: 560;
+  text-align: left;
+  cursor: pointer;
+}
+
+.sheetReason:hover {
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+}
+
+.sheetReasonSelected {
+  border-color: var(--primary);
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+}
+
+.reasonRadio {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  border: 1px solid color-mix(in srgb, var(--muted) 38%, var(--line));
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.reasonRadio:checked {
+  border: 5px solid var(--primary);
+}
+
+.reasonRadio[data-checked="true"] {
+  border: 5px solid var(--primary);
+}
+
+.sheetNote {
+  margin: 1rem 0 0;
+  padding-top: 0.875rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.sheetAction {
+  display: inline-flex;
+  width: 100%;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1rem;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  background: var(--foreground);
+  color: var(--surface);
+  font-size: 0.875rem;
+  font-weight: 680;
+  cursor: pointer;
+}
+
+.sheetActionSecondary {
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
+}
+
+.sheetActionSecondary:hover {
+  background: color-mix(in srgb, var(--foreground) 5%, transparent);
+  color: var(--foreground);
+}
+
+.sheetNote + .sheetActions {
+  margin-top: 1rem;
+}
+
+.loading {
+  display: flex;
+  min-height: 100dvh;
+  width: 100%;
+  max-width: 520px;
+  margin-inline: auto;
+  flex-direction: column;
+  padding: 1.25rem;
+  background: var(--background);
+}
+
+.loadingLine {
+  height: 4px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 78%, var(--background));
+  overflow: hidden;
+}
+
+.loadingLine::after {
+  display: block;
+  width: 38%;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--primary);
+  content: "";
+  animation: loading-sweep 1.3s ease-in-out infinite;
+}
+
+.loadingMessage {
+  margin: 2rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+@keyframes question-forward {
+  from {
+    opacity: 0;
+    transform: translateX(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes question-backward {
+  from {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes loading-sweep {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(300%);
+  }
+}
+
+@media (max-width: 339px) {
+  .appBar {
+    grid-template-columns: 46px minmax(0, 1fr) 58px;
+    padding-inline: 0.5rem;
+  }
+
+  .mainContent {
+    padding-top: 1.5rem;
+  }
+
+  .question {
+    font-size: 1.45rem;
+    line-height: 1.4;
+  }
+
+  .option {
+    min-height: 52px;
+  }
+
+  .sheet {
+    padding: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .runner *,
+  .runner *::before,
+  .runner *::after,
+  .layer,
+  .sheet,
+  .loadingLine::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 1ms !important;
+  }
+}

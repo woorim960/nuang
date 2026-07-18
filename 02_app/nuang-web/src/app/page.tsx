@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { EntryGate } from "@/features/onboarding/EntryGate";
 
-export default function Home() {
-  redirect("/home");
+export default function RootPage() {
+  return <EntryGate />;
 }

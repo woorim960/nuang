@@ -1,0 +1,43 @@
+grant usage on schema identity to anon, authenticated, service_role;
+grant usage on schema consent to anon, authenticated, service_role;
+grant usage on schema content to anon, authenticated, service_role;
+grant usage on schema assessment to anon, authenticated, service_role;
+grant usage on schema scoring to anon, authenticated, service_role;
+grant usage on schema report to anon, authenticated, service_role;
+grant usage on schema sharing to anon, authenticated, service_role;
+grant usage on schema profile to anon, authenticated, service_role;
+grant usage on schema comparison to anon, authenticated, service_role;
+grant usage on schema audit to anon, authenticated, service_role;
+
+grant all on all tables in schema identity to anon, authenticated, service_role;
+grant all on all tables in schema consent to anon, authenticated, service_role;
+grant all on all tables in schema content to anon, authenticated, service_role;
+grant all on all tables in schema assessment to anon, authenticated, service_role;
+grant all on all tables in schema scoring to anon, authenticated, service_role;
+grant all on all tables in schema report to anon, authenticated, service_role;
+grant all on all tables in schema sharing to anon, authenticated, service_role;
+grant all on all tables in schema profile to anon, authenticated, service_role;
+grant all on all tables in schema comparison to anon, authenticated, service_role;
+grant all on all tables in schema audit to anon, authenticated, service_role;
+
+grant all on all routines in schema identity to anon, authenticated, service_role;
+grant all on all routines in schema consent to anon, authenticated, service_role;
+grant all on all routines in schema content to anon, authenticated, service_role;
+grant all on all routines in schema assessment to anon, authenticated, service_role;
+grant all on all routines in schema scoring to anon, authenticated, service_role;
+grant all on all routines in schema report to anon, authenticated, service_role;
+grant all on all routines in schema sharing to anon, authenticated, service_role;
+grant all on all routines in schema profile to anon, authenticated, service_role;
+grant all on all routines in schema comparison to anon, authenticated, service_role;
+grant all on all routines in schema audit to anon, authenticated, service_role;
+
+grant all on all sequences in schema identity to anon, authenticated, service_role;
+grant all on all sequences in schema consent to anon, authenticated, service_role;
+grant all on all sequences in schema content to anon, authenticated, service_role;
+grant all on all sequences in schema assessment to anon, authenticated, service_role;
+grant all on all sequences in schema scoring to anon, authenticated, service_role;
+grant all on all sequences in schema report to anon, authenticated, service_role;
+grant all on all sequences in schema sharing to anon, authenticated, service_role;
+grant all on all sequences in schema profile to anon, authenticated, service_role;
+grant all on all sequences in schema comparison to anon, authenticated, service_role;
+grant all on all sequences in schema audit to anon, authenticated, service_role;

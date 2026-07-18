@@ -1,0 +1,11 @@
+{
+  "protocol_version": "m04-core-expert-kit.v0.2-smrl-r3",
+  "analysis_status": "INTERNAL_AGGREGATION_COMPLETE_NOT_EXTERNAL_VALIDATION",
+  "reviewer_count": 6,
+  "candidate_count": 1,
+  "stage1_response_rows": 6,
+  "stage2_response_rows": 6,
+  "automated_triage": "PASS_TO_COGNITIVE",
+  "fatal_risk_count": 0,
+  "warning": "This is an internal AI critique aggregation, not external expert validation, user evidence, or production approval."
+}

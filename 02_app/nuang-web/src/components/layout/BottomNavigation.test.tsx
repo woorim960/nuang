@@ -30,11 +30,11 @@ describe("BottomNavigation", () => {
   });
 
   it("marks nested routes as active for the matching tab only", () => {
-    navigationMock.usePathname.mockReturnValue("/together/comparison/demo");
+    navigationMock.usePathname.mockReturnValue("/feed/post/demo");
 
     render(<BottomNavigation />);
 
-    expect(screen.getByRole("link", { name: "함께 탭" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "피드 탭" })).toHaveAttribute(
       "aria-current",
       "page",
     );

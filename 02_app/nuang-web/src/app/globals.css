@@ -27,6 +27,8 @@
   --color-line: var(--line);
   --color-primary: var(--primary);
   --color-primary-strong: var(--primary-strong);
+  --color-danger: var(--danger);
+  --color-success: var(--success);
   --color-flame: var(--flame);
   --color-sun: var(--sun);
   --color-water: var(--water);
@@ -109,5 +111,164 @@ select {
   100% {
     opacity: 1;
     transform: scale(1);
+  }
+}
+
+.nuang-checkpoint-visual {
+  animation: nuang-checkpoint-settle 650ms 80ms cubic-bezier(0.2, 0.8, 0.2, 1)
+    both;
+}
+
+.nuang-checkpoint-mascot {
+  animation: nuang-checkpoint-breathe 1.4s 760ms ease-in-out 2 alternate;
+  transform-origin: center bottom;
+}
+
+.nuang-checkpoint-glow {
+  animation: nuang-checkpoint-glow 1.4s 760ms ease-in-out 2 alternate;
+}
+
+.nuang-checkpoint-shadow {
+  animation: nuang-checkpoint-shadow 1.4s 760ms ease-in-out 2 alternate;
+  transform-origin: center;
+}
+
+.nuang-recovery-card {
+  animation: nuang-recovery-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.nuang-recovery-progress {
+  animation: nuang-recovery-progress 1.1s ease-in-out both;
+}
+
+.nuang-recovery-success {
+  animation: nuang-recovery-success 240ms ease-out both;
+}
+
+.nuang-saving-spinner {
+  animation: nuang-saving-spin 800ms linear infinite;
+}
+
+.nuang-assessment-sheet {
+  animation: nuang-sheet-in 280ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+
+.nuang-sheet-backdrop {
+  animation: nuang-backdrop-in 180ms ease-out both;
+}
+
+@keyframes nuang-checkpoint-settle {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes nuang-checkpoint-breathe {
+  from {
+    transform: translateY(0) scale(1);
+  }
+  to {
+    transform: translateY(-1.5px) scale(1.006);
+  }
+}
+
+@keyframes nuang-checkpoint-glow {
+  from {
+    opacity: 0.48;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 0.78;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes nuang-checkpoint-shadow {
+  from {
+    opacity: 0.58;
+    transform: translateX(-50%) scaleX(1);
+  }
+  to {
+    opacity: 0.34;
+    transform: translateX(-50%) scaleX(0.94);
+  }
+}
+
+@keyframes nuang-recovery-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nuang-recovery-progress {
+  0% {
+    transform: scaleX(0);
+  }
+  64% {
+    transform: scaleX(0.72);
+  }
+  100% {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes nuang-recovery-success {
+  from {
+    transform: scale(0.86);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes nuang-saving-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes nuang-sheet-in {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nuang-backdrop-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nuang-checkpoint-visual,
+  .nuang-checkpoint-mascot,
+  .nuang-checkpoint-glow,
+  .nuang-checkpoint-shadow,
+  .nuang-recovery-card,
+  .nuang-recovery-progress,
+  .nuang-recovery-success,
+  .nuang-saving-spinner,
+  .nuang-assessment-sheet,
+  .nuang-sheet-backdrop {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

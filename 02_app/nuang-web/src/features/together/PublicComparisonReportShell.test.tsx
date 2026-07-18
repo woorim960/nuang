@@ -22,7 +22,7 @@ describe("PublicComparisonReportShell", () => {
     render(<PublicComparisonReportShell comparisonReportId={null} />);
 
     expect(screen.getByText("형식 확인 필요")).toBeInTheDocument();
-    expect(screen.getByText("유효하지 않은 리포트 ID")).toBeInTheDocument();
-    expect(screen.getByText(/유효한 리포트 ID가 필요합니다/)).toBeInTheDocument();
+    expect(screen.getByText("유효하지 않은 비교 링크")).toBeInTheDocument();
+    expect(screen.getByText(/비교 리포트 링크 형식을 확인해 주세요/)).toBeInTheDocument();
   });
 });

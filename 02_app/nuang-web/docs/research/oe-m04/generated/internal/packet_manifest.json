@@ -1,0 +1,122 @@
+{
+  "protocol_version": "m04-oe-expert-kit.v0.1",
+  "generated_at": "2026-07-17T00:00:00+09:00",
+  "source_files": [
+    "docs/NUANG_M03_OE_AE_CANDIDATE_ITEM_BANK.md",
+    "docs/NUANG_M03_OE_CI_CANDIDATE_ITEM_BANK.md",
+    "docs/NUANG_M03_OE_IE_CANDIDATE_ITEM_BANK.md"
+  ],
+  "opaque_key_seed_id": "cd61f229f2c25216",
+  "reviewer_slots": [
+    "R01",
+    "R02",
+    "R03",
+    "R04",
+    "R05",
+    "R06",
+    "R07",
+    "R08"
+  ],
+  "generated_files": [
+    {
+      "path": "reviewer/R01_stage1_blind.csv",
+      "sha256": "e81280345ef2487e54d1cafd2c677f5d1458f0974f9edadc325e17fa0c72fd8d",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R01_stage2_target_reveal.csv",
+      "sha256": "dfbc7cf97549233274f5a40435977ba691a7bc2277d9992d7950bec7e00d4750",
+      "bytes": 7192
+    },
+    {
+      "path": "reviewer/R02_stage1_blind.csv",
+      "sha256": "314d1bfddd7dcaa1104fb9affd1de285620e196b59dd88cb459630a8309076d4",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R02_stage2_target_reveal.csv",
+      "sha256": "1b393ec3bb378dc952c2e1896adac5960e3903fbef49477a1b151bbb174f350c",
+      "bytes": 7192
+    },
+    {
+      "path": "reviewer/R03_stage1_blind.csv",
+      "sha256": "84c85b574c9fe050e788f7c9da5d2770bd0c9ae6c393a5b469bf7bc8d0c5794f",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R03_stage2_target_reveal.csv",
+      "sha256": "73cdffea907968393f12d4e9989f66bb6755b1d4b58502a16919556458779e44",
+      "bytes": 7192
+    },
+    {
+      "path": "reviewer/R04_stage1_blind.csv",
+      "sha256": "e1e90f74bb374d3cf415bd46f0d76148cdc01a4c2e7c80abe0f685d4a5b1a420",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R04_stage2_target_reveal.csv",
+      "sha256": "312c000facde5fd71b43a2364fc0834d3e6d51c492495c1d0aabcab57a26b60e",
+      "bytes": 7192
+    },
+    {
+      "path": "reviewer/R05_stage1_blind.csv",
+      "sha256": "684088a14fed244f4aae06cf7f8affe3f314f91b779af0333a850d6a69426761",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R05_stage2_target_reveal.csv",
+      "sha256": "d272247b2d0565cebe65cb999c3bec345b9e8b909f04a27ea24e43115942408f",
+      "bytes": 7192
+    },
+    {
+      "path": "reviewer/R06_stage1_blind.csv",
+      "sha256": "76fb9c63a754e2945b0b011d48cb0223f357380931dde524f1bb7aa24a969091",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R06_stage2_target_reveal.csv",
+      "sha256": "2399101e26e1c13a42d71960db21cc5480475ad1f23398ae6283291e92d3801f",
+      "bytes": 7192
+    },
+    {
+      "path": "reviewer/R07_stage1_blind.csv",
+      "sha256": "12ed6439311cfafaacea3331e4138e6796111933a03d03ae5f148edff8f4c1fc",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R07_stage2_target_reveal.csv",
+      "sha256": "852212c4dd9aa3cdbf1e3ac980b173980405f4dca6f6e68b7f0d3a070197a5e6",
+      "bytes": 7192
+    },
+    {
+      "path": "reviewer/R08_stage1_blind.csv",
+      "sha256": "891eb204cace9d89b13bb864e50ea6cd671f62ba82a677ae3d4bbf4ca22897b0",
+      "bytes": 6014
+    },
+    {
+      "path": "internal/DO_NOT_RELEASE_BEFORE_STAGE1_LOCK_R08_stage2_target_reveal.csv",
+      "sha256": "69b5c0db29789455405b5cab5e75f0ae386d7a6cc6916f125113fc2160c060bc",
+      "bytes": 7192
+    },
+    {
+      "path": "internal/opaque_item_mapping.csv",
+      "sha256": "ac8e35cb3c8b7eba40e93c26cecd1a53e56a50675db00f30c71f0105505ccb7b",
+      "bytes": 8266
+    },
+    {
+      "path": "internal/reviewer_roster_template.csv",
+      "sha256": "3c5fc73f1c934334f5c595e8b2ba0aceed5d1a0d572253dfff41155b438958d1",
+      "bytes": 452
+    },
+    {
+      "path": "internal/packet_lock_log.csv",
+      "sha256": "594f4f6c2a75d52373945a57d9a714277e7856ee1065ddf1a9bab72a26180c68",
+      "bytes": 1303
+    },
+    {
+      "path": "internal/adjudication_decision_log.csv",
+      "sha256": "d18b21641c6fcde2762563df9e42bfc7efa2bfb65e05db03d80b16e437320247",
+      "bytes": 1524
+    }
+  ]
+}

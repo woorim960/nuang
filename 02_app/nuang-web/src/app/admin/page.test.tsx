@@ -31,7 +31,7 @@ describe("AdminPage", () => {
     expect(screen.getByRole("heading", { name: "작게 열고 검증합니다" }))
       .toBeInTheDocument();
     expect(screen.getByText("결과 계정 저장")).toBeInTheDocument();
-    expect(screen.getByText("공개 프로필 코드와 공개 비교")).toBeInTheDocument();
+    expect(screen.getByText("공개 프로필 스냅샷과 공개 비교")).toBeInTheDocument();
   });
 
   it("keeps policy document gates visible before launch", () => {

@@ -4,8 +4,15 @@ import { openDB, type DBSchema } from "idb";
 import type {
   AssessmentAnswer,
   AssessmentDefinition,
+  AssessmentMilestoneId,
+  AssessmentMilestoneStatus,
+  AssessmentResultEvidenceStatus,
+  AssessmentResultSnapshot,
   LocalAssessmentAttempt,
 } from "@/features/assessment/types";
+import { halfwayCheckpointContentVersion } from "@/features/assessment/assessment-milestone";
+import { getApprovedReusableResponses } from "@/features/assessment/assessment-response-reuse";
+import { sanitizePrecisionDestination } from "@/features/assessment/precision-entry";
 import {
   localCompletedRetentionDays,
   localInProgressRetentionDays,
@@ -36,23 +43,50 @@ function getDb() {
 
 export async function getOrCreateLocalAttempt(
   assessment: AssessmentDefinition,
-  initialResponses: Record<string, AssessmentAnswer> = {},
+  reuseSourceAttempt?: LocalAssessmentAttempt,
+  returnDestination?: string | null,
 ) {
   const db = await getDb();
-  const existing = await db.getAllFromIndex(ATTEMPT_STORE, "by-assessment-state", [
-    assessment.assessmentId,
-    "in_progress",
-  ]);
+  const existing = await db.getAllFromIndex(
+    ATTEMPT_STORE,
+    "by-assessment-state",
+    [assessment.assessmentId, "in_progress"],
+  );
   const active = existing
-    .filter((attempt) => new Date(attempt.expiresAt).getTime() > Date.now())
+    .filter(
+      (attempt) =>
+        attempt.releaseId === assessment.releaseId &&
+        attempt.itemIds.length === assessment.items.length &&
+        attempt.itemIds.every(
+          (itemId, index) => itemId === assessment.items[index]?.itemId,
+        ) &&
+        new Date(attempt.expiresAt).getTime() > Date.now(),
+    )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
 
-  if (active) return active;
+  const safeReturnDestination = sanitizePrecisionDestination(returnDestination);
+
+  if (active) {
+    if (
+      safeReturnDestination &&
+      safeReturnDestination !== active.returnDestination
+    ) {
+      const resumed = {
+        ...active,
+        returnDestination: safeReturnDestination,
+        updatedAt: new Date().toISOString(),
+      };
+      await db.put(ATTEMPT_STORE, resumed);
+      return resumed;
+    }
+
+    return active;
+  }
 
   const now = new Date();
-  const allowedItemIds = new Set(assessment.items.map((item) => item.itemId));
-  const reusableResponses = Object.fromEntries(
-    Object.entries(initialResponses).filter(([itemId]) => allowedItemIds.has(itemId)),
+  const reusableResponses = getApprovedReusableResponses(
+    reuseSourceAttempt,
+    assessment,
   );
   const currentIndex = assessment.items.findIndex(
     (item) => !reusableResponses[item.itemId],
@@ -64,8 +98,14 @@ export async function getOrCreateLocalAttempt(
     mode: assessment.mode,
     itemIds: assessment.items.map((item) => item.itemId),
     responses: reusableResponses,
-    currentIndex: currentIndex === -1 ? assessment.items.length - 1 : currentIndex,
+    currentIndex:
+      currentIndex === -1 ? assessment.items.length - 1 : currentIndex,
     state: "in_progress",
+    localPersistStatus: "saved",
+    milestones: {},
+    ...(safeReturnDestination
+      ? { returnDestination: safeReturnDestination }
+      : {}),
     createdAt: now.toISOString(),
     updatedAt: now.toISOString(),
     expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
@@ -83,7 +123,7 @@ export async function saveLocalAnswer(
   const db = await getDb();
   const updatedAt = new Date();
   const nextAttempt: LocalAssessmentAttempt = {
-    ...attempt,
+    ...withoutCompletionResult(attempt),
     currentIndex,
     responses: {
       ...attempt.responses,
@@ -91,6 +131,7 @@ export async function saveLocalAnswer(
     },
     updatedAt: updatedAt.toISOString(),
     expiresAt: addDays(updatedAt, localInProgressRetentionDays).toISOString(),
+    localPersistStatus: "saved",
   };
 
   await db.put(ATTEMPT_STORE, nextAttempt);
@@ -108,6 +149,111 @@ export async function saveLocalProgress(
     currentIndex,
     updatedAt: now.toISOString(),
     expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
+    localPersistStatus: "saved",
+  };
+
+  await db.put(ATTEMPT_STORE, nextAttempt);
+  return nextAttempt;
+}
+
+export async function reopenLocalAttemptForReview(
+  attempt: LocalAssessmentAttempt,
+  currentIndex: number,
+) {
+  const db = await getDb();
+  const now = new Date();
+  const baseItemIds = new Set(attempt.itemIds);
+  const reopenedAttempt: LocalAssessmentAttempt = {
+    ...withoutCompletionResult(attempt),
+    currentIndex,
+    responses: Object.fromEntries(
+      Object.entries(attempt.responses).filter(([itemId]) =>
+        baseItemIds.has(itemId),
+      ),
+    ),
+    state: "in_progress",
+    localPersistStatus: "saved",
+    updatedAt: now.toISOString(),
+    expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
+  };
+
+  delete reopenedAttempt.adaptiveItemIds;
+  delete reopenedAttempt.adaptiveStatus;
+
+  await db.put(ATTEMPT_STORE, reopenedAttempt);
+  return reopenedAttempt;
+}
+
+export async function startLocalAdaptiveFollowUp(
+  attempt: LocalAssessmentAttempt,
+  adaptiveItemIds: string[],
+) {
+  const db = await getDb();
+  const now = new Date();
+  const allowedResponseIds = new Set([...attempt.itemIds, ...adaptiveItemIds]);
+  const adaptiveAttempt: LocalAssessmentAttempt = {
+    ...withoutCompletionResult(attempt),
+    adaptiveItemIds,
+    adaptiveStatus: "intro",
+    currentIndex: attempt.itemIds.length,
+    responses: Object.fromEntries(
+      Object.entries(attempt.responses).filter(([itemId]) =>
+        allowedResponseIds.has(itemId),
+      ),
+    ),
+    state: "in_progress",
+    localPersistStatus: "saved",
+    updatedAt: now.toISOString(),
+    expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
+  };
+
+  await db.put(ATTEMPT_STORE, adaptiveAttempt);
+  return adaptiveAttempt;
+}
+
+export async function beginLocalAdaptiveFollowUp(
+  attempt: LocalAssessmentAttempt,
+) {
+  const db = await getDb();
+  const now = new Date();
+  const activeAttempt: LocalAssessmentAttempt = {
+    ...attempt,
+    adaptiveStatus: "in_progress",
+    localPersistStatus: "saved",
+    updatedAt: now.toISOString(),
+    expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
+  };
+
+  await db.put(ATTEMPT_STORE, activeAttempt);
+  return activeAttempt;
+}
+
+export async function saveLocalMilestone(
+  attempt: LocalAssessmentAttempt,
+  milestoneId: AssessmentMilestoneId,
+  status: AssessmentMilestoneStatus,
+  currentIndex = attempt.currentIndex,
+) {
+  const db = await getDb();
+  const now = new Date();
+  const existing = attempt.milestones?.[milestoneId];
+  const milestone = {
+    id: milestoneId,
+    status,
+    contentVersion: halfwayCheckpointContentVersion,
+    shownAt: existing?.shownAt ?? now.toISOString(),
+    ...(status === "shown" ? {} : { resolvedAt: now.toISOString() }),
+  };
+  const nextAttempt: LocalAssessmentAttempt = {
+    ...attempt,
+    currentIndex,
+    localPersistStatus: "saved",
+    milestones: {
+      ...attempt.milestones,
+      [milestoneId]: milestone,
+    },
+    updatedAt: now.toISOString(),
+    expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
   };
 
   await db.put(ATTEMPT_STORE, nextAttempt);
@@ -116,26 +262,136 @@ export async function saveLocalProgress(
 
 export async function completeLocalAttempt(
   attempt: LocalAssessmentAttempt,
-  resultCopyVersion?: string,
+  options: {
+    completionRequestId: string;
+    evidenceStatus: AssessmentResultEvidenceStatus;
+    resultCopyVersion?: string;
+    resultSnapshot: AssessmentResultSnapshot;
+  },
 ) {
   const db = await getDb();
+  const storedAttempt = await db.get(ATTEMPT_STORE, attempt.id);
+
+  if (
+    (options.evidenceStatus === "insufficient_evidence") !==
+    (options.resultSnapshot.resultStatus === "insufficient_evidence")
+  ) {
+    throw new Error("COMPLETION_EVIDENCE_STATUS_MISMATCH");
+  }
+
+  if (
+    storedAttempt?.resultSnapshot &&
+    (storedAttempt.completionStatus === "completed" ||
+      storedAttempt.completionStatus === "insufficient_evidence")
+  ) {
+    if (
+      storedAttempt.completionRequestId === options.completionRequestId &&
+      storedAttempt.responseSnapshotHash !==
+        options.resultSnapshot.responseSnapshotHash
+    ) {
+      throw new Error("COMPLETION_SNAPSHOT_CONFLICT");
+    }
+    return storedAttempt;
+  }
+
+  const sourceAttempt = storedAttempt ?? attempt;
+
+  if (
+    sourceAttempt.completionRequestId &&
+    (sourceAttempt.completionRequestId !== options.completionRequestId ||
+      sourceAttempt.responseSnapshotHash !==
+        options.resultSnapshot.responseSnapshotHash)
+  ) {
+    throw new Error("COMPLETION_SNAPSHOT_CONFLICT");
+  }
+
   const now = new Date();
+  const isInsufficient =
+    options.resultSnapshot.resultStatus === "insufficient_evidence";
   const completed: LocalAssessmentAttempt = {
-    ...attempt,
-    state: "completed",
-    resultCopyVersion,
+    ...sourceAttempt,
+    completionRequestId: options.completionRequestId,
+    completionStatus: isInsufficient ? "insufficient_evidence" : "completed",
+    responseSnapshotHash: options.resultSnapshot.responseSnapshotHash,
+    resultCopyVersion: options.resultCopyVersion,
+    resultEvidenceStatus: options.evidenceStatus,
+    resultSnapshot: options.resultSnapshot,
+    ...(sourceAttempt.adaptiveItemIds?.length
+      ? { adaptiveStatus: "completed" as const }
+      : {}),
+    state: isInsufficient ? "in_progress" : "completed",
+    localPersistStatus: "saved",
     updatedAt: now.toISOString(),
-    completedAt: now.toISOString(),
-    expiresAt: addDays(now, localCompletedRetentionDays).toISOString(),
+    completedAt: isInsufficient ? undefined : now.toISOString(),
+    expiresAt: addDays(
+      now,
+      isInsufficient
+        ? localInProgressRetentionDays
+        : localCompletedRetentionDays,
+    ).toISOString(),
   };
 
   await db.put(ATTEMPT_STORE, completed);
   return completed;
 }
 
+export async function beginLocalAttemptCompletion(
+  attempt: LocalAssessmentAttempt,
+  completionRequestId: string,
+  responseSnapshotHash: string,
+) {
+  const db = await getDb();
+  const storedAttempt = await db.get(ATTEMPT_STORE, attempt.id);
+  const sourceAttempt = storedAttempt ?? attempt;
+
+  if (sourceAttempt.state === "completed") return sourceAttempt;
+
+  if (sourceAttempt.completionRequestId) {
+    if (
+      sourceAttempt.completionRequestId !== completionRequestId ||
+      sourceAttempt.responseSnapshotHash !== responseSnapshotHash
+    ) {
+      throw new Error("COMPLETION_SNAPSHOT_CONFLICT");
+    }
+    return sourceAttempt;
+  }
+
+  const now = new Date();
+  const submitting: LocalAssessmentAttempt = {
+    ...sourceAttempt,
+    completionRequestId,
+    completionStatus: "submitting",
+    responseSnapshotHash,
+    updatedAt: now.toISOString(),
+    expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
+  };
+
+  await db.put(ATTEMPT_STORE, submitting);
+  return submitting;
+}
+
 export async function getLocalAttempt(id: string) {
   const db = await getDb();
   return db.get(ATTEMPT_STORE, id);
+}
+
+export async function saveLocalAttemptReturnDestination(
+  attempt: LocalAssessmentAttempt,
+  returnDestination: string | null,
+) {
+  const db = await getDb();
+  const stored = (await db.get(ATTEMPT_STORE, attempt.id)) ?? attempt;
+  const safeReturnDestination = sanitizePrecisionDestination(returnDestination);
+  const updated = { ...stored, updatedAt: new Date().toISOString() };
+
+  if (safeReturnDestination) {
+    updated.returnDestination = safeReturnDestination;
+  } else {
+    delete updated.returnDestination;
+  }
+
+  await db.put(ATTEMPT_STORE, updated);
+  return updated;
 }
 
 export async function listLocalAttempts() {
@@ -153,12 +409,15 @@ export async function deleteLocalAttempt(id: string) {
   await db.delete(ATTEMPT_STORE, id);
 }
 
-export async function getLatestCompletedAttempt(assessmentId: string) {
+export async function getLatestCompletedAttempt(
+  assessmentId: string,
+): Promise<LocalAssessmentAttempt | undefined> {
   const db = await getDb();
-  const completed = await db.getAllFromIndex(ATTEMPT_STORE, "by-assessment-state", [
-    assessmentId,
-    "completed",
-  ]);
+  const completed = await db.getAllFromIndex(
+    ATTEMPT_STORE,
+    "by-assessment-state",
+    [assessmentId, "completed"],
+  );
 
   return completed
     .filter((attempt) => new Date(attempt.expiresAt).getTime() > Date.now())
@@ -169,4 +428,20 @@ function addDays(date: Date, days: number) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
   return next;
+}
+
+function withoutCompletionResult(
+  attempt: LocalAssessmentAttempt,
+): LocalAssessmentAttempt {
+  const activeAttempt = { ...attempt };
+
+  delete activeAttempt.completedAt;
+  delete activeAttempt.completionRequestId;
+  delete activeAttempt.completionStatus;
+  delete activeAttempt.responseSnapshotHash;
+  delete activeAttempt.resultCopyVersion;
+  delete activeAttempt.resultEvidenceStatus;
+  delete activeAttempt.resultSnapshot;
+
+  return activeAttempt;
 }

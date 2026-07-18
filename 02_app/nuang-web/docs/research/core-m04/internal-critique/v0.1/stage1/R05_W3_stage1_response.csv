@@ -1,0 +1,51 @@
+protocol_version,reviewer_slot,wave_id,sequence_in_wave,opaque_item_id,context_label,prompt_text,first_construct_mapping,second_construct_mapping,direction_guess,clarity_rating_1_4,single_response_rating_1_4,universality_rating_1_4,scale_fit_rating_1_4,desirable_direction_guess,risk_flags,fatal_risk_note,stage1_notes
+m04-core-expert-kit.v0.1,R05,W3,1,NX-102,사소한 일이 생각대로 되지 않을 때,짜증이 금방 커진다.,ER_IR,NONE,HIGH,4,4,4,4,LOW,CLINICAL_CONTAMINATION,NONE,작은 좌절에서 불편한 감정이 빠르게 커지는 반응이 직접적이다.
+m04-core-expert-kit.v0.1,R05,W3,2,NX-078,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,처리할 시점을 정해둔다.,SM_RL,SM_OS,HIGH,4,3,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,약속 이행을 위해 시점을 정하는 반응이며 계획 구조화도 함께 포함한다.
+m04-core-expert-kit.v0.1,R05,W3,3,NX-113,처음 만난 사람들과 가볍게 이야기할 때,대화 흐름에 함께할수록 기운이 붙는다.,SE_RE,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,처음 만난 사람들과 함께할수록 에너지가 살아나는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,4,NX-109,영상을 보거나 대화하던 중 처음 듣는 개념이 나왔을 때,영상이나 대화를 이해할 만큼만 뜻을 확인한다.,OE_IE,NONE,LOW,4,4,4,4,HIGH,LIMITER,NONE,현재 내용을 이해하는 데 필요한 범위에서 탐색을 멈추는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,5,NX-106,가보지 않은 공간에 대한 설명을 접할 때,설명된 내용까지만 생각하고 넘어간다.,OE_CI,NONE,LOW,4,4,4,4,SIMILAR,LIMITER,NONE,주어진 설명 바깥의 장면이나 가능성을 확장하지 않는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,6,NX-075,결과가 아직 정해지지 않은 일을 기다릴 때,잘못될 가능성이 여러 번 떠오른다.,ER_WD,NONE,HIGH,4,4,4,4,LOW,CLINICAL_CONTAMINATION,NONE,불확실한 결과를 기다리며 부정 가능성이 반복되는 걱정 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,7,NX-063,익숙한 사람들과 한동안 이야기를 나눌 때,혼자 조용히 있을 시간이 필요해진다.,SE_RE,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,익숙한 사람들과 함께한 뒤에도 회복 시간이 필요한 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,8,NX-027,미뤄도 당장 문제없는 할 일이 생겼을 때,해야 할 때가 가까워지기 전에 첫 행동을 시작한다.,SM_EP,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,외부 시점이 임박하기 전에 행동을 시작하는 실행 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,9,NX-083,하늘이나 나무 같은 일상 풍경을 볼 때,잠시 본 뒤 하던 일로 관심이 돌아간다.,OE_AE,METHOD,LOW,3,3,4,3,HIGH,ATTENTION;ADJACENT_CONSTRUCT,NONE,미적 관심의 짧음과 일반적인 주의 전환이 구분되지 않을 수 있다.
+m04-core-expert-kit.v0.1,R05,W3,10,NX-046,다른 사람과 정한 내용이 여러 가지일 때,내가 맡은 내용과 시점을 다시 확인한다.,SM_RL,SM_OS,HIGH,4,3,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,합의한 역할과 시점을 재확인하는 이행 반응이며 구조화도 일부 포함한다.
+m04-core-expert-kit.v0.1,R05,W3,11,NX-009,평범한 일상 장면을 보고 있을 때,보이는 장면만 살펴보고 그대로 지나간다.,OE_CI,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,보이는 내용 밖의 다른 장면이나 가능성을 떠올리지 않는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,12,NX-086,가벼운 주제에서 의견이 엇갈릴 때,다른 사람들의 반응을 본 뒤 내 생각을 말한다.,SE_AI,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,자기 의견을 먼저 밖으로 꺼내지 않고 반응을 본 뒤 표현한다.
+m04-core-expert-kit.v0.1,R05,W3,13,NX-119,며칠 쉬었다가 다시 이어야 하는 일이 있을 때,다시 하고 싶은 마음이나 계기가 생길 때 재개한다.,SM_EP,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,중단 뒤 스스로 복귀하기보다 흥미나 외부 계기를 기다리는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,14,NX-049,하던 중 예상하지 못한 작은 문제가 생겼을 때,불편한 감정이 한꺼번에 올라온다.,ER_IR,NONE,HIGH,4,4,4,4,LOW,CLINICAL_CONTAMINATION,NONE,예상 밖의 작은 문제에서 감정이 빠르게 커지는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,15,NX-021,여럿이 모였지만 대화가 시작되지 않았을 때,다른 사람이 대화를 시작한 뒤 참여한다.,SE_AI,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,대화 주제를 먼저 꺼내지 않고 시작된 뒤 참여하는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,16,NX-017,가깝지는 않은 사람이 힘든 일을 꺼낼 때,그 사람이 느낀 마음보다 일어난 일이 먼저 궁금해진다.,RO_EC,NONE,LOW,4,4,3,4,HIGH,ADJACENT_CONSTRUCT,NONE,상대 마음보다 사건 사실에 주의가 먼저 가는 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,17,NX-003,여러 단계를 거친 일을 마치기 전에,눈에 걸리는 부분이 있을 때 다시 살핀다.,SM_OS,METHOD,LOW,3,3,4,3,HIGH,ATTENTION;ADJACENT_CONSTRUCT,NONE,정해진 점검 구조보다 눈에 띄는 부분에 의존해 주의 현저성이 섞인다.
+m04-core-expert-kit.v0.1,R05,W3,18,NX-006,영화나 드라마의 중간 장면만 우연히 봤을 때,그 장면 앞뒤에 무슨 일이 있었을지 떠올려본다.,OE_CI,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,주어진 장면 바깥의 앞뒤 이야기를 확장해 떠올리는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,19,NX-141,사소한 선택에서 상대와 원하는 것이 다를 때,내가 원하는 쪽으로 정할 이유가 먼저 떠오른다.,RO_RN,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,상대 선택 여지보다 자신의 선택을 관철할 이유가 먼저 떠오르는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,20,NX-137,비슷한 일을 반복해서 처리할 때,그때 필요한 순서로 진행한다.,SM_OS,NONE,LOW,3,3,4,3,HIGH,ADJACENT_CONSTRUCT,NONE,반복 가능한 구조를 만들지 않는 뜻이나 상황 적응적 순서로도 읽힌다.
+m04-core-expert-kit.v0.1,R05,W3,21,NX-108,함께할 계획에서 상대가 다른 방향을 원한다고 다시 말했을 때,내가 원하는 방향의 이유를 계속 설명한다.,RO_RN,SE_AI,LOW,4,3,4,4,HIGH,SOCIAL_DESIRABILITY;ADJACENT_CONSTRUCT,NONE,상대가 재표현한 선택 여지보다 자기 방향 설득을 계속하는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,22,NX-103,사소한 일이 꼬여 감정이 올라온 뒤,한동안 다른 일을 할 때도 불편한 감정이 이어진다.,ER_IR,NONE,HIGH,4,4,4,4,LOW,CLINICAL_CONTAMINATION,NONE,작은 좌절 뒤 불편한 감정이 다른 활동까지 오래 이어지는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,23,NX-134,하던 일을 일상적인 이유로 잠시 멈춘 뒤,다시 시작할 계기가 생길 때까지 그대로 둔다.,SM_EP,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,중단 뒤 자발적으로 복귀하지 않고 외부 계기를 기다리는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,24,NX-008,여러 날에 걸쳐 해야 하는 일이 있을 때,중간에 긴 공백이 생기지 않도록 나눠서 이어간다.,SM_EP,SM_OS,HIGH,4,3,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,행동을 공백 없이 지속하는 반응이며 분할 계획도 일부 포함한다.
+m04-core-expert-kit.v0.1,R05,W3,25,NX-084,내 제안을 충분히 설명한 뒤 상대가 원하지 않는다고 말했을 때,결정을 바꿀 다른 설득 방법이 떠오른다.,RO_RN,SE_AI,LOW,4,3,4,4,HIGH,SOCIAL_DESIRABILITY;ADJACENT_CONSTRUCT,NONE,상대 거절 뒤에도 선택 여지를 두기보다 추가 설득을 우선한다.
+m04-core-expert-kit.v0.1,R05,W3,26,NX-117,영상이나 사진의 한 장면을 볼 때,그 인상은 짧게 지나간다.,OE_AE,NONE,LOW,4,4,4,4,HIGH,ATTENTION,NONE,시각 장면의 분위기와 인상에 관심이 오래 머물지 않는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,27,NX-016,상대의 실수 때문에 함께한 일에 문제가 생겼을 때,고쳐야 할 행동을 중심으로 말한다.,RO_RN,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,사람 자체가 아니라 수정할 행동에 초점을 두어 존엄을 유지한다.
+m04-core-expert-kit.v0.1,R05,W3,28,NX-019,함께하는 방식에 작은 조정이 필요할 때,바꾸고 싶은 부분을 먼저 말한다.,SE_AI,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,필요한 조정 의견을 상대 질문 전에 먼저 표현하는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,29,NX-070,하나의 가벼운 가능성이 떠올랐을 때,처음 떠오른 장면만 생각하고 다른 일로 넘어간다.,OE_CI,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,처음 가능성을 후속 장면으로 확장하지 않는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,30,NX-022,일상에서 음악을 들을 때,그 인상에 머무는 시간은 짧다.,OE_AE,NONE,LOW,4,4,4,4,HIGH,ATTENTION,NONE,소리와 분위기의 인상에 관심이 짧게 머무는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,31,NX-139,여럿이 가벼운 활동을 함께할 때,그 흐름에 들어가면 기운이 살아난다.,SE_RE,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,사람들과 활동하는 흐름 속에서 에너지가 살아나는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,32,NX-004,해야 할 일이 몇 가지 겹쳐 있을 때,할 일을 순서나 묶음으로 정리한다.,SM_OS,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,겹친 할 일을 반복해 따를 수 있는 순서나 묶음으로 구조화한다.
+m04-core-expert-kit.v0.1,R05,W3,33,NX-093,내가 한 것을 다른 사람이 확인할 예정일 때,해야 할 행동을 몇 번이고 다시 망설인다.,ER_WD,NONE,HIGH,4,4,4,4,LOW,CLINICAL_CONTAMINATION,NONE,평가 앞에서 걱정이 반복되어 행동 착수를 주저하는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,34,NX-013,가까운 사람이 계획한 일이 뜻대로 되지 않았다고 메시지를 보낼 때,처음에는 어떻게 하면 일이 나아질지가 궁금해진다.,RO_EC,NONE,LOW,4,4,4,4,HIGH,ADJACENT_CONSTRUCT,NONE,상대의 현재 마음보다 해결 방법에 주의가 먼저 가는 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,35,NX-149,해야 할 일이 평소보다 조금 늘었을 때,일이 늘어도 걱정이 오래 이어지지는 않는다.,ER_WD,NONE,LOW,4,4,4,4,LOW,NEGATION,NONE,일 증가 속에서도 실패 가능성에 오래 머물지 않는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,36,NX-050,공동 활동의 다음 순서가 정해지지 않았을 때,진행할 방법을 먼저 제안한다.,SE_AI,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,공동 선택이 필요한 때 진행 방법을 먼저 밖으로 꺼내는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,37,NX-120,사람들과 부담 없이 시간을 보낸 뒤,기운이 살아난 느낌이 든다.,SE_RE,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,사람들과 함께한 뒤 에너지가 살아난다는 반응이 직접적이다.
+m04-core-expert-kit.v0.1,R05,W3,38,NX-110,해보려던 일이 한 번 잘되지 않았을 때,다음 시도를 생각할 때 걱정이 오래 이어지지 않는다.,ER_WD,NONE,LOW,4,4,4,4,LOW,NEGATION,NONE,실패 뒤에도 다음 시도에 대한 걱정이 지속되지 않는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,39,NX-098,누군가 힘들었던 일을 이야기할 때,그 사람이 어떤 마음이었는지에 주의가 간다.,RO_EC,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,사건 사실보다 상대가 느낀 마음에 주의하는 반응이 직접적이다.
+m04-core-expert-kit.v0.1,R05,W3,40,NX-040,나중에 다시 쓸 자료를 보관할 때,종류나 쓰임에 따라 찾을 곳을 나눈다.,SM_OS,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,재탐색 가능하도록 자료 위치를 종류와 쓰임으로 구조화한다.
+m04-core-expert-kit.v0.1,R05,W3,41,NX-062,앱이나 서비스에서 처음 보는 이용 규칙을 안내받았을 때,이용에 필요한 방법만 확인한다.,OE_IE,NONE,LOW,4,4,3,4,HIGH,DIGITAL_ACCESS;LIMITER,NONE,이용에 필요한 범위에서 규칙 탐색을 멈추는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,42,NX-047,누군가 속상한 일과 해결할 문제를 함께 이야기할 때,원인과 해결할 부분이 먼저 눈에 들어온다.,RO_EC,NONE,LOW,4,4,4,4,HIGH,ADJACENT_CONSTRUCT,NONE,상대 마음보다 원인과 해결 문제에 주의가 먼저 가는 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,43,NX-128,여럿이 간단한 선택을 미루고 있을 때,내가 먼저 선택지를 꺼낸다.,SE_AI,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,집단 선택 상황에서 선택지를 먼저 밖으로 꺼내는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,44,NX-126,해야 하지만 당장 재미나 보상이 적은 일을 할 때,그날의 관심이나 기운에 따라 이어가는 정도가 달라진다.,SM_EP,NONE,LOW,3,3,4,4,HIGH,ADJACENT_CONSTRUCT;ATTENTION,NONE,실행 지속이 내적 흥미와 에너지에 좌우되며 일반 주의나 피로와도 겹친다.
+m04-core-expert-kit.v0.1,R05,W3,45,NX-092,이야기의 다음 내용을 알기 전,지금까지 나온 이야기만 되짚어보며 기다린다.,OE_CI,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,주어진 내용 밖의 다음 장면을 확장하지 않고 기존 내용에 머문다.
+m04-core-expert-kit.v0.1,R05,W3,46,NX-058,함께 준비한 일이 잘 풀리지 않았을 때,처음에는 함께한 사람들의 마음에 주의가 간다.,RO_EC,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,어긋난 문제보다 함께한 사람들의 마음에 주의가 먼저 가는 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,47,NX-101,맡은 일을 약속한 때까지 마치기 어려워졌을 때,약속한 때가 오기 전에 상황을 알리고 다시 맞춘다.,SM_RL,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,기한 변경을 선제적으로 알리고 합의를 다시 맞추는 이행 반응이다.
+m04-core-expert-kit.v0.1,R05,W3,48,NX-039,결과를 확신하기 어려운 선택을 해야 할 때,걱정이 생겨도 필요한 시점에는 결정을 내린다.,ER_WD,NONE,LOW,4,4,4,4,LOW,SOCIAL_DESIRABILITY,NONE,불확실성과 걱정이 있어도 결정 지연으로 이어지지 않는 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,49,NX-127,내가 마쳐야 다른 사람이 이어갈 수 있을 때,상대가 요청한 뒤 필요한 부분을 넘긴다.,SM_RL,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,상대 의존성이 있어도 요청 뒤에야 넘기는 맡은 일 이행의 낮은 방향이다.
+m04-core-expert-kit.v0.1,R05,W3,50,NX-076,작은 불편이 짧은 시간 안에 반복될 때,처음보다 짜증이 빠르게 쌓인다.,ER_IR,NONE,HIGH,4,4,4,4,LOW,CLINICAL_CONTAMINATION,NONE,반복 자극에 불편한 감정이 빠르게 누적되는 반응이 직접적이다.

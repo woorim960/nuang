@@ -1,8 +1,8 @@
 import {
   ClipboardCheck,
+  FileText,
   MapPinned,
-  ShieldCheck,
-  UsersRound,
+  MessageCircle,
 } from "lucide-react";
 import Link from "next/link";
 import { StatusPill } from "@/components/ui/StatusPill";
@@ -13,14 +13,14 @@ import {
 
 const iconByFlowId = {
   assessment: ClipboardCheck,
+  feed: MessageCircle,
   map: MapPinned,
-  together: UsersRound,
-  visibility: ShieldCheck,
+  reports: FileText,
 } as const;
 
 export function NuangNextActionFlow({
   eyebrow = "시작 흐름",
-  title = "검사에서 함께까지",
+  title = "검사에서 리포트까지",
 }: {
   eyebrow?: string;
   title?: string;

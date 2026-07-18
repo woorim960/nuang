@@ -1,0 +1,9 @@
+opaque_item_id,source_candidate_id,revision_candidate_id,target_facet,keyed_direction,critical_flag,seam_flag,context_label,prompt_text
+NV2-001,SMRL-C11,SMRL-C11-r2,SM-RL,HIGH,NO,YES,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,따로 알림이 없어도 약속한 일을 챙겨서 한다.
+NV2-002,SMOS-C10,SMOS-C10-r2,SM-OS,LOW,YES,NO,나중에 다시 쓸 자료를 보관할 때,"따로 정해둔 자리 없이, 그때 두기 편한 곳에 둔다."
+NV2-003,ERWD-C06,ERWD-C06-r2,ER-WD,LOW,YES,NO,내가 한 것을 다른 사람이 확인할 예정일 때,잘못 보일까 하는 걱정이 생겨도 같은 생각이 반복되지는 않는다.
+NV2-004,OEIE-C10,OEIE-C10-r2,OE-IE,LOW,NO,YES,설명을 듣다가 필요한 답을 얻었을 때,거기까지 알아보고 넘어간다.
+NV2-005,RORN-P05-B,RORN-P05-B-r2,RO-RN,LOW,YES,NO,사소한 선택에서 상대와 원하는 것이 다를 때,"상대가 고를 수 있는 여지를 두기보다, 내가 원하는 쪽으로 정하려 한다."
+NV2-006,SMOS-C08,SMOS-C08-r2,SM-OS,LOW,NO,YES,이번 주 안에 할 일이 생겼을 때,"언제 할지 미리 정하지 않고, 그때 가능한 시간에 시작한다."
+NV2-007,SMOS-C12,SMOS-C13,SM-OS,LOW,YES,YES,여러 단계를 거친 일을 마무리할 때,"정해둔 확인 순서 없이, 그때 생각나는 부분부터 살핀다."
+NV2-008,OEIE-C09,OEIE-C09-r2,OE-IE,HIGH,NO,YES,설명을 듣다가 이해되지 않는 부분이 생겼을 때,이유나 배경을 더 알아보고 싶어진다.

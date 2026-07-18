@@ -1,0 +1,15 @@
+{
+  "protocol_version": "m04-core-expert-kit.v0.2-targeted",
+  "analysis_status": "INTERNAL_AGGREGATION_COMPLETE_NOT_EXTERNAL_VALIDATION",
+  "reviewer_count": 6,
+  "candidate_count": 8,
+  "stage1_response_rows": 48,
+  "stage2_response_rows": 48,
+  "proposed_decision_counts": {
+    "HOLD_FOR_RISK_REVIEW": 1,
+    "PASS_TO_COGNITIVE": 7
+  },
+  "fatal_risk_item_count": 1,
+  "seam_flag_item_count": 1,
+  "warning": "This is an internal AI critique aggregation. Proposed decisions are triage suggestions, not external validity evidence or production approval."
+}

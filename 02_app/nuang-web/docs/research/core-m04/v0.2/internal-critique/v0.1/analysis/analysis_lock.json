@@ -1,0 +1,13 @@
+{
+  "protocol_version": "m04-core-expert-kit.v0.2-targeted",
+  "locked_at": "2026-07-18T21:25:34+0900",
+  "status": "INTERNAL_AGGREGATION_AND_ADJUDICATION_LOCKED_NOT_EXTERNAL_VALIDATION",
+  "files": {
+    "analysis_summary.json": "b024d98c6fb4951f4ed6cfba64c6a955249b3e54d40faa85e9c7c1cdd8116826",
+    "item_metrics.csv": "f306e500da376e5e6cc0351d4703f0fd3a1b73062f339e4f7d8deb493395bd76",
+    "qualitative_evidence.csv": "772ae14b0ebda89958cc5edb64af77204afc9d2572bfacbb480a921a8cfe84d4",
+    "reviewer_inclusion.csv": "2e8e748b70b65e385d74f27416b4391cd2f086af129ac39bc8aee73deb24109e",
+    "adjudication_decisions.csv": "320ae69223fffd32f78f1916da4c7748d038dfea8aa4dd66462a4dab1ef8bd42",
+    "INTERNAL_ADJUDICATION.md": "0c4db5f7f5ce9681c879d0fb3133fda9c52e026292411b24073b53e7599dbcab"
+  }
+}

@@ -7,17 +7,17 @@ type StatusPillProps = {
 };
 
 const toneClass = {
-  primary: "bg-surface-soft text-primary",
-  success: "bg-[#e8f7ef] text-success",
-  caution: "bg-[#fff4dc] text-[#9a6400]",
-  neutral: "bg-[#eff0f6] text-muted",
+  primary: "text-primary",
+  success: "text-success",
+  caution: "text-[#9a6400]",
+  neutral: "text-muted",
 };
 
 export function StatusPill({ children, tone = "neutral" }: StatusPillProps) {
   return (
     <span
       className={cn(
-        "inline-flex min-h-7 items-center rounded-full px-3 text-xs font-semibold",
+        "inline-flex items-center text-xs font-bold leading-none",
         toneClass[tone],
       )}
     >

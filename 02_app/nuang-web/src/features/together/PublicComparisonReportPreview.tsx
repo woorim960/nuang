@@ -1,6 +1,5 @@
 import {
   MessageCircleQuestion,
-  RefreshCcw,
   Scale,
   ShieldCheck,
   SlidersHorizontal,
@@ -12,22 +11,22 @@ import { createApiClosedPayload } from "@/lib/api/closed-state-data";
 const reportSections = [
   {
     icon: ShieldCheck,
-    title: "공통점",
-    body: "두 사람이 함께 쓰기 쉬운 대화 기반을 요약합니다.",
+    title: "핵심 요약",
+    body: "가까운 자리와 신호를 맞출 자리를 먼저 정리합니다.",
   },
   {
     icon: Scale,
-    title: "차이점",
-    body: "점수 순위가 아니라 조율이 필요한 차이를 보여줍니다.",
+    title: "뉴앙 코드 비교",
+    body: "점수 순위가 아니라 공개된 뉴앙 코드의 관계 리듬을 보여줍니다.",
   },
   {
     icon: MessageCircleQuestion,
-    title: "대화 질문",
+    title: "대화 가이드",
     body: "상대 공개 범위 안에서 꺼내기 쉬운 질문만 제안합니다.",
   },
   {
     icon: SlidersHorizontal,
-    title: "조절 가이드",
+    title: "조율 가이드",
     body: "갈등 예측 대신 서로 맞춰볼 행동 단서를 정리합니다.",
   },
 ] as const;
@@ -52,29 +51,24 @@ export function PublicComparisonReportPreview() {
         </p>
       </header>
 
-      <div className="rounded-lg border border-primary/20 bg-surface-soft p-4">
+      <div className="border-y border-line py-4">
         <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-primary">
-            <RefreshCcw aria-hidden="true" size={18} />
-          </div>
+          <ShieldCheck aria-hidden="true" className="mt-0.5 shrink-0 text-primary" size={18} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h2 className="font-bold">비교 생성 준비 상태</h2>
-              <StatusPill tone="neutral">서버 준비 중</StatusPill>
+              <StatusPill tone="neutral">준비 중</StatusPill>
             </div>
             <p className="mt-1 text-sm leading-6 text-muted">
               {closedState.display.message} {closedState.display.nextStep}
             </p>
           </div>
         </div>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div className="mt-4 grid divide-y divide-line text-sm font-semibold text-muted">
           {accessRules.map((rule) => (
-            <span
-              className="rounded-full bg-white px-3 py-1.5 text-xs font-semibold text-muted"
-              key={rule}
-            >
+            <p className="py-2 first:pt-0 last:pb-0" key={rule}>
               {rule}
-            </span>
+            </p>
           ))}
         </div>
       </div>
@@ -84,11 +78,9 @@ export function PublicComparisonReportPreview() {
           const Icon = section.icon;
 
           return (
-            <article className="rounded-lg border border-line bg-white p-4" key={section.title}>
+            <article className="border-t border-line py-4 first:border-t-0 first:pt-0" key={section.title}>
               <div className="flex items-start gap-3">
-                <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-surface-soft text-primary">
-                  <Icon aria-hidden="true" size={18} />
-                </div>
+                <Icon aria-hidden="true" className="mt-0.5 shrink-0 text-primary" size={18} />
                 <div>
                   <h2 className="font-bold">{section.title}</h2>
                   <p className="mt-1 text-sm leading-6 text-muted">{section.body}</p>
@@ -99,8 +91,8 @@ export function PublicComparisonReportPreview() {
         })}
       </div>
 
-      <ButtonLink className="w-full" href="/together" variant="secondary">
-        함께 탭으로
+      <ButtonLink className="w-full" href="/my/reports" variant="secondary">
+        내 리포트로
       </ButtonLink>
     </section>
   );

@@ -1,0 +1,10 @@
+protocol_version,candidate_id,opaque_item_id,critical_flag,seam_flag,action,next_candidate_or_revision,target_facet,keyed_direction,draft_context_label,draft_prompt_text,decision_reason,required_recheck
+m04-core-expert-kit.v0.2-draft,SMOS-C12,NX-003,YES,YES,RETIRE_NEW_CANDIDATE,SMOS-C13,SM-OS,LOW,여러 단계를 거친 일을 마무리할 때,"정해둔 확인 순서 없이, 그때 생각나는 부분부터 살핀다.",기존 문장은 정리 구조보다 주의·완벽주의를 측정함,LIMITED_M04_AND_M05
+m04-core-expert-kit.v0.2-draft,ERWD-C06,NX-147,YES,NO,MAJOR_REVISION,ERWD-C06-r2,ER-WD,LOW,내가 한 것을 다른 사람이 확인할 예정일 때,잘못 보일까 하는 걱정이 생겨도 같은 생각이 반복되지는 않는다.,비교 기준 없는 시작 시점 대신 반복 걱정을 직접 묻음,LIMITED_M04_AND_M05
+m04-core-expert-kit.v0.2-draft,ROEC-P03-B,NX-082,YES,YES,RETIRE_NO_REPLACEMENT,NONE,RO-EC,LOW,NONE,NONE,상대가 먼저 말할 때까지 기다리는 행동은 마음·해결 주의보다 경계 존중과 대화 주도성을 측정함,LIMITED_M04_IF_REPLACED
+m04-core-expert-kit.v0.2-draft,RORN-P05-B,NX-141,YES,NO,MAJOR_REVISION,RORN-P05-B-r2,RO-RN,LOW,사소한 선택에서 상대와 원하는 것이 다를 때,"상대가 고를 수 있는 여지를 두기보다, 내가 원하는 쪽으로 정하려 한다.",자기 이유가 떠오르는 것과 상대 선택을 좁히는 행동을 분리함,LIMITED_M04_AND_M05
+m04-core-expert-kit.v0.2-draft,SMOS-C10,NX-122,YES,NO,MAJOR_REVISION,SMOS-C10-r2,SM-OS,LOW,나중에 다시 쓸 자료를 보관할 때,"따로 정해둔 자리 없이, 그때 두기 편한 곳에 둔다.",가까운 위치가 효율적 고정 체계일 가능성을 제거함,LIMITED_M04_AND_M05
+m04-core-expert-kit.v0.2-draft,OEIE-C09,NX-138,NO,YES,MAJOR_REVISION,OEIE-C09-r2,OE-IE,HIGH,설명을 듣다가 이해되지 않는 부분이 생겼을 때,이유나 배경을 더 알아보고 싶어진다.,과거 정보 기억 능력 없이 추가 탐구 관심을 직접 묻음,LIMITED_M04_AND_M05
+m04-core-expert-kit.v0.2-draft,OEIE-C10,NX-035,NO,YES,MAJOR_REVISION,OEIE-C10-r2,OE-IE,LOW,설명을 듣다가 필요한 답을 얻었을 때,거기까지 알아보고 넘어간다.,기억·주의가 아니라 추가 탐구가 멈추는 지점을 묻음,LIMITED_M04_AND_M05
+m04-core-expert-kit.v0.2-draft,SMOS-C08,NX-066,NO,YES,MAJOR_REVISION,SMOS-C08-r2,SM-OS,LOW,이번 주 안에 할 일이 생겼을 때,"언제 할지 미리 정하지 않고, 그때 가능한 시간에 시작한다.",기회가 생기면 시작하는 SM-EP 의미에서 계획 시점의 유무로 초점을 이동함,LIMITED_M04_AND_M05
+m04-core-expert-kit.v0.2-draft,SMRL-C11,NX-078,NO,YES,MAJOR_REVISION,SMRL-C11-r2,SM-RL,HIGH,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,따로 알림이 없어도 약속한 일을 챙겨서 한다.,처리 시점 계획보다 실제 역할 이행을 직접 묻음,LIMITED_M04_AND_M05

@@ -1,0 +1,29 @@
+{
+  "protocol_version": "m04-core-expert-kit.v0.1",
+  "analysis_status": "INCOMPLETE_INTERNAL_PREVIEW_NOT_FOR_ADJUDICATION",
+  "reviewer_count": 6,
+  "minimum_reviewer_gate": 6,
+  "reviewer_role_coverage": {
+    "psychometric": 2,
+    "personality": 1,
+    "korean_item": 1,
+    "ux_2030": 1,
+    "accessibility_or_bias": 1
+  },
+  "reviewer_role_gate_passed": true,
+  "candidate_count": 150,
+  "stage1_response_rows": 900,
+  "stage2_response_rows": 900,
+  "total_stage_response_rows": 1800,
+  "proposed_decision_counts": {
+    "PASS_TO_COGNITIVE": 88,
+    "HOLD_FOR_RISK_REVIEW": 4,
+    "COPY_REVISE": 26,
+    "HOLD_FOR_ACCESS": 23,
+    "CONSTRUCT_REWRITE": 8,
+    "EXCLUDE_OR_REBUILD": 1
+  },
+  "fatal_risk_item_count": 4,
+  "seam_flag_item_count": 6,
+  "warning": "Automated decisions are preregistered triage suggestions. Final item decisions require adjudication, dissent preservation, and owner sign-off."
+}

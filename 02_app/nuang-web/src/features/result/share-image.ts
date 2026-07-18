@@ -97,7 +97,7 @@ async function paintCard(ctx: CanvasRenderingContext2D, input: ShareImageInput) 
   ctx.fillStyle = "#202232";
   ctx.font =
     '800 44px -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif';
-  ctx.fillText("5개 영역", 120, 660);
+  ctx.fillText("코드 자리", 120, 660);
 
   input.domains.forEach((domain, index) => {
     const y = 735 + index * 112;

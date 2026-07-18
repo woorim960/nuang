@@ -54,12 +54,7 @@ describe("core result copy", () => {
         watch: low.watch,
       }).toEqual(seedDomain.low);
 
-      expect(middle.title).toBe(
-        coreResultCopySeed.global_copy.middle.title_template.replace(
-          "{label}",
-          seedDomain.label,
-        ),
-      );
+      expect(middle.title).toBe(buildMiddleTitle(seedDomain.label));
       expect(middle.summary).toBe(seedDomain.middle_summary);
       expect(middle.strengths).toEqual(coreResultCopySeed.global_copy.middle.strengths);
       expect(middle.watch).toBe(coreResultCopySeed.global_copy.middle.watch);
@@ -92,6 +87,15 @@ describe("core result copy", () => {
         coreResultCopySeed.global_copy.missing.facet,
       );
     });
+  });
+
+  it("uses natural Korean topic particles in middle domain titles", () => {
+    expect(
+      getDomainNarrative(buildDomainScore("SE", "사람 사이 에너지", 50)).title,
+    ).toBe("사람 사이 에너지는 균형 구간에 가까워요");
+    expect(
+      getDomainNarrative(buildDomainScore("OE", "감각과 생각", 50)).title,
+    ).toBe("감각과 생각은 균형 구간에 가까워요");
   });
 
   it("keeps core result copy inside provisional QA rules", () => {
@@ -157,4 +161,16 @@ function buildFacetScore(facetId: string, score: number | null): FacetScore {
     status: score === null ? "insufficient" : "valid",
     validResponses: score === null ? 0 : 6,
   };
+}
+
+function buildMiddleTitle(label: string) {
+  const lastCodePoint = label.codePointAt(label.length - 1);
+
+  if (!lastCodePoint) return `${label}은 균형 구간에 가까워요`;
+
+  const hangulOffset = lastCodePoint - 0xac00;
+  const isHangulSyllable = hangulOffset >= 0 && hangulOffset <= 11171;
+  const particle = isHangulSyllable && hangulOffset % 28 === 0 ? "는" : "은";
+
+  return `${label}${particle} 균형 구간에 가까워요`;
 }

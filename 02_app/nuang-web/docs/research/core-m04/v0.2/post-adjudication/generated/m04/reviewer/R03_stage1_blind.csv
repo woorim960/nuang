@@ -1,0 +1,2 @@
+protocol_version,reviewer_slot,sequence,opaque_item_id,context_label,prompt_text,first_construct_mapping,second_construct_mapping,direction_guess,clarity_rating_1_4,single_response_rating_1_4,universality_rating_1_4,scale_fit_rating_1_4,desirable_direction_guess,risk_flags,fatal_risk_note,stage1_notes
+m04-core-expert-kit.v0.2-smrl-r3,R03,1,NX3-001,다른 사람과 함께할 일에서 내가 맡은 부분이 있을 때,정한 때에 맞춰 내 부분을 끝낸다.,,,,,,,,,,,

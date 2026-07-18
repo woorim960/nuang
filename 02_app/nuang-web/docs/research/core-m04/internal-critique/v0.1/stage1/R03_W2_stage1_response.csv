@@ -1,0 +1,51 @@
+protocol_version,reviewer_slot,wave_id,sequence_in_wave,opaque_item_id,context_label,prompt_text,first_construct_mapping,second_construct_mapping,direction_guess,clarity_rating_1_4,single_response_rating_1_4,universality_rating_1_4,scale_fit_rating_1_4,desirable_direction_guess,risk_flags,fatal_risk_note,stage1_notes
+m04-core-expert-kit.v0.1,R03,W2,1,NX-035,대화 중 전에 들었던 것과 비슷한 설명이 나왔을 때,지금 들은 설명에만 관심을 둔다.,OE_IE,NONE,LOW,3,3,4,3,SIMILAR,MEMORY;ATTENTION;ADJACENT_CONSTRUCT,NONE,더 탐구하지 않는 반응으로 읽히지만 예전 설명을 기억하고 연결하는 능력과 현재 대화에 집중하는 방식이 답을 좌우할 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,2,NX-121,함께하는 방식에 작은 조정이 필요할 때,상대가 물어본 뒤 필요한 부분을 말한다.,SE_AI,NONE,LOW,4,4,3,4,SIMILAR,NONE,NONE,말을 꺼내는 순서가 명확하지만 함께 방식을 조정하는 경험이 적은 사용자는 최근 빈도를 판단하기 어렵다.
+m04-core-expert-kit.v0.1,R03,W2,3,NX-081,사소한 일이 꼬여 감정이 올라온 뒤,다음 일을 할 때는 감정의 크기가 줄어든다.,ER_IR,NONE,LOW,4,4,4,3,HIGH,MEMORY,NONE,감정 회복 방향은 쉽게 이해되지만 다음 일을 할 때라는 시간 간격이 매번 달라 빈도 기준이 조금 흔들릴 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,4,NX-114,해야 할 일이 평소보다 조금 늘었을 때,다 해내지 못할 것 같다는 생각이 계속 이어진다.,ER_WD,NONE,HIGH,4,4,4,4,LOW,SOCIAL_DESIRABILITY,NONE,일상적인 업무 증가와 지속되는 걱정이 직접 연결되어 쉽게 답하지만 걱정이 적은 답이 더 유능해 보일 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,5,NX-073,관심 있는 주제로 대화가 길어질 때,기운이 계속 이어진다.,SE_RE,NONE,HIGH,4,4,4,4,SIMILAR,LIMITER,NONE,문장은 명확하지만 사람과 함께해서 생기는 에너지보다 주제 자체에 대한 관심이 응답을 크게 좌우할 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,6,NX-101,맡은 일을 약속한 때까지 마치기 어려워졌을 때,약속한 때가 오기 전에 상황을 알리고 다시 맞춘다.,SM_RL,NONE,HIGH,4,4,3,4,HIGH,SOCIAL_DESIRABILITY,NONE,행동과 시점은 명확하지만 기한 있는 공동 약속 경험이 필요하고 미리 알리는 답이 분명히 더 바람직해 보인다.
+m04-core-expert-kit.v0.1,R03,W2,7,NX-009,평범한 일상 장면을 보고 있을 때,보이는 장면만 살펴보고 그대로 지나간다.,OE_CI,NONE,LOW,3,3,4,3,SIMILAR,ADJACENT_CONSTRUCT,NONE,상상 확장의 반대처럼 보이지만 보이는 장면을 살펴본다는 말은 미적 관심과도 겹쳐 어떤 반응의 빈도인지 잠시 생각하게 된다.
+m04-core-expert-kit.v0.1,R03,W2,8,NX-058,함께 준비한 일이 잘 풀리지 않았을 때,처음에는 함께한 사람들의 마음에 주의가 간다.,RO_EC,NONE,HIGH,4,4,3,3,HIGH,SOCIAL_DESIRABILITY,NONE,마음과 문제 중 첫 주의 방향은 분명하지만 공동 준비 실패가 최근에 없을 수 있고 사람 마음을 먼저 보는 답이 좋아 보인다.
+m04-core-expert-kit.v0.1,R03,W2,9,NX-010,상대의 실수 때문에 함께한 일에 문제가 생겼을 때,그 사람의 태도나 성격까지 함께 말한다.,RO_RN,NONE,LOW,4,4,3,4,LOW,SOCIAL_DESIRABILITY,NONE,행동과 사람을 분리하지 않는 반응이 명확하지만 공격적으로 보이는 답이라 실제보다 낮춰 답할 가능성이 크다.
+m04-core-expert-kit.v0.1,R03,W2,10,NX-087,상대의 말이 끝난 뒤 해결 방법이 떠올랐을 때,떠오른 해결 방법부터 말한다.,RO_EC,SE_AI,LOW,3,2,4,3,SIMILAR,ADJACENT_CONSTRUCT,NONE,상대가 힘든 상황인지가 없어 마음과 해결의 우선순위보다 해결안을 먼저 표현하는 성향까지 함께 묻게 된다.
+m04-core-expert-kit.v0.1,R03,W2,11,NX-139,여럿이 가벼운 활동을 함께할 때,그 흐름에 들어가면 기운이 살아난다.,SE_RE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,활동 참여 뒤 에너지 변화를 짧고 직접적으로 묻고 있어 모바일에서 한 번 읽고 최근 빈도를 고를 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,12,NX-012,작은 불편이 짧은 시간 안에 반복될 때,불편이 반복되어도 감정의 크기는 비슷하게 유지된다.,ER_IR,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,반복 자극에도 감정이 커지지 않는다는 뜻이 명확하지만 안정적인 답이 더 바람직해 보일 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,13,NX-021,여럿이 모였지만 대화가 시작되지 않았을 때,다른 사람이 대화를 시작한 뒤 참여한다.,SE_AI,NONE,LOW,4,4,3,4,SIMILAR,NONE,NONE,행동 순서는 매우 명확하지만 모임 경험이 적은 사용자는 최근 6개월 빈도를 잡기 어렵다.
+m04-core-expert-kit.v0.1,R03,W2,14,NX-093,내가 한 것을 다른 사람이 확인할 예정일 때,해야 할 행동을 몇 번이고 다시 망설인다.,ER_WD,SM_EP,HIGH,3,2,3,3,LOW,ADJACENT_CONSTRUCT;SOCIAL_DESIRABILITY,NONE,평가 걱정으로 인한 주저와 행동 착수 문제가 함께 있으며 해야 할 행동이 무엇인지 없어 모바일에서 장면이 선명하지 않다.
+m04-core-expert-kit.v0.1,R03,W2,15,NX-140,현실과 다른 가벼운 가정을 접할 때,그 안에서 일어날 장면을 이어서 떠올린다.,OE_CI,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,가정에서 장면을 확장하는 단일 반응을 간결하게 묻고 있어 즉시 이해하고 빈도로 답할 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,16,NX-109,영상을 보거나 대화하던 중 처음 듣는 개념이 나왔을 때,영상이나 대화를 이해할 만큼만 뜻을 확인한다.,OE_IE,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,필요한 범위까지만 확인하는 행동이 구체적이고 흔한 상황이라 최근 빈도로 답하기 쉽다.
+m04-core-expert-kit.v0.1,R03,W2,17,NX-004,해야 할 일이 몇 가지 겹쳐 있을 때,할 일을 순서나 묶음으로 정리한다.,SM_OS,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,할 일을 구조화하는 행동이 직접적이고 일상적이지만 정리하는 답이 더 유능해 보일 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,18,NX-037,사소한 일이 생각대로 되지 않을 때,불편해도 감정의 크기는 천천히 변한다.,ER_IR,NONE,LOW,3,4,4,3,HIGH,LIMITER,NONE,급격한 동요의 반대는 이해되지만 감정이 천천히 커지는지 줄어드는지가 없고 천천히의 시간 기준도 모호하다.
+m04-core-expert-kit.v0.1,R03,W2,19,NX-079,반복해서 쓰는 물건이나 자료를 둘 때,다시 찾을 자리를 정해둔다.,SM_OS,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,정리 행동이 짧고 구체적이며 반복 경험이 많아 쉽게 답하지만 자리를 정하는 답이 더 바람직해 보인다.
+m04-core-expert-kit.v0.1,R03,W2,20,NX-024,중요하게 생각하는 문제에서 의견이 다를 때,내 의견을 말한 뒤 상대가 선택할 여지를 남긴다.,RO_RN,NONE,HIGH,4,4,3,4,HIGH,SOCIAL_DESIRABILITY,NONE,자기 의견과 상대 선택 여지를 함께 유지하는 행동은 명확하지만 중요한 갈등이 드물 수 있고 존중 답이 더 좋아 보인다.
+m04-core-expert-kit.v0.1,R03,W2,21,NX-083,하늘이나 나무 같은 일상 풍경을 볼 때,잠시 본 뒤 하던 일로 관심이 돌아간다.,OE_AE,NONE,LOW,4,4,4,4,SIMILAR,ATTENTION,NONE,일상 장면이라 쉽게 답하지만 일정과 알림처럼 외부 주의 요구가 미적 인상에 머무는 시간을 바꿀 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,22,NX-066,이번 주 안에 할 일이 생겼을 때,할 수 있는 때가 생기면 시작한다.,SM_EP,NONE,HIGH,2,3,4,3,HIGH,LIMITER,NONE,할 수 있는 때는 시간 여유가 생긴 순간인지 마음이 내킨 순간인지 모호하며 실제 일정 제약이 착수 빈도를 크게 좌우한다.
+m04-core-expert-kit.v0.1,R03,W2,23,NX-041,누군가 힘들었던 일을 이야기할 때,무슨 일이 있었는지부터 확인한다.,RO_EC,NONE,LOW,4,4,3,3,SIMILAR,SOCIAL_DESIRABILITY,NONE,사건과 마음 중 사건을 먼저 보는 뜻은 명확하지만 해당 대화 기회가 다르고 덜 공감적으로 보일 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,24,NX-036,여럿의 일정을 맞출 때,내가 가능한 시간을 먼저 알린다.,SE_AI,NONE,HIGH,4,4,3,4,SIMILAR,NONE,NONE,먼저 정보를 꺼내는 행동이 분명하지만 여러 사람 일정을 맞춘 최근 경험이 없는 사용자도 있다.
+m04-core-expert-kit.v0.1,R03,W2,25,NX-096,영상이나 사진의 한 장면을 볼 때,그 장면이 주는 인상을 곱씹어본다.,OE_AE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,장면의 인상에 머무는 반응이 짧고 선명하며 모바일 이용 경험에서 빈도를 쉽게 떠올릴 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,26,NX-084,내 제안을 충분히 설명한 뒤 상대가 원하지 않는다고 말했을 때,결정을 바꿀 다른 설득 방법이 떠오른다.,RO_RN,NONE,LOW,4,4,3,3,LOW,SOCIAL_DESIRABILITY,NONE,상대 선택을 그대로 두지 않는 방향은 분명하지만 실제 행동이 아닌 생각의 빈도이며 강요로 보일 수 있어 축소 응답 가능성이 있다.
+m04-core-expert-kit.v0.1,R03,W2,27,NX-060,결과를 확신하기 어려운 선택을 해야 할 때,같은 걱정을 되짚느라 결정을 미룬다.,ER_WD,NONE,HIGH,4,4,4,4,LOW,SOCIAL_DESIRABILITY,NONE,걱정 반복과 결정 지연이 자연스럽게 연결되어 즉시 이해되지만 주저하지 않는 답이 더 유능해 보인다.
+m04-core-expert-kit.v0.1,R03,W2,28,NX-141,사소한 선택에서 상대와 원하는 것이 다를 때,내가 원하는 쪽으로 정할 이유가 먼저 떠오른다.,RO_RN,NONE,LOW,4,4,4,3,LOW,SOCIAL_DESIRABILITY,NONE,자기 선택을 우선 정당화하는 생각은 이해되지만 행동이 아닌 첫 생각의 빈도를 회상해야 하고 이기적으로 보일 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,29,NX-091,앱이나 서비스에서 처음 보는 이용 규칙을 안내받았을 때,왜 그렇게 정해졌는지 배경이 궁금해진다.,OE_IE,NONE,HIGH,4,4,3,4,SIMILAR,DIGITAL_ACCESS,NONE,배경 탐구 성향은 명확하지만 디지털 서비스 사용과 규칙 안내를 접한 경험의 차이가 응답 기회를 만든다.
+m04-core-expert-kit.v0.1,R03,W2,30,NX-063,익숙한 사람들과 한동안 이야기를 나눌 때,혼자 조용히 있을 시간이 필요해진다.,SE_RE,NONE,LOW,4,4,4,4,SIMILAR,NONE,NONE,익숙한 대화 뒤 회복 필요를 직접 묻고 흔한 경험이라 최근 6개월 빈도로 쉽게 응답할 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,31,NX-038,이야기의 다음 내용을 알기 전,이어질 장면을 머릿속으로 떠올려본다.,OE_CI,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,다음 장면을 확장하는 단일 반응이 구체적이며 다양한 콘텐츠 경험에 적용해 답하기 쉽다.
+m04-core-expert-kit.v0.1,R03,W2,32,NX-128,여럿이 간단한 선택을 미루고 있을 때,내가 먼저 선택지를 꺼낸다.,SE_AI,NONE,HIGH,4,4,3,4,SIMILAR,NONE,NONE,먼저 의견을 꺼내는 행동은 명확하지만 여럿이 선택을 미루는 장면이 최근에 적을 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,33,NX-130,처음 보는 기능이 있는 생활용품을 사용할 때,어떻게 쓰는지만 확인하고 바로 사용한다.,OE_IE,NONE,LOW,4,4,3,4,SIMILAR,ABILITY,NONE,필요한 사용법만 확인한다는 뜻은 쉽지만 제품 조작 자신감과 낯선 기능 경험이 탐구 범위에 영향을 줄 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,34,NX-052,비슷한 일을 반복해서 처리할 때,다음에도 따를 수 있는 순서를 만들어둔다.,SM_OS,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,반복 가능한 순서를 구조화하는 행동이 직접적이고 쉽게 답하지만 체계적인 답이 더 유능해 보인다.
+m04-core-expert-kit.v0.1,R03,W2,35,NX-099,다른 사람에게 해주기로 한 일이 있을 때,잊지 않도록 내가 확인할 방법을 마련한다.,SM_RL,SM_OS,HIGH,4,3,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,약속 이행을 위한 자기 확인과 알림 구조화가 함께 들어 있으며 미리 관리하는 답이 더 책임감 있어 보인다.
+m04-core-expert-kit.v0.1,R03,W2,36,NX-003,여러 단계를 거친 일을 마치기 전에,눈에 걸리는 부분이 있을 때 다시 살핀다.,METHOD,SM_OS,UNCLEAR,3,2,3,3,HIGH,ATTENTION;ADJACENT_CONSTRUCT,NONE,정해진 구조에 따른 점검보다 눈에 걸리는 부분을 발견하는 주의력과 완벽주의가 재확인을 좌우해 성향 방향이 선명하지 않다.
+m04-core-expert-kit.v0.1,R03,W2,37,NX-115,인터넷에서 같은 주제를 다르게 설명하는 글 두 개를 발견했을 때,한 글의 설명으로 이해되면 다른 글은 더 살펴보지 않는다.,OE_IE,NONE,LOW,4,4,3,4,SIMILAR,DIGITAL_ACCESS;EDUCATION,NONE,추가 탐색을 멈추는 행동은 분명하지만 온라인 접근과 두 글을 읽어 이해하는 경험에 따라 응답 기회가 달라진다.
+m04-core-expert-kit.v0.1,R03,W2,38,NX-080,해보려던 일이 한 번 잘되지 않았을 때,다시 해도 잘되지 않을 장면이 반복해서 떠오른다.,ER_WD,NONE,HIGH,4,4,3,4,LOW,SOCIAL_DESIRABILITY,NONE,실패 가능성의 반복 사고가 명확하지만 실패 뒤 재시도 장면이 드물 수 있고 걱정이 적은 답이 더 바람직해 보인다.
+m04-core-expert-kit.v0.1,R03,W2,39,NX-104,가깝지는 않은 사람이 힘든 일을 꺼낼 때,내 생각을 말하기 전에 그 사람이 어떤 마음인지 먼저 확인한다.,RO_EC,NONE,HIGH,4,4,3,4,HIGH,SOCIAL_DESIRABILITY,NONE,행동 순서는 명확하지만 가깝지 않은 사람과의 해당 대화가 적을 수 있고 마음을 먼저 확인하는 답이 더 좋아 보인다.
+m04-core-expert-kit.v0.1,R03,W2,40,NX-064,의견 충돌이 길어져 답답해졌을 때,상대의 태도나 성격까지 문제로 말한다.,RO_RN,NONE,LOW,4,4,3,4,LOW,SOCIAL_DESIRABILITY,NONE,사람과 의견을 분리하지 않는 행동이 직접적이지만 공격적으로 보여 실제보다 낮게 답할 가능성이 크다.
+m04-core-expert-kit.v0.1,R03,W2,41,NX-111,해야 하지만 당장 재미나 보상이 적은 일을 할 때,한 번에 많이 하지 못해도 조금씩 이어간다.,SM_EP,NONE,HIGH,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,지속 행동이 일상적이고 구체적이라 쉽게 답하지만 꾸준한 답이 더 성실해 보일 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,42,NX-089,가깝지는 않은 사람이 힘든 일에 대한 내 의견을 물을 때,처음에는 그 사람이 어떤 마음이었는지가 궁금해진다.,RO_EC,NONE,HIGH,4,4,3,3,HIGH,SOCIAL_DESIRABILITY,NONE,마음을 먼저 보는 방향은 분명하지만 해당 관계와 대화 경험이 드물 수 있고 공감적인 답이 좋아 보인다.
+m04-core-expert-kit.v0.1,R03,W2,43,NX-033,금방 끝낼 수 있는 부탁을 들어주기로 했을 때,다시 생각났을 때 처리한다.,SM_RL,NONE,LOW,4,4,4,4,HIGH,MEMORY;SOCIAL_DESIRABILITY,NONE,행동은 쉽게 이해되지만 다시 떠올리는 기억력과 알림 환경이 처리 시점을 좌우하고 미리 처리하는 답이 더 바람직하다.
+m04-core-expert-kit.v0.1,R03,W2,44,NX-106,가보지 않은 공간에 대한 설명을 접할 때,설명된 내용까지만 생각하고 넘어간다.,OE_CI,NONE,LOW,3,4,3,3,SIMILAR,ABILITY,NONE,확장하지 않는 뜻은 이해되지만 생각하고 넘어간다는 반응의 경계가 추상적이고 심상 능력에 따라 답이 달라질 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,45,NX-116,상대와 의견이 달라 대화가 길어질 때,답답함과 짜증이 빠르게 커진다.,ER_IR,NONE,HIGH,4,4,3,4,LOW,SOCIAL_DESIRABILITY,NONE,긴 의견 차이에서 감정이 빠르게 커지는 반응이 선명하지만 해당 갈등이 적을 수 있고 낮게 답하고 싶어질 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,46,NX-023,궁금했던 질문의 답을 찾았을 때,그 답이 나온 이유나 배경까지 더 알아본다.,OE_IE,NONE,HIGH,4,4,4,4,SIMILAR,NONE,NONE,답 이후 추가 탐구 행동이 구체적이고 흔한 검색 경험에 적용되어 최근 빈도로 쉽게 응답할 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,47,NX-022,일상에서 음악을 들을 때,그 인상에 머무는 시간은 짧다.,OE_AE,NONE,LOW,4,4,4,4,SIMILAR,ATTENTION,NONE,짧고 이해하기 쉽지만 멀티태스킹과 주변 자극이 인상에 머무는 시간을 바꿀 수 있다.
+m04-core-expert-kit.v0.1,R03,W2,48,NX-045,끝내기까지 작은 마무리만 남았을 때,필요해지는 시점까지 남은 부분을 그대로 둔다.,SM_EP,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,마무리를 미루는 행동과 기준 시점이 명확하지만 바로 끝내는 답이 더 성실해 보인다.
+m04-core-expert-kit.v0.1,R03,W2,49,NX-046,다른 사람과 정한 내용이 여러 가지일 때,내가 맡은 내용과 시점을 다시 확인한다.,SM_RL,SM_OS,HIGH,4,3,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,약속 이행을 위한 확인과 정보 정리가 함께 들어 있지만 일상적으로 이해되며 책임감 있는 답이 더 좋아 보인다.
+m04-core-expert-kit.v0.1,R03,W2,50,NX-100,하던 중 예상하지 못한 작은 문제가 생겼을 때,문제를 확인하는 동안 감정 변화는 크지 않다.,ER_IR,NONE,LOW,4,4,4,4,HIGH,SOCIAL_DESIRABILITY,NONE,예상 밖 문제에서 감정이 크게 변하지 않는 반응이 명확하지만 침착한 답이 더 바람직해 보일 수 있다.

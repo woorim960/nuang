@@ -11,7 +11,7 @@ import {
 import type { Metadata } from "next";
 import Link from "next/link";
 import { StatusPill } from "@/components/ui/StatusPill";
-import { moderationQueueReadinessItems } from "@/features/community/moderation-queue-contract";
+import { moderationQueueReadinessItems } from "@/features/moderation/moderation-queue-contract";
 
 export const metadata: Metadata = {
   robots: {
@@ -47,7 +47,7 @@ const qaGroups = [
       "빠른·정밀 코어 로컬 검사",
       "결과 리포트 action deck",
       "성향지도와 5탭 shell",
-      "커뮤니티 읽기 전용 피드",
+      "피드 읽기·작성 준비",
       "도움 연결 허브",
     ],
     note: "서버 전송 없이 모바일 기본 점검까지 통과",
@@ -58,7 +58,7 @@ const qaGroups = [
     icon: <Route size={20} />,
     items: [
       "/home, /assessments, /map",
-      "/together, /my, /help",
+      "/feed, /my, /help",
       "로컬 결과 리포트",
       "비교 미리보기와 접근 불가 화면",
       "공유·공개 프로필 준비 화면",
@@ -85,7 +85,7 @@ const qaGroups = [
     items: [
       "문항 최종 공개 승인",
       "약관·개인정보 최종 승인",
-      "공유 링크 검색 차단·만료·철회 검증",
+      "공유 주소 검색 차단·만료 검증",
       "결제·환불 정책",
       "접근성·운영 QA",
     ],
@@ -98,7 +98,7 @@ const qaGroups = [
 const policyGateCards = [
   {
     href: "/policies/terms",
-    note: "계정 저장, 공유 링크, 공개 비교, 커뮤니티 글쓰기 조건을 최종 검토해야 합니다.",
+    note: "계정 저장, 공유 링크, 공개 비교, 피드 글쓰기 조건을 최종 검토해야 합니다.",
     title: "이용약관",
   },
   {
@@ -111,9 +111,9 @@ const policyGateCards = [
 const openingOrder = [
   "Google/Kakao 로그인 연결",
   "결과 계정 저장",
-  "공유 링크 생성·철회",
-  "공개 프로필 코드와 공개 비교",
-  "커뮤니티 글쓰기와 운영 검토",
+  "공유 주소 생성",
+  "공개 프로필 스냅샷과 공개 비교",
+  "피드 글쓰기와 운영 검토",
 ] as const;
 
 export default function AdminPage() {
@@ -252,7 +252,7 @@ export default function AdminPage() {
               <StatusPill tone="caution">운영 큐 준비</StatusPill>
               <StatusPill tone="neutral">직접 응답 미조회</StatusPill>
             </div>
-            <h2 className="mt-3 text-lg font-bold">커뮤니티 moderation 큐</h2>
+            <h2 className="mt-3 text-lg font-bold">운영 검토 큐</h2>
             <p className="mt-2 text-sm leading-6 text-muted">
               신고가 들어와도 관리자 화면은 큐 상태, 사유, 심각도, 조치 기록만
               다루고 직접 문항 응답과 원점수는 보여주지 않습니다.
