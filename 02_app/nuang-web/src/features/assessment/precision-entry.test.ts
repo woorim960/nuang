@@ -35,7 +35,7 @@ import { calculateCoreScore } from "@/lib/scoring/core";
 import type { ScoringRelease } from "@/lib/scoring/types";
 
 describe("resolveLocalPrecisionEntry", () => {
-  it("redirects a validated completed full result before any other state", () => {
+  it("redirects to a validated completed full result when no newer attempt exists", () => {
     const quick = buildCompletedAttempt(
       quickCoreAssessment,
       quickScoringRelease,
@@ -49,23 +49,51 @@ describe("resolveLocalPrecisionEntry", () => {
   });
 
   it("resumes an active full attempt without showing the intro again", () => {
-    const active: LocalAssessmentAttempt = {
-      assessmentId: fullCoreAssessment.assessmentId,
-      createdAt: "2026-07-18T00:00:00.000Z",
-      currentIndex: 8,
-      expiresAt: "2026-07-25T00:00:00.000Z",
-      id: "local_full_active",
-      itemIds: fullCoreAssessment.items.map((item) => item.itemId),
-      mode: "full",
-      releaseId: fullCoreAssessment.releaseId,
-      responses: {},
-      state: "in_progress",
-      updatedAt: "2026-07-18T00:00:00.000Z",
-    };
+    const active = buildActiveAttempt(fullCoreAssessment);
 
     expect(resolveLocalPrecisionEntry([active])).toMatchObject({
       action: "redirect_attempt",
       attempt: { id: active.id },
+    });
+  });
+
+  it("resumes a precision attempt started after the latest completed result", () => {
+    const completed = buildCompletedAttempt(
+      candidateFullCoreAssessment,
+      candidateFullScoringRelease,
+    );
+    const active = buildActiveAttempt(
+      candidateFullCoreAssessment,
+      "2026-07-18T01:00:00.000Z",
+    );
+
+    expect(
+      resolveLocalPrecisionEntry([completed, active], {
+        assessment: candidateFullCoreAssessment,
+      }),
+    ).toMatchObject({
+      action: "redirect_attempt",
+      attempt: { id: active.id },
+    });
+  });
+
+  it("ignores a stale active attempt when a newer completed result exists", () => {
+    const completed = buildCompletedAttempt(
+      candidateFullCoreAssessment,
+      candidateFullScoringRelease,
+    );
+    const active = buildActiveAttempt(
+      candidateFullCoreAssessment,
+      "2026-07-17T23:00:00.000Z",
+    );
+
+    expect(
+      resolveLocalPrecisionEntry([active, completed], {
+        assessment: candidateFullCoreAssessment,
+      }),
+    ).toMatchObject({
+      action: "redirect_report",
+      attempt: { id: completed.id },
     });
   });
 
@@ -212,4 +240,23 @@ function buildCompletedAttempt(
   attempt.responseSnapshotHash = hash;
   attempt.resultSnapshot!.responseSnapshotHash = hash;
   return attempt;
+}
+
+function buildActiveAttempt(
+  assessment: AssessmentDefinition,
+  updatedAt = "2026-07-18T00:00:00.000Z",
+): LocalAssessmentAttempt {
+  return {
+    assessmentId: assessment.assessmentId,
+    createdAt: updatedAt,
+    currentIndex: 8,
+    expiresAt: "2026-07-25T00:00:00.000Z",
+    id: `local_${assessment.mode}_active`,
+    itemIds: assessment.items.map((item) => item.itemId),
+    mode: assessment.mode,
+    releaseId: assessment.releaseId,
+    responses: {},
+    state: "in_progress",
+    updatedAt,
+  };
 }

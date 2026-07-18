@@ -53,14 +53,23 @@ export function resolveLocalPrecisionEntry(
       attempt.state === "completed" &&
       getValidatedLocalResultSnapshot(attempt) !== null,
   );
+  const active = fullAttempts.find(
+    (attempt) => attempt.state === "in_progress",
+  );
+
+  const completedAt = completed?.completedAt ?? completed?.updatedAt;
+  const activeWasStartedAfterCompletedResult =
+    active !== undefined &&
+    (completedAt === undefined ||
+      active.updatedAt.localeCompare(completedAt) > 0);
+
+  if (activeWasStartedAfterCompletedResult) {
+    return { action: "redirect_attempt", attempt: active };
+  }
 
   if (completed) {
     return { action: "redirect_report", attempt: completed };
   }
-
-  const active = fullAttempts.find(
-    (attempt) => attempt.state === "in_progress",
-  );
 
   if (active) {
     return { action: "redirect_attempt", attempt: active };
