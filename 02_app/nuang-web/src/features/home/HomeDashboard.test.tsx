@@ -111,9 +111,11 @@ describe("HomeDashboard", () => {
     expect(screen.getByRole("status")).toHaveTextContent(
       "누군가와 시간을 나누는 쪽이 더 끌렸네요",
     );
-    expect(
-      window.localStorage.getItem("nuang:home:daily-choice:free-day-choice-v1"),
-    ).toBe("together");
+    const storedChoiceKey = window.localStorage.key(0);
+    expect(storedChoiceKey).toMatch(
+      /^nuang:home:daily-choice:free-day-choice-v1:\d{4}-\d{2}-\d{2}$/,
+    );
+    expect(window.localStorage.getItem(storedChoiceKey ?? "")).toBe("together");
     expect(
       screen.getByRole("link", { name: /다른 사람들의 생각도 보기/ }),
     ).toHaveAttribute("href", "/feed");

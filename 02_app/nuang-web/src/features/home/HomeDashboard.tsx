@@ -510,7 +510,7 @@ const homeDailyChoice = {
   ],
 } as const;
 
-const homeDailyChoiceStorageKey = `nuang:home:daily-choice:${homeDailyChoice.id}`;
+const homeDailyChoiceStorageKeyPrefix = `nuang:home:daily-choice:${homeDailyChoice.id}`;
 const homeDailyChoiceListeners = new Set<() => void>();
 let homeDailyChoiceMemory: string | null = null;
 
@@ -518,7 +518,7 @@ function subscribeToHomeDailyChoice(listener: () => void) {
   homeDailyChoiceListeners.add(listener);
 
   function handleStorage(event: StorageEvent) {
-    if (event.key === homeDailyChoiceStorageKey) listener();
+    if (event.key === getHomeDailyChoiceStorageKey()) listener();
   }
 
   window.addEventListener("storage", handleStorage);
@@ -532,7 +532,7 @@ function subscribeToHomeDailyChoice(listener: () => void) {
 function getHomeDailyChoiceSnapshot() {
   try {
     homeDailyChoiceMemory = window.localStorage.getItem(
-      homeDailyChoiceStorageKey,
+      getHomeDailyChoiceStorageKey(),
     );
   } catch {
     // Use the in-memory choice when browser storage is unavailable.
@@ -553,12 +553,16 @@ function saveHomeDailyChoice(optionId: string) {
   homeDailyChoiceMemory = optionId;
 
   try {
-    window.localStorage.setItem(homeDailyChoiceStorageKey, optionId);
+    window.localStorage.setItem(getHomeDailyChoiceStorageKey(), optionId);
   } catch {
     // The current visit still keeps the choice in memory.
   }
 
   homeDailyChoiceListeners.forEach((listener) => listener());
+}
+
+function getHomeDailyChoiceStorageKey() {
+  return `${homeDailyChoiceStorageKeyPrefix}:${new Date().toISOString().slice(0, 10)}`;
 }
 
 function selectFeaturedProfile() {
