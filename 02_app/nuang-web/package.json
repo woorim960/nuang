@@ -20,6 +20,7 @@
     "env:check": "node scripts/check-env.mjs local",
     "env:check:auth": "node scripts/check-env.mjs auth",
     "env:check:server": "node scripts/check-env.mjs server",
+    "smoke:community:authenticated": "node scripts/smoke-authenticated-community.mjs",
     "smoke:server:readiness": "node scripts/check-server-readiness.mjs",
     "seed:dev:comparison": "node scripts/seed-comparison-demo.mjs",
     "research:oe:expert-kit": "node scripts/generate-oe-expert-review-kit.mjs",
