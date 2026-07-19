@@ -135,7 +135,9 @@ describe("feed server read model", () => {
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedReadPayload();
-    const reportPost = payload.items.find((item) => item.id === "post-report-share");
+    const reportPost = payload.items.find(
+      (item) => item.id === "post-report-share",
+    );
 
     expect(reportPost?.reportShare).toMatchObject({
       profileCode: "SVODE",
@@ -199,7 +201,7 @@ describe("feed server read model", () => {
     ]);
   });
 
-  it("opens code-level poll stats when each code has only one vote", async () => {
+  it("hides code-level poll rows that could reveal one person's choice", async () => {
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedPollStatsPayload(
@@ -212,42 +214,7 @@ describe("feed server read model", () => {
       },
       totalVotes: 2,
     });
-    expect(payload?.codeRows).toEqual([
-      {
-        code: "SVODE",
-        name: "물결의 새길 개척가",
-        options: [
-          {
-            label: "산",
-            ratio: 0,
-            voteCount: 0,
-          },
-          {
-            label: "바다",
-            ratio: 100,
-            voteCount: 1,
-          },
-        ],
-        totalVotes: 1,
-      },
-      {
-        code: "TVOAE",
-        name: "불꽃의 온기 탐험가",
-        options: [
-          {
-            label: "산",
-            ratio: 100,
-            voteCount: 1,
-          },
-          {
-            label: "바다",
-            ratio: 0,
-            voteCount: 0,
-          },
-        ],
-        totalVotes: 1,
-      },
-    ]);
+    expect(payload?.codeRows).toEqual([]);
   });
 
   it("normalizes feed report detail names from the current Nuang code dictionary", async () => {
@@ -310,7 +277,9 @@ function createMockFeedReadClient({
               return builder;
             },
             maybeSingle() {
-              return Promise.resolve(resolveFeedReadOperation(operation, options));
+              return Promise.resolve(
+                resolveFeedReadOperation(operation, options),
+              );
             },
             order() {
               return builder;
@@ -320,16 +289,13 @@ function createMockFeedReadClient({
             },
             then<TResult1 = unknown, TResult2 = never>(
               onfulfilled?:
-                | ((value: unknown) => TResult1 | PromiseLike<TResult1>)
-                | null,
+                ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null,
               onrejected?:
-                | ((reason: unknown) => TResult2 | PromiseLike<TResult2>)
-                | null,
+                ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
             ) {
-              return Promise.resolve(resolveFeedReadOperation(operation, options)).then(
-                onfulfilled,
-                onrejected,
-              );
+              return Promise.resolve(
+                resolveFeedReadOperation(operation, options),
+              ).then(onfulfilled, onrejected);
             },
           };
 
@@ -358,12 +324,7 @@ function resolveFeedReadOperation(
 
   if (operation.schema === "feed" && operation.table === "feed_post") {
     if (
-      hasFilter(
-        operation,
-        "eq",
-        "id",
-        "33333333-3333-4333-8333-333333333333",
-      )
+      hasFilter(operation, "eq", "id", "33333333-3333-4333-8333-333333333333")
     ) {
       return {
         data: {

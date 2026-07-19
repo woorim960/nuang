@@ -4,6 +4,8 @@ import { ArrowRight, Check, LockKeyhole, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import { FeedPollCard } from "@/features/feed/FeedPollCard";
+import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
 import {
   type FeedItem,
   listHomeFeedPreviewItems,
@@ -58,7 +60,13 @@ export function HomeDashboard({
   }, []);
 
   const model = useMemo(() => buildHomeDashboardModel(attempts), [attempts]);
-  const conversations = selectConversations(feedPreviewItems);
+  const communityPollItem = feedPreviewItems.find(
+    (item) => item.poll?.promptId === homeDailyCommunityPollPromptId,
+  );
+  const conversations = selectConversations(
+    feedPreviewItems,
+    communityPollItem?.id,
+  );
 
   return (
     <div className={styles.home}>
@@ -71,7 +79,11 @@ export function HomeDashboard({
 
       {loaded ? <HomeHero hero={model.hero} /> : <HomeHeroSkeleton />}
 
-      <HomeDailyChoice />
+      {communityPollItem?.poll ? (
+        <HomeCommunityPoll item={communityPollItem} />
+      ) : (
+        <HomeDailyChoice />
+      )}
 
       <HomeProfileDiscovery profile={featuredProfile} />
 
@@ -413,6 +425,33 @@ function HomeDailyChoice() {
   );
 }
 
+function HomeCommunityPoll({ item }: { item: FeedItem }) {
+  if (!item.poll) return null;
+
+  return (
+    <section className={styles.section}>
+      <SectionHeading
+        description="선택하면 전체 결과와 뉴앙 코드별 차이를 볼 수 있어요."
+        title="오늘의 성향 질문"
+      />
+      <div className={styles.dailyChoiceCard}>
+        <div className={styles.dailyChoiceMeta}>
+          <span>실시간 커뮤니티 투표</span>
+          <span>{item.poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
+        </div>
+        <FeedPollCard poll={item.poll} returnTo="/home" variant="home" />
+        <div className={styles.communityPollFooter}>
+          <Link href={item.poll.statsHref}>
+            코드별 통계와 댓글 보기
+            <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
+          </Link>
+          <span>{item.replyLabel}</span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function HomeConversations({ items }: { items: FeedItem[] }) {
   return (
     <section className={styles.section}>
@@ -474,10 +513,13 @@ function SectionHeading({
   );
 }
 
-function selectConversations(items: FeedItem[]) {
+function selectConversations(items: FeedItem[], excludedItemId?: string) {
   return items
     .filter(
-      (item) => item.kind !== "daily_question" && isCurrentCodeContent(item),
+      (item) =>
+        item.id !== excludedItemId &&
+        item.kind !== "daily_question" &&
+        isCurrentCodeContent(item),
     )
     .slice(0, 2);
 }

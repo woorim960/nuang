@@ -21,7 +21,11 @@ const interactionMigration = readFileSync(
   "supabase/migrations/202607100003_feed_mvp_interactions.sql",
   "utf8",
 );
-const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}`;
+const homeCommunityPollMigration = readFileSync(
+  "supabase/migrations/202607190002_home_daily_community_poll.sql",
+  "utf8",
+);
+const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}\n${homeCommunityPollMigration}`;
 
 describe("feed db schema draft", () => {
   it("defines the first feed tables without legacy product naming", () => {
@@ -30,10 +34,16 @@ describe("feed db schema draft", () => {
     expect(migrations).toContain("create table feed.feed_comment");
     expect(migrations).toContain("create table feed.feed_reaction");
     expect(migrations).toContain("create table feed.feed_bookmark");
-    expect(migrations).toContain("create table if not exists feed.feed_preference");
+    expect(migrations).toContain(
+      "create table if not exists feed.feed_preference",
+    );
     expect(migrations).toContain("create table if not exists feed.feed_poll");
-    expect(migrations).toContain("create table if not exists feed.feed_poll_option");
-    expect(migrations).toContain("create table if not exists feed.feed_poll_vote");
+    expect(migrations).toContain(
+      "create table if not exists feed.feed_poll_option",
+    );
+    expect(migrations).toContain(
+      "create table if not exists feed.feed_poll_vote",
+    );
     expect(migrations).not.toContain("community");
   });
 
@@ -46,10 +56,18 @@ describe("feed db schema draft", () => {
   });
 
   it("enables RLS before opening future writes", () => {
-    expect(foundationMigration).toContain("alter table feed.feed_post enable row level security");
-    expect(foundationMigration).toContain("alter table feed.feed_comment enable row level security");
-    expect(foundationMigration).toContain("alter table feed.feed_reaction enable row level security");
-    expect(foundationMigration).toContain("alter table feed.feed_bookmark enable row level security");
+    expect(foundationMigration).toContain(
+      "alter table feed.feed_post enable row level security",
+    );
+    expect(foundationMigration).toContain(
+      "alter table feed.feed_comment enable row level security",
+    );
+    expect(foundationMigration).toContain(
+      "alter table feed.feed_reaction enable row level security",
+    );
+    expect(foundationMigration).toContain(
+      "alter table feed.feed_bookmark enable row level security",
+    );
   });
 
   it("supports official seed card targets without storing raw scoring data", () => {
@@ -61,9 +79,15 @@ describe("feed db schema draft", () => {
 
   it("stores not interested as a private feed preference", () => {
     expect(preferenceMigration).toContain("preference in ('not_interested')");
-    expect(preferenceMigration).toContain("feed_preference_post_active_unique_idx");
-    expect(preferenceMigration).toContain("feed_preference_seed_active_unique_idx");
-    expect(preferenceMigration).toContain("alter table feed.feed_preference enable row level security");
+    expect(preferenceMigration).toContain(
+      "feed_preference_post_active_unique_idx",
+    );
+    expect(preferenceMigration).toContain(
+      "feed_preference_seed_active_unique_idx",
+    );
+    expect(preferenceMigration).toContain(
+      "alter table feed.feed_preference enable row level security",
+    );
     expect(preferenceMigration).toContain("feed own preference read");
     expect(preferenceMigration).not.toContain("raw_score");
     expect(preferenceMigration).not.toContain("assessment_response");
@@ -95,5 +119,17 @@ describe("feed db schema draft", () => {
     expect(interactionMigration).toContain("nuang_code text");
     expect(interactionMigration).not.toContain("direct_response");
     expect(interactionMigration).not.toContain("raw_score");
+  });
+
+  it("seeds one official home poll without storing assessment responses", () => {
+    expect(homeCommunityPollMigration).toContain(
+      "balance_home_free_day_together_solo_001",
+    );
+    expect(homeCommunityPollMigration).toContain(
+      "insert into feed.feed_poll_option",
+    );
+    expect(homeCommunityPollMigration).toContain("'published'");
+    expect(homeCommunityPollMigration).not.toContain("assessment_response");
+    expect(homeCommunityPollMigration).not.toContain("raw_score");
   });
 });

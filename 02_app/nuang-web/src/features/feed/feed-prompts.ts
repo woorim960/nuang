@@ -20,6 +20,9 @@ export type BalanceGameTemplate = {
   version: string;
 };
 
+export const homeDailyCommunityPollPromptId =
+  "balance_home_free_day_together_solo_001";
+
 export const dailyQuestionTemplates = [
   {
     id: "daily_question_evening_001",
@@ -39,6 +42,21 @@ export const dailyQuestionTemplates = [
 ] as const satisfies readonly DailyQuestionTemplate[];
 
 export const balanceGameTemplates = [
+  {
+    id: homeDailyCommunityPollPromptId,
+    options: [
+      {
+        key: "together",
+        label: "사람을 만나 함께 보낸다",
+      },
+      {
+        key: "solo",
+        label: "혼자 여유롭게 보낸다",
+      },
+    ],
+    question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
+    version: "balance-game.v0.2",
+  },
   {
     id: "balance_trip_mountain_sea_001",
     options: [

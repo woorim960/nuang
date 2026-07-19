@@ -2,6 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
 import {
   createServerFeedPollStatsPayload,
   type FeedPollStatsPayload,
@@ -21,7 +22,9 @@ export const metadata: Metadata = {
   title: "뉴앙 코드별 통계 | NUANG",
 };
 
-export default async function FeedPollStatsPage({ params }: FeedPollStatsPageProps) {
+export default async function FeedPollStatsPage({
+  params,
+}: FeedPollStatsPageProps) {
   const { pollId } = await params;
   const payload = await createServerFeedPollStatsPayload(pollId);
 
@@ -86,7 +89,8 @@ function StatsSection({ payload }: { payload: FeedPollStatsPayload }) {
       <section className="px-4 py-6">
         <h2 className="text-base font-black">뉴앙 코드별 선택</h2>
         <p className="mt-2 text-sm leading-6 text-[#737373]">
-          한 명 이상 투표한 뉴앙 코드만 표시돼요. 0명인 코드는 숨겨요.
+          개인 선택이 드러나지 않도록 같은 뉴앙 코드에서 3명 이상 참여한 경우만
+          표시해요.
         </p>
         {payload.codeRows.length > 0 ? (
           <div className="mt-5 divide-y divide-[#ececec] border-y border-[#ececec]">
@@ -120,9 +124,48 @@ function StatsSection({ payload }: { payload: FeedPollStatsPayload }) {
           </div>
         ) : (
           <p className="mt-5 border-y border-[#ececec] py-5 text-sm font-semibold leading-6 text-[#737373]">
-            아직 뉴앙 코드가 있는 투표가 없어요.
+            아직 공개 기준을 충족한 뉴앙 코드 통계가 없어요.
           </p>
         )}
+      </section>
+
+      <section className="border-t border-[#ececec] px-4 py-6">
+        <div className="flex items-end justify-between gap-4">
+          <h2 className="text-base font-black">댓글로 이어서 이야기해요</h2>
+          <p className="text-sm font-bold text-[#737373]">
+            {payload.post.replyCount.toLocaleString("ko-KR")}개
+          </p>
+        </div>
+        <p className="mt-2 text-sm leading-6 text-[#737373]">
+          왜 그쪽을 골랐는지 나누면 서로의 선택을 더 쉽게 이해할 수 있어요.
+        </p>
+        {payload.post.replyPreview.length > 0 ? (
+          <div className="mt-4 space-y-3 rounded-xl bg-[#f7f7f7] p-4">
+            {payload.post.replyPreview.map((reply) => (
+              <p className="text-sm leading-6 text-[#2a2a2a]" key={reply.id}>
+                <span className="font-extrabold text-[#111111]">
+                  {reply.authorName}
+                </span>{" "}
+                {reply.body}
+                {reply.statusLabel ? (
+                  <span className="ml-1 text-[#737373]">
+                    · {reply.statusLabel}
+                  </span>
+                ) : null}
+              </p>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-4 rounded-xl bg-[#f7f7f7] p-4 text-sm font-semibold leading-6 text-[#737373]">
+            아직 공개된 댓글이 없어요. 첫 의견을 남겨보세요.
+          </p>
+        )}
+        <div className="mt-4 border-t border-[#ececec] pt-4">
+          <FeedActionButtons postId={payload.post.id} targetType="feed_post" />
+          <p className="mt-2 text-xs font-semibold leading-5 text-[#737373]">
+            댓글 작성은 안전한 커뮤니티 운영을 위해 로그인 후 사용할 수 있어요.
+          </p>
+        </div>
       </section>
     </>
   );

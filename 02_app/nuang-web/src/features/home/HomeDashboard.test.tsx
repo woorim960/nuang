@@ -11,8 +11,17 @@ import type {
 import type { FeedItem } from "@/features/feed/feed-seed";
 import { HomeDashboard } from "@/features/home/HomeDashboard";
 
+const navigationMocks = vi.hoisted(() => ({
+  push: vi.fn(),
+  refresh: vi.fn(),
+}));
+
 vi.mock("@/features/assessment/assessment-storage", () => ({
   listLocalAttempts: vi.fn(),
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => navigationMocks,
 }));
 
 describe("HomeDashboard", () => {
@@ -119,6 +128,64 @@ describe("HomeDashboard", () => {
     expect(
       screen.getByRole("link", { name: /다른 사람들의 생각도 보기/ }),
     ).toHaveAttribute("href", "/feed");
+  });
+
+  it("shows live totals and community links when the official poll is connected", async () => {
+    const communityPollItem: FeedItem = {
+      authorHandle: "nuang.official",
+      authorName: "NUANG",
+      avatarLabel: "뉴",
+      body: "오늘 더 끌리는 쪽을 골라보세요.",
+      id: "6af1b7c2-b8e1-4ee5-9c68-76b92bda0801",
+      kind: "balance_game",
+      layout: "thread",
+      likeLabel: "좋아요 0개",
+      poll: {
+        canViewCodeStats: true,
+        id: "7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801",
+        options: [
+          {
+            id: "option-together",
+            key: "together",
+            label: "사람을 만나 함께 보낸다",
+            ratio: 60,
+            viewerHasVoted: true,
+            voteCount: 6,
+          },
+          {
+            id: "option-solo",
+            key: "solo",
+            label: "혼자 여유롭게 보낸다",
+            ratio: 40,
+            viewerHasVoted: false,
+            voteCount: 4,
+          },
+        ],
+        promptId: "balance_home_free_day_together_solo_001",
+        question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
+        statsHref: "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats",
+        totalVotes: 10,
+        viewerVoteOptionId: "option-together",
+      },
+      priority: -1000,
+      replyLabel: "답글 3개",
+      targetType: "feed_post",
+      timeLabel: "방금",
+      title: "밸런스 게임",
+    };
+
+    render(<HomeDashboard feedPreviewItems={[communityPollItem]} />);
+
+    expect(await screen.findByText("실시간 커뮤니티 투표")).toBeInTheDocument();
+    expect(screen.getByText("10명 참여")).toBeInTheDocument();
+    expect(screen.getByText("60%")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /코드별 통계와 댓글 보기/ }),
+    ).toHaveAttribute(
+      "href",
+      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats",
+    );
+    expect(screen.getByText("답글 3개")).toBeInTheDocument();
   });
 
   it("resumes the current full assessment with accurate base-item progress", async () => {

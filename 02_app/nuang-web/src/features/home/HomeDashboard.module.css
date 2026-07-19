@@ -231,6 +231,7 @@
 .profileDiscovery:focus-visible,
 .dailyChoiceOption:focus-visible,
 .dailyChoiceResult a:focus-visible,
+.communityPollFooter a:focus-visible,
 .conversation:focus-visible,
 .sectionHeading a:focus-visible,
 .emptyConversation:focus-visible {
@@ -567,6 +568,32 @@
   color: #5d43bd;
   font-size: 0.75rem;
   font-weight: 750;
+}
+
+.communityPollFooter {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.45rem;
+  color: #77717c;
+  font-size: 0.75rem;
+  font-weight: 680;
+}
+
+.communityPollFooter a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.35rem;
+  color: #5d43bd;
+  font-size: 0.8125rem;
+  font-weight: 760;
+}
+
+.communityPollFooter span {
+  flex: 0 0 auto;
 }
 
 .conversationList {

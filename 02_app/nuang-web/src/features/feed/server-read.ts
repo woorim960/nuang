@@ -10,7 +10,8 @@ import type {
   FeedPollSummary,
   FeedReplyPreview,
 } from "@/features/feed/feed-seed";
-import { getNuangProfileName } from "@/features/nuang-code/nuang-code-dictionary";
+import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
+import { getSupportedNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
 import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
@@ -135,6 +136,11 @@ export type FeedPollStatsPayload = {
     id: string;
     question: string;
   };
+  post: {
+    id: string;
+    replyCount: number;
+    replyPreview: FeedReplyPreview[];
+  };
   totalVotes: number;
 };
 
@@ -186,7 +192,9 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     postIds: mergedRows.map((row) => row.id),
     seedKeys: basePayload.items.map((item) => item.id),
   });
-  const visibleRows = mergedRows.filter((row) => !hiddenTargets.postIds.has(row.id));
+  const visibleRows = mergedRows.filter(
+    (row) => !hiddenTargets.postIds.has(row.id),
+  );
   const visibleSeedItems = basePayload.items.filter(
     (item) => !hiddenTargets.seedKeys.has(item.id),
   );
@@ -194,23 +202,24 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     accountIds: visibleRows.map((row) => row.author_account_id),
     client: serviceClient,
   });
-  const [engagementByPostId, engagementBySeedKey, pollByPostId] = await Promise.all([
-    readPostEngagements({
-      accountId,
-      client: serviceClient,
-      rows: visibleRows,
-    }),
-    readSeedCardEngagements({
-      accountId,
-      client: serviceClient,
-      items: visibleSeedItems,
-    }),
-    readPollSummaries({
-      accountId,
-      client: serviceClient,
-      rows: visibleRows,
-    }),
-  ]);
+  const [engagementByPostId, engagementBySeedKey, pollByPostId] =
+    await Promise.all([
+      readPostEngagements({
+        accountId,
+        client: serviceClient,
+        rows: visibleRows,
+      }),
+      readSeedCardEngagements({
+        accountId,
+        client: serviceClient,
+        items: visibleSeedItems,
+      }),
+      readPollSummaries({
+        accountId,
+        client: serviceClient,
+        rows: visibleRows,
+      }),
+    ]);
   const dbItems = visibleRows.map((row, index) =>
     mapPostRowToFeedItem(
       row,
@@ -233,8 +242,20 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
 
 export async function createServerHomeFeedPreviewItems() {
   const payload = await createServerFeedReadPayload();
+  const communityPoll = payload.items.find(
+    (item) => item.poll?.promptId === homeDailyCommunityPollPromptId,
+  );
 
-  return payload.items.slice(0, payload.policy.homePreviewMaxItems);
+  if (!communityPoll) {
+    return payload.items.slice(0, payload.policy.homePreviewMaxItems);
+  }
+
+  return [
+    communityPoll,
+    ...payload.items
+      .filter((item) => item.id !== communityPoll.id)
+      .slice(0, payload.policy.homePreviewMaxItems - 1),
+  ];
 }
 
 export async function createServerFeedPollStatsPayload(
@@ -283,7 +304,9 @@ export async function createServerFeedPollStatsPayload(
   const votes = (voteResponse.data ?? []) as FeedPollVoteRow[];
   const totalVotes = votes.length;
   const optionSummaries = options.map((option) => {
-    const voteCount = votes.filter((vote) => vote.option_id === option.id).length;
+    const voteCount = votes.filter(
+      (vote) => vote.option_id === option.id,
+    ).length;
 
     return {
       id: option.id,
@@ -297,7 +320,7 @@ export async function createServerFeedPollStatsPayload(
     (vote) => String(vote.nuang_code),
   );
   const codeRows = [...votesByCode.entries()]
-    .filter(([, codeVotes]) => codeVotes.length > 0)
+    .filter(([, codeVotes]) => codeVotes.length >= 3)
     .sort(([leftCode], [rightCode]) => leftCode.localeCompare(rightCode))
     .map(([code, codeVotes]) => {
       const codeTotal = codeVotes.length;
@@ -305,21 +328,31 @@ export async function createServerFeedPollStatsPayload(
       return {
         code,
         name:
-          getNuangProfileName(code) ??
+          getSupportedNuangProfileName(code) ??
           codeVotes.find((vote) => vote.profile_name)?.profile_name ??
           "뉴앙 코드",
         options: options.map((option) => {
-          const voteCount = codeVotes.filter((vote) => vote.option_id === option.id).length;
+          const voteCount = codeVotes.filter(
+            (vote) => vote.option_id === option.id,
+          ).length;
 
           return {
             label: option.label,
-            ratio: codeTotal > 0 ? Math.round((voteCount / codeTotal) * 100) : 0,
+            ratio:
+              codeTotal > 0 ? Math.round((voteCount / codeTotal) * 100) : 0,
             voteCount,
           };
         }),
         totalVotes: codeTotal,
       };
     });
+  const accountId = await getCurrentAccountId(serviceClient);
+  const engagementByPostId = await readPostEngagements({
+    accountId,
+    client: serviceClient,
+    rows: [{ id: poll.post_id } as FeedPostRow],
+  });
+  const engagement = engagementByPostId.get(poll.post_id);
 
   return {
     codeRows,
@@ -327,6 +360,11 @@ export async function createServerFeedPollStatsPayload(
     poll: {
       id: poll.id,
       question: poll.question,
+    },
+    post: {
+      id: poll.post_id,
+      replyCount: engagement?.replies ?? 0,
+      replyPreview: engagement?.replyPreview ?? [],
     },
     totalVotes,
   };
@@ -560,24 +598,27 @@ async function readPostEngagements({
         .is("deleted_at", null)
     : Promise.resolve({ data: [], error: null });
 
-  const [commentResponse, reactionResponse, bookmarkResponse] = await Promise.all([
-    client
-      .schema("feed")
-      .from("feed_comment")
-      .select("id, post_id, author_account_id, body, moderation_status, created_at")
-      .in("post_id", postIds)
-      .is("deleted_at", null)
-      .order("created_at", { ascending: false })
-      .limit(200),
-    client
-      .schema("feed")
-      .from("feed_reaction")
-      .select("target_id, account_id")
-      .eq("target_type", "feed_post")
-      .in("target_id", postIds)
-      .is("deleted_at", null),
-    bookmarkRequest,
-  ]);
+  const [commentResponse, reactionResponse, bookmarkResponse] =
+    await Promise.all([
+      client
+        .schema("feed")
+        .from("feed_comment")
+        .select(
+          "id, post_id, author_account_id, body, moderation_status, created_at",
+        )
+        .in("post_id", postIds)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(200),
+      client
+        .schema("feed")
+        .from("feed_reaction")
+        .select("target_id, account_id")
+        .eq("target_type", "feed_post")
+        .in("target_id", postIds)
+        .is("deleted_at", null),
+      bookmarkRequest,
+    ]);
 
   if (!commentResponse.error && commentResponse.data) {
     const visibleCommentsByPostId = new Map<string, FeedPostCommentRow[]>();
@@ -699,27 +740,33 @@ async function readPollSummaries({
   );
   const votesByPollId = voteResponse.error
     ? new Map<string, FeedPollVoteRow[]>()
-    : groupBy((voteResponse.data ?? []) as FeedPollVoteRow[], (vote) => vote.poll_id);
+    : groupBy(
+        (voteResponse.data ?? []) as FeedPollVoteRow[],
+        (vote) => vote.poll_id,
+      );
 
   for (const poll of polls) {
     const options = optionsByPollId.get(poll.id) ?? [];
     const votes = votesByPollId.get(poll.id) ?? [];
     const totalVotes = votes.length;
     const viewerVote = accountId
-      ? votes.find((vote) => vote.account_id === accountId) ?? null
+      ? (votes.find((vote) => vote.account_id === accountId) ?? null)
       : null;
 
     pollByPostId.set(poll.post_id, {
       canViewCodeStats: totalVotes >= 2,
       id: poll.id,
       options: options.map((option) => {
-        const voteCount = votes.filter((vote) => vote.option_id === option.id).length;
+        const voteCount = votes.filter(
+          (vote) => vote.option_id === option.id,
+        ).length;
 
         return {
           id: option.id,
           key: option.option_key,
           label: option.label,
-          ratio: totalVotes > 0 ? Math.round((voteCount / totalVotes) * 100) : 0,
+          ratio:
+            totalVotes > 0 ? Math.round((voteCount / totalVotes) * 100) : 0,
           viewerHasVoted: viewerVote?.option_id === option.id,
           voteCount,
         };
@@ -775,25 +822,28 @@ async function readSeedCardEngagements({
         .is("deleted_at", null)
     : Promise.resolve({ data: [], error: null });
 
-  const [commentResponse, reactionResponse, bookmarkResponse] = await Promise.all([
-    client
-      .schema("feed")
-      .from("feed_comment")
-      .select("id, target_key, author_account_id, body, moderation_status, created_at")
-      .eq("target_type", "feed_seed_card")
-      .in("target_key", seedKeys)
-      .is("deleted_at", null)
-      .order("created_at", { ascending: false })
-      .limit(200),
-    client
-      .schema("feed")
-      .from("feed_reaction")
-      .select("target_key, account_id")
-      .eq("target_type", "feed_seed_card")
-      .in("target_key", seedKeys)
-      .is("deleted_at", null),
-    bookmarkRequest,
-  ]);
+  const [commentResponse, reactionResponse, bookmarkResponse] =
+    await Promise.all([
+      client
+        .schema("feed")
+        .from("feed_comment")
+        .select(
+          "id, target_key, author_account_id, body, moderation_status, created_at",
+        )
+        .eq("target_type", "feed_seed_card")
+        .in("target_key", seedKeys)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
+        .limit(200),
+      client
+        .schema("feed")
+        .from("feed_reaction")
+        .select("target_key, account_id")
+        .eq("target_type", "feed_seed_card")
+        .in("target_key", seedKeys)
+        .is("deleted_at", null),
+      bookmarkRequest,
+    ]);
 
   if (!commentResponse.error && commentResponse.data) {
     const visibleCommentsBySeedKey = new Map<string, FeedSeedCommentRow[]>();
@@ -889,7 +939,10 @@ async function readPublicProfileCardsForAccounts({
       continue;
     }
 
-    const snapshot = coercePublicProfileSnapshotPayload(row.snapshot_payload, row.id);
+    const snapshot = coercePublicProfileSnapshotPayload(
+      row.snapshot_payload,
+      row.id,
+    );
 
     if (!snapshot) {
       continue;
@@ -920,7 +973,10 @@ function mergePostRows({
   const rowsById = new Map<string, FeedPostRow>();
 
   for (const row of [...ownPosts, ...publicPosts]) {
-    if (row.visibility === "private_draft" && row.author_account_id !== accountId) {
+    if (
+      row.visibility === "private_draft" &&
+      row.author_account_id !== accountId
+    ) {
       continue;
     }
 
@@ -961,7 +1017,9 @@ function mapPostRowToFeedItem(
   return {
     authorHandle:
       publicProjection.authorHandle ??
-      (isOwnPost ? "me" : createFallbackHandle(authorProfile?.display.displayName)),
+      (isOwnPost
+        ? "me"
+        : createFallbackHandle(authorProfile?.display.displayName)),
     authorName:
       publicProjection.authorName ??
       authorProfile?.display.displayName ??
@@ -1014,10 +1072,9 @@ function readPublicProjection(value: unknown) {
   };
 }
 
-function parseReportShareProjection(value: unknown): Omit<
-  NonNullable<FeedItem["reportShare"]>,
-  "href"
-> | null {
+function parseReportShareProjection(
+  value: unknown,
+): Omit<NonNullable<FeedItem["reportShare"]>, "href"> | null {
   if (!value || typeof value !== "object") {
     return null;
   }
@@ -1040,11 +1097,14 @@ function parseReportShareProjection(value: unknown): Omit<
 
   return {
     assessmentKind:
-      reportShare.assessmentKind === "quick" || reportShare.assessmentKind === "full"
+      reportShare.assessmentKind === "quick" ||
+      reportShare.assessmentKind === "full"
         ? reportShare.assessmentKind
         : "full",
     completedAt:
-      typeof reportShare.completedAt === "string" ? reportShare.completedAt : "",
+      typeof reportShare.completedAt === "string"
+        ? reportShare.completedAt
+        : "",
     domains: Array.isArray(reportShare.domains)
       ? reportShare.domains.slice(0, 5).flatMap((domain) => {
           if (!domain || typeof domain !== "object") return [];
@@ -1055,7 +1115,10 @@ function parseReportShareProjection(value: unknown): Omit<
             symbol?: unknown;
           };
 
-          if (typeof item.domainId !== "string" || typeof item.label !== "string") {
+          if (
+            typeof item.domainId !== "string" ||
+            typeof item.label !== "string"
+          ) {
             return [];
           }
 
@@ -1070,7 +1133,9 @@ function parseReportShareProjection(value: unknown): Omit<
         })
       : [],
     profileCode: reportShare.profileCode,
-    profileName: getNuangProfileName(reportShare.profileCode) ?? reportShare.profileName,
+    profileName:
+      getSupportedNuangProfileName(reportShare.profileCode) ??
+      reportShare.profileName,
     resultLabel:
       typeof reportShare.resultLabel === "string"
         ? reportShare.resultLabel
@@ -1080,7 +1145,8 @@ function parseReportShareProjection(value: unknown): Omit<
 
 function normalizeReportShareBody(
   body: string,
-  reportShare: Omit<NonNullable<FeedItem["reportShare"]>, "href"> | null | undefined,
+  reportShare:
+    Omit<NonNullable<FeedItem["reportShare"]>, "href"> | null | undefined,
   rawProjection: unknown,
 ) {
   if (!reportShare) {
@@ -1119,12 +1185,14 @@ function readStoredReportShareProfileName(value: unknown) {
 function createFallbackHandle(displayName?: string) {
   if (!displayName) return "nuang.user";
 
-  return displayName
-    .trim()
-    .toLowerCase()
-    .replace(/[^\p{Letter}\p{Number}]+/gu, ".")
-    .replace(/^\.+|\.+$/g, "")
-    .slice(0, 24) || "nuang.user";
+  return (
+    displayName
+      .trim()
+      .toLowerCase()
+      .replace(/[^\p{Letter}\p{Number}]+/gu, ".")
+      .replace(/^\.+|\.+$/g, "")
+      .slice(0, 24) || "nuang.user"
+  );
 }
 
 function coercePublicProfileSnapshotPayload(
@@ -1172,8 +1240,10 @@ function applySeedCardEngagement(
     return item;
   }
 
-  const likeCount = parseFeedCountLabel("좋아요", item.likeLabel) + engagement.likes;
-  const replyCount = parseFeedCountLabel("답글", item.replyLabel) + engagement.replies;
+  const likeCount =
+    parseFeedCountLabel("좋아요", item.likeLabel) + engagement.likes;
+  const replyCount =
+    parseFeedCountLabel("답글", item.replyLabel) + engagement.replies;
 
   return {
     ...item,
@@ -1187,10 +1257,7 @@ function applySeedCardEngagement(
   };
 }
 
-function isVisibleComment(
-  row: FeedCommentBaseRow,
-  accountId: string | null,
-) {
+function isVisibleComment(row: FeedCommentBaseRow, accountId: string | null) {
   if (row.moderation_status === "published") {
     return true;
   }
@@ -1202,7 +1269,9 @@ function compareCommentsByCreatedAtDesc(
   left: FeedCommentBaseRow,
   right: FeedCommentBaseRow,
 ) {
-  return new Date(right.created_at).getTime() - new Date(left.created_at).getTime();
+  return (
+    new Date(right.created_at).getTime() - new Date(left.created_at).getTime()
+  );
 }
 
 function mapCommentRowToReplyPreview(
@@ -1243,10 +1312,7 @@ function parseFeedCountLabel(label: "답글" | "좋아요", value: string) {
   return match ? Number(match[1]) : 0;
 }
 
-function groupBy<TItem>(
-  items: TItem[],
-  getKey: (item: TItem) => string,
-) {
+function groupBy<TItem>(items: TItem[], getKey: (item: TItem) => string) {
   const grouped = new Map<string, TItem[]>();
 
   for (const item of items) {

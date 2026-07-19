@@ -15,9 +15,11 @@ type VoteStatus =
 export function FeedPollCard({
   poll,
   returnTo = "/feed",
+  variant = "feed",
 }: {
   poll: FeedPollSummary;
   returnTo?: string;
+  variant?: "feed" | "home";
 }) {
   const router = useRouter();
   const [status, setStatus] = useState<VoteStatus>({ status: "idle" });
@@ -66,16 +68,33 @@ export function FeedPollCard({
   }
 
   return (
-    <div className="mt-4 border-y border-[#ececec] py-3">
-      <p className="text-[15px] font-extrabold leading-6 text-[#111111]">
+    <div
+      className={cn(
+        variant === "home" ? "mt-3" : "mt-4 border-y border-[#ececec] py-3",
+      )}
+    >
+      <p
+        className={cn(
+          "font-extrabold text-[#111111]",
+          variant === "home"
+            ? "max-w-[25ch] text-[19px] leading-7 tracking-[-0.025em]"
+            : "text-[15px] leading-6",
+        )}
+      >
         {poll.question}
       </p>
-      <div className="mt-3 space-y-2">
+      <div className={cn("space-y-2", variant === "home" ? "mt-4" : "mt-3")}>
         {poll.options.map((option) => (
           <button
             aria-pressed={option.viewerHasVoted}
             className={cn(
-              "w-full py-2 text-left transition-opacity disabled:cursor-default",
+              "w-full text-left disabled:cursor-default",
+              variant === "home"
+                ? "min-h-[62px] rounded-2xl border border-[#e5e1e7] bg-[#fbfafb] px-3 py-3 transition-[border-color,background-color,transform]"
+                : "py-2 transition-opacity",
+              variant === "home" && option.viewerHasVoted
+                ? "border-[#8169d5] bg-[#f5f1ff]"
+                : "",
               canVote ? "hover:opacity-70" : "",
             )}
             disabled={!canVote}
@@ -94,9 +113,19 @@ export function FeedPollCard({
               ) : null}
             </div>
             {hasVoted ? (
-              <div className="mt-2 h-[3px] w-full bg-[#eeeeee]">
+              <div
+                className={cn(
+                  "mt-2 w-full bg-[#eeeeee]",
+                  variant === "home" ? "h-1 rounded-full" : "h-[3px]",
+                )}
+              >
                 <div
-                  className="h-full bg-[#111111]"
+                  className={cn(
+                    "h-full",
+                    variant === "home"
+                      ? "rounded-full bg-[#6546d7]"
+                      : "bg-[#111111]",
+                  )}
                   style={{ width: `${option.ratio}%` }}
                 />
               </div>

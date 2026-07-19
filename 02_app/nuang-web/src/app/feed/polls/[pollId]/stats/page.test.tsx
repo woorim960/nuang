@@ -1,22 +1,33 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import FeedPollStatsPage, { metadata } from "@/app/feed/polls/[pollId]/stats/page";
+import FeedPollStatsPage, {
+  metadata,
+} from "@/app/feed/polls/[pollId]/stats/page";
 
 const feedReadMocks = vi.hoisted(() => ({
   createServerFeedPollStatsPayload: vi.fn(),
 }));
+const navigationMocks = vi.hoisted(() => ({
+  push: vi.fn(),
+  refresh: vi.fn(),
+}));
 
 vi.mock("@/features/feed/server-read", () => ({
-  createServerFeedPollStatsPayload: feedReadMocks.createServerFeedPollStatsPayload,
+  createServerFeedPollStatsPayload:
+    feedReadMocks.createServerFeedPollStatsPayload,
+}));
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => navigationMocks,
 }));
 
 describe("FeedPollStatsPage", () => {
-  it("shows anonymous code-level stats even when a code has one vote", async () => {
+  it("shows code-level stats and comments after the privacy threshold", async () => {
     feedReadMocks.createServerFeedPollStatsPayload.mockResolvedValue({
       codeRows: [
         {
-          code: "SVODE",
-          name: "물결의 새길 개척가",
+          code: "ENAKQ",
+          name: "관계를 여는 지휘자",
           options: [
             {
               label: "산",
@@ -26,31 +37,43 @@ describe("FeedPollStatsPage", () => {
             {
               label: "바다",
               ratio: 100,
-              voteCount: 1,
+              voteCount: 3,
             },
           ],
-          totalVotes: 1,
+          totalVotes: 3,
         },
       ],
       options: [
         {
           id: "option-mountain",
           label: "산",
-          ratio: 50,
-          voteCount: 1,
+          ratio: 0,
+          voteCount: 0,
         },
         {
           id: "option-sea",
           label: "바다",
-          ratio: 50,
-          voteCount: 1,
+          ratio: 100,
+          voteCount: 3,
         },
       ],
       poll: {
         id: "11111111-1111-4111-8111-111111111111",
         question: "나 혼자 여행 간다면?",
       },
-      totalVotes: 2,
+      post: {
+        id: "22222222-2222-4222-8222-222222222222",
+        replyCount: 1,
+        replyPreview: [
+          {
+            authorHandle: "nuang.user",
+            authorName: "NUANG 사용자",
+            body: "함께 시간을 보내면 기분이 더 살아나요.",
+            id: "comment-001",
+          },
+        ],
+      },
+      totalVotes: 3,
     });
 
     render(
@@ -61,15 +84,20 @@ describe("FeedPollStatsPage", () => {
       }),
     );
 
-    expect(screen.getByRole("heading", { name: "뉴앙 코드별 통계" }))
-      .toBeInTheDocument();
-    expect(screen.getByText("2명 참여")).toBeInTheDocument();
-    expect(screen.getByText("SVODE")).toBeInTheDocument();
-    expect(screen.getByText("물결의 새길 개척가")).toBeInTheDocument();
-    expect(screen.getAllByText("100% · 1명").length).toBeGreaterThan(0);
-    expect(document.body).toHaveTextContent("0명인 코드는 숨겨요.");
+    expect(
+      screen.getByRole("heading", { name: "뉴앙 코드별 통계" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("3명 참여")).toBeInTheDocument();
+    expect(screen.getByText("ENAKQ")).toBeInTheDocument();
+    expect(screen.getByText("관계를 여는 지휘자")).toBeInTheDocument();
+    expect(screen.getAllByText("100% · 3명").length).toBeGreaterThan(0);
+    expect(document.body).toHaveTextContent("3명 이상 참여한 경우만 표시해요.");
     expect(document.body).not.toHaveTextContent("5명");
     expect(document.body).not.toHaveTextContent("누가 투표");
+    expect(screen.getByText("댓글로 이어서 이야기해요")).toBeInTheDocument();
+    expect(
+      screen.getByText("함께 시간을 보내면 기분이 더 살아나요."),
+    ).toBeInTheDocument();
   });
 
   it("keeps noindex metadata for poll stats", () => {

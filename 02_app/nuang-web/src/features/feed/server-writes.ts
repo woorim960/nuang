@@ -1,5 +1,8 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { ensureAccountForUser, type ServerWriteResult } from "@/features/account/server-writes";
+import {
+  ensureAccountForUser,
+  type ServerWriteResult,
+} from "@/features/account/server-writes";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import {
   getBalanceGameOption,
@@ -12,9 +15,9 @@ import type {
   FeedWriteSuccessInput,
 } from "@/features/feed/feed-write-contract";
 import {
-  getNuangProfileName,
-  isValidNuangCode,
-} from "@/features/nuang-code/nuang-code-dictionary";
+  getSupportedNuangProfileName,
+  isSupportedNuangCode,
+} from "@/features/nuang-code/profile-name-resolution";
 
 type ServiceClient = SupabaseClient;
 
@@ -89,15 +92,27 @@ export async function writeFeedRequestForAccount({
   }
 
   if (payload.action === "remove_reaction") {
-    return removeFeedReaction({ accountId: account.accountId, client, payload });
+    return removeFeedReaction({
+      accountId: account.accountId,
+      client,
+      payload,
+    });
   }
 
   if (payload.action === "remove_bookmark") {
-    return removeFeedBookmark({ accountId: account.accountId, client, payload });
+    return removeFeedBookmark({
+      accountId: account.accountId,
+      client,
+      payload,
+    });
   }
 
   if (payload.action === "not_interested") {
-    return writeFeedPreference({ accountId: account.accountId, client, payload });
+    return writeFeedPreference({
+      accountId: account.accountId,
+      client,
+      payload,
+    });
   }
 
   return writePollVote({ accountId: account.accountId, client, payload });
@@ -116,7 +131,11 @@ async function writeFeedPost({
     return { code: "feed_target_invalid", ok: false };
   }
 
-  const publicProjection = await buildPostProjection({ accountId, client, payload });
+  const publicProjection = await buildPostProjection({
+    accountId,
+    client,
+    payload,
+  });
 
   if (payload.source === "report_share" && !publicProjection.reportShare) {
     return { code: "feed_target_invalid", ok: false };
@@ -139,7 +158,10 @@ async function writeFeedPost({
     .single();
 
   if (response.error || !response.data) {
-    return { code: getFeedDbFailureCode(response.error, "feed_post_insert_failed"), ok: false };
+    return {
+      code: getFeedDbFailureCode(response.error, "feed_post_insert_failed"),
+      ok: false,
+    };
   }
 
   const row = response.data as {
@@ -207,7 +229,10 @@ async function writeBalanceGamePoll({
     .single();
 
   if (pollResponse.error || !pollResponse.data) {
-    return { code: getFeedDbFailureCode(pollResponse.error, "feed_poll_write_failed"), ok: false };
+    return {
+      code: getFeedDbFailureCode(pollResponse.error, "feed_poll_write_failed"),
+      ok: false,
+    };
   }
 
   const poll = pollResponse.data as { id: string };
@@ -225,7 +250,13 @@ async function writeBalanceGamePoll({
     .order("sort_order", { ascending: true });
 
   if (optionResponse.error || !optionResponse.data) {
-    return { code: getFeedDbFailureCode(optionResponse.error, "feed_poll_write_failed"), ok: false };
+    return {
+      code: getFeedDbFailureCode(
+        optionResponse.error,
+        "feed_poll_write_failed",
+      ),
+      ok: false,
+    };
   }
 
   const selectedCreatedOption = (
@@ -292,7 +323,10 @@ async function writeFeedComment({
     .single();
 
   if (response.error || !response.data) {
-    return { code: getFeedDbFailureCode(response.error, "feed_comment_insert_failed"), ok: false };
+    return {
+      code: getFeedDbFailureCode(response.error, "feed_comment_insert_failed"),
+      ok: false,
+    };
   }
 
   const row = response.data as {
@@ -661,7 +695,8 @@ async function readCurrentNuangCodeSnapshot({
 
   const publicSnapshotProfile = parseNuangCodeFromPublicSnapshot(
     publicSnapshotResponse.data
-      ? (publicSnapshotResponse.data as { snapshot_payload?: unknown }).snapshot_payload
+      ? (publicSnapshotResponse.data as { snapshot_payload?: unknown })
+          .snapshot_payload
       : null,
   );
 
@@ -684,15 +719,16 @@ async function readCurrentNuangCodeSnapshot({
       profile_code?: unknown;
       profile_name?: unknown;
     };
-    const code = typeof report.profile_code === "string" ? report.profile_code : null;
+    const code =
+      typeof report.profile_code === "string" ? report.profile_code : null;
 
-    if (isValidNuangCode(code)) {
+    if (isSupportedNuangCode(code)) {
       return {
         code,
         name:
           typeof report.profile_name === "string" && report.profile_name.trim()
             ? report.profile_name.trim()
-            : getNuangProfileName(code),
+            : getSupportedNuangProfileName(code),
       };
     }
   }
@@ -717,9 +753,10 @@ function parseNuangCodeFromPublicSnapshot(value: unknown) {
       name?: unknown;
     };
   };
-  const code = typeof snapshot.profile?.code === "string" ? snapshot.profile.code : null;
+  const code =
+    typeof snapshot.profile?.code === "string" ? snapshot.profile.code : null;
 
-  if (!isValidNuangCode(code)) {
+  if (!isSupportedNuangCode(code)) {
     return {
       code: null,
       name: null,
@@ -731,11 +768,13 @@ function parseNuangCodeFromPublicSnapshot(value: unknown) {
     name:
       typeof snapshot.profile?.name === "string" && snapshot.profile.name.trim()
         ? snapshot.profile.name.trim()
-        : getNuangProfileName(code),
+        : getSupportedNuangProfileName(code),
   };
 }
 
-function normalizeTarget(target: FeedWriteRequestTarget):
+function normalizeTarget(
+  target: FeedWriteRequestTarget,
+):
   | { data: NormalizedTarget; ok: true }
   | { code: "feed_target_invalid"; ok: false } {
   if (target.type === "feed_seed_card") {
@@ -822,7 +861,10 @@ async function insertOrReadExisting({
   }
 
   if (response.error?.code !== "23505") {
-    return { code: getFeedDbFailureCode(response.error, failureCode), ok: false };
+    return {
+      code: getFeedDbFailureCode(response.error, failureCode),
+      ok: false,
+    };
   }
 
   const existing = await selectActiveExisting();
@@ -835,21 +877,25 @@ async function insertOrReadExisting({
   }
 
   const restorable = await selectRestorableExisting();
-  const rowToRestore = restorable.data as
-    | {
-        deleted_at?: string | null;
-        id: string;
-      }
-    | null;
+  const rowToRestore = restorable.data as {
+    deleted_at?: string | null;
+    id: string;
+  } | null;
 
   if (restorable.error || !rowToRestore?.deleted_at) {
-    return { code: getFeedDbFailureCode(restorable.error, failureCode), ok: false };
+    return {
+      code: getFeedDbFailureCode(restorable.error, failureCode),
+      ok: false,
+    };
   }
 
   const restored = await restoreExisting(rowToRestore.id);
 
   if (restored.error || !restored.data) {
-    return { code: getFeedDbFailureCode(restored.error, failureCode), ok: false };
+    return {
+      code: getFeedDbFailureCode(restored.error, failureCode),
+      ok: false,
+    };
   }
 
   return {
@@ -896,12 +942,19 @@ async function updateExistingFeedAction({
           .maybeSingle();
 
   if (response.error) {
-    return { code: getFeedDbFailureCode(response.error, failureCode), ok: false };
+    return {
+      code: getFeedDbFailureCode(response.error, failureCode),
+      ok: false,
+    };
   }
 
   return {
     data: {
-      id: (response.data as { id?: string } | null)?.id ?? target.key ?? target.id ?? "",
+      id:
+        (response.data as { id?: string } | null)?.id ??
+        target.key ??
+        target.id ??
+        "",
     },
     ok: true,
   };
@@ -914,7 +967,10 @@ async function insertOrReadExistingPreference({
 }: {
   accountId: string;
   client: ServiceClient;
-  target: Extract<NormalizedTarget, { dbTargetType: "feed_post" | "feed_seed_card" }>;
+  target: Extract<
+    NormalizedTarget,
+    { dbTargetType: "feed_post" | "feed_seed_card" }
+  >;
 }): Promise<ServerWriteResult<{ id: string }, FeedWriteFailureCode>> {
   const row = {
     account_id: accountId,
@@ -939,7 +995,10 @@ async function insertOrReadExistingPreference({
 
   if (response.error?.code !== "23505") {
     return {
-      code: getFeedDbFailureCode(response.error, "feed_preference_write_failed"),
+      code: getFeedDbFailureCode(
+        response.error,
+        "feed_preference_write_failed",
+      ),
       ok: false,
     };
   }
@@ -952,7 +1011,10 @@ async function insertOrReadExistingPreference({
 
   if (existing.error || !existing.data) {
     return {
-      code: getFeedDbFailureCode(existing.error, "feed_preference_write_failed"),
+      code: getFeedDbFailureCode(
+        existing.error,
+        "feed_preference_write_failed",
+      ),
       ok: false,
     };
   }
@@ -1039,7 +1101,10 @@ function buildExistingBookmarkQuery({
   accountId: string;
   client: ServiceClient;
   includeDeleted: boolean;
-  target: Extract<NormalizedTarget, { dbTargetType: "feed_post" | "feed_seed_card" }>;
+  target: Extract<
+    NormalizedTarget,
+    { dbTargetType: "feed_post" | "feed_seed_card" }
+  >;
 }) {
   const query = client
     .schema("feed")
@@ -1066,7 +1131,10 @@ function buildExistingPreferenceQuery({
 }: {
   accountId: string;
   client: ServiceClient;
-  target: Extract<NormalizedTarget, { dbTargetType: "feed_post" | "feed_seed_card" }>;
+  target: Extract<
+    NormalizedTarget,
+    { dbTargetType: "feed_post" | "feed_seed_card" }
+  >;
 }) {
   const query = client
     .schema("feed")
@@ -1122,7 +1190,7 @@ async function buildPostProjection({
           question: balanceGame.question,
           selectedOptionKey: payload.pollOptionKey ?? null,
           version: balanceGame.version,
-      }
+        }
       : null,
     reportShare,
     source: payload.source,
@@ -1180,15 +1248,15 @@ async function readReportShareProjection({
     assessmentKind:
       row.report_kind === "quick" || row.report_kind === "full"
         ? row.report_kind
-        : shareSummary?.assessmentKind ?? "full",
+        : (shareSummary?.assessmentKind ?? "full"),
     completedAt: shareSummary?.completedAt ?? "",
     domains: shareSummary?.domains ?? [],
     profileCode,
     profileName:
-      getNuangProfileName(profileCode) ??
+      getSupportedNuangProfileName(profileCode) ??
       (typeof row.profile_name === "string" && row.profile_name.trim()
         ? row.profile_name.trim()
-        : shareSummary?.profileName ?? "뉴앙 리포트"),
+        : (shareSummary?.profileName ?? "뉴앙 리포트")),
     resultLabel: shareSummary?.resultLabel ?? "뉴앙 리포트",
   };
 }
@@ -1224,7 +1292,10 @@ function parseReportShareSummary(value: unknown): ReportShareProjection | null {
             symbol?: unknown;
           };
 
-          if (typeof item.domainId !== "string" || typeof item.label !== "string") {
+          if (
+            typeof item.domainId !== "string" ||
+            typeof item.label !== "string"
+          ) {
             return [];
           }
 
@@ -1241,9 +1312,13 @@ function parseReportShareSummary(value: unknown): ReportShareProjection | null {
     profileCode:
       typeof summary.profileCode === "string" ? summary.profileCode : "",
     profileName:
-      typeof summary.profileName === "string" ? summary.profileName : "뉴앙 리포트",
+      typeof summary.profileName === "string"
+        ? summary.profileName
+        : "뉴앙 리포트",
     resultLabel:
-      typeof summary.resultLabel === "string" ? summary.resultLabel : "뉴앙 리포트",
+      typeof summary.resultLabel === "string"
+        ? summary.resultLabel
+        : "뉴앙 리포트",
   };
 }
 
@@ -1257,12 +1332,16 @@ function isValidPostSourcePayload(
   if (payload.source === "balance_game") {
     const template = getBalanceGameTemplate(payload.sourceId);
 
-    return Boolean(template && getBalanceGameOption(template, payload.pollOptionKey));
+    return Boolean(
+      template && getBalanceGameOption(template, payload.pollOptionKey),
+    );
   }
 
   if (payload.source === "report_share") {
     return Boolean(
-      payload.attachments?.some((attachment) => attachment.type === "result_summary"),
+      payload.attachments?.some(
+        (attachment) => attachment.type === "result_summary",
+      ),
     );
   }
 
