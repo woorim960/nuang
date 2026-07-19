@@ -25,14 +25,17 @@ describe("FeedPollCard", () => {
   it("preserves the selected option when login is required", async () => {
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () =>
-        new Response(JSON.stringify({ error: "unauthenticated" }), {
-          status: 401,
-        }),
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ error: "unauthenticated" }), {
+            status: 401,
+          }),
       ),
     );
 
-    render(<FeedPollCard poll={createPoll()} returnTo="/home" variant="home" />);
+    render(
+      <FeedPollCard poll={createPoll()} returnTo="/home" variant="home" />,
+    );
 
     fireEvent.click(
       screen.getByRole("button", { name: /사람을 만나 함께 보낸다/ }),
@@ -53,10 +56,14 @@ describe("FeedPollCard", () => {
     );
     vi.stubGlobal(
       "fetch",
-      vi.fn(async () => new Response(JSON.stringify({ ok: true }), { status: 200 })),
+      vi.fn(
+        async () => new Response(JSON.stringify({ ok: true }), { status: 200 }),
+      ),
     );
 
-    render(<FeedPollCard poll={createPoll()} returnTo="/home" variant="home" />);
+    render(
+      <FeedPollCard poll={createPoll()} returnTo="/home" variant="home" />,
+    );
 
     await waitFor(() => {
       expect(navigationMocks.replace).toHaveBeenCalledWith("/home");
@@ -64,7 +71,7 @@ describe("FeedPollCard", () => {
     expect(navigationMocks.refresh).toHaveBeenCalledTimes(1);
   });
 
-  it("keeps the home origin on the code stats link", () => {
+  it("leaves the home result actions to the surrounding home card", () => {
     const poll = createPoll();
     poll.canViewCodeStats = true;
     poll.viewerVoteOptionId = poll.options[0]?.id ?? null;
@@ -73,11 +80,9 @@ describe("FeedPollCard", () => {
     render(<FeedPollCard poll={poll} returnTo="/home" variant="home" />);
 
     expect(
-      screen.getByRole("link", { name: "뉴앙 코드별 통계 보기" }),
-    ).toHaveAttribute(
-      "href",
-      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats?from=home",
-    );
+      screen.queryByRole("link", { name: "뉴앙 코드별 통계 보기" }),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/총 0명 참여/)).not.toBeInTheDocument();
   });
 });
 
@@ -105,8 +110,7 @@ function createPoll(): FeedPollSummary {
     ],
     promptId: "balance_home_free_day_together_solo_001",
     question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
-    statsHref:
-      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats",
+    statsHref: "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats",
     totalVotes: 0,
     viewerVoteOptionId: null,
   };

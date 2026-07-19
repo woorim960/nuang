@@ -428,6 +428,11 @@ function HomeDailyChoice() {
 function HomeCommunityPoll({ item }: { item: FeedItem }) {
   if (!item.poll) return null;
 
+  const statsHref = `${item.poll.statsHref}?from=home`;
+  const hasVoted = Boolean(item.poll.viewerVoteOptionId);
+  const latestReply = item.replyPreview?.[0];
+  const replyCount = item.replyCount ?? item.replyPreview?.length ?? 0;
+
   return (
     <section className={styles.section}>
       <SectionHeading
@@ -440,13 +445,65 @@ function HomeCommunityPoll({ item }: { item: FeedItem }) {
           <span>{item.poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
         </div>
         <FeedPollCard poll={item.poll} returnTo="/home" variant="home" />
-        <div className={styles.communityPollFooter}>
-          <Link href={`${item.poll.statsHref}?from=home`}>
-            코드별 통계와 댓글 보기
-            <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
-          </Link>
-          <span>{item.replyLabel}</span>
-        </div>
+        {hasVoted ? (
+          <div className={styles.communityMomentum}>
+            <span aria-hidden="true" className={styles.communityMomentumDot} />
+            <div>
+              <strong>
+                {item.poll.canViewCodeStats
+                  ? "뉴앙 코드별 선택 차이가 열렸어요"
+                  : "사람들의 선택이 모이기 시작했어요"}
+              </strong>
+              <p>
+                {item.poll.canViewCodeStats
+                  ? "나와 다른 코드는 무엇을 골랐는지 비교해보세요."
+                  : "참여가 더 모이면 뉴앙 코드별 선택 차이도 볼 수 있어요."}
+              </p>
+              {item.poll.canViewCodeStats ? (
+                <Link
+                  className={styles.communityMomentumAction}
+                  href={statsHref}
+                >
+                  코드별 결과 비교하기
+                  <ArrowRight aria-hidden="true" size={14} strokeWidth={2} />
+                </Link>
+              ) : null}
+            </div>
+          </div>
+        ) : null}
+
+        <Link className={styles.communityDiscussion} href={statsHref}>
+          <span aria-hidden="true" className={styles.communityDiscussionIcon}>
+            <MessageCircle size={17} strokeWidth={2} />
+          </span>
+          <span className={styles.communityDiscussionCopy}>
+            {latestReply ? (
+              <>
+                <small>최근 댓글 · {latestReply.authorName}</small>
+                <strong>{latestReply.body}</strong>
+                <span>
+                  {replyCount.toLocaleString("ko-KR")}개 댓글 모두 보기
+                </span>
+              </>
+            ) : (
+              <>
+                <small>아직 댓글이 없어요</small>
+                <strong>
+                  {hasVoted
+                    ? "내가 고른 이유를 먼저 남겨보세요."
+                    : "투표한 뒤 서로의 이유도 나눠보세요."}
+                </strong>
+                <span>{hasVoted ? "첫 댓글 남기기" : "댓글 둘러보기"}</span>
+              </>
+            )}
+          </span>
+          <ArrowRight
+            aria-hidden="true"
+            className={styles.communityDiscussionArrow}
+            size={17}
+            strokeWidth={2}
+          />
+        </Link>
       </div>
     </section>
   );
@@ -464,7 +521,11 @@ function HomeConversations({ items }: { items: FeedItem[] }) {
       {items.length > 0 ? (
         <div className={styles.conversationList}>
           {items.map((item) => (
-            <Link className={styles.conversation} href="/feed" key={item.id}>
+            <Link
+              className={styles.conversation}
+              href={item.reportShare?.href ?? "/feed"}
+              key={item.id}
+            >
               <div className={styles.conversationMeta}>
                 <span>{item.authorName}</span>
                 <span aria-hidden="true">·</span>
@@ -519,7 +580,8 @@ function selectConversations(items: FeedItem[], excludedItemId?: string) {
       (item) =>
         item.id !== excludedItemId &&
         item.kind !== "daily_question" &&
-        isCurrentCodeContent(item),
+        isCurrentCodeContent(item) &&
+        isUsefulHomeConversation(item),
     )
     .slice(0, 2);
 }
@@ -527,6 +589,17 @@ function selectConversations(items: FeedItem[], excludedItemId?: string) {
 function isCurrentCodeContent(item: FeedItem) {
   if (!item.reportShare) return true;
   return /^[EI][RN][GA][KM][CQ]$/.test(item.reportShare.profileCode);
+}
+
+function isUsefulHomeConversation(item: FeedItem) {
+  if (item.reportShare) return true;
+  if (item.poll || item.kind === "balance_game") return false;
+
+  const readableCharacterCount = `${item.title} ${item.body}`.match(
+    /[가-힣A-Za-z0-9]/g,
+  )?.length;
+
+  return (readableCharacterCount ?? 0) >= 12;
 }
 
 const homeDailyChoice = {

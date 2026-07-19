@@ -94,6 +94,21 @@ describe("HomeDashboard", () => {
         timeLabel: "방금",
         title: "오늘의 생각",
       },
+      {
+        authorHandle: "short",
+        authorName: "짧은 글",
+        avatarLabel: "짧",
+        body: "ㅣㅏㅡㅔ",
+        id: "home-preview-unreadable-post",
+        kind: "user_post",
+        layout: "thread",
+        likeLabel: "좋아요 0개",
+        priority: -999,
+        replyLabel: "답글 0개",
+        targetType: "feed_post",
+        timeLabel: "방금",
+        title: "밸런스 게임",
+      },
     ];
 
     render(<HomeDashboard feedPreviewItems={serverPreviewItems} />);
@@ -103,6 +118,7 @@ describe("HomeDashboard", () => {
       "href",
       "/feed",
     );
+    expect(screen.queryByText("ㅣㅏㅡㅔ")).not.toBeInTheDocument();
     expect(screen.getByText("오늘의 성향 질문")).toBeInTheDocument();
   });
 
@@ -168,7 +184,16 @@ describe("HomeDashboard", () => {
         viewerVoteOptionId: "option-together",
       },
       priority: -1000,
+      replyCount: 3,
       replyLabel: "답글 3개",
+      replyPreview: [
+        {
+          authorHandle: "guest",
+          authorName: "고요한산책",
+          body: "오늘은 혼자 쉬는 시간이 더 필요했어요.",
+          id: "reply-1",
+        },
+      ],
       targetType: "feed_post",
       timeLabel: "방금",
       title: "밸런스 게임",
@@ -180,12 +205,91 @@ describe("HomeDashboard", () => {
     expect(screen.getByText("10명 참여")).toBeInTheDocument();
     expect(screen.getByText("60%")).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /코드별 통계와 댓글 보기/ }),
+      screen.getByRole("link", { name: /코드별 결과 비교하기/ }),
     ).toHaveAttribute(
       "href",
       "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats?from=home",
     );
-    expect(screen.getByText("답글 3개")).toBeInTheDocument();
+    expect(
+      screen.getByText("뉴앙 코드별 선택 차이가 열렸어요"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("오늘은 혼자 쉬는 시간이 더 필요했어요."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /3개 댓글 모두 보기/ }),
+    ).toHaveAttribute(
+      "href",
+      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats?from=home",
+    );
+  });
+
+  it("explains the low-participation state without inventing code statistics", async () => {
+    const communityPollItem: FeedItem = {
+      authorHandle: "nuang.official",
+      authorName: "NUANG",
+      avatarLabel: "뉴",
+      body: "오늘 더 끌리는 쪽을 골라보세요.",
+      id: "official-poll-low-participation",
+      kind: "balance_game",
+      layout: "thread",
+      likeLabel: "좋아요 0개",
+      poll: {
+        canViewCodeStats: false,
+        id: "poll-low-participation",
+        options: [
+          {
+            id: "option-together",
+            key: "together",
+            label: "사람을 만나 함께 보낸다",
+            ratio: 100,
+            viewerHasVoted: true,
+            voteCount: 1,
+          },
+          {
+            id: "option-solo",
+            key: "solo",
+            label: "혼자 여유롭게 보낸다",
+            ratio: 0,
+            viewerHasVoted: false,
+            voteCount: 0,
+          },
+        ],
+        promptId: "balance_home_free_day_together_solo_001",
+        question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
+        statsHref: "/feed/polls/poll-low-participation/stats",
+        totalVotes: 1,
+        viewerVoteOptionId: "option-together",
+      },
+      priority: -1000,
+      replyCount: 0,
+      replyLabel: "답글 0개",
+      targetType: "feed_post",
+      timeLabel: "방금",
+      title: "밸런스 게임",
+    };
+
+    render(<HomeDashboard feedPreviewItems={[communityPollItem]} />);
+
+    expect(await screen.findByText("1명 참여")).toBeInTheDocument();
+    expect(
+      screen.getByText("사람들의 선택이 모이기 시작했어요"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "참여가 더 모이면 뉴앙 코드별 선택 차이도 볼 수 있어요.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("코드별 결과 비교하기")).not.toBeInTheDocument();
+    expect(
+      screen.getByText("내가 고른 이유를 먼저 남겨보세요."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /첫 댓글 남기기/ }),
+    ).toHaveAttribute(
+      "href",
+      "/feed/polls/poll-low-participation/stats?from=home",
+    );
   });
 
   it("resumes the current full assessment with accurate base-item progress", async () => {

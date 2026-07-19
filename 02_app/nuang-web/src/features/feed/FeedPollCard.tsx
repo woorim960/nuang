@@ -176,7 +176,7 @@ export function FeedPollCard({
           </button>
         ))}
       </div>
-      {hasVoted ? (
+      {hasVoted && variant !== "home" ? (
         <div className="mt-3 flex items-center justify-between gap-4 text-[13px] font-semibold text-[#737373]">
           <span>총 {poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
           {poll.canViewCodeStats ? (
@@ -190,11 +190,11 @@ export function FeedPollCard({
             <span>코드별 비교는 참여자가 더 모이면 열려요</span>
           )}
         </div>
-      ) : (
+      ) : !hasVoted ? (
         <p className="mt-3 text-[13px] font-semibold text-[#737373]">
           하나를 고르면 결과를 볼 수 있어요.
         </p>
-      )}
+      ) : null}
       {status.status === "pending" ? (
         <p className="mt-2 text-xs font-medium text-[#737373]" role="status">
           투표 저장 중
@@ -233,9 +233,7 @@ function createPollResumePath({
   returnTo: string;
 }) {
   const safeReturnTo =
-    returnTo.startsWith("/") && !returnTo.startsWith("//")
-      ? returnTo
-      : "/feed";
+    returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/feed";
   const url = new URL(safeReturnTo, "https://nuang.local");
 
   url.searchParams.set("resumeFeed", "poll");
