@@ -647,6 +647,17 @@
   box-shadow: 0 8px 22px rgb(60 47 80 / 7%);
 }
 
+.communityDiscussion[data-disabled="true"] {
+  min-height: 64px;
+  background: #fbfafb;
+  cursor: default;
+}
+
+.communityDiscussion[data-disabled="true"]:hover {
+  border-color: #ebe7ee;
+  box-shadow: none;
+}
+
 .communityDiscussion:active {
   transform: scale(0.995);
 }

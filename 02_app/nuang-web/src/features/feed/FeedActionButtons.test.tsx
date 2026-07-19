@@ -46,7 +46,9 @@ describe("FeedActionButtons", () => {
 
     fireEvent.click(likeButton);
 
-    expect(await screen.findByText("피드 글쓰기와 댓글은 아직 열기 전이에요.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("피드 글쓰기와 댓글은 아직 열기 전이에요."),
+    ).toBeInTheDocument();
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
         "/api/feed",
@@ -197,6 +199,30 @@ describe("FeedActionButtons", () => {
     expect(navigationMocks.refresh).not.toHaveBeenCalled();
   });
 
+  it("shows a focused comment composer without unrelated feed actions", () => {
+    vi.stubGlobal("fetch", vi.fn());
+
+    render(
+      <FeedActionButtons
+        commentComposer
+        commentPlaceholder="왜 이쪽을 골랐나요?"
+        postId="post-001"
+        targetType="feed_post"
+      />,
+    );
+
+    expect(
+      screen.getByPlaceholderText("왜 이쪽을 골랐나요?"),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "등록" })).toBeDisabled();
+    expect(
+      screen.queryByRole("button", { name: "좋아요" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "공유" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("restores a pending comment after login without losing the draft", async () => {
     window.sessionStorage.setItem(
       "nuang:feed:pending-comment:post-001",
@@ -221,7 +247,9 @@ describe("FeedActionButtons", () => {
       "로그인 전에 작성한 댓글이에요.",
     );
     expect(
-      screen.getByText("로그인이 완료됐어요. 게시를 누르면 댓글이 등록돼요."),
+      screen.getByText(
+        "로그인이 완료됐어요. 게시 버튼을 누르면 댓글이 등록돼요.",
+      ),
     ).toBeInTheDocument();
     expect(window.location.search).toBe("?from=home");
   });
@@ -351,7 +379,9 @@ describe("FeedActionButtons", () => {
     fireEvent.click(screen.getByRole("button", { name: "공유" }));
 
     expect(
-      await screen.findByText("공유는 프로필과 결과 공유 정책이 연결된 뒤 열릴 예정이에요."),
+      await screen.findByText(
+        "공유는 프로필과 결과 공유 정책이 연결된 뒤 열릴 예정이에요.",
+      ),
     ).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });

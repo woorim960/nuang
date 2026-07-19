@@ -11,6 +11,7 @@ import type {
   FeedReplyPreview,
 } from "@/features/feed/feed-seed";
 import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
+import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { getSupportedNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
 import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
@@ -142,6 +143,13 @@ export type FeedPollStatsPayload = {
     replyPreview: FeedReplyPreview[];
   };
   totalVotes: number;
+  viewer: {
+    isAuthenticated: boolean;
+    nuangCode: string | null;
+    profileName: string | null;
+    voteOptionId: string | null;
+    voteOptionLabel: string | null;
+  };
 };
 
 export type FeedReportSharePayload = {
@@ -316,7 +324,7 @@ export async function createServerFeedPollStatsPayload(
     };
   });
   const votesByCode = groupBy(
-    votes.filter((vote) => Boolean(vote.nuang_code)),
+    votes.filter((vote) => isCurrentNuangCode(vote.nuang_code)),
     (vote) => String(vote.nuang_code),
   );
   const codeRows = [...votesByCode.entries()]
@@ -347,12 +355,17 @@ export async function createServerFeedPollStatsPayload(
       };
     });
   const accountId = await getCurrentAccountId(serviceClient);
-  const engagementByPostId = await readPostEngagements({
+  const viewerVote = accountId
+    ? (votes.find((vote) => vote.account_id === accountId) ?? null)
+    : null;
+  const viewerCode = isCurrentNuangCode(viewerVote?.nuang_code)
+    ? viewerVote.nuang_code
+    : null;
+  const postReplies = await readPostReplies({
     accountId,
     client: serviceClient,
-    rows: [{ id: poll.post_id } as FeedPostRow],
+    postId: poll.post_id,
   });
-  const engagement = engagementByPostId.get(poll.post_id);
 
   return {
     codeRows,
@@ -363,10 +376,21 @@ export async function createServerFeedPollStatsPayload(
     },
     post: {
       id: poll.post_id,
-      replyCount: engagement?.replies ?? 0,
-      replyPreview: engagement?.replyPreview ?? [],
+      replyCount: postReplies.replyCount,
+      replyPreview: postReplies.replies,
     },
     totalVotes,
+    viewer: {
+      isAuthenticated: Boolean(accountId),
+      nuangCode: viewerCode,
+      profileName: viewerCode
+        ? (getCandidateProfileDefinition(viewerCode)?.displayName ?? null)
+        : null,
+      voteOptionId: viewerVote?.option_id ?? null,
+      voteOptionLabel:
+        options.find((option) => option.id === viewerVote?.option_id)?.label ??
+        null,
+    },
   };
 }
 
@@ -678,6 +702,45 @@ async function readPostEngagements({
   return engagementByPostId;
 }
 
+async function readPostReplies({
+  accountId,
+  client,
+  postId,
+}: {
+  accountId: string | null;
+  client: SupabaseClient;
+  postId: string;
+}) {
+  const response = await client
+    .schema("feed")
+    .from("feed_comment")
+    .select(
+      "id, post_id, author_account_id, body, moderation_status, created_at",
+    )
+    .eq("post_id", postId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (response.error || !response.data) {
+    return {
+      replies: [] as FeedReplyPreview[],
+      replyCount: 0,
+    };
+  }
+
+  const visibleComments = (response.data as FeedPostCommentRow[])
+    .filter((row) => isVisibleComment(row, accountId))
+    .sort(compareCommentsByCreatedAtDesc);
+
+  return {
+    replies: visibleComments.map((comment) =>
+      mapCommentRowToReplyPreview(comment, accountId),
+    ),
+    replyCount: visibleComments.length,
+  };
+}
+
 async function readPollSummaries({
   accountId,
   client,
@@ -753,8 +816,15 @@ async function readPollSummaries({
       ? (votes.find((vote) => vote.account_id === accountId) ?? null)
       : null;
 
+    const codeVotes = groupBy(
+      votes.filter((vote) => isCurrentNuangCode(vote.nuang_code)),
+      (vote) => String(vote.nuang_code),
+    );
+
     pollByPostId.set(poll.post_id, {
-      canViewCodeStats: totalVotes >= 2,
+      canViewCodeStats: [...codeVotes.values()].some(
+        (groupedVotes) => groupedVotes.length >= 3,
+      ),
       id: poll.id,
       options: options.map((option) => {
         const voteCount = votes.filter(
@@ -1263,6 +1333,10 @@ function isVisibleComment(row: FeedCommentBaseRow, accountId: string | null) {
   }
 
   return Boolean(accountId && row.author_account_id === accountId);
+}
+
+function isCurrentNuangCode(code: string | null | undefined): code is string {
+  return Boolean(code && getCandidateProfileDefinition(code));
 }
 
 function compareCommentsByCreatedAtDesc(

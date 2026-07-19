@@ -430,7 +430,7 @@ function HomeCommunityPoll({ item }: { item: FeedItem }) {
 
   const statsHref = `${item.poll.statsHref}?from=home`;
   const hasVoted = Boolean(item.poll.viewerVoteOptionId);
-  const latestReply = item.replyPreview?.[0];
+  const latestReply = hasVoted ? item.replyPreview?.[0] : undefined;
   const replyCount = item.replyCount ?? item.replyPreview?.length ?? 0;
 
   return (
@@ -472,38 +472,46 @@ function HomeCommunityPoll({ item }: { item: FeedItem }) {
           </div>
         ) : null}
 
-        <Link className={styles.communityDiscussion} href={statsHref}>
-          <span aria-hidden="true" className={styles.communityDiscussionIcon}>
-            <MessageCircle size={17} strokeWidth={2} />
-          </span>
-          <span className={styles.communityDiscussionCopy}>
-            {latestReply ? (
-              <>
-                <small>최근 댓글 · {latestReply.authorName}</small>
-                <strong>{latestReply.body}</strong>
-                <span>
-                  {replyCount.toLocaleString("ko-KR")}개 댓글 모두 보기
-                </span>
-              </>
-            ) : (
-              <>
-                <small>아직 댓글이 없어요</small>
-                <strong>
-                  {hasVoted
-                    ? "내가 고른 이유를 먼저 남겨보세요."
-                    : "투표한 뒤 서로의 이유도 나눠보세요."}
-                </strong>
-                <span>{hasVoted ? "첫 댓글 남기기" : "댓글 둘러보기"}</span>
-              </>
-            )}
-          </span>
-          <ArrowRight
-            aria-hidden="true"
-            className={styles.communityDiscussionArrow}
-            size={17}
-            strokeWidth={2}
-          />
-        </Link>
+        {hasVoted ? (
+          <Link className={styles.communityDiscussion} href={statsHref}>
+            <span aria-hidden="true" className={styles.communityDiscussionIcon}>
+              <MessageCircle size={17} strokeWidth={2} />
+            </span>
+            <span className={styles.communityDiscussionCopy}>
+              {latestReply ? (
+                <>
+                  <small>최근 댓글 · {latestReply.authorName}</small>
+                  <strong>{latestReply.body}</strong>
+                  <span>
+                    {replyCount.toLocaleString("ko-KR")}개 댓글 모두 보기
+                  </span>
+                </>
+              ) : (
+                <>
+                  <small>아직 댓글이 없어요</small>
+                  <strong>내가 고른 이유를 먼저 남겨보세요.</strong>
+                  <span>첫 댓글 남기기</span>
+                </>
+              )}
+            </span>
+            <ArrowRight
+              aria-hidden="true"
+              className={styles.communityDiscussionArrow}
+              size={17}
+              strokeWidth={2}
+            />
+          </Link>
+        ) : (
+          <div className={styles.communityDiscussion} data-disabled="true">
+            <span aria-hidden="true" className={styles.communityDiscussionIcon}>
+              <MessageCircle size={17} strokeWidth={2} />
+            </span>
+            <span className={styles.communityDiscussionCopy}>
+              <small>투표 후에 열려요</small>
+              <strong>하나를 고르면 서로의 선택 이유도 볼 수 있어요.</strong>
+            </span>
+          </div>
+        )}
       </div>
     </section>
   );

@@ -74,6 +74,13 @@ describe("FeedPollStatsPage", () => {
         ],
       },
       totalVotes: 3,
+      viewer: {
+        isAuthenticated: true,
+        nuangCode: "ENAKQ",
+        profileName: "관계를 여는 지휘자",
+        voteOptionId: "option-sea",
+        voteOptionLabel: "바다",
+      },
     });
 
     render(
@@ -85,18 +92,23 @@ describe("FeedPollStatsPage", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "뉴앙 코드별 통계" }),
+      screen.getByRole("heading", { name: "투표 결과" }),
     ).toBeInTheDocument();
+    expect(screen.getByText("내가 고른 선택")).toBeInTheDocument();
+    expect(screen.getAllByText("바다").length).toBeGreaterThan(0);
     expect(screen.getByText("3명 참여")).toBeInTheDocument();
     expect(screen.getByText("ENAKQ")).toBeInTheDocument();
     expect(screen.getByText("관계를 여는 지휘자")).toBeInTheDocument();
-    expect(screen.getAllByText("100% · 3명").length).toBeGreaterThan(0);
-    expect(document.body).toHaveTextContent("3명 이상 참여한 경우만 표시해요.");
+    expect(screen.getAllByText("100%").length).toBeGreaterThan(0);
+    expect(document.body).toHaveTextContent("3명 이상 모였을 때만");
     expect(document.body).not.toHaveTextContent("5명");
     expect(document.body).not.toHaveTextContent("누가 투표");
-    expect(screen.getByText("댓글로 이어서 이야기해요")).toBeInTheDocument();
+    expect(screen.getByText("선택한 이유 나누기")).toBeInTheDocument();
     expect(
       screen.getByText("함께 시간을 보내면 기분이 더 살아나요."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText("왜 이쪽을 골랐나요?"),
     ).toBeInTheDocument();
   });
 
@@ -121,6 +133,13 @@ describe("FeedPollStatsPage", () => {
         replyPreview: [],
       },
       totalVotes: 0,
+      viewer: {
+        isAuthenticated: false,
+        nuangCode: null,
+        profileName: null,
+        voteOptionId: null,
+        voteOptionLabel: null,
+      },
     });
 
     render(
@@ -135,5 +154,12 @@ describe("FeedPollStatsPage", () => {
     expect(
       screen.getByRole("link", { name: "홈으로 돌아가기" }),
     ).toHaveAttribute("href", "/home");
+    expect(
+      screen.getByText("먼저 오늘의 선택을 골라주세요"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /투표하고 결과 보기/ }),
+    ).toHaveAttribute("href", "/home");
+    expect(screen.queryByText("전체 선택 결과")).not.toBeInTheDocument();
   });
 });

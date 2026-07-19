@@ -213,6 +213,10 @@ describe("feed server read model", () => {
         question: "나 혼자 여행 간다면?",
       },
       totalVotes: 2,
+      viewer: {
+        isAuthenticated: false,
+        voteOptionId: null,
+      },
     });
     expect(payload?.codeRows).toEqual([]);
   });

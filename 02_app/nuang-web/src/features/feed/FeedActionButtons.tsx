@@ -31,6 +31,8 @@ type FeedActionFailurePayload =
 
 export function FeedActionButtons({
   className,
+  commentComposer = false,
+  commentPlaceholder = "댓글 달기",
   includeBookmark = false,
   initialBookmarked = false,
   initialLiked = false,
@@ -40,6 +42,8 @@ export function FeedActionButtons({
   targetType = "feed_seed_card",
 }: {
   className?: string;
+  commentComposer?: boolean;
+  commentPlaceholder?: string;
   includeBookmark?: boolean;
   initialBookmarked?: boolean;
   initialLiked?: boolean;
@@ -51,7 +55,7 @@ export function FeedActionButtons({
   const router = useRouter();
   const [status, setStatus] = useState<FeedActionStatus>({ status: "idle" });
   const [commentBody, setCommentBody] = useState("");
-  const [isCommentOpen, setIsCommentOpen] = useState(false);
+  const [isCommentOpen, setIsCommentOpen] = useState(commentComposer);
   const [activeActions, setActiveActions] = useState<Array<FeedAction["type"]>>(
     createInitialActiveActions({ initialBookmarked, initialLiked }),
   );
@@ -77,7 +81,7 @@ export function FeedActionButtons({
       setCommentBody(savedDraft);
       setIsCommentOpen(true);
       setStatus({
-        message: "로그인이 완료됐어요. 게시를 누르면 댓글이 등록돼요.",
+        message: `로그인이 완료됐어요. ${commentComposer ? "등록" : "게시"} 버튼을 누르면 댓글이 등록돼요.`,
         status: "notice",
       });
     }, 0);
@@ -85,42 +89,44 @@ export function FeedActionButtons({
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [postId]);
-  const actions: FeedAction[] = [
-    {
-      label: "좋아요",
-      makeRequest: (active) =>
-        active
-          ? {
-              action: "remove_reaction",
-              reaction: "like",
-              target: {
-                id: postId,
-                type: targetType,
-              },
-            }
-          : {
-              action: "react",
-              reaction: "like",
-              target: {
-                id: postId,
-                type: targetType,
-              },
-            },
-      mode: "api",
-      type: "react",
-    },
-    {
-      label: "댓글",
-      mode: "comment",
-      type: "comment",
-    },
-    {
-      label: "공유",
-      mode: "local",
-      type: "share",
-    },
-  ];
+  }, [commentComposer, postId]);
+  const actions: FeedAction[] = commentComposer
+    ? []
+    : [
+        {
+          label: "좋아요",
+          makeRequest: (active) =>
+            active
+              ? {
+                  action: "remove_reaction",
+                  reaction: "like",
+                  target: {
+                    id: postId,
+                    type: targetType,
+                  },
+                }
+              : {
+                  action: "react",
+                  reaction: "like",
+                  target: {
+                    id: postId,
+                    type: targetType,
+                  },
+                },
+          mode: "api",
+          type: "react",
+        },
+        {
+          label: "댓글",
+          mode: "comment",
+          type: "comment",
+        },
+        {
+          label: "공유",
+          mode: "local",
+          type: "share",
+        },
+      ];
 
   if (includeBookmark) {
     actions.push({
@@ -150,55 +156,75 @@ export function FeedActionButtons({
 
   return (
     <div className={cn("min-w-0", className)}>
-      <div
-        className={cn(
-          "flex items-center text-[#242424]",
-          includeBookmark ? "justify-between" : "gap-4",
-        )}
-      >
-        <div className="flex items-center gap-4">
-          {primaryActions.map((action) => (
+      {actions.length > 0 ? (
+        <div
+          className={cn(
+            "flex items-center text-[#242424]",
+            includeBookmark ? "justify-between" : "gap-4",
+          )}
+        >
+          <div className="flex items-center gap-4">
+            {primaryActions.map((action) => (
+              <ActionButton
+                action={action}
+                active={activeActions.includes(action.type)}
+                disabled={status.status === "pending"}
+                expanded={action.type === "comment" ? isCommentOpen : undefined}
+                key={action.type}
+                onClick={handleAction}
+              />
+            ))}
+          </div>
+          {bookmarkAction ? (
             <ActionButton
-              action={action}
-              active={activeActions.includes(action.type)}
+              action={bookmarkAction}
+              active={activeActions.includes(bookmarkAction.type)}
               disabled={status.status === "pending"}
-              expanded={action.type === "comment" ? isCommentOpen : undefined}
-              key={action.type}
               onClick={handleAction}
             />
-          ))}
+          ) : null}
         </div>
-        {bookmarkAction ? (
-          <ActionButton
-            action={bookmarkAction}
-            active={activeActions.includes(bookmarkAction.type)}
-            disabled={status.status === "pending"}
-            onClick={handleAction}
-          />
-        ) : null}
-      </div>
+      ) : null}
       {isCommentOpen && replyPreview.length > 0 ? (
         <FeedReplyPreviewList replies={replyPreview} />
       ) : null}
       {isCommentOpen ? (
-        <form className="mt-2 flex items-center gap-2" onSubmit={handleCommentSubmit}>
+        <form
+          className={cn(
+            "flex items-center gap-2",
+            commentComposer ? "mt-0" : "mt-2",
+          )}
+          onSubmit={handleCommentSubmit}
+        >
           <label className="sr-only" htmlFor={`feed-comment-${postId}`}>
             댓글 내용
           </label>
           <input
-            className="min-h-9 min-w-0 flex-1 border-0 border-b border-[#dedede] bg-transparent px-0 text-sm font-medium outline-none placeholder:text-[#9a9a9a] focus:border-[#111111]"
+            className={cn(
+              "min-w-0 flex-1 text-sm font-medium outline-none placeholder:text-[#9a9a9a]",
+              commentComposer
+                ? "min-h-11 rounded-[14px] border border-[#ded9e3] bg-white px-3 focus:border-[#8066d3] focus:ring-2 focus:ring-[#8066d3]/10"
+                : "min-h-9 border-0 border-b border-[#dedede] bg-transparent px-0 focus:border-[#111111]",
+            )}
             id={`feed-comment-${postId}`}
             maxLength={400}
             onChange={(event) => setCommentBody(event.target.value)}
-            placeholder="댓글 달기"
+            placeholder={commentPlaceholder}
             value={commentBody}
           />
           <button
-            className="h-9 shrink-0 px-1 text-sm font-bold text-[#111111] disabled:text-[#b8b8b8]"
-            disabled={commentBody.trim().length < 2 || status.status === "pending"}
+            className={cn(
+              "shrink-0 text-sm font-bold disabled:cursor-not-allowed",
+              commentComposer
+                ? "h-11 rounded-[14px] bg-[#5e43c2] px-4 text-white shadow-[0_7px_18px_rgb(94_67_194_/_18%)] disabled:bg-[#d8d2e2] disabled:shadow-none"
+                : "h-9 px-1 text-[#111111] disabled:text-[#b8b8b8]",
+            )}
+            disabled={
+              commentBody.trim().length < 2 || status.status === "pending"
+            }
             type="submit"
           >
-            게시
+            {commentComposer ? "등록" : "게시"}
           </button>
         </form>
       ) : null}
@@ -280,9 +306,9 @@ export function FeedActionButtons({
         },
         method: "POST",
       });
-      const payload = (await response.json().catch(() => null)) as
-        | FeedActionFailurePayload
-        | null;
+      const payload = (await response
+        .json()
+        .catch(() => null)) as FeedActionFailurePayload | null;
 
       if (response.status === 401) {
         if (request.action === "create_comment") {
@@ -366,9 +392,7 @@ function createFeedResumePath({
   returnTo: string;
 }) {
   const safeReturnTo =
-    returnTo.startsWith("/") && !returnTo.startsWith("//")
-      ? returnTo
-      : "/feed";
+    returnTo.startsWith("/") && !returnTo.startsWith("//") ? returnTo : "/feed";
   const url = new URL(safeReturnTo, "https://nuang.local");
   url.searchParams.set(
     "resumeFeed",
@@ -387,7 +411,11 @@ function clearResumeFeedParams() {
   ["auth", "resumeFeed", "postId"].forEach((key) => {
     url.searchParams.delete(key);
   });
-  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+  window.history.replaceState(
+    {},
+    "",
+    `${url.pathname}${url.search}${url.hash}`,
+  );
 }
 
 function createInitialActiveActions({
@@ -415,7 +443,9 @@ function FeedReplyPreviewList({ replies }: { replies: FeedReplyPreview[] }) {
     <div aria-label="최근 댓글" className="mt-3 space-y-1.5">
       {replies.map((reply) => (
         <p className="text-[13px] leading-[1.45] text-[#2a2a2a]" key={reply.id}>
-          <span className="font-extrabold text-[#111111]">{reply.authorName}</span>{" "}
+          <span className="font-extrabold text-[#111111]">
+            {reply.authorName}
+          </span>{" "}
           <span>{reply.body}</span>
           {reply.statusLabel ? (
             <span className="ml-1 text-[#737373]">· {reply.statusLabel}</span>
@@ -492,7 +522,8 @@ function getActionIcon(type: FeedAction["type"], active: boolean) {
 }
 
 function getSuccessMessage(type: FeedAction["type"], active: boolean) {
-  if (type === "react") return active ? "좋아요를 남겼어요." : "좋아요를 취소했어요.";
+  if (type === "react")
+    return active ? "좋아요를 남겼어요." : "좋아요를 취소했어요.";
   if (type === "bookmark") return active ? "저장했어요." : "저장을 취소했어요.";
   if (type === "comment") return "댓글이 접수됐어요.";
 
