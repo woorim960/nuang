@@ -183,7 +183,7 @@ describe("HomeDashboard", () => {
       screen.getByRole("link", { name: /코드별 통계와 댓글 보기/ }),
     ).toHaveAttribute(
       "href",
-      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats",
+      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats?from=home",
     );
     expect(screen.getByText("답글 3개")).toBeInTheDocument();
   });

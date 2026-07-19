@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import type { FeedPollSummary } from "@/features/feed/feed-seed";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { cn } from "@/lib/utils/cn";
@@ -23,8 +23,53 @@ export function FeedPollCard({
 }) {
   const router = useRouter();
   const [status, setStatus] = useState<VoteStatus>({ status: "idle" });
+  const resumedVoteRef = useRef(false);
   const hasVoted = Boolean(poll.viewerVoteOptionId);
   const canVote = status.status !== "pending" && !hasVoted;
+
+  useEffect(() => {
+    if (hasVoted || resumedVoteRef.current) return;
+
+    const searchParams = new URLSearchParams(window.location.search);
+    const resumedPollId = searchParams.get("pollId");
+    const resumedOptionId = searchParams.get("optionId");
+    const shouldResume =
+      searchParams.get("auth") === "connected" &&
+      searchParams.get("resumeFeed") === "poll" &&
+      resumedPollId === poll.id &&
+      poll.options.some((option) => option.id === resumedOptionId);
+
+    if (!shouldResume || !resumedOptionId) return;
+
+    resumedVoteRef.current = true;
+    const timeoutId = window.setTimeout(() => {
+      setStatus({ status: "pending" });
+
+      void postPollVote(poll.id, resumedOptionId)
+        .then((response) => {
+          if (!response.ok) {
+            setStatus({
+              message: "로그인은 완료됐지만 투표를 저장하지 못했어요.",
+              status: "error",
+            });
+            return;
+          }
+
+          router.replace(returnTo);
+          router.refresh();
+        })
+        .catch(() => {
+          setStatus({
+            message: "네트워크 연결 때문에 투표를 확인하지 못했어요.",
+            status: "error",
+          });
+        });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [hasVoted, poll.id, poll.options, returnTo, router]);
 
   async function handleVote(optionId: string) {
     if (!canVote) return;
@@ -32,20 +77,18 @@ export function FeedPollCard({
     setStatus({ status: "pending" });
 
     try {
-      const response = await fetch("/api/feed", {
-        body: JSON.stringify({
-          action: "vote_poll",
-          optionId,
-          pollId: poll.id,
-        } satisfies FeedWriteRequest),
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      });
+      const response = await postPollVote(poll.id, optionId);
 
       if (response.status === 401) {
-        router.push(`/login?next=${encodeURIComponent(returnTo)}`);
+        const resumePath = createPollResumePath({
+          optionId,
+          pollId: poll.id,
+          returnTo,
+        });
+
+        router.push(
+          `/login?next=${encodeURIComponent(resumePath)}&reason=poll`,
+        );
         return;
       }
 
@@ -137,11 +180,14 @@ export function FeedPollCard({
         <div className="mt-3 flex items-center justify-between gap-4 text-[13px] font-semibold text-[#737373]">
           <span>총 {poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
           {poll.canViewCodeStats ? (
-            <Link className="text-[#111111]" href={poll.statsHref}>
+            <Link
+              className="text-[#111111]"
+              href={createStatsHref(poll.statsHref, variant)}
+            >
               뉴앙 코드별 통계 보기
             </Link>
           ) : (
-            <span>2명 이상 모이면 통계가 열려요</span>
+            <span>코드별 비교는 참여자가 더 모이면 열려요</span>
           )}
         </div>
       ) : (
@@ -161,4 +207,48 @@ export function FeedPollCard({
       ) : null}
     </div>
   );
+}
+
+async function postPollVote(pollId: string, optionId: string) {
+  return fetch("/api/feed", {
+    body: JSON.stringify({
+      action: "vote_poll",
+      optionId,
+      pollId,
+    } satisfies FeedWriteRequest),
+    headers: {
+      "content-type": "application/json",
+    },
+    method: "POST",
+  });
+}
+
+function createPollResumePath({
+  optionId,
+  pollId,
+  returnTo,
+}: {
+  optionId: string;
+  pollId: string;
+  returnTo: string;
+}) {
+  const safeReturnTo =
+    returnTo.startsWith("/") && !returnTo.startsWith("//")
+      ? returnTo
+      : "/feed";
+  const url = new URL(safeReturnTo, "https://nuang.local");
+
+  url.searchParams.set("resumeFeed", "poll");
+  url.searchParams.set("pollId", pollId);
+  url.searchParams.set("optionId", optionId);
+
+  return `${url.pathname}${url.search}`;
+}
+
+function createStatsHref(statsHref: string, variant: "feed" | "home") {
+  if (variant !== "home") return statsHref;
+
+  const url = new URL(statsHref, "https://nuang.local");
+  url.searchParams.set("from", "home");
+  return `${url.pathname}${url.search}`;
 }

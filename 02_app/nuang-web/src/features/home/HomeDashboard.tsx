@@ -441,7 +441,7 @@ function HomeCommunityPoll({ item }: { item: FeedItem }) {
         </div>
         <FeedPollCard poll={item.poll} returnTo="/home" variant="home" />
         <div className={styles.communityPollFooter}>
-          <Link href={item.poll.statsHref}>
+          <Link href={`${item.poll.statsHref}?from=home`}>
             코드별 통계와 댓글 보기
             <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
           </Link>

@@ -3,7 +3,7 @@
 import { Bookmark, Heart, MessageCircle, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { FormEvent } from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import type { FeedReplyPreview } from "@/features/feed/feed-seed";
 import type { ApiClosedPayload } from "@/lib/api/closed-state-data";
@@ -36,6 +36,7 @@ export function FeedActionButtons({
   initialLiked = false,
   postId,
   replyPreview = [],
+  returnTo = "/feed",
   targetType = "feed_seed_card",
 }: {
   className?: string;
@@ -44,6 +45,7 @@ export function FeedActionButtons({
   initialLiked?: boolean;
   postId: string;
   replyPreview?: FeedReplyPreview[];
+  returnTo?: string;
   targetType?: "feed_post" | "feed_seed_card";
 }) {
   const router = useRouter();
@@ -53,6 +55,37 @@ export function FeedActionButtons({
   const [activeActions, setActiveActions] = useState<Array<FeedAction["type"]>>(
     createInitialActiveActions({ initialBookmarked, initialLiked }),
   );
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(window.location.search);
+    const shouldResumeComment =
+      searchParams.get("auth") === "connected" &&
+      searchParams.get("resumeFeed") === "comment" &&
+      searchParams.get("postId") === postId;
+
+    if (!shouldResumeComment) return;
+
+    const savedDraft = window.sessionStorage.getItem(
+      createPendingCommentKey(postId),
+    );
+
+    clearResumeFeedParams();
+
+    if (!savedDraft) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setCommentBody(savedDraft);
+      setIsCommentOpen(true);
+      setStatus({
+        message: "로그인이 완료됐어요. 게시를 누르면 댓글이 등록돼요.",
+        status: "notice",
+      });
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [postId]);
   const actions: FeedAction[] = [
     {
       label: "좋아요",
@@ -252,10 +285,23 @@ export function FeedActionButtons({
         | null;
 
       if (response.status === 401) {
-        setStatus({
-          message: "로그인 후 사용할 수 있어요.",
-          status: "notice",
+        if (request.action === "create_comment") {
+          window.sessionStorage.setItem(
+            createPendingCommentKey(postId),
+            request.body,
+          );
+        }
+
+        const resumePath = createFeedResumePath({
+          actionType,
+          postId,
+          returnTo,
         });
+        router.push(
+          `/login?next=${encodeURIComponent(resumePath)}&reason=${
+            actionType === "comment" ? "comment" : "community"
+          }`,
+        );
         return;
       }
 
@@ -281,6 +327,7 @@ export function FeedActionButtons({
       }
 
       if (actionType === "comment") {
+        window.sessionStorage.removeItem(createPendingCommentKey(postId));
         setCommentBody("");
         setIsCommentOpen(true);
       }
@@ -307,6 +354,40 @@ export function FeedActionButtons({
       });
     }
   }
+}
+
+function createFeedResumePath({
+  actionType,
+  postId,
+  returnTo,
+}: {
+  actionType: FeedAction["type"];
+  postId: string;
+  returnTo: string;
+}) {
+  const safeReturnTo =
+    returnTo.startsWith("/") && !returnTo.startsWith("//")
+      ? returnTo
+      : "/feed";
+  const url = new URL(safeReturnTo, "https://nuang.local");
+  url.searchParams.set(
+    "resumeFeed",
+    actionType === "comment" ? "comment" : "community",
+  );
+  url.searchParams.set("postId", postId);
+  return `${url.pathname}${url.search}`;
+}
+
+function createPendingCommentKey(postId: string) {
+  return `nuang:feed:pending-comment:${postId}`;
+}
+
+function clearResumeFeedParams() {
+  const url = new URL(window.location.href);
+  ["auth", "resumeFeed", "postId"].forEach((key) => {
+    url.searchParams.delete(key);
+  });
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
 function createInitialActiveActions({

@@ -106,4 +106,34 @@ describe("FeedPollStatsPage", () => {
       index: false,
     });
   });
+
+  it("returns to home and preserves the stats route for comment login", async () => {
+    feedReadMocks.createServerFeedPollStatsPayload.mockResolvedValue({
+      codeRows: [],
+      options: [],
+      poll: {
+        id: "11111111-1111-4111-8111-111111111111",
+        question: "갑자기 하루 여유가 생겼다면?",
+      },
+      post: {
+        id: "22222222-2222-4222-8222-222222222222",
+        replyCount: 0,
+        replyPreview: [],
+      },
+      totalVotes: 0,
+    });
+
+    render(
+      await FeedPollStatsPage({
+        params: Promise.resolve({
+          pollId: "11111111-1111-4111-8111-111111111111",
+        }),
+        searchParams: Promise.resolve({ from: "home" }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("link", { name: "홈으로 돌아가기" }),
+    ).toHaveAttribute("href", "/home");
+  });
 });

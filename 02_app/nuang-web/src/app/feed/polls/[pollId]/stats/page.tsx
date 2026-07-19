@@ -12,6 +12,9 @@ type FeedPollStatsPageProps = {
   params: Promise<{
     pollId: string;
   }>;
+  searchParams?: Promise<{
+    from?: string | string[];
+  }>;
 };
 
 export const metadata: Metadata = {
@@ -24,8 +27,16 @@ export const metadata: Metadata = {
 
 export default async function FeedPollStatsPage({
   params,
+  searchParams,
 }: FeedPollStatsPageProps) {
   const { pollId } = await params;
+  const query = searchParams ? await searchParams : {};
+  const from = Array.isArray(query.from) ? query.from[0] : query.from;
+  const backHref = from === "home" ? "/home" : "/feed";
+  const returnTo =
+    from === "home"
+      ? `/feed/polls/${pollId}/stats?from=home`
+      : `/feed/polls/${pollId}/stats`;
   const payload = await createServerFeedPollStatsPayload(pollId);
 
   if (!payload) {
@@ -36,9 +47,9 @@ export default async function FeedPollStatsPage({
     <main className="mx-auto min-h-dvh w-full max-w-[470px] border-x border-[#ececec] bg-white pb-10 text-[#111111]">
       <header className="sticky top-0 z-10 flex h-[58px] items-center gap-2 border-b border-[#ececec] bg-white/90 px-4 backdrop-blur-xl">
         <Link
-          aria-label="피드로 돌아가기"
+          aria-label={from === "home" ? "홈으로 돌아가기" : "피드로 돌아가기"}
           className="-ml-2 grid h-10 w-10 place-items-center rounded-full hover:bg-[#f5f5f5]"
-          href="/feed"
+          href={backHref}
         >
           <ArrowLeft aria-hidden="true" size={22} strokeWidth={1.9} />
         </Link>
@@ -59,12 +70,18 @@ export default async function FeedPollStatsPage({
         </p>
       </section>
 
-      <StatsSection payload={payload} />
+      <StatsSection payload={payload} returnTo={returnTo} />
     </main>
   );
 }
 
-function StatsSection({ payload }: { payload: FeedPollStatsPayload }) {
+function StatsSection({
+  payload,
+  returnTo,
+}: {
+  payload: FeedPollStatsPayload;
+  returnTo: string;
+}) {
   return (
     <>
       <section className="border-b border-[#ececec] px-4 py-6">
@@ -161,7 +178,11 @@ function StatsSection({ payload }: { payload: FeedPollStatsPayload }) {
           </p>
         )}
         <div className="mt-4 border-t border-[#ececec] pt-4">
-          <FeedActionButtons postId={payload.post.id} targetType="feed_post" />
+          <FeedActionButtons
+            postId={payload.post.id}
+            returnTo={returnTo}
+            targetType="feed_post"
+          />
           <p className="mt-2 text-xs font-semibold leading-5 text-[#737373]">
             댓글 작성은 안전한 커뮤니티 운영을 위해 로그인 후 사용할 수 있어요.
           </p>

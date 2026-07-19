@@ -4,11 +4,13 @@ import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
 import { createApiClosedPayload } from "@/lib/api/closed-state-data";
 
 const navigationMocks = vi.hoisted(() => ({
+  push: vi.fn(),
   refresh: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
+    push: navigationMocks.push,
     refresh: navigationMocks.refresh,
   }),
 }));
@@ -16,6 +18,8 @@ vi.mock("next/navigation", () => ({
 describe("FeedActionButtons", () => {
   afterEach(() => {
     navigationMocks.refresh.mockClear();
+    navigationMocks.push.mockClear();
+    window.sessionStorage.clear();
     vi.unstubAllGlobals();
   });
 
@@ -172,7 +176,16 @@ describe("FeedActionButtons", () => {
     });
     fireEvent.click(screen.getByRole("button", { name: "게시" }));
 
-    expect(await screen.findByText("로그인 후 사용할 수 있어요.")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(navigationMocks.push).toHaveBeenCalledWith(
+        "/login?next=%2Ffeed%3FresumeFeed%3Dcomment%26postId%3Ddaily_mood_001&reason=comment",
+      );
+    });
+    expect(
+      window.sessionStorage.getItem(
+        "nuang:feed:pending-comment:daily_mood_001",
+      ),
+    ).toBe("이 질문은 오늘 생각해볼 만해요.");
     expect(getLastRequestBody()).toMatchObject({
       action: "create_comment",
       body: "이 질문은 오늘 생각해볼 만해요.",
@@ -182,6 +195,35 @@ describe("FeedActionButtons", () => {
       },
     });
     expect(navigationMocks.refresh).not.toHaveBeenCalled();
+  });
+
+  it("restores a pending comment after login without losing the draft", async () => {
+    window.sessionStorage.setItem(
+      "nuang:feed:pending-comment:post-001",
+      "로그인 전에 작성한 댓글이에요.",
+    );
+    window.history.replaceState(
+      {},
+      "",
+      "/feed/polls/poll-001/stats?from=home&resumeFeed=comment&postId=post-001&auth=connected",
+    );
+    vi.stubGlobal("fetch", vi.fn());
+
+    render(
+      <FeedActionButtons
+        postId="post-001"
+        returnTo="/feed/polls/poll-001/stats?from=home"
+        targetType="feed_post"
+      />,
+    );
+
+    expect(await screen.findByLabelText("댓글 내용")).toHaveValue(
+      "로그인 전에 작성한 댓글이에요.",
+    );
+    expect(
+      screen.getByText("로그인이 완료됐어요. 게시를 누르면 댓글이 등록돼요."),
+    ).toBeInTheDocument();
+    expect(window.location.search).toBe("?from=home");
   });
 
   it("shows recent replies only after the comment action is opened", async () => {

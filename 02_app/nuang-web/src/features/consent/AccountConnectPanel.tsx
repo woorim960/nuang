@@ -25,7 +25,11 @@ type ConnectedAccount = {
   providerLabel: string;
 };
 
-export function AccountConnectPanel() {
+export function AccountConnectPanel({
+  context = "account",
+}: {
+  context?: "account" | "community";
+}) {
   const router = useRouter();
   const [savedConsentDraft] = useState(readSavedConsentDraft);
   const [terms, setTerms] = useState(savedConsentDraft?.terms ?? false);
@@ -232,8 +236,9 @@ export function AccountConnectPanel() {
           계정 연결
         </h2>
         <p className="mt-1 text-sm leading-6 text-muted">
-          검사는 로그인 없이 시작할 수 있어요. 리포트 저장과 공유가 필요할 때만
-          로그인하세요.
+          {context === "community"
+            ? "투표와 댓글을 안전하게 운영하기 위해 계정을 연결해요. 검사와 결과 확인은 로그인 없이도 이용할 수 있어요."
+            : "검사는 로그인 없이 시작할 수 있어요. 리포트 저장과 공유가 필요할 때 로그인하세요."}
         </p>
       </div>
 
