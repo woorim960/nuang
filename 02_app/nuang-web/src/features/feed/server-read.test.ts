@@ -37,11 +37,11 @@ describe("feed server read model", () => {
     vi.clearAllMocks();
   });
 
-  it("falls back to seed feed when service credentials are unavailable", async () => {
+  it("does not present example posts as real content when service credentials are unavailable", async () => {
     const payload = await createServerFeedReadPayload();
 
-    expect(payload.items.map((item) => item.id)).toContain("daily_mood_001");
-    expect(payload.items[0]?.targetType).toBe("feed_seed_card");
+    expect(payload.items).toEqual([]);
+    expect(payload.stories).toEqual([]);
   });
 
   it("keeps the payload free from legacy community wording", async () => {
@@ -68,7 +68,6 @@ describe("feed server read model", () => {
     const payload = await createServerFeedReadPayload();
     const ownPost = payload.items.find((item) => item.id === "post-own");
     const publicPost = payload.items.find((item) => item.id === "post-public");
-    const seedCard = payload.items.find((item) => item.id === "daily_mood_001");
 
     expect(ownPost).toMatchObject({
       likeLabel: "좋아요 2개",
@@ -100,26 +99,9 @@ describe("feed server read model", () => {
       viewerHasBookmarked: false,
       viewerHasLiked: false,
     });
-    expect(seedCard).toMatchObject({
-      likeLabel: "좋아요 1,249개",
-      replyPreview: [
-        {
-          authorName: "나",
-          body: "공식 카드에 남긴 내 댓글",
-          statusLabel: "게시 전 확인 중",
-        },
-        {
-          authorName: "NUANG 사용자",
-          body: "공식 카드 공개 댓글",
-        },
-      ],
-      replyLabel: "답글 44개",
-      viewerHasBookmarked: true,
-      viewerHasLiked: true,
-    });
   });
 
-  it("normalizes report share preview names from the current Nuang code dictionary", async () => {
+  it("keeps only report shares that use the current Nuang code", async () => {
     supabaseMocks.serverClient = {
       auth: {
         getUser: async () => ({
@@ -140,12 +122,12 @@ describe("feed server read model", () => {
     );
 
     expect(reportPost?.reportShare).toMatchObject({
-      profileCode: "SVODE",
-      profileName: "물결의 새길 개척가",
+      profileCode: "INGMQ",
+      profileName: "생각의 파도 탐험가",
     });
   });
 
-  it("filters posts and seed cards marked as not interested by the current account", async () => {
+  it("filters posts marked as not interested by the current account", async () => {
     supabaseMocks.serverClient = {
       auth: {
         getUser: async () => ({
@@ -169,7 +151,6 @@ describe("feed server read model", () => {
     expect(itemIds).toContain("post-own");
     expect(itemIds).not.toContain("post-public");
     expect(itemIds).not.toContain("daily_mood_001");
-    expect(itemIds).toContain("daily_question_001");
   });
 
   it("builds the home preview from the same filtered feed read model", async () => {
@@ -193,12 +174,8 @@ describe("feed server read model", () => {
     const previewItems = await createServerHomeFeedPreviewItems();
     const itemIds = previewItems.map((item) => item.id);
 
-    expect(previewItems).toHaveLength(3);
-    expect(itemIds).toEqual([
-      "post-own",
-      "post-report-share",
-      "daily_question_001",
-    ]);
+    expect(previewItems).toHaveLength(2);
+    expect(itemIds).toEqual(["post-own", "post-report-share"]);
   });
 
   it("hides code-level poll rows that could reveal one person's choice", async () => {
@@ -379,7 +356,7 @@ function resolveFeedReadOperation(
       data: [
         {
           author_account_id: "account-other",
-          body: "SVODE 물결 새길 개척가 리포트를 공유했어요.",
+          body: "INGMQ 생각의 파도 탐험가 리포트를 공유했어요.",
           created_at: "2026-07-09T07:10:00.000Z",
           id: "post-report-share",
           moderation_status: "published",
@@ -388,8 +365,8 @@ function resolveFeedReadOperation(
               assessmentKind: "full",
               completedAt: "2026-07-04T00:00:00.000Z",
               domains: [],
-              profileCode: "SVODE",
-              profileName: "물결 새길 개척가",
+              profileCode: "INGMQ",
+              profileName: "생각의 파도 탐험가",
               resultLabel: "현재 가장 가까운 대표 성향",
             },
           },
@@ -400,7 +377,7 @@ function resolveFeedReadOperation(
         },
         {
           author_account_id: "account-other",
-          body: "공개 피드 글",
+          body: "실제 공개 피드에 남긴 충분히 이해할 수 있는 이야기입니다.",
           created_at: "2026-07-09T07:00:00.000Z",
           id: "post-public",
           moderation_status: "published",

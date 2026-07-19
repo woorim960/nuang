@@ -49,9 +49,13 @@ describe("FeedComposer", () => {
 
     render(<FeedComposer />);
 
-    expect(screen.getByRole("tab", { name: "글" })).toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "일반 글" })).not.toBeInTheDocument();
-    expect(screen.queryByRole("tab", { name: "리포트" })).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "내 생각" })).toBeInTheDocument();
+    expect(
+      screen.queryByRole("tab", { name: "일반 글" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("tab", { name: "리포트" }),
+    ).not.toBeInTheDocument();
 
     fireEvent.change(screen.getByLabelText("글 내용"), {
       target: {
@@ -59,9 +63,11 @@ describe("FeedComposer", () => {
       },
     });
     fireEvent.click(screen.getByRole("tab", { name: "오늘의 질문" }));
-    fireEvent.click(screen.getByRole("button", { name: "게시" }));
+    fireEvent.click(screen.getByRole("button", { name: "게시하기" }));
 
-    expect(await screen.findByText("게시 요청이 접수됐어요.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("게시 요청이 접수됐어요."),
+    ).toBeInTheDocument();
     expect(navigationMock.router.refresh).toHaveBeenCalledTimes(1);
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
@@ -106,22 +112,26 @@ describe("FeedComposer", () => {
 
     render(<FeedComposer />);
 
-    fireEvent.click(screen.getByRole("tab", { name: "밸런스 게임" }));
-    fireEvent.click(screen.getByRole("button", { name: "산" }));
+    fireEvent.click(screen.getByRole("tab", { name: "둘 중 하나" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "사람을 만나 함께 보낸다" }),
+    );
     fireEvent.change(screen.getByLabelText("글 내용"), {
       target: {
         value: "오늘은 조용한 길이 더 끌려요.",
       },
     });
-    fireEvent.click(screen.getByRole("button", { name: "게시" }));
+    fireEvent.click(screen.getByRole("button", { name: "게시하기" }));
 
-    expect(await screen.findByText("게시 요청이 접수됐어요.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("게시 요청이 접수됐어요."),
+    ).toBeInTheDocument();
     expect(getLastRequestBody()).toMatchObject({
       action: "create_post",
       body: "오늘은 조용한 길이 더 끌려요.",
-      pollOptionKey: "mountain",
+      pollOptionKey: "together",
       source: "balance_game",
-      sourceId: "balance_trip_mountain_sea_001",
+      sourceId: "balance_home_free_day_together_solo_001",
       visibility: "public",
     });
   });
@@ -132,7 +142,7 @@ describe("FeedComposer", () => {
 
     render(<FeedComposer />);
 
-    expect(screen.getByRole("button", { name: "게시" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "게시하기" })).toBeDisabled();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -156,10 +166,14 @@ describe("FeedComposer", () => {
         value: "짧은 생각을 남겨요.",
       },
     });
-    fireEvent.click(screen.getByRole("button", { name: "게시" }));
+    fireEvent.click(screen.getByRole("button", { name: "게시하기" }));
 
-    expect(await screen.findByText("로그인 후 게시할 수 있어요.")).toBeInTheDocument();
-    expect(navigationMock.router.push).toHaveBeenCalledWith("/login?next=%2Ffeed");
+    expect(
+      await screen.findByText("로그인 후 게시할 수 있어요."),
+    ).toBeInTheDocument();
+    expect(navigationMock.router.push).toHaveBeenCalledWith(
+      "/login?next=%2Ffeed",
+    );
     expect(document.body).not.toHaveTextContent("커뮤니티");
     expect(document.body).not.toHaveTextContent("안전");
   });

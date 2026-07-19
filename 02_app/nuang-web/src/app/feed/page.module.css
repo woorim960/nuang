@@ -1,0 +1,486 @@
+.shell {
+  min-height: 100dvh;
+  background: #f6f4f1;
+  color: #29252e;
+}
+
+.page {
+  width: 100%;
+  max-width: 470px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  border-right: 1px solid #e8e3df;
+  border-left: 1px solid #e8e3df;
+  background:
+    radial-gradient(circle at 90% 4%, rgb(112 78 211 / 8%), transparent 20rem),
+    #faf8f5;
+  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+}
+
+.header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: flex;
+  min-height: 70px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid rgb(225 219 214 / 78%);
+  background: rgb(250 248 245 / 89%);
+  backdrop-filter: blur(18px);
+}
+
+.header p,
+.header h1 {
+  margin: 0;
+}
+
+.header > div > p {
+  color: #6849c1;
+  font-size: 0.6875rem;
+  font-weight: 830;
+  letter-spacing: 0.08em;
+}
+
+.header h1 {
+  margin-top: 0.06rem;
+  color: #29242e;
+  font-size: 1.18rem;
+  font-weight: 840;
+  letter-spacing: -0.03em;
+}
+
+.header > p {
+  max-width: 17rem;
+  color: #7d7681;
+  font-size: 0.6875rem;
+  font-weight: 650;
+  text-align: right;
+}
+
+.content {
+  display: grid;
+  gap: 1.1rem;
+  padding: 1rem;
+}
+
+.introCard {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+  padding: 0.95rem;
+  border: 1px solid #e3dded;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #f8f5ff, #fff);
+}
+
+.introCard > span {
+  display: grid;
+  width: 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 11px;
+  background: #eae2fb;
+  color: #6849bd;
+}
+
+.introCard strong,
+.introCard p {
+  margin: 0;
+}
+
+.introCard strong {
+  color: #413849;
+  font-size: 0.8125rem;
+  font-weight: 780;
+}
+
+.introCard p {
+  margin-top: 0.2rem;
+  color: #7b7480;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+}
+
+.feedSection {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 0.15rem;
+}
+
+.sectionHeading h2,
+.sectionHeading p,
+.sectionHeading span {
+  margin: 0;
+}
+
+.sectionHeading h2 {
+  color: #2d2932;
+  font-size: 1.05rem;
+  font-weight: 820;
+  letter-spacing: -0.025em;
+}
+
+.sectionHeading p {
+  margin-top: 0.18rem;
+  color: #827b85;
+  font-size: 0.6875rem;
+}
+
+.sectionHeading > span {
+  color: #756d7a;
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+.postList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.postCard {
+  padding: 1rem;
+  border: 1px solid #e6e0da;
+  border-radius: 22px;
+  background: #fff;
+  box-shadow: 0 12px 30px rgb(60 49 41 / 6%);
+  animation: post-in 260ms ease-out both;
+}
+
+.postHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.avatarButton {
+  display: block;
+  width: 2.5rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border-radius: 13px;
+}
+
+.profileImage {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+}
+
+.fallbackAvatar {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 13px;
+  background: linear-gradient(145deg, #6c4bc8, #8a70d8);
+  color: #fff;
+  font-size: 0.8125rem;
+  font-weight: 820;
+}
+
+.authorCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.08rem;
+}
+
+.authorButton {
+  display: block;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.authorName {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.3rem;
+  overflow: hidden;
+  color: #37313c;
+  font-size: 0.8125rem;
+  font-weight: 790;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.authorName svg {
+  flex: 0 0 auto;
+  color: #6e50c9;
+}
+
+.authorCopy > span {
+  overflow: hidden;
+  color: #88818b;
+  font-size: 0.625rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.postTypeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.postTypeRow > span {
+  display: inline-flex;
+  min-height: 24px;
+  align-items: center;
+  padding: 0 0.55rem;
+  border-radius: 999px;
+  background: #f1eff2;
+  color: #69616e;
+  font-size: 0.625rem;
+  font-weight: 760;
+}
+
+.postTypeRow > span[data-official="true"] {
+  background: #eee8fb;
+  color: #6042b9;
+}
+
+.postTypeRow small {
+  color: #8b838e;
+  font-size: 0.625rem;
+}
+
+.postBody {
+  margin: 0.65rem 0 0;
+  color: #443e48;
+  font-size: 0.8125rem;
+  line-height: 1.62;
+  white-space: pre-wrap;
+}
+
+.pollWrap {
+  margin-top: 0.8rem;
+  padding: 0.2rem 0.85rem 0.75rem;
+  border: 1px solid #e5dfee;
+  border-radius: 18px;
+  background: #fcfbfe;
+}
+
+.pollDetailLink {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 0.3rem;
+  margin-top: 0.55rem;
+  color: #5d41b8;
+  font-size: 0.75rem;
+  font-weight: 760;
+}
+
+.reportCard {
+  display: block;
+  margin-top: 0.8rem;
+  padding: 0.95rem;
+  border: 1px solid #ded6ee;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 92% 0%, rgb(118 83 207 / 12%), transparent 7rem),
+    linear-gradient(145deg, #fbf9ff, #f7f5fa);
+  transition:
+    border-color 150ms ease,
+    transform 120ms ease;
+}
+
+.reportCard:hover {
+  border-color: #cfc2e9;
+}
+
+.reportCard:active {
+  transform: scale(0.995);
+}
+
+.reportHeading {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.reportHeading > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.22rem;
+}
+
+.reportHeading > div > span {
+  color: #71687a;
+  font-size: 0.625rem;
+  font-weight: 700;
+}
+
+.reportHeading strong {
+  color: #4e36a1;
+  font-size: 1.3rem;
+  font-weight: 850;
+  letter-spacing: 0.035em;
+}
+
+.reportHeading p {
+  overflow: hidden;
+  margin: 0;
+  color: #403748;
+  font-size: 0.75rem;
+  font-weight: 760;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reportHeading > span {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.25rem;
+  color: #6245b9;
+  font-size: 0.6875rem;
+  font-weight: 750;
+}
+
+.reportDomains {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e5dfeb;
+}
+
+.reportDomains > div {
+  display: grid;
+  grid-template-columns: 5.2rem minmax(0, 1fr) 1.5rem;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.reportDomains > div > span:first-child {
+  overflow: hidden;
+  color: #7e7683;
+  font-size: 0.625rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reportDomains > div > span:nth-child(2) {
+  height: 4px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e6e1e9;
+}
+
+.reportDomains > div > span:nth-child(2) > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #8b70dd, #6444c6);
+}
+
+.reportDomains strong {
+  color: #5e5664;
+  font-size: 0.625rem;
+  font-weight: 760;
+  text-align: right;
+}
+
+.postActions {
+  display: flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding-top: 0.55rem;
+  border-top: 1px solid #eee9ef;
+}
+
+.engagementSummary,
+.emptyEngagement {
+  margin: 0;
+  color: #847d87;
+  font-size: 0.625rem;
+  font-weight: 650;
+  text-align: right;
+}
+
+.engagementSummary {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.emptyFeed {
+  display: grid;
+  justify-items: center;
+  padding: 1.7rem 1rem;
+  border: 1px dashed #ddd7dc;
+  border-radius: 20px;
+  background: rgb(255 255 255 / 75%);
+  text-align: center;
+}
+
+.emptyFeed strong,
+.emptyFeed p {
+  margin: 0;
+}
+
+.emptyFeed strong {
+  color: #4b444f;
+  font-size: 0.875rem;
+  font-weight: 780;
+}
+
+.emptyFeed p {
+  margin-top: 0.3rem;
+  color: #817a84;
+  font-size: 0.75rem;
+}
+
+@media (max-width: 350px) {
+  .header > p {
+    display: none;
+  }
+
+  .content {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  .postCard {
+    padding: 0.9rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .postCard {
+    animation-duration: 1ms !important;
+  }
+
+  .reportCard {
+    transition: none;
+  }
+}
+
+@keyframes post-in {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

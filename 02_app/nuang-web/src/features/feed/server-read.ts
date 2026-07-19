@@ -49,26 +49,13 @@ type FeedPostCommentRow = FeedCommentBaseRow & {
   post_id: string;
 };
 
-type FeedSeedCommentRow = FeedCommentBaseRow & {
-  target_key: string | null;
-};
-
 type FeedPostReactionCountRow = {
   account_id: string;
   target_id: string;
 };
 
-type FeedSeedReactionCountRow = {
-  account_id: string;
-  target_key: string | null;
-};
-
 type FeedPostBookmarkRow = {
   post_id: string | null;
-};
-
-type FeedSeedBookmarkRow = {
-  target_key: string | null;
 };
 
 type FeedPostPreferenceRow = {
@@ -175,13 +162,24 @@ const sourceTitleMap: Record<FeedPostRow["source"], string> = {
 
 const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const demoFeedHandles = new Set([
+  "doyun.forest",
+  "harin.sun",
+  "jiho.water",
+  "minjae.spark",
+  "seoyeon.flame",
+]);
 
 export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
   const basePayload = createFeedReadPayload();
   const serviceClient = createSupabaseServiceClient();
 
   if (!serviceClient) {
-    return basePayload;
+    return {
+      ...basePayload,
+      items: [],
+      stories: [],
+    };
   }
 
   const accountId = await getCurrentAccountId(serviceClient);
@@ -198,53 +196,44 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     accountId,
     client: serviceClient,
     postIds: mergedRows.map((row) => row.id),
-    seedKeys: basePayload.items.map((item) => item.id),
+    seedKeys: [],
   });
   const visibleRows = mergedRows.filter(
     (row) => !hiddenTargets.postIds.has(row.id),
-  );
-  const visibleSeedItems = basePayload.items.filter(
-    (item) => !hiddenTargets.seedKeys.has(item.id),
   );
   const authorProfilesByAccountId = await readPublicProfileCardsForAccounts({
     accountIds: visibleRows.map((row) => row.author_account_id),
     client: serviceClient,
   });
-  const [engagementByPostId, engagementBySeedKey, pollByPostId] =
-    await Promise.all([
-      readPostEngagements({
-        accountId,
-        client: serviceClient,
-        rows: visibleRows,
-      }),
-      readSeedCardEngagements({
-        accountId,
-        client: serviceClient,
-        items: visibleSeedItems,
-      }),
-      readPollSummaries({
-        accountId,
-        client: serviceClient,
-        rows: visibleRows,
-      }),
-    ]);
-  const dbItems = visibleRows.map((row, index) =>
-    mapPostRowToFeedItem(
-      row,
+  const [engagementByPostId, pollByPostId] = await Promise.all([
+    readPostEngagements({
       accountId,
-      index,
-      engagementByPostId.get(row.id),
-      authorProfilesByAccountId.get(row.author_account_id),
-      pollByPostId.get(row.id),
-    ),
-  );
-  const seedItems = visibleSeedItems.map((item) =>
-    applySeedCardEngagement(item, engagementBySeedKey.get(item.id)),
-  );
+      client: serviceClient,
+      rows: visibleRows,
+    }),
+    readPollSummaries({
+      accountId,
+      client: serviceClient,
+      rows: visibleRows,
+    }),
+  ]);
+  const dbItems = visibleRows
+    .map((row, index) =>
+      mapPostRowToFeedItem(
+        row,
+        accountId,
+        index,
+        engagementByPostId.get(row.id),
+        authorProfilesByAccountId.get(row.author_account_id),
+        pollByPostId.get(row.id),
+      ),
+    )
+    .filter(isUsefulFeedItem);
 
   return {
     ...basePayload,
-    items: [...dbItems, ...seedItems],
+    items: dbItems,
+    stories: [],
   };
 }
 
@@ -852,131 +841,6 @@ async function readPollSummaries({
   return pollByPostId;
 }
 
-async function readSeedCardEngagements({
-  accountId,
-  client,
-  items,
-}: {
-  accountId: string | null;
-  client: SupabaseClient;
-  items: FeedItem[];
-}) {
-  const seedKeys = items
-    .filter((item) => item.targetType === "feed_seed_card")
-    .map((item) => item.id);
-  const engagementBySeedKey = new Map<string, FeedEngagement>(
-    seedKeys.map((seedKey) => [
-      seedKey,
-      {
-        likes: 0,
-        replyPreview: [],
-        replies: 0,
-        viewerHasBookmarked: false,
-        viewerHasLiked: false,
-      },
-    ]),
-  );
-
-  if (seedKeys.length === 0) {
-    return engagementBySeedKey;
-  }
-
-  const bookmarkRequest = accountId
-    ? client
-        .schema("feed")
-        .from("feed_bookmark")
-        .select("target_key")
-        .eq("account_id", accountId)
-        .eq("target_type", "feed_seed_card")
-        .in("target_key", seedKeys)
-        .is("deleted_at", null)
-    : Promise.resolve({ data: [], error: null });
-
-  const [commentResponse, reactionResponse, bookmarkResponse] =
-    await Promise.all([
-      client
-        .schema("feed")
-        .from("feed_comment")
-        .select(
-          "id, target_key, author_account_id, body, moderation_status, created_at",
-        )
-        .eq("target_type", "feed_seed_card")
-        .in("target_key", seedKeys)
-        .is("deleted_at", null)
-        .order("created_at", { ascending: false })
-        .limit(200),
-      client
-        .schema("feed")
-        .from("feed_reaction")
-        .select("target_key, account_id")
-        .eq("target_type", "feed_seed_card")
-        .in("target_key", seedKeys)
-        .is("deleted_at", null),
-      bookmarkRequest,
-    ]);
-
-  if (!commentResponse.error && commentResponse.data) {
-    const visibleCommentsBySeedKey = new Map<string, FeedSeedCommentRow[]>();
-
-    for (const row of commentResponse.data as FeedSeedCommentRow[]) {
-      if (!row.target_key || !isVisibleComment(row, accountId)) {
-        continue;
-      }
-
-      const current = engagementBySeedKey.get(row.target_key);
-      if (current) current.replies += 1;
-
-      const comments = visibleCommentsBySeedKey.get(row.target_key) ?? [];
-      comments.push(row);
-      visibleCommentsBySeedKey.set(row.target_key, comments);
-    }
-
-    for (const [seedKey, comments] of visibleCommentsBySeedKey.entries()) {
-      const current = engagementBySeedKey.get(seedKey);
-
-      if (!current) {
-        continue;
-      }
-
-      current.replyPreview = [...comments]
-        .sort(compareCommentsByCreatedAtDesc)
-        .slice(0, 2)
-        .map((comment) => mapCommentRowToReplyPreview(comment, accountId));
-    }
-  }
-
-  if (!reactionResponse.error && reactionResponse.data) {
-    for (const row of reactionResponse.data as FeedSeedReactionCountRow[]) {
-      if (!row.target_key) {
-        continue;
-      }
-
-      const current = engagementBySeedKey.get(row.target_key);
-      if (!current) {
-        continue;
-      }
-
-      current.likes += 1;
-      if (accountId && row.account_id === accountId) {
-        current.viewerHasLiked = true;
-      }
-    }
-  }
-
-  if (!bookmarkResponse.error && bookmarkResponse.data) {
-    for (const row of bookmarkResponse.data as FeedSeedBookmarkRow[]) {
-      if (!row.target_key) {
-        continue;
-      }
-
-      const current = engagementBySeedKey.get(row.target_key);
-      if (current) current.viewerHasBookmarked = true;
-    }
-  }
-
-  return engagementBySeedKey;
-}
-
 async function readPublicProfileCardsForAccounts({
   accountIds,
   client,
@@ -1114,7 +978,7 @@ function mapPostRowToFeedItem(
     replyPreview: engagement.replyPreview,
     statusLabel: getStatusLabel(row),
     targetType: "feed_post",
-    timeLabel: "방금",
+    timeLabel: formatRelativeFeedTime(row.published_at ?? row.created_at),
     title: sourceTitleMap[row.source],
     viewerHasBookmarked: engagement.viewerHasBookmarked,
     viewerHasLiked: engagement.viewerHasLiked,
@@ -1302,31 +1166,6 @@ function coercePublicProfileSnapshotPayload(
   };
 }
 
-function applySeedCardEngagement(
-  item: FeedItem,
-  engagement: FeedEngagement | undefined,
-): FeedItem {
-  if (!engagement) {
-    return item;
-  }
-
-  const likeCount =
-    parseFeedCountLabel("좋아요", item.likeLabel) + engagement.likes;
-  const replyCount =
-    parseFeedCountLabel("답글", item.replyLabel) + engagement.replies;
-
-  return {
-    ...item,
-    likeCount,
-    likeLabel: formatFeedCountLabel("좋아요", likeCount),
-    replyCount,
-    replyLabel: formatFeedCountLabel("답글", replyCount),
-    replyPreview: engagement.replyPreview,
-    viewerHasBookmarked: engagement.viewerHasBookmarked,
-    viewerHasLiked: engagement.viewerHasLiked,
-  };
-}
-
 function isVisibleComment(row: FeedCommentBaseRow, accountId: string | null) {
   if (row.moderation_status === "published") {
     return true;
@@ -1337,6 +1176,50 @@ function isVisibleComment(row: FeedCommentBaseRow, accountId: string | null) {
 
 function isCurrentNuangCode(code: string | null | undefined): code is string {
   return Boolean(code && getCandidateProfileDefinition(code));
+}
+
+function isUsefulFeedItem(item: FeedItem) {
+  if (demoFeedHandles.has(item.authorHandle)) {
+    return false;
+  }
+
+  if (item.reportShare) {
+    return isCurrentNuangCode(item.reportShare.profileCode);
+  }
+
+  if (item.poll?.promptId === homeDailyCommunityPollPromptId) {
+    return true;
+  }
+
+  const readableCharacterCount = `${item.title} ${item.body}`.match(
+    /[가-힣A-Za-z0-9]/g,
+  )?.length;
+
+  return (readableCharacterCount ?? 0) >= 12;
+}
+
+function formatRelativeFeedTime(value: string) {
+  const time = new Date(value).getTime();
+
+  if (!Number.isFinite(time)) return "방금";
+
+  const elapsedSeconds = Math.max(0, Math.floor((Date.now() - time) / 1000));
+
+  if (elapsedSeconds < 60) return "방금";
+
+  const elapsedMinutes = Math.floor(elapsedSeconds / 60);
+  if (elapsedMinutes < 60) return `${elapsedMinutes}분`;
+
+  const elapsedHours = Math.floor(elapsedMinutes / 60);
+  if (elapsedHours < 24) return `${elapsedHours}시간`;
+
+  const elapsedDays = Math.floor(elapsedHours / 24);
+  if (elapsedDays < 30) return `${elapsedDays}일`;
+
+  return new Intl.DateTimeFormat("ko-KR", {
+    day: "numeric",
+    month: "short",
+  }).format(new Date(time));
 }
 
 function compareCommentsByCreatedAtDesc(
@@ -1377,13 +1260,6 @@ function getCommentStatusLabel(row: FeedCommentBaseRow) {
 
 function formatFeedCountLabel(label: "답글" | "좋아요", value: number) {
   return `${label} ${value.toLocaleString("ko-KR")}개`;
-}
-
-function parseFeedCountLabel(label: "답글" | "좋아요", value: string) {
-  const normalized = value.replaceAll(",", "");
-  const match = new RegExp(`${label}\\s+(\\d+)개`).exec(normalized);
-
-  return match ? Number(match[1]) : 0;
 }
 
 function groupBy<TItem>(items: TItem[], getKey: (item: TItem) => string) {

@@ -1,5 +1,6 @@
 "use client";
 
+import { PenLine } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
@@ -9,6 +10,7 @@ import {
 } from "@/features/feed/feed-prompts";
 import type { ApiClosedPayload } from "@/lib/api/closed-state-data";
 import { cn } from "@/lib/utils/cn";
+import styles from "./FeedComposer.module.css";
 
 type ComposerStatus =
   | { status: "idle" }
@@ -31,7 +33,7 @@ const composerModes: Array<{
   mode: ComposerMode;
 }> = [
   {
-    label: "글",
+    label: "내 생각",
     mode: "free_text",
   },
   {
@@ -39,7 +41,7 @@ const composerModes: Array<{
     mode: "daily_question",
   },
   {
-    label: "밸런스 게임",
+    label: "둘 중 하나",
     mode: "balance_game",
   },
 ];
@@ -48,7 +50,9 @@ export function FeedComposer() {
   const router = useRouter();
   const [body, setBody] = useState("");
   const [mode, setMode] = useState<ComposerMode>("free_text");
-  const [selectedPollOptionKey, setSelectedPollOptionKey] = useState<string | null>(null);
+  const [selectedPollOptionKey, setSelectedPollOptionKey] = useState<
+    string | null
+  >(null);
   const [status, setStatus] = useState<ComposerStatus>({ status: "idle" });
   const dailyQuestion = getDefaultDailyQuestionTemplate();
   const balanceGame = getDefaultBalanceGameTemplate();
@@ -94,9 +98,9 @@ export function FeedComposer() {
         },
         method: "POST",
       });
-      const payload = (await response.json().catch(() => null)) as
-        | FeedComposerResponse
-        | null;
+      const payload = (await response
+        .json()
+        .catch(() => null)) as FeedComposerResponse | null;
 
       if (response.status === 401) {
         setStatus({
@@ -144,70 +148,70 @@ export function FeedComposer() {
   }
 
   return (
-    <section className="border-b border-[#ececec] px-4 py-4">
-      <form className="flex gap-3" onSubmit={handleSubmit}>
-        <div className="grid h-[38px] w-[38px] shrink-0 place-items-center rounded-full bg-[#111111] text-[15px] font-black text-white">
-          나
+    <section className={styles.composer}>
+      <div className={styles.composerHeading}>
+        <span aria-hidden="true">
+          <PenLine size={18} strokeWidth={1.9} />
+        </span>
+        <div>
+          <h2>내 이야기 남기기</h2>
+          <p>부담 없이 짧게 시작해도 좋아요.</p>
         </div>
-        <div className="min-w-0 flex-1">
-          <div aria-label="피드 작성 형식" className="flex gap-5" role="tablist">
-            {composerModes.map((item) => (
-              <button
-                aria-selected={mode === item.mode}
-                className={cn(
-                  "border-b-2 pb-2 text-sm font-extrabold",
-                  mode === item.mode
-                    ? "border-[#111111] text-[#111111]"
-                    : "border-transparent text-[#737373]",
-                )}
-                key={item.mode}
-                onClick={() => {
-                  setMode(item.mode);
-                  if (item.mode !== "balance_game") {
-                    setSelectedPollOptionKey(null);
-                  }
-                  setStatus({ status: "idle" });
-                }}
-                role="tab"
-                type="button"
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-          <ComposerModePanel
-            balanceGame={balanceGame}
-            dailyQuestion={dailyQuestion}
-            mode={mode}
-            selectedPollOptionKey={selectedPollOptionKey}
-            setSelectedPollOptionKey={setSelectedPollOptionKey}
-          />
-          <label className="sr-only" htmlFor="feed-composer-body">
-            글 내용
-          </label>
-          <textarea
-            className="mt-3 block min-h-11 w-full resize-none border-0 bg-transparent p-0 text-[16px] leading-6 text-[#111111] outline-none placeholder:text-[#9a9a9a]"
-            id="feed-composer-body"
-            maxLength={800}
-            onChange={(event) => setBody(event.target.value)}
-            placeholder={getPlaceholder(mode)}
-            rows={mode === "balance_game" ? 1 : 2}
-            value={body}
-          />
-          <div className="mt-3 flex items-center justify-between gap-3">
-            <p className="text-xs font-semibold text-[#737373]">
-              {getHelperText(mode)}
-            </p>
+      </div>
+      <form onSubmit={handleSubmit}>
+        <div
+          aria-label="피드 작성 형식"
+          className={styles.modeTabs}
+          role="tablist"
+        >
+          {composerModes.map((item) => (
             <button
-              className="h-9 shrink-0 px-1 text-sm font-extrabold text-[#111111] transition-opacity disabled:opacity-30"
-              disabled={!canSubmit}
-              type="submit"
+              aria-selected={mode === item.mode}
+              className={cn(
+                styles.modeTab,
+                mode === item.mode && styles.modeTabSelected,
+              )}
+              key={item.mode}
+              onClick={() => {
+                setMode(item.mode);
+                if (item.mode !== "balance_game") {
+                  setSelectedPollOptionKey(null);
+                }
+                setStatus({ status: "idle" });
+              }}
+              role="tab"
+              type="button"
             >
-              게시
+              {item.label}
             </button>
-          </div>
-          <ComposerStatusMessage status={status} />
+          ))}
         </div>
+        <ComposerModePanel
+          balanceGame={balanceGame}
+          dailyQuestion={dailyQuestion}
+          mode={mode}
+          selectedPollOptionKey={selectedPollOptionKey}
+          setSelectedPollOptionKey={setSelectedPollOptionKey}
+        />
+        <label className="sr-only" htmlFor="feed-composer-body">
+          글 내용
+        </label>
+        <textarea
+          className={styles.bodyInput}
+          id="feed-composer-body"
+          maxLength={800}
+          onChange={(event) => setBody(event.target.value)}
+          placeholder={getPlaceholder(mode)}
+          rows={mode === "balance_game" ? 1 : 2}
+          value={body}
+        />
+        <div className={styles.composerFooter}>
+          <p>{getHelperText(mode)}</p>
+          <button disabled={!canSubmit} type="submit">
+            게시하기
+          </button>
+        </div>
+        <ComposerStatusMessage status={status} />
       </form>
     </section>
   );
@@ -227,27 +231,20 @@ function ComposerModePanel({
   setSelectedPollOptionKey: (value: string) => void;
 }) {
   if (mode === "daily_question") {
-    return (
-      <p className="mt-3 border-y border-[#ececec] py-3 text-[15px] font-bold leading-6 text-[#111111]">
-        {dailyQuestion.prompt}
-      </p>
-    );
+    return <p className={styles.promptCard}>{dailyQuestion.prompt}</p>;
   }
 
   if (mode === "balance_game") {
     return (
-      <div className="mt-3 border-y border-[#ececec] py-3">
-        <p className="text-[15px] font-bold leading-6 text-[#111111]">
-          {balanceGame.question}
-        </p>
-        <div className="mt-3 grid grid-cols-2 gap-4">
+      <div className={styles.balancePanel}>
+        <p>{balanceGame.question}</p>
+        <div>
           {balanceGame.options.map((option) => (
             <button
               className={cn(
-                "border-b-2 pb-2 text-left text-[15px] font-extrabold",
-                selectedPollOptionKey === option.key
-                  ? "border-[#111111] text-[#111111]"
-                  : "border-[#dddddd] text-[#737373]",
+                styles.balanceOption,
+                selectedPollOptionKey === option.key &&
+                  styles.balanceOptionSelected,
               )}
               key={option.key}
               onClick={() => setSelectedPollOptionKey(option.key)}
@@ -337,11 +334,7 @@ function ComposerStatusMessage({ status }: { status: ComposerStatus }) {
 
   if (status.status === "pending") {
     return (
-      <p
-        aria-live="polite"
-        className="mt-2 text-xs font-medium text-[#737373]"
-        role="status"
-      >
+      <p aria-live="polite" className={styles.status} role="status">
         게시 중
       </p>
     );
@@ -350,8 +343,8 @@ function ComposerStatusMessage({ status }: { status: ComposerStatus }) {
   return (
     <p
       className={cn(
-        "mt-2 text-xs font-medium",
-        status.status === "error" ? "text-[#9a6400]" : "text-[#737373]",
+        styles.status,
+        status.status === "error" && styles.statusError,
       )}
       role={status.status === "error" ? "alert" : "status"}
     >

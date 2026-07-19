@@ -34,6 +34,7 @@ export function FeedActionButtons({
   commentComposer = false,
   commentPlaceholder = "댓글 달기",
   includeBookmark = false,
+  includeShare = true,
   initialBookmarked = false,
   initialLiked = false,
   postId,
@@ -45,6 +46,7 @@ export function FeedActionButtons({
   commentComposer?: boolean;
   commentPlaceholder?: string;
   includeBookmark?: boolean;
+  includeShare?: boolean;
   initialBookmarked?: boolean;
   initialLiked?: boolean;
   postId: string;
@@ -121,12 +123,15 @@ export function FeedActionButtons({
           mode: "comment",
           type: "comment",
         },
-        {
-          label: "공유",
-          mode: "local",
-          type: "share",
-        },
       ];
+
+  if (!commentComposer && includeShare) {
+    actions.push({
+      label: "공유",
+      mode: "local",
+      type: "share",
+    });
+  }
 
   if (includeBookmark) {
     actions.push({

@@ -1,9 +1,4 @@
-import {
-  ArrowLeft,
-  BadgeCheck,
-  Search,
-  Send,
-} from "lucide-react";
+import { ArrowRight, BadgeCheck, Sparkles } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
@@ -11,159 +6,126 @@ import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
 import { FeedComposer } from "@/features/feed/FeedComposer";
 import { FeedMoreMenu } from "@/features/feed/FeedMoreMenu";
 import { FeedPollCard } from "@/features/feed/FeedPollCard";
-import {
-  listFeedStories,
-  type FeedItem,
-  type FeedStory,
-} from "@/features/feed/feed-seed";
-import {
-  PublicProfileButton,
-} from "@/features/public-profile/PublicProfileModal";
-import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
+import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
+import type { FeedItem } from "@/features/feed/feed-seed";
 import { createServerFeedReadPayload } from "@/features/feed/server-read";
-import { cn } from "@/lib/utils/cn";
+import { PublicProfileButton } from "@/features/public-profile/PublicProfileModal";
+import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
+import styles from "./page.module.css";
 
 export const metadata: Metadata = {
   title: "피드 | NUANG",
 };
 
-const storyToneClass = {
-  flame: "from-[#f97316] to-[#ef4444]",
-  forest: "from-[#16a34a] to-[#84cc16]",
-  purple: "from-[#111111] to-[#7c3aed]",
-  sun: "from-[#f59e0b] to-[#facc15]",
-  water: "from-[#0ea5e9] to-[#22c55e]",
-} as const satisfies Record<FeedStory["tone"], string>;
-
 export default async function FeedPage() {
-  const stories = listFeedStories();
   const feedPayload = await createServerFeedReadPayload();
   const posts = feedPayload.items;
 
   return (
-    <div className="min-h-dvh bg-white text-[#111111]">
-      <main className="mx-auto min-h-dvh w-full max-w-[470px] border-x border-[#ececec] bg-white pb-[calc(86px+env(safe-area-inset-bottom))]">
-        <h1 className="sr-only">피드</h1>
-        <header className="sticky top-0 z-20 flex h-[58px] items-center justify-between border-b border-[#ececec] bg-white/90 px-4 backdrop-blur-xl">
-          <Link
-            aria-label="홈으로 돌아가기"
-            className="-ml-2 grid h-10 w-10 place-items-center rounded-full text-[#111111] hover:bg-[#f5f5f5]"
-            href="/home"
-          >
-            <ArrowLeft aria-hidden="true" size={22} strokeWidth={1.9} />
-          </Link>
-          <Link className="text-[21px] font-black tracking-normal" href="/home">
-            NUANG
-          </Link>
-          <div className="flex items-center gap-1">
-            <button
-              aria-label="피드 검색"
-              className="grid h-10 w-10 place-items-center rounded-full text-[#111111] hover:bg-[#f5f5f5]"
-              type="button"
-            >
-              <Search aria-hidden="true" size={22} strokeWidth={1.9} />
-            </button>
-            <button
-              aria-label="메시지"
-              className="grid h-10 w-10 place-items-center rounded-full text-[#111111] hover:bg-[#f5f5f5]"
-              type="button"
-            >
-              <Send aria-hidden="true" size={21} strokeWidth={1.9} />
-            </button>
+    <div className={styles.shell}>
+      <main className={styles.page}>
+        <header className={styles.header}>
+          <div>
+            <p>NUANG</p>
+            <h1>피드</h1>
           </div>
+          <p>서로의 선택과 생각을 발견하는 곳</p>
         </header>
 
-        <div className="sticky top-[58px] z-10 grid h-[52px] grid-cols-2 border-b border-[#ececec] bg-white/90 backdrop-blur-xl">
-          <button
-            className="relative text-[15px] font-bold text-[#111111] after:absolute after:inset-x-[24%] after:bottom-0 after:h-[2px] after:rounded-t-full after:bg-[#111111]"
-            type="button"
-          >
-            추천
-          </button>
-          <button className="text-[15px] font-bold text-[#737373]" type="button">
-            팔로잉
-          </button>
-        </div>
+        <div className={styles.content}>
+          <aside className={styles.introCard}>
+            <span aria-hidden="true">
+              <Sparkles size={18} strokeWidth={1.9} />
+            </span>
+            <div>
+              <strong>오늘은 어떤 생각이 오갈까요?</strong>
+              <p>
+                검사 답변과 점수는 공개하지 않고, 직접 나눈 이야기만 보여줘요.
+              </p>
+            </div>
+          </aside>
 
-        <section
-          aria-label="스토리"
-          className="flex gap-3 overflow-x-auto border-b border-[#ececec] px-3 py-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {stories.map((story) => (
-            <StoryBubble story={story} key={story.id} />
-          ))}
-        </section>
+          <FeedComposer />
 
-        <FeedComposer />
+          <section aria-label="커뮤니티 피드" className={styles.feedSection}>
+            <div className={styles.sectionHeading}>
+              <div>
+                <h2>새로운 이야기</h2>
+                <p>최근에 공개된 글부터 보여드려요.</p>
+              </div>
+              {posts.length > 0 ? <span>{posts.length}개</span> : null}
+            </div>
 
-        <section aria-label="추천 피드">
-          {posts.map((post) =>
-            post.layout === "media" ? (
-              <MediaPost post={post} key={post.id} />
+            {posts.length > 0 ? (
+              <div className={styles.postList}>
+                {posts.map((post) => (
+                  <FeedPost post={post} key={post.id} />
+                ))}
+              </div>
             ) : (
-              <ThreadPost post={post} key={post.id} />
-            ),
-          )}
-        </section>
+              <div className={styles.emptyFeed}>
+                <strong>아직 공개된 이야기가 없어요</strong>
+                <p>위에서 첫 이야기를 남기면 이곳에 바로 이어져요.</p>
+              </div>
+            )}
+          </section>
+        </div>
       </main>
       <BottomNavigation />
     </div>
   );
 }
 
-function StoryBubble({ story }: { story: FeedStory }) {
-  return (
-    <button className="w-[70px] shrink-0 text-center" type="button">
-      <span
-        className={cn(
-          "mx-auto block h-16 w-16 rounded-full p-[2px]",
-          story.seen
-            ? "bg-[#dddddd]"
-            : `bg-gradient-to-tr ${storyToneClass[story.tone]}`,
-        )}
-      >
-        <span className="grid h-full w-full place-items-center rounded-full border-[3px] border-white bg-[#111111] text-[15px] font-black text-white">
-          {story.avatarLabel}
-        </span>
-      </span>
-      <span className="mt-1.5 block truncate text-xs font-medium text-[#333333]">
-        {story.label}
-      </span>
-    </button>
-  );
-}
+function FeedPost({ post }: { post: FeedItem }) {
+  const isOfficialDailyPoll =
+    post.poll?.promptId === homeDailyCommunityPollPromptId;
 
-function ThreadPost({ post }: { post: FeedItem }) {
   return (
-    <article className="grid grid-cols-[48px_minmax(0,1fr)] gap-1 border-b border-[#ececec] px-3 py-4">
-      <div>
+    <article className={styles.postCard}>
+      <div className={styles.postHeader}>
         <Avatar
           label={post.avatarLabel}
           profile={post.authorProfile}
           profileLabel={post.authorName}
         />
-        <div className="mx-auto mt-2 h-[calc(100%-44px)] min-h-10 w-px bg-[#eeeeee]" />
+        <PostAuthor post={post} />
+        <FeedMoreMenu postId={post.id} targetType={post.targetType} />
       </div>
-      <div className="min-w-0 pb-1">
-        <PostHeader post={post} />
-        <p className="mt-1 text-[15px] font-bold leading-5 text-[#111111]">
-          {post.title}
-        </p>
-        <p className="mt-2 text-[15px] leading-[1.48] text-[#171717]">
-          {post.body}
-        </p>
-        {post.poll ? <FeedPollCard poll={post.poll} /> : null}
-        {post.reportShare ? <ReportSharePreview post={post} /> : null}
+
+      <div className={styles.postTypeRow}>
+        <span data-official={isOfficialDailyPoll ? "true" : "false"}>
+          {isOfficialDailyPoll ? "오늘의 성향 질문" : post.title}
+        </span>
+        {post.statusLabel ? <small>{post.statusLabel}</small> : null}
+      </div>
+
+      <p className={styles.postBody}>{post.body}</p>
+
+      {post.poll ? (
+        <div className={styles.pollWrap}>
+          <FeedPollCard poll={post.poll} returnTo="/feed" variant="home" />
+          {post.poll.viewerVoteOptionId ? (
+            <Link className={styles.pollDetailLink} href={post.poll.statsHref}>
+              투표 결과와 댓글 보기
+              <ArrowRight aria-hidden="true" size={15} strokeWidth={2} />
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
+
+      {post.reportShare ? <ReportSharePreview post={post} /> : null}
+
+      <div className={styles.postActions}>
         <FeedActionButtons
-          className="mt-3"
           includeBookmark
+          includeShare={false}
           initialBookmarked={post.viewerHasBookmarked}
           initialLiked={post.viewerHasLiked}
           postId={post.id}
           replyPreview={post.replyPreview}
           targetType={post.targetType}
         />
-        <ReplyLine post={post} />
+        <EngagementSummary post={post} />
       </div>
     </article>
   );
@@ -173,38 +135,29 @@ function ReportSharePreview({ post }: { post: FeedItem }) {
   if (!post.reportShare) return null;
 
   return (
-    <Link
-      className="mt-4 block border-y border-[#ececec] py-4 hover:opacity-80"
-      href={post.reportShare.href}
-    >
-      <p className="text-xs font-bold text-[#737373]">공유 리포트</p>
-      <div className="mt-2 flex items-end justify-between gap-4">
-        <div className="min-w-0">
-          <p className="text-[28px] font-black leading-none tracking-normal text-[#111111]">
-            {post.reportShare.profileCode}
-          </p>
-          <p className="mt-2 truncate text-sm font-extrabold text-[#111111]">
-            {post.reportShare.profileName}
-          </p>
+    <Link className={styles.reportCard} href={post.reportShare.href}>
+      <div className={styles.reportHeading}>
+        <div>
+          <span>공유된 뉴앙 리포트</span>
+          <strong>{post.reportShare.profileCode}</strong>
+          <p>{post.reportShare.profileName}</p>
         </div>
-        <span className="shrink-0 text-sm font-black text-[#111111]">리포트 보기</span>
+        <span>
+          리포트 보기
+          <ArrowRight aria-hidden="true" size={14} strokeWidth={2} />
+        </span>
       </div>
       {post.reportShare.domains.length > 0 ? (
-        <div className="mt-4 space-y-2">
+        <div className={styles.reportDomains}>
           {post.reportShare.domains.slice(0, 3).map((domain) => (
-            <div className="flex items-center gap-3" key={domain.domainId}>
-              <span className="w-16 shrink-0 truncate text-xs font-bold text-[#737373]">
-                {domain.label}
+            <div key={domain.domainId}>
+              <span>{domain.label}</span>
+              <span>
+                <span style={{ width: `${domain.score ?? 0}%` }} />
               </span>
-              <span className="h-[3px] min-w-0 flex-1 bg-[#eeeeee]">
-                <span
-                  className="block h-full bg-[#111111]"
-                  style={{ width: `${domain.score ?? 0}%` }}
-                />
-              </span>
-              <span className="w-7 text-right text-xs font-black tabular-nums text-[#111111]">
+              <strong>
                 {domain.score === null ? "-" : Math.round(domain.score)}
-              </span>
+              </strong>
             </div>
           ))}
         </div>
@@ -213,112 +166,36 @@ function ReportSharePreview({ post }: { post: FeedItem }) {
   );
 }
 
-function MediaPost({ post }: { post: FeedItem }) {
-  return (
-    <article className="border-b border-[#ececec] bg-white">
-      <div className="flex items-center gap-2 px-3 py-3">
-        <Avatar
-          label={post.avatarLabel}
-          profile={post.authorProfile}
-          profileLabel={post.authorName}
-          size="sm"
+function PostAuthor({ post }: { post: FeedItem }) {
+  const authorName = (
+    <span className={styles.authorName}>
+      {post.authorName}
+      {post.verified ? (
+        <BadgeCheck
+          aria-label="인증됨"
+          fill="currentColor"
+          size={14}
+          strokeWidth={2.2}
         />
-        <PostHeader post={post} compact />
-      </div>
-      <div
-        className={cn(
-          "relative min-h-[300px] overflow-hidden bg-[#f1f1f1]",
-          post.visualTone === "dark"
-            ? "bg-[radial-gradient(circle_at_70%_24%,rgba(255,255,255,.16)_0_10%,transparent_11%),linear-gradient(135deg,#171717_0%,#262032_44%,#6d5dfc_100%)]"
-            : "bg-[radial-gradient(circle_at_72%_24%,rgba(255,255,255,.75)_0_10%,transparent_11%),linear-gradient(135deg,#fafafa_0%,#ede9fe_52%,#b8d7ff_100%)]",
-        )}
-      >
-        <div
-          className={cn(
-            "absolute bottom-5 left-5 text-[28px] font-black tracking-normal",
-            post.visualTone === "dark" ? "text-white" : "text-[#111111]",
-          )}
-        >
-          {post.mediaLabel}
-        </div>
-      </div>
-      <div className="px-3 pb-4 pt-3">
-        <FeedActionButtons
-          className="w-full"
-          includeBookmark
-          initialBookmarked={post.viewerHasBookmarked}
-          initialLiked={post.viewerHasLiked}
-          postId={post.id}
-          replyPreview={post.replyPreview}
-          targetType={post.targetType}
-        />
-        <div className="mt-1 text-sm font-bold">{post.likeLabel}</div>
-        <p className="mt-1 text-sm leading-[1.45]">
-          <span className="font-bold">{post.authorHandle}</span>{" "}
-          <span className="font-semibold">{post.title}</span> {post.body}
-        </p>
-        <div className="mt-1 text-sm text-[#737373]">{post.replyLabel} 모두 보기</div>
-        <div className="mt-2 text-xs text-[#8a8a8a]">{post.timeLabel} 전</div>
-      </div>
-    </article>
-  );
-}
-
-function PostHeader({
-  compact = false,
-  post,
-}: {
-  compact?: boolean;
-  post: FeedItem;
-}) {
-  return (
-    <div className="flex min-w-0 flex-1 items-center gap-1.5">
-      <div className="min-w-0">
-        <div className="flex min-w-0 items-center gap-1.5">
-          <AuthorName post={post} text={compact ? post.authorHandle : post.authorName} />
-          {post.verified && (
-            <BadgeCheck
-              aria-label="인증됨"
-              className="h-[15px] w-[15px] shrink-0 fill-[#1d9bf0] text-white"
-              strokeWidth={2.2}
-            />
-          )}
-          <span className="shrink-0 text-sm text-[#737373]">· {post.timeLabel}</span>
-          {post.statusLabel ? (
-            <span className="shrink-0 text-sm text-[#737373]">
-              · {post.statusLabel}
-            </span>
-          ) : null}
-        </div>
-        {!compact && (
-          <div className="truncate text-xs font-medium text-[#737373]">
-            {post.authorHandle}
-          </div>
-        )}
-      </div>
-      <FeedMoreMenu postId={post.id} targetType={post.targetType} />
-    </div>
-  );
-}
-
-function ReplyLine({ post }: { post: FeedItem }) {
-  const knownLikeCount = post.likeCount ?? null;
-  const knownReplyCount = post.replyCount ?? null;
-  const hasKnownEngagement = knownLikeCount !== null || knownReplyCount !== null;
-  const hasVisibleEngagement =
-    !hasKnownEngagement || Boolean((knownLikeCount ?? 0) + (knownReplyCount ?? 0));
-
-  return (
-    <div className="mt-2 flex items-center gap-2 text-[13px] text-[#737373]">
-      {hasVisibleEngagement ? (
-        <span className="relative block h-6 w-12">
-          <span className="absolute left-0 h-[22px] w-[22px] rounded-full border-2 border-white bg-[#d8d8d8]" />
-          <span className="absolute left-3.5 h-[22px] w-[22px] rounded-full border-2 border-white bg-[#b9c7ff]" />
-          <span className="absolute left-7 h-[22px] w-[22px] rounded-full border-2 border-white bg-[#d9f99d]" />
-        </span>
       ) : null}
+    </span>
+  );
+
+  return (
+    <div className={styles.authorCopy}>
+      {post.authorProfile ? (
+        <PublicProfileButton
+          ariaLabel={`${post.authorName} 프로필 보기`}
+          className={styles.authorButton}
+          profile={post.authorProfile}
+        >
+          {authorName}
+        </PublicProfileButton>
+      ) : (
+        authorName
+      )}
       <span>
-        {post.replyLabel} · {post.likeLabel}
+        {post.authorHandle} · {post.timeLabel}
       </span>
     </div>
   );
@@ -328,22 +205,20 @@ function Avatar({
   label,
   profile,
   profileLabel,
-  size = "md",
 }: {
   label: string;
   profile?: FeedItem["authorProfile"];
-  profileLabel?: string;
-  size?: "md" | "sm";
+  profileLabel: string;
 }) {
   if (profile) {
     return (
       <PublicProfileButton
-        ariaLabel={`${profileLabel ?? profile.display.displayName} 프로필 보기`}
-        className="rounded-full"
+        ariaLabel={`${profileLabel} 프로필 보기`}
+        className={styles.avatarButton}
         profile={profile}
       >
         <PublicProfileImageView
-          className={size === "sm" ? undefined : "h-[38px] w-[38px]"}
+          className={styles.profileImage}
           image={profile.display.profileImage}
           size="sm"
         />
@@ -351,36 +226,22 @@ function Avatar({
     );
   }
 
-  return (
-    <div
-      className={cn(
-        "grid shrink-0 place-items-center rounded-full bg-[#111111] font-black text-white",
-        size === "sm" ? "h-9 w-9 text-sm" : "h-[38px] w-[38px] text-[15px]",
-      )}
-    >
-      {label}
-    </div>
-  );
+  return <span className={styles.fallbackAvatar}>{label.slice(0, 1)}</span>;
 }
 
-function AuthorName({ post, text }: { post: FeedItem; text: string }) {
-  const label = (
-    <span className="block truncate text-sm font-extrabold text-[#111111]">
-      {text}
-    </span>
-  );
+function EngagementSummary({ post }: { post: FeedItem }) {
+  const likeCount = post.likeCount ?? 0;
+  const replyCount = post.replyCount ?? 0;
 
-  if (!post.authorProfile) {
-    return label;
+  if (likeCount === 0 && replyCount === 0) {
+    return <p className={styles.emptyEngagement}>첫 반응을 남겨보세요</p>;
   }
 
   return (
-    <PublicProfileButton
-      ariaLabel={`${post.authorName} 프로필 보기`}
-      className="block max-w-full truncate"
-      profile={post.authorProfile}
-    >
-      {label}
-    </PublicProfileButton>
+    <p className={styles.engagementSummary}>
+      {likeCount > 0 ? `좋아요 ${likeCount.toLocaleString("ko-KR")}개` : null}
+      {likeCount > 0 && replyCount > 0 ? <span>·</span> : null}
+      {replyCount > 0 ? `댓글 ${replyCount.toLocaleString("ko-KR")}개` : null}
+    </p>
   );
 }
