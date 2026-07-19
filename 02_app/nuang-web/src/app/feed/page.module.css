@@ -1,167 +1,99 @@
 .shell {
   min-height: 100dvh;
-  background: #f6f4f1;
-  color: #29252e;
+  background: #f4f1ed;
+  color: #252230;
 }
 
 .page {
   width: 100%;
-  max-width: 470px;
+  max-width: 520px;
   min-height: 100dvh;
   margin: 0 auto;
-  border-right: 1px solid #e8e3df;
-  border-left: 1px solid #e8e3df;
-  background:
-    radial-gradient(circle at 90% 4%, rgb(112 78 211 / 8%), transparent 20rem),
-    #faf8f5;
-  padding-bottom: calc(88px + env(safe-area-inset-bottom));
+  background: #fbfaf7;
+  padding-bottom: calc(82px + env(safe-area-inset-bottom));
 }
 
 .header {
   position: sticky;
-  z-index: 20;
+  z-index: 30;
   top: 0;
   display: flex;
-  min-height: 70px;
+  min-height: 58px;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid rgb(225 219 214 / 78%);
-  background: rgb(250 248 245 / 89%);
+  padding: 0.45rem 0.85rem 0.45rem 1rem;
+  border-bottom: 1px solid rgb(232 227 233 / 90%);
+  background: rgb(251 250 247 / 92%);
   backdrop-filter: blur(18px);
 }
 
-.header p,
-.header h1 {
-  margin: 0;
-}
-
-.header > div > p {
-  color: #6849c1;
-  font-size: 0.6875rem;
-  font-weight: 830;
-  letter-spacing: 0.08em;
-}
-
-.header h1 {
-  margin-top: 0.06rem;
-  color: #29242e;
-  font-size: 1.18rem;
-  font-weight: 840;
-  letter-spacing: -0.03em;
-}
-
-.header > p {
-  max-width: 17rem;
-  color: #7d7681;
-  font-size: 0.6875rem;
-  font-weight: 650;
-  text-align: right;
-}
-
-.content {
-  display: grid;
-  gap: 1.1rem;
-  padding: 1rem;
-}
-
-.introCard {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
-  gap: 0.7rem;
-  padding: 0.95rem;
-  border: 1px solid #e3dded;
-  border-radius: 18px;
-  background: linear-gradient(135deg, #f8f5ff, #fff);
-}
-
-.introCard > span {
-  display: grid;
-  width: 2rem;
-  height: 2rem;
-  place-items: center;
-  border-radius: 11px;
-  background: #eae2fb;
-  color: #6849bd;
-}
-
-.introCard strong,
-.introCard p {
-  margin: 0;
-}
-
-.introCard strong {
-  color: #413849;
-  font-size: 0.8125rem;
-  font-weight: 780;
-}
-
-.introCard p {
-  margin-top: 0.2rem;
-  color: #7b7480;
-  font-size: 0.6875rem;
-  line-height: 1.5;
-}
-
-.feedSection {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.sectionHeading {
+.wordmark {
   display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0 0.15rem;
+  min-width: 0;
+  align-items: baseline;
+  gap: 0.55rem;
 }
 
-.sectionHeading h2,
-.sectionHeading p,
-.sectionHeading span {
+.wordmark span {
+  color: #5c40b8;
+  font-size: 0.9375rem;
+  font-weight: 850;
+  letter-spacing: 0.06em;
+}
+
+.wordmark h1 {
   margin: 0;
-}
-
-.sectionHeading h2 {
-  color: #2d2932;
-  font-size: 1.05rem;
-  font-weight: 820;
+  color: #2b2730;
+  font-size: 1rem;
+  font-weight: 780;
   letter-spacing: -0.025em;
 }
 
-.sectionHeading p {
-  margin-top: 0.18rem;
-  color: #827b85;
-  font-size: 0.6875rem;
+.writeLink {
+  display: inline-flex;
+  min-width: 44px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  border-radius: 999px;
+  color: #5139a4;
+  font-size: 0.75rem;
+  font-weight: 760;
 }
 
-.sectionHeading > span {
-  color: #756d7a;
-  font-size: 0.6875rem;
-  font-weight: 700;
+.writeLink:hover {
+  background: #f2eef8;
+}
+
+.feedSection {
+  background: #f4f1ed;
 }
 
 .postList {
   display: grid;
-  gap: 0.75rem;
+  gap: 0.5rem;
 }
 
 .postCard {
   padding: 1rem;
-  border: 1px solid #e6e0da;
-  border-radius: 22px;
+  border-top: 1px solid #ebe6ec;
+  border-bottom: 1px solid #ebe6ec;
   background: #fff;
-  box-shadow: 0 12px 30px rgb(60 49 41 / 6%);
-  animation: post-in 260ms ease-out both;
+  animation: post-in 220ms ease-out both;
+}
+
+.postCard[data-official="true"] {
+  background: #fffdfa;
 }
 
 .postHeader {
   display: grid;
+  min-height: 44px;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 0.65rem;
+  gap: 0.7rem;
 }
 
 .avatarButton {
@@ -169,12 +101,14 @@
   width: 2.5rem;
   height: 2.5rem;
   overflow: hidden;
-  border-radius: 13px;
+  border-radius: 50%;
 }
 
 .profileImage {
   width: 2.5rem !important;
   height: 2.5rem !important;
+  object-fit: cover;
+  transform: scale(1.08);
 }
 
 .fallbackAvatar {
@@ -182,17 +116,17 @@
   width: 2.5rem;
   height: 2.5rem;
   place-items: center;
-  border-radius: 13px;
-  background: linear-gradient(145deg, #6c4bc8, #8a70d8);
+  border-radius: 50%;
+  background: linear-gradient(145deg, #7052cc, #957cdf);
   color: #fff;
-  font-size: 0.8125rem;
-  font-weight: 820;
+  font-size: 0.75rem;
+  font-weight: 810;
 }
 
 .authorCopy {
   display: grid;
   min-width: 0;
-  gap: 0.08rem;
+  gap: 0.05rem;
 }
 
 .authorButton {
@@ -205,230 +139,223 @@
   display: flex;
   min-width: 0;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.28rem;
   overflow: hidden;
-  color: #37313c;
-  font-size: 0.8125rem;
-  font-weight: 790;
+  color: #302b34;
+  font-size: 0.875rem;
+  font-weight: 760;
+  line-height: 1.35;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .authorName svg {
   flex: 0 0 auto;
-  color: #6e50c9;
+  color: #6546d7;
 }
 
 .authorCopy > span {
   overflow: hidden;
-  color: #88818b;
-  font-size: 0.625rem;
+  color: #7f7884;
+  font-size: 0.75rem;
+  line-height: 1.4;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.postTypeRow {
+.postContext {
   display: flex;
   align-items: center;
   gap: 0.45rem;
-  margin-top: 0.85rem;
+  margin: 0.85rem 0 0;
+  color: #716a76;
+  font-size: 0.75rem;
+  font-weight: 720;
+  line-height: 1.45;
 }
 
-.postTypeRow > span {
+.postContext[data-official="true"] {
+  color: #5c40b5;
+}
+
+.postContext small {
   display: inline-flex;
-  min-height: 24px;
+  min-height: 22px;
   align-items: center;
-  padding: 0 0.55rem;
+  padding: 0 0.45rem;
   border-radius: 999px;
-  background: #f1eff2;
-  color: #69616e;
+  background: #f1eef3;
+  color: #7b7380;
   font-size: 0.625rem;
-  font-weight: 760;
-}
-
-.postTypeRow > span[data-official="true"] {
-  background: #eee8fb;
-  color: #6042b9;
-}
-
-.postTypeRow small {
-  color: #8b838e;
-  font-size: 0.625rem;
+  font-weight: 700;
 }
 
 .postBody {
-  margin: 0.65rem 0 0;
-  color: #443e48;
-  font-size: 0.8125rem;
-  line-height: 1.62;
+  margin: 0.35rem 0 0;
+  color: #38323d;
+  font-size: 0.9375rem;
+  font-weight: 520;
+  line-height: 1.65;
+  text-wrap: pretty;
   white-space: pre-wrap;
+  word-break: keep-all;
 }
 
 .pollWrap {
-  margin-top: 0.8rem;
-  padding: 0.2rem 0.85rem 0.75rem;
-  border: 1px solid #e5dfee;
+  margin-top: 0.85rem;
+  padding: 0.3rem 0.9rem 0.8rem;
+  border: 1px solid #eadfce;
   border-radius: 18px;
-  background: #fcfbfe;
+  background: #fff7ea;
+}
+
+.pollNote {
+  margin: 0.6rem 0 0;
+  color: #81776e;
+  font-size: 0.6875rem;
+  line-height: 1.45;
 }
 
 .pollDetailLink {
   display: inline-flex;
-  min-height: 36px;
+  min-height: 40px;
   align-items: center;
   gap: 0.3rem;
-  margin-top: 0.55rem;
-  color: #5d41b8;
+  margin-top: 0.25rem;
+  color: #583daf;
   font-size: 0.75rem;
-  font-weight: 760;
+  font-weight: 750;
 }
 
 .reportCard {
-  display: block;
-  margin-top: 0.8rem;
-  padding: 0.95rem;
-  border: 1px solid #ded6ee;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.9rem;
+  margin-top: 0.85rem;
+  padding: 1rem;
+  border: 1px solid #ded6ec;
   border-radius: 18px;
-  background:
-    radial-gradient(circle at 92% 0%, rgb(118 83 207 / 12%), transparent 7rem),
-    linear-gradient(145deg, #fbf9ff, #f7f5fa);
+  background: #f7f4fc;
   transition:
     border-color 150ms ease,
     transform 120ms ease;
 }
 
 .reportCard:hover {
-  border-color: #cfc2e9;
+  border-color: #cfc2e8;
 }
 
 .reportCard:active {
   transform: scale(0.995);
 }
 
-.reportHeading {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 0.75rem;
-}
-
-.reportHeading > div {
+.reportCard > div {
   display: grid;
   min-width: 0;
-  gap: 0.22rem;
+  gap: 0.14rem;
 }
 
-.reportHeading > div > span {
-  color: #71687a;
-  font-size: 0.625rem;
-  font-weight: 700;
+.reportCard > div > span {
+  color: #736b79;
+  font-size: 0.6875rem;
+  font-weight: 680;
 }
 
-.reportHeading strong {
-  color: #4e36a1;
-  font-size: 1.3rem;
+.reportCard strong {
+  color: #4f35ad;
+  font-size: 1.4rem;
   font-weight: 850;
   letter-spacing: 0.035em;
 }
 
-.reportHeading p {
+.reportCard p {
   overflow: hidden;
   margin: 0;
-  color: #403748;
-  font-size: 0.75rem;
-  font-weight: 760;
+  color: #433a49;
+  font-size: 0.8125rem;
+  font-weight: 740;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.reportHeading > span {
+.reportCard > span {
   display: inline-flex;
   flex: 0 0 auto;
   align-items: center;
   gap: 0.25rem;
-  color: #6245b9;
-  font-size: 0.6875rem;
-  font-weight: 750;
-}
-
-.reportDomains {
-  display: grid;
-  gap: 0.45rem;
-  margin-top: 0.85rem;
-  padding-top: 0.75rem;
-  border-top: 1px solid #e5dfeb;
-}
-
-.reportDomains > div {
-  display: grid;
-  grid-template-columns: 5.2rem minmax(0, 1fr) 1.5rem;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.reportDomains > div > span:first-child {
-  overflow: hidden;
-  color: #7e7683;
-  font-size: 0.625rem;
-  font-weight: 650;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.reportDomains > div > span:nth-child(2) {
-  height: 4px;
-  overflow: hidden;
-  border-radius: 999px;
-  background: #e6e1e9;
-}
-
-.reportDomains > div > span:nth-child(2) > span {
-  display: block;
-  height: 100%;
-  border-radius: inherit;
-  background: linear-gradient(90deg, #8b70dd, #6444c6);
-}
-
-.reportDomains strong {
-  color: #5e5664;
-  font-size: 0.625rem;
-  font-weight: 760;
-  text-align: right;
+  color: #5b40b4;
+  font-size: 0.75rem;
+  font-weight: 740;
 }
 
 .postActions {
-  display: flex;
-  min-height: 42px;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-  padding-top: 0.55rem;
-  border-top: 1px solid #eee9ef;
+  margin-top: 0.65rem;
 }
 
 .engagementSummary,
 .emptyEngagement {
-  margin: 0;
-  color: #847d87;
-  font-size: 0.625rem;
-  font-weight: 650;
-  text-align: right;
+  margin: 0.15rem 0 0;
+  color: #514a56;
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1.45;
 }
 
 .engagementSummary {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.28rem;
+}
+
+.emptyEngagement {
+  color: #8a828d;
+  font-weight: 620;
+}
+
+.recentReply {
+  display: flex;
+  min-width: 0;
+  gap: 0.35rem;
+  margin: 0.45rem 0 0;
+  color: #4e4752;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.recentReply strong {
+  flex: 0 0 auto;
+  color: #37313b;
+  font-weight: 760;
+}
+
+.recentReply > span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recentReply small {
+  flex: 0 0 auto;
+  color: #8c8490;
+  font-size: 0.625rem;
+}
+
+.conversationLink {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  margin-top: 0.15rem;
+  color: #7e7682;
+  font-size: 0.75rem;
+  font-weight: 620;
 }
 
 .emptyFeed {
   display: grid;
   justify-items: center;
-  padding: 1.7rem 1rem;
-  border: 1px dashed #ddd7dc;
-  border-radius: 20px;
-  background: rgb(255 255 255 / 75%);
+  padding: 3.5rem 1rem;
+  background: #fff;
   text-align: center;
 }
 
@@ -438,29 +365,52 @@
 }
 
 .emptyFeed strong {
-  color: #4b444f;
-  font-size: 0.875rem;
-  font-weight: 780;
+  color: #48414c;
+  font-size: 0.9375rem;
+  font-weight: 770;
 }
 
 .emptyFeed p {
-  margin-top: 0.3rem;
-  color: #817a84;
-  font-size: 0.75rem;
+  margin-top: 0.35rem;
+  color: #837c87;
+  font-size: 0.8125rem;
 }
 
-@media (max-width: 350px) {
-  .header > p {
-    display: none;
+@media (min-width: 521px) {
+  .page {
+    border-right: 1px solid #e4dfe5;
+    border-left: 1px solid #e4dfe5;
   }
 
-  .content {
-    padding-right: 0.75rem;
-    padding-left: 0.75rem;
+  .postList {
+    gap: 0.75rem;
+    padding: 1rem;
   }
 
   .postCard {
-    padding: 0.9rem;
+    border: 1px solid #e8e3e9;
+    border-radius: 20px;
+    box-shadow: 0 8px 28px rgb(55 44 75 / 4%);
+  }
+}
+
+@media (max-width: 350px) {
+  .header {
+    padding-left: 0.75rem;
+  }
+
+  .writeLink span {
+    display: none;
+  }
+
+  .postCard {
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+  }
+
+  .reportCard {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
 
@@ -477,10 +427,8 @@
 @keyframes post-in {
   from {
     opacity: 0;
-    transform: translateY(5px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }

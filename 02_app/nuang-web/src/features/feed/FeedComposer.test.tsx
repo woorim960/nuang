@@ -17,6 +17,8 @@ describe("FeedComposer", () => {
   beforeEach(() => {
     navigationMock.router.push.mockClear();
     navigationMock.router.refresh.mockClear();
+    window.sessionStorage.clear();
+    window.history.replaceState({}, "", "/feed");
   });
 
   afterEach(() => {
@@ -49,7 +51,13 @@ describe("FeedComposer", () => {
 
     render(<FeedComposer />);
 
-    expect(screen.getByRole("tab", { name: "내 생각" })).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "지금 떠오른 생각을 나눠보세요",
+      }),
+    );
+
+    expect(screen.getByRole("tab", { name: "글" })).toBeInTheDocument();
     expect(
       screen.queryByRole("tab", { name: "일반 글" }),
     ).not.toBeInTheDocument();
@@ -63,10 +71,12 @@ describe("FeedComposer", () => {
       },
     });
     fireEvent.click(screen.getByRole("tab", { name: "오늘의 질문" }));
-    fireEvent.click(screen.getByRole("button", { name: "게시하기" }));
+    fireEvent.click(screen.getByRole("button", { name: "게시" }));
 
     expect(
-      await screen.findByText("게시 요청이 접수됐어요."),
+      await screen.findByText(
+        "글을 올렸어요. 확인이 끝나면 다른 사람에게도 보여요.",
+      ),
     ).toBeInTheDocument();
     expect(navigationMock.router.refresh).toHaveBeenCalledTimes(1);
     await waitFor(() => {
@@ -112,7 +122,12 @@ describe("FeedComposer", () => {
 
     render(<FeedComposer />);
 
-    fireEvent.click(screen.getByRole("tab", { name: "둘 중 하나" }));
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "지금 떠오른 생각을 나눠보세요",
+      }),
+    );
+    fireEvent.click(screen.getByRole("tab", { name: "밸런스 게임" }));
     fireEvent.click(
       screen.getByRole("button", { name: "사람을 만나 함께 보낸다" }),
     );
@@ -121,10 +136,12 @@ describe("FeedComposer", () => {
         value: "오늘은 조용한 길이 더 끌려요.",
       },
     });
-    fireEvent.click(screen.getByRole("button", { name: "게시하기" }));
+    fireEvent.click(screen.getByRole("button", { name: "게시" }));
 
     expect(
-      await screen.findByText("게시 요청이 접수됐어요."),
+      await screen.findByText(
+        "글을 올렸어요. 확인이 끝나면 다른 사람에게도 보여요.",
+      ),
     ).toBeInTheDocument();
     expect(getLastRequestBody()).toMatchObject({
       action: "create_post",
@@ -142,7 +159,13 @@ describe("FeedComposer", () => {
 
     render(<FeedComposer />);
 
-    expect(screen.getByRole("button", { name: "게시하기" })).toBeDisabled();
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "지금 떠오른 생각을 나눠보세요",
+      }),
+    );
+    expect(screen.getByRole("button", { name: "게시" })).toBeDisabled();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
@@ -161,21 +184,55 @@ describe("FeedComposer", () => {
 
     render(<FeedComposer />);
 
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "지금 떠오른 생각을 나눠보세요",
+      }),
+    );
     fireEvent.change(screen.getByLabelText("글 내용"), {
       target: {
         value: "짧은 생각을 남겨요.",
       },
     });
-    fireEvent.click(screen.getByRole("button", { name: "게시하기" }));
+    fireEvent.click(screen.getByRole("button", { name: "게시" }));
 
     expect(
       await screen.findByText("로그인 후 게시할 수 있어요."),
     ).toBeInTheDocument();
     expect(navigationMock.router.push).toHaveBeenCalledWith(
-      "/login?next=%2Ffeed",
+      "/login?next=%2Ffeed%3FresumeFeed%3Dpost&reason=community",
+    );
+    expect(window.sessionStorage.getItem("nuang:feed:pending-post")).toContain(
+      "짧은 생각을 남겨요.",
     );
     expect(document.body).not.toHaveTextContent("커뮤니티");
     expect(document.body).not.toHaveTextContent("안전");
+  });
+
+  it("restores the post draft after login", async () => {
+    window.sessionStorage.setItem(
+      "nuang:feed:pending-post",
+      JSON.stringify({
+        body: "로그인 전에 적어둔 생각이에요.",
+        mode: "daily_question",
+        selectedPollOptionKey: null,
+      }),
+    );
+    window.history.replaceState({}, "", "/feed?resumeFeed=post&auth=connected");
+
+    render(<FeedComposer />);
+
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByLabelText("글 내용")).toHaveValue(
+      "로그인 전에 적어둔 생각이에요.",
+    );
+    expect(screen.getByRole("tab", { name: "오늘의 질문" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(
+      screen.getByText("로그인됐어요. 내용을 확인하고 게시해 주세요."),
+    ).toBeInTheDocument();
   });
 });
 

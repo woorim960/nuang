@@ -36,7 +36,7 @@ export function FeedMoreMenu({
       <button
         aria-expanded={open}
         aria-label="더 보기"
-        className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-[#555555] hover:bg-[#f5f5f5]"
+        className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-[#5f5864] transition-colors hover:bg-[#f5f2f6]"
         onClick={() => {
           setOpen((value) => !value);
           setStatus({ status: "idle" });
@@ -46,18 +46,47 @@ export function FeedMoreMenu({
         <MoreHorizontal aria-hidden="true" size={21} strokeWidth={1.9} />
       </button>
       {open ? (
-        <div className="absolute right-0 top-9 z-30 w-[180px] border border-[#ededed] bg-white py-1 shadow-[0_12px_30px_rgba(0,0,0,0.12)]">
-          <button
-            className="flex min-h-10 w-full items-center px-3 text-left text-sm font-semibold text-[#111111] hover:bg-[#f7f7f7] disabled:text-[#9a9a9a]"
-            disabled={status.status === "pending"}
-            onClick={() => {
-              void submitNotInterested();
-            }}
-            type="button"
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center bg-[#1b1620]/35"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) setOpen(false);
+          }}
+        >
+          <section
+            aria-labelledby={`feed-more-title-${postId}`}
+            aria-modal="true"
+            className="w-full max-w-[520px] rounded-t-[24px] bg-white px-3 pb-[calc(12px+env(safe-area-inset-bottom))] pt-2 shadow-[0_-18px_44px_rgba(40,32,51,0.16)]"
+            role="dialog"
           >
-            관심 없음
-          </button>
-          <FeedMoreMenuStatusMessage status={status} />
+            <span
+              aria-hidden="true"
+              className="mx-auto mb-3 block h-1 w-10 rounded-full bg-[#ded8e1]"
+            />
+            <h2
+              className="px-2 pb-2 text-center text-sm font-extrabold text-[#2d2831]"
+              id={`feed-more-title-${postId}`}
+            >
+              게시물 메뉴
+            </h2>
+            <button
+              className="flex min-h-12 w-full items-center rounded-[14px] px-4 text-left text-sm font-semibold text-[#3e3742] hover:bg-[#f7f4f8] disabled:text-[#9a9a9a]"
+              disabled={status.status === "pending"}
+              onClick={() => {
+                void submitNotInterested();
+              }}
+              type="button"
+            >
+              관심 없음
+            </button>
+            <FeedMoreMenuStatusMessage status={status} />
+            <button
+              className="mt-1 flex min-h-12 w-full items-center justify-center rounded-[14px] bg-[#f3f0f4] text-sm font-bold text-[#4b444f]"
+              onClick={() => setOpen(false)}
+              type="button"
+            >
+              닫기
+            </button>
+          </section>
         </div>
       ) : null}
     </div>
@@ -81,9 +110,9 @@ export function FeedMoreMenu({
         },
         method: "POST",
       });
-      const payload = (await response.json().catch(() => null)) as
-        | FeedMoreMenuFailurePayload
-        | null;
+      const payload = (await response
+        .json()
+        .catch(() => null)) as FeedMoreMenuFailurePayload | null;
 
       if (response.status === 401) {
         setStatus({
@@ -135,7 +164,7 @@ function FeedMoreMenuStatusMessage({ status }: { status: FeedMoreMenuStatus }) {
   return (
     <p
       className={cn(
-        "px-3 pb-2 pt-1 text-xs font-medium",
+        "px-4 pb-2 pt-1 text-xs font-medium",
         status.status === "error" ? "text-[#9a6400]" : "text-[#737373]",
       )}
       role={status.status === "error" ? "alert" : "status"}

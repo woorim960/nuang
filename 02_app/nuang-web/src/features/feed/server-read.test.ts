@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  createServerFeedPostDetailPayload,
   createServerFeedReadPayload,
   createServerFeedPollStatsPayload,
   createServerFeedReportSharePayload,
@@ -178,6 +179,51 @@ describe("feed server read model", () => {
     expect(itemIds).toEqual(["post-own", "post-report-share"]);
   });
 
+  it("reads one visible post with every comment the viewer may see", async () => {
+    supabaseMocks.serverClient = {
+      auth: {
+        getUser: async () => ({
+          data: {
+            user: {
+              id: "auth-user-001",
+            },
+          },
+          error: null,
+        }),
+      },
+    };
+    supabaseMocks.serviceClient = createMockFeedReadClient();
+
+    const payload = await createServerFeedPostDetailPayload(
+      "44444444-4444-4444-8444-444444444444",
+    );
+
+    expect(payload).toMatchObject({
+      comments: [
+        {
+          authorName: "나",
+          body: "내가 남긴 확인 중 댓글",
+          statusLabel: "게시 전 확인 중",
+        },
+        {
+          authorName: "NUANG 사용자",
+          body: "공개된 대화 댓글",
+        },
+      ],
+      post: {
+        body: "서로 다른 생각을 편하게 나누기 위해 남긴 실제 공개 이야기입니다.",
+        id: "44444444-4444-4444-8444-444444444444",
+        replyCount: 2,
+        title: "오늘의 질문",
+        viewerHasLiked: true,
+      },
+      viewer: {
+        isAuthenticated: true,
+      },
+    });
+    expect(payload?.comments).toHaveLength(2);
+  });
+
   it("hides code-level poll rows that could reveal one person's choice", async () => {
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
@@ -212,6 +258,18 @@ describe("feed server read model", () => {
     });
     expect(JSON.stringify(payload)).not.toContain("물결 새길 개척가");
   });
+
+  it("does not expose a private report share to another viewer", async () => {
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      privateReportShare: true,
+    });
+
+    const payload = await createServerFeedReportSharePayload(
+      "33333333-3333-4333-8333-333333333333",
+    );
+
+    expect(payload).toBeNull();
+  });
 });
 
 type MockFeedReadOperation = {
@@ -223,13 +281,16 @@ type MockFeedReadOperation = {
 function createMockFeedReadClient({
   hiddenPostIds = [],
   hiddenSeedKeys = [],
+  privateReportShare = false,
 }: {
   hiddenPostIds?: string[];
   hiddenSeedKeys?: string[];
+  privateReportShare?: boolean;
 } = {}) {
   const options = {
     hiddenPostIds,
     hiddenSeedKeys,
+    privateReportShare,
   };
 
   return {
@@ -292,6 +353,7 @@ function resolveFeedReadOperation(
   options: {
     hiddenPostIds: string[];
     hiddenSeedKeys: string[];
+    privateReportShare: boolean;
   },
 ) {
   if (operation.schema === "identity" && operation.table === "auth_identity") {
@@ -305,6 +367,25 @@ function resolveFeedReadOperation(
 
   if (operation.schema === "feed" && operation.table === "feed_post") {
     if (
+      hasFilter(operation, "eq", "id", "44444444-4444-4444-8444-444444444444")
+    ) {
+      return {
+        data: {
+          author_account_id: "account-other",
+          body: "서로 다른 생각을 편하게 나누기 위해 남긴 실제 공개 이야기입니다.",
+          created_at: "2026-07-09T07:10:00.000Z",
+          id: "44444444-4444-4444-8444-444444444444",
+          moderation_status: "published",
+          published_at: "2026-07-09T07:11:00.000Z",
+          source: "daily_question",
+          source_id: "daily_question_detail_001",
+          visibility: "public",
+        },
+        error: null,
+      };
+    }
+
+    if (
       hasFilter(operation, "eq", "id", "33333333-3333-4333-8333-333333333333")
     ) {
       return {
@@ -313,7 +394,9 @@ function resolveFeedReadOperation(
           body: "SVODE 물결 새길 개척가 리포트를 공유했어요.",
           created_at: "2026-07-09T07:10:00.000Z",
           id: "33333333-3333-4333-8333-333333333333",
-          moderation_status: "published",
+          moderation_status: options.privateReportShare
+            ? "pending_review"
+            : "published",
           public_projection_payload: {
             reportShare: {
               assessmentKind: "full",
@@ -327,7 +410,7 @@ function resolveFeedReadOperation(
           published_at: "2026-07-09T07:11:00.000Z",
           source: "report_share",
           source_id: null,
-          visibility: "public",
+          visibility: options.privateReportShare ? "private_draft" : "public",
         },
         error: null,
       };
@@ -448,6 +531,45 @@ function resolveFeedReadOperation(
   }
 
   if (operation.schema === "feed" && operation.table === "feed_comment") {
+    if (
+      hasFilter(
+        operation,
+        "eq",
+        "post_id",
+        "44444444-4444-4444-8444-444444444444",
+      )
+    ) {
+      return {
+        data: [
+          {
+            author_account_id: "account-own",
+            body: "내가 남긴 확인 중 댓글",
+            created_at: "2026-07-09T07:24:00.000Z",
+            id: "comment-detail-own",
+            moderation_status: "pending_review",
+            post_id: "44444444-4444-4444-8444-444444444444",
+          },
+          {
+            author_account_id: "account-other",
+            body: "공개된 대화 댓글",
+            created_at: "2026-07-09T07:23:00.000Z",
+            id: "comment-detail-public",
+            moderation_status: "published",
+            post_id: "44444444-4444-4444-8444-444444444444",
+          },
+          {
+            author_account_id: "account-other",
+            body: "다른 사람에게 보이면 안 되는 댓글",
+            created_at: "2026-07-09T07:25:00.000Z",
+            id: "comment-detail-hidden",
+            moderation_status: "pending_review",
+            post_id: "44444444-4444-4444-8444-444444444444",
+          },
+        ],
+        error: null,
+      };
+    }
+
     if (hasFilter(operation, "eq", "target_type", "feed_seed_card")) {
       return {
         data: [
@@ -534,6 +656,10 @@ function resolveFeedReadOperation(
 
     return {
       data: [
+        {
+          account_id: "account-own",
+          target_id: "44444444-4444-4444-8444-444444444444",
+        },
         {
           account_id: "account-own",
           target_id: "post-own",

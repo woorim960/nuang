@@ -34,6 +34,7 @@ export function FeedActionButtons({
   commentComposer = false,
   commentPlaceholder = "댓글 달기",
   includeBookmark = false,
+  includeComment = true,
   includeShare = true,
   initialBookmarked = false,
   initialLiked = false,
@@ -46,6 +47,7 @@ export function FeedActionButtons({
   commentComposer?: boolean;
   commentPlaceholder?: string;
   includeBookmark?: boolean;
+  includeComment?: boolean;
   includeShare?: boolean;
   initialBookmarked?: boolean;
   initialLiked?: boolean;
@@ -118,12 +120,15 @@ export function FeedActionButtons({
           mode: "api",
           type: "react",
         },
-        {
-          label: "댓글",
-          mode: "comment",
-          type: "comment",
-        },
       ];
+
+  if (!commentComposer && includeComment) {
+    actions.push({
+      label: "댓글",
+      mode: "comment",
+      type: "comment",
+    });
+  }
 
   if (!commentComposer && includeShare) {
     actions.push({
@@ -482,8 +487,8 @@ function ActionButton({
       aria-expanded={action.type === "comment" ? expanded : undefined}
       aria-pressed={isPressable ? active : undefined}
       className={cn(
-        "grid h-9 w-9 place-items-center rounded-full transition-colors hover:bg-[#f5f5f5] disabled:opacity-50",
-        active ? "text-[#111111]" : "text-[#242424]",
+        "grid h-11 w-11 place-items-center rounded-full transition-[color,background-color,transform] hover:bg-[#f5f2f8] active:scale-[0.96] disabled:opacity-50",
+        active ? "text-[#6546d7]" : "text-[#302b34]",
       )}
       disabled={disabled}
       onClick={() => {

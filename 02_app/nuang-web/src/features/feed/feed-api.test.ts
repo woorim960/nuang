@@ -25,8 +25,8 @@ describe("feed api", () => {
 
     expect(response.status).toBe(200);
     expect(body.ok).toBe(true);
-    expect(body.result.items.length).toBeGreaterThan(0);
-    expect(body.result.stories.length).toBeGreaterThan(0);
+    expect(body.result.items).toEqual([]);
+    expect(body.result.stories).toEqual([]);
   });
 
   it("keeps valid write requests behind the auth/env gate", async () => {

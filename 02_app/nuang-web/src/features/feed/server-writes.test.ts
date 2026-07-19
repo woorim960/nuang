@@ -37,7 +37,10 @@ const user = {
 describe("feed server writes", () => {
   it("stores new feed posts with public projection only", async () => {
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -102,7 +105,10 @@ describe("feed server writes", () => {
 
   it("stores balance game posts with poll options and an anonymous code vote", async () => {
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -130,7 +136,10 @@ describe("feed server writes", () => {
         };
       }
 
-      if (operation.schema === "feed" && operation.table === "feed_poll_option") {
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_option"
+      ) {
         return {
           data: [
             {
@@ -146,14 +155,20 @@ describe("feed server writes", () => {
         };
       }
 
-      if (operation.schema === "profile" && operation.table === "profile_public_snapshot") {
+      if (
+        operation.schema === "profile" &&
+        operation.table === "profile_public_snapshot"
+      ) {
         return {
           data: null,
           error: null,
         };
       }
 
-      if (operation.schema === "report" && operation.table === "result_report") {
+      if (
+        operation.schema === "report" &&
+        operation.table === "result_report"
+      ) {
         return {
           data: {
             profile_code: "TVOAE",
@@ -198,12 +213,16 @@ describe("feed server writes", () => {
       },
       ok: true,
     });
-    expect(operations.find((item) => item.table === "feed_poll")?.insertRow).toMatchObject({
+    expect(
+      operations.find((item) => item.table === "feed_poll")?.insertRow,
+    ).toMatchObject({
       post_id: "22222222-2222-4222-8222-222222222222",
       prompt_id: "balance_trip_mountain_sea_001",
       question: "나 혼자 여행 간다면?",
     });
-    expect(operations.find((item) => item.table === "feed_poll_vote")?.insertRow).toMatchObject({
+    expect(
+      operations.find((item) => item.table === "feed_poll_vote")?.insertRow,
+    ).toMatchObject({
       account_id: accountId,
       nuang_code: "TVOAE",
       option_id: "44444444-4444-4444-8444-444444444444",
@@ -217,7 +236,10 @@ describe("feed server writes", () => {
   it("stores duplicate seed card reactions idempotently", async () => {
     let reactionInsertCount = 0;
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -287,7 +309,10 @@ describe("feed server writes", () => {
 
   it("rejects unknown seed card targets before writing", async () => {
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -322,7 +347,10 @@ describe("feed server writes", () => {
 
   it("restores soft-deleted feed post reactions when they are created again", async () => {
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -392,7 +420,9 @@ describe("feed server writes", () => {
       },
       ok: true,
     });
-    const restoreOperation = operations.find((operation) => operation.updateRow);
+    const restoreOperation = operations.find(
+      (operation) => operation.updateRow,
+    );
     expect(restoreOperation?.updateRow).toEqual({
       deleted_at: null,
     });
@@ -400,7 +430,10 @@ describe("feed server writes", () => {
 
   it("soft deletes active seed bookmarks", async () => {
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -458,7 +491,10 @@ describe("feed server writes", () => {
 
   it("stores not interested preferences without touching public reactions", async () => {
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -467,7 +503,10 @@ describe("feed server writes", () => {
         };
       }
 
-      if (operation.schema === "feed" && operation.table === "feed_preference") {
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_preference"
+      ) {
         return {
           data: {
             id: "55555555-5555-4555-8555-555555555555",
@@ -512,14 +551,17 @@ describe("feed server writes", () => {
       target_key: "daily_mood_001",
       target_type: "feed_seed_card",
     });
-    expect(operations.some((operation) => operation.table === "feed_reaction")).toBe(
-      false,
-    );
+    expect(
+      operations.some((operation) => operation.table === "feed_reaction"),
+    ).toBe(false);
   });
 
   it("rejects not interested preferences for comment targets", async () => {
     const { client, operations } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -549,14 +591,17 @@ describe("feed server writes", () => {
       code: "feed_target_not_supported",
       ok: false,
     });
-    expect(operations.some((operation) => operation.table === "feed_preference")).toBe(
-      false,
-    );
+    expect(
+      operations.some((operation) => operation.table === "feed_preference"),
+    ).toBe(false);
   });
 
   it("reports feed schema exposure problems clearly", async () => {
     const { client } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -601,7 +646,10 @@ describe("feed server writes", () => {
 
   it("reports feed schema grant problems clearly", async () => {
     const { client } = createMockClient((operation) => {
-      if (operation.schema === "identity" && operation.table === "auth_identity") {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
         return {
           data: {
             account_id: accountId,
@@ -644,7 +692,9 @@ describe("feed server writes", () => {
   });
 });
 
-function createMockClient(responder: (operation: MockOperation) => MockResponse) {
+function createMockClient(
+  responder: (operation: MockOperation) => MockResponse,
+) {
   const operations: MockOperation[] = [];
   const client = {
     schema(schema: string) {
@@ -689,14 +739,15 @@ function createMockClient(responder: (operation: MockOperation) => MockResponse)
             },
             then<TResult1 = unknown, TResult2 = never>(
               onfulfilled?:
-                | ((value: unknown) => TResult1 | PromiseLike<TResult1>)
-                | null,
+                ((value: unknown) => TResult1 | PromiseLike<TResult1>) | null,
               onrejected?:
-                | ((reason: unknown) => TResult2 | PromiseLike<TResult2>)
-                | null,
+                ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
             ) {
               operations.push(structuredClone(operation));
-              return Promise.resolve(responder(operation)).then(onfulfilled, onrejected);
+              return Promise.resolve(responder(operation)).then(
+                onfulfilled,
+                onrejected,
+              );
             },
             update(row: Record<string, unknown>) {
               operation.updateRow = row;

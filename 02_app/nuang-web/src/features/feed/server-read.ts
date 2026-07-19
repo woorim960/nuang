@@ -145,6 +145,14 @@ export type FeedReportSharePayload = {
   reportShare: NonNullable<FeedItem["reportShare"]>;
 };
 
+export type FeedPostDetailPayload = {
+  comments: FeedReplyPreview[];
+  post: FeedItem;
+  viewer: {
+    isAuthenticated: boolean;
+  };
+};
+
 type FeedHiddenTargets = {
   postIds: Set<string>;
   seedKeys: Set<string>;
@@ -253,6 +261,88 @@ export async function createServerHomeFeedPreviewItems() {
       .filter((item) => item.id !== communityPoll.id)
       .slice(0, payload.policy.homePreviewMaxItems - 1),
   ];
+}
+
+export async function createServerFeedPostDetailPayload(
+  postId: string,
+): Promise<FeedPostDetailPayload | null> {
+  const serviceClient = createSupabaseServiceClient();
+
+  if (!serviceClient || !uuidPattern.test(postId)) {
+    return null;
+  }
+
+  const response = await serviceClient
+    .schema("feed")
+    .from("feed_post")
+    .select(
+      "id, author_account_id, source, source_id, body, visibility, moderation_status, public_projection_payload, created_at, published_at",
+    )
+    .eq("id", postId)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (response.error || !response.data) {
+    return null;
+  }
+
+  const row = response.data as FeedPostRow;
+  const accountId = await getCurrentAccountId(serviceClient);
+  const isOwnPost = row.author_account_id === accountId;
+  const isPublicPost =
+    row.moderation_status === "published" &&
+    (row.visibility === "public" || row.visibility === "profile_public");
+
+  if (!isOwnPost && !isPublicPost) {
+    return null;
+  }
+
+  const [authorProfiles, engagementByPostId, pollByPostId, postReplies] =
+    await Promise.all([
+      readPublicProfileCardsForAccounts({
+        accountIds: [row.author_account_id],
+        client: serviceClient,
+      }),
+      readPostEngagements({
+        accountId,
+        client: serviceClient,
+        rows: [row],
+      }),
+      readPollSummaries({
+        accountId,
+        client: serviceClient,
+        rows: [row],
+      }),
+      readPostReplies({
+        accountId,
+        client: serviceClient,
+        postId: row.id,
+      }),
+    ]);
+  const post = mapPostRowToFeedItem(
+    row,
+    accountId,
+    0,
+    engagementByPostId.get(row.id),
+    authorProfiles.get(row.author_account_id),
+    pollByPostId.get(row.id),
+  );
+
+  if (!isUsefulFeedItem(post)) {
+    return null;
+  }
+
+  return {
+    comments: postReplies.replies,
+    post: {
+      ...post,
+      replyCount: postReplies.replyCount,
+      replyLabel: formatFeedCountLabel("답글", postReplies.replyCount),
+    },
+    viewer: {
+      isAuthenticated: Boolean(accountId),
+    },
+  };
 }
 
 export async function createServerFeedPollStatsPayload(
@@ -395,7 +485,9 @@ export async function createServerFeedReportSharePayload(
   const response = await serviceClient
     .schema("feed")
     .from("feed_post")
-    .select("id, body, public_projection_payload, created_at")
+    .select(
+      "id, author_account_id, body, moderation_status, public_projection_payload, visibility, created_at",
+    )
     .eq("id", postId)
     .eq("source", "report_share")
     .is("deleted_at", null)
@@ -406,11 +498,24 @@ export async function createServerFeedReportSharePayload(
   }
 
   const row = response.data as {
+    author_account_id: string;
     body: string;
     created_at: string;
     id: string;
+    moderation_status: FeedPostRow["moderation_status"];
     public_projection_payload: unknown;
+    visibility: FeedPostRow["visibility"];
   };
+  const accountId = await getCurrentAccountId(serviceClient);
+  const isOwnPost = row.author_account_id === accountId;
+  const isPublicPost =
+    row.moderation_status === "published" &&
+    (row.visibility === "public" || row.visibility === "profile_public");
+
+  if (!isOwnPost && !isPublicPost) {
+    return null;
+  }
+
   const publicProjection = readPublicProjection(row.public_projection_payload);
 
   if (!publicProjection.reportShare) {
@@ -1243,6 +1348,7 @@ function mapCommentRowToReplyPreview(
     body: row.body,
     id: row.id,
     statusLabel: getCommentStatusLabel(row),
+    timeLabel: formatRelativeFeedTime(row.created_at),
   };
 }
 

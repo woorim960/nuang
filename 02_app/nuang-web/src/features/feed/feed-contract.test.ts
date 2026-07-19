@@ -79,7 +79,9 @@ describe("feed contract", () => {
   });
 
   it("accepts safe post/comment/reaction/bookmark requests", () => {
-    expect(feedWriteRequestSchema.safeParse(validPostPayload).success).toBe(true);
+    expect(feedWriteRequestSchema.safeParse(validPostPayload).success).toBe(
+      true,
+    );
     expect(
       feedWriteRequestSchema.safeParse({
         action: "create_comment",

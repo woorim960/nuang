@@ -81,7 +81,9 @@ describe("FeedMoreMenu", () => {
     fireEvent.click(screen.getByRole("button", { name: "더 보기" }));
     fireEvent.click(screen.getByRole("button", { name: "관심 없음" }));
 
-    expect(await screen.findByText("로그인 후 사용할 수 있어요.")).toBeInTheDocument();
+    expect(
+      await screen.findByText("로그인 후 사용할 수 있어요."),
+    ).toBeInTheDocument();
     expect(navigationMocks.refresh).not.toHaveBeenCalled();
     expect(getLastRequestBody()).toMatchObject({
       action: "not_interested",

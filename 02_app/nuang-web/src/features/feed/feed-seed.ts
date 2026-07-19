@@ -21,6 +21,7 @@ export type FeedReplyPreview = {
   body: string;
   id: string;
   statusLabel?: string;
+  timeLabel?: string;
 };
 
 export type FeedPollOptionSummary = {

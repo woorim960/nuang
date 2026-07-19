@@ -71,7 +71,9 @@ export default async function FeedReportSharePage({
           {payload.reportShare.profileName}
         </h2>
         {payload.body ? (
-          <p className="mt-5 text-[15px] leading-6 text-[#171717]">{payload.body}</p>
+          <p className="mt-5 text-[15px] leading-6 text-[#171717]">
+            {payload.body}
+          </p>
         ) : null}
         <p className="mt-5 text-sm leading-6 text-[#737373]">
           이 화면은 피드에 공유된 공개 요약만 보여줘요. 문항별 답변, 원점수,
