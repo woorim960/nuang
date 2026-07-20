@@ -38,6 +38,22 @@ const viewerResult: CoreScoreResult = {
       status: "valid",
       symbol: "K",
     },
+    {
+      domainId: "OE",
+      isBoundary: false,
+      label: "생각과 탐색",
+      score: 67.3,
+      status: "valid",
+      symbol: "N",
+    },
+    {
+      domainId: "RO",
+      isBoundary: false,
+      label: "관계에서 관심이 가는 곳",
+      score: 69.5,
+      status: "valid",
+      symbol: "A",
+    },
   ],
   facets: [
     {
@@ -47,6 +63,13 @@ const viewerResult: CoreScoreResult = {
       status: "valid",
       validResponses: 6,
     },
+    ...Array.from({ length: 9 }, (_, index) => ({
+      facetId: `TEST-${index + 1}`,
+      label: `세부 성향 ${index + 1}`,
+      score: 50 + index,
+      status: "valid" as const,
+      validResponses: 6,
+    })),
   ],
   profileName: "관계를 여는 지휘자",
 };
@@ -78,6 +101,22 @@ const targetResult: CoreScoreResult = {
       score: 79.1,
       status: "valid",
       symbol: "M",
+    },
+    {
+      domainId: "OE",
+      isBoundary: false,
+      label: "생각과 탐색",
+      score: 35.1,
+      status: "valid",
+      symbol: "R",
+    },
+    {
+      domainId: "RO",
+      isBoundary: false,
+      label: "관계에서 관심이 가는 곳",
+      score: 43.2,
+      status: "valid",
+      symbol: "G",
     },
   ],
   profileName: "질문을 품은 탐구자",
@@ -166,7 +205,7 @@ describe("public profile comparison contract", () => {
       domainId: "ER",
       difference: 2,
     });
-    expect(report.comparison.sections.axisComparisons).toHaveLength(3);
+    expect(report.comparison.sections.axisComparisons).toHaveLength(5);
     expect(report.comparison.sections.axisComparisons[0]).toMatchObject({
       domainId: "SE",
       interpretation: expect.stringContaining("사람 사이 에너지"),

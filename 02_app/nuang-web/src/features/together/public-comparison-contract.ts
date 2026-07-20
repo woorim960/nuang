@@ -81,10 +81,11 @@ export type CreatePublicProfileSnapshotInput = {
 
 export type PublicComparisonFailureCode =
   | "viewer_full_core_missing"
+  | "viewer_comparison_scope_missing"
   | "target_public_snapshot_missing"
   | "snapshot_policy_version_mismatch"
   | "target_public_snapshot_not_active"
-  | "comparison_scope_empty"
+  | "target_comparison_scope_missing"
   | "comparison_report_build_failed"
   | "comparison_audit_write_failed";
 
@@ -154,6 +155,12 @@ export const publicComparisonFailures: Record<
     retryable: false,
     step: "ensure_viewer_full_core",
   },
+  viewer_comparison_scope_missing: {
+    httpStatus: 403,
+    message: "내 비교 공개 범위를 확인해 주세요.",
+    retryable: false,
+    step: "project_allowed_fields",
+  },
   target_public_snapshot_missing: {
     httpStatus: 404,
     message: "상대의 공개 프로필을 찾을 수 없어요.",
@@ -172,9 +179,9 @@ export const publicComparisonFailures: Record<
     retryable: false,
     step: "revalidate_target_public_scope",
   },
-  comparison_scope_empty: {
-    httpStatus: 400,
-    message: "비교에 사용할 공개 항목이 부족해요.",
+  target_comparison_scope_missing: {
+    httpStatus: 409,
+    message: "이 프로필은 아직 비교 정보를 준비하고 있어요.",
     retryable: false,
     step: "project_allowed_fields",
   },
@@ -308,8 +315,12 @@ export function hasRequiredPublicComparisonScope(
 ) {
   const includedFields = new Set(snapshot.visibility.includedFields);
 
-  return listDefaultComparableFields().every((rule) =>
-    includedFields.has(rule.fieldId),
+  return (
+    listDefaultComparableFields().every((rule) =>
+      includedFields.has(rule.fieldId),
+    ) &&
+    snapshot.publicData.coreDomainMap.length === 5 &&
+    snapshot.publicData.coreFacetSummary.length === 10
   );
 }
 

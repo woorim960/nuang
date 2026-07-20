@@ -106,3 +106,14 @@ create policy "feed own profile report read"
 on feed.profile_report
 for select
 using (reporter_account_id = identity.current_account_id());
+
+grant usage on schema feed to anon, authenticated, service_role;
+
+grant all on table
+  feed.profile_follow,
+  feed.activity_notification,
+  feed.profile_block,
+  feed.profile_report
+to anon, authenticated, service_role;
+
+notify pgrst, 'reload schema';

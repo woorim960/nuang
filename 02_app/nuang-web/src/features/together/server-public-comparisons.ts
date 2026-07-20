@@ -166,11 +166,12 @@ export async function createPublicComparisonForUser({
     return { code: "comparison_report_build_failed", ok: false };
   }
 
-  if (
-    !hasRequiredPublicComparisonScope(viewerSnapshot.payload) ||
-    !hasRequiredPublicComparisonScope(targetSnapshot)
-  ) {
-    return { code: "comparison_scope_empty", ok: false };
+  if (!hasRequiredPublicComparisonScope(viewerSnapshot.payload)) {
+    return { code: "viewer_comparison_scope_missing", ok: false };
+  }
+
+  if (!hasRequiredPublicComparisonScope(targetSnapshot)) {
+    return { code: "target_comparison_scope_missing", ok: false };
   }
 
   const comparisonReportId = crypto.randomUUID();

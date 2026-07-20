@@ -1,0 +1,357 @@
+.root {
+  color: var(--foreground);
+  background: rgb(248 247 244 / 96%);
+}
+
+.overlay {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  overflow: hidden;
+  backdrop-filter: blur(18px);
+  animation: route-loading-enter 170ms ease-out both;
+}
+
+.page {
+  min-height: 100dvh;
+}
+
+.surface {
+  position: relative;
+  display: grid;
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  overflow: hidden;
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgb(224 219 255 / 62%) 0,
+      rgb(239 237 255 / 26%) 24%,
+      transparent 49%
+    ),
+    radial-gradient(circle at 18% 22%, rgb(223 243 236 / 44%), transparent 28%),
+    #f8f7f4;
+}
+
+.progressTrack {
+  position: absolute;
+  z-index: 3;
+  top: env(safe-area-inset-top);
+  right: 0;
+  left: 0;
+  height: 2px;
+  overflow: hidden;
+  background: rgb(102 87 217 / 7%);
+}
+
+.progressTrack span {
+  display: block;
+  width: 34%;
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #9d92ec, #7063d7, #9d92ec);
+  animation: route-loading-progress 1.4s ease-in-out infinite;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-height: 100dvh;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(1.15rem, 3dvh, 1.6rem);
+  padding: calc(1.75rem + env(safe-area-inset-top)) 1.5rem
+    calc(1.75rem + env(safe-area-inset-bottom));
+}
+
+.visual {
+  position: relative;
+  display: grid;
+  width: min(53vw, 13.5rem);
+  aspect-ratio: 1;
+  place-items: center;
+}
+
+.glow {
+  position: absolute;
+  inset: 18%;
+  border-radius: 999px;
+  background: rgb(144 128 230 / 18%);
+  filter: blur(1.65rem);
+  animation: route-loading-glow 1.7s ease-in-out infinite alternate;
+}
+
+.mascot {
+  position: relative;
+  z-index: 2;
+  width: 80%;
+  height: auto;
+  filter: drop-shadow(0 1rem 1.6rem rgb(70 57 130 / 12%));
+  transform-origin: 50% 82%;
+  animation: route-loading-breathe 2.45s ease-in-out infinite;
+}
+
+.mascotShadow {
+  position: absolute;
+  z-index: 1;
+  bottom: 13.5%;
+  left: 50%;
+  width: 43%;
+  height: 6.5%;
+  border-radius: 999px;
+  background: rgb(48 36 91 / 10%);
+  filter: blur(0.5rem);
+  transform: translateX(-50%);
+  animation: route-loading-shadow 2.45s ease-in-out infinite;
+}
+
+.signal {
+  --signal-x: 0px;
+  --signal-y: 0px;
+  position: absolute;
+  z-index: 3;
+  top: 47%;
+  left: 49%;
+  width: 0.56rem;
+  height: 0.56rem;
+  border: 1.5px solid rgb(255 255 255 / 75%);
+  border-radius: 0.22rem;
+  background: #8e82e5;
+  box-shadow: 0 0.3rem 0.8rem rgb(66 53 120 / 12%);
+  animation: route-loading-signal 3.1s cubic-bezier(0.22, 0.75, 0.28, 1)
+    infinite;
+}
+
+.signalOne {
+  --signal-x: -4.9rem;
+  --signal-y: -3.6rem;
+  background: #e97958;
+}
+
+.signalTwo {
+  --signal-x: 5rem;
+  --signal-y: -3.1rem;
+  background: #e8b650;
+  animation-delay: -0.62s;
+}
+
+.signalThree {
+  --signal-x: -5.2rem;
+  --signal-y: 2.6rem;
+  background: #6b9edc;
+  animation-delay: -1.24s;
+}
+
+.signalFour {
+  --signal-x: 5.1rem;
+  --signal-y: 2.8rem;
+  background: #65aa8b;
+  animation-delay: -1.86s;
+}
+
+.signalFive {
+  --signal-x: 0.2rem;
+  --signal-y: -5.1rem;
+  background: #9a8de8;
+  animation-delay: -2.48s;
+}
+
+.copy {
+  text-align: center;
+}
+
+.wordmark {
+  margin: 0 0 0.55rem;
+  color: #7a6fce;
+  font-size: 0.67rem;
+  font-weight: 750;
+  letter-spacing: 0.17em;
+}
+
+.copy h1 {
+  margin: 0;
+  font-size: clamp(1.25rem, 5.5vw, 1.5rem);
+  font-weight: 720;
+  line-height: 1.4;
+  letter-spacing: -0.035em;
+}
+
+.copy > p:not(.wordmark) {
+  margin: 0.55rem 0 0;
+  color: #747884;
+  font-size: 0.84rem;
+  line-height: 1.6;
+  letter-spacing: -0.018em;
+}
+
+.status {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.42rem;
+  margin-top: 1rem;
+  border: 1px solid rgb(119 105 211 / 10%);
+  border-radius: 999px;
+  padding: 0.36rem 0.72rem;
+  color: #6e63bd;
+  font-size: 0.72rem;
+  font-weight: 650;
+  background: rgb(255 255 255 / 62%);
+  box-shadow: 0 0.45rem 1.2rem rgb(68 57 118 / 5%);
+}
+
+.statusDot {
+  width: 0.38rem;
+  height: 0.38rem;
+  border-radius: 999px;
+  background: #8174d8;
+  animation: route-loading-live-dot 1.35s ease-out infinite;
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.17rem;
+  margin-left: -0.16rem;
+}
+
+.ellipsis i {
+  width: 0.17rem;
+  height: 0.17rem;
+  border-radius: 999px;
+  background: currentColor;
+  animation: route-loading-ellipsis 1.2s ease-in-out infinite;
+}
+
+.ellipsis i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+
+.ellipsis i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes route-loading-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes route-loading-progress {
+  from {
+    transform: translateX(-115%);
+  }
+  to {
+    transform: translateX(305%);
+  }
+}
+
+@keyframes route-loading-glow {
+  from {
+    opacity: 0.52;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 0.9;
+    transform: scale(1.06);
+  }
+}
+
+@keyframes route-loading-breathe {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-0.28rem) scale(1.012);
+  }
+}
+
+@keyframes route-loading-shadow {
+  0%,
+  100% {
+    opacity: 0.62;
+    transform: translateX(-50%) scaleX(1);
+  }
+  50% {
+    opacity: 0.36;
+    transform: translateX(-50%) scaleX(0.92);
+  }
+}
+
+@keyframes route-loading-signal {
+  0%,
+  10% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.35) rotate(0deg);
+  }
+  38%,
+  64% {
+    opacity: 0.92;
+    transform: translate(var(--signal-x), var(--signal-y)) scale(1)
+      rotate(20deg);
+  }
+  84%,
+  100% {
+    opacity: 0;
+    transform: translate(0, 0) scale(0.35) rotate(36deg);
+  }
+}
+
+@keyframes route-loading-live-dot {
+  0% {
+    box-shadow: 0 0 0 0 rgb(129 116 216 / 24%);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 0.42rem transparent;
+  }
+}
+
+@keyframes route-loading-ellipsis {
+  0%,
+  65%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  35% {
+    opacity: 1;
+    transform: translateY(-0.12rem);
+  }
+}
+
+@media (max-height: 39rem) {
+  .content {
+    gap: 0.75rem;
+  }
+
+  .visual {
+    width: min(34dvh, 10.75rem);
+  }
+
+  .copy > p:not(.wordmark) {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .progressTrack span,
+  .glow,
+  .mascot,
+  .mascotShadow,
+  .signal,
+  .statusDot,
+  .ellipsis i {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

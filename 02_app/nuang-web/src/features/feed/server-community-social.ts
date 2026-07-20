@@ -143,6 +143,10 @@ export async function writeProfileFollow({
     );
 
   if (mutation.error) {
+    console.error("[community-follow] profile_follow upsert failed", {
+      code: mutation.error.code,
+      message: mutation.error.message,
+    });
     return { code: "follow_write_failed" as const, ok: false as const };
   }
 

@@ -29,6 +29,10 @@ const topicMediaMigration = readFileSync(
   "supabase/migrations/202607200001_feed_post_topics_media.sql",
   "utf8",
 );
+const communityProfileSocialMigration = readFileSync(
+  "supabase/migrations/202607200002_community_profile_social.sql",
+  "utf8",
+);
 const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}\n${homeCommunityPollMigration}\n${topicMediaMigration}`;
 
 describe("feed db schema draft", () => {
@@ -113,6 +117,15 @@ describe("feed db schema draft", () => {
     );
     expect(interactionMigration).toContain(
       "grant all on feed.feed_poll_vote to anon, authenticated, service_role",
+    );
+    expect(communityProfileSocialMigration).toContain(
+      "feed.profile_follow,\n  feed.activity_notification",
+    );
+    expect(communityProfileSocialMigration).toContain(
+      "to anon, authenticated, service_role",
+    );
+    expect(communityProfileSocialMigration).toContain(
+      "notify pgrst, 'reload schema'",
     );
   });
 

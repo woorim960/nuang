@@ -86,6 +86,7 @@ for (const item of profiles) {
     now.getTime() - 24 * 60 * 60 * 1000,
   ).toISOString();
   const domains = createDomains(item.code);
+  const facets = createFacets(domains);
   await upsert("identity", "account", {
     created_at: completedAt,
     deleted_at: null,
@@ -117,6 +118,7 @@ for (const item of profiles) {
       assessmentKind: "full",
       completedAt,
       domains,
+      facets,
       includesDirectResponses: false,
       profileCode: item.code,
       profileName: item.profileName,
@@ -129,7 +131,7 @@ for (const item of profiles) {
     assessmentKind: "full",
     completedAt,
     domains,
-    facets: [],
+    facets,
     profileCode: item.code,
     profileName: item.profileName,
     resultLabel: "정밀 성향 결과",
@@ -159,7 +161,7 @@ for (const item of profiles) {
     id: item.snapshotId,
     published_at: completedAt,
     result_report_id: item.reportId,
-    snapshot_payload: createSnapshot(item, domains, completedAt),
+    snapshot_payload: createSnapshot(item, domains, facets, completedAt),
     status: "active",
     visibility_policy_version: "profile-visibility.v0.1",
   });
@@ -256,7 +258,7 @@ function reviewPost(
   };
 }
 
-function createSnapshot(item, domains, createdAt) {
+function createSnapshot(item, domains, facets, createdAt) {
   return {
     contractVersion: "public-profile-snapshot.v0.1",
     createdAt,
@@ -278,11 +280,21 @@ function createSnapshot(item, domains, createdAt) {
         status: "valid",
         symbol: domain.symbol,
       })),
-      coreFacetSummary: [],
+      coreFacetSummary: facets.map((facet) => ({
+        id: facet.facetId,
+        label: facet.label,
+        score: facet.score,
+        status: facet.status,
+      })),
     },
     snapshotId: item.snapshotId,
     visibility: {
-      includedFields: ["profile", "coreDomainMap"],
+      includedFields: [
+        "display_profile",
+        "representative_profile",
+        "core_domain_map",
+        "core_facet_summary",
+      ],
       policyVersion: "profile-visibility.v0.1",
     },
   };
@@ -301,6 +313,31 @@ function createDomains(code) {
     label,
     score: code[index] === high ? 68 : 32,
     symbol: code[index],
+  }));
+}
+
+function createFacets(domains) {
+  const definitions = [
+    ["SE", "SE-RE", "함께하는 에너지", -4],
+    ["SE", "SE-AI", "먼저 표현하기", 4],
+    ["OE", "OE-AE", "미적 경험", -5],
+    ["OE", "OE-CI", "상상 확장", 2],
+    ["OE", "OE-IE", "지적 탐구", 6],
+    ["RO", "RO-EC", "관계에서 관심이 가는 곳", 0],
+    ["SM", "SM-EP", "실행과 지속", 3],
+    ["SM", "SM-OS", "질서와 구조", -3],
+    ["ER", "ER-IR", "감정 동요", 4],
+    ["ER", "ER-WD", "걱정과 주저", -4],
+  ];
+  const domainScores = new Map(
+    domains.map((domain) => [domain.domainId, domain.score]),
+  );
+
+  return definitions.map(([domainId, facetId, label, offset]) => ({
+    facetId,
+    label,
+    score: Math.max(0, Math.min(100, domainScores.get(domainId) + offset)),
+    status: "valid",
   }));
 }
 
