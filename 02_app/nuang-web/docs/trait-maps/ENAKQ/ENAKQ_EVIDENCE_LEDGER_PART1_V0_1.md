@@ -165,7 +165,7 @@ Part 1의 모든 claim은 아직 `APPROVED`가 아니다.
 | `ENAKQ.general.response.AA` | 상태·과정 방법론 | RO-EC process pilot | `HOLD` | 반복 상황 process evidence |
 | `ENAKQ.general.q.activation` | BFI2, BFAS | ER-WD·ER-IR | `NUANG_MAPPED_PROVISIONAL` | 한국어 ER 구조·준거 |
 | `ENAKQ.general.q.expression` | Emotion Process 1998 | DETAIL-ARCH | `COGNITIVE_REVIEW_REQUIRED` | Q→C 별도 측정·안전성 |
-| `ENAKQ.partner.similarity` | DYAD-2010 | 비교 가드레일 | `EXTERNAL_SUPPORTED` | 친구·가족·업무 확장 검토 |
+| `ENAKQ.partner.similarity` | DYAD-2010 | 비교 가드레일 | `EXTERNAL_SUPPORTED_BOUNDARY` | 친구·가족·업무 확장 검토 |
 | `ENAKQ.stress.worry` | BFI2, BFAS | ER-WD·상황 맥락 가설 | `QUANT_VALIDATION_REQUIRED` | 걱정의 빈도·강도·상황별 증분타당도 |
 | `ENAKQ.stress.recovery` | 직접 공통 처방 근거 없음 | 후속검사 후보 | `HOLD` | 개인 지원 선호 데이터 |
 | `ENAKQ.boundary.variability` | STATE-2001, WTT, State Measurement | scoring boundary | `NUANG_MAPPED_PROVISIONAL` | 뉴앙 반복측정 자료 |

@@ -122,7 +122,7 @@
 | `ENAKQ.family.friction` | 반응성·스트레스 연구 간접 | `HOLD` | 관심·압박·간섭 구분 |
 | `ENAKQ.interaction.AQ` | A/Q 단일 정의 | `HOLD` | 가족·연인별 조합 효과 |
 | `ENAKQ.family.conflict` | 과정 계약+제품 안전 | `HOLD` | 갈등 장면 process pair |
-| `ENAKQ.process.non_inference` | WTT·Gross+측정 범위 | `EXTERNAL_SUPPORTED` | 전 화면 감사 |
+| `ENAKQ.process.non_inference` | WTT·Gross+측정 범위 | `EXTERNAL_SUPPORTED_BOUNDARY` | 전 화면 감사 |
 | `ENAKQ.family.support_prompt` | SUPPORT-MATCHING 간접 | `COGNITIVE_REVIEW_REQUIRED` | 문화·상황별 유용성 |
 | `ENAKQ.stress.recovery` | 직접 공통 근거 없음 | `HOLD` | 개인 지원 선호 자료 |
 | `ENAKQ.friend.context` | 상황 연구+FRIEND-DAILY | `COGNITIVE_REVIEW_REQUIRED` | 친숙도·모임 크기·관계 종류 |
@@ -137,7 +137,7 @@
 | `ENAKQ.friend.reciprocity` | FRIEND-DAILY 간접 | `COGNITIVE_REVIEW_REQUIRED` | 행동 횟수·기여 인식 구분 |
 | `ENAKQ.friend.repair` | 제품 대화 가설 | `HOLD` | 실제 유용성·안전 검토 |
 | `ENAKQ.friend.similarity` | FRIEND-DYAD-2023, FRIEND-2026 | `EXTERNAL_SUPPORTED` | 뉴앙 친구 비교 자료 |
-| `ENAKQ.partner.similarity` | DYAD-2010, ROMANTIC-2023 | `EXTERNAL_SUPPORTED` | 관계 형태·문화 확장 |
+| `ENAKQ.partner.similarity` | DYAD-2010, ROMANTIC-2023 | `EXTERNAL_SUPPORTED_BOUNDARY` | 관계 형태·문화 확장 |
 | `ENAKQ.partner.context` | dyadic 연구+제품 안전 | `COGNITIVE_REVIEW_REQUIRED` | 다양한 연인 관계 표현 |
 | `ENAKQ.partner.boundary` | 내부 정책+연구 범위 | `EXTERNAL_SUPPORTED` | 애착·애정 오해 감사 |
 | `ENAKQ.partner.contact` | E 단일 정의+관계 가설 | `HOLD` | 연락 빈도·행동 자료 |

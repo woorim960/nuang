@@ -132,12 +132,12 @@ Part 4는 호감이 시작되는 관계, 업무·학업, 부담과 회복처럼 
 | `ENAKQ.crush.uncertainty` | RELATIONAL-UNCERTAINTY 간접 | `HOLD` | 불확실성·최근 경험·Q 분리 측정 |
 | `ENAKQ.crush.expression` | E 정의+상황 변산 | `HOLD` | 호감 전후 반복 행동 자료 |
 | `ENAKQ.general.definition.E` | Part 1 근거+SE 정의 | `NUANG_MAPPED_PROVISIONAL` | SE 구조·준거타당도 |
-| `ENAKQ.boundary.variability` | 상태·상황 연구 | `EXTERNAL_SUPPORTED_BOUNDARY` | 뉴앙 반복측정 |
+| `ENAKQ.boundary.variability` | 상태·상황 연구 | `NUANG_MAPPED_PROVISIONAL` | 뉴앙 반복측정 |
 | `ENAKQ.crush.ambiguity` | N/Q 단일 정의 | `HOLD` | 애착·사회불안·호감 강도 통제 |
 | `ENAKQ.interaction.NAQ` | N/A/Q 단일 정의만 존재 | `HOLD` | 조합 증분효과·반례 검증 |
 | `ENAKQ.crush.fact_check` | 제품 자기관찰 가설 | `COGNITIVE_REVIEW_REQUIRED` | 반추 증가·부담 여부 확인 |
 | `ENAKQ.crush.attention` | A 정의 | `HOLD` | 호감 맥락의 주의·실제 행동 분리 |
-| `ENAKQ.general.definition.A` | IPC+RO-EC 정의 | `NUANG_MAPPED_PROVISIONAL` | RO-EC 구조·공감 능력과 판별 |
+| `ENAKQ.general.definition.A` | IPC+RO-EC 정의 | `QUANT_VALIDATION_REQUIRED` | RO-EC 구조·공감 능력과 판별 |
 | `ENAKQ.interaction.AQ` | A/Q 단일 정의 | `HOLD` | 관계별 조합 자료 |
 | `ENAKQ.crush.contact` | 관계 불확실성 연구 간접 | `HOLD` | 연락 규범·관계 단계·문화 검토 |
 | `ENAKQ.crush.prompt` | 제품 대화 가설 | `COGNITIVE_REVIEW_REQUIRED` | 안전·거절 부담·유용성 테스트 |
@@ -154,11 +154,11 @@ Part 4는 호감이 시작되는 관계, 업무·학업, 부담과 회복처럼 
 | `ENAKQ.general.definition.N` | BFI2+OE 정의 | `NUANG_MAPPED_PROVISIONAL` | OE 3-facet 구조 |
 | `ENAKQ.work.collaboration` | A 정의+trait activation 간접 | `HOLD` | 협업 기술·역할 요구와 판별 |
 | `ENAKQ.work.followthrough` | K 정의+SM 자료 | `NUANG_MAPPED_PROVISIONAL` | 직무별 실행 행동 준거 |
-| `ENAKQ.general.definition.K` | BFI2/BFAS+SM 정의 | `NUANG_MAPPED_PROVISIONAL` | SM 구조·Big Five C와 판별 |
+| `ENAKQ.general.definition.K` | BFI2/BFAS+SM 정의 | `QUANT_VALIDATION_REQUIRED` | SM 구조·Big Five C와 판별 |
 | `ENAKQ.work.performance_boundary` | TRAIT-ACTIVATION, PERSON-SITUATION, JOB-META | `EXTERNAL_SUPPORTED_BOUNDARY` | 고용 사용 금지 정책 테스트 |
 | `ENAKQ.work.evaluation` | Q 정의+업무 상황 가설 | `HOLD` | 평가·발표·마감별 반복 자료 |
 | `ENAKQ.general.q.activation` | ER 정의+BFAS/BFI2 | `NUANG_MAPPED_PROVISIONAL` | ER 2-facet 구조 |
-| `ENAKQ.general.q.expression` | Gross+과정 계약 | `EXTERNAL_SUPPORTED_BOUNDARY` | 표현·조절 직접 측정 |
+| `ENAKQ.general.q.expression` | Gross+과정 계약 | `COGNITIVE_REVIEW_REQUIRED` | 표현·조절 직접 측정 |
 | `ENAKQ.study.pattern` | N/K 단일 정의 | `HOLD` | 학습 행동·성적·지식 분리 |
 | `ENAKQ.study.support` | 개인화 제품 가설 | `HOLD` | 실제 교차 설계·지원 효과 자료 |
 | `ENAKQ.interaction.NK` | N/K 단일 정의 | `HOLD` | 조합 증분효과 |
@@ -166,13 +166,13 @@ Part 4는 호감이 시작되는 관계, 업무·학업, 부담과 회복처럼 
 | `ENAKQ.work.self_check` | 제품 자기관찰 가설 | `COGNITIVE_REVIEW_REQUIRED` | 이해도·부담·유용성 |
 | `ENAKQ.work.boundary` | 제품 안전+검사 사용 원칙 | `SAFETY_POLICY` | 고용·교육 데이터 접근 통제 |
 | `ENAKQ.stress.activation` | ER 정의 | `NUANG_MAPPED_PROVISIONAL` | 한국어 ER 정량 파일럿 |
-| `ENAKQ.general.definition.Q` | ER 정의+BFAS/BFI2 | `NUANG_MAPPED_PROVISIONAL` | ER 구조·경계 점수 |
+| `ENAKQ.general.definition.Q` | ER 정의+BFAS/BFI2 | `QUANT_VALIDATION_REQUIRED` | ER 구조·경계 점수 |
 | `ENAKQ.stress.state_boundary` | DAILY-STRESS-STATES, STRESS-STATE-2026 | `EXTERNAL_SUPPORTED_BOUNDARY` | 6개월 성향·최근 상태 UX 분리 |
-| `ENAKQ.stress.worry` | ER-WD 정의 | `NUANG_MAPPED_PROVISIONAL` | 걱정·주저 문항 구조 |
+| `ENAKQ.stress.worry` | ER-WD 정의 | `QUANT_VALIDATION_REQUIRED` | 걱정·주저 문항 구조 |
 | `ENAKQ.stress.crossload` | OE·SM·ER 구성개념 경계 | `COGNITIVE_REVIEW_REQUIRED` | 생각 문장 판별 인지 인터뷰 |
 | `ENAKQ.interaction.NQ` | N/Q 단일 정의 | `HOLD` | 조합 효과·반추와 판별 |
 | `ENAKQ.stress.communication` | 과정 비추론+제품 가설 | `COGNITIVE_REVIEW_REQUIRED` | 선택 질문 부담·안전 검토 |
-| `ENAKQ.stress.recovery` | ER 계약+REACTIVITY-RECOVERY | `EXTERNAL_SUPPORTED_BOUNDARY` | 개인 회복 지표·지원 반복 자료 |
+| `ENAKQ.stress.recovery` | ER 계약+REACTIVITY-RECOVERY | `HOLD` | 개인 회복 지표·지원 반복 자료 |
 | `ENAKQ.stress.reactivity_recovery_boundary` | REACTIVITY-RECOVERY-2023 | `EXTERNAL_SUPPORTED_BOUNDARY` | 더 큰·다양한 표본 보강 |
 | `ENAKQ.stress.support_preference` | SUPPORT-MATCHING 간접 | `HOLD` | 상황별 개인 선호·효과 분리 |
 | `ENAKQ.family.support_prompt` | Part 3 근거 | `COGNITIVE_REVIEW_REQUIRED` | 호감·업무·부담 맥락별 검토 |
