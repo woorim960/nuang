@@ -47,6 +47,37 @@ describe("TraitMapDetailTemplate", () => {
     expect(screen.queryByText("궁금한 내용을 바로 골라 보세요")).toBeNull();
   });
 
+  it("updates the sticky chapter header from the actual scroll position", async () => {
+    let visibleChapter = 1;
+    const rectSpy = vi
+      .spyOn(HTMLElement.prototype, "getBoundingClientRect")
+      .mockImplementation(function (this: HTMLElement) {
+        const chapterNumber = Number(this.getAttribute("data-chapter-number"));
+        if (chapterNumber) {
+          return createDomRect(124 + (chapterNumber - visibleChapter) * 900);
+        }
+        if (this.getAttribute("aria-expanded") !== null) {
+          return createDomRect(56, 114);
+        }
+        return createDomRect(0);
+      });
+
+    try {
+      render(<TraitMapDetailTemplate guide={guide} />);
+
+      visibleChapter = 2;
+      window.dispatchEvent(new Event("scroll"));
+
+      await waitFor(() =>
+        expect(
+          screen.getByRole("button", { name: /02.*이름 뜻/ }),
+        ).toBeInTheDocument(),
+      );
+    } finally {
+      rectSpy.mockRestore();
+    }
+  });
+
   it("keeps agreed easy-Korean terms out of the customer guide", () => {
     const customerCopy = JSON.stringify(guide.chapters);
     const repeatedHedgeCount = [
@@ -70,3 +101,17 @@ describe("TraitMapDetailTemplate", () => {
     expect(customerCopy).not.toContain("인지 인터뷰");
   });
 });
+
+function createDomRect(top: number, bottom = top + 100) {
+  return {
+    bottom,
+    height: bottom - top,
+    left: 0,
+    right: 390,
+    top,
+    width: 390,
+    x: 0,
+    y: top,
+    toJSON: () => ({}),
+  } as DOMRect;
+}

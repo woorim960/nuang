@@ -25,33 +25,60 @@ export function TraitMapDetailTemplate({
   const [tableOfContentsOpen, setTableOfContentsOpen] = useState(false);
   const chapterSelectionLocked = useRef(false);
   const chapterSelectionTimer = useRef<number | null>(null);
+  const chapterNavigatorButtonRef = useRef<HTMLButtonElement>(null);
+  const syncActiveChapterRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
-    if (!("IntersectionObserver" in window)) return;
+    let frameId: number | null = null;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (chapterSelectionLocked.current) return;
+    const updateActiveChapter = () => {
+      frameId = null;
+      if (chapterSelectionLocked.current) return;
 
-        const visible = entries
-          .filter((entry) => entry.isIntersecting)
-          .sort(
-            (left, right) => right.intersectionRatio - left.intersectionRatio,
-          )[0];
-        const chapterNumber = Number(
-          visible?.target.getAttribute("data-chapter-number"),
-        );
-        if (chapterNumber) setActiveChapter(chapterNumber);
-      },
-      { rootMargin: "-112px 0px -58%", threshold: [0, 0.15, 0.35] },
-    );
+      const navigatorBottom =
+        chapterNavigatorButtonRef.current?.getBoundingClientRect().bottom ??
+        114;
+      const activationLine = navigatorBottom + 10;
+      let nextChapterNumber = guide.chapters[0]?.number ?? 1;
 
-    for (const chapter of guide.chapters) {
-      const element = document.getElementById(chapter.id);
-      if (element) observer.observe(element);
-    }
+      for (const chapter of guide.chapters) {
+        const chapterElement = document.getElementById(chapter.id);
+        if (!chapterElement) continue;
+        if (chapterElement.getBoundingClientRect().top > activationLine) break;
+        nextChapterNumber = chapter.number;
+      }
 
-    return () => observer.disconnect();
+      const documentHeight = document.documentElement.scrollHeight;
+      const reachedDocumentEnd =
+        documentHeight > window.innerHeight &&
+        window.scrollY + window.innerHeight >= documentHeight - 2;
+      if (reachedDocumentEnd) {
+        nextChapterNumber = guide.chapters.at(-1)?.number ?? nextChapterNumber;
+      }
+
+      setActiveChapter((current) =>
+        current === nextChapterNumber ? current : nextChapterNumber,
+      );
+    };
+
+    const scheduleActiveChapterSync = () => {
+      if (frameId !== null) return;
+      frameId = window.requestAnimationFrame(updateActiveChapter);
+    };
+
+    syncActiveChapterRef.current = scheduleActiveChapterSync;
+    scheduleActiveChapterSync();
+    window.addEventListener("scroll", scheduleActiveChapterSync, {
+      passive: true,
+    });
+    window.addEventListener("resize", scheduleActiveChapterSync);
+
+    return () => {
+      if (frameId !== null) window.cancelAnimationFrame(frameId);
+      syncActiveChapterRef.current = null;
+      window.removeEventListener("scroll", scheduleActiveChapterSync);
+      window.removeEventListener("resize", scheduleActiveChapterSync);
+    };
   }, [guide.chapters]);
 
   useEffect(
@@ -75,6 +102,7 @@ export function TraitMapDetailTemplate({
     chapterSelectionTimer.current = window.setTimeout(() => {
       chapterSelectionLocked.current = false;
       chapterSelectionTimer.current = null;
+      syncActiveChapterRef.current?.();
     }, 900);
     setActiveChapter(chapterNumber);
     setTableOfContentsOpen(false);
@@ -181,6 +209,7 @@ export function TraitMapDetailTemplate({
         <button
           aria-expanded={tableOfContentsOpen}
           className={styles.chapterNavigatorButton}
+          ref={chapterNavigatorButtonRef}
           onClick={() => setTableOfContentsOpen((open) => !open)}
           type="button"
         >
