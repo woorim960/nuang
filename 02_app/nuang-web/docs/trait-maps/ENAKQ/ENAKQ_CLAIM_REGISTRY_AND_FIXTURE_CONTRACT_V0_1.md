@@ -169,8 +169,8 @@ contentKey: trait-map.enakq.general.definition.e
 
 ## 11. 다음 단계
 
-1. 158개 레지스트리를 성격심리·심리측정·관계/임상 안전 검토용 패킷으로 변환한다.
-2. 검토자는 claim마다 `accept`, `revise`, `reject`, `insufficient_evidence`와 이유를 기록한다.
+1. ~~158개 레지스트리를 성격심리·심리측정·관계/임상 안전 검토용 패킷으로 변환한다.~~ 완료: [`enakq-map-v0.1`](../../research/enakq-map-v0.1/README.md)
+2. 실제 자격·독립성을 확인한 검토자를 역할별로 모집하고 claim마다 `accept`, `revise`, `reject`, `insufficient_evidence`와 이유를 수집한다.
 3. 내부 수정 뒤 2030 한국어 사용자를 대상으로 이해·오해·낙인·자기일치감을 분리해 인지 인터뷰한다.
 4. 문항·점수와 claim 연결을 정량 파일럿에서 검증한다.
 5. 모든 게이트를 통과한 claim만 사용자 문구로 다듬고 `APPROVED` 후보로 올린다.

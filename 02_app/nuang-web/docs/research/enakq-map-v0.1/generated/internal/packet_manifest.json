@@ -1,0 +1,67 @@
+{
+  "claimCount": 158,
+  "generatedAt": "2026-07-20T00:00:00+09:00",
+  "mapVersion": "ENAKQ.map.v0.1-draft",
+  "packetVersion": "ENAKQ-EXPERT-PACKET.v0.1",
+  "protocolVersion": "enakq-trait-map-expert-review.v0.1",
+  "reviewCountByRole": {
+    "personality_psychology": 86,
+    "psychometrics": 119,
+    "relationship_safety": 98
+  },
+  "sourceRegistry": "src/features/nuang-code/fixtures/enakq-claim-registry.generated.json",
+  "files": [
+    {
+      "path": "internal/adjudication_template.csv",
+      "sha256": "fa01420d6782d35f70d9f8e75fd0db47255f2afae0515ceace0330047798269d"
+    },
+    {
+      "path": "internal/claim_review_assignment.csv",
+      "sha256": "174de088cc4b5b3f1d254bc4d9b95a87a693333150969a099565fd2d46715ece"
+    },
+    {
+      "path": "internal/reviewer_roster_template.csv",
+      "sha256": "9d1e25a16e37813c7a311027dac96c3f5780c23fc244eff9ce2d43f14d7d0082"
+    },
+    {
+      "path": "reviewer/00_REVIEWER_GUIDE.md",
+      "sha256": "5f72fb90dc5d793e6899e854ddb234c2c7187e999f5b3ad94cf2f0632ef69d3f"
+    },
+    {
+      "path": "reviewer/personality_psychology_W1.csv",
+      "sha256": "bb2993a6f407d3da70baf0cff68ae353421472a87f8ab6528114386218355f39"
+    },
+    {
+      "path": "reviewer/personality_psychology_W2.csv",
+      "sha256": "bcf85c94e9d9cd4c4928ba2007cc39b5fd97e6eeb782ae59f93e9efc08ec1e50"
+    },
+    {
+      "path": "reviewer/personality_psychology_W3.csv",
+      "sha256": "1cc8a36e5ce7dbdb26eca73ae622b5cb20a7e1bbde49d6750a5ac389ad7f0aea"
+    },
+    {
+      "path": "reviewer/psychometrics_W1.csv",
+      "sha256": "03ce19ceeff868c94aaa945e405dc0f82465fa1902fea5c634bcd3797a7a3548"
+    },
+    {
+      "path": "reviewer/psychometrics_W2.csv",
+      "sha256": "656ed9603f4aa8886e3b847677efba4d9ed101c915d869af3746ff008537ba08"
+    },
+    {
+      "path": "reviewer/psychometrics_W3.csv",
+      "sha256": "172dbf9fb36c9f9d798c42d57b6e68baf5bd83646ecbbc20137cb28b97aec1e7"
+    },
+    {
+      "path": "reviewer/relationship_safety_W1.csv",
+      "sha256": "4d73bb37faa0916f513ab7c84d5d6bd6cc2b807797d5cd8cfa05e41bee977404"
+    },
+    {
+      "path": "reviewer/relationship_safety_W2.csv",
+      "sha256": "965d006efa34e9702dd01493ded2b1e87b02191760f7ac8edf35d1971d93859b"
+    },
+    {
+      "path": "reviewer/relationship_safety_W3.csv",
+      "sha256": "a45f79b1a5957073055ac21248d5154907428a3896f347f59670bbaa19a74698"
+    }
+  ]
+}
