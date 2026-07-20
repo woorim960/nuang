@@ -19,6 +19,10 @@
   에이전트가 claim을 독립적으로 비판 검토했다.
 - 내부 검토 303건을 158개 claim에 다시 연결하고, 보류·수정·내부 수용으로
   보수적으로 조정했다.
+- Gate A P0 claim 5개의 변경 전후·수정 이유·제품 구현·남은 검증을 v0.2
+  변경안으로 분리했다.
+- 9개 민감정보 등급, AI 사용 제한, 세 단계 안전 흐름, 결과 버전 계약을
+  자동 검증 가능한 코드로 고정했다.
 
 패킷이 생성됐다는 사실은 외부 검토가 완료됐다는 뜻이 아니다. 현재 roster의 상태는 모두 `not_recruited`다. 실제 자격·신원·독립성을 확인한 사람의 응답만 외부 전문가 근거로 인정한다.
 
@@ -45,6 +49,7 @@
 - 역할별 원응답과 요약: `internal-critique/v0.1/`
 - claim별 보수적 조정: `internal-critique/v0.1/analysis/INTERNAL_AGENT_ADJUDICATION.md`
 - 수정 순서와 다음 연구 관문: `internal-critique/v0.1/analysis/REVISION_GATE_PLAN.md`
+- P0 개인정보·AI·안전 변경안: `revisions/v0.2-gate-a/GATE_A_P0_CHANGESET.md`
 
 ## 역할별 검토량
 
@@ -98,7 +103,7 @@ npm run research:enakq:internal-critique:analysis:check
 
 ## 다음 운영 단계
 
-1. 내부 검토의 P0 안전·개인정보 claim을 별도 변경안으로 작성한다.
+1. Gate A 변경안을 내부 안전·개인정보 관점에서 재검토한다.
 2. 다섯 축과 facet의 포함·제외 정의, 양극성, 판정 보류 규칙을 확정한다.
 3. 수정된 축·문항을 2030 한국어 사용자 인지 인터뷰로 보낸다.
 4. 역할별 자격 요건에 맞는 실제 검토자를 모집한다.
