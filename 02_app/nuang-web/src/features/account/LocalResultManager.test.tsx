@@ -54,11 +54,12 @@ describe("LocalResultManager", () => {
     render(<LocalResultManager />);
 
     expect(
-      await screen.findByText("완료한 검사와 진행 중인 검사를 모아봤어요"),
+      await screen.findByText("첫 성향 리포트를 만들어보세요"),
     ).toBeInTheDocument();
-    expect(screen.getByText("0개")).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "관계 비교" })).toBeVisible();
+    expect(screen.getByRole("heading", { name: "주제 검사" })).toBeVisible();
     expect(
-      screen.getByText(/공유 주소와 비교 기록도 함께 정리됩니다/),
+      screen.getByText(/공유 주소와 비교 기록도 함께 정리돼요/),
     ).toBeInTheDocument();
     expect(screen.getByText("아직 결과가 없어요")).toBeInTheDocument();
     expect(screen.queryByText(/기기|계정 저장|로컬/)).not.toBeInTheDocument();
@@ -70,9 +71,8 @@ describe("LocalResultManager", () => {
     render(<LocalResultManager />);
 
     expect(
-      await screen.findByText("완료한 검사와 진행 중인 검사를 모아봤어요"),
+      await screen.findByText("첫 성향 리포트를 만들어보세요"),
     ).toBeInTheDocument();
-    expect(screen.getByText("0개")).toBeInTheDocument();
     expect(screen.getByText("아직 결과가 없어요")).toBeInTheDocument();
   });
 
@@ -96,7 +96,8 @@ describe("LocalResultManager", () => {
 
     render(<LocalResultManager />);
 
-    expect(await screen.findByText("정밀 코어")).toBeInTheDocument();
+    expect(await screen.findByText("현재 내 대표 성향")).toBeInTheDocument();
+    expect(screen.getByText("정밀 코어")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /정밀 코어 결과 열기/ }),
     ).toHaveAttribute("href", "/results/local/local_test_1");
@@ -107,7 +108,7 @@ describe("LocalResultManager", () => {
       screen.getByRole("button", { name: "내 데이터 JSON 내려받기" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/응답과 결과를 JSON 파일로 내려받습니다/),
+      screen.getByText(/검사 응답과 결과를 파일로 저장해 둘 수 있어요/),
     ).toBeInTheDocument();
   });
 
@@ -201,7 +202,7 @@ describe("LocalResultManager", () => {
             createAccountResult({
               kind: "quick",
               localResultId: "local_other_device",
-              profileName: "햇살 리듬 탐험가",
+              profileName: "새 길을 찾는 탐구자",
               resultReportId: "33333333-3333-4333-8333-333333333333",
             }),
           ],
@@ -215,7 +216,10 @@ describe("LocalResultManager", () => {
 
     render(<LocalResultManager />);
 
-    expect(await screen.findByText("2개")).toBeInTheDocument();
+    expect(await screen.findByText("현재 내 대표 성향")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "이전 코어 검사" }),
+    ).toBeInTheDocument();
     expect(screen.getAllByText("정밀 코어")).toHaveLength(1);
     expect(screen.queryByText(/계정|기기|로컬/)).not.toBeInTheDocument();
     expect(
@@ -248,11 +252,11 @@ describe("LocalResultManager", () => {
                     createdAt: "2026-07-09T00:00:00.000Z",
                     headline:
                       "편하게 맞는 자리는 마음이 흔들릴 때의 반응이에요.",
-                    targetCode: "SVODE",
+                    targetCode: "ENAKQ",
                     targetDisplayName: "상대",
-                    targetProfileName: "물결의 새길 개척가",
-                    viewerCode: "TVOAE",
-                    viewerProfileName: "불꽃의 온기 탐험가",
+                    targetProfileName: "관계를 여는 지휘자",
+                    viewerCode: "INGMC",
+                    viewerProfileName: "새 길을 찾는 탐구자",
                   },
                 ],
                 ok: true,
@@ -288,7 +292,7 @@ describe("LocalResultManager", () => {
     render(<LocalResultManager />);
 
     expect(await screen.findByText("1:1 비교 리포트")).toBeInTheDocument();
-    expect(screen.getByText("TVOAE와 SVODE · 상대")).toBeInTheDocument();
+    expect(screen.getByText("INGMC와 ENAKQ · 상대")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "1:1 비교 리포트 결과 열기" }),
     ).toHaveAttribute(
@@ -341,6 +345,47 @@ describe("LocalResultManager", () => {
     ).toHaveAttribute("href", "/assessments/nu-core-full");
     expect(screen.getAllByText("정밀 코어")).toHaveLength(1);
   });
+
+  it("keeps legacy results accessible without exposing retired codes or beta attempts", async () => {
+    vi.mocked(listLocalAttempts).mockResolvedValue([
+      {
+        ...createCoreAttempt(),
+        assessmentId: "nu-core-beta",
+        completedAt: undefined,
+        id: "legacy_beta_attempt",
+        state: "in_progress",
+      },
+    ]);
+    fetchMock.mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ok: true,
+          results: [
+            {
+              ...createAccountResult({ localResultId: null }),
+              profileCode: "TVOAE",
+              profileName: "불꽃의 온기 탐험가",
+            },
+          ],
+        }),
+        {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        },
+      ),
+    );
+
+    render(<LocalResultManager />);
+
+    expect(
+      await screen.findByText("이전에 저장한 코어 검사 결과"),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("TVOAE")).not.toBeInTheDocument();
+    expect(screen.queryByText("불꽃의 온기 탐험가")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "코어 검사 이어하기" }),
+    ).not.toBeInTheDocument();
+  });
 });
 
 function createCoreAttempt() {
@@ -376,8 +421,8 @@ function createAccountResult(
     facets: [],
     kind: overrides.kind ?? "full",
     localResultId: overrides.localResultId ?? "local_test_1",
-    profileCode: "TVOAE",
-    profileName: overrides.profileName ?? "불꽃의 온기 탐험가",
+    profileCode: "INGMC",
+    profileName: overrides.profileName ?? "새 길을 찾는 탐구자",
     resultLabel: "현재 대표 성향",
     resultReportId:
       overrides.resultReportId ?? "22222222-2222-4222-8222-222222222222",
