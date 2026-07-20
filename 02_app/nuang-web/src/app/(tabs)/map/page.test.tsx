@@ -45,10 +45,20 @@ describe("MapPage", () => {
       }),
     );
 
-    expect(
-      screen.getByRole("link", { name: "ENAKQ 상세 지도 보기" }),
-    ).toHaveAttribute("href", "/map/ENAKQ");
+    const detailLinks = screen.getAllByRole("link", {
+      name: "상세 성향지도 보기",
+    });
+    expect(detailLinks).toHaveLength(2);
+    detailLinks.forEach((link) =>
+      expect(link).toHaveAttribute("href", "/map/ENAKQ"),
+    );
     expect(screen.getByTestId("selected-code")).toHaveTextContent("ENAKQ");
+    expect(
+      screen.getByText("이 코드가 어떤 생각과 행동으로 이어지는지 살펴보세요."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("궁금한 사람의 코드는 아래에서 직접 조합할 수 있어요."),
+    ).toBeInTheDocument();
     expect(screen.queryByText("TVOAE")).not.toBeInTheDocument();
   });
 
@@ -61,8 +71,15 @@ describe("MapPage", () => {
 
     expect(screen.getByTestId("selected-code")).toHaveTextContent("INAKQ");
     expect(
-      screen.getByRole("heading", { name: "고요한 마음 지휘자" }),
-    ).toBeInTheDocument();
+      screen.getAllByRole("heading", { name: "고요한 마음 지휘자" }),
+    ).toHaveLength(2);
+    const detailLinks = screen.getAllByRole("link", {
+      name: "상세 성향지도 보기",
+    });
+    expect(detailLinks).toHaveLength(2);
+    detailLinks.forEach((link) =>
+      expect(link).toHaveAttribute("href", "/map/INAKQ"),
+    );
   });
 
   it("updates the profile as each code letter is selected", async () => {
@@ -77,8 +94,8 @@ describe("MapPage", () => {
 
     expect(screen.getByTestId("selected-code")).toHaveTextContent("INAKQ");
     expect(
-      screen.getByRole("heading", { name: "고요한 마음 지휘자" }),
-    ).toBeInTheDocument();
+      screen.getAllByRole("heading", { name: "고요한 마음 지휘자" }),
+    ).toHaveLength(2);
   });
 
   it("finds a profile by its role name", async () => {

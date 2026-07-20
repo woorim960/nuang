@@ -15,7 +15,6 @@ import {
   candidatePublicPairOrder,
   type CandidateProfileDefinition,
 } from "@/features/nuang-code/candidate-profile-names";
-import { hasPublishedTraitMapCustomerGuide } from "@/features/nuang-code/trait-map-customer-guide-catalog";
 import styles from "./TraitMapExplorer.module.css";
 
 const SAVED_CODE_STORAGE_KEY = "nuang.map.saved-codes.v1";
@@ -150,27 +149,18 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
     showAllProfiles || query.trim()
       ? matchingProfiles
       : matchingProfiles.slice(0, INITIAL_PROFILE_COUNT);
-  const requestedProfile = initialCode
-    ? candidateProfileDefinitions[initialCode]
-    : null;
-  const savedStartProfile =
-    !requestedProfile &&
-    !viewerProfile &&
-    selectedProfile &&
-    savedCodes.includes(selectedProfile.code)
-      ? {
-          code: selectedProfile.code,
-          displayName: selectedProfile.displayName,
-          sourceLabel: "최근 관심 코드",
-        }
-      : null;
-  const startProfile = requestedProfile
+  const startProfile = selectedProfile
     ? {
-        code: requestedProfile.code,
-        displayName: requestedProfile.displayName,
-        sourceLabel: "지금 살펴보는 성향",
+        code: selectedProfile.code,
+        displayName: selectedProfile.displayName,
+        sourceLabel:
+          viewerProfile?.code === selectedProfile.code
+            ? viewerProfile.sourceLabel
+            : savedCodes.includes(selectedProfile.code)
+              ? "최근 관심 코드"
+              : "지금 선택한 성향",
       }
-    : (viewerProfile ?? savedStartProfile);
+    : null;
 
   const moveToBuilder = () => {
     builderRef.current?.scrollIntoView?.({
@@ -435,16 +425,12 @@ function MapStartPanel({
   onExplore: () => void;
   profile: MapViewerProfile | null;
 }) {
+  const definition = profile ? candidateProfileDefinitions[profile.code] : null;
   const title = isLoading
     ? "내게 맞는 시작점을 찾고 있어요"
     : profile
-      ? `${profile.code} · ${profile.displayName}`
+      ? profile.displayName
       : "누구의 성향이 궁금한가요?";
-  const description = isLoading
-    ? "저장된 검사 결과와 관심 코드를 확인한 뒤 가장 자연스러운 시작점을 보여드릴게요."
-    : profile
-      ? "이 코드의 다섯 글자 뜻부터 살펴보거나, 아래에서 다른 사람의 코드를 바로 조합해 보세요."
-      : "알고 있는 5글자 코드를 직접 넣어 보세요. 내 코드를 모른다면 빠른 검사로 먼저 찾을 수 있어요.";
 
   return (
     <section
@@ -452,7 +438,46 @@ function MapStartPanel({
       aria-busy={isLoading}
       aria-labelledby="map-start-title"
     >
-      <div className={styles.startHeading}>
+      <div className={styles.startOverview}>
+        <div className={styles.startCopy}>
+          <p className={styles.eyebrow}>
+            {isLoading
+              ? "내 성향을 확인하는 중"
+              : (profile?.sourceLabel ?? "성향 탐색 시작")}
+          </p>
+          <h2 id="map-start-title">{title}</h2>
+          {profile ? (
+            <div
+              aria-label={`선택한 코드 ${profile.code}`}
+              className={styles.startCode}
+            >
+              {profile.code.split("").map((letter, index) => (
+                <span data-position={index + 1} key={`${letter}-${index}`}>
+                  {letter}
+                </span>
+              ))}
+            </div>
+          ) : null}
+          <p className={styles.startDescription}>
+            {isLoading ? (
+              "저장된 검사 결과와 관심 코드를 확인하고 있어요."
+            ) : profile ? (
+              <>
+                <span>
+                  이 코드가 어떤 생각과 행동으로 이어지는지 살펴보세요.
+                </span>
+                <span>
+                  궁금한 사람의 코드는 아래에서 직접 조합할 수 있어요.
+                </span>
+              </>
+            ) : (
+              <>
+                <span>알고 있는 5글자 코드를 직접 조합해 보세요.</span>
+                <span>내 코드를 모른다면 빠른 검사로 먼저 찾을 수 있어요.</span>
+              </>
+            )}
+          </p>
+        </div>
         <div className={styles.startCharacter}>
           <span aria-hidden="true" className={styles.characterGlow} />
           <NuangCharacter
@@ -461,22 +486,38 @@ function MapStartPanel({
             size="md"
           />
         </div>
-        <div>
-          <p className={styles.eyebrow}>
-            {isLoading
-              ? "내 성향을 확인하는 중"
-              : (profile?.sourceLabel ?? "성향 탐색 시작")}
-          </p>
-          <h2 id="map-start-title">{title}</h2>
-        </div>
       </div>
-      <p className={styles.startDescription}>{description}</p>
+      {definition ? (
+        <ol
+          aria-label={`${profile?.code} 다섯 글자 핵심 의미`}
+          className={styles.startSignals}
+        >
+          {definition.codeTokens.map((token, index) => (
+            <li data-position={index + 1} key={`${token}-${index}`}>
+              <strong>{definition.code[index]}</strong>
+              <span>{token}</span>
+            </li>
+          ))}
+        </ol>
+      ) : null}
       {!isLoading ? (
         <div className={styles.startActions}>
-          <button onClick={onExplore} type="button">
-            {profile ? "이 코드 뜻 보기" : "5글자 코드 직접 입력"}
-            <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
-          </button>
+          {profile ? (
+            <>
+              <Link href={`/map/${profile.code}`}>
+                상세 성향지도 보기
+                <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
+              </Link>
+              <button onClick={onExplore} type="button">
+                다른 코드 조합하기
+              </button>
+            </>
+          ) : (
+            <button onClick={onExplore} type="button">
+              5글자 코드 직접 조합
+              <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
+            </button>
+          )}
           {!profile ? (
             <Link href="/assessments/nu-core-quick?returnTo=%2Fmap">
               검사로 내 코드 찾기
@@ -573,7 +614,7 @@ function ProfileResult({
       <p className={styles.profileSummary}>{profile.summary}</p>
 
       <details className={styles.codeDetails}>
-        <summary>다섯 글자의 뜻 보기</summary>
+        <summary>다섯 글자 한눈에 보기</summary>
         <ol>
           {profile.code.split("").map((symbol, index) => {
             const direction = candidateAxisCopy[index].directions[symbol];
@@ -590,12 +631,10 @@ function ProfileResult({
         </ol>
       </details>
 
-      {hasPublishedTraitMapCustomerGuide(profile.code) ? (
-        <Link className={styles.detailLink} href={`/map/${profile.code}`}>
-          {profile.code} 상세 지도 보기
-          <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
-        </Link>
-      ) : null}
+      <Link className={styles.detailLink} href={`/map/${profile.code}`}>
+        상세 성향지도 보기
+        <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
+      </Link>
     </article>
   );
 }
