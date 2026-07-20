@@ -180,9 +180,16 @@ export function PublicComparisonReportView({
       (axis) => axis.viewerSymbol === axis.targetSymbol && axis.difference > 16,
     )
     .sort((a, b) => b.difference - a.difference)[0];
-  const strongestDifference = [...axisComparisons].sort(
-    (a, b) => b.difference - a.difference,
-  )[0];
+  const relationshipDifferences = [...axisComparisons]
+    .filter(isMeaningfulRelationshipDifference)
+    .sort((a, b) => b.difference - a.difference);
+  const strongestDifference = relationshipDifferences[0];
+  const relationshipMoments =
+    relationshipDifferences.length > 0
+      ? relationshipDifferences.slice(0, 2)
+      : closestAxis
+        ? [closestAxis]
+        : [];
 
   const allOpen =
     axisComparisons.length > 0 && openAxes.length === axisComparisons.length;
@@ -281,19 +288,18 @@ export function PublicComparisonReportView({
             }
             tone="mint"
           />
-          <SummaryItem
-            label="같은 방향이지만 정도가 다른 부분"
-            value={
-              sameDirectionDifferentStrength?.label ?? "두드러진 부분은 없어요"
-            }
-            tone="lavender"
-          />
+          {sameDirectionDifferentStrength ? (
+            <SummaryItem
+              label="같은 방향이지만 정도가 다른 부분"
+              value={sameDirectionDifferentStrength.label}
+              tone="lavender"
+            />
+          ) : null}
           <SummaryItem
             label="먼저 맞춰보면 좋은 부분"
             value={
               strongestDifference?.label ??
-              summary.strongestDifferenceLabel ??
-              "작은 신호부터 확인해요"
+              "현재 공개된 자리에서는 큰 차이가 없어요"
             }
             tone="peach"
           />
@@ -369,36 +375,23 @@ export function PublicComparisonReportView({
                 ? "관계 전반에서"
                 : `${relationshipLabel} 관계에서`}
             </p>
-            <h2>함께 있을 때 이런 차이가 보일 수 있어요</h2>
+            <h2>
+              {relationshipDifferences.length > 0
+                ? "함께 있을 때 이런 차이가 보일 수 있어요"
+                : "비슷해도 한 번 확인하면 좋은 순간이에요"}
+            </h2>
           </div>
         </div>
         <div className={styles.momentList}>
-          {[...axisComparisons]
-            .sort((a, b) => b.difference - a.difference)
-            .slice(0, 2)
-            .map((axis) => (
-              <RelationshipMoment
-                axis={axis}
-                context={relationship}
-                key={axis.domainId}
-                targetName={targetName}
-              />
-            ))}
+          {relationshipMoments.map((axis) => (
+            <RelationshipMoment
+              axis={axis}
+              context={relationship}
+              key={axis.domainId}
+            />
+          ))}
         </div>
       </section>
-
-      {strongestDifference ? (
-        <section className={styles.questionSection}>
-          <p className={styles.sectionEyebrow}>오늘 한 가지 물어본다면</p>
-          <h2>
-            {axisMomentCopy[strongestDifference.domainId]?.question ??
-              sections.conversationStarters[0]}
-          </h2>
-          <p>
-            상대의 마음을 추정하기보다, 편한 방식을 가볍게 확인하는 질문이에요.
-          </p>
-        </section>
-      ) : null}
 
       <details className={styles.privacyDetails}>
         <summary>서로 공개한 성향 정보만 사용했어요</summary>
@@ -480,6 +473,8 @@ function AxisComparison({
     (item) => item.domainId === axis.domainId,
   );
   const status = getAxisStatus(axis);
+  const hasSharedDirection =
+    Boolean(axis.viewerSymbol) && axis.viewerSymbol === axis.targetSymbol;
 
   return (
     <article className={styles.axis} data-open={isOpen}>
@@ -517,11 +512,22 @@ function AxisComparison({
 
       {isOpen ? (
         <div className={styles.axisDetails}>
-          <p className={styles.axisInterpretation}>{axis.interpretation}</p>
-          <div className={styles.patternGrid}>
-            <Pattern label="나" text={axis.viewerPattern} />
-            <Pattern label={targetName} text={axis.targetPattern} />
-          </div>
+          {hasSharedDirection ? (
+            <SharedPattern
+              difference={axis.difference}
+              text={axis.viewerPattern}
+            />
+          ) : (
+            <>
+              <p className={styles.axisInterpretation}>
+                {axis.interpretation}
+              </p>
+              <div className={styles.patternGrid}>
+                <Pattern label="나" text={axis.viewerPattern} />
+                <Pattern label={targetName} text={axis.targetPattern} />
+              </div>
+            </>
+          )}
           {facets.length > 0 ? (
             <div className={styles.facetGroup}>
               <h3>세부 모습 {facets.length}개</h3>
@@ -534,16 +540,6 @@ function AxisComparison({
               ))}
             </div>
           ) : null}
-          <div className={styles.axisNote}>
-            <p>
-              <span>다르게 받아들일 수 있는 순간</span>
-              {axis.possibleMisread}
-            </p>
-            <p>
-              <span>이렇게 확인해 보세요</span>
-              {axisMomentCopy[axis.domainId]?.question ?? axis.adjustmentTip}
-            </p>
-          </div>
         </div>
       ) : null}
     </article>
@@ -600,6 +596,27 @@ function Pattern({ label, text }: { label: string; text: string }) {
   );
 }
 
+function SharedPattern({
+  difference,
+  text,
+}: {
+  difference: number;
+  text: string;
+}) {
+  const [title, ...body] = text.split(". ");
+
+  return (
+    <div className={styles.sharedPattern}>
+      <span>두 사람에게 공통으로 나타난 방향</span>
+      <strong>{title}</strong>
+      {body.length > 0 ? <p>{body.join(". ")}</p> : null}
+      {difference > 16 ? (
+        <small>방향은 같지만 이 모습이 나타나는 정도에는 차이가 있어요.</small>
+      ) : null}
+    </div>
+  );
+}
+
 function FacetComparison({
   facet,
   targetName,
@@ -650,11 +667,9 @@ function MiniTrack({
 function RelationshipMoment({
   axis,
   context,
-  targetName,
 }: {
   axis: PublicComparisonAxisInsight;
   context: RelationshipContext;
-  targetName: string;
 }) {
   const moment = axisMomentCopy[axis.domainId];
   if (!moment) return null;
@@ -662,25 +677,26 @@ function RelationshipMoment({
     context === "general"
       ? moment.scene
       : (relationshipSceneOverrides[context][axis.domainId] ?? moment.scene);
+  const hasMeaningfulDifference = isMeaningfulRelationshipDifference(axis);
 
   return (
     <article className={styles.moment}>
       <p className={styles.momentContext}>{getContextPrefix(context)}</p>
       <h3>{scene}</h3>
-      <div className={styles.momentPeople}>
-        <p>
-          <span>나는</span>
-          {shortenPattern(axis.viewerPattern)}
-        </p>
-        <p>
-          <span>
-            {targetName}
-            {topicParticle(targetName)}
-          </span>
-          {shortenPattern(axis.targetPattern)}
-        </p>
-      </div>
-      <p className={styles.momentQuestion}>{moment.question}</p>
+      <p className={styles.momentInsight}>
+        <span>
+          {hasMeaningfulDifference
+            ? "다르게 느낄 수 있는 지점"
+            : "비슷해도 확인할 지점"}
+        </span>
+        {hasMeaningfulDifference
+          ? axis.possibleMisread
+          : "비슷한 성향이어도 그날의 상황과 관계에 따라 원하는 속도는 달라질 수 있어요."}
+      </p>
+      <p className={styles.momentQuestion}>
+        <span>이렇게 물어보세요</span>
+        {moment.question}
+      </p>
     </article>
   );
 }
@@ -797,8 +813,14 @@ function clampScore(score: number) {
   return Math.max(2, Math.min(98, score));
 }
 
-function shortenPattern(pattern: string) {
-  return pattern.split(". ")[0] || pattern;
+function isMeaningfulRelationshipDifference(
+  axis: PublicComparisonAxisInsight,
+) {
+  return (
+    axis.viewerSymbol !== axis.targetSymbol ||
+    axis.difference > 16 ||
+    axis.hasBoundarySignal
+  );
 }
 
 function toPersonName(name: string) {
@@ -812,14 +834,6 @@ function andParticle(value: string) {
   const code = last.charCodeAt(0);
   if (code < 0xac00 || code > 0xd7a3) return "와";
   return (code - 0xac00) % 28 === 0 ? "와" : "과";
-}
-
-function topicParticle(value: string) {
-  const last = Array.from(value.trim()).at(-1);
-  if (!last) return "는";
-  const code = last.charCodeAt(0);
-  if (code < 0xac00 || code > 0xd7a3) return "는";
-  return (code - 0xac00) % 28 === 0 ? "는" : "은";
 }
 
 function getContextPrefix(context: RelationshipContext) {

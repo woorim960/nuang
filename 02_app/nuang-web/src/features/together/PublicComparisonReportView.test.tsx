@@ -115,7 +115,12 @@ describe("PublicComparisonReportView", () => {
         name: "함께 있을 때 이런 차이가 보일 수 있어요",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText("오늘 한 가지 물어본다면")).toBeInTheDocument();
+    expect(screen.queryByText("오늘 한 가지 물어본다면")).not.toBeInTheDocument();
+    expect(
+      screen.getAllByText(
+        "지금 바로 이야기할까, 생각을 정리한 뒤 다시 이야기할까?",
+      ),
+    ).toHaveLength(1);
     expect(
       screen.getByText("서로 공개한 성향 정보만 사용했어요"),
     ).toBeInTheDocument();
@@ -133,5 +138,47 @@ describe("PublicComparisonReportView", () => {
     expect(screen.queryByText(/직접 문항 응답/)).not.toBeInTheDocument();
     expect(screen.queryByText(/score_payload/)).not.toBeInTheDocument();
     expect(screen.queryByText(/itemId/)).not.toBeInTheDocument();
+  });
+
+  it("shows a shared direction once when both people have the same code direction", () => {
+    const viewer = createPublicProfileSnapshotPayload({
+      createdAt: "2026-07-04T00:00:00.000Z",
+      displayProfile: {
+        displayName: "나",
+        motif: "flame",
+      },
+      result: viewerResult,
+      snapshotId: "44444444-4444-4444-8444-444444444444",
+    });
+    const target = createPublicProfileSnapshotPayload({
+      createdAt: "2026-07-04T00:00:00.000Z",
+      displayProfile: {
+        displayName: "친구",
+        motif: "water",
+      },
+      result: viewerResult,
+      snapshotId: "55555555-5555-4555-8555-555555555555",
+    });
+    const report = createPublicComparisonReportPayload({
+      comparisonId: "66666666-6666-4666-8666-666666666666",
+      createdAt: "2026-07-04T00:00:00.000Z",
+      target,
+      viewer,
+    });
+
+    render(<PublicComparisonReportView report={report} />);
+
+    expect(
+      screen.getByText("두 사람에게 공통으로 나타난 방향"),
+    ).toBeInTheDocument();
+    expect(screen.getAllByText("함께할 때 활력이 올라요")).toHaveLength(1);
+    expect(
+      screen.getByRole("heading", {
+        name: "비슷해도 한 번 확인하면 좋은 순간이에요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("현재 공개된 자리에서는 큰 차이가 없어요"),
+    ).toBeInTheDocument();
   });
 });

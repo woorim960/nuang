@@ -186,8 +186,7 @@
   align-items: flex-end;
 }
 
-.sectionHeading h2,
-.questionSection h2 {
+.sectionHeading h2 {
   margin: 4px 0 0;
   font-size: 17px;
   font-weight: 780;
@@ -462,6 +461,47 @@
   line-height: 17px;
 }
 
+.sharedPattern {
+  margin-top: 14px;
+  padding: 13px 14px;
+  border-left: 2px solid #a9d7ca;
+  color: #535d64;
+  background: #f4faf8;
+}
+
+.sharedPattern > span,
+.sharedPattern > strong,
+.sharedPattern > small {
+  display: block;
+}
+
+.sharedPattern > span {
+  color: #658c81;
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 15px;
+}
+
+.sharedPattern > strong {
+  margin-top: 3px;
+  font-size: 12.5px;
+  font-weight: 720;
+  line-height: 19px;
+}
+
+.sharedPattern > p,
+.sharedPattern > small {
+  margin: 3px 0 0;
+  color: #6b7478;
+  font-size: 10.5px;
+  line-height: 17px;
+}
+
+.sharedPattern > small {
+  margin-top: 7px;
+  color: #7a7f88;
+}
+
 .facetGroup {
   margin-top: 16px;
   padding-top: 14px;
@@ -556,30 +596,6 @@
   line-height: 17px;
 }
 
-.axisNote {
-  display: grid;
-  gap: 10px;
-  margin-top: 12px;
-  padding: 12px 13px;
-  border-left: 2px solid #c9c3ee;
-  color: #555b67;
-  background: #fbfaff;
-}
-
-.axisNote p {
-  margin: 0;
-  font-size: 11px;
-  line-height: 18px;
-}
-
-.axisNote span {
-  display: block;
-  margin-bottom: 2px;
-  color: #8075bc;
-  font-size: 10px;
-  font-weight: 700;
-}
-
 .scoreGuide {
   margin-top: 15px;
   background: #f5f5f7;
@@ -616,31 +632,19 @@
   line-height: 21px;
 }
 
-.momentPeople {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  margin-top: 11px;
-}
-
-.momentPeople p {
-  margin: 0;
-  color: #5f6470;
+.momentInsight {
+  margin: 8px 0 0;
+  color: #666d76;
   font-size: 11px;
-  line-height: 17px;
+  line-height: 18px;
 }
 
-.momentPeople p + p {
-  padding-left: 12px;
-  border-left: 1px solid var(--comparison-line);
-}
-
-.momentPeople span {
+.momentInsight span {
   display: block;
   margin-bottom: 2px;
-  color: #92959f;
-  font-size: 9.5px;
-  font-weight: 650;
+  color: #8b8f99;
+  font-size: 10px;
+  font-weight: 700;
 }
 
 .momentQuestion {
@@ -654,24 +658,12 @@
   line-height: 18px;
 }
 
-.questionSection {
-  margin: 0;
-  padding: 20px 16px 22px;
-  border-bottom: 8px solid var(--comparison-canvas);
-  background: linear-gradient(145deg, #f5f2ff, #fbfaff 55%, #f0faf7);
-}
-
-.questionSection h2 {
-  margin-top: 8px;
-  font-size: 16px;
-  line-height: 24px;
-}
-
-.questionSection > p:last-child {
-  margin: 7px 0 0;
-  color: #727685;
-  font-size: 11.5px;
-  line-height: 18px;
+.momentQuestion span {
+  display: block;
+  margin-bottom: 2px;
+  color: #847ba8;
+  font-size: 10px;
+  font-weight: 700;
 }
 
 .privacyDetails {
