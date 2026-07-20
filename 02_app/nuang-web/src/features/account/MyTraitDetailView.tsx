@@ -1,28 +1,54 @@
 "use client";
 
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
+import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { readJsonResponse } from "@/features/account/response-json";
 import {
   listFreeTopicResultsLocalFirst,
   syncQueuedFreeTopicResults,
   type StoredFreeTopicResult,
 } from "@/features/assessment/free-topic-storage";
-import type { AccountResultSummary } from "@/features/account/account-result-contract";
-import { readJsonResponse } from "@/features/account/response-json";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
 import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
-import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
+import {
+  getCandidateDirectionCopy,
+  getCandidateProfileDefinition,
+} from "@/features/nuang-code/candidate-profile-names";
+import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import type { CoreScoreResult, FacetScore } from "@/lib/scoring/types";
+import styles from "./MyTraitDetailView.module.css";
 
 const domainShortLabel: Record<string, string> = {
-  ER: "반응",
+  ER: "감정",
   OE: "탐색",
   RO: "관계",
-  SE: "사람",
+  SE: "에너지",
   SM: "일상",
+};
+
+type TraitDomain = {
+  domainId: string;
+  label: string;
+  score: number | null;
+  symbol?: string | null;
+};
+
+type TraitFacet = Pick<FacetScore, "facetId" | "label" | "score">;
+
+type TraitDetail = {
+  code: string;
+  completedAt: string;
+  domains: TraitDomain[];
+  facets: TraitFacet[];
+  profileName: string;
+  resultHref: string;
+  sourceLabel: string;
 };
 
 export function MyTraitDetailView() {
@@ -64,173 +90,320 @@ export function MyTraitDetailView() {
     () => buildLatestAccountResult(accountResults),
     [accountResults],
   );
-  const detail = localScore
+  const detail: TraitDetail | null = localScore
     ? buildLocalTraitDetail(localScore)
     : latestAccountResult
       ? buildAccountTraitDetail(latestAccountResult)
       : null;
 
   if (!loaded) {
-    return (
-      <section
-        aria-live="polite"
-        className="border-y border-line py-6 text-sm text-muted"
-        role="status"
-      >
-        내 성향을 불러오는 중
-      </section>
-    );
+    return <TraitDetailLoading />;
   }
 
   if (!detail) {
-    return (
-      <section className="border-y border-line py-7">
-        <h1 className="text-2xl font-black">아직 성향 결과가 없어요</h1>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          코어 검사를 완료하면 이 화면에서 코드 지도, 세부 신호, 변화 기록을 볼
-          수 있어요.
-        </p>
-      </section>
-    );
+    return <TraitDetailEmpty />;
   }
 
-  const code = detail.code;
   const motif: NuangCharacterMotif = "purple";
-  const domainAxes = detail.domains.map((domain) => ({
-    id: domain.domainId,
-    label: domain.label,
-    shortLabel: domainShortLabel[domain.domainId] ?? domain.label,
-    value: domain.score,
+  const axisRows = nextNuangCodeScheme.positions.map((position) => ({
+    position,
+    domain: detail.domains.find(
+      (domain) => domain.domainId === position.domainId,
+    ),
+    symbol: detail.code[position.codePosition - 1] ?? null,
+  }));
+  const domainAxes = axisRows.map(({ position, domain }) => ({
+    id: position.domainId,
+    label: position.label,
+    shortLabel: domainShortLabel[position.domainId] ?? position.label,
+    value: domain?.score ?? null,
   }));
 
   return (
-    <div className="grid gap-6">
-      <section className="border-b border-line pb-6 pt-7">
-        <div className="flex items-center justify-between gap-5">
-          <div className="min-w-0">
-            <p className="text-[38px] font-black leading-none tracking-normal">
-              {code}
-            </p>
-            <h1 className="mt-3 text-2xl font-black">{detail.profileName}</h1>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {detail.sourceLabel}와 무료 주제 검사 기록을 함께 참고해 현재
-              성향을 정리해요.
-            </p>
+    <div className={styles.content}>
+      <section className={styles.hero}>
+        <div className={styles.heroIdentity}>
+          <div className={styles.characterWrap}>
+            <NuangCharacter motif={motif} size="md" />
           </div>
-          <NuangCharacter motif={motif} size="lg" />
+          <div className={styles.heroCopy}>
+            <p>{detail.sourceLabel} 검사 기준</p>
+            <strong>{detail.code}</strong>
+            <h1>{detail.profileName}</h1>
+          </div>
+        </div>
+        <p className={styles.heroDescription}>
+          현재 검사에서 가장 가까운 대표 성향이에요. 점수는 고정된 등급이
+          아니라, 평소 어느 방향을 더 자주 사용하는지 보여줘요.
+        </p>
+        <div className={styles.heroMeta}>
+          <span>{formatLongDate(detail.completedAt)} 검사</span>
+          <span aria-hidden="true" />
+          <span>최신 결과</span>
+        </div>
+        <div className={styles.heroActions}>
+          <Link href={detail.resultHref}>전체 리포트 보기</Link>
+          <Link href="/assessments/nu-core-full?from=my-profile&returnTo=%2Fmy%2Fprofile">
+            검사 다시 하기
+          </Link>
         </div>
       </section>
 
-      <section className="border-b border-line pb-6">
-        <h2 className="text-base font-bold">코드 지도</h2>
-        <p className="mt-1 text-sm leading-6 text-muted">
-          내 성향의 중심 구조를 오각형으로 보여줘요.
-        </p>
-        <div className="mt-4">
+      <section className={styles.section}>
+        <SectionHeading
+          description="다섯 영역을 한눈에 볼 수 있어요. 중심에서 멀수록 해당 방향의 점수가 높아요."
+          eyebrow="전체 모습"
+          title="코드 지도"
+        />
+        <div className={styles.radarWrap}>
           <TraitRadarChart
             ariaLabel="내 코드 지도"
             axes={domainAxes}
-            centerLabel="코드 지도"
+            centerLabel={detail.code}
           />
         </div>
       </section>
 
-      <section className="border-b border-line pb-6">
-        <h2 className="text-base font-bold">세부 신호</h2>
-        <p className="mt-1 text-sm leading-6 text-muted">
-          가운데 50을 기준으로 양쪽 방향이 펼쳐지는 방식이에요.
-        </p>
+      <section className={styles.section}>
+        <SectionHeading
+          description="선택된 문자를 강조하고, 반대 방향과의 비율도 함께 보여드려요."
+          eyebrow="5개 축"
+          title="코드 한 자리씩 보기"
+        />
+        <div className={styles.axisList}>
+          {axisRows.map(({ position, domain, symbol }) => (
+            <AxisRow
+              domain={domain}
+              key={position.domainId}
+              position={position}
+              symbol={domain?.symbol ?? symbol}
+            />
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <SectionHeading
+          description="세부 문항 응답을 0~100으로 환산했어요. 50은 어느 한쪽으로 치우치지 않은 값이에요."
+          eyebrow="자세히 보기"
+          title="세부 반응"
+        />
         {detail.facets.length > 0 ? (
-          <div className="mt-5 grid gap-4">
+          <div className={styles.facetList}>
             {detail.facets.map((facet) => (
               <CenteredFacetBar facet={facet} key={facet.facetId} />
             ))}
           </div>
         ) : (
-          <p className="mt-4 border-t border-line pt-4 text-sm leading-6 text-muted">
-            이전에 저장된 결과는 코드 지도 요약만 보관되어 있어요. 새 코어
-            검사를 완료하면 이곳에 세부 신호까지 채워집니다.
+          <p className={styles.inlineEmpty}>
+            이전 결과에는 세부 반응 점수가 저장되지 않았어요. 새 코어 검사를
+            완료하면 이곳에서 확인할 수 있어요.
           </p>
         )}
       </section>
 
-      <section className="pb-8">
-        <h2 className="text-base font-bold">최근 더 선명해진 부분</h2>
-        <p className="mt-1 text-sm leading-6 text-muted">
-          여러 검사를 통해 축적된 데이터가 충분히 같은 방향을 보여줄 때 대표
-          성향이 업데이트돼요.
-        </p>
+      <section className={styles.section}>
+        <SectionHeading
+          actionHref="/assessments"
+          actionLabel="검사 둘러보기"
+          description="최근 완료한 주제 검사와 점수를 다시 확인할 수 있어요."
+          eyebrow="나의 기록"
+          title="최근 검사 기록"
+        />
         {topicResults.length > 0 ? (
-          <div className="mt-4 grid gap-3">
+          <div className={styles.recordList}>
             {topicResults.slice(0, 3).map((topicResult) => (
-              <div
-                className="border-t border-line pt-3"
+              <article
+                className={styles.recordRow}
                 key={topicResult.localResultId}
               >
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-sm font-bold">
-                      {topicResult.assessment.title}
-                    </p>
-                    <p className="mt-1 text-xs text-muted">
-                      {topicResult.assessment.categoryLabel} ·{" "}
-                      {formatDate(topicResult.completedAt)}
-                    </p>
-                  </div>
-                  <p className="text-lg font-black tabular-nums">
-                    {getAverageScore(topicResult)}
-                  </p>
+                <div>
+                  <strong>{topicResult.assessment.title}</strong>
+                  <span>
+                    {topicResult.assessment.categoryLabel} ·{" "}
+                    {formatDate(topicResult.completedAt)}
+                  </span>
                 </div>
-              </div>
+                <p>
+                  <small>평균</small>
+                  <strong>{getAverageScore(topicResult)}</strong>
+                </p>
+              </article>
             ))}
           </div>
         ) : (
-          <p className="mt-4 border-t border-line pt-4 text-sm leading-6 text-muted">
-            무료 주제 검사를 더 해보면 이곳에 변화 신호가 쌓여요.
+          <p className={styles.inlineEmpty}>
+            아직 완료한 주제 검사가 없어요. 궁금한 주제를 하나 골라 내 모습을 더
+            자세히 살펴보세요.
           </p>
         )}
       </section>
+
+      <p className={styles.trustNote}>
+        이 화면은 가장 최근 코어 검사 결과를 이해하기 쉽게 정리한 내용이며,
+        의료·임상 진단을 대신하지 않아요.
+      </p>
     </div>
   );
 }
 
-function CenteredFacetBar({
-  facet,
+function SectionHeading({
+  actionHref,
+  actionLabel,
+  description,
+  eyebrow,
+  title,
 }: {
-  facet: Pick<FacetScore, "facetId" | "label" | "score">;
+  actionHref?: string;
+  actionLabel?: string;
+  description: string;
+  eyebrow: string;
+  title: string;
 }) {
-  const value = facet.score ?? 50;
-  const bounded = Math.max(0, Math.min(100, Math.round(value)));
-  const leftWidth = bounded < 50 ? 50 - bounded : 0;
-  const rightWidth = bounded >= 50 ? bounded - 50 : 0;
+  return (
+    <div className={styles.sectionHeading}>
+      <div>
+        <p>{eyebrow}</p>
+        <h2>{title}</h2>
+      </div>
+      {actionHref && actionLabel ? (
+        <Link href={actionHref}>
+          {actionLabel}
+          <ChevronRight aria-hidden="true" size={14} strokeWidth={1.7} />
+        </Link>
+      ) : null}
+      <span>{description}</span>
+    </div>
+  );
+}
+
+function AxisRow({
+  domain,
+  position,
+  symbol,
+}: {
+  domain?: TraitDomain;
+  position: (typeof nextNuangCodeScheme.positions)[number];
+  symbol: string | null;
+}) {
+  const score = domain?.score;
+  const hasScore = typeof score === "number";
+  const highScore = hasScore ? clampScore(score) : null;
+  const lowScore = highScore === null ? null : 100 - highScore;
+  const selectedSymbol = symbol ?? null;
+  const directionCopy = selectedSymbol
+    ? getCandidateDirectionCopy(position.codePosition, selectedSymbol)
+    : null;
+
+  return (
+    <article className={styles.axisRow} data-testid="trait-axis-row">
+      <div className={styles.axisHeader}>
+        <div>
+          <span>{position.codePosition}</span>
+          <strong>{position.label}</strong>
+        </div>
+        {selectedSymbol ? (
+          <b aria-label={`선택된 코드 ${selectedSymbol}`}>{selectedSymbol}</b>
+        ) : (
+          <b className={styles.axisUnknown}>-</b>
+        )}
+      </div>
+      <p className={styles.axisSummary}>
+        {directionCopy?.description ?? "이 영역은 응답이 조금 더 필요해요."}
+      </p>
+      {highScore !== null && lowScore !== null ? (
+        <div
+          aria-label={`${position.lowSymbol} ${lowScore}%, ${position.highSymbol} ${highScore}%`}
+          className={styles.axisScale}
+          role="img"
+        >
+          <div className={styles.axisTrack}>
+            <span style={{ left: `${highScore}%` }} />
+          </div>
+          <div className={styles.axisLegend}>
+            <strong
+              className={
+                selectedSymbol === position.lowSymbol ? styles.isSelected : ""
+              }
+            >
+              {position.lowSymbol} <span>{lowScore}%</span>
+            </strong>
+            <strong
+              className={
+                selectedSymbol === position.highSymbol ? styles.isSelected : ""
+              }
+            >
+              {position.highSymbol} <span>{highScore}%</span>
+            </strong>
+          </div>
+        </div>
+      ) : (
+        <p className={styles.missingScore}>점수를 계산할 응답이 더 필요해요.</p>
+      )}
+    </article>
+  );
+}
+
+function CenteredFacetBar({ facet }: { facet: TraitFacet }) {
+  const hasScore = typeof facet.score === "number";
+  const bounded = hasScore ? clampScore(facet.score as number) : null;
 
   return (
     <div
-      aria-label={`${facet.label} ${bounded}점`}
-      aria-valuemax={100}
-      aria-valuemin={0}
-      aria-valuenow={bounded}
-      role="meter"
+      aria-label={
+        bounded === null
+          ? `${facet.label} 점수 없음`
+          : `${facet.label} ${bounded}점`
+      }
+      aria-valuemax={bounded === null ? undefined : 100}
+      aria-valuemin={bounded === null ? undefined : 0}
+      aria-valuenow={bounded ?? undefined}
+      className={styles.facetRow}
+      role={bounded === null ? undefined : "meter"}
     >
-      <div className="flex items-center justify-between gap-3 text-sm">
-        <span className="font-semibold">{facet.label}</span>
-        <span className="tabular-nums text-muted">{bounded}</span>
+      <div>
+        <strong>{facet.label}</strong>
+        <span>{bounded === null ? "응답 필요" : bounded}</span>
       </div>
-      <div className="mt-2 grid grid-cols-2 gap-px bg-line">
-        <div className="flex h-2.5 justify-end bg-[#f6f5f9]">
-          <div
-            className="h-full bg-water"
-            style={{ width: `${leftWidth * 2}%` }}
-          />
-        </div>
-        <div className="h-2.5 bg-[#f6f5f9]">
-          <div
-            className="h-full bg-primary"
-            style={{ width: `${rightWidth * 2}%` }}
-          />
-        </div>
+      <div className={styles.facetTrack}>
+        <i aria-hidden="true" />
+        {bounded !== null ? (
+          <b aria-hidden="true" style={{ left: `${bounded}%` }} />
+        ) : null}
       </div>
     </div>
+  );
+}
+
+function TraitDetailLoading() {
+  return (
+    <div aria-live="polite" className={styles.loading} role="status">
+      <div className={styles.loadingCharacter}>
+        <NuangCharacter motif="purple" size="sm" />
+      </div>
+      <strong>내 성향을 정리하고 있어요</strong>
+      <span>가장 최근 검사 결과를 불러오는 중이에요.</span>
+      <i aria-hidden="true" />
+    </div>
+  );
+}
+
+function TraitDetailEmpty() {
+  return (
+    <section className={styles.empty}>
+      <div className={styles.characterWrap}>
+        <NuangCharacter motif="forest" size="md" />
+      </div>
+      <p>아직 결과가 없어요</p>
+      <h1>코어 검사로 내 성향의 기준을 만들어보세요</h1>
+      <span>
+        검사를 완료하면 대표 코드, 5개 축의 비율과 세부 반응을 이 화면에서
+        확인할 수 있어요.
+      </span>
+      <Link href="/assessments/nu-core-quick?returnTo=%2Fmy%2Fprofile">
+        코어 검사 시작하기
+      </Link>
+    </section>
   );
 }
 
@@ -240,23 +413,27 @@ function buildLocalTraitDetail({
 }: {
   attempt: LocalAssessmentAttempt;
   result: CoreScoreResult;
-}) {
+}): TraitDetail {
   return {
     code: result.code ?? "-----",
+    completedAt: attempt.completedAt ?? attempt.updatedAt,
     domains: result.domains,
     facets: result.facets,
     profileName: result.profileName ?? "대표 성향 계산 중",
+    resultHref: `/results/local/${attempt.id}`,
     sourceLabel:
       attempt.assessmentId === "nu-core-full" ? "정밀 코어" : "빠른 코어",
   };
 }
 
-function buildAccountTraitDetail(result: AccountResultSummary) {
+function buildAccountTraitDetail(result: AccountResultSummary): TraitDetail {
   return {
     code: result.profileCode,
+    completedAt: result.completedAt,
     domains: result.domains,
     facets: result.facets,
     profileName: result.profileName,
+    resultHref: `/results/account/${result.resultReportId}`,
     sourceLabel: result.kind === "full" ? "정밀 코어" : "빠른 코어",
   };
 }
@@ -320,4 +497,16 @@ function formatDate(value: string) {
     day: "numeric",
     month: "short",
   }).format(new Date(value));
+}
+
+function formatLongDate(value: string) {
+  return new Intl.DateTimeFormat("ko-KR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(value));
+}
+
+function clampScore(value: number) {
+  return Math.max(0, Math.min(100, Math.round(value)));
 }
