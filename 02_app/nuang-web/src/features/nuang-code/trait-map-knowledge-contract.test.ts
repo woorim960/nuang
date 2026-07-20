@@ -13,7 +13,7 @@ function createEntry() {
         claimId: "ENAKQ.general.strength.01",
         claimKind: "strength",
         confidence: "theory_informed",
-        contentKey: "ENAKQ:general:strength:opens-relationships",
+        contentKey: "trait-map.enakq.general.strength.opens-relationships",
         contexts: ["general"],
         evidenceRefs: ["evidence.01"],
         longCopy: "관계를 시작할 때 나타날 수 있는 강점을 자세히 설명해요.",

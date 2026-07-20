@@ -162,11 +162,13 @@ Part 5의 강점 장도 위 범위를 넘지 않는다. 각 글자의 장점은 
 
 ## 10. 다음 실행 순서
 
-1. 158개 claim을 실제 데이터 계약으로 옮기기 전에 canonical claim registry와 contentKey schema를 설계한다.
-2. ENAKQ 선명형·경계형·facet split형 fixture를 만들고 어떤 문장이 노출·숨김되는지 확정한다.
-3. 외부 성격심리·심리측정·관계/임상 안전 검토용 패킷을 준비한다.
+1. ~~158개 claim의 canonical claim registry와 contentKey schema를 설계한다.~~ 완료: `nuang-trait-claim-registry.v0.1`
+2. ~~ENAKQ 선명형·경계형·facet split형 fixture를 만들고 노출·숨김 조건을 계약 테스트한다.~~ 완료: `nuang-trait-profile-fixture.v0.1`
+3. 외부 성격심리·심리측정·관계/임상 안전 검토용 패킷을 준비한다. 다음 단계
 4. 검토 수정 뒤 2030 한국어 사용자 인지 인터뷰를 진행한다.
 5. 문항·점수 정량 파일럿에서 지지된 claim만 운영 후보로 승격한다.
 6. 운영 UI는 요약·상황별 상세·근거 페이지로 분리하고 한 화면의 중복을 계약 테스트한다.
 
-다음 개발 단계에서는 5만 자 원문을 곧바로 DB와 화면에 넣지 않는다. 먼저 claim registry와 fixture를 만들어 `어떤 데이터가 있을 때 어떤 문장을 보여주는지`를 결정해야 미검증 조합과 비공개 정보를 운영 리포트가 자동 생성하는 일을 막을 수 있다.
+이번 개발 단계에서도 5만 자 원문을 DB와 화면에 곧바로 넣지 않았다. claim registry와 fixture를 먼저 만들어 `어떤 데이터가 있을 때 어떤 문장을 보여주는지`를 결정했고, 미검증 조합과 비공개 정보를 운영 리포트가 자동 생성하지 못하도록 계약으로 차단했다.
+
+구현 결과와 현재 차단 상태는 [ENAKQ Claim Registry · Fixture 계약 v0.1](./ENAKQ_CLAIM_REGISTRY_AND_FIXTURE_CONTRACT_V0_1.md)에 기록했다. 현재 158개 claim 중 `APPROVED`는 0개이므로 운영 선택기는 모든 연구 문장을 숨긴다.
