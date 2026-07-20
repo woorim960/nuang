@@ -18,7 +18,7 @@ export default async function MapPage({ searchParams }: MapPageProps = {}) {
   const initialCode =
     normalizedCode && candidateProfileDefinitions[normalizedCode]
       ? normalizedCode
-      : "ENAKQ";
+      : null;
 
   return <TraitMapExplorer initialCode={initialCode} />;
 }

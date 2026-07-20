@@ -4,6 +4,11 @@ import { Bookmark, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { readJsonResponse } from "@/features/account/response-json";
+import { listLocalAttempts } from "@/features/assessment/assessment-storage";
+import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
+import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import {
   candidateAxisCopy,
   candidateProfileDefinitions,
@@ -16,7 +21,13 @@ const SAVED_CODE_STORAGE_KEY = "nuang.map.saved-codes.v1";
 const INITIAL_PROFILE_COUNT = 8;
 
 type TraitMapExplorerProps = {
-  initialCode: string;
+  initialCode: string | null;
+};
+
+type MapViewerProfile = {
+  code: string;
+  displayName: string;
+  sourceLabel: string;
 };
 
 type ProfileFilter = "all" | "E" | "I";
@@ -32,13 +43,41 @@ const allProfiles = Object.values(candidateProfileDefinitions).sort((a, b) =>
 );
 
 export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
-  const [selectedCode, setSelectedCode] = useState(initialCode);
+  const [selectedCode, setSelectedCode] = useState(initialCode ?? "-----");
   const [savedCodes, setSavedCodes] = useState<string[]>([]);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<ProfileFilter>("all");
   const [showAllProfiles, setShowAllProfiles] = useState(false);
+  const [viewerProfile, setViewerProfile] = useState<MapViewerProfile | null>(
+    null,
+  );
+  const [viewerProfileLoaded, setViewerProfileLoaded] = useState(false);
+  const builderRef = useRef<HTMLElement>(null);
   const resultRef = useRef<HTMLElement>(null);
-  const selectedProfile = candidateProfileDefinitions[selectedCode];
+  const selectedProfile = candidateProfileDefinitions[selectedCode] ?? null;
+
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadViewerProfile() {
+      const [localAttempts, accountResults] = await Promise.all([
+        listLocalAttempts().catch(() => []),
+        listMapAccountResults(),
+      ]);
+      const profile = buildMapViewerProfile({ accountResults, localAttempts });
+
+      if (!isMounted) return;
+      setViewerProfile(profile);
+      setViewerProfileLoaded(true);
+      if (!initialCode && profile) setSelectedCode(profile.code);
+    }
+
+    void loadViewerProfile();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [initialCode]);
 
   useEffect(() => {
     const timer = window.setTimeout(() => {
@@ -66,6 +105,30 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
     return () => window.clearTimeout(timer);
   }, []);
 
+  useEffect(() => {
+    if (
+      !viewerProfileLoaded ||
+      initialCode ||
+      viewerProfile ||
+      selectedCode !== "-----" ||
+      savedCodes.length === 0
+    ) {
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      setSelectedCode(savedCodes[0]);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
+  }, [
+    initialCode,
+    savedCodes,
+    selectedCode,
+    viewerProfile,
+    viewerProfileLoaded,
+  ]);
+
   const matchingProfiles = useMemo(() => {
     const normalizedQuery = query.trim().toLocaleLowerCase("ko-KR");
 
@@ -86,6 +149,34 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
     showAllProfiles || query.trim()
       ? matchingProfiles
       : matchingProfiles.slice(0, INITIAL_PROFILE_COUNT);
+  const requestedProfile = initialCode
+    ? candidateProfileDefinitions[initialCode]
+    : null;
+  const savedStartProfile =
+    !requestedProfile &&
+    !viewerProfile &&
+    selectedProfile &&
+    savedCodes.includes(selectedProfile.code)
+      ? {
+          code: selectedProfile.code,
+          displayName: selectedProfile.displayName,
+          sourceLabel: "최근 관심 코드",
+        }
+      : null;
+  const startProfile = requestedProfile
+    ? {
+        code: requestedProfile.code,
+        displayName: requestedProfile.displayName,
+        sourceLabel: "지금 살펴보는 성향",
+      }
+    : (viewerProfile ?? savedStartProfile);
+
+  const moveToBuilder = () => {
+    builderRef.current?.scrollIntoView?.({
+      behavior: "smooth",
+      block: "start",
+    });
+  };
 
   const selectCode = (code: string, moveToResult = false) => {
     setSelectedCode(code);
@@ -101,12 +192,17 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
   };
 
   const selectLetter = (position: number, symbol: string) => {
-    const letters = selectedCode.split("");
+    const letters = Array.from(
+      { length: 5 },
+      (_, index) => selectedCode[index] ?? "-",
+    );
     letters[position] = symbol;
     selectCode(letters.join(""));
   };
 
   const toggleSavedCode = () => {
+    if (!selectedProfile) return;
+
     const nextCodes = savedCodes.includes(selectedCode)
       ? savedCodes.filter((code) => code !== selectedCode)
       : [selectedCode, ...savedCodes].slice(0, 5);
@@ -135,32 +231,11 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
         </p>
       </section>
 
-      <section className={styles.featured} aria-labelledby="featured-map-title">
-        <div className={styles.featuredCopy}>
-          <p className={styles.eyebrow}>깊이 읽는 성향지도</p>
-          <h2 id="featured-map-title">ENAKQ · 관계를 여는 지휘자</h2>
-          <p>
-            사람을 만날 때의 모습부터 생각, 일, 감정, 가까운 관계까지 15개
-            주제로 자세히 살펴봐요.
-          </p>
-          <div className={styles.featuredMeta}>
-            <span>15개 주제</span>
-            <span>원하는 부분부터 읽기</span>
-          </div>
-          <Link className={styles.featuredLink} href="/map/ENAKQ">
-            상세 지도 열기
-            <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
-          </Link>
-        </div>
-        <div className={styles.characterStage}>
-          <span className={styles.characterGlow} />
-          <NuangCharacter
-            className={styles.character}
-            motif="purple"
-            size="lg"
-          />
-        </div>
-      </section>
+      <MapStartPanel
+        isLoading={!initialCode && !viewerProfileLoaded}
+        onExplore={moveToBuilder}
+        profile={startProfile}
+      />
 
       {savedCodes.length > 0 ? (
         <section className={styles.saved} aria-labelledby="saved-code-title">
@@ -190,7 +265,11 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
         </section>
       ) : null}
 
-      <section className={styles.builder} aria-labelledby="code-builder-title">
+      <section
+        className={styles.builder}
+        aria-labelledby="code-builder-title"
+        ref={builderRef}
+      >
         <div className={styles.sectionHeading}>
           <p className={styles.eyebrow}>한 글자씩 눌러 바로 확인하기</p>
           <h2 id="code-builder-title">코드 조합해 보기</h2>
@@ -238,12 +317,16 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
           })}
         </div>
 
-        <ProfileResult
-          isSaved={savedCodes.includes(selectedCode)}
-          onToggleSaved={toggleSavedCode}
-          profile={selectedProfile}
-          resultRef={resultRef}
-        />
+        {selectedProfile ? (
+          <ProfileResult
+            isSaved={savedCodes.includes(selectedCode)}
+            onToggleSaved={toggleSavedCode}
+            profile={selectedProfile}
+            resultRef={resultRef}
+          />
+        ) : (
+          <EmptyBuilderResult code={selectedCode} resultRef={resultRef} />
+        )}
       </section>
 
       <section
@@ -261,7 +344,7 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
           <span className={styles.srOnly}>코드 또는 역할 이름 검색</span>
           <input
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="예: ENAKQ, 지휘자"
+            placeholder="5글자 코드 또는 역할 이름"
             type="search"
             value={query}
           />
@@ -342,6 +425,108 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
   );
 }
 
+function MapStartPanel({
+  isLoading,
+  onExplore,
+  profile,
+}: {
+  isLoading: boolean;
+  onExplore: () => void;
+  profile: MapViewerProfile | null;
+}) {
+  const title = isLoading
+    ? "내게 맞는 시작점을 찾고 있어요"
+    : profile
+      ? `${profile.code} · ${profile.displayName}`
+      : "누구의 성향이 궁금한가요?";
+  const description = isLoading
+    ? "저장된 검사 결과와 관심 코드를 확인한 뒤 가장 자연스러운 시작점을 보여드릴게요."
+    : profile
+      ? "이 코드의 다섯 글자 뜻부터 살펴보거나, 아래에서 다른 사람의 코드를 바로 조합해 보세요."
+      : "알고 있는 5글자 코드를 직접 넣어 보세요. 내 코드를 모른다면 빠른 검사로 먼저 찾을 수 있어요.";
+
+  return (
+    <section
+      className={styles.startPanel}
+      aria-busy={isLoading}
+      aria-labelledby="map-start-title"
+    >
+      <div className={styles.startHeading}>
+        <div className={styles.startCharacter}>
+          <span aria-hidden="true" className={styles.characterGlow} />
+          <NuangCharacter
+            className={styles.character}
+            motif="purple"
+            size="md"
+          />
+        </div>
+        <div>
+          <p className={styles.eyebrow}>
+            {isLoading
+              ? "내 성향을 확인하는 중"
+              : (profile?.sourceLabel ?? "성향 탐색 시작")}
+          </p>
+          <h2 id="map-start-title">{title}</h2>
+        </div>
+      </div>
+      <p className={styles.startDescription}>{description}</p>
+      {!isLoading ? (
+        <div className={styles.startActions}>
+          <button onClick={onExplore} type="button">
+            {profile ? "이 코드 뜻 보기" : "5글자 코드 직접 입력"}
+            <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
+          </button>
+          {!profile ? (
+            <Link href="/assessments/nu-core-quick?returnTo=%2Fmap">
+              검사로 내 코드 찾기
+            </Link>
+          ) : null}
+        </div>
+      ) : null}
+    </section>
+  );
+}
+
+function EmptyBuilderResult({
+  code,
+  resultRef,
+}: {
+  code: string;
+  resultRef: React.RefObject<HTMLElement | null>;
+}) {
+  const chosenCount = [...code].filter((letter) => letter !== "-").length;
+  const remainingCount = 5 - chosenCount;
+
+  return (
+    <article className={styles.emptyBuilderResult} ref={resultRef}>
+      <p className={styles.resultLabel}>직접 입력하는 코드</p>
+      <div
+        aria-label={`선택한 글자 ${chosenCount}개`}
+        className={styles.emptyCode}
+      >
+        {code.split("").map((letter, index) => (
+          <span
+            data-filled={letter !== "-"}
+            data-position={index + 1}
+            key={`${index}-${letter}`}
+          >
+            {letter === "-" ? "·" : letter}
+          </span>
+        ))}
+      </div>
+      <strong>
+        {chosenCount === 0
+          ? "한 글자씩 골라 보세요"
+          : `${remainingCount}글자만 더 고르면 설명이 열려요`}
+      </strong>
+      <p>
+        각 자리는 좋고 나쁨을 가르는 점수가 아니라, 평소 어느 쪽 모습이 더 자주
+        나타나는지를 보여줘요.
+      </p>
+    </article>
+  );
+}
+
 function ProfileResult({
   isSaved,
   onToggleSaved,
@@ -412,4 +597,82 @@ function ProfileResult({
       ) : null}
     </article>
   );
+}
+
+async function listMapAccountResults(): Promise<AccountResultSummary[]> {
+  try {
+    const response = await fetch("/api/account-results", {
+      cache: "no-store",
+      method: "GET",
+    });
+    if (!response.ok) return [];
+
+    const body = await readJsonResponse<{
+      ok?: boolean;
+      results?: AccountResultSummary[];
+    }>(response);
+
+    return body?.ok && Array.isArray(body.results) ? body.results : [];
+  } catch {
+    return [];
+  }
+}
+
+function buildMapViewerProfile({
+  accountResults,
+  localAttempts,
+}: {
+  accountResults: AccountResultSummary[];
+  localAttempts: LocalAssessmentAttempt[];
+}): MapViewerProfile | null {
+  const accountCandidates = accountResults.flatMap((result) => {
+    const profile = candidateProfileDefinitions[result.profileCode];
+    if (!profile) return [];
+
+    return [
+      {
+        code: profile.code,
+        completedAt: result.completedAt,
+        displayName: profile.displayName,
+        kind: result.kind,
+      },
+    ];
+  });
+  const localCandidates = localAttempts.flatMap((attempt) => {
+    if (attempt.state !== "completed") return [];
+
+    const score = calculateLocalAttemptScore(attempt);
+    const profile = score?.code
+      ? candidateProfileDefinitions[score.code]
+      : undefined;
+    if (!profile) return [];
+
+    return [
+      {
+        code: profile.code,
+        completedAt: attempt.completedAt ?? attempt.updatedAt,
+        displayName: profile.displayName,
+        kind: attempt.mode,
+      },
+    ];
+  });
+  const [representative] = [...accountCandidates, ...localCandidates].sort(
+    (left, right) => {
+      const kindDifference =
+        Number(right.kind === "full") - Number(left.kind === "full");
+      if (kindDifference !== 0) return kindDifference;
+      return right.completedAt.localeCompare(left.completedAt);
+    },
+  );
+
+  if (!representative) return null;
+
+  return {
+    code: representative.code,
+    displayName: representative.displayName,
+    sourceLabel:
+      representative.kind === "full"
+        ? "내 대표 코드 · 정밀 검사 기준"
+        : "내 첫 코드 · 빠른 검사 기준",
+  };
 }

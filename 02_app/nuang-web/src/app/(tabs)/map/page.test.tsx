@@ -21,7 +21,8 @@ describe("MapPage", () => {
     });
   });
 
-  it("opens the detailed ENAKQ map from the main trait map", async () => {
+  it("starts without a fixed profile and opens ENAKQ only after selection", async () => {
+    const user = userEvent.setup();
     render(await MapPage());
 
     expect(
@@ -31,7 +32,21 @@ describe("MapPage", () => {
       screen.getByText("나와 궁금한 사람의 성향을 한곳에서 알아봐요."),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /상세 지도 열기/ }),
+      await screen.findByRole("heading", { name: "누구의 성향이 궁금한가요?" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByTestId("selected-code")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("link", { name: "ENAKQ 상세 지도 보기" }),
+    ).not.toBeInTheDocument();
+
+    await user.click(
+      screen.getByRole("button", {
+        name: "ENAKQ 관계를 여는 지휘자 살펴보기",
+      }),
+    );
+
+    expect(
+      screen.getByRole("link", { name: "ENAKQ 상세 지도 보기" }),
     ).toHaveAttribute("href", "/map/ENAKQ");
     expect(screen.getByTestId("selected-code")).toHaveTextContent("ENAKQ");
     expect(screen.queryByText("TVOAE")).not.toBeInTheDocument();
@@ -52,7 +67,11 @@ describe("MapPage", () => {
 
   it("updates the profile as each code letter is selected", async () => {
     const user = userEvent.setup();
-    render(await MapPage());
+    render(
+      await MapPage({
+        searchParams: Promise.resolve({ code: "ENAKQ" }),
+      }),
+    );
 
     await user.click(screen.getByRole("button", { name: "1번째 I 혼자" }));
 
