@@ -449,6 +449,12 @@
   font-weight: 700;
 }
 
+.evidenceSection a + a {
+  margin-left: 1rem;
+  color: #707580;
+  font-weight: 620;
+}
+
 @keyframes character-settle {
   from {
     opacity: 0;

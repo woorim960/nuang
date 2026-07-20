@@ -155,6 +155,9 @@ export function EnakqTraitMapTemplate() {
         />
         <p>{template.evidenceNote.body}</p>
         <Link href="/map">다른 뉴앙 코드 둘러보기</Link>
+        {process.env.NODE_ENV === "development" ? (
+          <Link href="/research/trait-map/enakq">내부 콘텐츠 검토 현황</Link>
+        ) : null}
       </section>
     </article>
   );

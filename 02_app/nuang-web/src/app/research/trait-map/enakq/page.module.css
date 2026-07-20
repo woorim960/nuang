@@ -1,0 +1,373 @@
+.page {
+  width: 100%;
+  max-width: 680px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  color: #25272e;
+  background: #fff;
+  word-break: keep-all;
+}
+
+.header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: grid;
+  min-height: calc(62px + env(safe-area-inset-top));
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: end;
+  padding: env(safe-area-inset-top) 0.9rem 0.55rem;
+  border-bottom: 1px solid #ececf1;
+  background: rgb(255 255 255 / 94%);
+  backdrop-filter: blur(18px);
+}
+
+.header > a,
+.header > span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+}
+
+.header > a {
+  color: #4b4e57;
+}
+
+.header > div {
+  align-self: center;
+  text-align: center;
+}
+
+.header p,
+.sectionHeading p {
+  margin: 0;
+  color: #756bd0;
+  font-size: 0.61rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+}
+
+.header h1 {
+  margin: 0.14rem 0 0;
+  font-size: 0.88rem;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+}
+
+.hero {
+  display: grid;
+  gap: 1rem;
+  padding: 2rem 1.15rem 1.45rem;
+  border-bottom: 8px solid #f6f5f2;
+  background:
+    radial-gradient(circle at 100% 0%, rgb(215 236 230 / 52%), transparent 32%),
+    linear-gradient(140deg, #fbfaff, #fbfdfc);
+}
+
+.eyebrow {
+  margin: 0;
+  color: #3e766b;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.hero h2 {
+  margin: 0.4rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  line-height: 1.38;
+}
+
+.hero > div:first-child > p:last-child {
+  max-width: 34rem;
+  margin: 0.72rem 0 0;
+  color: #696e79;
+  font-size: 0.78rem;
+  line-height: 1.7;
+}
+
+.storageReady,
+.storageLocal {
+  display: inline-flex;
+  width: fit-content;
+  min-height: 34px;
+  align-items: center;
+  gap: 0.42rem;
+  padding: 0 0.7rem;
+  border-radius: 999px;
+  font-size: 0.69rem;
+  font-weight: 680;
+}
+
+.storageReady {
+  color: #397267;
+  background: #edf7f3;
+}
+
+.storageLocal {
+  color: #8a6a2d;
+  background: #fdf7eb;
+}
+
+.releasePanel,
+.section,
+.footer {
+  padding: 1.5rem 1.15rem;
+  border-bottom: 8px solid #f6f5f2;
+}
+
+.releaseTop,
+.sectionHeading,
+.atomTop,
+.atomMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.releaseTop > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.25rem;
+}
+
+.releaseTop > div span {
+  color: #8a8e98;
+  font-size: 0.62rem;
+  font-weight: 680;
+  letter-spacing: 0.06em;
+}
+
+.releaseTop > div strong {
+  overflow: hidden;
+  font-size: 0.76rem;
+  font-weight: 680;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.draftBadge,
+.stateBadge {
+  flex: 0 0 auto;
+  padding: 0.3rem 0.58rem;
+  border-radius: 999px;
+  color: #7267c8;
+  background: #f3f1fd;
+  font-size: 0.63rem;
+  font-weight: 690;
+}
+
+.inventoryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin-top: 1rem;
+  overflow: hidden;
+  border: 1px solid #ececf1;
+  border-radius: 1rem;
+}
+
+.summaryItem {
+  display: grid;
+  gap: 0.28rem;
+  padding: 0.8rem 0.25rem;
+  border-right: 1px solid #ececf1;
+  text-align: center;
+}
+
+.summaryItem:last-child {
+  border-right: 0;
+}
+
+.summaryItem span {
+  color: #888d97;
+  font-size: 0.62rem;
+}
+
+.summaryItem strong {
+  font-size: 1rem;
+  font-weight: 720;
+  font-variant-numeric: tabular-nums;
+}
+
+.summaryItem small {
+  margin-left: 0.08rem;
+  color: #777c87;
+  font-size: 0.62rem;
+  font-weight: 600;
+}
+
+.blockedNotice {
+  display: grid;
+  grid-template-columns: 1.45rem minmax(0, 1fr);
+  gap: 0.65rem;
+  margin-top: 1rem;
+  padding: 0.9rem;
+  border: 1px solid #eee8d9;
+  border-radius: 0.95rem;
+  color: #84672f;
+  background: #fdfaf4;
+}
+
+.blockedNotice strong {
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.blockedNotice p {
+  margin: 0.3rem 0 0;
+  color: #777268;
+  font-size: 0.69rem;
+  line-height: 1.62;
+}
+
+.sectionHeading {
+  align-items: end;
+}
+
+.sectionHeading h2 {
+  margin: 0.3rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 730;
+  letter-spacing: -0.03em;
+}
+
+.sectionHeading > span {
+  color: #92959e;
+  font-size: 0.65rem;
+  text-align: right;
+}
+
+.gateList,
+.atomList {
+  margin-top: 1rem;
+  border-top: 1px solid #ececf1;
+}
+
+.gateRow {
+  display: grid;
+  min-height: 65px;
+  grid-template-columns: 1.55rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  border-bottom: 1px solid #ececf1;
+}
+
+.gateRow > svg {
+  color: #857bd5;
+}
+
+.gateRow > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.gateRow strong {
+  font-size: 0.77rem;
+  font-weight: 680;
+}
+
+.gateRow span {
+  color: #858994;
+  font-size: 0.65rem;
+}
+
+.gateRow b {
+  color: #6d7180;
+  font-size: 0.7rem;
+  font-weight: 680;
+  font-variant-numeric: tabular-nums;
+}
+
+.atomRow {
+  padding: 1rem 0;
+  border-bottom: 1px solid #ececf1;
+}
+
+.atomTop > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.atomTop > div span {
+  color: #2f323a;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.atomTop small {
+  color: #989ba4;
+  font-size: 0.62rem;
+}
+
+.atomRow > p {
+  margin: 0.7rem 0 0;
+  color: #626771;
+  font-size: 0.74rem;
+  line-height: 1.7;
+}
+
+.atomMeta {
+  align-items: end;
+  margin-top: 0.7rem;
+}
+
+.atomMeta > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #4d786f;
+  font-size: 0.64rem;
+  font-weight: 650;
+}
+
+.atomMeta code {
+  max-width: 58%;
+  overflow: hidden;
+  color: #9a9da5;
+  font-family: inherit;
+  font-size: 0.58rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.footer {
+  border-bottom: 0;
+  background: #fbfbfc;
+}
+
+.footer p {
+  margin: 0;
+  color: #7b7f89;
+  font-size: 0.7rem;
+  line-height: 1.65;
+}
+
+.footer a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  margin-top: 0.75rem;
+  color: #6258bd;
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+@media (max-width: 390px) {
+  .inventoryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .summaryItem:nth-child(2) {
+    border-right: 0;
+  }
+
+  .summaryItem:nth-child(-n + 2) {
+    border-bottom: 1px solid #ececf1;
+  }
+}
