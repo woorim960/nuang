@@ -76,9 +76,12 @@ describe("freeTopicAssessments", () => {
     });
   });
 
-  it("builds approved dynamic evidence for A-grade free topic results", () => {
+  it("keeps short topic results separate from the representative code", () => {
     const assessment = getFreeTopicAssessment("conversation-temperature");
     expect(assessment).not.toBeNull();
+
+    expect(assessment?.impactGrade).toBe("B");
+    expect(assessment?.evidenceUse).toBe("interpretation_and_recommendation_only");
 
     const observations = buildFreeTopicEvidenceObservations({
       assessment: assessment!,
@@ -90,14 +93,7 @@ describe("freeTopicAssessments", () => {
       },
     });
 
-    expect(observations).toHaveLength(3);
-    expect(observations[0]).toMatchObject({
-      approvalStatus: "approved",
-      id: "conversation-temperature:facet:RO-EC",
-      score: 72,
-      sourceKind: "free_topic",
-      target: { kind: "facet", id: "RO-EC" },
-    });
+    expect(observations).toEqual([]);
   });
 
   it("builds user-facing report signals without exposing internal target codes", () => {

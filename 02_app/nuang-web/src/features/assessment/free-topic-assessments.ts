@@ -805,7 +805,9 @@ function topic(
       >
     >,
 ): FreeTopicAssessment {
-  const impactGrade = assessment.impactGrade ?? "A";
+  // Short topic explorers are useful as their own result, but do not yet have
+  // enough repeated items to update a representative NUANG code.
+  const impactGrade = assessment.impactGrade ?? "B";
 
   return {
     comparisonUse: false,

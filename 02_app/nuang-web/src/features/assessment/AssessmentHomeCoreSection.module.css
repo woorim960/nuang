@@ -1,0 +1,241 @@
+.journey {
+  padding: 1rem;
+  border: 1px solid #e9e7f2;
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at 91% 13%, rgb(207 199 245 / 34%), transparent 32%),
+    #faf9ff;
+  box-shadow: 0 7px 18px rgb(69 62 110 / 5%);
+}
+
+.mainRow {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 72px;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.copy {
+  min-width: 0;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #6657d9;
+  font-size: 0.6875rem;
+  font-weight: 650;
+}
+
+.copy h3 {
+  margin: 0.4rem 0 0;
+  color: #20232a;
+  font-size: 1.0625rem;
+  font-weight: 680;
+  letter-spacing: -0.028em;
+  line-height: 1.38;
+}
+
+.caption {
+  margin: 0.4rem 0 0;
+  color: #717682;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.55;
+}
+
+.characterStage {
+  position: relative;
+  display: grid;
+  width: 72px;
+  height: 82px;
+  place-items: center;
+}
+
+.characterStage > span {
+  position: absolute;
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  background: rgb(222 216 250 / 48%);
+}
+
+.character {
+  z-index: 1;
+  width: 68px !important;
+  height: 68px !important;
+  filter: drop-shadow(0 6px 8px rgb(72 61 129 / 10%));
+}
+
+.progressBlock {
+  margin-top: 0.85rem;
+}
+
+.progressMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: #7a7e88;
+  font-size: 0.65625rem;
+  font-weight: 550;
+}
+
+.progressMeta strong {
+  color: #6657d9;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressTrack {
+  height: 5px;
+  margin-top: 0.4rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e7e4f1;
+}
+
+.progressTrack > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #776bd8;
+  transition: width 420ms ease-out;
+}
+
+.steps {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps::before {
+  position: absolute;
+  top: 12px;
+  right: 15%;
+  left: 15%;
+  height: 1px;
+  background: #ddd9eb;
+  content: "";
+}
+
+.steps li {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  justify-items: center;
+  gap: 0.35rem;
+  color: #999ca6;
+}
+
+.steps li > span {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 1px solid #ddd9eb;
+  border-radius: 50%;
+  background: #faf9ff;
+  font-size: 0.625rem;
+  font-weight: 650;
+}
+
+.steps li > small {
+  font-size: 0.625rem;
+  font-weight: 600;
+}
+
+.steps li[data-complete="true"] > span {
+  border-color: #b9b1e8;
+  color: #6657d9;
+  background: #efedff;
+}
+
+.steps li[data-current="true"] {
+  color: #5f54bd;
+}
+
+.steps li[data-current="true"] > span {
+  border-color: #8176dd;
+  color: #fff;
+  background: #7569d9;
+}
+
+.primaryAction {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.9rem;
+  padding: 0.65rem 0.75rem 0.65rem 0.9rem;
+  border-radius: 13px;
+  color: #fff;
+  background: #6e60d8;
+  font-size: 0.8125rem;
+  font-weight: 650;
+  box-shadow: 0 6px 14px rgb(96 81 202 / 13%);
+  transition:
+    background-color 140ms ease,
+    transform 120ms ease;
+}
+
+.primaryAction:hover {
+  background: #6254cc;
+}
+
+.primaryAction:active {
+  transform: scale(0.99);
+}
+
+.primaryAction:focus-visible {
+  outline: 2px solid #c8c2f5;
+  outline-offset: 2px;
+}
+
+.skeleton {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+  border: 1px solid #eceaf2;
+  border-radius: 18px;
+  background: #faf9ff;
+}
+
+.skeleton span {
+  height: 12px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #eeecf5, #f8f7fb, #eeecf5);
+  background-size: 180% 100%;
+  animation: skeleton-wave 1.2s linear infinite;
+}
+
+.skeleton span:first-child {
+  width: 35%;
+}
+
+.skeleton span:nth-child(2) {
+  width: 72%;
+  height: 20px;
+}
+
+.skeleton span:last-child {
+  width: 88%;
+}
+
+@keyframes skeleton-wave {
+  to {
+    background-position: -180% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .progressTrack > span,
+  .primaryAction,
+  .skeleton span {
+    animation: none;
+    transition: none;
+  }
+}
