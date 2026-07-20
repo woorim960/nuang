@@ -1,5 +1,4 @@
-export const nextNuangCodeSchemeVersion =
-  "NUANG-CODE-5AXIS-CANDIDATE-1.0";
+export const nextNuangCodeSchemeVersion = "NUANG-CODE-5AXIS-CANDIDATE-1.0";
 
 export type MeasurementGateStatus = "failed" | "not_started" | "passed";
 
@@ -10,6 +9,7 @@ export type CandidateCodePosition = {
   label: string;
   lowSymbol: string;
   publicFacetIds: readonly string[];
+  researchDetailFacetIds: readonly string[];
 };
 
 export type CandidateCodeScheme = {
@@ -17,6 +17,7 @@ export type CandidateCodeScheme = {
   status: "candidate" | "validated" | "active" | "retired";
   validationGates: {
     cognitiveReview: MeasurementGateStatus;
+    fairnessAndInvariance: MeasurementGateStatus;
     quantitativePilot: MeasurementGateStatus;
     reliabilityAndStructure: MeasurementGateStatus;
   };
@@ -28,6 +29,7 @@ export const nextNuangCodeScheme = {
   status: "candidate",
   validationGates: {
     cognitiveReview: "not_started",
+    fairnessAndInvariance: "not_started",
     quantitativePilot: "not_started",
     reliabilityAndStructure: "not_started",
   },
@@ -39,6 +41,7 @@ export const nextNuangCodeScheme = {
       lowSymbol: "I",
       highSymbol: "E",
       publicFacetIds: ["SE-RE", "SE-AI"],
+      researchDetailFacetIds: [],
     },
     {
       codePosition: 2,
@@ -47,6 +50,7 @@ export const nextNuangCodeScheme = {
       lowSymbol: "R",
       highSymbol: "N",
       publicFacetIds: ["OE-AE", "OE-CI", "OE-IE"],
+      researchDetailFacetIds: [],
     },
     {
       codePosition: 3,
@@ -55,6 +59,7 @@ export const nextNuangCodeScheme = {
       lowSymbol: "G",
       highSymbol: "A",
       publicFacetIds: ["RO-EC"],
+      researchDetailFacetIds: ["RO-RN"],
     },
     {
       codePosition: 4,
@@ -62,7 +67,8 @@ export const nextNuangCodeScheme = {
       label: "일상을 꾸리는 방식",
       lowSymbol: "M",
       highSymbol: "K",
-      publicFacetIds: ["SM-EP", "SM-OS", "SM-RL"],
+      publicFacetIds: ["SM-EP", "SM-OS"],
+      researchDetailFacetIds: ["SM-RL"],
     },
     {
       codePosition: 5,
@@ -71,6 +77,7 @@ export const nextNuangCodeScheme = {
       lowSymbol: "C",
       highSymbol: "Q",
       publicFacetIds: ["ER-IR", "ER-WD"],
+      researchDetailFacetIds: [],
     },
   ],
 } as const satisfies CandidateCodeScheme;

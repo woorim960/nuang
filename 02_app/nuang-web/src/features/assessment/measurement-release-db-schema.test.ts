@@ -21,6 +21,10 @@ const roleProfileNameSql = readFileSync(
   "supabase/migrations/202607190001_candidate_role_profile_name_release.sql",
   "utf8",
 );
+const gateBValidationSql = readFileSync(
+  "supabase/migrations/202607200001_gate_b_measurement_validation_gate.sql",
+  "utf8",
+);
 
 describe("measurement release database catalog", () => {
   it("separates code, item revision, and release membership versions", () => {
@@ -47,6 +51,13 @@ describe("measurement release database catalog", () => {
       "Code scheme must be validated before activation",
     );
     expect(catalogSql).toContain("reliability_and_structure");
+    expect(gateBValidationSql).toContain("fairness_and_invariance");
+    expect(gateBValidationSql).toContain(
+      "require_gate_b_code_scheme_validation_trigger",
+    );
+    expect(gateBValidationSql).toContain(
+      "require_gate_b_item_bank_validation_trigger",
+    );
   });
 
   it("keeps candidate content service-role only", () => {

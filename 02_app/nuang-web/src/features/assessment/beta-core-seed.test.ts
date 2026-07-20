@@ -27,6 +27,9 @@ describe("beta core item set", () => {
     counts.forEach((count) => expect(count).toEqual({ direct: 3, reverse: 3 }));
     expect(counts.has("SM-RL")).toBe(false);
     expect(counts.has("RO-RN")).toBe(false);
+    expect(
+      betaScoringRelease.domains.flatMap((domain) => domain.facetIds),
+    ).not.toEqual(expect.arrayContaining(["SM-RL", "RO-RN"]));
   });
 
   it("provides exactly three forced-choice follow-up items per code position", () => {

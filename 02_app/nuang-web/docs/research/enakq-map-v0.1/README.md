@@ -50,6 +50,7 @@
 - claim별 보수적 조정: `internal-critique/v0.1/analysis/INTERNAL_AGENT_ADJUDICATION.md`
 - 수정 순서와 다음 연구 관문: `internal-critique/v0.1/analysis/REVISION_GATE_PLAN.md`
 - P0 개인정보·AI·안전 변경안: `revisions/v0.2-gate-a/GATE_A_P0_CHANGESET.md`
+- 5축·facet 측정모형: `measurement-model/gate-b-v0.1/GATE_B_MEASUREMENT_MODEL.md`
 
 ## 역할별 검토량
 

@@ -23,6 +23,12 @@ describe("next NUANG code scheme", () => {
   });
 
   it("cannot become customer-active before every validation gate passes", () => {
+    expect(Object.keys(nextNuangCodeScheme.validationGates)).toEqual([
+      "cognitiveReview",
+      "fairnessAndInvariance",
+      "quantitativePilot",
+      "reliabilityAndStructure",
+    ]);
     expect(canActivateCodeScheme(nextNuangCodeScheme)).toBe(false);
     expect(() => assertCodeSchemeCanActivate(nextNuangCodeScheme)).toThrow(
       /has not passed every measurement gate/,
