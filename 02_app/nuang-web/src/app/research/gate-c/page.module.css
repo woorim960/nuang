@@ -65,6 +65,36 @@
   margin-top: 2rem;
 }
 
+.analysisLink {
+  display: grid;
+  min-height: 72px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--conversation-line);
+  border-radius: 17px;
+  background: color-mix(in srgb, var(--conversation-soft) 62%, var(--surface));
+  color: var(--conversation);
+  text-decoration: none;
+}
+
+.analysisLink > span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.analysisLink strong {
+  font-size: 0.875rem;
+  font-weight: 670;
+}
+
+.analysisLink small {
+  color: color-mix(in srgb, var(--conversation) 72%, var(--muted));
+  font-size: 0.72rem;
+}
+
 .sectionHeading {
   display: flex;
   align-items: end;

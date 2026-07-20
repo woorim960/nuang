@@ -18,7 +18,18 @@ const routeSource = fs.readFileSync(
   "utf8",
 );
 const indexRouteSource = fs.readFileSync(
+  path.join(process.cwd(), "src/app/research/gate-c/internal/page.tsx"),
+  "utf8",
+);
+const publicRouteSource = fs.readFileSync(
   path.join(process.cwd(), "src/app/research/gate-c/page.tsx"),
+  "utf8",
+);
+const analysisRouteSource = fs.readFileSync(
+  path.join(
+    process.cwd(),
+    "src/app/research/gate-c/internal/analysis/page.tsx",
+  ),
   "utf8",
 );
 
@@ -31,12 +42,28 @@ describe("Gate C research runner isolation", () => {
     );
   });
 
-  it("keeps both research routes behind a development-only gate", () => {
+  it("keeps moderator research routes behind a development-only gate", () => {
     expect(routeSource).toContain('process.env.NODE_ENV !== "development"');
     expect(indexRouteSource).toContain(
       'process.env.NODE_ENV !== "development"',
     );
     expect(routeSource).toContain("notFound()");
     expect(indexRouteSource).toContain("notFound()");
+  });
+
+  it("exposes only the self-administered public study at the shareable route", () => {
+    expect(publicRouteSource).toContain("GateCPublicStudy");
+    expect(publicRouteSource).not.toContain("GateCStudyRunner");
+    expect(publicRouteSource).not.toContain("gateCFormIds");
+  });
+
+  it("keeps aggregate research analysis internal and development-only", () => {
+    expect(analysisRouteSource).toContain(
+      'process.env.NODE_ENV !== "development"',
+    );
+    expect(analysisRouteSource).toContain("notFound()");
+    expect(analysisRouteSource).not.toMatch(
+      /participant_code|age_band|life_context/,
+    );
   });
 });

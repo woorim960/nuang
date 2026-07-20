@@ -217,7 +217,7 @@ export function GateCStudyRunner({
   }
 
   function leaveStudy() {
-    router.push("/research/gate-c");
+    router.push("/research/gate-c/internal");
   }
 
   function downloadSession() {

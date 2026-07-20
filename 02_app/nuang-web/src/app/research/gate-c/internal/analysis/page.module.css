@@ -1,0 +1,344 @@
+.page {
+  width: 100%;
+  max-width: 620px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding-bottom: max(2rem, env(safe-area-inset-bottom));
+  color: var(--foreground);
+  word-break: keep-all;
+}
+
+.header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: grid;
+  min-height: 68px;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.6rem clamp(1rem, 4vw, 1.25rem);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+  background: color-mix(in srgb, var(--background) 94%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.header > a {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--muted);
+}
+
+.header > a:last-child {
+  justify-self: end;
+}
+
+.header p,
+.sectionHeading p {
+  margin: 0;
+  color: var(--conversation);
+  font-size: 0.65rem;
+  font-weight: 680;
+  letter-spacing: 0.06em;
+}
+
+.header h1 {
+  margin: 0.15rem 0 0;
+  font-size: 1rem;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+}
+
+.intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1rem;
+  padding: 2rem clamp(1.1rem, 5vw, 1.5rem) 1.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--conversation);
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.intro h2,
+.sectionHeading h2 {
+  margin: 0.35rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+}
+
+.intro > div > p:last-child {
+  max-width: 33rem;
+  margin: 0.7rem 0 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.intro > a {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 0.35rem;
+  padding-inline: 0.75rem;
+  border: 1px solid var(--conversation-line);
+  border-radius: 12px;
+  background: var(--conversation-soft);
+  color: var(--conversation);
+  font-size: 0.75rem;
+  font-weight: 620;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.summaryGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1px;
+  margin-inline: clamp(1.1rem, 5vw, 1.5rem);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--line);
+}
+
+.summaryItem {
+  display: grid;
+  gap: 0.3rem;
+  padding: 0.85rem 0.45rem;
+  background: var(--surface);
+  text-align: center;
+}
+
+.summaryItem span {
+  color: var(--muted);
+  font-size: 0.65rem;
+}
+
+.summaryItem strong {
+  font-size: 1.05rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.section {
+  margin-top: 2rem;
+  padding-inline: clamp(1.1rem, 5vw, 1.5rem);
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeading h2 {
+  font-size: 1.05rem;
+}
+
+.sectionHeading > span {
+  color: var(--muted);
+  font-size: 0.68rem;
+  text-align: right;
+}
+
+.coverageList,
+.queueList {
+  margin-top: 0.9rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--surface);
+}
+
+.coverageRow {
+  display: grid;
+  min-height: 54px;
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  gap: 0.75rem;
+  padding-inline: 0.9rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.coverageRow:last-child {
+  border-bottom: 0;
+}
+
+.coverageRow > span,
+.coverageRow > strong {
+  font-size: 0.75rem;
+  font-weight: 630;
+}
+
+.coverageRow > strong {
+  justify-self: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.coverageTrack {
+  height: 5px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 72%, var(--background));
+}
+
+.coverageTrack span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--conversation);
+}
+
+.queueRow {
+  padding: 1rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.queueRow:last-child {
+  border-bottom: 0;
+}
+
+.queueTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.queueTop > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+}
+
+.queueTop strong {
+  font-size: 0.8125rem;
+  font-weight: 680;
+}
+
+.queueTop > div > span {
+  color: var(--muted);
+  font-size: 0.6875rem;
+}
+
+.statusReview,
+.statusMonitor,
+.statusInsufficient {
+  padding: 0.3rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 650;
+}
+
+.statusReview {
+  background: var(--reaction-soft);
+  color: var(--reaction);
+}
+
+.statusMonitor {
+  background: var(--conversation-soft);
+  color: var(--conversation);
+}
+
+.statusInsufficient {
+  background: var(--play-soft);
+  color: var(--play);
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+
+.metricGrid > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.metricGrid span {
+  color: var(--muted);
+  font-size: 0.62rem;
+}
+
+.metricGrid strong {
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.reasonCopy {
+  margin: 0.75rem 0 0;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  line-height: 1.45;
+}
+
+.emptyState,
+.unavailable {
+  display: grid;
+  justify-items: center;
+  margin-top: 0.9rem;
+  padding: 2.5rem 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--surface);
+  text-align: center;
+}
+
+.emptyState p,
+.unavailable h2 {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 650;
+}
+
+.emptyState span,
+.unavailable p {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.unavailable {
+  margin: 2rem clamp(1.1rem, 5vw, 1.5rem);
+  color: var(--muted);
+}
+
+.unavailable h2 {
+  margin-top: 0.8rem;
+  color: var(--foreground);
+}
+
+.footer {
+  margin: 1.25rem 0 0;
+  padding-inline: clamp(1.1rem, 5vw, 1.5rem);
+  color: var(--muted);
+  font-size: 0.65rem;
+  text-align: center;
+}
+
+@media (max-width: 420px) {
+  .intro {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .intro > a {
+    justify-self: start;
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

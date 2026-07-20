@@ -1,0 +1,459 @@
+.publicPage {
+  width: 100%;
+  max-width: 520px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  background:
+    radial-gradient(
+      circle at 88% 4%,
+      rgb(214 236 230 / 62%),
+      transparent 25rem
+    ),
+    var(--background);
+  color: var(--foreground);
+  overflow-wrap: break-word;
+  word-break: keep-all;
+}
+
+.intro {
+  padding: clamp(2rem, 7vw, 3.25rem) clamp(1.15rem, 5.5vw, 1.7rem)
+    max(2.5rem, env(safe-area-inset-bottom));
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--muted);
+  font-size: 0.7rem;
+  font-weight: 620;
+  letter-spacing: 0.035em;
+}
+
+.brandRow span:first-child {
+  color: var(--conversation);
+  font-weight: 720;
+  letter-spacing: 0.09em;
+}
+
+.intro h1 {
+  max-width: 15ch;
+  margin: 1rem 0 0;
+  font-size: clamp(2rem, 8.3vw, 2.55rem);
+  font-weight: 720;
+  letter-spacing: -0.045em;
+  line-height: 1.24;
+  text-wrap: balance;
+}
+
+.introCopy {
+  max-width: 31rem;
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.68;
+}
+
+.privacyPanel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  margin-top: 1.7rem;
+  padding: 1rem;
+  border: 1px solid var(--conversation-line);
+  border-radius: 18px;
+  background: color-mix(in srgb, var(--conversation-soft) 70%, var(--surface));
+  color: var(--conversation);
+}
+
+.privacyPanel strong {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 680;
+}
+
+.privacyPanel p {
+  margin: 0.35rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.58;
+}
+
+.formFields {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.75rem;
+}
+
+.selectField {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.selectField > span {
+  padding-inline: 0.1rem;
+  font-size: 0.8125rem;
+  font-weight: 620;
+}
+
+.selectField select {
+  width: 100%;
+  min-height: 52px;
+  padding: 0.7rem 2.5rem 0.7rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--surface) 97%, var(--background));
+  color: var(--foreground);
+  outline: none;
+}
+
+.selectField select:focus {
+  border-color: color-mix(in srgb, var(--conversation) 48%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--conversation) 9%, transparent);
+}
+
+.honeypot {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.consentList {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding-top: 1.2rem;
+  border-top: 1px solid var(--line);
+}
+
+.consentList label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  cursor: pointer;
+}
+
+.consentList input {
+  width: 18px;
+  height: 18px;
+  margin: 0.08rem 0 0;
+  accent-color: var(--conversation);
+}
+
+.startButton,
+.homeButton {
+  display: inline-flex;
+  width: 100%;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 1.35rem;
+  border: 0;
+  border-radius: 14px;
+  background: var(--foreground);
+  color: var(--surface);
+  font-size: 0.875rem;
+  font-weight: 680;
+  cursor: pointer;
+}
+
+.startButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.32;
+}
+
+.boundaryCopy {
+  margin: 0.9rem 0 0;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.answerGuide {
+  margin: -0.1rem 0 1.4rem;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+.unsureArea {
+  margin-top: 0.75rem;
+}
+
+.quietButton,
+.feedbackToggle {
+  width: 100%;
+  min-height: 46px;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 560;
+  cursor: pointer;
+}
+
+.quietButton:hover,
+.feedbackToggle:hover {
+  background: color-mix(in srgb, var(--foreground) 4%, transparent);
+  color: var(--foreground);
+}
+
+.unsureReasons {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+  padding: 0.65rem;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+  animation: reveal 180ms ease-out both;
+}
+
+.unsureReasons button {
+  min-height: 44px;
+  padding: 0.6rem 0.75rem;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.unsureReasons button[aria-pressed="true"] {
+  background: color-mix(in srgb, var(--primary) 8%, var(--surface));
+  color: var(--primary-strong);
+  font-weight: 650;
+}
+
+.feedbackArea {
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
+}
+
+.feedbackToggle[aria-pressed="true"] {
+  color: var(--conversation);
+  font-weight: 640;
+}
+
+.feedbackArea label {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.35rem;
+  animation: reveal 180ms ease-out both;
+}
+
+.feedbackArea label span {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.feedbackArea textarea {
+  width: 100%;
+  min-height: 88px;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  outline: none;
+  resize: vertical;
+}
+
+.feedbackArea textarea:focus {
+  border-color: color-mix(in srgb, var(--conversation) 48%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--conversation) 8%, transparent);
+}
+
+.errorMessage {
+  margin: 0.85rem 0 0;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--danger) 18%, var(--line));
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--danger) 4%, var(--surface));
+  color: var(--danger);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.completeStage {
+  display: grid;
+  width: 100%;
+  flex: 1;
+  align-content: center;
+  justify-items: center;
+  padding: clamp(2rem, 8vw, 3rem) clamp(1.25rem, 6vw, 2rem)
+    max(2rem, env(safe-area-inset-bottom));
+  text-align: center;
+}
+
+.successMark {
+  display: grid;
+  width: 60px;
+  height: 60px;
+  margin-bottom: 1.2rem;
+  place-items: center;
+  border: 1px solid var(--conversation-line);
+  border-radius: 20px;
+  background: var(--conversation-soft);
+  color: var(--conversation);
+  box-shadow: 0 18px 36px rgb(48 110 96 / 10%);
+}
+
+.completeEyebrow {
+  margin: 0;
+  color: var(--conversation);
+  font-size: 0.8125rem;
+  font-weight: 680;
+}
+
+.completeStage > h1 {
+  max-width: 15ch;
+  margin: 0.55rem 0 0;
+  font-size: clamp(1.8rem, 7vw, 2.2rem);
+  font-weight: 720;
+  letter-spacing: -0.04em;
+  line-height: 1.28;
+  text-wrap: balance;
+}
+
+.completeCopy {
+  max-width: 30rem;
+  margin: 0.9rem 0 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+  line-height: 1.68;
+}
+
+.participantCode {
+  display: grid;
+  gap: 0.3rem;
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 1.5rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--surface);
+}
+
+.participantCode span {
+  color: var(--muted);
+  font-size: 0.6875rem;
+}
+
+.participantCode strong {
+  font-size: 0.9375rem;
+  letter-spacing: 0.035em;
+}
+
+.homeButton {
+  max-width: 28rem;
+}
+
+.storageDetails {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 0.8rem;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  text-align: left;
+}
+
+.storageDetails summary {
+  padding: 1rem 0;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-align: center;
+  cursor: pointer;
+}
+
+.storageBody {
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.15rem 0 0.5rem;
+}
+
+.storageBody > p {
+  margin: 0 0 0.35rem;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.storageBody > button,
+.deleteConfirm button {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.storageBody .deleteButton {
+  border-color: transparent;
+  background: transparent;
+}
+
+.deleteConfirm {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 13px;
+  background: var(--surface);
+}
+
+.deleteConfirm p {
+  grid-column: 1 / -1;
+  margin: 0 0 0.2rem;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  text-align: center;
+}
+
+.deletedMessage {
+  padding: 0.8rem;
+  border-radius: 12px;
+  background: var(--conversation-soft);
+  color: var(--conversation);
+  text-align: center;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unsureReasons,
+  .feedbackArea label {
+    animation: none;
+  }
+}
