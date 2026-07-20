@@ -1,25 +1,35 @@
 "use client";
 
-import { ArrowLeft, BookOpen, ChevronDown, Clock3 } from "lucide-react";
+import {
+  ArrowLeft,
+  BookOpen,
+  ChevronDown,
+  Clock3,
+  ExternalLink,
+} from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
-import guideDocument from "@/features/nuang-code/fixtures/enakq-longform-guide.generated.json";
+import { enakqCustomerGuideV2 } from "@/features/nuang-code/enakq-customer-guide-v2";
 import { enakqTraitMapTemplateV1 } from "@/features/nuang-code/enakq-trait-map-template-v1";
 import styles from "@/features/map/EnakqTraitMapTemplate.module.css";
 
 const template = enakqTraitMapTemplateV1;
-const guide = guideDocument;
+const guide = enakqCustomerGuideV2;
 
 export function EnakqTraitMapTemplate() {
   const [activeChapter, setActiveChapter] = useState(1);
   const [tableOfContentsOpen, setTableOfContentsOpen] = useState(false);
+  const chapterSelectionLocked = useRef(false);
+  const chapterSelectionTimer = useRef<number | null>(null);
 
   useEffect(() => {
     if (!("IntersectionObserver" in window)) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
+        if (chapterSelectionLocked.current) return;
+
         const visible = entries
           .filter((entry) => entry.isIntersecting)
           .sort(
@@ -41,11 +51,28 @@ export function EnakqTraitMapTemplate() {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(
+    () => () => {
+      if (chapterSelectionTimer.current !== null) {
+        window.clearTimeout(chapterSelectionTimer.current);
+      }
+    },
+    [],
+  );
+
   const currentChapter =
     guide.chapters.find((chapter) => chapter.number === activeChapter) ??
     guide.chapters[0];
 
   function moveToChapter(chapterId: string, chapterNumber: number) {
+    chapterSelectionLocked.current = true;
+    if (chapterSelectionTimer.current !== null) {
+      window.clearTimeout(chapterSelectionTimer.current);
+    }
+    chapterSelectionTimer.current = window.setTimeout(() => {
+      chapterSelectionLocked.current = false;
+      chapterSelectionTimer.current = null;
+    }, 900);
     setActiveChapter(chapterNumber);
     setTableOfContentsOpen(false);
     window.requestAnimationFrame(() => {
@@ -77,9 +104,10 @@ export function EnakqTraitMapTemplate() {
           <CodeLetters />
           <h1>{template.profileName}</h1>
           <p>
-            사람과 함께할 때 활력이 오르고, 새로운 가능성을 살펴보며, 관계에서는
-            상대의 마음이 자연스럽게 눈에 들어오는 편이에요. 시작한 일을
-            이어가려는 모습과 걱정이 빠르게 커지는 모습도 함께 나타날 수 있어요.
+            사람과 함께할 때 활력이 오르고, 새로운 가능성을 찾으며, 관계에서는
+            상대의 마음을 세심하게 살펴요. 사람과 생각을 연결한 뒤 다음 행동까지
+            꾸준히 이어가는 편이고, 중요한 관계가 불확실할 때는 걱정과 감정이
+            빠르게 커져요.
           </p>
         </div>
         <div className={styles.characterWrap}>
@@ -98,13 +126,16 @@ export function EnakqTraitMapTemplate() {
           </span>
           <div>
             <p>ENAKQ를 깊이 이해하는 안내서</p>
-            <h2 id="guide-intro-title">요약하지 않고 생활 장면까지 살펴봐요</h2>
+            <h2 id="guide-intro-title">
+              생각의 이유와 행동까지 자세히 살펴봐요
+            </h2>
           </div>
         </div>
         <p>
-          이 안내서는 {guide.chapters.length}개 장으로 나뉘어 있어요. 가족,
-          친구, 연인, 마음 가는 사람, 일과 공부, 힘든 순간까지 구체적으로
-          다뤄요. 처음부터 모두 읽어도 좋고, 지금 궁금한 장부터 골라도 괜찮아요.
+          이 안내서는 {guide.chapters.length}개 장에서 ENAKQ가 중요하게 여기는
+          가치와 생각의 흐름, 관계별 행동, 부담이 커지는 순간과 회복 방법까지
+          구체적으로 설명해요. 나를 이해할 때도, 궁금한 사람을 알아갈 때도
+          원하는 장부터 골라 읽을 수 있어요.
         </p>
         <div className={styles.guideStats}>
           <span>
@@ -123,11 +154,15 @@ export function EnakqTraitMapTemplate() {
         aria-labelledby="reading-guide-title"
       >
         <div>
-          <span>읽기 전에</span>
-          <h2 id="reading-guide-title">내 경험과 함께 보면 더 정확해요</h2>
+          <span>이렇게 읽어보세요</span>
+          <h2 id="reading-guide-title">핵심부터 관계별 모습까지 이어져요</h2>
         </div>
         <ol>
-          {template.readingGuide.map((item, index) => (
+          {[
+            "먼저 다섯 글자와 ENAKQ의 중심 가치를 이해해요.",
+            "가족·친구·연인·마음 가는 사람과의 행동을 살펴봐요.",
+            "마지막에는 강점, 대화법, 뉴앙의 신뢰 근거를 확인해요.",
+          ].map((item, index) => (
             <li key={item}>
               <span>{index + 1}</span>
               {item}
@@ -135,9 +170,9 @@ export function EnakqTraitMapTemplate() {
           ))}
         </ol>
         <p>
-          모든 문장이 모든 ENAKQ에게 똑같이 맞는 것은 아니에요. 잘 맞는 부분은
-          나를 설명하는 말로 쓰고, 낯선 부분은 어떤 상황에서 모습이 달라지는지
-          확인하는 질문으로 사용해 보세요.
+          본문은 ENAKQ에서 대체로 반복되는 경향을 중심으로 설명해요. 각 행동이
+          나타나는 이유까지 함께 읽으면 단순한 특징 목록보다 이 성향을 훨씬
+          구체적으로 이해할 수 있어요.
         </p>
       </section>
 
@@ -204,9 +239,8 @@ export function EnakqTraitMapTemplate() {
         <span>다 읽은 뒤</span>
         <h2 id="next-step-title">다른 코드와 나란히 살펴봐요</h2>
         <p>
-          같은 글자를 가진 사람도 세부 점수와 살아온 경험은 다를 수 있어요. 다른
-          코드를 볼 때에는 좋고 나쁨보다 어떤 상황에서 서로 다르게 느끼고 행동할
-          수 있는지 살펴보세요.
+          다른 코드를 함께 보면 두 사람이 대화를 시작하는 방식, 상대의 마음을
+          살피는 순서, 계획과 걱정을 다루는 차이를 더 분명하게 이해할 수 있어요.
         </p>
         <Link href="/map">다른 뉴앙 코드 둘러보기</Link>
         {process.env.NODE_ENV === "development" ? (
@@ -256,6 +290,32 @@ function GuideChapter({ chapter }: { chapter: GuideChapterDocument }) {
           </section>
         ))}
       </div>
+
+      {chapter.references?.length ? (
+        <section className={styles.references} aria-label="참고한 전문 자료">
+          <div>
+            <span>신뢰를 더 자세히 확인하고 싶다면</span>
+            <h3>참고한 전문 자료</h3>
+          </div>
+          <ul>
+            {chapter.references.map((reference) => (
+              <li key={reference.href}>
+                <a href={reference.href} rel="noreferrer" target="_blank">
+                  <span>
+                    <strong>{reference.title}</strong>
+                    <small>{reference.description}</small>
+                  </span>
+                  <ExternalLink
+                    aria-hidden="true"
+                    size={16}
+                    strokeWidth={1.6}
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
 
       <div className={styles.selfCheck}>
         <span>내 모습과 비교해 보기</span>

@@ -566,6 +566,72 @@
   color: #42464f;
 }
 
+.references {
+  margin-top: 1.7rem;
+  padding: 1rem 0.9rem 0.7rem;
+  border: 1px solid #dfeae6;
+  border-radius: 0.9rem;
+  background: #f7fbfa;
+}
+
+.references > div > span {
+  color: #548077;
+  font-size: 0.63rem;
+  font-weight: 680;
+}
+
+.references h3 {
+  margin: 0.2rem 0 0;
+  color: #303d3a;
+  font-size: 0.88rem;
+  font-weight: 700;
+}
+
+.references ul {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  border-top: 1px solid #e1ebe7;
+  list-style: none;
+}
+
+.references li + li {
+  border-top: 1px solid #e6eeeb;
+}
+
+.references a {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  padding: 0.7rem 0.1rem;
+  color: inherit;
+}
+
+.references a > span {
+  display: grid;
+  min-width: 0;
+  gap: 0.24rem;
+}
+
+.references strong {
+  color: #3f514d;
+  font-size: 0.72rem;
+  font-weight: 680;
+  line-height: 1.45;
+}
+
+.references small {
+  color: #77847f;
+  font-size: 0.66rem;
+  line-height: 1.52;
+}
+
+.references svg {
+  flex: 0 0 auto;
+  color: #71968d;
+}
+
 .selfCheck {
   margin-top: 1.7rem;
   padding: 0.78rem 0.85rem;
