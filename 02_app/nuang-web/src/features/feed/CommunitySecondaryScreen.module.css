@@ -311,6 +311,21 @@
   word-break: keep-all;
 }
 
+.stateAction {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.1rem;
+  padding: 0 1rem;
+  border: 1px solid #e3e1ef;
+  border-radius: 13px;
+  color: #675bbd;
+  background: #faf9ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
 .notificationList {
   display: grid;
 }

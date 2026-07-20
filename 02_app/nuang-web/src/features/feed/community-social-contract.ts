@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { PublicProfileImage } from "@/features/public-profile/profile-image";
 
 export const profileFollowRequestSchema = z.object({
   action: z.enum(["follow", "unfollow"]),
@@ -37,8 +38,31 @@ export type CommunityNotification = {
   targetType: "feed_comment" | "feed_post" | "public_profile";
 };
 
+export type CommunityNotificationsResult = {
+  notifications: CommunityNotification[];
+  state: "ready" | "unauthenticated" | "unavailable";
+};
+
 export type CommunityProfileSocialState = {
   followerCount: number;
+  followingCount: number;
   following: boolean;
   isOwnProfile: boolean;
+};
+
+export type CommunityProfileConnection = {
+  code: string;
+  connectedAt: string;
+  displayName: string;
+  profileImage: PublicProfileImage;
+  profileName: string;
+  publicSnapshotId: string;
+};
+
+export type CommunityProfileConnectionsResult = {
+  followers: CommunityProfileConnection[];
+  following: CommunityProfileConnection[];
+  ownerDisplayName: string;
+  ownerPublicSnapshotId: string;
+  state: "profile_not_found" | "ready" | "unavailable";
 };

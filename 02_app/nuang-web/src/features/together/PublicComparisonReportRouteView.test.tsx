@@ -63,8 +63,7 @@ describe("PublicComparisonReportRouteView", () => {
       />,
     );
 
-    expect(screen.getByText("조회 준비 중")).toBeInTheDocument();
-    expect(screen.getByText(/비교 리포트 조회는 아직 열기 전이에요/)).toBeInTheDocument();
+    expect(screen.getByText("다음 화면을 준비하고 있어요")).toBeInTheDocument();
   });
 
   it("renders the active report when a safe payload exists", () => {
@@ -78,9 +77,13 @@ describe("PublicComparisonReportRouteView", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "에너지가 시작되는 방식에서 비슷한 리듬이 보여요." }),
+      screen.getByRole("heading", {
+        name: "상대와 나는 어디가 닮고 다를까요?",
+      }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "뉴앙 코드 비교" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "각자 편한 방식은 이만큼 달라요" }),
+    ).toBeInTheDocument();
   });
 
   it("renders the unavailable state without report payloads", () => {
@@ -96,6 +99,8 @@ describe("PublicComparisonReportRouteView", () => {
     expect(
       screen.getByRole("heading", { name: "비교 리포트를 다시 확인해야 해요" }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole("heading", { name: "뉴앙 코드 비교" })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "각자 편한 방식은 이만큼 달라요" }),
+    ).not.toBeInTheDocument();
   });
 });

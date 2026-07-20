@@ -1,14 +1,147 @@
-import { ShieldCheck } from "lucide-react";
+"use client";
+
+import { useMemo, useState } from "react";
+import {
+  Check,
+  ChevronDown,
+  Info,
+  Share2,
+  SlidersHorizontal,
+  X,
+} from "lucide-react";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import { getCandidateDirectionCopy } from "@/features/nuang-code/candidate-profile-names";
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import type {
-  PublicComparisonAxisDelta,
   PublicComparisonAxisInsight,
+  PublicComparisonFacetInsight,
   PublicComparisonProfileCard,
   PublicComparisonReportPayload,
 } from "@/features/together/public-comparison-contract";
-import { cn } from "@/lib/utils/cn";
+import styles from "@/features/together/PublicComparisonReportView.module.css";
+
+type RelationshipContext =
+  "general" | "family" | "friend" | "partner" | "crush" | "work";
+
+const relationshipContexts: Array<{
+  id: RelationshipContext;
+  label: string;
+  note: string;
+}> = [
+  { id: "general", label: "전체", note: "어떤 관계에서도 참고할 수 있는 장면" },
+  {
+    id: "family",
+    label: "가족",
+    note: "연락, 돌봄, 집안의 약속을 맞추는 장면",
+  },
+  {
+    id: "friend",
+    label: "친구",
+    note: "약속, 답장, 함께 쉬는 방식을 맞추는 장면",
+  },
+  {
+    id: "partner",
+    label: "연인",
+    note: "표현, 연락, 갈등 뒤 회복을 맞추는 장면",
+  },
+  {
+    id: "crush",
+    label: "마음 가는 사람",
+    note: "서두르지 않고 서로의 표현 방식을 알아가는 장면",
+  },
+  {
+    id: "work",
+    label: "동료",
+    note: "일정, 의견, 피드백과 협업을 맞추는 장면",
+  },
+];
+
+const facetDirectionLabels: Record<string, { high: string; low: string }> = {
+  "SE-RE": { high: "함께하며 충전", low: "혼자 정리하며 충전" },
+  "SE-AI": { high: "필요한 말을 먼저 꺼냄", low: "상황을 살핀 뒤 표현" },
+  "OE-AE": { high: "분위기와 감각에도 관심", low: "구체적인 내용에 집중" },
+  "OE-CI": {
+    high: "앞뒤 이야기와 가능성을 펼침",
+    low: "확인한 장면 안에서 생각",
+  },
+  "OE-IE": { high: "다른 설명과 원리까지 탐구", low: "필요한 만큼 확인" },
+  "RO-EC": { high: "상대 마음이 먼저 보임", low: "원인과 해결이 먼저 보임" },
+  "SM-EP": {
+    high: "시작하고 꾸준히 이어감",
+    low: "상황과 에너지에 따라 달라짐",
+  },
+  "SM-OS": { high: "정해둔 구조를 유지", low: "상황에 맞춰 구조를 정함" },
+  "ER-IR": {
+    high: "불편한 감정이 빠르게 커짐",
+    low: "감정 변화가 비교적 잔잔함",
+  },
+  "ER-WD": { high: "걱정과 망설임이 커짐", low: "걱정이 오래 이어지지 않음" },
+};
+
+const axisMomentCopy: Record<string, { question: string; scene: string }> = {
+  SE: {
+    scene: "연락을 시작하거나 함께할 약속을 잡을 때",
+    question: "지금 바로 이야기할까, 생각을 정리한 뒤 다시 이야기할까?",
+  },
+  OE: {
+    scene: "함께 볼 것, 갈 곳이나 할 일을 고를 때",
+    question: "익숙한 선택부터 볼까, 새로운 선택도 같이 찾아볼까?",
+  },
+  RO: {
+    scene: "한 사람이 속상한 일을 이야기할 때",
+    question:
+      "지금은 마음을 들어주는 게 좋을까, 해결 방법을 같이 찾는 게 좋을까?",
+  },
+  SM: {
+    scene: "약속이나 함께할 일을 정할 때",
+    question: "꼭 지킬 부분과 바뀌어도 괜찮은 부분을 나눠볼까?",
+  },
+  ER: {
+    scene: "답이 늦거나 계획이 어긋났을 때",
+    question: "지금 걱정되는 걸 이야기할까, 잠깐 정리한 뒤 다시 이야기할까?",
+  },
+};
+
+const relationshipSceneOverrides: Record<
+  Exclude<RelationshipContext, "general">,
+  Record<string, string>
+> = {
+  family: {
+    SE: "가족 연락을 먼저 하거나 함께 시간을 보낼 때",
+    OE: "함께 먹을 것, 갈 곳이나 가족 행사를 정할 때",
+    RO: "가족이 속상한 일을 이야기할 때",
+    SM: "집안의 역할이나 가족 일정을 나눌 때",
+    ER: "연락이 늦거나 가족 계획이 갑자기 바뀔 때",
+  },
+  friend: {
+    SE: "친구에게 먼저 연락하거나 만날 약속을 잡을 때",
+    OE: "함께 놀 것과 새로운 장소를 고를 때",
+    RO: "친구가 고민이나 속상한 일을 꺼낼 때",
+    SM: "약속 시간과 함께 준비할 일을 정할 때",
+    ER: "답장이 늦거나 약속이 바뀌었을 때",
+  },
+  partner: {
+    SE: "연락 빈도와 함께 보내는 시간을 맞출 때",
+    OE: "데이트나 함께할 경험을 고를 때",
+    RO: "한 사람이 서운한 마음을 이야기할 때",
+    SM: "공동 일정과 생활의 역할을 맞출 때",
+    ER: "답이 늦거나 갈등 뒤 다시 이야기할 때",
+  },
+  crush: {
+    SE: "누가 먼저 연락하고 대화를 이어갈지 살필 때",
+    OE: "처음 함께할 장소와 대화 주제를 고를 때",
+    RO: "상대가 조심스럽게 고민을 꺼냈을 때",
+    SM: "다음 만남과 연락 약속을 정할 때",
+    ER: "답장이 늦거나 상대의 반응이 아직 분명하지 않을 때",
+  },
+  work: {
+    SE: "회의에서 의견을 꺼내거나 협업을 시작할 때",
+    OE: "익숙한 방법과 새로운 아이디어 중 방향을 고를 때",
+    RO: "동료가 어려움이나 문제를 이야기할 때",
+    SM: "마감 일정과 맡을 일을 나눌 때",
+    ER: "피드백을 받거나 계획이 갑자기 바뀔 때",
+  },
+};
 
 export function PublicComparisonReportView({
   report,
@@ -17,299 +150,599 @@ export function PublicComparisonReportView({
 }) {
   const { comparison } = report;
   const sections = comparison.sections;
-  const axisComparisons = getAxisComparisons(sections);
-  const summary = sections.summary ?? {
-    body: "공개된 성향 정보를 기준으로 관계에서 나타나는 방식을 정리했어요.",
-    closestAxisLabel: sections.commonGround[0]?.label ?? null,
-    headline: "공개된 성향 정보를 기준으로 서로의 반응 방식을 확인했어요.",
-    strongestDifferenceLabel: sections.differences[0]?.label ?? null,
-  };
+  const axisComparisons = useMemo(
+    () => getAxisComparisons(sections),
+    [sections],
+  );
+  const initiallyOpen = useMemo(
+    () =>
+      [...axisComparisons].sort((a, b) => b.difference - a.difference)[0]
+        ?.domainId ?? null,
+    [axisComparisons],
+  );
+  const [openAxes, setOpenAxes] = useState<string[]>(
+    initiallyOpen ? [initiallyOpen] : [],
+  );
+  const [relationship, setRelationship] =
+    useState<RelationshipContext>("general");
+  const [relationshipSheetOpen, setRelationshipSheetOpen] = useState(false);
+  const [shareState, setShareState] = useState<"idle" | "shared">("idle");
+  const summary = sections.summary;
+  const targetName = toPersonName(comparison.target.displayName);
+  const relationshipLabel = relationshipContexts.find(
+    (item) => item.id === relationship,
+  )?.label;
+  const closestAxis = axisComparisons
+    .filter((axis) => axis.difference <= 16)
+    .sort((a, b) => a.difference - b.difference)[0];
+  const sameDirectionDifferentStrength = axisComparisons
+    .filter(
+      (axis) => axis.viewerSymbol === axis.targetSymbol && axis.difference > 16,
+    )
+    .sort((a, b) => b.difference - a.difference)[0];
+  const strongestDifference = [...axisComparisons].sort(
+    (a, b) => b.difference - a.difference,
+  )[0];
+
+  const allOpen =
+    axisComparisons.length > 0 && openAxes.length === axisComparisons.length;
+
+  async function shareReport() {
+    const shareData = {
+      text: `${targetName}${andParticle(targetName)} 나의 공개 성향을 나란히 살펴본 뉴앙 비교 리포트예요.`,
+      title: `${targetName}${andParticle(targetName)} 나 · 뉴앙 비교 리포트`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(window.location.href);
+      }
+      setShareState("shared");
+      window.setTimeout(() => setShareState("idle"), 1800);
+    } catch {
+      setShareState("idle");
+    }
+  }
+
+  function toggleAxis(domainId: string) {
+    setOpenAxes((current) =>
+      current.includes(domainId)
+        ? current.filter((id) => id !== domainId)
+        : [...current, domainId],
+    );
+  }
+
+  function toggleAllAxes() {
+    setOpenAxes(allOpen ? [] : axisComparisons.map((axis) => axis.domainId));
+  }
 
   return (
-    <section className="mx-auto grid max-w-[520px] gap-3 pb-4 text-[#292b33]">
-      <header className="rounded-[22px] bg-gradient-to-br from-[#f7f5ff] to-white px-4 pb-4 pt-5">
-        <p className="text-xs font-extrabold text-[#6657c8]">1:1 비교 리포트</p>
-        <h1 className="mt-3 text-[23px] font-black leading-8 tracking-normal">
-          {summary.headline}
+    <section className={styles.page}>
+      <header className={styles.hero}>
+        <div className={styles.eyebrowRow}>
+          <p>나와 비교하기</p>
+          <button
+            aria-label="비교 리포트 공유"
+            className={styles.iconButton}
+            onClick={shareReport}
+            type="button"
+          >
+            {shareState === "shared" ? (
+              <Check size={18} />
+            ) : (
+              <Share2 size={18} />
+            )}
+          </button>
+        </div>
+        <h1>
+          {targetName}
+          {andParticle(targetName)} 나는 어디가 닮고 다를까요?
         </h1>
-        <p className="mt-2 text-[13px] leading-6 text-[#5f636e]">
-          {summary.body}
+        <p className={styles.heroDescription}>
+          두 사람이 정밀 코어 검사에서 공개한 성향을 나란히 살펴봤어요.
         </p>
 
-        <section
-          aria-label="비교 대상"
-          className="mt-5 grid grid-cols-[minmax(0,1fr)_42px_minmax(0,1fr)] items-center gap-2"
-        >
-          <ProfileCard label="나" profile={comparison.viewer} />
-          <div className="grid h-[42px] w-[42px] place-items-center rounded-full bg-[#ece8ff] text-[11px] font-black text-[#6557d2]">
-            ↔
+        <div aria-label="비교 대상" className={styles.profilePair}>
+          <Profile profile={comparison.viewer} relationLabel="나" />
+          <div aria-hidden="true" className={styles.pairConnector}>
+            <span />
+            <span />
+            <span />
           </div>
-          <ProfileCard label="상대" profile={comparison.target} />
-        </section>
-        <p className="mt-4 rounded-[14px] bg-[#eaf8f3] px-3 py-2.5 text-[11.5px] leading-5 text-[#535a68]">
-          <strong>궁합 점수가 아니에요.</strong> 두 사람이 공개한 코드에서 닮은
-          점과 다르게 반응할 수 있는 점을 대화에 도움이 되도록 풀어드려요.
-        </p>
+          <Profile profile={comparison.target} relationLabel={targetName} />
+        </div>
+
+        <div className={styles.trustNote}>
+          <Info aria-hidden="true" size={16} />
+          <p>
+            잘 맞고 안 맞는 점수를 매기는 결과가 아니에요. 각자 편한 방식과
+            오해가 생길 수 있는 순간을 이해하도록 도와드려요.
+          </p>
+        </div>
       </header>
 
-      <section className="rounded-[18px] border border-[#e7e8ec] bg-white p-4">
-        <p className="text-xs font-bold text-[#737373]">핵심 요약</p>
-        <div className="mt-3 grid grid-cols-2 gap-3">
-          <SummaryLine
-            label="가장 가까운 코드 자리"
-            value={
-              summary.closestAxisLabel ??
-              "공개된 정보 기준으로 더 확인이 필요해요"
-            }
-          />
-          <SummaryLine
-            label="신호를 맞출 코드 자리"
-            value={
-              summary.strongestDifferenceLabel ?? "큰 차이가 선명하지 않아요"
-            }
-          />
-        </div>
-      </section>
-
-      <section className="rounded-[18px] border border-[#e7e8ec] bg-white p-4">
-        <SectionTitle
-          description="두 사람의 뉴앙 코드가 같은 자리와 다른 자리를 생활 장면으로 풀어봤어요."
-          title="뉴앙 코드 비교"
-        />
-        <div className="mt-4 grid gap-5">
-          {axisComparisons.map((axis) => (
-            <AxisComparisonRow axis={axis} key={axis.domainId} />
-          ))}
-        </div>
-      </section>
-
-      <section className="rounded-[18px] border border-[#e7e8ec] bg-white p-4">
-        <SectionTitle
-          description="차이가 큰 축에서 실제 관계 장면으로 나타날 수 있는 부분이에요."
-          title="오해가 생길 수 있는 장면"
-        />
-        <TextList items={sections.misunderstandingScenes ?? []} />
-      </section>
-
-      <section className="rounded-[18px] border border-[#e7e8ec] bg-white p-4">
-        <SectionTitle
-          description="서로를 추정하지 않고 확인하기 위한 질문이에요."
-          title="대화 가이드"
-        />
-        <TextList items={sections.conversationStarters} />
-      </section>
-
-      <section className="rounded-[18px] border border-[#e7e8ec] bg-white p-4">
-        <SectionTitle
-          description="서로 다른 속도를 맞추기 위한 실천 문장이에요."
-          title="조율 가이드"
-        />
-        <TextList items={sections.adjustmentGuide} />
-      </section>
-
-      <section className="rounded-[18px] bg-[#f4f4f7] p-4">
-        <div className="flex items-start gap-3">
-          <ShieldCheck
-            aria-hidden="true"
-            className="mt-0.5 shrink-0 text-[#111111]"
-            size={18}
-          />
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}>
           <div>
-            <h2 className="text-[15px] font-extrabold">공개 범위 기준</h2>
-            <p className="mt-1 text-sm leading-6 text-[#666666]">
-              이 리포트는 서로 공개된 성향 정보만 기준으로 만들었어요. 직접
-              응답, 원점수, 민감 항목, 비공개 정보는 사용하지 않습니다.
-            </p>
+            <p className={styles.sectionEyebrow}>한눈에 보기</p>
+            <h2>둘의 성향을 먼저 짚어봤어요</h2>
           </div>
         </div>
+        <div className={styles.summaryList}>
+          <SummaryItem
+            label="가장 자연스럽게 맞는 부분"
+            value={
+              closestAxis?.label ??
+              summary.closestAxisLabel ??
+              "조금 더 살펴볼게요"
+            }
+            tone="mint"
+          />
+          <SummaryItem
+            label="같은 방향이지만 정도가 다른 부분"
+            value={
+              sameDirectionDifferentStrength?.label ?? "두드러진 부분은 없어요"
+            }
+            tone="lavender"
+          />
+          <SummaryItem
+            label="먼저 맞춰보면 좋은 부분"
+            value={
+              strongestDifference?.label ??
+              summary.strongestDifferenceLabel ??
+              "작은 신호부터 확인해요"
+            }
+            tone="peach"
+          />
+        </div>
       </section>
+
+      <section className={styles.contextSection}>
+        <button
+          className={styles.contextButton}
+          onClick={() => setRelationshipSheetOpen(true)}
+          type="button"
+        >
+          <span>
+            <SlidersHorizontal aria-hidden="true" size={16} />
+            관계에 맞춰 보기
+          </span>
+          <strong>{relationshipLabel}</strong>
+          <ChevronDown aria-hidden="true" size={17} />
+        </button>
+        <p>
+          성향 수치는 그대로 두고, 이 관계에서 자주 마주칠 상황과 질문을 먼저
+          보여드려요.
+        </p>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}>
+          <div>
+            <p className={styles.sectionEyebrow}>5개 코드 자리</p>
+            <h2>각자 편한 방식은 이만큼 달라요</h2>
+          </div>
+          <button
+            className={styles.textButton}
+            onClick={toggleAllAxes}
+            type="button"
+          >
+            {allOpen ? "모두 접기" : "모두 펼치기"}
+          </button>
+        </div>
+        <p className={styles.sectionDescription}>
+          각 %는 전체 사용자 중 순위가 아니라, 내 응답에서 어느 방향이 더 자주
+          나타났는지 보여주는 값이에요.
+        </p>
+        <div className={styles.axisList}>
+          {axisComparisons.map((axis) => (
+            <AxisComparison
+              axis={axis}
+              facets={(sections.facetComparisons ?? []).filter(
+                (facet) => facet.domainId === axis.domainId,
+              )}
+              isOpen={openAxes.includes(axis.domainId)}
+              key={axis.domainId}
+              onToggle={() => toggleAxis(axis.domainId)}
+              targetName={targetName}
+            />
+          ))}
+        </div>
+        <div className={styles.scoreGuide}>
+          <Info aria-hidden="true" size={15} />
+          <p>
+            50%에 가까울수록 두 모습이 비슷하게 나타날 수 있어요. 두 사람의
+            수치는 서로 합쳐 100%가 아니며, 차이가 관계의 좋고 나쁨이나 잘 맞을
+            확률을 뜻하지 않아요.
+          </p>
+        </div>
+      </section>
+
+      <section className={styles.section}>
+        <div className={styles.sectionHeading}>
+          <div>
+            <p className={styles.sectionEyebrow}>
+              {relationship === "general"
+                ? "관계 전반에서"
+                : `${relationshipLabel} 관계에서`}
+            </p>
+            <h2>함께 있을 때 이런 차이가 보일 수 있어요</h2>
+          </div>
+        </div>
+        <div className={styles.momentList}>
+          {[...axisComparisons]
+            .sort((a, b) => b.difference - a.difference)
+            .slice(0, 2)
+            .map((axis) => (
+              <RelationshipMoment
+                axis={axis}
+                context={relationship}
+                key={axis.domainId}
+                targetName={targetName}
+              />
+            ))}
+        </div>
+      </section>
+
+      {strongestDifference ? (
+        <section className={styles.questionSection}>
+          <p className={styles.sectionEyebrow}>오늘 한 가지 물어본다면</p>
+          <h2>
+            {axisMomentCopy[strongestDifference.domainId]?.question ??
+              sections.conversationStarters[0]}
+          </h2>
+          <p>
+            상대의 마음을 추정하기보다, 편한 방식을 가볍게 확인하는 질문이에요.
+          </p>
+        </section>
+      ) : null}
+
+      <details className={styles.privacyDetails}>
+        <summary>서로 공개한 성향 정보만 사용했어요</summary>
+        <p>
+          직접 응답, 원점수, 민감 항목과 비공개 정보는 사용하지 않았어요. 공개
+          범위가 바뀌면 이 리포트도 다시 확인해요.
+        </p>
+      </details>
+
+      {relationshipSheetOpen ? (
+        <RelationshipSheet
+          onClose={() => setRelationshipSheetOpen(false)}
+          onSelect={(value) => {
+            setRelationship(value);
+            setRelationshipSheetOpen(false);
+          }}
+          selected={relationship}
+        />
+      ) : null}
     </section>
   );
 }
 
-function ProfileCard({
-  label,
+function Profile({
   profile,
+  relationLabel,
 }: {
-  label: string;
   profile: PublicComparisonProfileCard;
+  relationLabel: string;
 }) {
   return (
-    <article className="min-w-0 rounded-[16px] border border-[#e5e2f2] bg-white p-3 text-center">
+    <article className={styles.profile}>
       <PublicProfileImageView
-        className="mx-auto"
+        className={styles.profileImage}
         image={profile.profileImage}
         size="md"
       />
-      <p className="mt-3 text-xs font-bold text-[#8a8a8a]">{label}</p>
-      <h2 className="mt-1 text-[15px] font-black leading-5">
-        {profile.profileName}
-      </h2>
-      <p className="mt-2 font-mono text-[15px] font-black tracking-[0.05em] text-[#6557d2]">
-        {profile.code}
-      </p>
-      <p className="mt-1 truncate text-xs font-semibold text-[#777777]">
-        {profile.displayName}
-      </p>
+      <p>{relationLabel}</p>
+      <strong>{profile.code}</strong>
+      <span>{profile.profileName}</span>
     </article>
   );
 }
 
-function SummaryLine({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-[14px] bg-[#f5f4fa] p-3">
-      <p className="text-xs font-bold text-[#8a8a8a]">{label}</p>
-      <p className="mt-1 text-[16px] font-extrabold leading-6">{value}</p>
-    </div>
-  );
-}
-
-function SectionTitle({
-  description,
-  title,
-}: {
-  description: string;
-  title: string;
-}) {
-  return (
-    <header>
-      <h2 className="text-[19px] font-black tracking-normal">{title}</h2>
-      <p className="mt-1 text-sm leading-6 text-[#666666]">{description}</p>
-    </header>
-  );
-}
-
-function AxisComparisonRow({ axis }: { axis: PublicComparisonAxisInsight }) {
-  const closenessLabel = getClosenessLabel(axis);
-
-  return (
-    <article className="rounded-[16px] border border-[#e7e8ec] bg-white p-4">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <h3 className="text-[16px] font-black">{axis.label}</h3>
-          <p className="mt-1 text-sm leading-6 text-[#666666]">
-            {axis.interpretation}
-          </p>
-        </div>
-        <span
-          className={cn(
-            "shrink-0 whitespace-nowrap text-xs font-extrabold",
-            axis.difference >= 25 ? "text-[#d9480f]" : "text-[#555555]",
-          )}
-        >
-          {closenessLabel}
-        </span>
-      </div>
-
-      <div className="mt-4 grid gap-3 sm:grid-cols-2">
-        <CodeSignalCard
-          label="나"
-          pattern={axis.viewerPattern}
-          symbol={axis.viewerSymbol}
-        />
-        <CodeSignalCard
-          label="상대"
-          pattern={axis.targetPattern}
-          symbol={axis.targetSymbol}
-        />
-      </div>
-
-      <div className="mt-4 grid gap-3 border-t border-[#eeeeee] pt-4">
-        <ReportNote label="오해될 수 있는 장면" text={axis.possibleMisread} />
-        <ReportNote
-          label={
-            closenessLabel === "같은 자리" ? "함께 유지할 질문" : "맞추는 질문"
-          }
-          text={axis.adjustmentTip}
-        />
-      </div>
-    </article>
-  );
-}
-
-function CodeSignalCard({
+function SummaryItem({
   label,
-  pattern,
-  symbol,
+  tone,
+  value,
 }: {
   label: string;
-  pattern: string;
-  symbol?: string | null;
+  tone: "lavender" | "mint" | "peach";
+  value: string;
 }) {
-  const signal = splitPattern(pattern);
-
   return (
-    <div className="rounded-lg bg-[#fafafa] p-3">
-      <div className="flex items-center justify-between gap-3">
-        <span className="text-xs font-bold text-[#777777]">{label}</span>
-        <span className="font-mono text-lg font-black text-[#111111]">
-          {symbol ?? "-"}
-        </span>
+    <div className={styles.summaryItem} data-tone={tone}>
+      <span aria-hidden="true" />
+      <div>
+        <p>{label}</p>
+        <strong>{value}</strong>
       </div>
-      <p className="mt-2 text-sm font-black leading-5 text-[#111111]">
-        {signal.title}
-      </p>
-      {signal.body ? (
-        <p className="mt-1 text-[13px] leading-5 text-[#666666]">
-          {signal.body}
-        </p>
+    </div>
+  );
+}
+
+function AxisComparison({
+  axis,
+  facets,
+  isOpen,
+  onToggle,
+  targetName,
+}: {
+  axis: PublicComparisonAxisInsight;
+  facets: PublicComparisonFacetInsight[];
+  isOpen: boolean;
+  onToggle: () => void;
+  targetName: string;
+}) {
+  const position = nextNuangCodeScheme.positions.find(
+    (item) => item.domainId === axis.domainId,
+  );
+  const status = getAxisStatus(axis);
+
+  return (
+    <article className={styles.axis} data-open={isOpen}>
+      <button
+        aria-expanded={isOpen}
+        className={styles.axisToggle}
+        onClick={onToggle}
+        type="button"
+      >
+        <span>
+          <strong>{axis.label}</strong>
+          <small>{status}</small>
+        </span>
+        <ChevronDown aria-hidden="true" size={19} />
+      </button>
+
+      <div className={styles.axisScores}>
+        <ScoreTrack
+          highSymbol={position?.highSymbol ?? ""}
+          lowSymbol={position?.lowSymbol ?? ""}
+          name="나"
+          score={axis.viewerScore}
+          symbol={axis.viewerSymbol}
+          tone="viewer"
+        />
+        <ScoreTrack
+          highSymbol={position?.highSymbol ?? ""}
+          lowSymbol={position?.lowSymbol ?? ""}
+          name={targetName}
+          score={axis.targetScore}
+          symbol={axis.targetSymbol}
+          tone="target"
+        />
+      </div>
+
+      {isOpen ? (
+        <div className={styles.axisDetails}>
+          <p className={styles.axisInterpretation}>{axis.interpretation}</p>
+          <div className={styles.patternGrid}>
+            <Pattern label="나" text={axis.viewerPattern} />
+            <Pattern label={targetName} text={axis.targetPattern} />
+          </div>
+          {facets.length > 0 ? (
+            <div className={styles.facetGroup}>
+              <h3>세부 모습 {facets.length}개</h3>
+              {facets.map((facet) => (
+                <FacetComparison
+                  facet={facet}
+                  key={facet.facetId}
+                  targetName={targetName}
+                />
+              ))}
+            </div>
+          ) : null}
+          <div className={styles.axisNote}>
+            <p>
+              <span>다르게 받아들일 수 있는 순간</span>
+              {axis.possibleMisread}
+            </p>
+            <p>
+              <span>이렇게 확인해 보세요</span>
+              {axisMomentCopy[axis.domainId]?.question ?? axis.adjustmentTip}
+            </p>
+          </div>
+        </div>
       ) : null}
+    </article>
+  );
+}
+
+function ScoreTrack({
+  highSymbol,
+  lowSymbol,
+  name,
+  score,
+  symbol,
+  tone,
+}: {
+  highSymbol: string;
+  lowSymbol: string;
+  name: string;
+  score: number;
+  symbol?: string | null;
+  tone: "target" | "viewer";
+}) {
+  const normalizedScore = clampScore(score);
+  const directionStrength =
+    symbol === lowSymbol ? 100 - normalizedScore : normalizedScore;
+
+  return (
+    <div className={styles.scoreTrack} data-tone={tone}>
+      <div className={styles.scoreMeta}>
+        <span>{name}</span>
+        <strong>
+          {symbol ?? "-"} {Math.round(directionStrength)}%
+        </strong>
+      </div>
+      <div className={styles.trackLabels}>
+        <span>{lowSymbol}</span>
+        <span>{highSymbol}</span>
+      </div>
+      <div className={styles.track}>
+        <span style={{ left: `${normalizedScore}%` }} />
+      </div>
     </div>
   );
 }
 
-function ReportNote({ label, text }: { label: string; text: string }) {
+function Pattern({ label, text }: { label: string; text: string }) {
+  const [title, ...body] = text.split(". ");
+
   return (
-    <div>
-      <p className="text-xs font-bold text-[#8a8a8a]">{label}</p>
-      <p className="mt-1 text-sm font-semibold leading-6 text-[#333333]">
-        {text}
-      </p>
+    <div className={styles.pattern}>
+      <span>{label}</span>
+      <strong>{title}</strong>
+      {body.length > 0 ? <p>{body.join(". ")}</p> : null}
     </div>
   );
 }
 
-function splitPattern(pattern: string) {
-  const [title, ...rest] = pattern.split(". ");
-
-  return {
-    body: rest.join(". ").trim(),
-    title: title.trim() || pattern,
-  };
-}
-
-function TextList({ items }: { items: string[] }) {
-  if (items.length === 0) {
-    return (
-      <p className="mt-3 text-sm leading-6 text-[#666666]">
-        공개된 정보 기준으로 더 확인이 필요해요.
-      </p>
-    );
-  }
+function FacetComparison({
+  facet,
+  targetName,
+}: {
+  facet: PublicComparisonFacetInsight;
+  targetName: string;
+}) {
+  const directions = facetDirectionLabels[facet.facetId];
 
   return (
-    <ul className="mt-3 grid divide-y divide-[#eeeeee]">
-      {items.map((item) => (
-        <li
-          className="py-3 text-sm leading-6 text-[#555555] first:pt-0 last:pb-0"
-          key={item}
-        >
-          {item}
-        </li>
-      ))}
-    </ul>
+    <div className={styles.facet}>
+      <h4>{facet.label}</h4>
+      {directions ? (
+        <div className={styles.facetDirections}>
+          <span>{directions.low}</span>
+          <span>{directions.high}</span>
+        </div>
+      ) : null}
+      <MiniTrack label="나" score={facet.viewerScore} tone="viewer" />
+      <MiniTrack label={targetName} score={facet.targetScore} tone="target" />
+      <p>{facet.interpretation}</p>
+    </div>
+  );
+}
+
+function MiniTrack({
+  label,
+  score,
+  tone,
+}: {
+  label: string;
+  score: number;
+  tone: "target" | "viewer";
+}) {
+  const normalizedScore = clampScore(score);
+
+  return (
+    <div className={styles.miniTrack} data-tone={tone}>
+      <span>{label}</span>
+      <div>
+        <i style={{ width: `${normalizedScore}%` }} />
+      </div>
+      <strong>{Math.round(normalizedScore)}%</strong>
+    </div>
+  );
+}
+
+function RelationshipMoment({
+  axis,
+  context,
+  targetName,
+}: {
+  axis: PublicComparisonAxisInsight;
+  context: RelationshipContext;
+  targetName: string;
+}) {
+  const moment = axisMomentCopy[axis.domainId];
+  if (!moment) return null;
+  const scene =
+    context === "general"
+      ? moment.scene
+      : (relationshipSceneOverrides[context][axis.domainId] ?? moment.scene);
+
+  return (
+    <article className={styles.moment}>
+      <p className={styles.momentContext}>{getContextPrefix(context)}</p>
+      <h3>{scene}</h3>
+      <div className={styles.momentPeople}>
+        <p>
+          <span>나는</span>
+          {shortenPattern(axis.viewerPattern)}
+        </p>
+        <p>
+          <span>
+            {targetName}
+            {topicParticle(targetName)}
+          </span>
+          {shortenPattern(axis.targetPattern)}
+        </p>
+      </div>
+      <p className={styles.momentQuestion}>{moment.question}</p>
+    </article>
+  );
+}
+
+function RelationshipSheet({
+  onClose,
+  onSelect,
+  selected,
+}: {
+  onClose: () => void;
+  onSelect: (value: RelationshipContext) => void;
+  selected: RelationshipContext;
+}) {
+  return (
+    <div className={styles.sheetBackdrop} onClick={onClose} role="presentation">
+      <section
+        aria-label="관계 선택"
+        aria-modal="true"
+        className={styles.sheet}
+        onClick={(event) => event.stopPropagation()}
+        role="dialog"
+      >
+        <header>
+          <div>
+            <p>관계에 맞춰 보기</p>
+            <h2>어떤 관계에서 살펴볼까요?</h2>
+          </div>
+          <button aria-label="닫기" onClick={onClose} type="button">
+            <X size={20} />
+          </button>
+        </header>
+        <p className={styles.sheetGuide}>
+          점수와 코드는 바뀌지 않고, 자주 마주칠 상황만 달라져요. 선택한 관계는
+          상대에게 알려지지 않아요.
+        </p>
+        <div className={styles.contextOptions}>
+          {relationshipContexts.map((item) => (
+            <button
+              aria-pressed={selected === item.id}
+              key={item.id}
+              onClick={() => onSelect(item.id)}
+              type="button"
+            >
+              <span>
+                <strong>{item.label}</strong>
+                <small>{item.note}</small>
+              </span>
+              {selected === item.id ? (
+                <Check aria-hidden="true" size={18} />
+              ) : null}
+            </button>
+          ))}
+        </div>
+      </section>
+    </div>
   );
 }
 
 function getAxisComparisons(
   sections: PublicComparisonReportPayload["comparison"]["sections"],
 ) {
-  if (
-    Array.isArray(sections.axisComparisons) &&
-    sections.axisComparisons.length > 0
-  ) {
-    return sections.axisComparisons;
-  }
+  if (sections.axisComparisons?.length > 0) return sections.axisComparisons;
 
   return [...sections.commonGround, ...sections.differences].map((axis) => ({
     ...axis,
@@ -318,19 +751,15 @@ function getAxisComparisons(
     interpretation:
       axis.difference <= 16
         ? `${axis.label}에서는 서로 기대하는 흐름이 가까운 편이에요.`
-        : `${axis.label}에서는 서로 다른 리듬이 보일 수 있어요.`,
+        : `${axis.label}에서는 편한 방식이 다를 수 있어요.`,
     possibleMisread:
-      "한쪽은 충분하다고 느끼고, 다른 한쪽은 설명이 더 필요하다고 느낄 수 있어요.",
+      "한 사람은 충분하다고 느끼고, 다른 사람은 설명이 더 필요하다고 느낄 수 있어요.",
     targetPattern: buildFallbackPattern(
       "상대",
       axis.domainId,
       axis.targetSymbol,
     ),
-    viewerPattern: buildFallbackPattern(
-      "나",
-      axis.domainId,
-      axis.viewerSymbol,
-    ),
+    viewerPattern: buildFallbackPattern("나", axis.domainId, axis.viewerSymbol),
   })) satisfies PublicComparisonAxisInsight[];
 }
 
@@ -346,23 +775,62 @@ function buildFallbackPattern(
     ? getCandidateDirectionCopy(position.codePosition, symbol ?? "")
     : null;
 
-  if (!insight) {
-    return `${subject}의 공개된 뉴앙 코드 정보를 더 확인해야 해요.`;
-  }
-
-  return `${insight.detailTitle}. ${insight.description}`;
+  return insight
+    ? `${insight.detailTitle}. ${insight.description}`
+    : `${subject}의 공개된 뉴앙 코드 정보를 더 확인해야 해요.`;
 }
 
-function getClosenessLabel(axis: PublicComparisonAxisDelta) {
-  if (
-    axis.viewerSymbol &&
-    axis.targetSymbol &&
-    axis.viewerSymbol === axis.targetSymbol
-  ) {
-    return "같은 자리";
+function getAxisStatus(axis: PublicComparisonAxisInsight) {
+  const sameSymbol =
+    Boolean(axis.viewerSymbol) && axis.viewerSymbol === axis.targetSymbol;
+
+  if (sameSymbol && axis.difference <= 8) return "같은 방향 · 매우 가까워요";
+  if (sameSymbol && axis.difference <= 16) return "같은 방향 · 가까워요";
+  if (sameSymbol) return "같은 방향 · 선명도는 달라요";
+  if (axis.difference <= 16 || axis.hasBoundarySignal) {
+    return "글자는 다르지만 두 모습이 함께 나타날 수 있어요";
   }
-  if (axis.difference <= 8) return "매우 가까움";
-  if (axis.difference <= 16) return "가까움";
-  if (axis.difference <= 28) return "조율 가능";
-  return "차이 큼";
+  return "편한 방식이 달라요";
+}
+
+function clampScore(score: number) {
+  return Math.max(2, Math.min(98, score));
+}
+
+function shortenPattern(pattern: string) {
+  return pattern.split(". ")[0] || pattern;
+}
+
+function toPersonName(name: string) {
+  if (name === "상대") return "상대";
+  return name.endsWith("님") ? name : `${name}님`;
+}
+
+function andParticle(value: string) {
+  const last = Array.from(value.trim()).at(-1);
+  if (!last) return "와";
+  const code = last.charCodeAt(0);
+  if (code < 0xac00 || code > 0xd7a3) return "와";
+  return (code - 0xac00) % 28 === 0 ? "와" : "과";
+}
+
+function topicParticle(value: string) {
+  const last = Array.from(value.trim()).at(-1);
+  if (!last) return "는";
+  const code = last.charCodeAt(0);
+  if (code < 0xac00 || code > 0xd7a3) return "는";
+  return (code - 0xac00) % 28 === 0 ? "는" : "은";
+}
+
+function getContextPrefix(context: RelationshipContext) {
+  const copy: Record<RelationshipContext, string> = {
+    general: "일상에서",
+    family: "가족과 생활하며",
+    friend: "친구와 시간을 보내며",
+    partner: "연인과 마음을 나누며",
+    crush: "서로를 알아가며",
+    work: "함께 일하거나 공부하며",
+  };
+
+  return copy[context];
 }

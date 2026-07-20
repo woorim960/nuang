@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { PublicComparisonReportView } from "@/features/together/PublicComparisonReportView";
 import {
@@ -87,25 +87,49 @@ describe("PublicComparisonReportView", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: "편하게 맞는 자리는 걱정과 감정 반응, 신호를 맞출 자리는 사람 사이 에너지예요.",
+        name: "상대와 나는 어디가 닮고 다를까요?",
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("관계를 여는 지휘자")).toBeInTheDocument();
     expect(screen.getByText("질문을 품은 탐구자")).toBeInTheDocument();
-    expect(screen.getByText("핵심 요약")).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "뉴앙 코드 비교" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "사람 사이 에너지" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "걱정과 감정 반응" })).toBeInTheDocument();
-    expect(screen.getAllByText("함께할 때 활력이 올라요")).toHaveLength(1);
+    expect(screen.getByText("한눈에 보기")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "각자 편한 방식은 이만큼 달라요" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /사람 사이 에너지/ }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /걱정과 감정 반응/ }),
+    ).toBeInTheDocument();
     expect(document.body).not.toHaveTextContent("나:");
     expect(document.body).not.toHaveTextContent("상대:");
-    expect(screen.getAllByText(/함께할 때 활력이 올라요/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/혼자 정리하며 회복해요/).length).toBeGreaterThan(0);
-    expect(screen.getByRole("heading", { name: "오해가 생길 수 있는 장면" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "대화 가이드" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "조율 가이드" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "공개 범위 기준" })).toBeInTheDocument();
-    expect(screen.getByText(/직접 응답, 원점수, 민감 항목/)).toBeInTheDocument();
+    expect(
+      screen.getAllByText(/함께할 때 활력이 올라요/).length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getAllByText(/혼자 정리하며 회복해요/).length,
+    ).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("heading", {
+        name: "함께 있을 때 이런 차이가 보일 수 있어요",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("오늘 한 가지 물어본다면")).toBeInTheDocument();
+    expect(
+      screen.getByText("서로 공개한 성향 정보만 사용했어요"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/직접 응답, 원점수, 민감 항목/),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /관계에 맞춰 보기/ }));
+    expect(
+      screen.getByRole("heading", { name: "어떤 관계에서 살펴볼까요?" }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /마음 가는 사람/ }));
+    expect(
+      screen.getByRole("button", { name: /마음 가는 사람/ }),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/직접 문항 응답/)).not.toBeInTheDocument();
     expect(screen.queryByText(/score_payload/)).not.toBeInTheDocument();
     expect(screen.queryByText(/itemId/)).not.toBeInTheDocument();

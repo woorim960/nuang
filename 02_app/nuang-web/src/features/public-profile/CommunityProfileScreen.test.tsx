@@ -41,6 +41,7 @@ describe("CommunityProfileScreen", () => {
         initialSocialState={{
           followerCount: 12,
           following: false,
+          followingCount: 8,
           isOwnProfile: false,
         }}
         posts={[post]}
@@ -56,6 +57,59 @@ describe("CommunityProfileScreen", () => {
       expect(screen.getByRole("button", { name: "팔로잉" })).toBePressed();
     });
     expect(screen.getByText("13")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "13팔로워" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("/connections?tab=followers"),
+    );
+    expect(screen.getByRole("link", { name: "8팔로잉" })).toHaveAttribute(
+      "href",
+      expect.stringContaining("/connections?tab=following"),
+    );
+  });
+
+  it("unfollows without leaving the profile and keeps the prior state on failure", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ followerCount: 11, following: false }), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({ message: "팔로우 상태를 저장하지 못했어요." }),
+          { headers: { "content-type": "application/json" }, status: 409 },
+        ),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <CommunityProfileScreen
+        initialSocialState={{
+          followerCount: 12,
+          following: true,
+          followingCount: 8,
+          isOwnProfile: false,
+        }}
+        posts={[post]}
+        profile={profile}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "팔로잉" }));
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "팔로우" })).not.toBePressed(),
+    );
+    expect(screen.getByRole("link", { name: "11팔로워" })).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "팔로우" }));
+    await waitFor(() =>
+      expect(
+        screen.getByText("팔로우 상태를 저장하지 못했어요."),
+      ).toBeInTheDocument(),
+    );
+    expect(screen.getByRole("button", { name: "팔로우" })).not.toBePressed();
   });
 
   it("creates a privacy-scoped comparison and opens its report", async () => {
@@ -77,6 +131,7 @@ describe("CommunityProfileScreen", () => {
         initialSocialState={{
           followerCount: 12,
           following: false,
+          followingCount: 8,
           isOwnProfile: false,
         }}
         posts={[post]}
@@ -112,6 +167,7 @@ describe("CommunityProfileScreen", () => {
         initialSocialState={{
           followerCount: 12,
           following: false,
+          followingCount: 8,
           isOwnProfile: false,
         }}
         posts={[post]}
@@ -149,6 +205,7 @@ describe("CommunityProfileScreen", () => {
         initialSocialState={{
           followerCount: 2,
           following: false,
+          followingCount: 3,
           isOwnProfile: true,
         }}
         posts={[post]}

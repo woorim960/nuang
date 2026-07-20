@@ -1,9 +1,15 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import type {
   CommunityNotification,
+  CommunityNotificationsResult,
+  CommunityProfileConnection,
+  CommunityProfileConnectionsResult,
   CommunityProfileSocialState,
 } from "@/features/feed/community-social-contract";
 import { getModerationSeverity } from "@/features/moderation/moderation-queue-contract";
+import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
+import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
+import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
 
 type ServiceClient = SupabaseClient;
 
@@ -19,23 +25,36 @@ export async function readCommunityProfileSocialState({
   const snapshot = await readSnapshotOwner(client, publicSnapshotId);
 
   if (!snapshot) {
-    return { followerCount: 0, following: false, isOwnProfile: false };
+    return {
+      followerCount: 0,
+      following: false,
+      followingCount: 0,
+      isOwnProfile: false,
+    };
   }
 
-  const [followerResponse, viewerAccountId] = await Promise.all([
-    client
-      .schema("feed")
-      .from("profile_follow")
-      .select("id", { count: "exact", head: true })
-      .eq("target_account_id", snapshot.accountId)
-      .is("deleted_at", null),
-    user ? readAccountId(client, user.id) : Promise.resolve(null),
-  ]);
+  const [followerResponse, followingResponse, viewerAccountId] =
+    await Promise.all([
+      client
+        .schema("feed")
+        .from("profile_follow")
+        .select("id", { count: "exact", head: true })
+        .eq("target_account_id", snapshot.accountId)
+        .is("deleted_at", null),
+      client
+        .schema("feed")
+        .from("profile_follow")
+        .select("id", { count: "exact", head: true })
+        .eq("follower_account_id", snapshot.accountId)
+        .is("deleted_at", null),
+      user ? readAccountId(client, user.id) : Promise.resolve(null),
+    ]);
 
   if (!viewerAccountId) {
     return {
       followerCount: followerResponse.count ?? 0,
       following: false,
+      followingCount: followingResponse.count ?? 0,
       isOwnProfile: false,
     };
   }
@@ -44,6 +63,7 @@ export async function readCommunityProfileSocialState({
     return {
       followerCount: followerResponse.count ?? 0,
       following: false,
+      followingCount: followingResponse.count ?? 0,
       isOwnProfile: true,
     };
   }
@@ -60,7 +80,87 @@ export async function readCommunityProfileSocialState({
   return {
     followerCount: followerResponse.count ?? 0,
     following: Boolean(followResponse.data),
+    followingCount: followingResponse.count ?? 0,
     isOwnProfile: false,
+  };
+}
+
+export async function readCommunityProfileConnections({
+  client,
+  publicSnapshotId,
+}: {
+  client: ServiceClient;
+  publicSnapshotId: string;
+}): Promise<CommunityProfileConnectionsResult> {
+  const snapshot = await readSnapshotOwner(client, publicSnapshotId);
+
+  if (!snapshot) {
+    return createEmptyConnectionsResult(publicSnapshotId, "profile_not_found");
+  }
+
+  const [followerResponse, followingResponse, ownerProfileResponse] =
+    await Promise.all([
+      client
+        .schema("feed")
+        .from("profile_follow")
+        .select("follower_account_id,created_at")
+        .eq("target_account_id", snapshot.accountId)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false }),
+      client
+        .schema("feed")
+        .from("profile_follow")
+        .select("target_account_id,created_at")
+        .eq("follower_account_id", snapshot.accountId)
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false }),
+      client
+        .schema("profile")
+        .from("profile_public_snapshot")
+        .select("snapshot_payload")
+        .eq("id", publicSnapshotId)
+        .maybeSingle(),
+    ]);
+
+  if (
+    followerResponse.error ||
+    followingResponse.error ||
+    ownerProfileResponse.error
+  ) {
+    return createEmptyConnectionsResult(publicSnapshotId, "unavailable");
+  }
+
+  const followerRows = (followerResponse.data ?? []).map((row) => ({
+    accountId: String(row.follower_account_id),
+    connectedAt: String(row.created_at),
+  }));
+  const followingRows = (followingResponse.data ?? []).map((row) => ({
+    accountId: String(row.target_account_id),
+    connectedAt: String(row.created_at),
+  }));
+  const profilesByAccountId = await readConnectionProfiles({
+    accountIds: [
+      ...followerRows.map((row) => row.accountId),
+      ...followingRows.map((row) => row.accountId),
+    ],
+    client,
+  });
+
+  if (!profilesByAccountId) {
+    return createEmptyConnectionsResult(publicSnapshotId, "unavailable");
+  }
+
+  const ownerPayload = coerceSnapshotPayload(
+    ownerProfileResponse.data?.snapshot_payload,
+    publicSnapshotId,
+  );
+
+  return {
+    followers: mapConnectionRows(followerRows, profilesByAccountId),
+    following: mapConnectionRows(followingRows, profilesByAccountId),
+    ownerDisplayName: ownerPayload?.displayProfile.displayName ?? "프로필",
+    ownerPublicSnapshotId: publicSnapshotId,
+    state: "ready",
   };
 }
 
@@ -70,9 +170,9 @@ export async function readCommunityNotifications({
 }: {
   client: ServiceClient;
   user: User;
-}): Promise<CommunityNotification[]> {
+}): Promise<CommunityNotificationsResult> {
   const accountId = await readAccountId(client, user.id);
-  if (!accountId) return [];
+  if (!accountId) return { notifications: [], state: "unavailable" };
 
   const response = await client
     .schema("feed")
@@ -85,21 +185,25 @@ export async function readCommunityNotifications({
     .order("created_at", { ascending: false })
     .limit(50);
 
-  if (response.error) return [];
+  if (response.error) return { notifications: [], state: "unavailable" };
 
-  return (response.data ?? []).map((row) => ({
-    actorDisplayName: String(row.actor_display_name ?? "누군가"),
-    actorPublicSnapshotId:
-      typeof row.actor_public_snapshot_id === "string"
-        ? row.actor_public_snapshot_id
-        : null,
-    createdAt: String(row.created_at),
-    eventType: row.event_type as CommunityNotification["eventType"],
-    id: String(row.id),
-    previewText: typeof row.preview_text === "string" ? row.preview_text : null,
-    targetId: String(row.target_id),
-    targetType: row.target_type as CommunityNotification["targetType"],
-  }));
+  return {
+    notifications: (response.data ?? []).map((row) => ({
+      actorDisplayName: String(row.actor_display_name ?? "누군가"),
+      actorPublicSnapshotId:
+        typeof row.actor_public_snapshot_id === "string"
+          ? row.actor_public_snapshot_id
+          : null,
+      createdAt: String(row.created_at),
+      eventType: row.event_type as CommunityNotification["eventType"],
+      id: String(row.id),
+      previewText:
+        typeof row.preview_text === "string" ? row.preview_text : null,
+      targetId: String(row.target_id),
+      targetType: row.target_type as CommunityNotification["targetType"],
+    })),
+    state: "ready",
+  };
 }
 
 export async function writeProfileFollow({
@@ -154,7 +258,7 @@ export async function writeProfileFollow({
     const actorSnapshotResponse = await client
       .schema("profile")
       .from("profile_public_snapshot")
-      .select("id")
+      .select("id,snapshot_payload")
       .eq("account_id", followerAccountId)
       .eq("status", "active")
       .is("deleted_at", null)
@@ -162,12 +266,27 @@ export async function writeProfileFollow({
       .limit(1)
       .maybeSingle();
 
+    const actorSnapshot = coerceSnapshotPayload(
+      actorSnapshotResponse.data?.snapshot_payload,
+      actorSnapshotResponse.data?.id ?? "",
+    );
+
     await client
+      .schema("feed")
+      .from("activity_notification")
+      .update({ deleted_at: now })
+      .eq("recipient_account_id", snapshot.accountId)
+      .eq("actor_account_id", followerAccountId)
+      .eq("event_type", "follow")
+      .is("deleted_at", null);
+
+    const notificationResponse = await client
       .schema("feed")
       .from("activity_notification")
       .insert({
         actor_account_id: followerAccountId,
-        actor_display_name: getDisplayName(user),
+        actor_display_name:
+          actorSnapshot?.displayProfile.displayName ?? getDisplayName(user),
         actor_public_snapshot_id: actorSnapshotResponse.data?.id ?? null,
         event_type: "follow",
         preview_text: "새로운 팔로우가 시작됐어요.",
@@ -175,6 +294,22 @@ export async function writeProfileFollow({
         target_id: publicSnapshotId,
         target_type: "public_profile",
       });
+
+    if (notificationResponse.error) {
+      console.error("[community-follow] activity notification insert failed", {
+        code: notificationResponse.error.code,
+        message: notificationResponse.error.message,
+      });
+    }
+  } else {
+    await client
+      .schema("feed")
+      .from("activity_notification")
+      .update({ deleted_at: now })
+      .eq("recipient_account_id", snapshot.accountId)
+      .eq("actor_account_id", followerAccountId)
+      .eq("event_type", "follow")
+      .is("deleted_at", null);
   }
 
   const countResponse = await client
@@ -319,6 +454,109 @@ async function readAccountId(client: ServiceClient, supabaseUserId: string) {
     .maybeSingle();
 
   return response.data ? String(response.data.account_id) : null;
+}
+
+function createEmptyConnectionsResult(
+  publicSnapshotId: string,
+  state: CommunityProfileConnectionsResult["state"],
+): CommunityProfileConnectionsResult {
+  return {
+    followers: [],
+    following: [],
+    ownerDisplayName: "프로필",
+    ownerPublicSnapshotId: publicSnapshotId,
+    state,
+  };
+}
+
+async function readConnectionProfiles({
+  accountIds,
+  client,
+}: {
+  accountIds: string[];
+  client: ServiceClient;
+}) {
+  const uniqueAccountIds = [...new Set(accountIds)].filter(Boolean);
+  const profilesByAccountId = new Map<string, CommunityProfileConnection>();
+  if (uniqueAccountIds.length === 0) return profilesByAccountId;
+
+  const response = await client
+    .schema("profile")
+    .from("profile_public_snapshot")
+    .select("id,account_id,snapshot_payload,created_at")
+    .in("account_id", uniqueAccountIds)
+    .eq("status", "active")
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false });
+
+  if (response.error) return null;
+
+  for (const row of response.data ?? []) {
+    const accountId = String(row.account_id);
+    if (profilesByAccountId.has(accountId)) continue;
+
+    const publicSnapshotId = String(row.id);
+    const snapshot = coerceSnapshotPayload(
+      row.snapshot_payload,
+      publicSnapshotId,
+    );
+    if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) continue;
+
+    profilesByAccountId.set(accountId, {
+      code: snapshot.profile.code,
+      connectedAt: "",
+      displayName: snapshot.displayProfile.displayName,
+      profileImage: snapshot.displayProfile.profileImage,
+      profileName: snapshot.profile.name,
+      publicSnapshotId,
+    });
+  }
+
+  return profilesByAccountId;
+}
+
+function mapConnectionRows(
+  rows: Array<{ accountId: string; connectedAt: string }>,
+  profilesByAccountId: Map<string, CommunityProfileConnection>,
+) {
+  return rows.flatMap((row) => {
+    const profile = profilesByAccountId.get(row.accountId);
+    return profile ? [{ ...profile, connectedAt: row.connectedAt }] : [];
+  });
+}
+
+function coerceSnapshotPayload(
+  value: unknown,
+  fallbackSnapshotId: string,
+): PublicProfileSnapshotPayload | null {
+  if (!value || typeof value !== "object") return null;
+
+  const snapshot = value as PublicProfileSnapshotPayload;
+  const displayName = snapshot.displayProfile?.displayName;
+  const motif = snapshot.displayProfile?.motif;
+
+  if (
+    !displayName ||
+    !motif ||
+    !snapshot.profile?.code ||
+    !snapshot.profile.name
+  ) {
+    return null;
+  }
+
+  return {
+    ...snapshot,
+    displayProfile: {
+      ...snapshot.displayProfile,
+      profileImage:
+        snapshot.displayProfile.profileImage ??
+        createCharacterProfileImage({
+          alt: `${displayName} 프로필 이미지`,
+          motif,
+        }),
+    },
+    snapshotId: snapshot.snapshotId || fallbackSnapshotId,
+  };
 }
 
 function getDisplayName(user: User) {

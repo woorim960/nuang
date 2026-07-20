@@ -40,7 +40,12 @@ async function resolveSocialState(publicSnapshotId: string) {
   ]);
 
   if (!serverClient || !serviceClient) {
-    return { followerCount: 0, following: false, isOwnProfile: false };
+    return {
+      followerCount: 0,
+      following: false,
+      followingCount: 0,
+      isOwnProfile: false,
+    };
   }
 
   const { data } = await serverClient.auth.getUser();

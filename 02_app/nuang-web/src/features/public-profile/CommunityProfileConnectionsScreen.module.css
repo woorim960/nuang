@@ -1,0 +1,167 @@
+.tabs {
+  position: sticky;
+  z-index: 10;
+  top: calc(58px + env(safe-area-inset-top));
+  display: grid;
+  min-height: 52px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 1px solid #ececf0;
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: blur(14px);
+}
+
+.tabs a {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  color: #858895;
+  font-size: 0.8125rem;
+  font-weight: 690;
+}
+
+.tabs a[aria-current="page"] {
+  color: #2c2e35;
+  font-weight: 760;
+}
+
+.tabs a[aria-current="page"]::after {
+  position: absolute;
+  right: 25%;
+  bottom: -1px;
+  left: 25%;
+  height: 2px;
+  border-radius: 999px;
+  background: #8f83dc;
+  content: "";
+}
+
+.tabs span {
+  color: #9c9eaa;
+  font-size: 0.6875rem;
+  font-weight: 650;
+}
+
+.list {
+  display: grid;
+}
+
+.guide {
+  margin: 0;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid #f0f0f3;
+  color: #7d808c;
+  background: #fbfbfc;
+  font-size: 0.71875rem;
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.item {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #f0f0f3;
+  color: inherit;
+  background: #fff;
+  transition: background 140ms ease;
+}
+
+.item:active {
+  background: #f8f8fa;
+}
+
+.itemCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.itemCopy strong,
+.itemCopy small {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.itemCopy strong {
+  color: #292b32;
+  font-size: 0.8125rem;
+  font-weight: 740;
+}
+
+.itemCopy small {
+  color: #888b96;
+  font-size: 0.6875rem;
+  font-weight: 580;
+}
+
+.code {
+  color: #756ac7;
+  font-size: 0.6875rem;
+  font-weight: 740;
+  letter-spacing: 0.035em;
+}
+
+.state {
+  display: grid;
+  min-height: 360px;
+  place-items: center;
+  align-content: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.stateMark {
+  display: grid;
+  width: 52px;
+  height: 52px;
+  margin-bottom: 1rem;
+  place-items: center;
+  border-radius: 18px;
+  color: #766ac8;
+  background: #f1effc;
+}
+
+.state strong {
+  color: #292b32;
+  font-size: 0.9375rem;
+  font-weight: 740;
+}
+
+.state p {
+  max-width: 290px;
+  margin: 0.45rem 0 0;
+  color: #858895;
+  font-size: 0.75rem;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+.state a,
+.state button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.1rem;
+  padding: 0 1rem;
+  border: 1px solid #e3e1ef;
+  border-radius: 13px;
+  color: #675bbd;
+  background: #faf9ff;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+@media (max-width: 350px) {
+  .item,
+  .guide {
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+  }
+}

@@ -1,4 +1,4 @@
-import { Bell } from "lucide-react";
+import { Bell, RefreshCw } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
@@ -12,13 +12,42 @@ export const metadata: Metadata = {
 };
 
 export default async function CommunityNotificationsPage() {
-  const notifications = await resolveNotifications();
+  const result = await resolveNotifications();
 
   return (
     <CommunityScreenShell title="커뮤니티 알림">
-      {notifications.length > 0 ? (
+      {result.state === "unavailable" ? (
+        <section className={styles.emptyState}>
+          <div>
+            <span aria-hidden="true" className={styles.emptyMark}>
+              <RefreshCw size={21} strokeWidth={1.7} />
+            </span>
+            <strong>알림을 불러오지 못했어요</strong>
+            <p>연결을 확인한 뒤 다시 불러와 주세요.</p>
+            <a className={styles.stateAction} href="/feed/notifications">
+              다시 불러오기
+            </a>
+          </div>
+        </section>
+      ) : result.state === "unauthenticated" ? (
+        <section className={styles.emptyState}>
+          <div>
+            <span aria-hidden="true" className={styles.emptyMark}>
+              <Bell size={22} strokeWidth={1.7} />
+            </span>
+            <strong>로그인하면 소식을 모아볼 수 있어요</strong>
+            <p>팔로우와 댓글처럼 나와 연결된 활동을 놓치지 않게 알려드려요.</p>
+            <Link
+              className={styles.stateAction}
+              href="/login?next=%2Ffeed%2Fnotifications&reason=community"
+            >
+              로그인하기
+            </Link>
+          </div>
+        </section>
+      ) : result.notifications.length > 0 ? (
         <section className={styles.notificationList}>
-          {notifications.map((notification) => (
+          {result.notifications.map((notification) => (
             <Link
               className={styles.notificationItem}
               href={getNotificationHref(notification)}
@@ -61,16 +90,22 @@ async function resolveNotifications() {
     Promise.resolve(createSupabaseServiceClient()),
   ]);
 
-  if (!serverClient || !serviceClient) return [];
+  if (!serverClient || !serviceClient) {
+    return { notifications: [], state: "unavailable" as const };
+  }
 
   const { data } = await serverClient.auth.getUser();
-  if (!data.user) return [];
+  if (!data.user) {
+    return { notifications: [], state: "unauthenticated" as const };
+  }
 
   return readCommunityNotifications({ client: serviceClient, user: data.user });
 }
 
 function getNotificationTitle(
-  notification: Awaited<ReturnType<typeof resolveNotifications>>[number],
+  notification: Awaited<
+    ReturnType<typeof resolveNotifications>
+  >["notifications"][number],
 ) {
   const actor = notification.actorDisplayName;
   if (notification.eventType === "follow") return `${actor}님이 팔로우했어요.`;
@@ -84,7 +119,9 @@ function getNotificationTitle(
 }
 
 function getNotificationHref(
-  notification: Awaited<ReturnType<typeof resolveNotifications>>[number],
+  notification: Awaited<
+    ReturnType<typeof resolveNotifications>
+  >["notifications"][number],
 ) {
   if (notification.targetType === "public_profile") {
     return notification.actorPublicSnapshotId

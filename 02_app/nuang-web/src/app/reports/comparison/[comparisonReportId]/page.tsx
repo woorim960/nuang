@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     follow: false,
     index: false,
   },
-  title: "1:1 비교 리포트 확인 | NUANG",
+  title: "나와 비교하기 | NUANG",
 };
 
 export default async function PublicComparisonReportPage({
@@ -41,7 +41,7 @@ export default async function PublicComparisonReportPage({
       backHref={getSafeBackHref(backTo)}
       title="나와 비교하기"
     >
-      <div className="px-4 py-5">
+      <div className={state.kind === "active" ? "" : "px-4 py-5"}>
         <PublicComparisonReportRouteView state={state} />
       </div>
     </CommunityScreenShell>

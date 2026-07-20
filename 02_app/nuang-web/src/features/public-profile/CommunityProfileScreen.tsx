@@ -257,9 +257,19 @@ export function CommunityProfileScreen({
           <span>
             <strong>{posts.length.toLocaleString("ko-KR")}</strong>공개 게시물
           </span>
-          <span>
+          <Link
+            href={`/feed/profiles/${profile.source.publicSnapshotId}/connections?tab=followers`}
+          >
             <strong>{followerCount.toLocaleString("ko-KR")}</strong>팔로워
-          </span>
+          </Link>
+          <Link
+            href={`/feed/profiles/${profile.source.publicSnapshotId}/connections?tab=following`}
+          >
+            <strong>
+              {initialSocialState.followingCount.toLocaleString("ko-KR")}
+            </strong>
+            팔로잉
+          </Link>
         </div>
 
         {initialSocialState.isOwnProfile ? (
@@ -268,8 +278,7 @@ export function CommunityProfileScreen({
             onClick={shareProfile}
             type="button"
           >
-            <Share2 aria-hidden="true" size={17} />
-            내 프로필 공유
+            <Share2 aria-hidden="true" size={17} />내 프로필 공유
           </button>
         ) : (
           <div className={styles.actions}>

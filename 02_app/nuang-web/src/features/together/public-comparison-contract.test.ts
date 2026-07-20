@@ -57,16 +57,32 @@ const viewerResult: CoreScoreResult = {
   ],
   facets: [
     {
+      facetId: "SE-RE",
+      label: "함께할 때의 에너지",
+      score: 64.2,
+      status: "valid",
+      validResponses: 6,
+    },
+    {
       facetId: "SE-AI",
       label: "먼저 표현하기",
       score: 71.8,
       status: "valid",
       validResponses: 6,
     },
-    ...Array.from({ length: 9 }, (_, index) => ({
-      facetId: `TEST-${index + 1}`,
-      label: `세부 성향 ${index + 1}`,
-      score: 50 + index,
+    ...[
+      ["OE-AE", "분위기와 감각에 관심", 59],
+      ["OE-CI", "상상 확장", 68],
+      ["OE-IE", "새로운 원리와 관점 탐구", 61],
+      ["RO-EC", "관계에서 먼저 보이는 곳", 70],
+      ["SM-EP", "시작하고 이어가기", 56],
+      ["SM-OS", "정리하고 계획하기", 60],
+      ["ER-IR", "감정이 커지는 정도", 63],
+      ["ER-WD", "걱정과 주저", 65],
+    ].map(([facetId, label, score]) => ({
+      facetId: String(facetId),
+      label: String(label),
+      score: Number(score),
       status: "valid" as const,
       validResponses: 6,
     })),
@@ -146,7 +162,9 @@ describe("public profile comparison contract", () => {
       snapshotId: "11111111-1111-4111-8111-111111111111",
     });
 
-    expect(snapshot.visibility.policyVersion).toBe(profileVisibilityPolicyVersion);
+    expect(snapshot.visibility.policyVersion).toBe(
+      profileVisibilityPolicyVersion,
+    );
     expect(snapshot.visibility.includedFields).toEqual([
       "display_profile",
       "representative_profile",
@@ -206,6 +224,21 @@ describe("public profile comparison contract", () => {
       difference: 2,
     });
     expect(report.comparison.sections.axisComparisons).toHaveLength(5);
+    expect(report.comparison.sections.facetComparisons).toHaveLength(10);
+    expect(
+      report.comparison.sections.facetComparisons.find(
+        (facet) => facet.facetId === "SE-AI",
+      ),
+    ).toMatchObject({
+      facetId: "SE-AI",
+      label: "먼저 표현하기",
+      targetScore: 72,
+      viewerScore: 72,
+    });
+    expect(report.comparison.model).toMatchObject({
+      codeSchemeVersion: "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+      scoreInterpretation: "response_direction_0_100",
+    });
     expect(report.comparison.sections.axisComparisons[0]).toMatchObject({
       domainId: "SE",
       interpretation: expect.stringContaining("사람 사이 에너지"),
@@ -216,7 +249,61 @@ describe("public profile comparison contract", () => {
       closestAxisLabel: "걱정과 감정 반응",
       strongestDifferenceLabel: "사람 사이 에너지",
     });
-    expect(report.comparison.sections.misunderstandingScenes.length).toBeGreaterThan(0);
+    expect(
+      report.comparison.sections.misunderstandingScenes.length,
+    ).toBeGreaterThan(0);
+    expect(
+      report.comparison.sections.commonGround.some((common) =>
+        report.comparison.sections.differences.some(
+          (difference) => difference.domainId === common.domainId,
+        ),
+      ),
+    ).toBe(false);
+  });
+
+  it("separates a shared letter from a shared response strength", () => {
+    const viewer = createPublicProfileSnapshotPayload({
+      createdAt: "2026-07-04T00:00:00.000Z",
+      displayProfile: { displayName: "나", motif: "flame" },
+      result: viewerResult,
+      snapshotId: "11111111-1111-4111-8111-111111111111",
+    });
+    const target = createPublicProfileSnapshotPayload({
+      createdAt: "2026-07-04T00:00:00.000Z",
+      displayProfile: { displayName: "상대", motif: "water" },
+      result: {
+        ...viewerResult,
+        domains: viewerResult.domains.map((domain) =>
+          domain.domainId === "SE" ? { ...domain, score: 51 } : domain,
+        ),
+      },
+      snapshotId: "22222222-2222-4222-8222-222222222222",
+    });
+
+    const report = createPublicComparisonReportPayload({
+      comparisonId: "33333333-3333-4333-8333-333333333333",
+      createdAt: "2026-07-04T00:00:00.000Z",
+      target,
+      viewer,
+    });
+    const energy = report.comparison.sections.axisComparisons.find(
+      (axis) => axis.domainId === "SE",
+    );
+
+    expect(energy?.viewerSymbol).toBe("E");
+    expect(energy?.targetSymbol).toBe("E");
+    expect(energy?.difference).toBe(21);
+    expect(energy?.interpretation).toContain("나타나는 정도에는 차이가 있어요");
+    expect(
+      report.comparison.sections.commonGround.some(
+        (axis) => axis.domainId === "SE",
+      ),
+    ).toBe(false);
+    expect(
+      report.comparison.sections.differences.some(
+        (axis) => axis.domainId === "SE",
+      ),
+    ).toBe(true);
   });
 
   it("maps every comparison failure to a public response contract", () => {

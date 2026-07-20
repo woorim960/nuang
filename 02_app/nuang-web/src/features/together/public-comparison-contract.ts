@@ -1,4 +1,8 @@
-import type { CoreScoreResult, DomainScore, FacetScore } from "@/lib/scoring/types";
+import type {
+  CoreScoreResult,
+  DomainScore,
+  FacetScore,
+} from "@/lib/scoring/types";
 import {
   createCharacterProfileImage,
   type PublicProfileImage,
@@ -19,7 +23,28 @@ export const publicProfileSnapshotContractVersion =
   "public-profile-snapshot.v0.1";
 
 export const publicComparisonReportContractVersion =
-  "public-comparison-report.v0.4";
+  "public-comparison-report.v0.5";
+
+export const publicComparisonFacetModelVersion =
+  "nuang-public-facets.candidate-1.0";
+export const publicComparisonCopyVersion = "comparison-copy.1.1";
+export const publicComparisonFacetIds = [
+  "SE-RE",
+  "SE-AI",
+  "OE-AE",
+  "OE-CI",
+  "OE-IE",
+  "RO-EC",
+  "SM-EP",
+  "SM-OS",
+  "ER-IR",
+  "ER-WD",
+] as const;
+
+const publicComparisonDomainIds = nextNuangCodeScheme.positions.map(
+  (position) => position.domainId,
+);
+const publicComparisonFacetIdSet = new Set<string>(publicComparisonFacetIds);
 
 type CandidateDomainId =
   (typeof nextNuangCodeScheme.positions)[number]["domainId"];
@@ -208,6 +233,12 @@ export type PublicComparisonReportPayload = {
     id: string;
     policyVersion: typeof profileVisibilityPolicyVersion;
     requiresCounterpartyApproval: false;
+    model: {
+      codeSchemeVersion: typeof nextNuangCodeScheme.version;
+      copyVersion: typeof publicComparisonCopyVersion;
+      facetModelVersion: typeof publicComparisonFacetModelVersion;
+      scoreInterpretation: "response_direction_0_100";
+    };
     access: {
       reevaluateOnVisibilityChange: true;
       targetSnapshotStatusRequired: "active";
@@ -226,6 +257,7 @@ export type PublicComparisonReportPayload = {
       commonGround: PublicComparisonAxisDelta[];
       conversationStarters: string[];
       differences: PublicComparisonAxisDelta[];
+      facetComparisons: PublicComparisonFacetInsight[];
       misunderstandingScenes: string[];
       summary: PublicComparisonSummary;
     };
@@ -252,9 +284,11 @@ export type PublicComparisonAxisDelta = {
   label: string;
   positionId?: CandidateDomainId;
   targetIsBoundary?: boolean;
+  targetEvidenceStatus?: string;
   targetScore: number;
   targetSymbol?: string | null;
   viewerIsBoundary?: boolean;
+  viewerEvidenceStatus?: string;
   viewerScore: number;
   viewerSymbol?: string | null;
 };
@@ -268,11 +302,25 @@ export type PublicComparisonSummary = {
 
 export type PublicComparisonAxisInsight = PublicComparisonAxisDelta & {
   adjustmentTip: string;
-  closeness: "close" | "different" | "moderate" | "very_close" | "very_different";
+  closeness:
+    "close" | "different" | "moderate" | "very_close" | "very_different";
   interpretation: string;
   possibleMisread: string;
   targetPattern: string;
   viewerPattern: string;
+};
+
+export type PublicComparisonFacetInsight = {
+  closeness: PublicComparisonAxisInsight["closeness"];
+  difference: number;
+  domainId: string;
+  facetId: string;
+  interpretation: string;
+  label: string;
+  targetEvidenceStatus: string;
+  targetScore: number;
+  viewerEvidenceStatus: string;
+  viewerScore: number;
 };
 
 export function createPublicProfileSnapshotPayload({
@@ -281,7 +329,8 @@ export function createPublicProfileSnapshotPayload({
   result,
   snapshotId,
 }: CreatePublicProfileSnapshotInput): PublicProfileSnapshotPayload {
-  const normalizedDisplayProfile = normalizePublicProfileDisplay(displayProfile);
+  const normalizedDisplayProfile =
+    normalizePublicProfileDisplay(displayProfile);
 
   return {
     contractVersion: publicProfileSnapshotContractVersion,
@@ -314,13 +363,19 @@ export function hasRequiredPublicComparisonScope(
   snapshot: PublicProfileSnapshotPayload,
 ) {
   const includedFields = new Set(snapshot.visibility.includedFields);
+  const domainIds = new Set(
+    snapshot.publicData.coreDomainMap.map((domain) => domain.id),
+  );
+  const facetIds = new Set(
+    snapshot.publicData.coreFacetSummary.map((facet) => facet.id),
+  );
 
   return (
     listDefaultComparableFields().every((rule) =>
       includedFields.has(rule.fieldId),
     ) &&
-    snapshot.publicData.coreDomainMap.length === 5 &&
-    snapshot.publicData.coreFacetSummary.length === 10
+    publicComparisonDomainIds.every((domainId) => domainIds.has(domainId)) &&
+    publicComparisonFacetIds.every((facetId) => facetIds.has(facetId))
   );
 }
 
@@ -352,12 +407,13 @@ export function createPublicComparisonReportPayload({
 }): PublicComparisonReportPayload {
   const deltas = getComparableDomainDeltas(viewer, target);
   const axisComparisons = deltas.map(toAxisInsight);
+  const facetComparisons = getComparableFacetInsights(viewer, target);
   const commonGround = [...deltas]
-    .filter((delta) => isSameCodePosition(delta) || delta.difference <= 16)
+    .filter((delta) => delta.difference <= 16)
     .sort((a, b) => a.difference - b.difference)
     .slice(0, 2);
   const differences = [...deltas]
-    .filter((delta) => !isSameCodePosition(delta) || delta.difference > 16)
+    .filter((delta) => delta.difference > 16)
     .sort((a, b) => b.difference - a.difference)
     .slice(0, 3);
 
@@ -370,6 +426,12 @@ export function createPublicComparisonReportPayload({
       id: comparisonId,
       policyVersion: profileVisibilityPolicyVersion,
       requiresCounterpartyApproval: false,
+      model: {
+        codeSchemeVersion: nextNuangCodeScheme.version,
+        copyVersion: publicComparisonCopyVersion,
+        facetModelVersion: publicComparisonFacetModelVersion,
+        scoreInterpretation: "response_direction_0_100",
+      },
       access: {
         reevaluateOnVisibilityChange: true,
         targetSnapshotStatusRequired: "active",
@@ -386,10 +448,19 @@ export function createPublicComparisonReportPayload({
         adjustmentGuide: buildAdjustmentGuide(differences, viewer, target),
         axisComparisons,
         commonGround,
-        conversationStarters: buildConversationStarters(commonGround, differences),
+        conversationStarters: buildConversationStarters(
+          commonGround,
+          differences,
+        ),
         differences,
+        facetComparisons,
         misunderstandingScenes: buildMisunderstandingScenes(differences),
-        summary: buildComparisonSummary(commonGround, differences, viewer, target),
+        summary: buildComparisonSummary(
+          commonGround,
+          differences,
+          viewer,
+          target,
+        ),
       },
       sharedFields: listDefaultComparableFields().map((rule) => rule.fieldId),
       target: toComparisonProfileCard(target),
@@ -398,6 +469,79 @@ export function createPublicComparisonReportPayload({
       viewerPublicSnapshotId: viewer.snapshotId,
     },
   };
+}
+
+function getComparableFacetInsights(
+  viewer: PublicProfileSnapshotPayload,
+  target: PublicProfileSnapshotPayload,
+) {
+  const targetFacetsById = new Map(
+    target.publicData.coreFacetSummary
+      .filter(
+        (facet) =>
+          facet.score !== null && publicComparisonFacetIdSet.has(facet.id),
+      )
+      .map((facet) => [facet.id, facet]),
+  );
+
+  return viewer.publicData.coreFacetSummary.flatMap((viewerFacet) => {
+    if (
+      viewerFacet.score === null ||
+      !publicComparisonFacetIdSet.has(viewerFacet.id)
+    ) {
+      return [];
+    }
+
+    const targetFacet = targetFacetsById.get(viewerFacet.id);
+
+    if (!targetFacet || targetFacet.score === null) return [];
+
+    const difference = Math.abs(viewerFacet.score - targetFacet.score);
+
+    return [
+      {
+        closeness: getCloseness(difference),
+        difference,
+        domainId: viewerFacet.id.split("-")[0] ?? "",
+        facetId: viewerFacet.id,
+        interpretation: buildFacetInterpretation({
+          difference,
+          label: viewerFacet.label,
+          targetScore: targetFacet.score,
+          viewerScore: viewerFacet.score,
+        }),
+        label: viewerFacet.label,
+        targetEvidenceStatus: targetFacet.status,
+        targetScore: targetFacet.score,
+        viewerEvidenceStatus: viewerFacet.status,
+        viewerScore: viewerFacet.score,
+      },
+    ];
+  });
+}
+
+function buildFacetInterpretation({
+  difference,
+  label,
+  targetScore,
+  viewerScore,
+}: {
+  difference: number;
+  label: string;
+  targetScore: number;
+  viewerScore: number;
+}) {
+  if (difference <= 8) {
+    return `${label}${topicParticle(label)} 두 사람에게 거의 비슷한 정도로 나타나요.`;
+  }
+
+  if (difference <= 16) {
+    return `${label}${topicParticle(label)} 두 사람에게 비슷한 정도로 나타나요.`;
+  }
+
+  return viewerScore > targetScore
+    ? `${label}${topicParticle(label)} 나에게 상대보다 더 자주 나타나는 편이에요.`
+    : `${label}${topicParticle(label)} 상대에게 나보다 더 자주 나타나는 편이에요.`;
 }
 
 function toPublicDomainSummary(domain: DomainScore): PublicAxisSummary {
@@ -459,20 +603,12 @@ function getComparableDomainDeltas(
       .filter((domain) => domain.score !== null)
       .map((domain, index) => [getAxisId(domain, index), domain]),
   );
-  const targetDomainsByLabel = new Map(
-    target.publicData.coreDomainMap
-      .filter((domain) => domain.score !== null)
-      .map((domain) => [domain.label, domain]),
-  );
 
   return viewer.publicData.coreDomainMap.flatMap((viewerDomain, index) => {
     if (viewerDomain.score === null) return [];
     const axisId = getAxisId(viewerDomain, index);
     const position = getCandidateCodePosition(axisId);
-    const targetDomain =
-      targetDomainsById.get(axisId) ??
-      targetDomainsByLabel.get(viewerDomain.label) ??
-      target.publicData.coreDomainMap[index];
+    const targetDomain = targetDomainsById.get(axisId);
 
     if (!targetDomain || targetDomain.score === null) return [];
 
@@ -488,13 +624,17 @@ function getComparableDomainDeltas(
       {
         difference: Math.abs(viewerDomain.score - targetDomain.score),
         domainId: axisId,
-        hasBoundarySignal: Boolean(viewerDomain.isBoundary || targetDomain.isBoundary),
+        hasBoundarySignal: Boolean(
+          viewerDomain.isBoundary || targetDomain.isBoundary,
+        ),
         label: position?.label ?? viewerDomain.label,
         positionId: position?.domainId,
         targetIsBoundary: Boolean(targetDomain.isBoundary),
+        targetEvidenceStatus: targetDomain.status,
         targetScore: targetDomain.score,
         targetSymbol,
         viewerIsBoundary: Boolean(viewerDomain.isBoundary),
+        viewerEvidenceStatus: viewerDomain.status,
         viewerScore: viewerDomain.score,
         viewerSymbol,
       },
@@ -551,7 +691,9 @@ function buildSummaryHeadline(
   return "공개된 성향 정보를 기준으로 서로의 반응 방식을 확인했어요.";
 }
 
-function toAxisInsight(delta: PublicComparisonAxisDelta): PublicComparisonAxisInsight {
+function toAxisInsight(
+  delta: PublicComparisonAxisDelta,
+): PublicComparisonAxisInsight {
   const closeness = getCloseness(delta.difference);
 
   return {
@@ -560,12 +702,22 @@ function toAxisInsight(delta: PublicComparisonAxisDelta): PublicComparisonAxisIn
     closeness,
     interpretation: buildAxisInterpretation(delta, closeness),
     possibleMisread: buildPossibleMisread(delta),
-    targetPattern: buildPatternText("상대", delta.targetSymbol, delta.targetIsBoundary),
-    viewerPattern: buildPatternText("나", delta.viewerSymbol, delta.viewerIsBoundary),
+    targetPattern: buildPatternText(
+      "상대",
+      delta.targetSymbol,
+      delta.targetIsBoundary,
+    ),
+    viewerPattern: buildPatternText(
+      "나",
+      delta.viewerSymbol,
+      delta.viewerIsBoundary,
+    ),
   };
 }
 
-function getCloseness(difference: number): PublicComparisonAxisInsight["closeness"] {
+function getCloseness(
+  difference: number,
+): PublicComparisonAxisInsight["closeness"] {
   if (difference <= 8) return "very_close";
   if (difference <= 16) return "close";
   if (difference <= 28) return "moderate";
@@ -582,10 +734,20 @@ function buildAxisInterpretation(
   const targetInsight = getCandidateAxisDirection(delta, delta.targetSymbol);
   const boundarySuffix = delta.hasBoundarySignal ? ` ${boundaryCopy}` : "";
 
-  if (isSameCodePosition(delta)) {
+  if (isSameCodePosition(delta) && delta.difference <= 16) {
     const sharedName = viewerInsight?.shortToken ?? "비슷한 방식";
 
     return `${delta.label}에서는 둘 다 ${sharedName} 쪽으로 가까워요. ${copy.same}${boundarySuffix}`;
+  }
+
+  if (isSameCodePosition(delta)) {
+    const sharedName = viewerInsight?.shortToken ?? "같은 방향";
+
+    return `${delta.label}에서는 둘 다 ${sharedName} 쪽이지만, 나타나는 정도에는 차이가 있어요. ${copy.same}${boundarySuffix}`;
+  }
+
+  if (delta.difference <= 16) {
+    return `${delta.label}의 수치는 서로 가깝지만 경계 양쪽에서 글자가 달라졌어요. 상황에 따라 비슷한 반응도 나타날 수 있어요.${boundarySuffix}`;
   }
 
   if (closeness === "moderate") {
@@ -600,8 +762,12 @@ function buildPossibleMisread(delta: PublicComparisonAxisDelta) {
 }
 
 function buildAdjustmentTip(delta: PublicComparisonAxisDelta) {
-  if (isSameCodePosition(delta) || delta.difference <= 16) {
+  if (delta.difference <= 16) {
     return `가까운 자리예요. ${getComparisonCopy(delta).adjustmentQuestion}`;
+  }
+
+  if (isSameCodePosition(delta)) {
+    return `같은 방향이지만 나타나는 정도가 달라요. ${getComparisonCopy(delta).adjustmentQuestion}`;
   }
 
   return `조율이 필요한 자리예요. ${getComparisonCopy(delta).adjustmentQuestion}`;
@@ -709,7 +875,11 @@ function buildMisunderstandingScenes(differences: PublicComparisonAxisDelta[]) {
 }
 
 function isSameCodePosition(delta: PublicComparisonAxisDelta) {
-  return Boolean(delta.viewerSymbol && delta.targetSymbol && delta.viewerSymbol === delta.targetSymbol);
+  return Boolean(
+    delta.viewerSymbol &&
+    delta.targetSymbol &&
+    delta.viewerSymbol === delta.targetSymbol,
+  );
 }
 
 function getComparisonCopy(delta: PublicComparisonAxisDelta) {
@@ -718,7 +888,8 @@ function getComparisonCopy(delta: PublicComparisonAxisDelta) {
     : {
         same: "서로 편하게 맞는 흐름이 보여요.",
         different: "서로 필요한 신호가 다르게 나타날 수 있어요.",
-        possibleMisread: "한쪽은 충분하다고 느끼고, 다른 한쪽은 설명이 더 필요하다고 느낄 수 있어요.",
+        possibleMisread:
+          "한쪽은 충분하다고 느끼고, 다른 한쪽은 설명이 더 필요하다고 느낄 수 있어요.",
         adjustmentQuestion: "서로 편한 속도와 표현 방식을 먼저 확인해볼까요?",
       };
 }
@@ -757,7 +928,8 @@ const candidateComparisonCopy: Record<
       "한 사람은 원인과 해결할 부분에, 다른 사람은 상대가 어떤 마음인지에 더 자연스럽게 관심이 가요.",
     possibleMisread:
       "해결 방법을 말하는 것을 공감 부족으로, 마음을 살피는 것을 문제 회피로 오해할 수 있어요.",
-    adjustmentQuestion: "지금은 마음을 함께 살펴볼까, 원인과 해결 방법을 정리해볼까?",
+    adjustmentQuestion:
+      "지금은 마음을 함께 살펴볼까, 원인과 해결 방법을 정리해볼까?",
   },
   SM: {
     same: "해야 할 일을 시작하고 이어가며 정리하는 방식이 비슷해요.",
@@ -765,7 +937,8 @@ const candidateComparisonCopy: Record<
       "한 사람은 비교적 꾸준한 흐름을 편하게 느끼고, 다른 사람은 상황에 맞춰 바꾸는 여유를 더 필요로 해요.",
     possibleMisread:
       "꾸준함을 통제로 느끼거나, 상황에 맞춘 변화를 무책임으로 오해할 수 있어요.",
-    adjustmentQuestion: "꼭 지킬 부분과 상황에 따라 바꿔도 되는 부분을 나눠볼까?",
+    adjustmentQuestion:
+      "꼭 지킬 부분과 상황에 따라 바꿔도 되는 부분을 나눠볼까?",
   },
   ER: {
     same: "불편한 상황에서 걱정과 감정이 커지는 속도가 비슷해요.",
@@ -773,7 +946,8 @@ const candidateComparisonCopy: Record<
       "한 사람은 걱정과 감정이 비교적 천천히 커지고, 다른 사람은 비교적 빠르게 커질 수 있어요.",
     possibleMisread:
       "차분한 반응을 무관심으로 보거나, 빠른 감정 반응을 과하다고 오해할 수 있어요.",
-    adjustmentQuestion: "지금 느끼는 걱정과 감정을 어느 정도로 함께 확인하면 편할까?",
+    adjustmentQuestion:
+      "지금 느끼는 걱정과 감정을 어느 정도로 함께 확인하면 편할까?",
   },
 };
 

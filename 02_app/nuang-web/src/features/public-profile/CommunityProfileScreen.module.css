@@ -74,13 +74,23 @@
   font-size: 0.71875rem;
 }
 
-.stats span {
+.stats span,
+.stats a {
   display: inline-flex;
   align-items: baseline;
   gap: 0.3rem;
 }
 
-.stats strong {
+.stats a {
+  color: inherit;
+}
+
+.stats a:active {
+  opacity: 0.68;
+}
+
+.stats strong,
+.stats a strong {
   color: #20232a;
   font-size: 0.9375rem;
 }

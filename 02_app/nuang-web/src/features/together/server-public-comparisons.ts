@@ -8,6 +8,8 @@ import {
   createPublicComparisonReportPayload,
   createPublicProfileSnapshotPayload,
   hasRequiredPublicComparisonScope,
+  publicComparisonCopyVersion,
+  publicComparisonFacetModelVersion,
   publicComparisonReportContractVersion,
   publicProfileSnapshotContractVersion,
   type PublicComparisonFailureCode,
@@ -682,8 +684,12 @@ function shouldRefreshComparisonReport(report: PublicComparisonReportPayload) {
   return (
     report.comparison.contractVersion !==
       publicComparisonReportContractVersion ||
+    report.comparison.model?.copyVersion !== publicComparisonCopyVersion ||
+    report.comparison.model?.facetModelVersion !==
+      publicComparisonFacetModelVersion ||
     !Array.isArray(sections.axisComparisons) ||
     sections.axisComparisons.length === 0 ||
+    !Array.isArray(sections.facetComparisons) ||
     (sections.commonGround.length === 0 && sections.differences.length === 0) ||
     !sections.summary ||
     headline.includes("는 가까워지고")
