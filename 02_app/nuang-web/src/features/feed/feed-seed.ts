@@ -16,6 +16,7 @@ export type FeedItemKind =
 export type FeedItemLayout = "media" | "thread";
 
 export type FeedReplyPreview = {
+  authorCode?: string;
   authorHandle: string;
   authorName: string;
   body: string;
@@ -33,14 +34,27 @@ export type FeedPollOptionSummary = {
   voteCount: number;
 };
 
+export type FeedPollCodePerspective = {
+  code: string;
+  name: string;
+  options: Array<{
+    label: string;
+    ratio: number;
+    voteCount: number;
+  }>;
+  totalVotes: number;
+};
+
 export type FeedPollSummary = {
   canViewCodeStats: boolean;
+  codePerspectives: FeedPollCodePerspective[];
   id: string;
   options: FeedPollOptionSummary[];
   promptId: string;
   question: string;
   statsHref: string;
   totalVotes: number;
+  viewerCode: string | null;
   viewerVoteOptionId: string | null;
 };
 
@@ -59,6 +73,25 @@ export type FeedReportShareSummary = {
   resultLabel: string;
 };
 
+export type FeedPostMedia = {
+  alt: string;
+  height: number | null;
+  id: string;
+  url: string;
+  width: number | null;
+};
+
+export type FeedPostTopicSummary = {
+  category: string | null;
+  label: string | null;
+  tags: string[];
+};
+
+export type FeedQuestionAudience = {
+  codes: string[];
+  mode: "all" | "different" | "exact" | "similar" | "trait";
+};
+
 export type FeedItem = {
   authorHandle: string;
   authorName: string;
@@ -70,9 +103,11 @@ export type FeedItem = {
   layout: FeedItemLayout;
   likeCount?: number;
   likeLabel: string;
+  media?: FeedPostMedia[];
   mediaLabel?: string;
   poll?: FeedPollSummary;
   priority: number;
+  questionAudience?: FeedQuestionAudience;
   reportShare?: FeedReportShareSummary;
   replyCount?: number;
   replyLabel: string;
@@ -81,6 +116,7 @@ export type FeedItem = {
   targetType?: "feed_post" | "feed_seed_card";
   timeLabel: string;
   title: string;
+  topic?: FeedPostTopicSummary;
   verified?: boolean;
   viewerHasBookmarked?: boolean;
   viewerHasLiked?: boolean;
@@ -143,8 +179,8 @@ const feedPublicProfiles = {
     cardId: "feed_profile_map_journal",
     displayName: "성향지도 노트",
     motif: "forest",
-    profileCode: "SCODE",
-    profileName: "숲의 새길 개척가",
+    profileCode: "INGMC",
+    profileName: "새 길을 찾는 탐구자",
     snapshotId: "44444444-4444-4444-8444-444444444444",
     scores: [66, 58, 62, 71, 73],
   }),
@@ -152,8 +188,8 @@ const feedPublicProfiles = {
     cardId: "feed_profile_official",
     displayName: "NUANG",
     motif: "purple",
-    profileCode: "TVOAE",
-    profileName: "불꽃의 온기 탐험가",
+    profileCode: "ENAKQ",
+    profileName: "관계를 여는 지휘자",
     snapshotId: "11111111-1111-4111-8111-111111111111",
     scores: [72, 64, 68, 59, 76],
   }),
@@ -161,8 +197,8 @@ const feedPublicProfiles = {
     cardId: "feed_profile_question",
     displayName: "오늘의 질문",
     motif: "water",
-    profileCode: "SVODE",
-    profileName: "물결의 새길 개척가",
+    profileCode: "IRGMQ",
+    profileName: "질문을 품은 탐구자",
     snapshotId: "22222222-2222-4222-8222-222222222222",
     scores: [54, 70, 61, 63, 69],
   }),
@@ -170,8 +206,8 @@ const feedPublicProfiles = {
     cardId: "feed_profile_trait_card",
     displayName: "성향 카드",
     motif: "flame",
-    profileCode: "TVOAE",
-    profileName: "불꽃의 온기 탐험가",
+    profileCode: "ENGKQ",
+    profileName: "영감을 키우는 기획자",
     snapshotId: "33333333-3333-4333-8333-333333333333",
     scores: [78, 67, 72, 57, 74],
   }),
@@ -206,9 +242,29 @@ export const feedItems: ReadonlyArray<FeedItem> = [
     id: "daily_question_001",
     kind: "daily_question",
     layout: "thread",
-    likeLabel: "좋아요 864개",
+    likeCount: 87,
+    likeLabel: "좋아요 87개",
     priority: 20,
-    replyLabel: "답글 28개",
+    replyCount: 14,
+    replyLabel: "답변 14개",
+    replyPreview: [
+      {
+        authorCode: "ERGMC",
+        authorHandle: "doyun.guide",
+        authorName: "도윤",
+        body: "상대가 지금 원하는 대화가 무엇인지 먼저 물어보면 서로 조금 더 편해지는 것 같아요.",
+        id: "daily_question_reply_001",
+        timeLabel: "3분",
+      },
+      {
+        authorCode: "IRGMQ",
+        authorHandle: "eunseo.note",
+        authorName: "은서",
+        body: "바로 답을 정하기보다 서로 다르게 느낀 부분부터 천천히 이야기해요.",
+        id: "daily_question_reply_002",
+        timeLabel: "11분",
+      },
+    ],
     timeLabel: "34분",
     title: "서로 다른 사람과 편하게 지내는 방법",
     targetType: "feed_seed_card",
@@ -314,21 +370,21 @@ function createSeedCoreResult({
   profileName: string;
   scores: [number, number, number, number, number];
 }): CoreScoreResult {
-  const labels = [
-    "사람 사이 에너지",
-    "마음의 반응",
-    "일상 리듬",
-    "생각의 방향",
-    "새로움 수용",
+  const domains = [
+    { domainId: "SE", label: "사람 사이 에너지" },
+    { domainId: "OE", label: "생각과 탐색" },
+    { domainId: "RO", label: "관계에서 관심이 가는 곳" },
+    { domainId: "SM", label: "일상을 꾸리는 방식" },
+    { domainId: "ER", label: "걱정과 감정 반응" },
   ] as const;
 
   return {
     alternativeCodes: [],
     code: profileCode,
     domains: scores.map((score, index) => ({
-      domainId: `domain_${index + 1}`,
+      domainId: domains[index].domainId,
       isBoundary: false,
-      label: labels[index],
+      label: domains[index].label,
       score,
       status: "valid",
       symbol: profileCode[index] ?? null,

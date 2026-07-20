@@ -36,14 +36,14 @@ export function FeedMoreMenu({
       <button
         aria-expanded={open}
         aria-label="더 보기"
-        className="grid h-11 w-11 shrink-0 place-items-center rounded-full text-[#5f5864] transition-colors hover:bg-[#f5f2f6]"
+        className="grid h-[42px] w-[42px] shrink-0 place-items-center rounded-full text-[#20232a] transition-colors hover:bg-[#f6f5f2]"
         onClick={() => {
           setOpen((value) => !value);
           setStatus({ status: "idle" });
         }}
         type="button"
       >
-        <MoreHorizontal aria-hidden="true" size={21} strokeWidth={1.9} />
+        <MoreHorizontal aria-hidden="true" size={24} strokeWidth={2} />
       </button>
       {open ? (
         <div
@@ -55,7 +55,7 @@ export function FeedMoreMenu({
           <section
             aria-labelledby={`feed-more-title-${postId}`}
             aria-modal="true"
-            className="w-full max-w-[520px] rounded-t-[24px] bg-white px-3 pb-[calc(12px+env(safe-area-inset-bottom))] pt-2 shadow-[0_-18px_44px_rgba(40,32,51,0.16)]"
+            className="w-full max-w-[430px] rounded-t-[24px] bg-white px-3 pb-[calc(12px+env(safe-area-inset-bottom))] pt-2 shadow-[0_-18px_44px_rgba(32,35,42,0.14)]"
             role="dialog"
           >
             <span
@@ -63,13 +63,13 @@ export function FeedMoreMenu({
               className="mx-auto mb-3 block h-1 w-10 rounded-full bg-[#ded8e1]"
             />
             <h2
-              className="px-2 pb-2 text-center text-sm font-extrabold text-[#2d2831]"
+              className="px-2 pb-2 text-center text-sm font-bold text-[#20232a]"
               id={`feed-more-title-${postId}`}
             >
               게시물 메뉴
             </h2>
             <button
-              className="flex min-h-12 w-full items-center rounded-[14px] px-4 text-left text-sm font-semibold text-[#3e3742] hover:bg-[#f7f4f8] disabled:text-[#9a9a9a]"
+              className="flex min-h-12 w-full items-center rounded-[14px] px-4 text-left text-sm font-semibold text-[#20232a] hover:bg-[#f6f5f2] disabled:text-[#9a9a9a]"
               disabled={status.status === "pending"}
               onClick={() => {
                 void submitNotInterested();
@@ -80,7 +80,7 @@ export function FeedMoreMenu({
             </button>
             <FeedMoreMenuStatusMessage status={status} />
             <button
-              className="mt-1 flex min-h-12 w-full items-center justify-center rounded-[14px] bg-[#f3f0f4] text-sm font-bold text-[#4b444f]"
+              className="mt-1 flex min-h-12 w-full items-center justify-center rounded-[14px] bg-[#f6f5f2] text-sm font-semibold text-[#525761]"
               onClick={() => setOpen(false)}
               type="button"
             >

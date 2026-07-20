@@ -8,17 +8,17 @@ import { ScoreBar } from "@/components/ui/ScoreBar";
 import { StatusPill } from "@/components/ui/StatusPill";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import {
-  getLatestCompletedAttempt,
   getLocalAttempt,
+  listLocalAttempts,
 } from "@/features/assessment/assessment-storage";
+import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
+import { candidateQuickCoreAssessment } from "@/features/assessment/candidate-quick-core-seed";
+import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
-import { fullScoringRelease } from "@/features/assessment/full-core-seed";
 import {
   getDomainNarrative,
   getHighestDomains,
 } from "@/features/result/report-copy";
-import { calculateCoreScore } from "@/lib/scoring/core";
-import type { ItemResponse } from "@/lib/scoring/types";
 
 const toneByDomain = {
   SE: "flame",
@@ -28,16 +28,9 @@ const toneByDomain = {
   OE: "sun",
 } as const;
 
-const motifByPrefix = {
-  TV: "flame",
-  TC: "sun",
-  SV: "water",
-  SC: "forest",
-} as const;
-
 const domainShortLabel: Record<string, string> = {
-  ER: "마음",
-  OE: "감각",
+  ER: "반응",
+  OE: "탐색",
   RO: "관계",
   SE: "사람",
   SM: "일상",
@@ -46,10 +39,11 @@ const domainShortLabel: Record<string, string> = {
 const facetShortLabel: Record<string, string> = {
   "ER-IR": "감정",
   "ER-WD": "걱정",
-  "OE-AS": "감각",
+  "OE-AE": "새 경험",
+  "OE-CI": "호기심",
   "OE-IE": "아이디어",
-  "RO-EC": "공감",
-  "RO-RN": "기준",
+  "RO-EC": "관심",
+  "RO-RN": "선택·존중",
   "SE-AI": "표현",
   "SE-RE": "함께",
   "SM-EP": "실행",
@@ -58,10 +52,15 @@ const facetShortLabel: Record<string, string> = {
 
 const previewDomainAxes = [
   { id: "SE", label: "사람 사이 에너지", shortLabel: "사람", value: 72 },
-  { id: "ER", label: "마음의 반응", shortLabel: "마음", value: 64 },
-  { id: "SM", label: "일상 리듬", shortLabel: "일상", value: 68 },
-  { id: "RO", label: "관계 방식", shortLabel: "관계", value: 58 },
-  { id: "OE", label: "감각과 생각", shortLabel: "감각", value: 66 },
+  { id: "OE", label: "생각과 탐색", shortLabel: "탐색", value: 66 },
+  {
+    id: "RO",
+    label: "관계에서 관심이 가는 곳",
+    shortLabel: "관계",
+    value: 58,
+  },
+  { id: "SM", label: "일상을 꾸리는 방식", shortLabel: "일상", value: 68 },
+  { id: "ER", label: "걱정과 감정 반응", shortLabel: "반응", value: 64 },
 ];
 
 export function LocalMapView() {
@@ -72,11 +71,18 @@ export function LocalMapView() {
   useEffect(() => {
     let isMounted = true;
 
-    Promise.all([
-      getLatestCompletedAttempt("nu-core-full"),
-      getLatestCompletedAttempt("nu-core-quick"),
-    ]).then(([fullAttempt, quickAttempt]) => {
+    listLocalAttempts().then((attempts) => {
       if (!isMounted) return;
+      const fullAttempt = attempts.find(
+        (attempt) =>
+          attempt.state === "completed" &&
+          attempt.releaseId === candidateFullCoreAssessment.releaseId,
+      );
+      const quickAttempt = attempts.find(
+        (attempt) =>
+          attempt.state === "completed" &&
+          attempt.releaseId === candidateQuickCoreAssessment.releaseId,
+      );
       setAttemptId(fullAttempt?.id ?? null);
       setHasQuickResult(Boolean(quickAttempt));
       setLoaded(true);
@@ -124,16 +130,7 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
 
   const result = useMemo(() => {
     if (!attempt) return null;
-
-    const responses: ItemResponse[] = Object.values(attempt.responses).map(
-      (response) => ({
-        itemId: response.itemId,
-        value: response.value,
-        isUnsure: response.isUnsure,
-      }),
-    );
-
-    return calculateCoreScore(fullScoringRelease, responses);
+    return calculateLocalAttemptScore(attempt);
   }, [attempt]);
 
   if (!attempt || !result) {
@@ -150,8 +147,7 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
 
   const code = result.code ?? "-----";
   const profileName = result.profileName ?? "대표 성향 계산 중";
-  const motif =
-    motifByPrefix[code.slice(0, 2) as keyof typeof motifByPrefix] ?? "purple";
+  const motif = "purple";
   const highestDomains = getHighestDomains(result.domains, 2);
   const domainAxes = result.domains.map((domain) => ({
     id: domain.domainId,

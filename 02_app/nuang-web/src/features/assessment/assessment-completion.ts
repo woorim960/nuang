@@ -1,23 +1,4 @@
-import {
-  fullCoreAssessment,
-  fullScoringRelease,
-} from "@/features/assessment/full-core-seed";
-import {
-  betaCoreAssessment,
-  betaScoringRelease,
-} from "@/features/assessment/beta-core-seed";
-import {
-  candidateQuickCoreAssessment,
-  candidateQuickScoringRelease,
-} from "@/features/assessment/candidate-quick-core-seed";
-import {
-  candidateFullCoreAssessment,
-  candidateFullScoringRelease,
-} from "@/features/assessment/candidate-full-core-seed";
-import {
-  quickCoreAssessment,
-  quickScoringRelease,
-} from "@/features/assessment/quick-core-seed";
+import { getScoringReleaseForAttempt } from "@/features/assessment/local-attempt-score";
 import {
   getAdaptiveItemsForDomains,
   getAssessmentRunItems,
@@ -147,7 +128,11 @@ export function prepareAssessmentCompletion(
       value: response.value,
     };
   });
-  const scoringRelease = getScoringRelease(assessment);
+  const scoringRelease = getScoringReleaseForAttempt(assessment);
+
+  if (!scoringRelease) {
+    throw new AssessmentCompletionError("RELEASE_MISMATCH");
+  }
 
   if (scoringRelease.assessmentReleaseId !== assessment.releaseId) {
     throw new AssessmentCompletionError("RELEASE_MISMATCH");
@@ -315,47 +300,6 @@ export function createResponseSnapshotHash(
     .join("|");
 
   return `fnv1a32x2:${fnv1a32x2(canonicalSnapshot)}`;
-}
-
-function getScoringRelease(assessment: AssessmentDefinition) {
-  if (
-    assessment.assessmentId === candidateFullCoreAssessment.assessmentId &&
-    assessment.releaseId === candidateFullCoreAssessment.releaseId &&
-    assessment.mode === candidateFullCoreAssessment.mode
-  ) {
-    return candidateFullScoringRelease;
-  }
-
-  if (
-    assessment.assessmentId === candidateQuickCoreAssessment.assessmentId &&
-    assessment.releaseId === candidateQuickCoreAssessment.releaseId &&
-    assessment.mode === candidateQuickCoreAssessment.mode
-  ) {
-    return candidateQuickScoringRelease;
-  }
-
-  if (
-    assessment.assessmentId === betaCoreAssessment.assessmentId &&
-    assessment.mode === betaCoreAssessment.mode
-  ) {
-    return betaScoringRelease;
-  }
-
-  if (
-    assessment.assessmentId === quickCoreAssessment.assessmentId &&
-    assessment.mode === "quick"
-  ) {
-    return quickScoringRelease;
-  }
-
-  if (
-    assessment.assessmentId === fullCoreAssessment.assessmentId &&
-    assessment.mode === "full"
-  ) {
-    return fullScoringRelease;
-  }
-
-  throw new AssessmentCompletionError("UNSUPPORTED_ASSESSMENT");
 }
 
 function hasSameOrderedItems(expected: string[], actual: string[]) {

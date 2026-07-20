@@ -6,6 +6,7 @@ import {
   type FeedItem,
   type FeedStory,
 } from "@/features/feed/feed-seed";
+import { feedPostTopicCategories } from "@/features/feed/feed-topic";
 
 export const feedContractVersion = "feed.v0.1";
 
@@ -81,14 +82,29 @@ const feedAttachmentSchema = z.object({
   type: z.enum(feedAttachmentTypes),
 });
 
+const feedPostTopicSchema = z.object({
+  category: z.enum(feedPostTopicCategories).nullable(),
+  source: z.enum(["manual", "local_suggestion"]),
+  tags: z
+    .array(z.string().trim().min(1).max(20))
+    .max(8)
+    .refine(
+      (tags) =>
+        new Set(tags.map((tag) => tag.toLocaleLowerCase("ko-KR"))).size ===
+        tags.length,
+      "주제 태그는 중복될 수 없습니다.",
+    ),
+});
+
 export const createFeedPostRequestSchema = z.object({
   action: z.literal("create_post"),
   attachments: z.array(feedAttachmentSchema).max(2).optional(),
-  body: z.string().trim().min(1).max(800),
+  body: z.string().trim().max(800),
   clientRequestId: z.string().trim().min(8).max(128).optional(),
   pollOptionKey: z.string().trim().min(1).max(64).optional(),
   source: z.enum(feedPostSources),
   sourceId: z.string().trim().min(4).max(128).optional(),
+  topic: feedPostTopicSchema.optional(),
   visibility: z.enum(feedVisibilityLevels),
 });
 
@@ -156,6 +172,7 @@ export type FeedReadPayload = {
   items: FeedItem[];
   policy: typeof feedPolicy;
   stories: FeedStory[];
+  viewerCode: string | null;
 };
 
 export function createFeedReadPayload(): FeedReadPayload {
@@ -164,5 +181,6 @@ export function createFeedReadPayload(): FeedReadPayload {
     items: [...feedItems].sort((a, b) => a.priority - b.priority),
     policy: feedPolicy,
     stories: [...feedStories],
+    viewerCode: null,
   };
 }

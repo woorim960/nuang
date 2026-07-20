@@ -1,0 +1,358 @@
+.screen {
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  color: #20232a;
+  background: #fff;
+  box-shadow: 0 0 0 1px rgb(32 35 42 / 5%);
+}
+
+.screenHeader {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: grid;
+  min-height: 58px;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  padding: env(safe-area-inset-top) 0.35rem 0;
+  border-bottom: 1px solid #e6e7eb;
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: blur(16px);
+}
+
+.screenHeader > a,
+.trailing > a,
+.trailing > button {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #20232a;
+}
+
+.screenHeader > a:hover,
+.trailing > a:hover,
+.trailing > button:hover {
+  background: #f6f5f2;
+}
+
+.screenHeader h1 {
+  margin: 0;
+  overflow: hidden;
+  color: #20232a;
+  font-size: 0.9375rem;
+  font-weight: 800;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.trailing {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.screenBody {
+  min-height: calc(100dvh - 58px);
+}
+
+.searchSection {
+  padding: 1rem;
+}
+
+.searchField {
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0 0.85rem;
+  border: 1px solid #e6e7eb;
+  border-radius: 15px;
+  color: #737887;
+  background: #f6f5f2;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background 150ms ease;
+}
+
+.searchField:focus-within {
+  border-color: #6657d9;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgb(102 87 217 / 9%);
+}
+
+.searchField input {
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  color: #20232a;
+  background: transparent;
+  font-size: 0.875rem;
+}
+
+.searchField input::placeholder {
+  color: #9a9da7;
+}
+
+.searchField input::-webkit-search-cancel-button,
+.searchField input::-webkit-search-decoration {
+  display: none;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.searchField input::-ms-clear,
+.searchField input::-ms-reveal {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+.searchField button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 50%;
+  color: #737887;
+}
+
+.definitionCard {
+  margin: 0 1rem 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: #f6f5f2;
+}
+
+.definitionCard strong {
+  display: block;
+  color: #20232a;
+  font-size: 0.8125rem;
+  font-weight: 750;
+}
+
+.definitionCard p {
+  margin: 0.3rem 0 0;
+  color: #737887;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.resultHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem 0.55rem;
+  border-top: 8px solid #f6f5f2;
+}
+
+.resultHeader strong {
+  font-size: 0.8125rem;
+}
+
+.resultHeader span {
+  color: #737887;
+  font-size: 0.6875rem;
+}
+
+.resultList {
+  display: grid;
+  border-top: 1px solid #e6e7eb;
+}
+
+.resultGroup + .resultGroup {
+  border-top: 8px solid #f6f5f2;
+}
+
+.resultGroupTitle {
+  display: block;
+  padding: 0.8rem 1rem 0.55rem;
+  color: #737887;
+  font-size: 0.6875rem;
+}
+
+.tagResultList {
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0 1rem 0.9rem;
+  scrollbar-width: none;
+}
+
+.tagResultList::-webkit-scrollbar {
+  display: none;
+}
+
+.tagResultItem {
+  display: grid;
+  min-width: 132px;
+  flex: 0 0 auto;
+  gap: 0.2rem;
+  padding: 0.75rem 0.85rem;
+  border: 1px solid #e6e7eb;
+  border-radius: 15px;
+  color: #5144b5;
+  background: #efedff;
+}
+
+.tagResultItem span {
+  font-size: 0.8125rem;
+  font-weight: 750;
+}
+
+.tagResultItem small {
+  color: #737887;
+  font-size: 0.65625rem;
+  font-weight: 650;
+}
+
+.resultItem {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #e6e7eb;
+  color: inherit;
+}
+
+.resultAvatar,
+.notificationAvatar {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #5144b5;
+  background: linear-gradient(145deg, #e9e8ff, #def4ef);
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.resultAvatar {
+  width: 40px;
+  height: 40px;
+}
+
+.resultCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.resultCopy strong {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.resultCopy small {
+  display: -webkit-box;
+  overflow: hidden;
+  color: #737887;
+  font-size: 0.71875rem;
+  line-height: 1.45;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.resultCode {
+  align-self: start;
+  padding: 0.25rem 0.45rem;
+  border-radius: 999px;
+  color: #5144b5;
+  background: #efedff;
+  font-size: 0.625rem;
+  font-weight: 750;
+  letter-spacing: 0.04em;
+}
+
+.emptyState {
+  display: grid;
+  min-height: 320px;
+  place-items: center;
+  padding: 3rem 1.5rem;
+  text-align: center;
+}
+
+.emptyState > div {
+  max-width: 300px;
+}
+
+.emptyMark {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 1rem;
+  place-items: center;
+  border-radius: 18px;
+  color: #6657d9;
+  background: #efedff;
+}
+
+.emptyState strong {
+  display: block;
+  color: #20232a;
+  font-size: 0.9375rem;
+}
+
+.emptyState p {
+  margin: 0.45rem 0 0;
+  color: #737887;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.notificationList {
+  display: grid;
+}
+
+.notificationItem {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-bottom: 1px solid #e6e7eb;
+}
+
+.notificationAvatar {
+  width: 40px;
+  height: 40px;
+}
+
+.notificationItem strong {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 750;
+  line-height: 1.45;
+}
+
+.notificationItem p {
+  margin: 0.3rem 0 0;
+  color: #737887;
+  font-size: 0.71875rem;
+  line-height: 1.55;
+}
+
+@media (max-width: 350px) {
+  .resultItem,
+  .searchSection,
+  .notificationItem {
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+  }
+
+  .definitionCard {
+    margin-right: 0.8rem;
+    margin-left: 0.8rem;
+  }
+}

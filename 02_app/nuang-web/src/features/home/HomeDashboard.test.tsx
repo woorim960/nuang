@@ -158,6 +158,7 @@ describe("HomeDashboard", () => {
       likeLabel: "좋아요 0개",
       poll: {
         canViewCodeStats: true,
+        codePerspectives: [],
         id: "7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801",
         options: [
           {
@@ -181,6 +182,7 @@ describe("HomeDashboard", () => {
         question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
         statsHref: "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats",
         totalVotes: 10,
+        viewerCode: "INGMC",
         viewerVoteOptionId: "option-together",
       },
       priority: -1000,
@@ -236,6 +238,7 @@ describe("HomeDashboard", () => {
       likeLabel: "좋아요 0개",
       poll: {
         canViewCodeStats: false,
+        codePerspectives: [],
         id: "poll-low-participation",
         options: [
           {
@@ -259,6 +262,7 @@ describe("HomeDashboard", () => {
         question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
         statsHref: "/feed/polls/poll-low-participation/stats",
         totalVotes: 1,
+        viewerCode: "INGMC",
         viewerVoteOptionId: "option-together",
       },
       priority: -1000,

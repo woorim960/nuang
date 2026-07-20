@@ -25,7 +25,11 @@ const homeCommunityPollMigration = readFileSync(
   "supabase/migrations/202607190002_home_daily_community_poll.sql",
   "utf8",
 );
-const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}\n${homeCommunityPollMigration}`;
+const topicMediaMigration = readFileSync(
+  "supabase/migrations/202607200001_feed_post_topics_media.sql",
+  "utf8",
+);
+const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}\n${homeCommunityPollMigration}\n${topicMediaMigration}`;
 
 describe("feed db schema draft", () => {
   it("defines the first feed tables without legacy product naming", () => {
@@ -131,5 +135,19 @@ describe("feed db schema draft", () => {
     expect(homeCommunityPollMigration).toContain("'published'");
     expect(homeCommunityPollMigration).not.toContain("assessment_response");
     expect(homeCommunityPollMigration).not.toContain("raw_score");
+  });
+
+  it("stores post topics and ordered private media without a paid AI dependency", () => {
+    expect(topicMediaMigration).toContain("topic_category text");
+    expect(topicMediaMigration).toContain("topic_tags text[]");
+    expect(topicMediaMigration).toContain("'local_suggestion'");
+    expect(topicMediaMigration).toContain(
+      "create table if not exists feed.feed_post_media",
+    );
+    expect(topicMediaMigration).toContain("sort_order between 1 and 19");
+    expect(topicMediaMigration).toContain("'feed-media'");
+    expect(topicMediaMigration).toContain("false,");
+    expect(topicMediaMigration).not.toContain("openai");
+    expect(topicMediaMigration).not.toContain("gemini");
   });
 });

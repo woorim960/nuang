@@ -9,7 +9,7 @@ import type { CoreScoreResult } from "@/lib/scoring/types";
 
 const viewerResult: CoreScoreResult = {
   alternativeCodes: [],
-  code: "TVOAE",
+  code: "ENAKQ",
   domains: [
     {
       domainId: "SE",
@@ -17,24 +17,24 @@ const viewerResult: CoreScoreResult = {
       label: "사람 사이 에너지",
       score: 72,
       status: "valid",
-      symbol: "T",
+      symbol: "E",
     },
     {
       domainId: "ER",
       isBoundary: false,
-      label: "마음의 반응",
+      label: "걱정과 감정 반응",
       score: 64,
       status: "valid",
-      symbol: "V",
+      symbol: "Q",
     },
   ],
   facets: [],
-  profileName: "불꽃의 온기 탐험가",
+  profileName: "관계를 여는 지휘자",
 };
 
 const targetResult: CoreScoreResult = {
   ...viewerResult,
-  code: "SVODE",
+  code: "IRGMQ",
   domains: [
     {
       domainId: "SE",
@@ -42,18 +42,18 @@ const targetResult: CoreScoreResult = {
       label: "사람 사이 에너지",
       score: 38,
       status: "valid",
-      symbol: "S",
+      symbol: "I",
     },
     {
       domainId: "ER",
       isBoundary: false,
-      label: "마음의 반응",
+      label: "걱정과 감정 반응",
       score: 62,
       status: "valid",
-      symbol: "V",
+      symbol: "Q",
     },
   ],
-  profileName: "물결의 새길 개척가",
+  profileName: "질문을 품은 탐구자",
 };
 
 describe("PublicComparisonReportView", () => {
@@ -87,20 +87,20 @@ describe("PublicComparisonReportView", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: "편하게 맞는 자리는 마음이 흔들릴 때의 반응, 신호를 맞출 자리는 에너지가 시작되는 방식이에요.",
+        name: "편하게 맞는 자리는 걱정과 감정 반응, 신호를 맞출 자리는 사람 사이 에너지예요.",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText("불꽃의 온기 탐험가")).toBeInTheDocument();
-    expect(screen.getByText("물결의 새길 개척가")).toBeInTheDocument();
+    expect(screen.getByText("관계를 여는 지휘자")).toBeInTheDocument();
+    expect(screen.getByText("질문을 품은 탐구자")).toBeInTheDocument();
     expect(screen.getByText("핵심 요약")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "뉴앙 코드 비교" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "에너지가 시작되는 방식" })).toBeInTheDocument();
-    expect(screen.getByRole("heading", { name: "마음이 흔들릴 때의 반응" })).toBeInTheDocument();
-    expect(screen.getAllByText("먼저 움직이는 에너지")).toHaveLength(1);
+    expect(screen.getByRole("heading", { name: "사람 사이 에너지" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "걱정과 감정 반응" })).toBeInTheDocument();
+    expect(screen.getAllByText("함께할 때 활력이 올라요")).toHaveLength(1);
     expect(document.body).not.toHaveTextContent("나:");
     expect(document.body).not.toHaveTextContent("상대:");
-    expect(screen.getAllByText(/먼저 움직이는 에너지/).length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/조용히 살피는 에너지/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/함께할 때 활력이 올라요/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/혼자 정리하며 회복해요/).length).toBeGreaterThan(0);
     expect(screen.getByRole("heading", { name: "오해가 생길 수 있는 장면" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "대화 가이드" })).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "조율 가이드" })).toBeInTheDocument();

@@ -24,34 +24,42 @@ describe("FeedPage", () => {
     });
   });
 
-  it("renders a focused community feed without unfinished controls or example posts", async () => {
+  it("renders the approved community navigation without fake posts", async () => {
     render(await FeedPage());
 
-    expect(screen.getByRole("heading", { name: "피드" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "커뮤니티" }),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("button", {
-        name: "지금 떠오른 생각을 나눠보세요",
+        name: "새 게시물 쓰기",
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "글쓰기 영역으로 이동" }),
+      screen.getByRole("link", { name: "게시물, 사람, 성향 검색" }),
+    ).toHaveAttribute("href", "/feed/search");
+    expect(
+      screen.getByRole("link", { name: "커뮤니티 활동 알림" }),
+    ).toHaveAttribute("href", "/feed/notifications");
+    expect(screen.getByRole("button", { name: "추천" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(
+      screen.getByRole("button", { name: "데칼코마니" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", {
+        name: "여러 성향을 골라 게시물 모아보기",
+      }),
     ).toBeInTheDocument();
     expect(screen.getByText("아직 올라온 이야기가 없어요")).toBeInTheDocument();
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "피드 검색" }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "메시지" }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "팔로잉" }),
-    ).not.toBeInTheDocument();
     expect(screen.queryByText("TVOAE")).not.toBeInTheDocument();
   });
 
   it("keeps product metadata for the feed route", () => {
-    expect(metadata.title).toBe("피드 | NUANG");
+    expect(metadata.title).toBe("커뮤니티 | NUANG");
   });
 
   it("keeps the bottom navigation as the only way back to main tabs", async () => {

@@ -1,8 +1,16 @@
 "use client";
 
-import { Bookmark, Heart, MessageCircle, Send } from "lucide-react";
+import {
+  Bookmark,
+  Heart,
+  Link2,
+  MessageCircle,
+  Repeat2,
+  Send,
+  X,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { FormEvent } from "react";
+import type { FormEvent, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import type { FeedReplyPreview } from "@/features/feed/feed-seed";
@@ -16,6 +24,7 @@ type FeedActionStatus =
   | { message: string; status: "error" };
 
 type FeedAction = {
+  count?: number;
   label: string;
   makeRequest?: (active: boolean) => FeedWriteRequest;
   mode: "api" | "comment" | "local";
@@ -30,6 +39,7 @@ type FeedActionFailurePayload =
     };
 
 export function FeedActionButtons({
+  allowComment = true,
   className,
   commentComposer = false,
   commentPlaceholder = "댓글 달기",
@@ -38,11 +48,15 @@ export function FeedActionButtons({
   includeShare = true,
   initialBookmarked = false,
   initialLiked = false,
+  likeCount = 0,
   postId,
+  questionMode = false,
+  replyCount = 0,
   replyPreview = [],
   returnTo = "/feed",
   targetType = "feed_seed_card",
 }: {
+  allowComment?: boolean;
   className?: string;
   commentComposer?: boolean;
   commentPlaceholder?: string;
@@ -51,7 +65,10 @@ export function FeedActionButtons({
   includeShare?: boolean;
   initialBookmarked?: boolean;
   initialLiked?: boolean;
+  likeCount?: number;
   postId: string;
+  questionMode?: boolean;
+  replyCount?: number;
   replyPreview?: FeedReplyPreview[];
   returnTo?: string;
   targetType?: "feed_post" | "feed_seed_card";
@@ -60,6 +77,10 @@ export function FeedActionButtons({
   const [status, setStatus] = useState<FeedActionStatus>({ status: "idle" });
   const [commentBody, setCommentBody] = useState("");
   const [isCommentOpen, setIsCommentOpen] = useState(commentComposer);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [likeTotal, setLikeTotal] = useState(likeCount);
+  const [replies, setReplies] = useState(replyPreview);
+  const [replyTotal, setReplyTotal] = useState(replyCount);
   const [activeActions, setActiveActions] = useState<Array<FeedAction["type"]>>(
     createInitialActiveActions({ initialBookmarked, initialLiked }),
   );
@@ -85,7 +106,7 @@ export function FeedActionButtons({
       setCommentBody(savedDraft);
       setIsCommentOpen(true);
       setStatus({
-        message: `로그인이 완료됐어요. ${commentComposer ? "등록" : "게시"} 버튼을 누르면 댓글이 등록돼요.`,
+        message: `로그인이 완료됐어요. ${commentComposer ? "등록" : "게시"} 버튼을 누르면 ${questionMode ? "답변" : "댓글"}이 등록돼요.`,
         status: "notice",
       });
     }, 0);
@@ -93,11 +114,12 @@ export function FeedActionButtons({
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [commentComposer, postId]);
+  }, [commentComposer, postId, questionMode]);
   const actions: FeedAction[] = commentComposer
     ? []
     : [
         {
+          count: likeTotal,
           label: "좋아요",
           makeRequest: (active) =>
             active
@@ -124,7 +146,8 @@ export function FeedActionButtons({
 
   if (!commentComposer && includeComment) {
     actions.push({
-      label: "댓글",
+      count: replyTotal,
+      label: questionMode ? "답변" : "댓글",
       mode: "comment",
       type: "comment",
     });
@@ -169,11 +192,11 @@ export function FeedActionButtons({
       {actions.length > 0 ? (
         <div
           className={cn(
-            "flex items-center text-[#242424]",
-            includeBookmark ? "justify-between" : "gap-4",
+            "flex items-center text-[#6d7280]",
+            includeBookmark ? "justify-between" : "gap-1",
           )}
         >
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1">
             {primaryActions.map((action) => (
               <ActionButton
                 action={action}
@@ -182,6 +205,7 @@ export function FeedActionButtons({
                 expanded={action.type === "comment" ? isCommentOpen : undefined}
                 key={action.type}
                 onClick={handleAction}
+                showCount
               />
             ))}
           </div>
@@ -191,30 +215,37 @@ export function FeedActionButtons({
               active={activeActions.includes(bookmarkAction.type)}
               disabled={status.status === "pending"}
               onClick={handleAction}
+              showCount
             />
           ) : null}
         </div>
       ) : null}
-      {isCommentOpen && replyPreview.length > 0 ? (
-        <FeedReplyPreviewList replies={replyPreview} />
-      ) : null}
       {isCommentOpen ? (
+        <FeedReplyPreviewList
+          questionMode={questionMode}
+          replies={replies}
+          replyTotal={replyTotal}
+        />
+      ) : null}
+      {isCommentOpen && allowComment ? (
         <form
           className={cn(
             "flex items-center gap-2",
-            commentComposer ? "mt-0" : "mt-2",
+            commentComposer ? "mt-0" : questionMode ? "mt-3" : "mt-2",
           )}
           onSubmit={handleCommentSubmit}
         >
           <label className="sr-only" htmlFor={`feed-comment-${postId}`}>
-            댓글 내용
+            {questionMode ? "답변 내용" : "댓글 내용"}
           </label>
           <input
             className={cn(
               "min-w-0 flex-1 text-sm font-medium outline-none placeholder:text-[#9a9a9a]",
               commentComposer
-                ? "min-h-11 rounded-[14px] border border-[#ded9e3] bg-white px-3 focus:border-[#8066d3] focus:ring-2 focus:ring-[#8066d3]/10"
-                : "min-h-9 border-0 border-b border-[#dedede] bg-transparent px-0 focus:border-[#111111]",
+                ? "min-h-11 rounded-[14px] border border-[#c7e5dc] bg-white px-3 focus:border-[#306e60] focus:ring-2 focus:ring-[#306e60]/10"
+                : questionMode
+                  ? "min-h-10 rounded-[15px] border border-[#c7e5dc] bg-[#f8fcfa] px-3 focus:border-[#306e60] focus:ring-2 focus:ring-[#306e60]/10"
+                  : "min-h-9 border-0 border-b border-[#dedede] bg-transparent px-0 focus:border-[#111111]",
             )}
             id={`feed-comment-${postId}`}
             maxLength={400}
@@ -226,8 +257,10 @@ export function FeedActionButtons({
             className={cn(
               "shrink-0 text-sm font-bold disabled:cursor-not-allowed",
               commentComposer
-                ? "h-11 rounded-[14px] bg-[#5e43c2] px-4 text-white shadow-[0_7px_18px_rgb(94_67_194_/_18%)] disabled:bg-[#d8d2e2] disabled:shadow-none"
-                : "h-9 px-1 text-[#111111] disabled:text-[#b8b8b8]",
+                ? "h-11 rounded-[14px] bg-[#306e60] px-4 text-white shadow-[0_7px_18px_rgb(48_110_96_/_14%)] disabled:bg-[#d8e3df] disabled:shadow-none"
+                : questionMode
+                  ? "h-9 px-1 text-[#306e60] disabled:text-[#aebbb7]"
+                  : "h-9 px-1 text-[#111111] disabled:text-[#b8b8b8]",
             )}
             disabled={
               commentBody.trim().length < 2 || status.status === "pending"
@@ -238,16 +271,30 @@ export function FeedActionButtons({
           </button>
         </form>
       ) : null}
+      {isCommentOpen && questionMode && !allowComment ? (
+        <p className="mt-2 text-[11px] leading-[1.5] text-[#85818b]">
+          답변 대상으로 지정된 성향만 답변을 남길 수 있어요.
+        </p>
+      ) : null}
+      {isCommentOpen && questionMode ? (
+        <p className="mt-1.5 text-[11px] leading-[1.45] text-[#85818b]">
+          공개한 뉴앙 코드만 표시되며 검사 점수와 응답 내용은 공개되지 않아요.
+        </p>
+      ) : null}
       <FeedActionStatusMessage status={status} />
+      {isShareOpen ? (
+        <ShareActionSheet
+          onClose={() => setIsShareOpen(false)}
+          onSelect={handleShareOption}
+        />
+      ) : null}
     </div>
   );
 
   async function handleAction(action: FeedAction) {
     if (action.mode === "local") {
-      setStatus({
-        message: "공유는 프로필과 결과 공유 정책이 연결된 뒤 열릴 예정이에요.",
-        status: "notice",
-      });
+      setIsShareOpen(true);
+      setStatus({ status: "idle" });
       return;
     }
 
@@ -276,14 +323,14 @@ export function FeedActionButtons({
 
     if (trimmedBody.length < 2) {
       setStatus({
-        message: "댓글을 조금 더 적어주세요.",
+        message: `${questionMode ? "답변" : "댓글"}을 조금 더 적어주세요.`,
         status: "error",
       });
       return;
     }
 
     await submitFeedRequest(
-      "댓글",
+      questionMode ? "답변" : "댓글",
       {
         action: "create_comment",
         body: trimmedBody,
@@ -366,6 +413,20 @@ export function FeedActionButtons({
         window.sessionStorage.removeItem(createPendingCommentKey(postId));
         setCommentBody("");
         setIsCommentOpen(true);
+        setReplyTotal((current) => current + 1);
+        if (request.action === "create_comment") {
+          setReplies((current) => [
+            {
+              authorHandle: "me",
+              authorName: "나",
+              body: request.body,
+              id: `local-${Date.now()}`,
+              statusLabel: "게시 전 확인 중",
+              timeLabel: "방금",
+            },
+            ...current,
+          ]);
+        }
       }
 
       if (actionType === "react" || actionType === "bookmark") {
@@ -376,10 +437,15 @@ export function FeedActionButtons({
               : [...current, actionType]
             : current.filter((item) => item !== actionType),
         );
+        if (actionType === "react") {
+          setLikeTotal((current) =>
+            Math.max(0, current + (nextActive ? 1 : -1)),
+          );
+        }
       }
 
       setStatus({
-        message: getSuccessMessage(actionType, nextActive),
+        message: getSuccessMessage(actionType, nextActive, questionMode),
         status: "notice",
       });
       router.refresh();
@@ -387,6 +453,61 @@ export function FeedActionButtons({
       setStatus({
         message: "네트워크 연결 때문에 요청을 확인하지 못했어요.",
         status: "error",
+      });
+    }
+  }
+
+  async function handleShareOption(option: "copy" | "feed" | "kakao") {
+    setIsShareOpen(false);
+
+    if (option === "copy") {
+      try {
+        await window.navigator.clipboard?.writeText(
+          `${window.location.origin}/feed?posted=${encodeURIComponent(postId)}`,
+        );
+        setStatus({ message: "질문 링크를 복사했어요.", status: "notice" });
+      } catch {
+        setStatus({
+          message:
+            "공유 링크를 준비했어요. 브라우저의 공유 기능을 이용해 주세요.",
+          status: "notice",
+        });
+      }
+      return;
+    }
+
+    const shareUrl = `${window.location.origin}/feed?posted=${encodeURIComponent(postId)}`;
+
+    if (option === "feed") {
+      router.push(`/feed/new?share=${encodeURIComponent(postId)}`);
+      return;
+    }
+
+    if (window.navigator.share) {
+      try {
+        await window.navigator.share({
+          text: "뉴앙 커뮤니티에서 함께 보고 싶은 이야기가 있어요.",
+          title: "뉴앙 커뮤니티",
+          url: shareUrl,
+        });
+        setStatus({ message: "공유 화면을 열었어요.", status: "notice" });
+        return;
+      } catch {
+        setStatus({ status: "idle" });
+        return;
+      }
+    }
+
+    try {
+      await window.navigator.clipboard?.writeText(shareUrl);
+      setStatus({
+        message: "공유 링크를 복사했어요. 카카오톡 대화창에 붙여넣어 주세요.",
+        status: "notice",
+      });
+    } catch {
+      setStatus({
+        message: "브라우저의 공유 기능에서 카카오톡을 선택해 주세요.",
+        status: "notice",
       });
     }
   }
@@ -448,7 +569,77 @@ function createInitialActiveActions({
   return activeActions;
 }
 
-function FeedReplyPreviewList({ replies }: { replies: FeedReplyPreview[] }) {
+function FeedReplyPreviewList({
+  questionMode,
+  replies,
+  replyTotal,
+}: {
+  questionMode: boolean;
+  replies: FeedReplyPreview[];
+  replyTotal: number;
+}) {
+  if (questionMode) {
+    return (
+      <section
+        aria-label="질문의 답변"
+        className="mt-2 border-t border-[#ebe8ee] pt-3"
+      >
+        <div className="mb-1.5 flex items-center justify-between gap-3">
+          <strong className="text-[13px] font-bold text-[#343039]">
+            답변 {replyTotal.toLocaleString("ko-KR")}개
+          </strong>
+          {replies.length > 0 ? (
+            <span className="text-[11px] font-medium text-[#89858e]">
+              최근 답변부터
+            </span>
+          ) : null}
+        </div>
+        {replies.length > 0 ? (
+          <div className="divide-y divide-[#efedf1]">
+            {replies.map((reply) => (
+              <article
+                className="grid grid-cols-[30px_minmax(0,1fr)] gap-2 py-2.5"
+                key={reply.id}
+              >
+                <span
+                  aria-hidden="true"
+                  className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[linear-gradient(145deg,#ebe8ff,#def4ef)] text-[10px] font-bold text-[#5a4bc1]"
+                >
+                  {reply.authorName.slice(0, 1)}
+                </span>
+                <div className="min-w-0">
+                  <p className="m-0 text-[13px] leading-[1.55] text-[#343039]">
+                    <strong className="mr-1 font-bold text-[#242128]">
+                      {reply.authorName}
+                    </strong>
+                    {reply.authorCode ? (
+                      <span className="mr-1.5 inline-flex min-h-5 items-center rounded-full bg-[#f0edff] px-1.5 text-[9px] font-bold tracking-[0.04em] text-[#5c4fc2]">
+                        {reply.authorCode}
+                      </span>
+                    ) : null}
+                    {reply.body}
+                  </p>
+                  <p className="mt-1 flex items-center gap-2.5 text-[10px] font-medium text-[#8a8790]">
+                    {reply.timeLabel ? <span>{reply.timeLabel}</span> : null}
+                    {reply.statusLabel ? (
+                      <span>{reply.statusLabel}</span>
+                    ) : null}
+                    <button type="button">공감</button>
+                    <button type="button">답글</button>
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <p className="py-2 text-[12px] leading-[1.5] text-[#817d86]">
+            아직 답변이 없어요. 내 경험을 가장 먼저 나눠보세요.
+          </p>
+        )}
+      </section>
+    );
+  }
+
   return (
     <div aria-label="최근 댓글" className="mt-3 space-y-1.5">
       {replies.map((reply) => (
@@ -472,12 +663,14 @@ function ActionButton({
   disabled,
   expanded,
   onClick,
+  showCount,
 }: {
   active: boolean;
   action: FeedAction;
   disabled: boolean;
   expanded?: boolean;
   onClick: (action: FeedAction) => Promise<void>;
+  showCount: boolean;
 }) {
   const isPressable = action.type === "react" || action.type === "bookmark";
 
@@ -487,8 +680,8 @@ function ActionButton({
       aria-expanded={action.type === "comment" ? expanded : undefined}
       aria-pressed={isPressable ? active : undefined}
       className={cn(
-        "grid h-11 w-11 place-items-center rounded-full transition-[color,background-color,transform] hover:bg-[#f5f2f8] active:scale-[0.96] disabled:opacity-50",
-        active ? "text-[#6546d7]" : "text-[#302b34]",
+        "inline-flex min-h-[38px] items-center gap-[5px] rounded-full px-[7px] text-[12px] font-normal transition-[color,background-color,transform] hover:bg-[#f6f5f2] active:scale-[0.97] disabled:opacity-50",
+        getActionToneClass(action.type, active, expanded),
       )}
       disabled={disabled}
       onClick={() => {
@@ -497,8 +690,39 @@ function ActionButton({
       type="button"
     >
       {getActionIcon(action.type, active)}
+      {showCount && action.type === "react" ? (
+        <span className="text-[12px] font-normal tabular-nums">
+          {(action.count ?? 0).toLocaleString("ko-KR")}
+        </span>
+      ) : null}
+      {showCount && action.type === "comment" ? (
+        <span className="text-[12px] font-normal tabular-nums">
+          {action.label === "답변" ? `${action.label} ` : null}
+          {(action.count ?? 0).toLocaleString("ko-KR")}
+        </span>
+      ) : null}
     </button>
   );
+}
+
+function getActionToneClass(
+  type: FeedAction["type"],
+  active: boolean,
+  expanded?: boolean,
+) {
+  if (type === "react" && active) {
+    return "text-[#c94b61] hover:bg-[#fff0f3] focus-visible:outline-[#c94b61]";
+  }
+
+  if (type === "comment" && expanded) {
+    return "text-[#306e60] hover:bg-[#e6f4ef] focus-visible:outline-[#306e60]";
+  }
+
+  if (type === "bookmark" && active) {
+    return "text-[#20232a] hover:bg-[#f3f3f5] focus-visible:outline-[#20232a]";
+  }
+
+  return "text-[#6d7280] focus-visible:outline-[#6d7280]";
 }
 
 function getActionIcon(type: FeedAction["type"], active: boolean) {
@@ -507,14 +731,14 @@ function getActionIcon(type: FeedAction["type"], active: boolean) {
       <Heart
         aria-hidden="true"
         fill={active ? "currentColor" : "none"}
-        size={22}
-        strokeWidth={1.9}
+        size={24}
+        strokeWidth={2}
       />
     );
   }
 
   if (type === "comment") {
-    return <MessageCircle aria-hidden="true" size={22} strokeWidth={1.9} />;
+    return <MessageCircle aria-hidden="true" size={24} strokeWidth={2} />;
   }
 
   if (type === "bookmark") {
@@ -522,22 +746,105 @@ function getActionIcon(type: FeedAction["type"], active: boolean) {
       <Bookmark
         aria-hidden="true"
         fill={active ? "currentColor" : "none"}
-        size={23}
-        strokeWidth={1.9}
+        size={24}
+        strokeWidth={2}
       />
     );
   }
 
-  return <Send aria-hidden="true" size={21} strokeWidth={1.9} />;
+  return <Send aria-hidden="true" size={24} strokeWidth={2} />;
 }
 
-function getSuccessMessage(type: FeedAction["type"], active: boolean) {
+function getSuccessMessage(
+  type: FeedAction["type"],
+  active: boolean,
+  questionMode: boolean,
+) {
   if (type === "react")
     return active ? "좋아요를 남겼어요." : "좋아요를 취소했어요.";
   if (type === "bookmark") return active ? "저장했어요." : "저장을 취소했어요.";
-  if (type === "comment") return "댓글이 접수됐어요.";
+  if (type === "comment")
+    return `${questionMode ? "답변" : "댓글"}이 접수됐어요.`;
 
   return "반영됐어요.";
+}
+
+function ShareActionSheet({
+  onClose,
+  onSelect,
+}: {
+  onClose: () => void;
+  onSelect: (option: "copy" | "feed" | "kakao") => Promise<void>;
+}) {
+  return (
+    <div
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-[#19171d]/35 px-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-[2px]"
+      onClick={(event) => {
+        if (event.currentTarget === event.target) onClose();
+      }}
+    >
+      <section
+        aria-label="게시물 공유"
+        aria-modal="true"
+        className="w-full max-w-[496px] overflow-hidden rounded-[22px] bg-white shadow-[0_24px_60px_rgb(29_24_37_/_22%)]"
+        role="dialog"
+      >
+        <header className="flex min-h-14 items-center justify-between border-b border-[#ebe8ed] px-4">
+          <strong className="text-sm font-bold text-[#2e2a32]">공유하기</strong>
+          <button
+            aria-label="공유 닫기"
+            className="grid h-10 w-10 place-items-center rounded-full text-[#68636d] hover:bg-[#f5f3f6]"
+            onClick={onClose}
+            type="button"
+          >
+            <X aria-hidden="true" size={19} strokeWidth={1.9} />
+          </button>
+        </header>
+        <div className="grid divide-y divide-[#efedf1] px-1 pb-1">
+          <ShareOption
+            icon={<Link2 aria-hidden="true" size={20} strokeWidth={1.9} />}
+            label="링크 복사"
+            onClick={() => void onSelect("copy")}
+          />
+          <ShareOption
+            icon={
+              <MessageCircle aria-hidden="true" size={20} strokeWidth={1.9} />
+            }
+            label="카카오톡으로 공유"
+            onClick={() => void onSelect("kakao")}
+          />
+          <ShareOption
+            icon={<Repeat2 aria-hidden="true" size={20} strokeWidth={1.9} />}
+            label="내 피드에 공유"
+            onClick={() => void onSelect("feed")}
+          />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function ShareOption({
+  icon,
+  label,
+  onClick,
+}: {
+  icon: ReactNode;
+  label: string;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      className="flex min-h-13 items-center gap-3 rounded-xl px-3 text-left text-[13px] font-semibold text-[#38333d] hover:bg-[#f8f6f9]"
+      onClick={onClick}
+      type="button"
+    >
+      <span className="grid h-9 w-9 place-items-center rounded-full bg-[#f2eff8] text-[#6755c7]">
+        {icon}
+      </span>
+      {label}
+    </button>
+  );
 }
 
 function FeedActionStatusMessage({ status }: { status: FeedActionStatus }) {

@@ -10,19 +10,19 @@ import {
   type ProfileVisibilityFieldId,
 } from "@/features/together/profile-visibility-policy";
 import {
-  getBoundaryCopy,
-  getNuangCodeLetterAt,
-  getNuangCodeLetterInsight,
-  getNuangCodePositionByDomainId,
-  nuangCodeComparisonCopy,
-  type NuangCodePositionId,
-} from "@/features/nuang-code/nuang-code-dictionary";
+  getCandidateDirectionCopy,
+  getCandidateProfileDefinition,
+} from "@/features/nuang-code/candidate-profile-names";
+import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 
 export const publicProfileSnapshotContractVersion =
   "public-profile-snapshot.v0.1";
 
 export const publicComparisonReportContractVersion =
-  "public-comparison-report.v0.3";
+  "public-comparison-report.v0.4";
+
+type CandidateDomainId =
+  (typeof nextNuangCodeScheme.positions)[number]["domainId"];
 
 export type PublicProfileDisplay = {
   displayName: string;
@@ -243,7 +243,7 @@ export type PublicComparisonAxisDelta = {
   domainId: string;
   hasBoundarySignal?: boolean;
   label: string;
-  positionId?: NuangCodePositionId;
+  positionId?: CandidateDomainId;
   targetIsBoundary?: boolean;
   targetScore: number;
   targetSymbol?: string | null;
@@ -457,7 +457,7 @@ function getComparableDomainDeltas(
   return viewer.publicData.coreDomainMap.flatMap((viewerDomain, index) => {
     if (viewerDomain.score === null) return [];
     const axisId = getAxisId(viewerDomain, index);
-    const position = getNuangCodePositionByDomainId(axisId);
+    const position = getCandidateCodePosition(axisId);
     const targetDomain =
       targetDomainsById.get(axisId) ??
       targetDomainsByLabel.get(viewerDomain.label) ??
@@ -465,18 +465,21 @@ function getComparableDomainDeltas(
 
     if (!targetDomain || targetDomain.score === null) return [];
 
+    const positionIndex = position ? position.codePosition - 1 : index;
     const viewerSymbol =
-      viewerDomain.symbol ?? getNuangCodeLetterAt(viewer.profile.code, position?.index ?? -1);
+      viewerDomain.symbol ??
+      getCandidateCodeSymbolAt(viewer.profile.code, positionIndex);
     const targetSymbol =
-      targetDomain.symbol ?? getNuangCodeLetterAt(target.profile.code, position?.index ?? -1);
+      targetDomain.symbol ??
+      getCandidateCodeSymbolAt(target.profile.code, positionIndex);
 
     return [
       {
         difference: Math.abs(viewerDomain.score - targetDomain.score),
         domainId: axisId,
         hasBoundarySignal: Boolean(viewerDomain.isBoundary || targetDomain.isBoundary),
-        label: position?.name ?? viewerDomain.label,
-        positionId: position?.id,
+        label: position?.label ?? viewerDomain.label,
+        positionId: position?.domainId,
         targetIsBoundary: Boolean(targetDomain.isBoundary),
         targetScore: targetDomain.score,
         targetSymbol,
@@ -511,7 +514,7 @@ function buildComparisonSummary(
         ? `${pairSubject} ${closestAxis.label}에서는 편하게 맞는 부분이 있고, ${strongestDifference.label}에서는 서로 필요한 신호가 다르게 나타나요.`
         : closestAxis
           ? `${pairSubject} ${closestAxis.label}에서 서로 편한 흐름이 가까워요.`
-          : `${pairSubject} 공개된 뉴앙 코드를 기준으로 관계 리듬을 정리했어요.`,
+          : `${pairSubject} 공개된 뉴앙 코드를 기준으로 관계에서 나타나는 방식을 정리했어요.`,
     closestAxisLabel: closestAxis?.label ?? null,
     headline: buildSummaryHeadline(closestAxis, strongestDifference),
     strongestDifferenceLabel: strongestDifference?.label ?? null,
@@ -531,10 +534,10 @@ function buildSummaryHeadline(
   }
 
   if (closestAxis) {
-    return `${closestAxis.label}에서 비슷한 리듬이 보여요.`;
+    return `${closestAxis.label}에서 비슷한 방식이 보여요.`;
   }
 
-  return "공개된 성향 정보를 기준으로 서로의 리듬을 확인했어요.";
+  return "공개된 성향 정보를 기준으로 서로의 반응 방식을 확인했어요.";
 }
 
 function toAxisInsight(delta: PublicComparisonAxisDelta): PublicComparisonAxisInsight {
@@ -564,12 +567,12 @@ function buildAxisInterpretation(
   closeness: PublicComparisonAxisInsight["closeness"],
 ) {
   const copy = getComparisonCopy(delta);
-  const viewerInsight = getNuangCodeLetterInsight(delta.viewerSymbol);
-  const targetInsight = getNuangCodeLetterInsight(delta.targetSymbol);
-  const boundarySuffix = delta.hasBoundarySignal ? ` ${getBoundaryCopy()}` : "";
+  const viewerInsight = getCandidateAxisDirection(delta, delta.viewerSymbol);
+  const targetInsight = getCandidateAxisDirection(delta, delta.targetSymbol);
+  const boundarySuffix = delta.hasBoundarySignal ? ` ${boundaryCopy}` : "";
 
   if (isSameCodePosition(delta)) {
-    const sharedName = viewerInsight?.name ?? "비슷한 흐름";
+    const sharedName = viewerInsight?.shortToken ?? "비슷한 방식";
 
     return `${delta.label}에서는 둘 다 ${sharedName} 쪽으로 가까워요. ${copy.same}${boundarySuffix}`;
   }
@@ -578,7 +581,7 @@ function buildAxisInterpretation(
     return `${delta.label}에서는 비슷한 부분과 다른 부분이 함께 보여요. ${copy.different}${boundarySuffix}`;
   }
 
-  return `${delta.label}에서는 ${viewerInsight?.name ?? "내 흐름"}와 ${targetInsight?.name ?? "상대 흐름"}가 다르게 나타나요. ${copy.different}${boundarySuffix}`;
+  return `${delta.label}에서 나는 ${viewerInsight?.shortToken ?? "내 방식"}, 상대는 ${targetInsight?.shortToken ?? "상대 방식"} 쪽으로 다르게 나타나요. ${copy.different}${boundarySuffix}`;
 }
 
 function buildPossibleMisread(delta: PublicComparisonAxisDelta) {
@@ -598,14 +601,17 @@ function buildPatternText(
   symbol: string | null | undefined,
   isBoundary?: boolean,
 ) {
-  const insight = getNuangCodeLetterInsight(symbol);
-  const boundary = isBoundary ? ` ${getBoundaryCopy()}` : "";
+  const position = getCandidateCodePositionForSymbol(symbol);
+  const insight = position
+    ? getCandidateDirectionCopy(position.codePosition, symbol ?? "")
+    : null;
+  const boundary = isBoundary ? ` ${boundaryCopy}` : "";
 
   if (!insight) {
     return `${subject}의 공개된 뉴앙 코드 정보를 더 확인해야 해요.`;
   }
 
-  return `${insight.name}. ${insight.summary}${boundary}`;
+  return `${insight.detailTitle}. ${insight.description}${boundary}`;
 }
 
 function buildConversationStarters(
@@ -697,11 +703,98 @@ function isSameCodePosition(delta: PublicComparisonAxisDelta) {
 
 function getComparisonCopy(delta: PublicComparisonAxisDelta) {
   return delta.positionId
-    ? nuangCodeComparisonCopy[delta.positionId]
+    ? candidateComparisonCopy[delta.positionId]
     : {
         same: "서로 편하게 맞는 흐름이 보여요.",
         different: "서로 필요한 신호가 다르게 나타날 수 있어요.",
         possibleMisread: "한쪽은 충분하다고 느끼고, 다른 한쪽은 설명이 더 필요하다고 느낄 수 있어요.",
         adjustmentQuestion: "서로 편한 속도와 표현 방식을 먼저 확인해볼까요?",
       };
+}
+
+const boundaryCopy =
+  "이 자리는 한쪽으로 아주 강하게 기울기보다 상황에 따라 두 모습이 모두 나타날 수 있어요.";
+
+const candidateComparisonCopy: Record<
+  CandidateDomainId,
+  {
+    adjustmentQuestion: string;
+    different: string;
+    possibleMisread: string;
+    same: string;
+  }
+> = {
+  SE: {
+    same: "함께 있을 때의 에너지와 표현을 시작하는 방식이 비슷해요.",
+    different:
+      "한 사람은 함께하며 바로 표현할 때 편하고, 다른 사람은 혼자 정리하고 상황을 살핀 뒤 표현할 때 편해요.",
+    possibleMisread:
+      "표현이 늦으면 관심이 없다고 오해하거나, 빠른 반응을 부담으로 느낄 수 있어요.",
+    adjustmentQuestion: "바로 이야기할까, 생각을 정리할 시간을 가질까?",
+  },
+  OE: {
+    same: "정보를 살펴보고 생각을 넓히는 방식이 비슷해요.",
+    different:
+      "한 사람은 확인된 내용과 구체적인 정보부터 보고, 다른 사람은 새로운 가능성과 관점을 더 찾아봐요.",
+    possibleMisread:
+      "구체적인 확인을 답답함으로 보거나, 가능성 탐색을 현실과 동떨어진 이야기로 오해할 수 있어요.",
+    adjustmentQuestion: "확인된 내용부터 볼까, 새로운 가능성부터 이야기해볼까?",
+  },
+  RO: {
+    same: "관계 상황에서 자연스럽게 관심이 가는 곳이 비슷해요.",
+    different:
+      "한 사람은 원인과 해결할 부분에, 다른 사람은 상대가 어떤 마음인지에 더 자연스럽게 관심이 가요.",
+    possibleMisread:
+      "해결 방법을 말하는 것을 공감 부족으로, 마음을 살피는 것을 문제 회피로 오해할 수 있어요.",
+    adjustmentQuestion: "지금은 마음을 함께 살펴볼까, 원인과 해결 방법을 정리해볼까?",
+  },
+  SM: {
+    same: "해야 할 일을 시작하고 이어가며 정리하는 방식이 비슷해요.",
+    different:
+      "한 사람은 비교적 꾸준한 흐름을 편하게 느끼고, 다른 사람은 상황에 맞춰 바꾸는 여유를 더 필요로 해요.",
+    possibleMisread:
+      "꾸준함을 통제로 느끼거나, 상황에 맞춘 변화를 무책임으로 오해할 수 있어요.",
+    adjustmentQuestion: "꼭 지킬 부분과 상황에 따라 바꿔도 되는 부분을 나눠볼까?",
+  },
+  ER: {
+    same: "불편한 상황에서 걱정과 감정이 커지는 속도가 비슷해요.",
+    different:
+      "한 사람은 걱정과 감정이 비교적 천천히 커지고, 다른 사람은 비교적 빠르게 커질 수 있어요.",
+    possibleMisread:
+      "차분한 반응을 무관심으로 보거나, 빠른 감정 반응을 과하다고 오해할 수 있어요.",
+    adjustmentQuestion: "지금 느끼는 걱정과 감정을 어느 정도로 함께 확인하면 편할까?",
+  },
+};
+
+function getCandidateCodePosition(domainId: string) {
+  return (
+    nextNuangCodeScheme.positions.find(
+      (position) => position.domainId === domainId,
+    ) ?? null
+  );
+}
+
+function getCandidateCodeSymbolAt(code: string, index: number) {
+  if (!getCandidateProfileDefinition(code)) return null;
+  return code[index] ?? null;
+}
+
+function getCandidateAxisDirection(
+  delta: PublicComparisonAxisDelta,
+  symbol: string | null | undefined,
+) {
+  const position = getCandidateCodePosition(delta.domainId);
+  return position
+    ? getCandidateDirectionCopy(position.codePosition, symbol ?? "")
+    : null;
+}
+
+function getCandidateCodePositionForSymbol(symbol: string | null | undefined) {
+  if (!symbol) return null;
+  return (
+    nextNuangCodeScheme.positions.find(
+      (position) =>
+        position.lowSymbol === symbol || position.highSymbol === symbol,
+    ) ?? null
+  );
 }

@@ -289,6 +289,67 @@ describe("FeedActionButtons", () => {
     expect(screen.getByText("최근 공개 댓글입니다.")).toBeInTheDocument();
   });
 
+  it("uses the common icon action bar with the inline answer flow", () => {
+    vi.stubGlobal("fetch", vi.fn());
+
+    render(
+      <FeedActionButtons
+        includeBookmark
+        likeCount={87}
+        postId="question-001"
+        questionMode
+        replyCount={14}
+        replyPreview={[
+          {
+            authorCode: "ERGMC",
+            authorHandle: "doyun.guide",
+            authorName: "도윤",
+            body: "괜찮은지 묻고 조금 기다려요.",
+            id: "reply-001",
+            timeLabel: "3분",
+          },
+        ]}
+      />,
+    );
+
+    expect(screen.getByRole("button", { name: "좋아요" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "답변" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "공유" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "저장" })).toBeInTheDocument();
+    expect(screen.getByText("87")).toBeInTheDocument();
+    expect(screen.getByText("답변 14")).toBeInTheDocument();
+    expect(screen.queryByLabelText("질문의 답변")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "답변" }));
+
+    expect(screen.getByLabelText("질문의 답변")).toBeInTheDocument();
+    expect(
+      screen.getByText("괜찮은지 묻고 조금 기다려요."),
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText("답변 내용")).toBeInTheDocument();
+  });
+
+  it("opens the V12 share choices without leaving the feed", () => {
+    vi.stubGlobal("fetch", vi.fn());
+
+    render(<FeedActionButtons postId="question-001" questionMode />);
+
+    fireEvent.click(screen.getByRole("button", { name: "공유" }));
+
+    expect(
+      screen.getByRole("dialog", { name: "게시물 공유" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "링크 복사" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "카카오톡으로 공유" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "내 피드에 공유" }),
+    ).toBeInTheDocument();
+  });
+
   it("refreshes the feed after a successful comment write", async () => {
     vi.stubGlobal(
       "fetch",
@@ -370,7 +431,7 @@ describe("FeedActionButtons", () => {
     });
   });
 
-  it("keeps share local until the share policy is connected", async () => {
+  it("opens share choices locally without calling the feed API", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
@@ -379,9 +440,10 @@ describe("FeedActionButtons", () => {
     fireEvent.click(screen.getByRole("button", { name: "공유" }));
 
     expect(
-      await screen.findByText(
-        "공유는 프로필과 결과 공유 정책이 연결된 뒤 열릴 예정이에요.",
-      ),
+      screen.getByRole("dialog", { name: "게시물 공유" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "링크 복사" }),
     ).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });

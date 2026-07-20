@@ -35,6 +35,8 @@
     "research:core:beta-item-set:check": "node scripts/generate-core-beta-item-set.mjs --check",
     "research:core:measurement-seed": "node scripts/generate-measurement-release-seed.mjs",
     "research:core:measurement-seed:check": "node scripts/generate-measurement-release-seed.mjs --check",
+    "migrate:public-profiles:current-code": "node scripts/rebase-public-profiles-to-current-code.mjs",
+    "seed:community:review": "node scripts/seed-community-review-data.mjs --apply",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },

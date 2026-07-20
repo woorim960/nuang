@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import FeedPollStatsPage, {
   metadata,
@@ -22,7 +22,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("FeedPollStatsPage", () => {
-  it("shows code-level stats and comments after the privacy threshold", async () => {
+  it("shows the V12 code perspective explorer from the first vote", async () => {
     feedReadMocks.createServerFeedPollStatsPayload.mockResolvedValue({
       codeRows: [
         {
@@ -37,10 +37,19 @@ describe("FeedPollStatsPage", () => {
             {
               label: "바다",
               ratio: 100,
-              voteCount: 3,
+              voteCount: 1,
             },
           ],
-          totalVotes: 3,
+          totalVotes: 1,
+        },
+        {
+          code: "IRGMC",
+          name: "단서를 좇는 탐구자",
+          options: [
+            { label: "산", ratio: 100, voteCount: 1 },
+            { label: "바다", ratio: 0, voteCount: 0 },
+          ],
+          totalVotes: 1,
         },
       ],
       options: [
@@ -73,7 +82,7 @@ describe("FeedPollStatsPage", () => {
           },
         ],
       },
-      totalVotes: 3,
+      totalVotes: 2,
       viewer: {
         isAuthenticated: true,
         nuangCode: "ENAKQ",
@@ -92,24 +101,20 @@ describe("FeedPollStatsPage", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "투표 결과" }),
+      screen.getByRole("heading", { name: "코드별 관점" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("내가 고른 선택")).toBeInTheDocument();
-    expect(screen.getAllByText("바다").length).toBeGreaterThan(0);
-    expect(screen.getByText("3명 참여")).toBeInTheDocument();
-    expect(screen.getByText("ENAKQ")).toBeInTheDocument();
-    expect(screen.getByText("관계를 여는 지휘자")).toBeInTheDocument();
-    expect(screen.getAllByText("100%").length).toBeGreaterThan(0);
-    expect(document.body).toHaveTextContent("3명 이상 모였을 때만");
-    expect(document.body).not.toHaveTextContent("5명");
+    expect(screen.getByText("2개 코드가 참여했어요")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /ENAKQ.*1명/ })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
+    expect(screen.getByText("ENAKQ의 관점")).toBeInTheDocument();
+    expect(screen.getByText("100%")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /IRGMC.*1명/ }));
+    expect(screen.getByText("IRGMC의 관점")).toBeInTheDocument();
+    expect(screen.getByText("100%")).toBeInTheDocument();
+    expect(document.body).toHaveTextContent("1명부터 코드별 선택을");
     expect(document.body).not.toHaveTextContent("누가 투표");
-    expect(screen.getByText("선택한 이유 나누기")).toBeInTheDocument();
-    expect(
-      screen.getByText("함께 시간을 보내면 기분이 더 살아나요."),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByPlaceholderText("왜 이쪽을 골랐나요?"),
-    ).toBeInTheDocument();
   });
 
   it("keeps noindex metadata for poll stats", () => {
@@ -158,8 +163,10 @@ describe("FeedPollStatsPage", () => {
       screen.getByText("먼저 오늘의 선택을 골라주세요"),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /투표하고 결과 보기/ }),
+      screen.getByRole("link", { name: /투표하고 관점 보기/ }),
     ).toHaveAttribute("href", "/home");
-    expect(screen.queryByText("전체 선택 결과")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("코드별 관점을 모으고 있어요"),
+    ).not.toBeInTheDocument();
   });
 });

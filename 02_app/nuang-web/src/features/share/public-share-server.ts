@@ -1,6 +1,6 @@
 import { createPublicShareSuccessPayload } from "@/features/share/public-share-contract";
 import { hashShareToken } from "@/features/account/server-writes";
-import { getNuangProfileName } from "@/features/nuang-code/nuang-code-dictionary";
+import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import {
   createSupabaseServiceClient,
   getSupabaseServiceEnv,
@@ -82,7 +82,7 @@ export async function readPublicShareToken(
   const shareSummary = report.share_summary;
   const profileCode = stringOrFallback(shareSummary.profileCode, "-----");
   const profileName =
-    getNuangProfileName(profileCode) ??
+    getCandidateProfileDefinition(profileCode)?.displayName ??
     stringOrFallback(shareSummary.profileName, "공유 결과");
 
   return {

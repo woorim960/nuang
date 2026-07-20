@@ -12,7 +12,7 @@ import type { CoreScoreResult } from "@/lib/scoring/types";
 
 const viewerResult: CoreScoreResult = {
   alternativeCodes: [],
-  code: "TVOAE",
+  code: "ENAKQ",
   domains: [
     {
       domainId: "SE",
@@ -20,23 +20,23 @@ const viewerResult: CoreScoreResult = {
       label: "사람 사이 에너지",
       score: 72.4,
       status: "valid",
-      symbol: "T",
+      symbol: "E",
     },
     {
       domainId: "ER",
       isBoundary: false,
-      label: "마음의 반응",
+      label: "걱정과 감정 반응",
       score: 64.2,
       status: "valid",
-      symbol: "V",
+      symbol: "Q",
     },
     {
       domainId: "SM",
       isBoundary: false,
-      label: "일상 리듬",
+      label: "일상을 꾸리는 방식",
       score: 58.1,
       status: "valid",
-      symbol: "O",
+      symbol: "K",
     },
   ],
   facets: [
@@ -48,12 +48,12 @@ const viewerResult: CoreScoreResult = {
       validResponses: 6,
     },
   ],
-  profileName: "불꽃의 온기 탐험가",
+  profileName: "관계를 여는 지휘자",
 };
 
 const targetResult: CoreScoreResult = {
   ...viewerResult,
-  code: "SVODE",
+  code: "IRGMQ",
   domains: [
     {
       domainId: "SE",
@@ -61,26 +61,26 @@ const targetResult: CoreScoreResult = {
       label: "사람 사이 에너지",
       score: 38.3,
       status: "valid",
-      symbol: "S",
+      symbol: "I",
     },
     {
       domainId: "ER",
       isBoundary: false,
-      label: "마음의 반응",
+      label: "걱정과 감정 반응",
       score: 61.8,
       status: "valid",
-      symbol: "V",
+      symbol: "Q",
     },
     {
       domainId: "SM",
       isBoundary: false,
-      label: "일상 리듬",
+      label: "일상을 꾸리는 방식",
       score: 79.1,
       status: "valid",
-      symbol: "O",
+      symbol: "M",
     },
   ],
-  profileName: "물결의 새길 개척가",
+  profileName: "질문을 품은 탐구자",
 };
 
 describe("public profile comparison contract", () => {
@@ -169,13 +169,13 @@ describe("public profile comparison contract", () => {
     expect(report.comparison.sections.axisComparisons).toHaveLength(3);
     expect(report.comparison.sections.axisComparisons[0]).toMatchObject({
       domainId: "SE",
-      interpretation: expect.stringContaining("에너지가 시작되는 방식"),
-      targetSymbol: "S",
-      viewerSymbol: "T",
+      interpretation: expect.stringContaining("사람 사이 에너지"),
+      targetSymbol: "I",
+      viewerSymbol: "E",
     });
     expect(report.comparison.sections.summary).toMatchObject({
-      closestAxisLabel: "마음이 흔들릴 때의 반응",
-      strongestDifferenceLabel: "에너지가 시작되는 방식",
+      closestAxisLabel: "걱정과 감정 반응",
+      strongestDifferenceLabel: "사람 사이 에너지",
     });
     expect(report.comparison.sections.misunderstandingScenes.length).toBeGreaterThan(0);
   });

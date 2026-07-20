@@ -10,6 +10,7 @@ export type FeedWriteStepId =
   | "insert_feed_preference"
   | "insert_feed_poll"
   | "insert_feed_poll_vote"
+  | "upload_feed_media"
   | "remove_feed_reaction"
   | "remove_feed_bookmark";
 
@@ -26,6 +27,7 @@ export type FeedWriteFailureCode =
   | "feed_preference_write_failed"
   | "feed_poll_write_failed"
   | "feed_poll_vote_write_failed"
+  | "feed_media_upload_failed"
   | "feed_reaction_remove_failed"
   | "feed_bookmark_remove_failed";
 
@@ -116,6 +118,12 @@ export const feedWriteFailures: Record<
     message: "투표를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "insert_feed_poll_vote",
+  },
+  feed_media_upload_failed: {
+    httpStatus: 500,
+    message: "사진을 올리지 못했어요. 사진 상태를 확인하고 다시 시도해 주세요.",
+    retryable: true,
+    step: "upload_feed_media",
   },
   feed_reaction_remove_failed: {
     httpStatus: 500,

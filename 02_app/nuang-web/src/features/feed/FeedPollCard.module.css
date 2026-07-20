@@ -1,0 +1,243 @@
+.perspective {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ebd8b6;
+  animation: perspective-reveal 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.perspectiveHeader {
+  display: block;
+}
+
+.perspectiveToggle {
+  display: flex;
+  min-width: 0;
+  min-height: 2.25rem;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  text-align: left;
+}
+
+.perspectiveToggle strong {
+  color: #20232a;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.perspectiveToggle > span {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.18rem;
+  color: #737887;
+  font-size: 0.65625rem;
+  font-weight: 550;
+}
+
+.perspectiveChevron {
+  transition: transform 180ms ease;
+}
+
+.perspectiveChevron[data-open="true"] {
+  transform: rotate(180deg);
+}
+
+.perspectiveToggle:focus-visible {
+  outline: 2px solid #c99e55;
+  outline-offset: 2px;
+}
+
+.perspectiveBody {
+  animation: perspective-reveal 220ms ease-out both;
+}
+
+.perspectiveTabs {
+  display: flex;
+  gap: 0.4375rem;
+  margin: 0.75rem -0.125rem;
+  padding: 0 0.125rem 0.125rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.perspectiveTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.perspectiveTab {
+  flex: 0 0 auto;
+  min-height: 2.125rem;
+  padding: 0 0.6875rem;
+  border: 1px solid #e6e7eb;
+  border-radius: 999px;
+  color: #737887;
+  background: #fff;
+  font-size: 0.65625rem;
+  font-weight: 700;
+  white-space: nowrap;
+  transition:
+    color 160ms ease,
+    border-color 160ms ease,
+    background 160ms ease,
+    transform 160ms ease;
+}
+
+.perspectiveTab:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.perspectiveTab[aria-pressed="true"] {
+  border-color: #20232a;
+  color: #fff;
+  background: #20232a;
+}
+
+.perspectiveTab:disabled {
+  color: #a2a4ab;
+  background: #f7f7f9;
+  cursor: default;
+}
+
+.codePicker {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: -0.05rem 0 0.85rem;
+  animation: perspective-reveal 220ms ease-out both;
+}
+
+.codeChoice {
+  display: grid;
+  min-width: 0;
+  gap: 0.08rem;
+  padding: 0.58rem 0.35rem;
+  border: 1px solid #ebeaf1;
+  border-radius: 0.75rem;
+  color: #555861;
+  background: #fbfbfd;
+  text-align: center;
+}
+
+.codeChoice strong {
+  overflow: hidden;
+  font-size: 0.6875rem;
+  font-weight: 750;
+  text-overflow: ellipsis;
+}
+
+.codeChoice span {
+  color: #9698a0;
+  font-size: 0.5625rem;
+}
+
+.codeChoice[aria-pressed="true"] {
+  border-color: #9b90ef;
+  color: #6657d9;
+  background: #f5f3ff;
+}
+
+.codePending {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+  color: #858791;
+  background: #f7f7fa;
+  font-size: 0.65625rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.perspectiveName {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin: 0 0 0.7rem;
+}
+
+.perspectiveName strong {
+  color: #6657d9;
+  font-size: 0.75rem;
+  font-weight: 750;
+}
+
+.perspectiveName span {
+  color: #858791;
+  font-size: 0.625rem;
+}
+
+.perspectiveResults {
+  display: grid;
+  gap: 0.625rem;
+}
+
+.perspectiveLabel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.3125rem;
+  color: #737887;
+  font-size: 0.65625rem;
+}
+
+.perspectiveLabel strong {
+  color: #20232a;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.perspectiveTrack {
+  height: 0.4375rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e9e8ef;
+}
+
+.perspectiveTrack span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #8b621f;
+  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.perspectiveNote {
+  margin: 0.875rem 0 0;
+  padding: 0.75rem;
+  border-left: 2px solid #c99e55;
+  border-radius: 0 0.8125rem 0.8125rem 0;
+  color: #747782;
+  background: #fdf8ef;
+  font-size: 0.6875rem;
+  font-weight: 450;
+  line-height: 1.55;
+}
+
+@keyframes perspective-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(-0.35rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .perspective,
+  .perspectiveBody,
+  .codePicker {
+    animation: none;
+  }
+
+  .perspectiveChevron,
+  .perspectiveTab,
+  .perspectiveTrack span {
+    transition: none;
+  }
+}

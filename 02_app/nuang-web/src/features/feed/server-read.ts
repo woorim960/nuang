@@ -1,23 +1,32 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { createPublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
+import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
 import {
   createFeedReadPayload,
   type FeedReadPayload,
 } from "@/features/feed/feed-contract";
 import type {
   FeedItem,
+  FeedPostMedia,
   FeedPollSummary,
   FeedReplyPreview,
 } from "@/features/feed/feed-seed";
+import { feedCodeStatsDisplayThreshold } from "@/features/feed/feed-privacy";
+import { feedMediaBucket } from "@/features/feed/feed-media";
+import {
+  feedPostTopicLabels,
+  type FeedPostTopicCategory,
+} from "@/features/feed/feed-topic";
 import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
-import { getSupportedNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
+import { getCurrentNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
 import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
 type FeedPostRow = {
+  attachment_payload: unknown;
   author_account_id: string;
   body: string;
   created_at: string;
@@ -34,7 +43,23 @@ type FeedPostRow = {
     | "report_share"
     | "trait_card";
   source_id: string | null;
+  topic_category: FeedPostTopicCategory | null;
+  topic_tags: string[];
   visibility: "private_draft" | "profile_public" | "public";
+};
+
+const feedPostSelectWithTopics =
+  "id, author_account_id, source, source_id, body, visibility, moderation_status, topic_category, topic_tags, attachment_payload, public_projection_payload, created_at, published_at";
+const feedPostSelectLegacy =
+  "id, author_account_id, source, source_id, body, visibility, moderation_status, attachment_payload, public_projection_payload, created_at, published_at";
+
+type FeedPostMediaRow = {
+  height: number | null;
+  id: string;
+  post_id: string;
+  sort_order: number;
+  storage_path: string;
+  width: number | null;
 };
 
 type FeedCommentBaseRow = {
@@ -103,6 +128,21 @@ type FeedPollVoteRow = {
   profile_name: string | null;
 };
 
+type FeedPlaygroundVoteRow = FeedPollVoteRow & {
+  created_at: string;
+  id: string;
+};
+
+type FeedPlaygroundPollRow = FeedPollRow & {
+  created_at: string;
+  status: "active" | "closed" | "removed";
+};
+
+type FeedPlaygroundPostRow = {
+  id: string;
+  topic_category: FeedPostTopicCategory | null;
+};
+
 export type FeedPollStatsPayload = {
   codeRows: Array<{
     code: string;
@@ -139,6 +179,26 @@ export type FeedPollStatsPayload = {
   };
 };
 
+export type FeedPlaygroundRecord = {
+  canRevote: boolean;
+  participatedAt: string;
+  poll: FeedPollSummary | null;
+  pollId: string;
+  postId: string | null;
+  question: string;
+  selectedCode: string | null;
+  selectedOptionLabel: string;
+  selectedProfileName: string | null;
+  status: "active" | "closed" | "removed";
+  topicLabel: string;
+  voteId: string;
+};
+
+export type FeedPlaygroundRecordsPayload = {
+  records: FeedPlaygroundRecord[];
+  state: "ready" | "unauthenticated" | "unavailable";
+};
+
 export type FeedReportSharePayload = {
   body: string;
   createdAt: string;
@@ -151,6 +211,11 @@ export type FeedPostDetailPayload = {
   viewer: {
     isAuthenticated: boolean;
   };
+};
+
+export type CommunityProfileReadPayload = {
+  posts: FeedItem[];
+  profile: NonNullable<FeedItem["authorProfile"]>;
 };
 
 type FeedHiddenTargets = {
@@ -200,20 +265,28 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     ownPosts,
     publicPosts,
   });
-  const hiddenTargets = await readNotInterestedTargets({
-    accountId,
-    client: serviceClient,
-    postIds: mergedRows.map((row) => row.id),
-    seedKeys: [],
-  });
+  const [hiddenTargets, blockedAccountIds] = await Promise.all([
+    readNotInterestedTargets({
+      accountId,
+      client: serviceClient,
+      postIds: mergedRows.map((row) => row.id),
+      seedKeys: [],
+    }),
+    readBlockedCommunityAccountIds({ accountId, client: serviceClient }),
+  ]);
   const visibleRows = mergedRows.filter(
-    (row) => !hiddenTargets.postIds.has(row.id),
+    (row) =>
+      !hiddenTargets.postIds.has(row.id) &&
+      !blockedAccountIds.has(row.author_account_id),
   );
   const authorProfilesByAccountId = await readPublicProfileCardsForAccounts({
-    accountIds: visibleRows.map((row) => row.author_account_id),
+    accountIds: [
+      ...visibleRows.map((row) => row.author_account_id),
+      ...(accountId ? [accountId] : []),
+    ],
     client: serviceClient,
   });
-  const [engagementByPostId, pollByPostId] = await Promise.all([
+  const [engagementByPostId, pollByPostId, mediaByPostId] = await Promise.all([
     readPostEngagements({
       accountId,
       client: serviceClient,
@@ -221,6 +294,10 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     }),
     readPollSummaries({
       accountId,
+      client: serviceClient,
+      rows: visibleRows,
+    }),
+    readPostMedia({
       client: serviceClient,
       rows: visibleRows,
     }),
@@ -234,6 +311,7 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
         engagementByPostId.get(row.id),
         authorProfilesByAccountId.get(row.author_account_id),
         pollByPostId.get(row.id),
+        mediaByPostId.get(row.id),
       ),
     )
     .filter(isUsefulFeedItem);
@@ -242,7 +320,100 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     ...basePayload,
     items: dbItems,
     stories: [],
+    viewerCode: accountId
+      ? (authorProfilesByAccountId.get(accountId)?.display.code ?? null)
+      : null,
   };
+}
+
+export async function createServerCommunityProfilePayload(
+  publicSnapshotId: string,
+): Promise<CommunityProfileReadPayload | null> {
+  const serviceClient = createSupabaseServiceClient();
+
+  if (!serviceClient || !uuidPattern.test(publicSnapshotId)) return null;
+
+  const response = await serviceClient
+    .schema("profile")
+    .from("profile_public_snapshot")
+    .select("id, account_id, snapshot_payload")
+    .eq("id", publicSnapshotId)
+    .eq("status", "active")
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (response.error || !response.data) return null;
+
+  const row = response.data as PublicProfileSnapshotRow;
+  const snapshot = coercePublicProfileSnapshotPayload(
+    row.snapshot_payload,
+    row.id,
+  );
+
+  if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) return null;
+
+  const accountId = await getCurrentAccountId(serviceClient);
+  const blockedAccountIds = await readBlockedCommunityAccountIds({
+    accountId,
+    client: serviceClient,
+  });
+  if (blockedAccountIds.has(row.account_id)) return null;
+
+  const profile = createPublicProfileCardPayload({
+    cardId: `profile_${row.id}`,
+    snapshot,
+    status: "published",
+  });
+  const postRows = await readProfilePosts({
+    accountId: row.account_id,
+    client: serviceClient,
+    includeNonPublished: accountId === row.account_id,
+  });
+  const [engagementByPostId, pollByPostId, mediaByPostId] = await Promise.all([
+    readPostEngagements({ accountId, client: serviceClient, rows: postRows }),
+    readPollSummaries({ accountId, client: serviceClient, rows: postRows }),
+    readPostMedia({ client: serviceClient, rows: postRows }),
+  ]);
+  const posts = postRows
+    .map((postRow, index) =>
+      mapPostRowToFeedItem(
+        postRow,
+        accountId,
+        index,
+        engagementByPostId.get(postRow.id),
+        profile,
+        pollByPostId.get(postRow.id),
+        mediaByPostId.get(postRow.id),
+      ),
+    )
+    .filter(isUsefulFeedItem);
+
+  return {
+    posts,
+    profile,
+  };
+}
+
+export async function resolveCurrentCommunityProfileSnapshotId() {
+  const serviceClient = createSupabaseServiceClient();
+  if (!serviceClient) return null;
+
+  const accountId = await getCurrentAccountId(serviceClient);
+  if (!accountId) return null;
+
+  const response = await serviceClient
+    .schema("profile")
+    .from("profile_public_snapshot")
+    .select("id")
+    .eq("account_id", accountId)
+    .eq("status", "active")
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(1)
+    .maybeSingle();
+
+  if (response.error || !response.data) return null;
+  return String(response.data.id);
 }
 
 export async function createServerHomeFeedPreviewItems() {
@@ -272,22 +443,35 @@ export async function createServerFeedPostDetailPayload(
     return null;
   }
 
-  const response = await serviceClient
+  let response = await serviceClient
     .schema("feed")
     .from("feed_post")
-    .select(
-      "id, author_account_id, source, source_id, body, visibility, moderation_status, public_projection_payload, created_at, published_at",
-    )
+    .select(feedPostSelectWithTopics)
     .eq("id", postId)
     .is("deleted_at", null)
     .maybeSingle();
+
+  if (isMissingFeedTopicColumns(response.error)) {
+    response = await serviceClient
+      .schema("feed")
+      .from("feed_post")
+      .select(feedPostSelectLegacy)
+      .eq("id", postId)
+      .is("deleted_at", null)
+      .maybeSingle();
+  }
 
   if (response.error || !response.data) {
     return null;
   }
 
-  const row = response.data as FeedPostRow;
+  const row = normalizeFeedPostRow(response.data);
   const accountId = await getCurrentAccountId(serviceClient);
+  const blockedAccountIds = await readBlockedCommunityAccountIds({
+    accountId,
+    client: serviceClient,
+  });
+  if (blockedAccountIds.has(row.author_account_id)) return null;
   const isOwnPost = row.author_account_id === accountId;
   const isPublicPost =
     row.moderation_status === "published" &&
@@ -297,28 +481,37 @@ export async function createServerFeedPostDetailPayload(
     return null;
   }
 
-  const [authorProfiles, engagementByPostId, pollByPostId, postReplies] =
-    await Promise.all([
-      readPublicProfileCardsForAccounts({
-        accountIds: [row.author_account_id],
-        client: serviceClient,
-      }),
-      readPostEngagements({
-        accountId,
-        client: serviceClient,
-        rows: [row],
-      }),
-      readPollSummaries({
-        accountId,
-        client: serviceClient,
-        rows: [row],
-      }),
-      readPostReplies({
-        accountId,
-        client: serviceClient,
-        postId: row.id,
-      }),
-    ]);
+  const [
+    authorProfiles,
+    engagementByPostId,
+    pollByPostId,
+    mediaByPostId,
+    postReplies,
+  ] = await Promise.all([
+    readPublicProfileCardsForAccounts({
+      accountIds: [row.author_account_id],
+      client: serviceClient,
+    }),
+    readPostEngagements({
+      accountId,
+      client: serviceClient,
+      rows: [row],
+    }),
+    readPollSummaries({
+      accountId,
+      client: serviceClient,
+      rows: [row],
+    }),
+    readPostMedia({
+      client: serviceClient,
+      rows: [row],
+    }),
+    readPostReplies({
+      accountId,
+      client: serviceClient,
+      postId: row.id,
+    }),
+  ]);
   const post = mapPostRowToFeedItem(
     row,
     accountId,
@@ -326,6 +519,7 @@ export async function createServerFeedPostDetailPayload(
     engagementByPostId.get(row.id),
     authorProfiles.get(row.author_account_id),
     pollByPostId.get(row.id),
+    mediaByPostId.get(row.id),
   );
 
   if (!isUsefulFeedItem(post)) {
@@ -407,15 +601,21 @@ export async function createServerFeedPollStatsPayload(
     (vote) => String(vote.nuang_code),
   );
   const codeRows = [...votesByCode.entries()]
-    .filter(([, codeVotes]) => codeVotes.length >= 3)
-    .sort(([leftCode], [rightCode]) => leftCode.localeCompare(rightCode))
+    .filter(
+      ([, codeVotes]) => codeVotes.length >= feedCodeStatsDisplayThreshold,
+    )
+    .sort(
+      ([leftCode, leftVotes], [rightCode, rightVotes]) =>
+        rightVotes.length - leftVotes.length ||
+        leftCode.localeCompare(rightCode),
+    )
     .map(([code, codeVotes]) => {
       const codeTotal = codeVotes.length;
 
       return {
         code,
         name:
-          getSupportedNuangProfileName(code) ??
+          getCurrentNuangProfileName(code) ??
           codeVotes.find((vote) => vote.profile_name)?.profile_name ??
           "뉴앙 코드",
         options: options.map((option) => {
@@ -470,6 +670,242 @@ export async function createServerFeedPollStatsPayload(
         options.find((option) => option.id === viewerVote?.option_id)?.label ??
         null,
     },
+  };
+}
+
+export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPlaygroundRecordsPayload> {
+  const serviceClient = createSupabaseServiceClient();
+
+  if (!serviceClient) {
+    return {
+      records: [],
+      state: "unavailable",
+    };
+  }
+
+  const accountId = await getCurrentAccountId(serviceClient);
+
+  if (!accountId) {
+    return {
+      records: [],
+      state: "unauthenticated",
+    };
+  }
+
+  const ownVoteResponse = await serviceClient
+    .schema("feed")
+    .from("feed_poll_vote")
+    .select(
+      "id, poll_id, option_id, account_id, nuang_code, profile_name, created_at",
+    )
+    .eq("account_id", accountId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(50);
+
+  if (ownVoteResponse.error || !ownVoteResponse.data) {
+    return {
+      records: [],
+      state: "unavailable",
+    };
+  }
+
+  const ownVotes = ownVoteResponse.data as FeedPlaygroundVoteRow[];
+
+  if (ownVotes.length === 0) {
+    return {
+      records: [],
+      state: "ready",
+    };
+  }
+
+  const pollIds = [...new Set(ownVotes.map((vote) => vote.poll_id))];
+  const pollResponse = await serviceClient
+    .schema("feed")
+    .from("feed_poll")
+    .select("id, post_id, prompt_id, question, status, created_at")
+    .in("id", pollIds)
+    .is("deleted_at", null);
+
+  if (pollResponse.error || !pollResponse.data) {
+    return {
+      records: [],
+      state: "unavailable",
+    };
+  }
+
+  const polls = pollResponse.data as FeedPlaygroundPollRow[];
+  const postIds = [
+    ...new Set(polls.map((poll) => poll.post_id).filter(Boolean)),
+  ];
+  const [optionResponse, voteResponse, postResponse] = await Promise.all([
+    serviceClient
+      .schema("feed")
+      .from("feed_poll_option")
+      .select("id, poll_id, option_key, label, sort_order")
+      .in("poll_id", pollIds)
+      .order("sort_order", { ascending: true }),
+    serviceClient
+      .schema("feed")
+      .from("feed_poll_vote")
+      .select("poll_id, option_id, account_id, nuang_code, profile_name")
+      .in("poll_id", pollIds)
+      .is("deleted_at", null),
+    postIds.length > 0
+      ? serviceClient
+          .schema("feed")
+          .from("feed_post")
+          .select("id, topic_category")
+          .in("id", postIds)
+          .is("deleted_at", null)
+      : Promise.resolve({ data: [], error: null }),
+  ]);
+
+  if (
+    optionResponse.error ||
+    !optionResponse.data ||
+    voteResponse.error ||
+    (postResponse.error && !isMissingFeedTopicColumns(postResponse.error))
+  ) {
+    return {
+      records: [],
+      state: "unavailable",
+    };
+  }
+
+  const pollById = new Map(polls.map((poll) => [poll.id, poll]));
+  const optionsByPollId = groupBy(
+    optionResponse.data as FeedPollOptionRow[],
+    (option) => option.poll_id,
+  );
+  const votesByPollId = groupBy(
+    (voteResponse.data ?? []) as FeedPollVoteRow[],
+    (vote) => vote.poll_id,
+  );
+  const postById = new Map(
+    (
+      (postResponse.error
+        ? []
+        : (postResponse.data ?? [])) as FeedPlaygroundPostRow[]
+    ).map((post) => [post.id, post]),
+  );
+
+  return {
+    records: ownVotes.map((ownVote) => {
+      const poll = pollById.get(ownVote.poll_id);
+      const options = optionsByPollId.get(ownVote.poll_id) ?? [];
+      const selectedOption = options.find(
+        (option) => option.id === ownVote.option_id,
+      );
+      const selectedCode = isCurrentNuangCode(ownVote.nuang_code)
+        ? ownVote.nuang_code
+        : null;
+      const selectedProfileName = selectedCode
+        ? (getCurrentNuangProfileName(selectedCode) ??
+          getCandidateProfileDefinition(selectedCode)?.displayName ??
+          ownVote.profile_name)
+        : null;
+
+      if (!poll) {
+        return {
+          canRevote: false,
+          participatedAt: ownVote.created_at,
+          poll: null,
+          pollId: ownVote.poll_id,
+          postId: null,
+          question: "더 이상 볼 수 없는 질문",
+          selectedCode,
+          selectedOptionLabel: selectedOption?.label ?? "기록된 선택",
+          selectedProfileName,
+          status: "removed" as const,
+          topicLabel: "지난 질문",
+          voteId: ownVote.id,
+        };
+      }
+
+      const votes = votesByPollId.get(poll.id) ?? [];
+      const totalVotes = votes.length;
+      const codeVotes = groupBy(
+        votes.filter((vote) => isCurrentNuangCode(vote.nuang_code)),
+        (vote) => String(vote.nuang_code),
+      );
+      const codePerspectives = [...codeVotes.entries()]
+        .filter(
+          ([, groupedVotes]) =>
+            groupedVotes.length >= feedCodeStatsDisplayThreshold,
+        )
+        .sort(
+          ([leftCode, leftVotes], [rightCode, rightVotes]) =>
+            rightVotes.length - leftVotes.length ||
+            leftCode.localeCompare(rightCode),
+        )
+        .map(([code, groupedVotes]) => ({
+          code,
+          name:
+            getCurrentNuangProfileName(code) ??
+            groupedVotes.find((vote) => vote.profile_name)?.profile_name ??
+            "뉴앙 코드",
+          options: options.map((option) => {
+            const voteCount = groupedVotes.filter(
+              (vote) => vote.option_id === option.id,
+            ).length;
+
+            return {
+              label: option.label,
+              ratio: Math.round((voteCount / groupedVotes.length) * 100),
+              voteCount,
+            };
+          }),
+          totalVotes: groupedVotes.length,
+        }));
+      const post = postById.get(poll.post_id);
+      const pollSummary: FeedPollSummary = {
+        canViewCodeStats: codePerspectives.length > 0,
+        codePerspectives,
+        id: poll.id,
+        options: options.map((option) => {
+          const voteCount = votes.filter(
+            (vote) => vote.option_id === option.id,
+          ).length;
+
+          return {
+            id: option.id,
+            key: option.option_key,
+            label: option.label,
+            ratio:
+              totalVotes > 0 ? Math.round((voteCount / totalVotes) * 100) : 0,
+            viewerHasVoted: ownVote.option_id === option.id,
+            voteCount,
+          };
+        }),
+        promptId: poll.prompt_id,
+        question: poll.question,
+        statsHref: `/feed/polls/${poll.id}/stats`,
+        totalVotes,
+        viewerCode: selectedCode,
+        viewerVoteOptionId: ownVote.option_id,
+      };
+
+      return {
+        canRevote: poll.status === "active",
+        participatedAt: ownVote.created_at,
+        poll: pollSummary,
+        pollId: poll.id,
+        postId: poll.post_id,
+        question: poll.question,
+        selectedCode,
+        selectedOptionLabel: selectedOption?.label ?? "기록된 선택",
+        selectedProfileName,
+        status: poll.status,
+        topicLabel: resolvePlaygroundTopicLabel({
+          category: post?.topic_category ?? null,
+          promptId: poll.prompt_id,
+          question: poll.question,
+        }),
+        voteId: ownVote.id,
+      };
+    }),
+    state: "ready",
   };
 }
 
@@ -642,40 +1078,301 @@ async function readPublishedPosts(client: SupabaseClient) {
   const response = await client
     .schema("feed")
     .from("feed_post")
-    .select(
-      "id, author_account_id, source, source_id, body, visibility, moderation_status, public_projection_payload, created_at, published_at",
-    )
+    .select(feedPostSelectWithTopics)
     .eq("moderation_status", "published")
     .in("visibility", ["public", "profile_public"])
     .is("deleted_at", null)
     .order("published_at", { ascending: false })
     .limit(20);
 
+  if (isMissingFeedTopicColumns(response.error)) {
+    const legacyResponse = await client
+      .schema("feed")
+      .from("feed_post")
+      .select(feedPostSelectLegacy)
+      .eq("moderation_status", "published")
+      .in("visibility", ["public", "profile_public"])
+      .is("deleted_at", null)
+      .order("published_at", { ascending: false })
+      .limit(20);
+
+    if (legacyResponse.error || !legacyResponse.data) return [];
+    return legacyResponse.data.map(normalizeFeedPostRow);
+  }
+
   if (response.error || !response.data) {
     return [];
   }
 
-  return response.data as FeedPostRow[];
+  return response.data.map(normalizeFeedPostRow);
 }
 
 async function readOwnPosts(client: SupabaseClient, accountId: string) {
   const response = await client
     .schema("feed")
     .from("feed_post")
-    .select(
-      "id, author_account_id, source, source_id, body, visibility, moderation_status, public_projection_payload, created_at, published_at",
-    )
+    .select(feedPostSelectWithTopics)
     .eq("author_account_id", accountId)
     .in("moderation_status", ["pending_review", "published", "limited"])
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .limit(10);
 
+  if (isMissingFeedTopicColumns(response.error)) {
+    const legacyResponse = await client
+      .schema("feed")
+      .from("feed_post")
+      .select(feedPostSelectLegacy)
+      .eq("author_account_id", accountId)
+      .in("moderation_status", ["pending_review", "published", "limited"])
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(10);
+
+    if (legacyResponse.error || !legacyResponse.data) return [];
+    return legacyResponse.data.map(normalizeFeedPostRow);
+  }
+
   if (response.error || !response.data) {
     return [];
   }
 
-  return response.data as FeedPostRow[];
+  return response.data.map(normalizeFeedPostRow);
+}
+
+async function readProfilePosts({
+  accountId,
+  client,
+  includeNonPublished,
+}: {
+  accountId: string;
+  client: SupabaseClient;
+  includeNonPublished: boolean;
+}) {
+  let query = client
+    .schema("feed")
+    .from("feed_post")
+    .select(feedPostSelectWithTopics)
+    .eq("author_account_id", accountId)
+    .is("deleted_at", null)
+    .order("created_at", { ascending: false })
+    .limit(50);
+  query = includeNonPublished
+    ? query.in("moderation_status", ["pending_review", "published", "limited"])
+    : query
+        .eq("moderation_status", "published")
+        .in("visibility", ["public", "profile_public"]);
+  const response = await query;
+
+  if (isMissingFeedTopicColumns(response.error)) {
+    let legacyQuery = client
+      .schema("feed")
+      .from("feed_post")
+      .select(feedPostSelectLegacy)
+      .eq("author_account_id", accountId)
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(50);
+    legacyQuery = includeNonPublished
+      ? legacyQuery.in("moderation_status", [
+          "pending_review",
+          "published",
+          "limited",
+        ])
+      : legacyQuery
+          .eq("moderation_status", "published")
+          .in("visibility", ["public", "profile_public"]);
+    const legacyResponse = await legacyQuery;
+    if (legacyResponse.error || !legacyResponse.data) return [];
+    return legacyResponse.data.map(normalizeFeedPostRow);
+  }
+
+  if (response.error || !response.data) return [];
+  return response.data.map(normalizeFeedPostRow);
+}
+
+function isMissingFeedTopicColumns(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+
+  const candidate = error as { code?: unknown; message?: unknown };
+  const message =
+    typeof candidate.message === "string"
+      ? candidate.message.toLocaleLowerCase("en-US")
+      : "";
+
+  return (
+    candidate.code === "42703" ||
+    candidate.code === "PGRST204" ||
+    message.includes("topic_category") ||
+    message.includes("topic_tags")
+  );
+}
+
+function normalizeFeedPostRow(value: unknown): FeedPostRow {
+  const row = value as Omit<FeedPostRow, "topic_category" | "topic_tags"> & {
+    topic_category?: FeedPostTopicCategory | null;
+    topic_tags?: unknown;
+  };
+
+  return {
+    ...row,
+    topic_category: row.topic_category ?? null,
+    topic_tags: Array.isArray(row.topic_tags)
+      ? row.topic_tags.filter((tag): tag is string => typeof tag === "string")
+      : [],
+  };
+}
+
+async function readPostMedia({
+  client,
+  rows,
+}: {
+  client: SupabaseClient;
+  rows: FeedPostRow[];
+}) {
+  const mediaByPostId = new Map<string, FeedPostMedia[]>();
+  const postIds = rows.map((row) => row.id);
+
+  if (postIds.length === 0) return mediaByPostId;
+
+  const response = await client
+    .schema("feed")
+    .from("feed_post_media")
+    .select("id, post_id, storage_path, sort_order, width, height")
+    .in("post_id", postIds)
+    .is("deleted_at", null)
+    .order("sort_order", { ascending: true });
+
+  if (response.error || !response.data) {
+    return readLegacyPostMedia({ client, rows });
+  }
+
+  const mediaRows = response.data as FeedPostMediaRow[];
+  const signedResponse = await client.storage
+    .from(feedMediaBucket)
+    .createSignedUrls(
+      mediaRows.map((row) => row.storage_path),
+      60 * 60,
+    );
+
+  if (signedResponse.error || !signedResponse.data) return mediaByPostId;
+
+  const signedUrlByPath = new Map(
+    signedResponse.data.flatMap((item) =>
+      item.signedUrl ? [[item.path, item.signedUrl] as const] : [],
+    ),
+  );
+
+  for (const row of mediaRows) {
+    const url = signedUrlByPath.get(row.storage_path);
+    if (!url) continue;
+
+    const media = mediaByPostId.get(row.post_id) ?? [];
+    media.push({
+      alt: `게시물 사진 ${row.sort_order}`,
+      height: row.height,
+      id: row.id,
+      url,
+      width: row.width,
+    });
+    mediaByPostId.set(row.post_id, media);
+  }
+
+  const legacyMediaByPostId = await readLegacyPostMedia({ client, rows });
+  for (const [postId, legacyMedia] of legacyMediaByPostId) {
+    if (!mediaByPostId.has(postId)) mediaByPostId.set(postId, legacyMedia);
+  }
+
+  return mediaByPostId;
+}
+
+async function readLegacyPostMedia({
+  client,
+  rows,
+}: {
+  client: SupabaseClient;
+  rows: FeedPostRow[];
+}) {
+  const mediaByPostId = new Map<string, FeedPostMedia[]>();
+  const storedItems = rows.flatMap((row) =>
+    parseLegacyMediaAttachments(row.attachment_payload).flatMap((media) =>
+      media.storagePath ? [{ postId: row.id, ...media }] : [],
+    ),
+  );
+  const signedUrlByPath = new Map<string, string>();
+
+  if (storedItems.length > 0) {
+    const signedResponse = await client.storage
+      .from(feedMediaBucket)
+      .createSignedUrls(
+        storedItems.map((item) => String(item.storagePath)),
+        60 * 60,
+      );
+    for (const item of signedResponse.data ?? []) {
+      if (item.path && item.signedUrl)
+        signedUrlByPath.set(item.path, item.signedUrl);
+    }
+  }
+
+  for (const row of rows) {
+    const media = parseLegacyMediaAttachments(row.attachment_payload).flatMap(
+      (item, index) => {
+        const url =
+          item.externalUrl ??
+          (item.storagePath ? signedUrlByPath.get(item.storagePath) : null);
+        if (!url) return [];
+
+        return [
+          {
+            alt: item.alt ?? `게시물 사진 ${index + 1}`,
+            height: item.height,
+            id: item.id ?? `legacy_${row.id}_${index + 1}`,
+            url,
+            width: item.width,
+          } satisfies FeedPostMedia,
+        ];
+      },
+    );
+    if (media.length > 0) mediaByPostId.set(row.id, media);
+  }
+
+  return mediaByPostId;
+}
+
+function parseLegacyMediaAttachments(value: unknown) {
+  if (!Array.isArray(value)) return [];
+
+  return value.slice(0, 19).flatMap((candidate) => {
+    if (!candidate || typeof candidate !== "object") return [];
+    const item = candidate as Record<string, unknown>;
+    const externalUrl = readAllowedReviewImageUrl(item.externalUrl);
+    const storagePath = stringValue(item.storagePath);
+    if (!externalUrl && !storagePath) return [];
+
+    return [
+      {
+        alt: stringValue(item.alt),
+        externalUrl,
+        height: typeof item.height === "number" ? item.height : null,
+        id: stringValue(item.id),
+        storagePath,
+        width: typeof item.width === "number" ? item.width : null,
+      },
+    ];
+  });
+}
+
+function readAllowedReviewImageUrl(value: unknown) {
+  if (typeof value !== "string") return null;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || url.hostname !== "images.unsplash.com") {
+      return null;
+    }
+    return url.toString();
+  } catch {
+    return null;
+  }
 }
 
 async function readPostEngagements({
@@ -739,6 +1436,12 @@ async function readPostEngagements({
     ]);
 
   if (!commentResponse.error && commentResponse.data) {
+    const commentProfiles = await readPublicProfileCardsForAccounts({
+      accountIds: (commentResponse.data as FeedPostCommentRow[]).map(
+        (row) => row.author_account_id,
+      ),
+      client,
+    });
     const visibleCommentsByPostId = new Map<string, FeedPostCommentRow[]>();
 
     for (const row of commentResponse.data as FeedPostCommentRow[]) {
@@ -764,7 +1467,13 @@ async function readPostEngagements({
       current.replyPreview = [...comments]
         .sort(compareCommentsByCreatedAtDesc)
         .slice(0, 2)
-        .map((comment) => mapCommentRowToReplyPreview(comment, accountId));
+        .map((comment) =>
+          mapCommentRowToReplyPreview(
+            comment,
+            accountId,
+            commentProfiles.get(comment.author_account_id),
+          ),
+        );
     }
   }
 
@@ -826,10 +1535,18 @@ async function readPostReplies({
   const visibleComments = (response.data as FeedPostCommentRow[])
     .filter((row) => isVisibleComment(row, accountId))
     .sort(compareCommentsByCreatedAtDesc);
+  const commentProfiles = await readPublicProfileCardsForAccounts({
+    accountIds: visibleComments.map((row) => row.author_account_id),
+    client,
+  });
 
   return {
     replies: visibleComments.map((comment) =>
-      mapCommentRowToReplyPreview(comment, accountId),
+      mapCommentRowToReplyPreview(
+        comment,
+        accountId,
+        commentProfiles.get(comment.author_account_id),
+      ),
     ),
     replyCount: visibleComments.length,
   };
@@ -914,11 +1631,39 @@ async function readPollSummaries({
       votes.filter((vote) => isCurrentNuangCode(vote.nuang_code)),
       (vote) => String(vote.nuang_code),
     );
+    const codePerspectives = [...codeVotes.entries()]
+      .filter(
+        ([, groupedVotes]) =>
+          groupedVotes.length >= feedCodeStatsDisplayThreshold,
+      )
+      .sort(
+        ([leftCode, leftVotes], [rightCode, rightVotes]) =>
+          rightVotes.length - leftVotes.length ||
+          leftCode.localeCompare(rightCode),
+      )
+      .map(([code, groupedVotes]) => ({
+        code,
+        name:
+          getCurrentNuangProfileName(code) ??
+          groupedVotes.find((vote) => vote.profile_name)?.profile_name ??
+          "뉴앙 코드",
+        options: options.map((option) => {
+          const voteCount = groupedVotes.filter(
+            (vote) => vote.option_id === option.id,
+          ).length;
+
+          return {
+            label: option.label,
+            ratio: Math.round((voteCount / groupedVotes.length) * 100),
+            voteCount,
+          };
+        }),
+        totalVotes: groupedVotes.length,
+      }));
 
     pollByPostId.set(poll.post_id, {
-      canViewCodeStats: [...codeVotes.values()].some(
-        (groupedVotes) => groupedVotes.length >= 3,
-      ),
+      canViewCodeStats: codePerspectives.length > 0,
+      codePerspectives,
       id: poll.id,
       options: options.map((option) => {
         const voteCount = votes.filter(
@@ -939,6 +1684,9 @@ async function readPollSummaries({
       question: poll.question,
       statsHref: `/feed/polls/${poll.id}/stats`,
       totalVotes,
+      viewerCode: isCurrentNuangCode(viewerVote?.nuang_code)
+        ? viewerVote.nuang_code
+        : null,
       viewerVoteOptionId: viewerVote?.option_id ?? null,
     });
   }
@@ -983,7 +1731,7 @@ async function readPublicProfileCardsForAccounts({
       row.id,
     );
 
-    if (!snapshot) {
+    if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) {
       continue;
     }
 
@@ -1043,6 +1791,7 @@ function mapPostRowToFeedItem(
   },
   authorProfile?: FeedItem["authorProfile"],
   poll?: FeedPollSummary,
+  media: FeedPostMedia[] = [],
 ): FeedItem {
   const isOwnPost = row.author_account_id === accountId;
   const publicProjection = readPublicProjection(row.public_projection_payload);
@@ -1052,6 +1801,12 @@ function mapPostRowToFeedItem(
         href: `/feed/reports/${row.id}`,
       }
     : undefined;
+  const topicCategory =
+    row.topic_category ?? publicProjection.topic?.category ?? null;
+  const topicTags =
+    row.topic_tags.length > 0
+      ? row.topic_tags
+      : (publicProjection.topic?.tags ?? []);
 
   return {
     authorHandle:
@@ -1075,8 +1830,10 @@ function mapPostRowToFeedItem(
     layout: "thread",
     likeCount: engagement.likes,
     likeLabel: formatFeedCountLabel("좋아요", engagement.likes),
+    media,
     poll,
     priority: -1000 + index,
+    questionAudience: parseQuestionAudience(row.source_id),
     reportShare,
     replyCount: engagement.replies,
     replyLabel: formatFeedCountLabel("답글", engagement.replies),
@@ -1085,9 +1842,46 @@ function mapPostRowToFeedItem(
     targetType: "feed_post",
     timeLabel: formatRelativeFeedTime(row.published_at ?? row.created_at),
     title: sourceTitleMap[row.source],
+    topic:
+      topicCategory || topicTags.length > 0
+        ? {
+            category: topicCategory,
+            label: topicCategory ? feedPostTopicLabels[topicCategory] : null,
+            tags: topicTags,
+          }
+        : undefined,
     viewerHasBookmarked: engagement.viewerHasBookmarked,
     viewerHasLiked: engagement.viewerHasLiked,
   };
+}
+
+function parseQuestionAudience(
+  sourceId: string | null,
+): FeedItem["questionAudience"] {
+  if (!sourceId) return undefined;
+
+  if (sourceId === "ask_all") return { codes: [], mode: "all" };
+  if (sourceId === "ask_similar") return { codes: [], mode: "similar" };
+  if (sourceId === "ask_different") return { codes: [], mode: "different" };
+
+  if (sourceId.startsWith("ask_exact_")) {
+    const code = sourceId.slice("ask_exact_".length).toUpperCase();
+    return isCurrentNuangCode(code)
+      ? { codes: [code], mode: "exact" }
+      : undefined;
+  }
+
+  if (sourceId.startsWith("ask_trait_")) {
+    const codes = sourceId
+      .slice("ask_trait_".length)
+      .split("_")
+      .map((symbol) => symbol.toUpperCase())
+      .filter((symbol) => /^[A-Z]$/.test(symbol))
+      .slice(0, 3);
+    return codes.length > 0 ? { codes, mode: "trait" } : undefined;
+  }
+
+  return undefined;
 }
 
 function readPublicProjection(value: unknown) {
@@ -1102,13 +1896,31 @@ function readPublicProjection(value: unknown) {
     authorHandle?: unknown;
     authorName?: unknown;
     reportShare?: unknown;
+    topic?: unknown;
   };
 
   return {
     authorHandle: stringValue(projection.authorHandle),
     authorName: stringValue(projection.authorName),
     reportShare: parseReportShareProjection(projection.reportShare),
+    topic: parseProjectionTopic(projection.topic),
   };
+}
+
+function parseProjectionTopic(value: unknown) {
+  if (!value || typeof value !== "object") return null;
+  const topic = value as { category?: unknown; tags?: unknown };
+  const category =
+    typeof topic.category === "string" &&
+    Object.prototype.hasOwnProperty.call(feedPostTopicLabels, topic.category)
+      ? (topic.category as FeedPostTopicCategory)
+      : null;
+  const tags = Array.isArray(topic.tags)
+    ? topic.tags
+        .filter((tag): tag is string => typeof tag === "string")
+        .slice(0, 8)
+    : [];
+  return category || tags.length > 0 ? { category, tags } : null;
 }
 
 function parseReportShareProjection(
@@ -1173,7 +1985,7 @@ function parseReportShareProjection(
       : [],
     profileCode: reportShare.profileCode,
     profileName:
-      getSupportedNuangProfileName(reportShare.profileCode) ??
+      getCurrentNuangProfileName(reportShare.profileCode) ??
       reportShare.profileName,
     resultLabel:
       typeof reportShare.resultLabel === "string"
@@ -1283,6 +2095,48 @@ function isCurrentNuangCode(code: string | null | undefined): code is string {
   return Boolean(code && getCandidateProfileDefinition(code));
 }
 
+function resolvePlaygroundTopicLabel({
+  category,
+  promptId,
+  question,
+}: {
+  category: FeedPostTopicCategory | null;
+  promptId: string;
+  question: string;
+}) {
+  if (category) {
+    return feedPostTopicLabels[category];
+  }
+
+  const searchableText = `${promptId} ${question}`.toLocaleLowerCase("ko-KR");
+
+  if (
+    ["관계", "연인", "친구", "가족", "relationship"].some((keyword) =>
+      searchableText.includes(keyword),
+    )
+  ) {
+    return "관계";
+  }
+
+  if (
+    ["대화", "말", "연락", "conversation"].some((keyword) =>
+      searchableText.includes(keyword),
+    )
+  ) {
+    return "대화";
+  }
+
+  if (
+    ["취향", "여행", "음악", "카페", "preference", "trip"].some((keyword) =>
+      searchableText.includes(keyword),
+    )
+  ) {
+    return "취향";
+  }
+
+  return "일상";
+}
+
 function isUsefulFeedItem(item: FeedItem) {
   if (demoFeedHandles.has(item.authorHandle)) {
     return false;
@@ -1339,12 +2193,18 @@ function compareCommentsByCreatedAtDesc(
 function mapCommentRowToReplyPreview(
   row: FeedCommentBaseRow,
   accountId: string | null,
+  authorProfile?: FeedItem["authorProfile"],
 ): FeedReplyPreview {
   const isOwnComment = row.author_account_id === accountId;
 
   return {
-    authorHandle: isOwnComment ? "me" : "nuang.user",
-    authorName: isOwnComment ? "나" : "NUANG 사용자",
+    authorCode: authorProfile?.display.code,
+    authorHandle: isOwnComment
+      ? "me"
+      : createFallbackHandle(authorProfile?.display.displayName),
+    authorName: isOwnComment
+      ? "나"
+      : (authorProfile?.display.displayName ?? "NUANG 사용자"),
     body: row.body,
     id: row.id,
     statusLabel: getCommentStatusLabel(row),

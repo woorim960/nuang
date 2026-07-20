@@ -1,14 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fbfbfe;
-  --foreground: #202232;
-  --muted: #6b6f82;
+  --background: #f6f5f2;
+  --foreground: #20232a;
+  --muted: #6d7280;
   --surface: #ffffff;
-  --surface-soft: #f4f1ff;
-  --line: #e6e3f2;
-  --primary: #6546d7;
-  --primary-strong: #4d32b5;
+  --surface-soft: #efedff;
+  --line: #e6e7eb;
+  --primary: #6657d9;
+  --primary-strong: #5144b5;
+  --reaction: #c94b61;
+  --reaction-soft: #fff0f3;
+  --play: #8b621f;
+  --play-strong: #8b621f;
+  --play-soft: #fbf3e4;
+  --play-line: #ebd8b6;
+  --conversation: #306e60;
+  --conversation-strong: #306e60;
+  --conversation-soft: #e6f4ef;
+  --conversation-line: #c7e5dc;
   --flame: #e9511d;
   --sun: #f6ae24;
   --water: #2f7de1;
@@ -27,6 +37,14 @@
   --color-line: var(--line);
   --color-primary: var(--primary);
   --color-primary-strong: var(--primary-strong);
+  --color-reaction: var(--reaction);
+  --color-reaction-soft: var(--reaction-soft);
+  --color-play: var(--play);
+  --color-play-strong: var(--play-strong);
+  --color-play-soft: var(--play-soft);
+  --color-conversation: var(--conversation);
+  --color-conversation-strong: var(--conversation-strong);
+  --color-conversation-soft: var(--conversation-soft);
   --color-danger: var(--danger);
   --color-success: var(--success);
   --color-flame: var(--flame);
@@ -34,8 +52,8 @@
   --color-water: var(--water);
   --color-forest: var(--forest);
   --font-sans:
-    -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI",
-    sans-serif;
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
 }
 
 * {
@@ -55,7 +73,12 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family:
-    -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Segoe UI",
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
     sans-serif;
 }
 

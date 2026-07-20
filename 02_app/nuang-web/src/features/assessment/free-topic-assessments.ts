@@ -666,7 +666,7 @@ const freeTopicTargetCopy: Record<
   }
 > = {
   "ER-IR": {
-    areaLabel: "마음의 반응",
+    areaLabel: "걱정과 감정 반응",
     highCopy:
       "감정이 비교적 빠르게 올라오고, 그 변화가 표정이나 말투에 드러나기 쉬운 흐름이에요.",
     label: "감정 반응의 크기",
@@ -676,7 +676,7 @@ const freeTopicTargetCopy: Record<
       "감정 반응이 한쪽으로 치우치기보다 상황에 따라 커졌다가 가라앉는 흐름이에요.",
   },
   "ER-WD": {
-    areaLabel: "마음의 반응",
+    areaLabel: "걱정과 감정 반응",
     highCopy:
       "결정하거나 관계를 정리하기 전에 여러 가능성을 오래 생각하는 경향이 선명해요.",
     label: "걱정과 망설임",
@@ -686,7 +686,7 @@ const freeTopicTargetCopy: Record<
       "걱정과 실행 사이에서 균형을 찾으려는 흐름이에요.",
   },
   "OE-AS": {
-    areaLabel: "감각과 생각",
+    areaLabel: "생각과 탐색",
     highCopy:
       "분위기, 장면, 소리처럼 감각적인 단서로 기분과 판단이 움직이는 편이에요.",
     label: "감각으로 분위기 읽기",
@@ -696,7 +696,7 @@ const freeTopicTargetCopy: Record<
       "감각적인 인상과 현실적인 정보를 함께 참고하는 흐름이에요.",
   },
   "OE-IE": {
-    areaLabel: "감각과 생각",
+    areaLabel: "생각과 탐색",
     highCopy:
       "막혔을 때 원리, 관점, 새로운 아이디어를 찾아보며 다시 움직이는 힘이 보여요.",
     label: "아이디어로 풀어가기",
@@ -746,7 +746,7 @@ const freeTopicTargetCopy: Record<
       "함께하는 시간과 혼자 회복하는 시간을 함께 필요로 하는 흐름이에요.",
   },
   "SM-EP": {
-    areaLabel: "일상 리듬",
+    areaLabel: "일상을 꾸리는 방식",
     highCopy:
       "멈춘 일을 다시 시작할 작은 행동을 찾고, 실제로 움직이는 힘이 보여요.",
     label: "작게 시작해 마무리하기",
@@ -756,7 +756,7 @@ const freeTopicTargetCopy: Record<
       "상황이 정리되면 실행으로 넘어가지만, 준비가 필요할 때는 속도를 늦추는 흐름이에요.",
   },
   "SM-OS": {
-    areaLabel: "일상 리듬",
+    areaLabel: "일상을 꾸리는 방식",
     highCopy:
       "물건, 일정, 생각을 정해진 구조 안에 두면 마음이 안정되는 흐름이에요.",
     label: "정리와 계획",

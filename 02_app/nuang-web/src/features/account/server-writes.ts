@@ -21,14 +21,6 @@ import type {
 } from "@/features/account/share-link-contract";
 import { readResultAccountStatus } from "@/features/account/server-reads";
 import {
-  fullCoreAssessment,
-  fullScoringRelease,
-} from "@/features/assessment/full-core-seed";
-import {
-  quickCoreAssessment,
-  quickScoringRelease,
-} from "@/features/assessment/quick-core-seed";
-import {
   candidateFullCoreAssessment,
   candidateFullScoringRelease,
 } from "@/features/assessment/candidate-full-core-seed";
@@ -204,21 +196,6 @@ export async function claimResultToAccount({
 }
 
 function getTrustedClaimRelease(payload: ClaimResultPayload) {
-  const stableRelease =
-    payload.assessmentKind === "full"
-      ? {
-          assessmentReleaseId: fullCoreAssessment.releaseId,
-          codeSchemeVersion: fullScoringRelease.codeSchemeVersion,
-          scoringModelVersion: fullScoringRelease.scoringModelVersion,
-          scoringReleaseId: fullScoringRelease.scoringReleaseId,
-        }
-      : {
-          assessmentReleaseId: quickCoreAssessment.releaseId,
-          codeSchemeVersion: quickScoringRelease.codeSchemeVersion,
-          scoringModelVersion: quickScoringRelease.scoringModelVersion,
-          scoringReleaseId: quickScoringRelease.scoringReleaseId,
-        };
-
   const candidateRelease =
     payload.assessmentKind === "full"
       ? {
@@ -234,19 +211,12 @@ function getTrustedClaimRelease(payload: ClaimResultPayload) {
           scoringReleaseId: candidateQuickScoringRelease.scoringReleaseId,
         };
 
-  const allowedReleases =
-    process.env.NODE_ENV === "production"
-      ? [stableRelease]
-      : [stableRelease, candidateRelease];
-
-  return (
-    allowedReleases.find((expected) =>
-      Object.entries(expected).every(
-        ([key, value]) =>
-          payload.versionBundle[key as keyof typeof expected] === value,
-      ),
-    ) ?? null
-  );
+  return Object.entries(candidateRelease).every(
+    ([key, value]) =>
+      payload.versionBundle[key as keyof typeof candidateRelease] === value,
+  )
+    ? candidateRelease
+    : null;
 }
 
 async function restoreClaimedResult({

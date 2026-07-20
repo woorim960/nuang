@@ -14,7 +14,6 @@ import {
   createServerFeedPostDetailPayload,
   type FeedPostDetailPayload,
 } from "@/features/feed/server-read";
-import { PublicProfileButton } from "@/features/public-profile/PublicProfileModal";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import styles from "./page.module.css";
 
@@ -80,6 +79,16 @@ function PostCard({ post }: { post: FeedItem }) {
         <span>{post.title}</span>
         {post.statusLabel ? <small>{post.statusLabel}</small> : null}
       </div>
+      {post.topic ? (
+        <div aria-label="게시물 태그" className={styles.postTopics}>
+          {post.topic.label ? <strong>{post.topic.label}</strong> : null}
+          {post.topic.tags.map((tag) => (
+            <Link href={`/feed/tags/${encodeURIComponent(tag)}`} key={tag}>
+              #{tag}
+            </Link>
+          ))}
+        </div>
+      ) : null}
       <p className={styles.postBody}>{post.body}</p>
 
       {post.reportShare ? (
@@ -205,17 +214,17 @@ function Comment({ comment }: { comment: FeedReplyPreview }) {
 function PostAvatar({ post }: { post: FeedItem }) {
   if (post.authorProfile) {
     return (
-      <PublicProfileButton
-        ariaLabel={`${post.authorName} 프로필 보기`}
+      <Link
+        aria-label={`${post.authorName} 프로필 사진 보기`}
         className={styles.avatarButton}
-        profile={post.authorProfile}
+        href={`/feed/profiles/${post.authorProfile.source.publicSnapshotId}`}
       >
         <PublicProfileImageView
           className={styles.profileImage}
           image={post.authorProfile.display.profileImage}
           size="sm"
         />
-      </PublicProfileButton>
+      </Link>
     );
   }
 
@@ -244,13 +253,13 @@ function PostAuthor({ post }: { post: FeedItem }) {
   return (
     <div className={styles.authorCopy}>
       {post.authorProfile ? (
-        <PublicProfileButton
-          ariaLabel={`${post.authorName} 프로필 보기`}
+        <Link
+          aria-label={`${post.authorName} 프로필 보기`}
           className={styles.authorButton}
-          profile={post.authorProfile}
+          href={`/feed/profiles/${post.authorProfile.source.publicSnapshotId}`}
         >
           {author}
-        </PublicProfileButton>
+        </Link>
       ) : (
         author
       )}

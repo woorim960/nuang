@@ -45,7 +45,7 @@ describe("FeedReportSharePage", () => {
     );
 
     expect(
-      screen.getByRole("heading", { name: "공유 리포트" }),
+      screen.getByRole("heading", { name: "공개 리포트" }),
     ).toBeInTheDocument();
     expect(screen.getByText("SVODE")).toBeInTheDocument();
     expect(screen.getByText("물결의 새길 개척가")).toBeInTheDocument();

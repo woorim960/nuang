@@ -171,8 +171,8 @@ describe("feed server writes", () => {
       ) {
         return {
           data: {
-            profile_code: "TVOAE",
-            profile_name: "불꽃의 온기 탐험가",
+            profile_code: "ENAKQ",
+            profile_name: "관계를 여는 지휘자",
           },
           error: null,
         };
@@ -224,13 +224,106 @@ describe("feed server writes", () => {
       operations.find((item) => item.table === "feed_poll_vote")?.insertRow,
     ).toMatchObject({
       account_id: accountId,
-      nuang_code: "TVOAE",
+      nuang_code: "ENAKQ",
       option_id: "44444444-4444-4444-8444-444444444444",
       poll_id: "33333333-3333-4333-8333-333333333333",
-      profile_name: "불꽃의 온기 탐험가",
+      profile_name: "관계를 여는 지휘자",
     });
     expect(JSON.stringify(operations)).not.toContain("direct_response");
     expect(JSON.stringify(operations)).not.toContain("raw_score");
+  });
+
+  it("updates an existing balance vote when the viewer changes their choice", async () => {
+    const pollId = "33333333-3333-4333-8333-333333333333";
+    const optionId = "55555555-5555-4555-8555-555555555555";
+    const voteId = "66666666-6666-4666-8666-666666666666";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return {
+          data: { account_id: accountId },
+          error: null,
+        };
+      }
+
+      if (
+        operation.schema === "profile" &&
+        operation.table === "profile_public_snapshot"
+      ) {
+        return {
+          data: {
+            snapshot_payload: {
+              profile: {
+                code: "ENAKQ",
+                name: "관계를 여는 지휘자",
+              },
+            },
+          },
+          error: null,
+        };
+      }
+
+      if (operation.schema === "feed" && operation.table === "feed_poll_vote") {
+        if (operation.insertRow) {
+          return {
+            data: null,
+            error: { code: "23505", message: "duplicate vote" },
+          };
+        }
+
+        if (operation.updateRow) {
+          return {
+            data: { id: voteId },
+            error: null,
+          };
+        }
+
+        return {
+          data: { id: voteId },
+          error: null,
+        };
+      }
+
+      return {
+        data: null,
+        error: { message: "unexpected operation" },
+      };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "vote_poll",
+        optionId,
+        pollId,
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      data: {
+        action: "vote_poll",
+        id: voteId,
+        targetType: "feed_poll",
+      },
+      ok: true,
+    });
+    const updateOperation = operations.find((operation) => operation.updateRow);
+    expect(updateOperation?.updateRow).toEqual({
+      nuang_code: "ENAKQ",
+      option_id: optionId,
+      profile_name: "관계를 여는 지휘자",
+    });
+    expect(updateOperation?.filters).toEqual(
+      expect.arrayContaining([
+        ["eq", "id", voteId],
+        ["eq", "account_id", accountId],
+        ["eq", "poll_id", pollId],
+        ["is", "deleted_at", null],
+      ]),
+    );
   });
 
   it("stores duplicate seed card reactions idempotently", async () => {

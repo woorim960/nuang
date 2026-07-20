@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
 import { PublicComparisonReportRouteView } from "@/features/together/PublicComparisonReportRouteView";
 import {
   publicComparisonLookupRequestSchema,
@@ -10,6 +11,7 @@ import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
 type PublicComparisonReportPageProps = {
   params: Promise<{ comparisonReportId: string }>;
+  searchParams?: Promise<{ backTo?: string }>;
 };
 
 export const metadata: Metadata = {
@@ -22,8 +24,10 @@ export const metadata: Metadata = {
 
 export default async function PublicComparisonReportPage({
   params,
+  searchParams,
 }: PublicComparisonReportPageProps) {
   const { comparisonReportId } = await params;
+  const { backTo } = searchParams ? await searchParams : {};
   const parsed = publicComparisonLookupRequestSchema.safeParse({
     comparisonReportId,
   });
@@ -33,10 +37,19 @@ export default async function PublicComparisonReportPage({
   );
 
   return (
-    <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-8">
-      <PublicComparisonReportRouteView state={state} />
-    </main>
+    <CommunityScreenShell
+      backHref={getSafeBackHref(backTo)}
+      title="나와 비교하기"
+    >
+      <div className="px-4 py-5">
+        <PublicComparisonReportRouteView state={state} />
+      </div>
+    </CommunityScreenShell>
   );
+}
+
+function getSafeBackHref(backTo: string | undefined) {
+  return backTo?.startsWith("/feed/profiles/") ? backTo : "/feed";
 }
 
 async function resolveComparisonReportState(comparisonReportId: string | null) {
@@ -96,7 +109,9 @@ async function resolveComparisonReportState(comparisonReportId: string | null) {
   };
 }
 
-function lookupFailureToUnavailableStatus(code: PublicComparisonLookupFailureCode) {
+function lookupFailureToUnavailableStatus(
+  code: PublicComparisonLookupFailureCode,
+) {
   if (code === "comparison_report_stale") return "stale" as const;
   if (code === "comparison_report_disabled") return "disabled" as const;
   if (code === "comparison_report_deleted") return "deleted" as const;

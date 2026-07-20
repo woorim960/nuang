@@ -15,8 +15,8 @@ import type {
   FeedWriteSuccessInput,
 } from "@/features/feed/feed-write-contract";
 import {
-  getSupportedNuangProfileName,
-  isSupportedNuangCode,
+  getCurrentNuangProfileName,
+  isCurrentNuangCode,
 } from "@/features/nuang-code/profile-name-resolution";
 
 type ServiceClient = SupabaseClient;
@@ -141,21 +141,39 @@ async function writeFeedPost({
     return { code: "feed_target_invalid", ok: false };
   }
 
-  const response = await client
+  const sharedRow = {
+    attachment_payload: payload.attachments ?? [],
+    author_account_id: accountId,
+    body: payload.body,
+    moderation_status: "pending_review",
+    public_projection_payload: publicProjection,
+    source: payload.source,
+    source_id: payload.sourceId ?? null,
+    visibility: payload.visibility,
+  };
+  let response = await client
     .schema("feed")
     .from("feed_post")
     .insert({
-      attachment_payload: payload.attachments ?? [],
-      author_account_id: accountId,
-      body: payload.body,
-      moderation_status: "pending_review",
-      public_projection_payload: publicProjection,
-      source: payload.source,
-      source_id: payload.sourceId ?? null,
-      visibility: payload.visibility,
+      ...sharedRow,
+      topic_category: payload.topic?.category ?? null,
+      topic_source: payload.topic?.source ?? "manual",
+      topic_tags: payload.topic?.tags ?? [],
     })
     .select("id, moderation_status")
     .single();
+
+  if (isMissingFeedTopicColumns(response.error)) {
+    response = await client
+      .schema("feed")
+      .from("feed_post")
+      .insert({
+        ...sharedRow,
+        body: payload.body.trim() || "사진을 공유했어요.",
+      })
+      .select("id, moderation_status")
+      .single();
+  }
 
   if (response.error || !response.data) {
     return {
@@ -191,6 +209,23 @@ async function writeFeedPost({
     },
     ok: true,
   };
+}
+
+function isMissingFeedTopicColumns(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as { code?: unknown; message?: unknown };
+  const message =
+    typeof candidate.message === "string"
+      ? candidate.message.toLocaleLowerCase("en-US")
+      : "";
+
+  return (
+    candidate.code === "42703" ||
+    candidate.code === "PGRST204" ||
+    message.includes("topic_category") ||
+    message.includes("topic_source") ||
+    message.includes("topic_tags")
+  );
 }
 
 async function writeBalanceGamePoll({
@@ -669,8 +704,30 @@ async function insertPollVote({
     };
   }
 
+  const updated = await client
+    .schema("feed")
+    .from("feed_poll_vote")
+    .update({
+      nuang_code: profile.code,
+      option_id: optionId,
+      profile_name: profile.name,
+    })
+    .eq("id", existing.data.id)
+    .eq("account_id", accountId)
+    .eq("poll_id", pollId)
+    .is("deleted_at", null)
+    .select("id")
+    .single();
+
+  if (updated.error || !updated.data) {
+    return {
+      code: getFeedDbFailureCode(updated.error, "feed_poll_vote_write_failed"),
+      ok: false,
+    };
+  }
+
   return {
-    data: existing.data as { id: string },
+    data: updated.data as { id: string },
     ok: true,
   };
 }
@@ -722,13 +779,13 @@ async function readCurrentNuangCodeSnapshot({
     const code =
       typeof report.profile_code === "string" ? report.profile_code : null;
 
-    if (isSupportedNuangCode(code)) {
+    if (isCurrentNuangCode(code)) {
       return {
         code,
         name:
           typeof report.profile_name === "string" && report.profile_name.trim()
             ? report.profile_name.trim()
-            : getSupportedNuangProfileName(code),
+            : getCurrentNuangProfileName(code),
       };
     }
   }
@@ -756,7 +813,7 @@ function parseNuangCodeFromPublicSnapshot(value: unknown) {
   const code =
     typeof snapshot.profile?.code === "string" ? snapshot.profile.code : null;
 
-  if (!isSupportedNuangCode(code)) {
+  if (!isCurrentNuangCode(code)) {
     return {
       code: null,
       name: null,
@@ -768,7 +825,7 @@ function parseNuangCodeFromPublicSnapshot(value: unknown) {
     name:
       typeof snapshot.profile?.name === "string" && snapshot.profile.name.trim()
         ? snapshot.profile.name.trim()
-        : getSupportedNuangProfileName(code),
+        : getCurrentNuangProfileName(code),
   };
 }
 
@@ -1195,6 +1252,7 @@ async function buildPostProjection({
     reportShare,
     source: payload.source,
     sourceId: payload.sourceId ?? null,
+    topic: payload.topic ?? null,
   };
 }
 
@@ -1240,7 +1298,7 @@ async function readReportShareProjection({
       ? row.profile_code.trim()
       : shareSummary?.profileCode;
 
-  if (!profileCode) {
+  if (!isCurrentNuangCode(profileCode)) {
     return null;
   }
 
@@ -1253,7 +1311,7 @@ async function readReportShareProjection({
     domains: shareSummary?.domains ?? [],
     profileCode,
     profileName:
-      getSupportedNuangProfileName(profileCode) ??
+      getCurrentNuangProfileName(profileCode) ??
       (typeof row.profile_name === "string" && row.profile_name.trim()
         ? row.profile_name.trim()
         : (shareSummary?.profileName ?? "뉴앙 리포트")),

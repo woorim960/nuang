@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createServerFeedPostDetailPayload,
   createServerFeedReadPayload,
+  createServerFeedPlaygroundRecordsPayload,
   createServerFeedPollStatsPayload,
   createServerFeedReportSharePayload,
   createServerHomeFeedPreviewItems,
@@ -224,7 +225,7 @@ describe("feed server read model", () => {
     expect(payload?.comments).toHaveLength(2);
   });
 
-  it("hides code-level poll rows that could reveal one person's choice", async () => {
+  it("shows code-level poll rows from the first coded vote", async () => {
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedPollStatsPayload(
@@ -241,7 +242,48 @@ describe("feed server read model", () => {
         voteOptionId: null,
       },
     });
-    expect(payload?.codeRows).toEqual([]);
+    expect(payload?.codeRows).toHaveLength(2);
+    expect(payload?.codeRows.map((row) => row.code)).toEqual([
+      "ENAKQ",
+      "INGMC",
+    ]);
+  });
+
+  it("builds the signed-in viewer's playground records from current votes", async () => {
+    supabaseMocks.serverClient = {
+      auth: {
+        getUser: async () => ({
+          data: {
+            user: {
+              id: "auth-user-001",
+            },
+          },
+          error: null,
+        }),
+      },
+    };
+    supabaseMocks.serviceClient = createMockFeedReadClient();
+
+    const payload = await createServerFeedPlaygroundRecordsPayload();
+
+    expect(payload).toMatchObject({
+      records: [
+        {
+          canRevote: true,
+          poll: {
+            question: "나 혼자 여행 간다면?",
+            totalVotes: 3,
+            viewerCode: "INGMC",
+            viewerVoteOptionId: "option-sea",
+          },
+          selectedCode: "INGMC",
+          selectedOptionLabel: "바다",
+          status: "active",
+          topicLabel: "취향",
+        },
+      ],
+      state: "ready",
+    });
   });
 
   it("normalizes feed report detail names from the current Nuang code dictionary", async () => {
@@ -253,10 +295,10 @@ describe("feed server read model", () => {
 
     expect(payload?.reportShare).toMatchObject({
       href: "/feed/reports/33333333-3333-4333-8333-333333333333",
-      profileCode: "SVODE",
-      profileName: "물결의 새길 개척가",
+      profileCode: "INGMC",
+      profileName: "새 길을 찾는 탐구자",
     });
-    expect(JSON.stringify(payload)).not.toContain("물결 새길 개척가");
+    expect(JSON.stringify(payload)).not.toContain("예전 저장 이름");
   });
 
   it("does not expose a private report share to another viewer", async () => {
@@ -366,6 +408,18 @@ function resolveFeedReadOperation(
   }
 
   if (operation.schema === "feed" && operation.table === "feed_post") {
+    if (hasFilterColumn(operation, "in", "id")) {
+      return {
+        data: [
+          {
+            id: "22222222-2222-4222-8222-222222222222",
+            topic_category: "preferences",
+          },
+        ],
+        error: null,
+      };
+    }
+
     if (
       hasFilter(operation, "eq", "id", "44444444-4444-4444-8444-444444444444")
     ) {
@@ -391,7 +445,7 @@ function resolveFeedReadOperation(
       return {
         data: {
           author_account_id: "account-other",
-          body: "SVODE 물결 새길 개척가 리포트를 공유했어요.",
+          body: "INGMC 예전 저장 이름 리포트를 공유했어요.",
           created_at: "2026-07-09T07:10:00.000Z",
           id: "33333333-3333-4333-8333-333333333333",
           moderation_status: options.privateReportShare
@@ -402,8 +456,8 @@ function resolveFeedReadOperation(
               assessmentKind: "full",
               completedAt: "2026-07-04T00:00:00.000Z",
               domains: [],
-              profileCode: "SVODE",
-              profileName: "물결 새길 개척가",
+              profileCode: "INGMC",
+              profileName: "예전 저장 이름",
               resultLabel: "현재 가장 가까운 대표 성향",
             },
           },
@@ -475,6 +529,22 @@ function resolveFeedReadOperation(
   }
 
   if (operation.schema === "feed" && operation.table === "feed_poll") {
+    if (hasFilterColumn(operation, "in", "id")) {
+      return {
+        data: [
+          {
+            created_at: "2026-07-19T07:10:00.000Z",
+            id: "11111111-1111-4111-8111-111111111111",
+            post_id: "22222222-2222-4222-8222-222222222222",
+            prompt_id: "balance_game_trip",
+            question: "나 혼자 여행 간다면?",
+            status: "active",
+          },
+        ],
+        error: null,
+      };
+    }
+
     return {
       data: {
         id: "11111111-1111-4111-8111-111111111111",
@@ -509,21 +579,67 @@ function resolveFeedReadOperation(
   }
 
   if (operation.schema === "feed" && operation.table === "feed_poll_vote") {
+    if (hasFilter(operation, "eq", "account_id", "account-own")) {
+      return {
+        data: [
+          {
+            account_id: "account-own",
+            created_at: "2026-07-20T04:00:00.000Z",
+            id: "vote-own",
+            nuang_code: "INGMC",
+            option_id: "option-sea",
+            poll_id: "11111111-1111-4111-8111-111111111111",
+            profile_name: "예전 저장 이름",
+          },
+        ],
+        error: null,
+      };
+    }
+
+    if (hasFilterColumn(operation, "in", "poll_id")) {
+      return {
+        data: [
+          {
+            account_id: "account-flame",
+            nuang_code: "ENAKQ",
+            option_id: "option-mountain",
+            poll_id: "11111111-1111-4111-8111-111111111111",
+            profile_name: "관계를 여는 지휘자",
+          },
+          {
+            account_id: "account-water",
+            nuang_code: "INGMC",
+            option_id: "option-sea",
+            poll_id: "11111111-1111-4111-8111-111111111111",
+            profile_name: "새 길을 찾는 탐구자",
+          },
+          {
+            account_id: "account-own",
+            nuang_code: "INGMC",
+            option_id: "option-sea",
+            poll_id: "11111111-1111-4111-8111-111111111111",
+            profile_name: "예전 저장 이름",
+          },
+        ],
+        error: null,
+      };
+    }
+
     return {
       data: [
         {
           account_id: "account-flame",
-          nuang_code: "TVOAE",
+          nuang_code: "ENAKQ",
           option_id: "option-mountain",
           poll_id: "11111111-1111-4111-8111-111111111111",
-          profile_name: "불꽃 온기 탐험가",
+          profile_name: "관계를 여는 지휘자",
         },
         {
           account_id: "account-water",
-          nuang_code: "SVODE",
+          nuang_code: "INGMC",
           option_id: "option-sea",
           poll_id: "11111111-1111-4111-8111-111111111111",
-          profile_name: "물결 새길 개척가",
+          profile_name: "새 길을 찾는 탐구자",
         },
       ],
       error: null,
@@ -734,5 +850,15 @@ function hasFilter(
   return operation.filters.some(
     (filter) =>
       filter[0] === type && filter[1] === column && filter[2] === value,
+  );
+}
+
+function hasFilterColumn(
+  operation: MockFeedReadOperation,
+  type: string,
+  column: string,
+) {
+  return operation.filters.some(
+    (filter) => filter[0] === type && filter[1] === column,
   );
 }

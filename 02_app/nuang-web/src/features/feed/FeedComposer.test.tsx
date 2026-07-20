@@ -23,223 +23,313 @@ describe("FeedComposer", () => {
 
   afterEach(() => {
     vi.unstubAllGlobals();
+    vi.restoreAllMocks();
   });
 
-  it("posts user-written feed content with the selected daily question source", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => {
-        return new Response(
-          JSON.stringify({
-            feedWrite: {
-              action: "create_post",
-              id: "feed_post_001",
-              moderationStatus: "pending_review",
-              targetType: "feed_post",
-            },
-            ok: true,
-          }),
-          {
-            headers: {
-              "content-type": "application/json",
-            },
-            status: 200,
-          },
-        );
-      }),
-    );
-
+  it("moves from the feed entry to one dedicated writing screen", () => {
     render(<FeedComposer />);
 
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "지금 떠오른 생각을 나눠보세요",
-      }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: "새 게시물 쓰기" }));
 
-    expect(screen.getByRole("tab", { name: "글" })).toBeInTheDocument();
+    expect(navigationMock.router.push).toHaveBeenCalledWith("/feed/new");
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+  });
+
+  it("posts one familiar free-writing flow with a category and body hashtags", async () => {
+    stubSuccessfulPost();
+    render(<FeedComposer standalone />);
+
     expect(
-      screen.queryByRole("tab", { name: "일반 글" }),
-    ).not.toBeInTheDocument();
+      screen.getByRole("heading", { name: "새 게시물" }),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("tab")).not.toBeInTheDocument();
     expect(
-      screen.queryByRole("tab", { name: "리포트" }),
+      screen.getByRole("button", { name: "사진 추가" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "사진 0/19" }),
     ).not.toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "전체 공개" })).toHaveLength(
+      1,
+    );
 
     fireEvent.change(screen.getByLabelText("글 내용"), {
       target: {
-        value: "오늘은 대화 전에 생각을 정리하고 싶었어요.",
+        value: "오늘은 새로운 카페까지 천천히 걸어갔어요. #카페 #산책 ",
       },
     });
-    fireEvent.click(screen.getByRole("tab", { name: "오늘의 질문" }));
-    fireEvent.click(screen.getByRole("button", { name: "게시" }));
+    fireEvent.click(screen.getByRole("radio", { name: "일상 주제" }));
+
+    expect(screen.getByRole("button", { name: "카페 태그 삭제" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "산책 태그 삭제" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
 
     expect(
-      await screen.findByText(
-        "글을 올렸어요. 확인이 끝나면 다른 사람에게도 보여요.",
-      ),
+      screen.getByRole("heading", { name: "게시물 미리보기" }),
     ).toBeInTheDocument();
-    expect(navigationMock.router.refresh).toHaveBeenCalledTimes(1);
+    expect(screen.getByText("커뮤니티에서는 이렇게 보여요")).toBeInTheDocument();
+    expect(vi.mocked(fetch)).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+
     await waitFor(() => {
-      expect(fetch).toHaveBeenCalledWith(
-        "/api/feed",
-        expect.objectContaining({
-          method: "POST",
-        }),
+      expect(navigationMock.router.push).toHaveBeenCalledWith(
+        "/feed?posted=feed_post_001",
       );
     });
-    expect(getLastRequestBody()).toMatchObject({
+    expect(getLastJsonRequestBody()).toMatchObject({
       action: "create_post",
-      body: "오늘은 대화 전에 생각을 정리하고 싶었어요.",
-      source: "daily_question",
-      sourceId: "daily_question_evening_001",
+      body: "오늘은 새로운 카페까지 천천히 걸어갔어요.",
+      source: "free_text",
+      topic: {
+        category: "daily_life",
+        source: "manual",
+        tags: ["카페", "산책"],
+      },
       visibility: "public",
     });
   });
 
-  it("posts a balance game with the selected option", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => {
-        return new Response(
-          JSON.stringify({
-            feedWrite: {
-              action: "create_post",
-              id: "feed_post_001",
-              moderationStatus: "pending_review",
-              targetType: "feed_post",
-            },
-            ok: true,
-          }),
-          {
-            headers: {
-              "content-type": "application/json",
-            },
-            status: 200,
-          },
-        );
-      }),
-    );
+  it("selects a category when the user asks for a free local suggestion", async () => {
+    stubSuccessfulPost();
+    render(<FeedComposer standalone />);
 
-    render(<FeedComposer />);
-
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "지금 떠오른 생각을 나눠보세요",
-      }),
-    );
-    fireEvent.click(screen.getByRole("tab", { name: "밸런스 게임" }));
-    fireEvent.click(
-      screen.getByRole("button", { name: "사람을 만나 함께 보낸다" }),
-    );
     fireEvent.change(screen.getByLabelText("글 내용"), {
-      target: {
-        value: "오늘은 조용한 길이 더 끌려요.",
-      },
+      target: { value: "친구와 대화를 나누며 서로의 마음을 물어봤어요." },
     });
-    fireEvent.click(screen.getByRole("button", { name: "게시" }));
+    fireEvent.click(screen.getByRole("button", { name: "추천" }));
 
     expect(
-      await screen.findByText(
-        "글을 올렸어요. 확인이 끝나면 다른 사람에게도 보여요.",
+      await screen.findByRole("radio", { name: "관계 주제" }),
+    ).toHaveAttribute("aria-checked", "true");
+    expect(
+      screen.getByText(
+        "글과 가까운 주제를 선택했어요. 다른 주제로 바로 바꿀 수 있어요.",
       ),
     ).toBeInTheDocument();
-    expect(getLastRequestBody()).toMatchObject({
-      action: "create_post",
-      body: "오늘은 조용한 길이 더 끌려요.",
-      pollOptionKey: "together",
-      source: "balance_game",
-      sourceId: "balance_home_free_day_together_solo_001",
-      visibility: "public",
+
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+    expect(
+      screen.getByRole("heading", { name: "게시물 미리보기" }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+    await waitFor(() => {
+      expect(navigationMock.router.push).toHaveBeenCalledWith(
+        "/feed?posted=feed_post_001",
+      );
+    });
+    expect(getLastJsonRequestBody()).toMatchObject({
+      topic: {
+        category: "relationships",
+        source: "local_suggestion",
+        tags: [],
+      },
     });
   });
 
-  it("does not submit empty content", () => {
+  it("turns a completed body hashtag into a removable tag chip", () => {
+    render(<FeedComposer standalone />);
+
+    fireEvent.change(screen.getByLabelText("글 내용"), {
+      target: { value: "오늘 인사해요 #안녕 " },
+    });
+
+    expect(screen.getByLabelText("글 내용")).toHaveValue("오늘 인사해요 ");
+    fireEvent.click(screen.getByRole("button", { name: "안녕 태그 삭제" }));
+    expect(
+      screen.queryByRole("button", { name: "안녕 태그 삭제" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("never opens the preview or uploads from an Enter-driven form submit", () => {
     const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
+    render(<FeedComposer standalone />);
 
-    render(<FeedComposer />);
+    const bodyInput = screen.getByLabelText("글 내용");
+    fireEvent.change(bodyInput, {
+      target: { value: "엔터는 줄바꿈에만 사용해요." },
+    });
+    fireEvent.keyDown(bodyInput, { key: "Enter" });
+    fireEvent.submit(bodyInput.closest("form") as HTMLFormElement);
 
-    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "지금 떠오른 생각을 나눠보세요",
-      }),
-    );
-    expect(screen.getByRole("button", { name: "게시" })).toBeDisabled();
+    expect(
+      screen.getByRole("heading", { name: "새 게시물" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("heading", { name: "게시물 미리보기" }),
+    ).not.toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("shows login copy without community or safety wording", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => {
-        return new Response(JSON.stringify({ error: "unauthenticated" }), {
-          headers: {
-            "content-type": "application/json",
-          },
-          status: 401,
-        });
-      }),
-    );
+  it("returns from the preview to the same editable draft", () => {
+    render(<FeedComposer standalone />);
 
-    render(<FeedComposer />);
-
-    fireEvent.click(
-      screen.getByRole("button", {
-        name: "지금 떠오른 생각을 나눠보세요",
-      }),
-    );
     fireEvent.change(screen.getByLabelText("글 내용"), {
-      target: {
-        value: "짧은 생각을 남겨요.",
-      },
+      target: { value: "수정할 수 있는 미리보기예요." },
     });
-    fireEvent.click(screen.getByRole("button", { name: "게시" }));
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+    fireEvent.click(screen.getByRole("button", { name: "수정하기" }));
 
     expect(
-      await screen.findByText("로그인 후 게시할 수 있어요."),
+      screen.getByRole("heading", { name: "새 게시물" }),
     ).toBeInTheDocument();
-    expect(navigationMock.router.push).toHaveBeenCalledWith(
-      "/login?next=%2Ffeed%3FresumeFeed%3Dpost&reason=community",
+    expect(screen.getByLabelText("글 내용")).toHaveValue(
+      "수정할 수 있는 미리보기예요.",
     );
-    expect(window.sessionStorage.getItem("nuang:feed:pending-post")).toContain(
-      "짧은 생각을 남겨요.",
-    );
-    expect(document.body).not.toHaveTextContent("커뮤니티");
-    expect(document.body).not.toHaveTextContent("안전");
   });
 
-  it("restores the post draft after login", async () => {
+  it("uploads selected photos as multipart data without putting them in JSON", async () => {
+    stubSuccessfulPost();
+    vi.spyOn(URL, "createObjectURL").mockReturnValue("blob:feed-photo");
+    vi.spyOn(URL, "revokeObjectURL").mockImplementation(() => undefined);
+    render(<FeedComposer standalone />);
+
+    const photo = new File(["photo"], "walk.webp", { type: "image/webp" });
+    fireEvent.change(screen.getByLabelText("게시물 사진 선택"), {
+      target: { files: [photo] },
+    });
+
+    expect(
+      screen.getByAltText("선택한 게시물 사진 미리보기"),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "업로드" })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+
+    expect(
+      screen.getByAltText("업로드할 게시물 대표 사진"),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+
+    await waitFor(() => {
+      expect(navigationMock.router.push).toHaveBeenCalledWith(
+        "/feed?posted=feed_post_001",
+      );
+    });
+    const request = getLastRequestInit();
+    expect(request.headers).toBeUndefined();
+    expect(request.body).toBeInstanceOf(FormData);
+    const formData = request.body as FormData;
+    expect(formData.getAll("media")).toHaveLength(1);
+    expect(JSON.parse(String(formData.get("payload")))).toMatchObject({
+      action: "create_post",
+      body: "",
+      source: "free_text",
+    });
+  });
+
+  it("does not submit when both writing and photos are empty", () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    render(<FeedComposer standalone />);
+
+    expect(screen.getByRole("button", { name: "업로드" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "추천" })).toBeDisabled();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("restores text settings after login and explains that photos must be reselected", async () => {
     window.sessionStorage.setItem(
       "nuang:feed:pending-post",
       JSON.stringify({
         body: "로그인 전에 적어둔 생각이에요.",
-        mode: "daily_question",
-        selectedPollOptionKey: null,
+        category: "thoughts",
+        hadPhotos: true,
+        tags: ["기록"],
+        topicSource: "manual",
+        visibility: "profile_public",
       }),
     );
-    window.history.replaceState({}, "", "/feed?resumeFeed=post&auth=connected");
-
-    render(<FeedComposer />);
-
-    expect(await screen.findByRole("dialog")).toBeInTheDocument();
-    expect(screen.getByLabelText("글 내용")).toHaveValue(
-      "로그인 전에 적어둔 생각이에요.",
+    window.history.replaceState(
+      {},
+      "",
+      "/feed/new?resumeFeed=post&auth=connected",
     );
-    expect(screen.getByRole("tab", { name: "오늘의 질문" })).toHaveAttribute(
-      "aria-selected",
+    render(<FeedComposer standalone />);
+
+    expect(
+      await screen.findByRole("heading", { name: "새 게시물" }),
+    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByLabelText("글 내용")).toHaveValue(
+        "로그인 전에 적어둔 생각이에요.",
+      );
+    });
+    expect(screen.getByRole("radio", { name: "생각 주제" })).toHaveAttribute(
+      "aria-checked",
       "true",
     );
+    expect(screen.getByRole("button", { name: "기록 태그 삭제" })).toBeInTheDocument();
     expect(
-      screen.getByText("로그인됐어요. 내용을 확인하고 게시해 주세요."),
+      screen.getByText("로그인됐어요. 사진만 다시 선택하면 게시할 수 있어요."),
     ).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: "프로필 공개" })).toHaveLength(
+      1,
+    );
+  });
+
+  it("saves the draft and returns through login when posting requires an account", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ error: "unauthenticated" }), {
+            headers: { "content-type": "application/json" },
+            status: 401,
+          }),
+      ),
+    );
+    render(<FeedComposer standalone />);
+
+    fireEvent.change(screen.getByLabelText("글 내용"), {
+      target: { value: "짧은 생각을 남겨요." },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+
+    expect(
+      screen.getByRole("heading", { name: "게시물 미리보기" }),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "업로드" }));
+
+    await waitFor(() => {
+      expect(navigationMock.router.push).toHaveBeenCalledWith(
+        "/login?next=%2Ffeed%2Fnew%3FresumeFeed%3Dpost&reason=community",
+      );
+    });
+    expect(window.sessionStorage.getItem("nuang:feed:pending-post")).toContain(
+      "짧은 생각을 남겨요.",
+    );
   });
 });
 
-function getLastRequestBody() {
-  const mockedFetch = vi.mocked(fetch);
-  const lastCall = mockedFetch.mock.calls.at(-1);
-  const init = lastCall?.[1] as RequestInit | undefined;
+function stubSuccessfulPost() {
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            feedWrite: {
+              action: "create_post",
+              id: "feed_post_001",
+              moderationStatus: "pending_review",
+              targetType: "feed_post",
+            },
+            ok: true,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
+    ),
+  );
+}
 
-  return JSON.parse(String(init?.body));
+function getLastRequestInit() {
+  const mockedFetch = vi.mocked(fetch);
+  return mockedFetch.mock.calls.at(-1)?.[1] as RequestInit;
+}
+
+function getLastJsonRequestBody() {
+  return JSON.parse(String(getLastRequestInit().body));
 }

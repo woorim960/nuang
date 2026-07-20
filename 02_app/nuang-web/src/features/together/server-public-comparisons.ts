@@ -1,5 +1,6 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { getNuangProfileCharacterRule } from "@/components/character/nuang-profile-character-system";
+import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { parseStoredAccountResultSummary } from "@/features/account/account-result-contract";
 import type { AccountComparisonReportSummary } from "@/features/account/account-result-contract";
@@ -138,7 +139,10 @@ export async function createPublicComparisonForUser({
     return { code: "target_public_snapshot_not_active", ok: false };
   }
 
-  if (targetSnapshotRow.visibility_policy_version !== profileVisibilityPolicyVersion) {
+  if (
+    targetSnapshotRow.visibility_policy_version !==
+    profileVisibilityPolicyVersion
+  ) {
     return { code: "snapshot_policy_version_mismatch", ok: false };
   }
 
@@ -397,7 +401,9 @@ async function readViewerFullCoreReport({
   let query = client
     .schema("report")
     .from("result_report")
-    .select("id, account_id, report_kind, profile_code, profile_name, summary, created_at")
+    .select(
+      "id, account_id, report_kind, profile_code, profile_name, summary, created_at",
+    )
     .eq("account_id", accountId)
     .eq("report_kind", "full")
     .is("deleted_at", null)
@@ -413,8 +419,8 @@ async function readViewerFullCoreReport({
   if (response.error || !response.data) {
     return null;
   }
-
-  return response.data as AccountResultReportRow;
+  const report = response.data as AccountResultReportRow;
+  return getCandidateProfileDefinition(report.profile_code) ? report : null;
 }
 
 async function readTargetPublicSnapshot({
@@ -427,7 +433,9 @@ async function readTargetPublicSnapshot({
   const response = await client
     .schema("profile")
     .from("profile_public_snapshot")
-    .select("id, account_id, result_report_id, visibility_policy_version, snapshot_payload, status")
+    .select(
+      "id, account_id, result_report_id, visibility_policy_version, snapshot_payload, status",
+    )
     .eq("id", publicSnapshotId)
     .is("deleted_at", null)
     .maybeSingle();
@@ -463,8 +471,14 @@ async function readOrCreateViewerPublicSnapshot({
     .maybeSingle();
 
   if (!existingResponse.error && existingResponse.data) {
-    const row = existingResponse.data as { id: string; snapshot_payload: unknown };
-    const payload = coercePublicProfileSnapshotPayload(row.snapshot_payload, row.id);
+    const row = existingResponse.data as {
+      id: string;
+      snapshot_payload: unknown;
+    };
+    const payload = coercePublicProfileSnapshotPayload(
+      row.snapshot_payload,
+      row.id,
+    );
 
     if (payload) {
       return {
@@ -525,7 +539,8 @@ function coercePublicProfileSnapshotPayload(
     !snapshot.displayProfile?.motif ||
     !snapshot.profile?.code ||
     !snapshot.profile?.name ||
-    !Array.isArray(snapshot.publicData?.coreDomainMap)
+    !Array.isArray(snapshot.publicData?.coreDomainMap) ||
+    !getCandidateProfileDefinition(snapshot.profile.code)
   ) {
     return null;
   }
@@ -558,7 +573,9 @@ function coercePublicComparisonReportPayload(
     return null;
   }
 
-  if (!isSupportedPublicComparisonReportVersion(report.comparison.contractVersion)) {
+  if (
+    !isSupportedPublicComparisonReportVersion(report.comparison.contractVersion)
+  ) {
     return null;
   }
 
@@ -604,7 +621,10 @@ async function refreshComparisonReportIfNeeded({
   report: PublicComparisonReportPayload;
   row: PublicComparisonReportRow;
 }) {
-  if (!shouldRefreshComparisonReport(report) || !row.viewer_public_snapshot_id) {
+  if (
+    !shouldRefreshComparisonReport(report) ||
+    !row.viewer_public_snapshot_id
+  ) {
     return null;
   }
 
@@ -659,7 +679,8 @@ function shouldRefreshComparisonReport(report: PublicComparisonReportPayload) {
   const headline = sections.summary?.headline ?? "";
 
   return (
-    report.comparison.contractVersion !== publicComparisonReportContractVersion ||
+    report.comparison.contractVersion !==
+      publicComparisonReportContractVersion ||
     !Array.isArray(sections.axisComparisons) ||
     sections.axisComparisons.length === 0 ||
     (sections.commonGround.length === 0 && sections.differences.length === 0) ||
@@ -668,7 +689,9 @@ function shouldRefreshComparisonReport(report: PublicComparisonReportPayload) {
   );
 }
 
-function reportRowToCoreScoreResult(row: AccountResultReportRow): CoreScoreResult {
+function reportRowToCoreScoreResult(
+  row: AccountResultReportRow,
+): CoreScoreResult {
   const parsedSummary = parseStoredAccountResultSummary(row.summary);
   const summary = parsedSummary.success
     ? parsedSummary.data

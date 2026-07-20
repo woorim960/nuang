@@ -12,29 +12,17 @@ import {
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { readJsonResponse } from "@/features/account/response-json";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
-import { fullScoringRelease } from "@/features/assessment/full-core-seed";
-import { quickScoringRelease } from "@/features/assessment/quick-core-seed";
+import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
-import { calculateCoreScore } from "@/lib/scoring/core";
-import type {
-  CoreScoreResult,
-  FacetScore,
-  ItemResponse,
-} from "@/lib/scoring/types";
+import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
+import type { CoreScoreResult, FacetScore } from "@/lib/scoring/types";
 
 const domainShortLabel: Record<string, string> = {
-  ER: "마음",
-  OE: "감각",
+  ER: "반응",
+  OE: "탐색",
   RO: "관계",
   SE: "사람",
   SM: "일상",
-};
-
-const motifByPrefix: Record<string, NuangCharacterMotif> = {
-  SC: "forest",
-  SV: "water",
-  TC: "sun",
-  TV: "flame",
 };
 
 export function MyTraitDetailView() {
@@ -107,7 +95,7 @@ export function MyTraitDetailView() {
   }
 
   const code = detail.code;
-  const motif = motifByPrefix[code.slice(0, 2)] ?? "purple";
+  const motif: NuangCharacterMotif = "purple";
   const domainAxes = detail.domains.map((domain) => ({
     id: domain.domainId,
     label: domain.label,
@@ -277,23 +265,14 @@ function buildLatestScore(attempts: LocalAssessmentAttempt[]) {
   return attempts
     .filter((attempt) => attempt.state === "completed")
     .map((attempt) => {
-      const scoringRelease =
-        attempt.assessmentId === "nu-core-full"
-          ? fullScoringRelease
-          : quickScoringRelease;
-      const responses: ItemResponse[] = Object.values(attempt.responses).map(
-        (response) => ({
-          itemId: response.itemId,
-          isUnsure: response.isUnsure,
-          value: response.value,
-        }),
-      );
-      const result: CoreScoreResult = calculateCoreScore(
-        scoringRelease,
-        responses,
-      );
-      return { attempt, result };
+      const result = calculateLocalAttemptScore(attempt);
+      return result ? { attempt, result } : null;
     })
+    .filter(
+      (entry): entry is NonNullable<typeof entry> =>
+        Boolean(entry?.result.code) &&
+        Boolean(getCandidateProfileDefinition(entry?.result.code ?? "")),
+    )
     .sort((a, b) =>
       (b.attempt.completedAt ?? b.attempt.updatedAt).localeCompare(
         a.attempt.completedAt ?? a.attempt.updatedAt,
@@ -302,9 +281,9 @@ function buildLatestScore(attempts: LocalAssessmentAttempt[]) {
 }
 
 function buildLatestAccountResult(results: AccountResultSummary[]) {
-  return [...results].sort((a, b) =>
-    b.completedAt.localeCompare(a.completedAt),
-  )[0];
+  return results
+    .filter((result) => getCandidateProfileDefinition(result.profileCode))
+    .sort((a, b) => b.completedAt.localeCompare(a.completedAt))[0];
 }
 
 async function listAccountResults(): Promise<AccountResultSummary[]> {

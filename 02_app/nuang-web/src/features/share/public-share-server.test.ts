@@ -17,7 +17,7 @@ vi.mock("@/lib/supabase/service", () => ({
 }));
 
 describe("public share server read", () => {
-  it("uses the current Nuang code name over legacy stored profile names", async () => {
+  it("uses the current Nuang code name over a stale stored profile name", async () => {
     serviceMocks.client = createMockShareClient({
       report: {
         report_kind: "full",
@@ -29,11 +29,11 @@ describe("public share server read", () => {
               domainId: "SE",
               label: "사람 사이 에너지",
               score: 44,
-              symbol: "S",
+              symbol: "E",
             },
           ],
-          profileCode: "SVODE",
-          profileName: "물결 새길 개척가",
+          profileCode: "ENAKQ",
+          profileName: "예전 저장 이름",
           resultLabel: "현재 가장 가까운 대표 성향",
         },
       },
@@ -48,8 +48,8 @@ describe("public share server read", () => {
 
     expect(result.status).toBe("active");
     if (result.status !== "active") return;
-    expect(result.payload.share.result.profileCode).toBe("SVODE");
-    expect(result.payload.share.result.profileName).toBe("물결의 새길 개척가");
+    expect(result.payload.share.result.profileCode).toBe("ENAKQ");
+    expect(result.payload.share.result.profileName).toBe("관계를 여는 지휘자");
   });
 });
 

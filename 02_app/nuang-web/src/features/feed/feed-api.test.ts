@@ -42,8 +42,8 @@ describe("feed api", () => {
     const response = await feedPost(
       jsonRequest({
         action: "create_post",
-        body: "",
-        source: "free_text",
+        body: "x".repeat(801),
+        source: "unsupported",
         visibility: "public",
       }),
     );
@@ -51,6 +51,27 @@ describe("feed api", () => {
 
     expect(response.status).toBe(422);
     expect(body.error).toBe("validation_error");
+  });
+
+  it("rejects unsupported multipart photos before auth", async () => {
+    const formData = new FormData();
+    formData.set("payload", JSON.stringify(validPostPayload));
+    formData.append(
+      "media",
+      new File(["gif"], "animated.gif", { type: "image/gif" }),
+    );
+
+    const response = await feedPost({
+      formData: async () => formData,
+      headers: new Headers({
+        "content-type": "multipart/form-data; boundary=test",
+      }),
+    } as Request);
+    const body = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(body.error).toBe("invalid_request");
+    expect(body.message).toContain("JPG");
   });
 });
 
