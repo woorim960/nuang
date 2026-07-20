@@ -1,0 +1,31 @@
+{
+  "claimCount": 158,
+  "decisionCounts": {
+    "revise": 115,
+    "insufficient_evidence": 78,
+    "accept": 110
+  },
+  "dispositionCounts": {
+    "REVISE_BEFORE_NEXT_GATE": 50,
+    "INTERNAL_ACCEPT_NOT_APPROVED": 50,
+    "HOLD_FOR_MORE_EVIDENCE": 58
+  },
+  "externalReviewStatus": "NOT_STARTED",
+  "generatedAt": "2026-07-20T00:00:00+09:00",
+  "internalReviewCount": 303,
+  "registryMutationPermitted": false,
+  "riskCounts": {
+    "evidence_mismatch": 77,
+    "unmeasured_inference": 62,
+    "clinical_overreach": 9,
+    "other": 2,
+    "relationship_determinism": 9,
+    "privacy_scope": 16,
+    "cultural_norm": 5,
+    "ability_inference": 13,
+    "unclear_korean": 1,
+    "deterministic_language": 1,
+    "stigma_or_value_judgment": 2
+  },
+  "status": "INTERNAL_AGENT_CRITIQUE_COMPLETE_NOT_EXTERNAL_REVIEW"
+}
