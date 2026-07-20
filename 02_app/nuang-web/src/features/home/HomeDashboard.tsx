@@ -1,8 +1,22 @@
 "use client";
 
-import { ArrowRight, Check, LockKeyhole, MessageCircle } from "lucide-react";
+import {
+  ArrowRight,
+  Bell,
+  Check,
+  LockKeyhole,
+  MessageCircle,
+  UsersRound,
+} from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState, useSyncExternalStore } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+  type ReactNode,
+} from "react";
+import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { FeedPollCard } from "@/features/feed/FeedPollCard";
 import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
@@ -31,6 +45,9 @@ export function HomeDashboard({
   feedPreviewItems = listHomeFeedPreviewItems(),
 }: HomeDashboardProps = {}) {
   const [attempts, setAttempts] = useState<LocalAssessmentAttempt[]>([]);
+  const [accountResults, setAccountResults] = useState<AccountResultSummary[]>(
+    [],
+  );
   const [loaded, setLoaded] = useState(false);
   const featuredProfile = useSyncExternalStore(
     subscribeToFeaturedProfile,
@@ -41,7 +58,7 @@ export function HomeDashboard({
   useEffect(() => {
     let isMounted = true;
 
-    async function loadAttempts() {
+    async function loadLocalState() {
       try {
         const nextAttempts = await listLocalAttempts();
         if (isMounted) setAttempts(nextAttempts);
@@ -52,14 +69,23 @@ export function HomeDashboard({
       }
     }
 
-    void loadAttempts();
+    async function loadAccountState() {
+      const nextResults = await listAccountResults();
+      if (isMounted) setAccountResults(nextResults);
+    }
+
+    void loadLocalState();
+    void loadAccountState();
 
     return () => {
       isMounted = false;
     };
   }, []);
 
-  const model = useMemo(() => buildHomeDashboardModel(attempts), [attempts]);
+  const model = useMemo(
+    () => buildHomeDashboardModel(attempts, accountResults),
+    [accountResults, attempts],
+  );
   const communityPollItem = feedPreviewItems.find(
     (item) => item.poll?.promptId === homeDailyCommunityPollPromptId,
   );
@@ -67,17 +93,27 @@ export function HomeDashboard({
     feedPreviewItems,
     communityPollItem?.id,
   );
+  const viewerCode = getHeroResultCode(model.hero);
 
   return (
     <div className={styles.home}>
       <header className={styles.brandBar}>
-        <p className={styles.brand}>NUANG</p>
-        <p className={styles.brandDescription}>
-          나를 이해하고, 서로를 이해하는 곳
-        </p>
+        <div className={styles.wordmark}>
+          <p className={styles.brand}>NUANG</p>
+          <h1>홈</h1>
+        </div>
+        <Link
+          aria-label="커뮤니티 활동 알림"
+          className={styles.headerIconButton}
+          href="/feed/notifications"
+        >
+          <Bell aria-hidden="true" size={22} strokeWidth={1.7} />
+        </Link>
       </header>
 
       {loaded ? <HomeHero hero={model.hero} /> : <HomeHeroSkeleton />}
+
+      {model.hero.kind === "full_complete" ? <HomeRelationshipPrompt /> : null}
 
       {communityPollItem?.poll ? (
         <HomeCommunityPoll item={communityPollItem} />
@@ -87,15 +123,7 @@ export function HomeDashboard({
 
       <HomeProfileDiscovery profile={featuredProfile} />
 
-      <HomeConversations items={conversations} />
-
-      <aside className={styles.privacyNote}>
-        <LockKeyhole aria-hidden="true" size={19} strokeWidth={1.9} />
-        <div>
-          <h2>내 답변은 나만 볼 수 있어요</h2>
-          <p>공유할 때도 뉴앙 코드와 공개 가능한 요약만 보여줘요.</p>
-        </div>
-      </aside>
+      <HomeConversations items={conversations} viewerCode={viewerCode} />
     </div>
   );
 }
@@ -105,64 +133,67 @@ function HomeHero({ hero }: { hero: HomeHeroModel }) {
     const isFresh = hero.answered === 0 && !hero.adaptive;
 
     return (
-      <section className={styles.hero}>
-        <HeroCharacter />
-        <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}>{hero.assessmentLabel}</p>
-          <h1>
-            {hero.adaptive
-              ? "마지막 확인 질문을 이어가요"
-              : isFresh
-                ? "내 모습을 더 자세히 알아볼까요?"
-                : "답하던 곳부터 계속해요"}
-          </h1>
-          <p className={styles.heroBody}>
-            {hero.adaptive
-              ? "비슷하게 나온 코드 한 자리만 확인하면 결과를 볼 수 있어요."
-              : isFresh
-                ? "첫 결과를 바탕으로 더 다양한 상황 속 내 모습을 살펴봐요."
-                : "답한 내용은 잘 보관되어 있어요. 다음 질문부터 바로 이어갈 수 있어요."}
-          </p>
+      <HeroLayout
+        actions={
+          <>
+            <HeroPrimaryLink href={hero.href}>
+              {isFresh
+                ? `${hero.assessmentLabel} 시작하기`
+                : hero.adaptive
+                  ? "확인 질문 이어가기"
+                  : "검사 이어가기"}
+            </HeroPrimaryLink>
+            {hero.latestResult ? (
+              <HeroTextLink href={hero.latestResult.href}>
+                저장된 내 결과 다시 보기
+              </HeroTextLink>
+            ) : null}
+          </>
+        }
+      >
+        <p className={styles.eyebrow}>{hero.assessmentLabel}</p>
+        <h1>
+          {hero.adaptive
+            ? "한 자리만 더 확인하면 결과가 완성돼요"
+            : isFresh
+              ? "내 모습을 더 자세히 알아볼까요?"
+              : "답하던 곳부터 이어가요"}
+        </h1>
+        <p className={styles.heroBody}>
+          {hero.adaptive
+            ? "비슷하게 나온 코드 한 자리를 몇 가지 질문으로 확인해요."
+            : isFresh
+              ? "첫 결과를 바탕으로 더 다양한 상황 속 내 모습을 살펴봐요."
+              : "지금까지 답한 내용은 그대로 남아 있어요."}
+        </p>
 
-          {!isFresh ? (
-            <div className={styles.progressBlock}>
-              <div className={styles.progressMeta}>
-                <span>
-                  {hero.adaptive ? "코드 확인 중" : "현재까지 저장됨"}
-                </span>
-                <strong>
-                  {hero.adaptive ? "거의 완료" : `${hero.progress}%`}
-                </strong>
-              </div>
-              <div
-                aria-label={`${hero.assessmentLabel} 진행률`}
-                aria-valuemax={hero.total}
-                aria-valuemin={0}
-                aria-valuenow={hero.answered}
-                aria-valuetext={`${hero.total}개 중 ${hero.answered}개 응답 저장`}
-                className={styles.progressTrack}
-                role="progressbar"
-              >
-                <span
-                  className={styles.progressValue}
-                  style={{ width: `${hero.adaptive ? 96 : hero.progress}%` }}
-                />
-              </div>
+        {!isFresh ? (
+          <div className={styles.progressBlock}>
+            <div className={styles.progressMeta}>
+              <span>
+                {hero.adaptive ? "마지막 코드 확인 중" : "검사 진행률"}
+              </span>
+              <strong>
+                {hero.adaptive ? "거의 완료" : `${hero.progress}%`}
+              </strong>
             </div>
-          ) : null}
-
-          <HeroPrimaryLink href={hero.href}>
-            {isFresh
-              ? `${hero.assessmentLabel} 시작`
-              : `${hero.assessmentLabel} 이어가기`}
-          </HeroPrimaryLink>
-          {hero.latestResult ? (
-            <HeroTextLink href={hero.latestResult.href}>
-              저장된 내 결과 다시 보기
-            </HeroTextLink>
-          ) : null}
-        </div>
-      </section>
+            <div
+              aria-label={`${hero.assessmentLabel} 진행률`}
+              aria-valuemax={hero.total}
+              aria-valuemin={0}
+              aria-valuenow={hero.answered}
+              aria-valuetext={`${hero.total}개 중 ${hero.answered}개 응답 저장`}
+              className={styles.progressTrack}
+              role="progressbar"
+            >
+              <span
+                className={styles.progressValue}
+                style={{ width: `${hero.adaptive ? 96 : hero.progress}%` }}
+              />
+            </div>
+          </div>
+        ) : null}
+      </HeroLayout>
     );
   }
 
@@ -170,11 +201,11 @@ function HomeHero({ hero }: { hero: HomeHeroModel }) {
     return (
       <ResultHero
         eyebrow="나의 첫 뉴앙 코드"
-        primaryHref={hero.result.href}
-        primaryLabel="첫 결과 다시 보기"
+        primaryHref={hero.precisionHref}
+        primaryLabel="정밀 검사로 더 자세히 보기"
         result={hero.result}
-        secondaryHref={hero.precisionHref}
-        secondaryLabel="정밀 성향 검사로 더 자세히 보기"
+        secondaryHref={hero.result.href}
+        secondaryLabel="첫 결과 다시 보기"
       />
     );
   }
@@ -182,7 +213,7 @@ function HomeHero({ hero }: { hero: HomeHeroModel }) {
   if (hero.kind === "full_complete") {
     return (
       <ResultHero
-        eyebrow="내 대표 코드"
+        eyebrow="나의 뉴앙 코드"
         primaryHref={hero.result.href}
         primaryLabel="내 성향 자세히 보기"
         result={hero.result}
@@ -193,22 +224,26 @@ function HomeHero({ hero }: { hero: HomeHeroModel }) {
   }
 
   return (
-    <section className={styles.hero}>
-      <HeroCharacter />
-      <div className={styles.heroCopy}>
-        <p className={styles.eyebrow}>처음이라면 여기부터</p>
-        <h1>3분이면 첫 뉴앙 코드를 만나요</h1>
-        <p className={styles.heroBody}>
-          부담 없는 질문에 답하고, 지금 내 모습과 가까운 5글자 코드와 특징을
-          확인해 보세요.
-        </p>
-        <div className={styles.heroFacts} aria-label="첫 성향 검사 특징">
-          <span>로그인 없이</span>
-          <span>중단해도 이어서</span>
-        </div>
-        <HeroPrimaryLink href={hero.href}>첫 성향 검사 시작</HeroPrimaryLink>
-      </div>
-    </section>
+    <HeroLayout
+      actions={
+        <>
+          <HeroPrimaryLink href={hero.href}>
+            첫 성향 검사 시작하기
+          </HeroPrimaryLink>
+          <p className={styles.heroTrustNote}>
+            <LockKeyhole aria-hidden="true" size={13} strokeWidth={1.9} />
+            로그인 없이 시작할 수 있고, 답변은 공개되지 않아요.
+          </p>
+        </>
+      }
+    >
+      <p className={styles.eyebrow}>나를 알아보는 첫걸음</p>
+      <h1>3분이면 내 성향의 첫 단서를 만나요</h1>
+      <p className={styles.heroBody}>
+        간단한 질문에 답하면, 지금 내 모습과 가까운 5글자 뉴앙 코드를
+        알려드려요.
+      </p>
+    </HeroLayout>
   );
 }
 
@@ -228,22 +263,38 @@ function ResultHero({
   secondaryLabel: string;
 }) {
   return (
+    <HeroLayout
+      actions={
+        <>
+          <HeroPrimaryLink href={primaryHref}>{primaryLabel}</HeroPrimaryLink>
+          <HeroTextLink href={secondaryHref}>{secondaryLabel}</HeroTextLink>
+        </>
+      }
+    >
+      <p className={styles.eyebrow}>{eyebrow}</p>
+      <p aria-label={`뉴앙 코드 ${result.code}`} className={styles.code}>
+        {result.code}
+      </p>
+      <h1>{result.profileName}</h1>
+      <p className={styles.heroBody}>{result.summary}</p>
+    </HeroLayout>
+  );
+}
+
+function HeroLayout({
+  actions,
+  children,
+}: {
+  actions: ReactNode;
+  children: ReactNode;
+}) {
+  return (
     <section className={styles.hero}>
-      <HeroCharacter />
-      <div className={styles.heroCopy}>
-        <p className={styles.eyebrow}>{eyebrow}</p>
-        <p aria-label={`뉴앙 코드 ${result.code}`} className={styles.code}>
-          {result.code.split("").map((letter, index) => (
-            <span aria-hidden="true" key={`${letter}-${index}`}>
-              {letter}
-            </span>
-          ))}
-        </p>
-        <h1>{result.profileName}</h1>
-        <p className={styles.heroBody}>{result.summary}</p>
-        <HeroPrimaryLink href={primaryHref}>{primaryLabel}</HeroPrimaryLink>
-        <HeroTextLink href={secondaryHref}>{secondaryLabel}</HeroTextLink>
+      <div className={styles.heroProfileRow}>
+        <HeroCharacter />
+        <div className={styles.heroCopy}>{children}</div>
       </div>
+      <div className={styles.heroActions}>{actions}</div>
     </section>
   );
 }
@@ -256,7 +307,7 @@ function HeroCharacter() {
         className={styles.character}
         motif="purple"
         priority
-        size="lg"
+        size="md"
       />
     </div>
   );
@@ -299,6 +350,28 @@ function HomeHeroSkeleton() {
   );
 }
 
+function HomeRelationshipPrompt() {
+  return (
+    <section className={styles.relationshipPrompt}>
+      <span aria-hidden="true" className={styles.relationshipIcon}>
+        <UsersRound size={20} strokeWidth={1.8} />
+      </span>
+      <div>
+        <p className={styles.eyebrow}>서로를 이해하는 다음 단계</p>
+        <h2>궁금한 사람과 나는 어디가 닮았을까요?</h2>
+        <p>
+          가족·친구·좋아하는 사람과 잘 맞는 점, 대화할 때 다른 점을 비교해
+          보세요.
+        </p>
+        <Link href="/feed/search?from=home">
+          궁금한 사람 찾아보기
+          <ArrowRight aria-hidden="true" size={15} strokeWidth={1.9} />
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 function HomeProfileDiscovery({
   profile,
 }: {
@@ -307,37 +380,33 @@ function HomeProfileDiscovery({
   return (
     <section className={styles.section}>
       <SectionHeading
-        description="32가지 성향 중 하나를 가볍게 둘러보세요."
-        title="오늘 만나는 성향"
+        description="하루에 한 가지 성향을 가볍게 알아보세요."
+        title="오늘 발견할 성향"
       />
       {profile ? (
         <Link
-          aria-label={`${profile.accessibleName} 성향지도에서 더 알아보기`}
+          aria-label={`${profile.accessibleName} 성향 자세히 보기`}
           className={styles.profileDiscovery}
-          href={`/map?code=${profile.code}&from=home`}
+          href={`/map/${profile.code}?from=home`}
         >
           <div className={styles.profileDiscoveryTop}>
-            <span className={styles.profilePreviewLabel}>성향 미리보기</span>
+            <span className={styles.profilePreviewLabel}>오늘의 성향</span>
             <p
               aria-label={`뉴앙 코드 ${profile.code}`}
               className={styles.profileCode}
             >
-              {profile.code.split("").map((letter, index) => (
-                <span aria-hidden="true" key={`${letter}-${index}`}>
-                  {letter}
-                </span>
-              ))}
+              {profile.code}
             </p>
           </div>
           <h3>{profile.displayName}</h3>
           <p className={styles.profileSummary}>{profile.overview[0].text}</p>
           <div aria-label="성향 핵심 키워드" className={styles.profileTokens}>
-            {profile.codeTokens.map((token) => (
+            {profile.codeTokens.slice(0, 3).map((token) => (
               <span key={token}>{token}</span>
             ))}
           </div>
           <span className={styles.profileDiscoveryAction}>
-            성향지도에서 더 알아보기
+            이 성향 자세히 보기
             <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
           </span>
         </Link>
@@ -365,10 +434,10 @@ function HomeDailyChoice() {
   return (
     <section className={styles.section}>
       <SectionHeading
-        description="지금 더 끌리는 쪽을 가볍게 골라보세요."
-        title="오늘의 성향 질문"
+        description="하나를 고르면 다른 사람들의 선택도 바로 볼 수 있어요."
+        title="오늘의 성향 놀이터"
       />
-      <div className={styles.dailyChoiceCard}>
+      <div className={styles.playgroundBody}>
         <div className={styles.dailyChoiceMeta}>
           <span>오늘의 가벼운 선택</span>
           <span>검사 결과에는 반영되지 않아요</span>
@@ -436,39 +505,33 @@ function HomeCommunityPoll({ item }: { item: FeedItem }) {
   return (
     <section className={styles.section}>
       <SectionHeading
-        description="선택하면 전체 결과와 뉴앙 코드별 차이를 볼 수 있어요."
-        title="오늘의 성향 질문"
+        description="하나를 고르면 뉴앙 코드마다 어떻게 답했는지 바로 볼 수 있어요."
+        title="오늘의 성향 놀이터"
       />
-      <div className={styles.dailyChoiceCard}>
+      <div className={styles.playgroundBody}>
         <div className={styles.dailyChoiceMeta}>
           <span>실시간 커뮤니티 투표</span>
           <span>{item.poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
         </div>
         <FeedPollCard poll={item.poll} returnTo="/home" variant="home" />
         {hasVoted ? (
-          <div className={styles.communityMomentum}>
-            <span aria-hidden="true" className={styles.communityMomentumDot} />
-            <div>
-              <strong>
-                {item.poll.canViewCodeStats
-                  ? "뉴앙 코드별 선택 차이가 열렸어요"
-                  : "사람들의 선택이 모이기 시작했어요"}
-              </strong>
-              <p>
-                {item.poll.canViewCodeStats
-                  ? "나와 다른 코드는 무엇을 골랐는지 비교해보세요."
-                  : "참여가 더 모이면 뉴앙 코드별 선택 차이도 볼 수 있어요."}
-              </p>
-              {item.poll.canViewCodeStats ? (
-                <Link
-                  className={styles.communityMomentumAction}
-                  href={statsHref}
-                >
-                  코드별 결과 비교하기
-                  <ArrowRight aria-hidden="true" size={14} strokeWidth={2} />
-                </Link>
-              ) : null}
-            </div>
+          <div className={styles.communityResultNote}>
+            <strong>
+              {item.poll.canViewCodeStats
+                ? "뉴앙 코드별 관점도 함께 볼 수 있어요"
+                : "사람들의 선택이 모이기 시작했어요"}
+            </strong>
+            <p>
+              {item.poll.canViewCodeStats
+                ? "어떤 코드가 무엇을 골랐는지 같은 자리에서 비교해 보세요."
+                : "참여가 모이면 코드별 선택 차이도 확인할 수 있어요."}
+            </p>
+            {item.poll.canViewCodeStats ? (
+              <Link href={statsHref}>
+                코드별 관점 보기
+                <ArrowRight aria-hidden="true" size={14} strokeWidth={2} />
+              </Link>
+            ) : null}
           </div>
         ) : null}
 
@@ -501,52 +564,79 @@ function HomeCommunityPoll({ item }: { item: FeedItem }) {
               strokeWidth={2}
             />
           </Link>
-        ) : (
-          <div className={styles.communityDiscussion} data-disabled="true">
-            <span aria-hidden="true" className={styles.communityDiscussionIcon}>
-              <MessageCircle size={17} strokeWidth={2} />
-            </span>
-            <span className={styles.communityDiscussionCopy}>
-              <small>투표 후에 열려요</small>
-              <strong>하나를 고르면 서로의 선택 이유도 볼 수 있어요.</strong>
-            </span>
-          </div>
-        )}
+        ) : null}
       </div>
     </section>
   );
 }
 
-function HomeConversations({ items }: { items: FeedItem[] }) {
+function HomeConversations({
+  items,
+  viewerCode,
+}: {
+  items: FeedItem[];
+  viewerCode: string | null;
+}) {
   return (
     <section className={styles.section}>
       <SectionHeading
         actionHref="/feed"
-        actionLabel="더 보기"
-        description="나와 다른 관점과 오늘의 이야기를 만나보세요."
-        title="다른 사람들은 이렇게 생각해요"
+        actionLabel="커뮤니티 더 보기"
+        description="비슷한 성향과 다른 관점의 이야기를 함께 골랐어요."
+        title="지금 많이 이야기하는 것"
       />
       {items.length > 0 ? (
         <div className={styles.conversationList}>
-          {items.map((item) => (
-            <Link
-              className={styles.conversation}
-              href={item.reportShare?.href ?? "/feed"}
-              key={item.id}
-            >
-              <div className={styles.conversationMeta}>
-                <span>{item.authorName}</span>
-                <span aria-hidden="true">·</span>
-                <span>{item.timeLabel}</span>
-              </div>
-              <h3>{item.title}</h3>
-              <p>{item.body}</p>
-              <span className={styles.replyLabel}>
-                <MessageCircle aria-hidden="true" size={14} strokeWidth={1.9} />
-                {item.replyLabel}
-              </span>
-            </Link>
-          ))}
+          {items.map((item) => {
+            const itemCode = item.authorProfile?.display.code ?? null;
+            const reason = getConversationReason(
+              viewerCode,
+              itemCode,
+              item.replyCount ?? 0,
+            );
+
+            return (
+              <Link
+                className={styles.conversation}
+                href={
+                  item.targetType === "feed_post"
+                    ? `/feed/posts/${item.id}`
+                    : "/feed"
+                }
+                key={item.id}
+              >
+                <span aria-hidden="true" className={styles.conversationAvatar}>
+                  {item.authorName.slice(0, 1)}
+                </span>
+                <span className={styles.conversationCopy}>
+                  <span className={styles.conversationMeta}>
+                    <strong>{item.authorName}</strong>
+                    {itemCode ? <b>{itemCode}</b> : null}
+                    <span aria-hidden="true">·</span>
+                    <span>{item.timeLabel}</span>
+                  </span>
+                  {reason ? (
+                    <small className={styles.conversationReason}>
+                      {reason}
+                    </small>
+                  ) : null}
+                  <strong className={styles.conversationTitle}>
+                    {item.title}
+                  </strong>
+                  <span className={styles.conversationBody}>{item.body}</span>
+                  <span className={styles.replyLabel}>
+                    <span>{item.likeLabel}</span>
+                    <MessageCircle
+                      aria-hidden="true"
+                      size={13}
+                      strokeWidth={1.7}
+                    />
+                    {item.replyLabel}
+                  </span>
+                </span>
+              </Link>
+            );
+          })}
         </div>
       ) : (
         <Link className={styles.emptyConversation} href="/feed">
@@ -556,6 +646,23 @@ function HomeConversations({ items }: { items: FeedItem[] }) {
       )}
     </section>
   );
+}
+
+function getConversationReason(
+  viewerCode: string | null,
+  itemCode: string | null,
+  replyCount: number,
+) {
+  if (viewerCode && itemCode) {
+    const matchCount = viewerCode
+      .split("")
+      .filter((letter, index) => letter === itemCode[index]).length;
+    return matchCount >= 3
+      ? `내 코드와 ${matchCount}자리가 가까워요`
+      : "나와 다른 관점을 볼 수 있어요";
+  }
+
+  return replyCount > 0 ? "지금 댓글이 이어지고 있어요" : null;
 }
 
 function SectionHeading({
@@ -608,6 +715,14 @@ function isUsefulHomeConversation(item: FeedItem) {
   )?.length;
 
   return (readableCharacterCount ?? 0) >= 12;
+}
+
+function getHeroResultCode(hero: HomeHeroModel) {
+  if (hero.kind === "quick_complete" || hero.kind === "full_complete") {
+    return hero.result.code;
+  }
+
+  return hero.kind === "in_progress" ? (hero.latestResult?.code ?? null) : null;
 }
 
 const homeDailyChoice = {
@@ -691,29 +806,9 @@ function getHomeDailyChoiceStorageKey() {
 function selectFeaturedProfile() {
   const profiles = Object.values(candidateProfileDefinitions);
   const dateKey = new Date().toISOString().slice(0, 10);
-  const storageKey = `nuang:home:featured-profile:${dateKey}`;
-
-  try {
-    const storedCode = window.sessionStorage.getItem(storageKey);
-    if (storedCode && candidateProfileDefinitions[storedCode]) {
-      return candidateProfileDefinitions[storedCode];
-    }
-  } catch {
-    // Storage can be unavailable in privacy-restricted browsers.
-  }
-
-  const index = getRandomIndex(profiles.length);
+  const index = hashDateKey(dateKey) % Math.max(profiles.length, 1);
   const profile = profiles[index] ?? profiles[0];
-
-  if (!profile) return null;
-
-  try {
-    window.sessionStorage.setItem(storageKey, profile.code);
-  } catch {
-    // The preview still works when storage cannot be written.
-  }
-
-  return profile;
+  return profile ?? null;
 }
 
 let cachedFeaturedProfile: CandidateProfileDefinition | null | undefined;
@@ -734,14 +829,26 @@ function getServerFeaturedProfileSnapshot() {
   return null;
 }
 
-function getRandomIndex(length: number) {
-  if (length <= 1) return 0;
+function hashDateKey(value: string) {
+  return value.split("").reduce((hash, character) => {
+    return (hash * 31 + character.charCodeAt(0)) >>> 0;
+  }, 17);
+}
 
-  if (typeof window.crypto?.getRandomValues === "function") {
-    const value = new Uint32Array(1);
-    window.crypto.getRandomValues(value);
-    return value[0] % length;
+async function listAccountResults(): Promise<AccountResultSummary[]> {
+  try {
+    const response = await fetch("/api/account-results", {
+      cache: "no-store",
+      method: "GET",
+    });
+    if (!response.ok) return [];
+
+    const body = (await response.json()) as {
+      ok?: boolean;
+      results?: AccountResultSummary[];
+    };
+    return body.ok && Array.isArray(body.results) ? body.results : [];
+  } catch {
+    return [];
   }
-
-  return Math.floor(Math.random() * length);
 }

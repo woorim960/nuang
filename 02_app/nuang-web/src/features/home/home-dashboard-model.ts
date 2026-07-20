@@ -3,6 +3,7 @@ import { isCandidateQuickRelease } from "@/features/assessment/candidate-quick-c
 import { getValidatedLocalResultSnapshot } from "@/features/assessment/assessment-result-snapshot";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
+import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 
 export type HomeResultModel = {
@@ -43,6 +44,7 @@ export type HomeDashboardModel = {
 
 export function buildHomeDashboardModel(
   attempts: LocalAssessmentAttempt[],
+  accountResults: AccountResultSummary[] = [],
 ): HomeDashboardModel {
   const activeFull = getLatestAttempt(
     attempts,
@@ -54,8 +56,14 @@ export function buildHomeDashboardModel(
     (attempt) =>
       attempt.state === "in_progress" && isCandidateQuickRelease(attempt),
   );
-  const fullResult = getLatestValidResult(attempts, isCandidateFullRelease);
-  const quickResult = getLatestValidResult(attempts, isCandidateQuickRelease);
+  const fullResult = getLatestResult(
+    getLatestValidResult(attempts, isCandidateFullRelease),
+    getLatestAccountResult(accountResults, "full"),
+  );
+  const quickResult = getLatestResult(
+    getLatestValidResult(attempts, isCandidateQuickRelease),
+    getLatestAccountResult(accountResults, "quick"),
+  );
   const activeAttempt = activeFull ?? activeQuick;
 
   if (activeAttempt) {
@@ -126,7 +134,7 @@ function getLatestAttempt(
 function getLatestValidResult(
   attempts: LocalAssessmentAttempt[],
   isSupportedRelease: (attempt: LocalAssessmentAttempt) => boolean,
-): HomeResultModel | null {
+): DatedHomeResult | null {
   const entry = [...attempts]
     .filter(
       (attempt) => attempt.state === "completed" && isSupportedRelease(attempt),
@@ -164,10 +172,55 @@ function getLatestValidResult(
 
   return {
     code,
+    completedAt: entry.attempt.completedAt ?? entry.attempt.updatedAt,
     href: `/results/local/${entry.attempt.id}`,
     profileName,
     summary:
       definition?.overview[0]?.text ??
       "검사에서 반복해서 나타난 내 모습을 자세히 살펴볼 수 있어요.",
   };
+}
+
+type DatedHomeResult = HomeResultModel & { completedAt: string };
+
+function getLatestAccountResult(
+  results: AccountResultSummary[],
+  kind: AccountResultSummary["kind"],
+): DatedHomeResult | null {
+  const result = [...results]
+    .filter(
+      (entry) =>
+        entry.kind === kind &&
+        Boolean(entry.profileCode) &&
+        Boolean(entry.profileName) &&
+        Boolean(getCandidateProfileDefinition(entry.profileCode)),
+    )
+    .sort((left, right) =>
+      right.completedAt.localeCompare(left.completedAt),
+    )[0];
+
+  if (!result) return null;
+  const definition = getCandidateProfileDefinition(result.profileCode);
+
+  return {
+    code: result.profileCode,
+    completedAt: result.completedAt,
+    href: `/results/account/${result.resultReportId}`,
+    profileName: result.profileName,
+    summary:
+      definition?.overview[0]?.text ??
+      "검사에서 반복해서 나타난 내 모습을 자세히 살펴볼 수 있어요.",
+  };
+}
+
+function getLatestResult(
+  localResult: DatedHomeResult | null,
+  accountResult: DatedHomeResult | null,
+) {
+  if (!localResult) return accountResult;
+  if (!accountResult) return localResult;
+
+  return accountResult.completedAt.localeCompare(localResult.completedAt) >= 0
+    ? accountResult
+    : localResult;
 }

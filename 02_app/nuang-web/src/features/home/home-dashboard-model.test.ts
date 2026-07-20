@@ -11,6 +11,7 @@ import type {
   AssessmentDefinition,
   LocalAssessmentAttempt,
 } from "@/features/assessment/types";
+import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { coreResultCopyVersion } from "@/features/result/report-copy";
 import { buildHomeDashboardModel } from "@/features/home/home-dashboard-model";
 
@@ -118,6 +119,32 @@ describe("buildHomeDashboardModel", () => {
       kind: "in_progress",
       latestResult: {
         href: "/results/local/local_full_ready",
+      },
+    });
+  });
+
+  it("uses the signed-in account result when this browser has no local result", () => {
+    const accountResult: AccountResultSummary = {
+      assessmentAttemptId: "assessment-attempt-1",
+      completedAt: "2026-07-20T09:00:00.000Z",
+      createdAt: "2026-07-20T09:00:00.000Z",
+      domains: [],
+      facets: [],
+      kind: "full",
+      localResultId: null,
+      profileCode: "ENAKQ",
+      profileName: "관계를 여는 지휘자",
+      resultLabel: "정밀 성향 결과",
+      resultReportId: "11111111-1111-4111-8111-111111111111",
+    };
+
+    const model = buildHomeDashboardModel([], [accountResult]);
+
+    expect(model.hero).toMatchObject({
+      kind: "full_complete",
+      result: {
+        code: "ENAKQ",
+        href: "/results/account/11111111-1111-4111-8111-111111111111",
       },
     });
   });

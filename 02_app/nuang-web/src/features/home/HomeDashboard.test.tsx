@@ -42,38 +42,38 @@ describe("HomeDashboard", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "3분이면 첫 뉴앙 코드를 만나요",
+        name: "3분이면 내 성향의 첫 단서를 만나요",
       }),
     ).toBeInTheDocument();
     expect(screen.getAllByText("NUANG").length).toBeGreaterThan(0);
     expect(
       screen.getByRole("link", { name: /첫 성향 검사 시작/ }),
     ).toHaveAttribute("href", "/assessments/nu-core-quick?returnTo=%2Fhome");
-    expect(screen.getByText("오늘의 성향 질문")).toBeInTheDocument();
+    expect(screen.getByText("오늘의 성향 놀이터")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        name: "오늘 나는 어느 쪽에 가까울까요?",
+        name: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText("오늘 만나는 성향")).toBeInTheDocument();
+    expect(screen.getByText("오늘 발견할 성향")).toBeInTheDocument();
     const profileLink = await screen.findByRole("link", {
-      name: /성향지도에서 더 알아보기/,
+      name: /성향 자세히 보기/,
     });
     expect(profileLink.getAttribute("href")).toMatch(
-      /^\/map\?code=[EI][RN][GA][KM][CQ]&from=home$/,
+      /^\/map\/[EI][RN][GA][KM][CQ]\?from=home$/,
     );
+    expect(screen.getByText("지금 많이 이야기하는 것")).toBeInTheDocument();
     expect(
-      screen.getByText("다른 사람들은 이렇게 생각해요"),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "더 보기" })).toHaveAttribute(
-      "href",
-      "/feed",
-    );
-    expect(screen.getByText("내 답변은 나만 볼 수 있어요")).toBeInTheDocument();
+      screen.getByRole("link", { name: "커뮤니티 더 보기" }),
+    ).toHaveAttribute("href", "/feed");
+    expect(screen.getByText(/답변은 공개되지 않아요/)).toBeInTheDocument();
 
     expect(screen.queryByText("오늘의 메뉴")).not.toBeInTheDocument();
     expect(screen.queryByText("피드 미리보기")).not.toBeInTheDocument();
-    expect(screen.queryByLabelText(/알림/)).not.toBeInTheDocument();
+    expect(screen.getByLabelText(/알림/)).toHaveAttribute(
+      "href",
+      "/feed/notifications",
+    );
     expect(screen.queryByText(/리듬/)).not.toBeInTheDocument();
   });
 
@@ -116,10 +116,10 @@ describe("HomeDashboard", () => {
     expect(await screen.findByText("오늘의 생각")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /오늘의 생각/ })).toHaveAttribute(
       "href",
-      "/feed",
+      "/feed/posts/home-preview-server-post",
     );
     expect(screen.queryByText("ㅣㅏㅡㅔ")).not.toBeInTheDocument();
-    expect(screen.getByText("오늘의 성향 질문")).toBeInTheDocument();
+    expect(screen.getByText("오늘의 성향 놀이터")).toBeInTheDocument();
   });
 
   it("lets a visitor answer the daily choice without signing in", async () => {
@@ -207,13 +207,13 @@ describe("HomeDashboard", () => {
     expect(screen.getByText("10명 참여")).toBeInTheDocument();
     expect(screen.getByText("60%")).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: /코드별 결과 비교하기/ }),
+      screen.getByRole("link", { name: /코드별 관점 보기/ }),
     ).toHaveAttribute(
       "href",
       "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats?from=home",
     );
     expect(
-      screen.getByText("뉴앙 코드별 선택 차이가 열렸어요"),
+      screen.getByText("뉴앙 코드별 관점도 함께 볼 수 있어요"),
     ).toBeInTheDocument();
     expect(
       screen.getByText("오늘은 혼자 쉬는 시간이 더 필요했어요."),
@@ -280,11 +280,9 @@ describe("HomeDashboard", () => {
       screen.getByText("사람들의 선택이 모이기 시작했어요"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "참여가 더 모이면 뉴앙 코드별 선택 차이도 볼 수 있어요.",
-      ),
+      screen.getByText("참여가 모이면 코드별 선택 차이도 확인할 수 있어요."),
     ).toBeInTheDocument();
-    expect(screen.queryByText("코드별 결과 비교하기")).not.toBeInTheDocument();
+    expect(screen.queryByText("코드별 관점 보기")).not.toBeInTheDocument();
     expect(
       screen.getByText("내가 고른 이유를 먼저 남겨보세요."),
     ).toBeInTheDocument();
@@ -313,15 +311,13 @@ describe("HomeDashboard", () => {
     render(<HomeDashboard />);
 
     expect(
-      await screen.findByRole("heading", { name: "답하던 곳부터 계속해요" }),
+      await screen.findByRole("heading", { name: "답하던 곳부터 이어가요" }),
     ).toBeInTheDocument();
     expect(screen.getByText("32%")).toBeInTheDocument();
     expect(
       screen.getByRole("progressbar", { name: "정밀 성향 검사 진행률" }),
     ).toHaveAttribute("aria-valuetext", "60개 중 19개 응답 저장");
-    expect(
-      screen.getByRole("link", { name: /정밀 성향 검사 이어가기/ }),
-    ).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /검사 이어가기/ })).toHaveAttribute(
       "href",
       "/assessments/nu-core-full?from=home&backTo=%2Fhome&returnTo=%2Fhome",
     );
@@ -334,7 +330,7 @@ describe("HomeDashboard", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "3분이면 첫 뉴앙 코드를 만나요",
+        name: "3분이면 내 성향의 첫 단서를 만나요",
       }),
     ).toBeInTheDocument();
     expect(
