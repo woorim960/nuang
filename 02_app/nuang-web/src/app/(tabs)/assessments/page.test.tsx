@@ -29,6 +29,14 @@ describe("AssessmentsPage", () => {
       screen.getByText("정밀 코어까지 무료로 제공되는 뉴앙의 기본 검사"),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("link", {
+        name: "뉴앙 질문 확인 참여: 익명 참여, 약 4분",
+      }),
+    ).toHaveAttribute("href", "/research/gate-c?from=assessments");
+    expect(
+      screen.getByText(/성향 결과에는 반영되지 않으며/),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("link", { name: "친구 성향 맞히기 시작" }),
     ).toHaveAttribute("href", "/assessments/friend-match");
     expect(

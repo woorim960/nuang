@@ -1,16 +1,18 @@
 "use client";
 
-import {
-  ArrowRight,
-  Check,
-  ChevronLeft,
-  Copy,
-  ShieldCheck,
-  Trash2,
-  X,
-} from "lucide-react";
+import { ArrowRight, Check, Copy, ShieldCheck, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
+import {
+  AssessmentBottomSheet,
+  AssessmentQuestionDock,
+  AssessmentQuestionGuideButton,
+  AssessmentQuestionHeader,
+  AssessmentScaleResponseOptions,
+  AssessmentUnsureControl,
+  AssessmentUnsureSheet,
+  useAssessmentQuestionScroll,
+} from "@/features/assessment/AssessmentQuestionControls";
 import runnerStyles from "@/features/assessment/AssessmentRunner.module.css";
 import {
   gateCAgeBandLabels,
@@ -29,8 +31,6 @@ import {
 import {
   isGateCFormId,
   type GateCResponseChoice,
-  type GateCScaleValue,
-  type GateCUnsureReason,
 } from "@/features/research/gate-c/gate-c-study-contract";
 import {
   gateCParticipantDefinitions,
@@ -61,21 +61,6 @@ type CompletionReceipt = {
   qualityStatus: "excluded" | "included";
 };
 
-const responseOptions: Array<{ label: string; value: GateCScaleValue }> = [
-  { value: 1, label: "거의 그렇지 않아요" },
-  { value: 2, label: "드문 편이에요" },
-  { value: 3, label: "반반이에요" },
-  { value: 4, label: "자주 그래요" },
-  { value: 5, label: "거의 항상 그래요" },
-];
-
-const unsureReasons: Array<{ id: GateCUnsureReason; label: string }> = [
-  { id: "NO_EXPERIENCE", label: "비슷한 경험이 거의 없어요" },
-  { id: "CONTEXT_VARIES", label: "상황에 따라 많이 달라져요" },
-  { id: "WORDING_UNCLEAR", label: "질문의 뜻이 분명하지 않아요" },
-  { id: "PREFER_NOT_TO_ANSWER", label: "이 질문에는 답하고 싶지 않아요" },
-];
-
 export function GateCPublicStudy() {
   const router = useRouter();
   const questionShownAtRef = useRef(0);
@@ -96,6 +81,8 @@ export function GateCPublicStudy() {
   >({});
   const [feedback, setFeedback] = useState<Record<string, ItemFeedback>>({});
   const [unsureOpen, setUnsureOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
+  const [exitOpen, setExitOpen] = useState(false);
   const [starting, setStarting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -123,8 +110,8 @@ export function GateCPublicStudy() {
     Boolean(assessmentExperience) &&
     isAdult &&
     consentAccepted;
-  const progress = Math.round(
-    ((currentQuestionIndex + 1) / definition.items.length) * 100,
+  useAssessmentQuestionScroll(
+    surface === "questions" ? currentQuestion.studyItemId : null,
   );
 
   async function startStudy() {
@@ -523,40 +510,20 @@ export function GateCPublicStudy() {
 
   return (
     <main className={runnerStyles.runner}>
-      <header className={runnerStyles.appBar}>
-        <button
-          aria-label="참여 그만하기"
-          className={runnerStyles.closeButton}
-          onClick={() => router.push("/")}
-          type="button"
-        >
-          <X aria-hidden="true" size={20} strokeWidth={1.8} />
-        </button>
-        <p className={runnerStyles.title}>뉴앙 질문 확인</p>
-        <p className={runnerStyles.count}>
-          {currentQuestionIndex + 1} / {definition.items.length}
-        </p>
-      </header>
-      <div className={runnerStyles.progressWrap}>
-        <div
-          aria-label="질문 확인 진행률"
-          aria-valuemax={definition.items.length}
-          aria-valuemin={1}
-          aria-valuenow={currentQuestionIndex + 1}
-          className={runnerStyles.progress}
-          role="progressbar"
-        >
-          <span
-            className={runnerStyles.progressFill}
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
+      <AssessmentQuestionHeader
+        closeLabel="참여 그만하기"
+        countLabel={`전체 ${definition.items.length}개 중 ${currentQuestionIndex + 1}번째 질문`}
+        current={currentQuestionIndex + 1}
+        onClose={() => setExitOpen(true)}
+        progressLabel="질문 확인 진행률"
+        title="뉴앙 질문 확인"
+        total={definition.items.length}
+      />
 
       <section className={runnerStyles.mainContent}>
-        <p className={styles.answerGuide}>
-          최근 6개월의 평소 모습을 떠올려 답해 주세요.
-        </p>
+        <AssessmentQuestionGuideButton onClick={() => setHelpOpen(true)}>
+          답하는 기준 · 최근 6개월의 평소 모습
+        </AssessmentQuestionGuideButton>
         <div
           className={runnerStyles.questionRegion}
           key={currentQuestion.studyItemId}
@@ -567,66 +534,25 @@ export function GateCPublicStudy() {
           </h1>
         </div>
 
-        <fieldset className={runnerStyles.responses}>
-          <legend className={runnerStyles.legend}>이럴 때 내 모습은?</legend>
-          <div className={runnerStyles.options}>
-            {responseOptions.map((option) => {
-              const selected =
-                currentResponse?.currentChoice.kind === "scale" &&
-                currentResponse.currentChoice.value === option.value;
-              return (
-                <label
-                  className={cn(
-                    runnerStyles.option,
-                    selected && runnerStyles.optionSelected,
-                  )}
-                  key={option.value}
-                >
-                  <input
-                    checked={selected}
-                    className={runnerStyles.radio}
-                    name={`response-${currentQuestion.studyItemId}`}
-                    onChange={() =>
-                      choose({ kind: "scale", value: option.value })
-                    }
-                    type="radio"
-                  />
-                  <span>{option.label}</span>
-                </label>
-              );
-            })}
-          </div>
-        </fieldset>
+        <AssessmentScaleResponseOptions
+          guide="최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 이 모습이 얼마나 자주 나타나는지 하나 선택해 주세요."
+          name={`response-${currentQuestion.studyItemId}`}
+          onChange={(value) => choose({ kind: "scale", value })}
+          selectedValue={
+            currentResponse?.currentChoice.kind === "scale"
+              ? currentResponse.currentChoice.value
+              : undefined
+          }
+        />
 
-        <div className={styles.unsureArea}>
-          <button
-            aria-expanded={unsureOpen}
-            className={styles.quietButton}
-            onClick={() => setUnsureOpen((current) => !current)}
-            type="button"
-          >
-            {currentResponse?.currentChoice.kind === "unsure"
-              ? responseChoiceLabel(currentResponse.currentChoice)
-              : "이 상황은 답하기 어려워요"}
-          </button>
-          {unsureOpen ? (
-            <div className={styles.unsureReasons}>
-              {unsureReasons.map((reason) => (
-                <button
-                  aria-pressed={
-                    currentResponse?.currentChoice.kind === "unsure" &&
-                    currentResponse.currentChoice.reason === reason.id
-                  }
-                  key={reason.id}
-                  onClick={() => choose({ kind: "unsure", reason: reason.id })}
-                  type="button"
-                >
-                  {reason.label}
-                </button>
-              ))}
-            </div>
-          ) : null}
-        </div>
+        <AssessmentUnsureControl
+          onOpen={() => setUnsureOpen(true)}
+          selectedReason={
+            currentResponse?.currentChoice.kind === "unsure"
+              ? currentResponse.currentChoice.reason
+              : undefined
+          }
+        />
 
         <div className={styles.feedbackArea}>
           <button
@@ -670,32 +596,84 @@ export function GateCPublicStudy() {
         ) : null}
       </section>
 
-      <footer className={runnerStyles.dock}>
-        <button
-          aria-label="이전 질문"
-          className={runnerStyles.previousButton}
-          disabled={currentQuestionIndex === 0 || submitting}
-          onClick={goPrevious}
-          type="button"
-        >
-          <ChevronLeft aria-hidden="true" size={20} strokeWidth={1.8} />
-        </button>
-        <button
-          className={runnerStyles.nextButton}
-          disabled={!currentResponse || submitting}
-          onClick={goNext}
-          type="button"
-        >
-          {submitting
+      <AssessmentQuestionDock
+        nextDisabled={!currentResponse || submitting}
+        nextLabel={
+          submitting
             ? "안전하게 저장하고 있어요"
             : currentQuestionIndex === definition.items.length - 1
               ? "응답 제출하기"
-              : "다음"}
-          {!submitting ? (
-            <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
-          ) : null}
-        </button>
-      </footer>
+              : "다음"
+        }
+        onNext={goNext}
+        onPrevious={goPrevious}
+        previousDisabled={currentQuestionIndex === 0 || submitting}
+      />
+
+      {helpOpen ? (
+        <AssessmentBottomSheet
+          copy="특별했던 한 번보다 최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 문장 속 모습이 얼마나 자주 나타나는지 답해 주세요."
+          onClose={() => setHelpOpen(false)}
+          title="어떤 모습을 떠올리면 될까요?"
+        >
+          <p className={runnerStyles.sheetNote}>
+            비슷한 경험이 거의 없다면 ‘이 상황은 답하기 어려워요’를 선택해도
+            괜찮아요.
+          </p>
+          <div className={runnerStyles.sheetActions}>
+            <button
+              className={runnerStyles.sheetAction}
+              onClick={() => setHelpOpen(false)}
+              type="button"
+            >
+              이해했어요
+            </button>
+          </div>
+        </AssessmentBottomSheet>
+      ) : null}
+
+      {unsureOpen ? (
+        <AssessmentUnsureSheet
+          onClose={() => setUnsureOpen(false)}
+          onSelect={(reason) => {
+            setUnsureOpen(false);
+            choose({ kind: "unsure", reason });
+          }}
+          selectedReason={
+            currentResponse?.currentChoice.kind === "unsure"
+              ? currentResponse.currentChoice.reason
+              : undefined
+          }
+        />
+      ) : null}
+
+      {exitOpen ? (
+        <AssessmentBottomSheet
+          copy="지금 나가면 이번 참여는 제출되지 않고 뉴앙 앱 홈으로 이동해요. 현재 뉴앙은 개발 중이라 홈에서 아직 완성되지 않은 화면과 기능을 만날 수 있어요."
+          onClose={() => setExitOpen(false)}
+          title="참여를 그만둘까요?"
+        >
+          <div className={runnerStyles.sheetActions}>
+            <button
+              className={runnerStyles.sheetAction}
+              onClick={() => setExitOpen(false)}
+              type="button"
+            >
+              계속 참여하기
+            </button>
+            <button
+              className={cn(
+                runnerStyles.sheetAction,
+                runnerStyles.sheetActionSecondary,
+              )}
+              onClick={() => router.push("/home")}
+              type="button"
+            >
+              홈으로 나가기
+            </button>
+          </div>
+        </AssessmentBottomSheet>
+      ) : null}
     </main>
   );
 }
@@ -736,14 +714,6 @@ function isSameChoice(a: GateCResponseChoice, b: GateCResponseChoice) {
     ? a.value === (b as Extract<GateCResponseChoice, { kind: "scale" }>).value
     : a.reason ===
         (b as Extract<GateCResponseChoice, { kind: "unsure" }>).reason;
-}
-
-function responseChoiceLabel(choice: GateCResponseChoice) {
-  if (choice.kind === "scale") {
-    return responseOptions.find((option) => option.value === choice.value)
-      ?.label;
-  }
-  return unsureReasons.find((reason) => reason.id === choice.reason)?.label;
 }
 
 function readClock() {

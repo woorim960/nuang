@@ -1,14 +1,7 @@
 "use client";
 
-import {
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight,
-  CircleHelp,
-  X,
-} from "lucide-react";
 import { useRouter } from "next/navigation";
-import { type ReactNode, useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AssessmentMidpointCheckpoint } from "@/features/assessment/AssessmentMidpointCheckpoint";
 import { AssessmentRecoveryOverlay } from "@/features/assessment/AssessmentRecoveryOverlay";
 import {
@@ -16,6 +9,17 @@ import {
   type AssessmentCompletionViewState,
 } from "@/features/assessment/AssessmentCompletionState";
 import { AssessmentLoadingState } from "@/features/assessment/AssessmentLoadingState";
+import {
+  AssessmentBottomSheet,
+  AssessmentQuestionDock,
+  AssessmentQuestionGuideButton,
+  AssessmentQuestionHeader,
+  AssessmentScaleResponseOptions,
+  AssessmentUnsureControl,
+  AssessmentUnsureSheet,
+  assessmentUnsureReasons,
+  useAssessmentQuestionScroll,
+} from "@/features/assessment/AssessmentQuestionControls";
 import {
   hasUniformCoreResponses,
   prepareAssessmentCompletion,
@@ -65,33 +69,6 @@ type PendingMilestoneAction = {
   destination: MilestoneDestination;
   status: AssessmentMilestoneStatus;
 };
-
-const unsureReasons: Array<{
-  id: AssessmentUnsureReason;
-  label: string;
-  description: string;
-}> = [
-  {
-    id: "NO_EXPERIENCE",
-    label: "비슷한 경험이 거의 없어요",
-    description: "떠올릴 만한 상황이 아직 충분하지 않아요.",
-  },
-  {
-    id: "CONTEXT_VARIES",
-    label: "상황에 따라 많이 달라져요",
-    description: "한쪽으로 답하기 어려울 만큼 반응이 달라요.",
-  },
-  {
-    id: "WORDING_UNCLEAR",
-    label: "질문의 뜻이 분명하지 않아요",
-    description: "어떤 모습을 묻는지 확신하기 어려워요.",
-  },
-  {
-    id: "PREFER_NOT_TO_ANSWER",
-    label: "이 질문에는 답하고 싶지 않아요",
-    description: "답을 건너뛰고 다음 문항으로 이동해요.",
-  },
-];
 
 const completionRevealDelayMs = 300;
 const completionReadyHoldMs = 400;
@@ -261,6 +238,9 @@ export function AssessmentRunner({
     () => (attempt ? getAttemptAdaptiveAxisLabels(assessment, attempt) : []),
     [assessment, attempt],
   );
+  useAssessmentQuestionScroll(
+    surface === "question" ? (currentItem?.itemId ?? null) : null,
+  );
 
   if (!attempt || !currentItem) {
     if (!runnerError) {
@@ -314,7 +294,6 @@ export function AssessmentRunner({
     ? runItems.length - assessment.items.length
     : assessment.items.length;
   const phaseCurrentIndex = attempt.currentIndex - phaseStartIndex;
-  const progress = Math.round(((phaseCurrentIndex + 1) / phaseItemCount) * 100);
   const isPersisting = persistStatus === "saving";
   const hasPendingAnswerHere = pendingAnswer?.itemId === currentItem.itemId;
   const hasPendingAnswerElsewhere = Boolean(
@@ -326,7 +305,9 @@ export function AssessmentRunner({
     isPersisting || isActionSaving || hasPendingAnswerElsewhere;
   const canGoNext = Boolean(currentAnswer) && !isCurrentAnswerBlocked;
   const selectedUnsureReason = currentAnswer?.unsureReason
-    ? unsureReasons.find((reason) => reason.id === currentAnswer.unsureReason)
+    ? assessmentUnsureReasons.find(
+        (reason) => reason.id === currentAnswer.unsureReason,
+      )
     : undefined;
   const visibleRecoveryStatus =
     persistStatus === "failed" ||
@@ -843,45 +824,19 @@ export function AssessmentRunner({
 
   return (
     <main className={styles.runner}>
-      <header className={styles.appBar}>
-        <button
-          aria-label="검사 닫기"
-          className={styles.closeButton}
-          onClick={() => setIsExitOpen(true)}
-          type="button"
-        >
-          <X aria-hidden="true" size={20} strokeWidth={1.8} />
-        </button>
-        <p className={styles.title}>
-          {isAdaptiveQuestion ? "코드 추가 확인" : assessment.title}
-        </p>
-        <p
-          aria-label={
-            isAdaptiveQuestion
-              ? `추가 질문 ${phaseItemCount}개 중 ${phaseCurrentIndex + 1}번째`
-              : `전체 ${assessment.items.length}개 중 ${attempt.currentIndex + 1}번째 문항`
-          }
-          className={styles.count}
-        >
-          {phaseCurrentIndex + 1} / {phaseItemCount}
-        </p>
-      </header>
-
-      <div className={styles.progressWrap}>
-        <div
-          aria-label="검사 진행률"
-          aria-valuemax={phaseItemCount}
-          aria-valuemin={1}
-          aria-valuenow={phaseCurrentIndex + 1}
-          className={styles.progress}
-          role="progressbar"
-        >
-          <span
-            className={styles.progressFill}
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
+      <AssessmentQuestionHeader
+        closeLabel="검사 닫기"
+        countLabel={
+          isAdaptiveQuestion
+            ? `추가 질문 ${phaseItemCount}개 중 ${phaseCurrentIndex + 1}번째`
+            : `전체 ${assessment.items.length}개 중 ${attempt.currentIndex + 1}번째 문항`
+        }
+        current={phaseCurrentIndex + 1}
+        onClose={() => setIsExitOpen(true)}
+        progressLabel="검사 진행률"
+        title={isAdaptiveQuestion ? "코드 추가 확인" : assessment.title}
+        total={phaseItemCount}
+      />
 
       {isMidpoint ? (
         <AssessmentMidpointCheckpoint
@@ -892,16 +847,11 @@ export function AssessmentRunner({
       ) : (
         <>
           <section className={styles.mainContent}>
-            <button
-              className={styles.helpButton}
-              onClick={() => setIsHelpOpen(true)}
-              type="button"
-            >
-              <CircleHelp aria-hidden="true" size={16} strokeWidth={1.8} />
+            <AssessmentQuestionGuideButton onClick={() => setIsHelpOpen(true)}>
               {isAdaptiveQuestion
                 ? "비슷하게 나온 코드만 다시 확인해요"
                 : "답하는 기준 · 최근 6개월의 평소 모습"}
-            </button>
+            </AssessmentQuestionGuideButton>
 
             <div
               aria-atomic="true"
@@ -927,56 +877,27 @@ export function AssessmentRunner({
               </h1>
             </div>
 
-            <fieldset
-              aria-label="응답 선택"
-              className={styles.responses}
-              role="radiogroup"
-            >
-              <legend className={styles.legend}>
-                {isAdaptiveQuestion
-                  ? "반반보다 조금이라도 더 가까운 쪽은?"
-                  : "이럴 때 내 모습은?"}
-              </legend>
-              <span className="sr-only" id="assessment-answer-guide">
-                {isAdaptiveQuestion
+            <AssessmentScaleResponseOptions
+              disabled={isChoiceDisabled}
+              guide={
+                isAdaptiveQuestion
                   ? "두 방향 중 조금이라도 더 가까운 쪽을 선택해 주세요."
-                  : "최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 이 모습이 얼마나 자주 나타나는지 하나 선택해 주세요."}
-              </span>
-              <div
-                aria-describedby="assessment-answer-guide"
-                className={styles.options}
-              >
-                {(isAdaptiveQuestion
-                  ? adaptiveResponseOptions
-                  : responseOptions
-                ).map((option) => {
-                  const isSelected =
-                    !currentAnswer?.isUnsure &&
-                    currentAnswer?.value === option.value;
-                  return (
-                    <label
-                      className={cn(
-                        styles.option,
-                        isSelected && styles.optionSelected,
-                        isChoiceDisabled && styles.optionDisabled,
-                      )}
-                      key={option.value}
-                    >
-                      <input
-                        checked={isSelected}
-                        className={styles.radio}
-                        disabled={isChoiceDisabled}
-                        name={`response-${currentItem.itemId}`}
-                        onChange={() => void handleAnswer(option.value)}
-                        type="radio"
-                        value={option.value}
-                      />
-                      <span>{option.label}</span>
-                    </label>
-                  );
-                })}
-              </div>
-            </fieldset>
+                  : "최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 이 모습이 얼마나 자주 나타나는지 하나 선택해 주세요."
+              }
+              legend={
+                isAdaptiveQuestion
+                  ? "반반보다 조금이라도 더 가까운 쪽은?"
+                  : "이럴 때 내 모습은?"
+              }
+              name={`response-${currentItem.itemId}`}
+              onChange={(value) => void handleAnswer(value)}
+              options={
+                isAdaptiveQuestion ? adaptiveResponseOptions : responseOptions
+              }
+              selectedValue={
+                currentAnswer?.isUnsure ? undefined : currentAnswer?.value
+              }
+            />
 
             {isAdaptiveQuestion ? (
               <p className={styles.inlineNotice}>
@@ -984,35 +905,11 @@ export function AssessmentRunner({
                 두 방향 중 평소 내 모습에 조금이라도 더 가까운 쪽을 골라주세요.
               </p>
             ) : (
-              <div className={styles.unsureSlot}>
-                {currentAnswer?.isUnsure && selectedUnsureReason ? (
-                  <div className={styles.unsureSummary}>
-                    <p>
-                      <strong>답하기 어려움</strong> ·{" "}
-                      {selectedUnsureReason.label}
-                    </p>
-                    <button
-                      aria-label={selectedUnsureReason.label}
-                      className={styles.changeButton}
-                      disabled={isChoiceDisabled}
-                      onClick={() => setIsUnsureOpen(true)}
-                      type="button"
-                    >
-                      변경
-                      <ChevronRight aria-hidden="true" size={17} />
-                    </button>
-                  </div>
-                ) : (
-                  <button
-                    className={styles.unsureButton}
-                    disabled={isChoiceDisabled}
-                    onClick={() => setIsUnsureOpen(true)}
-                    type="button"
-                  >
-                    이 상황은 답하기 어려워요
-                  </button>
-                )}
-              </div>
+              <AssessmentUnsureControl
+                disabled={isChoiceDisabled}
+                onOpen={() => setIsUnsureOpen(true)}
+                selectedReason={selectedUnsureReason?.id}
+              />
             )}
 
             {hasPendingAnswerElsewhere ? (
@@ -1027,33 +924,22 @@ export function AssessmentRunner({
             ) : null}
           </section>
 
-          <footer className={styles.dock}>
-            <button
-              aria-label="이전 질문"
-              className={styles.previousButton}
-              disabled={
-                attempt.currentIndex === phaseStartIndex ||
-                isPersisting ||
-                isActionSaving ||
-                Boolean(pendingMilestone)
-              }
-              onClick={() => void goPrevious()}
-              type="button"
-            >
-              <ChevronLeft aria-hidden="true" size={20} strokeWidth={1.8} />
-            </button>
-            <button
-              className={styles.nextButton}
-              disabled={!canGoNext || isPersisting || isActionSaving}
-              onClick={() => void goNext()}
-              type="button"
-            >
-              {attempt.currentIndex === runItems.length - 1
+          <AssessmentQuestionDock
+            nextDisabled={!canGoNext || isPersisting || isActionSaving}
+            nextLabel={
+              attempt.currentIndex === runItems.length - 1
                 ? "결과 보기"
-                : "다음"}
-              <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
-            </button>
-          </footer>
+                : "다음"
+            }
+            onNext={() => void goNext()}
+            onPrevious={() => void goPrevious()}
+            previousDisabled={
+              attempt.currentIndex === phaseStartIndex ||
+              isPersisting ||
+              isActionSaving ||
+              Boolean(pendingMilestone)
+            }
+          />
         </>
       )}
 
@@ -1067,7 +953,7 @@ export function AssessmentRunner({
       ) : null}
 
       {isHelpOpen ? (
-        <BottomSheet
+        <AssessmentBottomSheet
           copy="특별했던 한 번보다 최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 문장 속 모습이 얼마나 자주 나타나는지 답해 주세요."
           onClose={() => setIsHelpOpen(false)}
           title="어떤 모습을 떠올리면 될까요?"
@@ -1085,49 +971,22 @@ export function AssessmentRunner({
               이해했어요
             </button>
           </div>
-        </BottomSheet>
+        </AssessmentBottomSheet>
       ) : null}
 
       {isUnsureOpen ? (
-        <BottomSheet
-          copy="가장 가까운 이유 하나를 골라주세요."
+        <AssessmentUnsureSheet
           onClose={() => setIsUnsureOpen(false)}
-          title="왜 답하기 어려운가요?"
-        >
-          <div className={styles.sheetReasons}>
-            {unsureReasons.map((reason) => (
-              <button
-                aria-pressed={currentAnswer?.unsureReason === reason.id}
-                className={cn(
-                  styles.sheetReason,
-                  currentAnswer?.unsureReason === reason.id &&
-                    styles.sheetReasonSelected,
-                )}
-                key={reason.id}
-                onClick={() => {
-                  setIsUnsureOpen(false);
-                  void handleAnswer(undefined, true, reason.id);
-                }}
-                type="button"
-              >
-                <span
-                  aria-hidden="true"
-                  className={styles.reasonRadio}
-                  data-checked={currentAnswer?.unsureReason === reason.id}
-                />
-                <span>{reason.label}</span>
-              </button>
-            ))}
-          </div>
-          <p className={styles.sheetNote}>
-            두 모습이 실제로 비슷하게 나타난다면 ‘반반이에요’를 선택해 주세요.
-            경험이 부족하거나 뜻이 모호하다면 답하기 어려운 이유를 알려주세요.
-          </p>
-        </BottomSheet>
+          onSelect={(reason) => {
+            setIsUnsureOpen(false);
+            void handleAnswer(undefined, true, reason);
+          }}
+          selectedReason={currentAnswer?.unsureReason}
+        />
       ) : null}
 
       {isExitOpen ? (
-        <BottomSheet
+        <AssessmentBottomSheet
           copy={
             pendingAnswer
               ? "지금 나가면 현재 화면에서 고른 답만 사라져요. 이전까지 보관된 답은 홈에서 다시 이어볼 수 있어요."
@@ -1178,74 +1037,9 @@ export function AssessmentRunner({
               </button>
             </div>
           )}
-        </BottomSheet>
+        </AssessmentBottomSheet>
       ) : null}
     </main>
-  );
-}
-
-function BottomSheet({
-  children,
-  copy,
-  onClose,
-  title,
-}: {
-  children: ReactNode;
-  copy?: string;
-  onClose: () => void;
-  title: string;
-}) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const previousFocus = document.activeElement as HTMLElement | null;
-    closeButtonRef.current?.focus();
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      previousFocus?.focus?.();
-    };
-  }, [onClose]);
-
-  return (
-    <div className={styles.layer} role="presentation">
-      <button
-        aria-label="닫기"
-        className={styles.backdropButton}
-        onClick={onClose}
-        type="button"
-      />
-      <section
-        aria-labelledby="assessment-sheet-title"
-        aria-modal="true"
-        className={styles.sheet}
-        role="dialog"
-      >
-        <div className={styles.sheetHeader}>
-          <div>
-            <h2 className={styles.sheetTitle} id="assessment-sheet-title">
-              {title}
-            </h2>
-            {copy ? <p className={styles.sheetCopy}>{copy}</p> : null}
-          </div>
-          <button
-            aria-label="닫기"
-            className={styles.sheetClose}
-            onClick={onClose}
-            ref={closeButtonRef}
-            type="button"
-          >
-            <X aria-hidden="true" size={19} strokeWidth={1.8} />
-          </button>
-        </div>
-        <div className={styles.sheetBody}>{children}</div>
-      </section>
-    </div>
   );
 }
 

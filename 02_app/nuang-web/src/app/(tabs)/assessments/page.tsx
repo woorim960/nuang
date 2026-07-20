@@ -23,6 +23,34 @@ export default function AssessmentsPage() {
 
       <AssessmentHomeCoreSection />
 
+      <section className="grid gap-3 border-y border-line py-4">
+        <div>
+          <p className="text-xs font-black text-primary">뉴앙 함께 만들기</p>
+          <h2 className="mt-1 text-base font-bold">
+            더 분명한 검사 질문을 함께 확인해 주세요
+          </h2>
+          <p className="mt-1 text-sm leading-6 text-muted">
+            익명으로 12개 질문이 자연스럽게 읽히는지 확인해요. 성향 결과에는
+            반영되지 않으며, 제출된 의견은 검사 문장을 개선하는 데만 사용합니다.
+          </p>
+        </div>
+        <Link
+          aria-label="뉴앙 질문 확인 참여: 익명 참여, 약 4분"
+          className="flex min-h-16 items-center justify-between gap-3 py-2"
+          href="/research/gate-c?from=assessments"
+        >
+          <div className="min-w-0">
+            <p className="font-bold">질문 확인에 참여하기</p>
+            <p className="mt-1 text-sm text-muted">익명 참여 · 약 4분</p>
+          </div>
+          <ChevronRight
+            aria-hidden="true"
+            className="shrink-0 text-muted"
+            size={18}
+          />
+        </Link>
+      </section>
+
       <section className="grid gap-3">
         <div>
           <p className="text-xs font-black text-primary">함께 해보기</p>
