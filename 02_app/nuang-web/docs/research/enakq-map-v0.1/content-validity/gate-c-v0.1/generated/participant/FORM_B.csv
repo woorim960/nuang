@@ -1,0 +1,13 @@
+protocol_version,form_id,order_index,study_item_id,context_label,prompt_text,response_format
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,1,GC1-012,일상에서 색과 빛이 어우러진 장면을 볼 때,잠깐 본 뒤 그대로 지나간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,2,GC1-003,누군가 힘들었던 일을 이야기할 때,그 사람이 어떤 마음이었는지에 주의가 간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,3,GC1-020,영상을 보거나 대화하던 중 처음 듣는 개념이 나왔을 때,영상이나 대화를 이해할 만큼만 뜻을 확인한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,4,GC1-008,반복해서 쓰는 물건이나 자료를 둘 때,다시 찾을 자리를 정해둔다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,5,GC1-015,사소한 일이 생각대로 되지 않을 때,불편해도 감정의 크기는 천천히 변한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,6,GC1-007,이야기의 다음 내용을 알기 전,이어질 장면을 머릿속으로 떠올려본다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,7,GC1-014,미뤄도 당장 문제없는 할 일이 생겼을 때,해야 할 때가 가까워져야 첫 행동을 시작한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,8,GC1-009,결과가 아직 정해지지 않은 일을 기다릴 때,잘못될 가능성이 여러 번 떠오른다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,9,GC1-054,해야 하지만 당장 재미나 보상이 적은 일을 할 때,그날의 관심이나 기운에 따라 이어가는 정도가 달라진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,10,GC1-006,여럿이 간단한 선택을 미루고 있을 때,내가 먼저 선택지를 꺼낸다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,11,GC1-011,익숙한 사람들과 한동안 이야기를 나눌 때,혼자 조용히 있을 시간이 필요해진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_B,12,GC1-046,공동 활동의 다음 순서가 정해지지 않았을 때,진행할 방법을 먼저 제안한다.,frequency_5_plus_difficult_reason

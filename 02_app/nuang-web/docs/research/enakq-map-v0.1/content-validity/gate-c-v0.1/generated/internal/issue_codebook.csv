@@ -1,0 +1,20 @@
+issue_code,definition_ko,default_severity,required_action
+CONTEXT_MISREAD,상황 전제를 의도와 다르게 이해함,S2,문구 수정 후 재검증
+CONTEXT_PROMPT_DUPLICATION,상황과 질문이 같은 내용을 반복함,S1,중복을 제거하고 필요 시 재검증
+PROMPT_MISREAD,질문의 핵심 행동이나 생각을 다르게 이해함,S2,문구 수정 후 재검증
+DOUBLE_RESPONSE,한 문항에서 두 개 이상의 반응을 동시에 판단해야 함,S2,단일 반응으로 재작성
+TARGET_SEAM,의도한 세부 성향보다 인접 성향으로 해석됨,S2,구성개념 재작성 또는 제외
+RESPONSE_LAYER_CONFUSION,처음 드는 생각과 실제 나타나는 반응 등 층위를 혼동함,S2,층위를 명시하고 재검증
+ABILITY_INFERENCE,성향 대신 능력이나 성취 수준으로 답함,S2,능력 단서를 제거하고 재검증
+VALUE_INFERENCE,성향 대신 좋은 사람·성실함 같은 가치 판단으로 답함,S2,가치 방향을 중립화하고 재검증
+CLINICAL_INFERENCE,문항이 진단이나 임상 상태를 암시함,S3,즉시 보류하고 안전 검토
+RELATIONSHIP_DETERMINISM,개인 성향으로 상대 마음이나 관계 결과를 단정함,S3,즉시 보류하고 안전 검토
+RECALL_WINDOW,최근 6개월의 평소 모습이 아닌 한 사건으로 답함,S1,회상 기준을 보강하고 확인
+EXPERIENCE_GAP,관련 경험이 없어 성향을 판단할 수 없음,S1,판단 어려움 사용성과 적용 범위 검토
+RESPONSE_SCALE,5단계 응답 간 차이를 구분하기 어려움,S2,척도 문구 또는 문항 적합성 수정
+NEGATION_DIRECTION,부정 표현 때문에 방향을 반대로 읽음,S2,긍정형 문장으로 재작성
+SOCIAL_DESIRABILITY,더 좋아 보이는 답을 고름,S2,가치 신호를 중립화하고 재검증
+ACCESS_CONSTRAINT,환경·장애·돌봄·권한 차이가 성향처럼 채점됨,S2,조건을 통제하거나 적용 범위를 수정
+UI_CONTEXT_LOSS,모바일 화면에서 상황 라벨과 질문의 연결을 놓침,S2,실제 러너 UI 수정 후 재검증
+PRIVACY_DISCOMFORT,답하기에 불필요하게 민감하거나 노출 우려가 큼,S3,수집 필요성과 문구를 재검토
+OTHER,코드북에 없는 문제,S0-S3,원문 기록 후 코드북 보완

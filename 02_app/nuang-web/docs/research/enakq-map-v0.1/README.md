@@ -51,6 +51,7 @@
 - 수정 순서와 다음 연구 관문: `internal-critique/v0.1/analysis/REVISION_GATE_PLAN.md`
 - P0 개인정보·AI·안전 변경안: `revisions/v0.2-gate-a/GATE_A_P0_CHANGESET.md`
 - 5축·facet 측정모형: `measurement-model/gate-b-v0.1/GATE_B_MEASUREMENT_MODEL.md`
+- 60문항 인지·내용타당도 검증: `content-validity/gate-c-v0.1/GATE_C_COGNITIVE_CONTENT_VALIDITY_PROTOCOL.md`
 
 ## 역할별 검토량
 
@@ -106,7 +107,7 @@ npm run research:enakq:internal-critique:analysis:check
 
 1. Gate A 변경안을 내부 안전·개인정보 관점에서 재검토한다.
 2. 다섯 축과 facet의 포함·제외 정의, 양극성, 판정 보류 규칙을 확정한다.
-3. 수정된 축·문항을 2030 한국어 사용자 인지 인터뷰로 보낸다.
+3. Gate C 패킷의 5개 균형 폼으로 2030 한국어 사용자 인지 인터뷰를 두 차례 수행한다.
 4. 역할별 자격 요건에 맞는 실제 검토자를 모집한다.
 5. 신원·학위/면허 또는 연구 실적·이해관계·독립성을 확인한다.
 6. 각 검토자에게 roster ID를 배정하고 동일한 역할 패킷의 복사본을 제공한다.

@@ -1,0 +1,13 @@
+protocol_version,form_id,order_index,study_item_id,context_label,prompt_text,response_format
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,1,GC1-045,하던 중 예상하지 못한 작은 문제가 생겼을 때,불편한 감정이 한꺼번에 올라온다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,2,GC1-056,가벼운 주제에서 의견이 엇갈릴 때,다른 사람들의 반응을 본 뒤 내 생각을 말한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,3,GC1-049,결과를 확신하기 어려운 선택을 해야 할 때,같은 걱정을 되짚느라 결정을 미룬다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,4,GC1-057,영화나 드라마의 중간 장면만 우연히 봤을 때,그 장면만 보고 앞뒤 이야기는 따로 떠올려보지 않는다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,5,GC1-041,사람들과 부담 없이 시간을 보낸 뒤,기운이 살아난 느낌이 든다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,6,GC1-059,해보려던 일이 한 번 잘되지 않았을 때,다음 시도를 생각할 때 걱정이 오래 이어지지 않는다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,7,GC1-042,하늘이나 나무 같은 일상 풍경을 볼 때,색과 분위기가 주는 인상에 눈길이 간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,8,GC1-053,함께 준비한 일이 잘 풀리지 않았을 때,처음에는 일이 어긋난 부분에 주의가 간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,9,GC1-050,영상을 보거나 대화하던 중 처음 듣는 개념이 나왔을 때,그 개념이 정확히 무엇을 뜻하는지 더 알아본다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,10,GC1-058,이번 주 안에서 시간을 자유롭게 정할 수 있는 일이 생겼을 때,언제 할지는 그날 상황을 보고 정한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,11,GC1-044,해야 하지만 당장 재미나 보상이 적은 일을 할 때,한 번에 많이 하지 못해도 조금씩 이어간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_E,12,GC1-060,처음 보는 기능이 있는 생활용품을 사용할 때,어떻게 쓰는지만 확인하고 바로 사용한다.,frequency_5_plus_difficult_reason

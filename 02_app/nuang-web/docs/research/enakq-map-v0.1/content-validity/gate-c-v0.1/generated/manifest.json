@@ -1,0 +1,89 @@
+{
+  "protocolVersion": "ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1",
+  "candidateSetId": "NUANG-CORE-GATE-C-COGNITIVE-CANDIDATE-1.0",
+  "sourceAssessmentReleaseId": "NUANG-CORE-BETA-1.0",
+  "status": "PREPARED_NOT_RUN_NOT_EXTERNAL_VALIDATION",
+  "generatedAt": "2026-07-20T00:00:00+09:00",
+  "source": "content-seed/items/core-beta-item-set.v1.0.json",
+  "itemCount": 60,
+  "replacementCount": 3,
+  "formCount": 5,
+  "itemsPerForm": 12,
+  "plannedParticipants": {
+    "discoveryRound": 20,
+    "revisionRound": 20,
+    "participantsPerFormPerRound": 4,
+    "targetedRetest": "4-10 when required"
+  },
+  "releaseBoundary": {
+    "customerScoringAllowed": false,
+    "productionResearchDataStorageAllowed": false,
+    "cognitiveReviewGate": "not_started"
+  },
+  "replacements": [
+    {
+      "sourceBetaItemId": "NU-B1-018",
+      "replacedSourceCandidateId": "SMOS-C04",
+      "cognitiveCandidateId": "SMOS-C10-r2",
+      "sourceResearchItemId": "NV2-002"
+    },
+    {
+      "sourceBetaItemId": "NU-B1-028",
+      "replacedSourceCandidateId": "SMOS-C10",
+      "cognitiveCandidateId": "SMOS-C13",
+      "sourceResearchItemId": "NV2-007"
+    },
+    {
+      "sourceBetaItemId": "NU-B1-058",
+      "replacedSourceCandidateId": "SMOS-C02",
+      "cognitiveCandidateId": "SMOS-C08-r3",
+      "sourceResearchItemId": "CIT-004"
+    }
+  ],
+  "files": [
+    {
+      "path": "internal/issue_codebook.csv",
+      "sha256": "80312de68446a68a0666f5c59709dd3abdc3ac35c16c30470dbe8561d78f2e7d"
+    },
+    {
+      "path": "internal/item_decision_template.csv",
+      "sha256": "d3be19173d58d1e5fc26504c019c764e98f9fa6942f1c4967480d079dff4d4b9"
+    },
+    {
+      "path": "internal/item_mapping_and_probes.csv",
+      "sha256": "d70219742afd68aadc2f355b6b069609d9dc447fd4038f212e76d2016893793c"
+    },
+    {
+      "path": "internal/recruitment_coverage_template.csv",
+      "sha256": "24eedd89ab3c311fedd9b74679f059e09e6d92f7d9cd8459e0c005d266e5358a"
+    },
+    {
+      "path": "internal/session_log_template.csv",
+      "sha256": "5f34de015dde5536d13898bf079d02a3ace9a9397866725ab2c007088a69f9de"
+    },
+    {
+      "path": "participant/FORM_A.csv",
+      "sha256": "d96610cac525a94533bc7db8797f5843ac07cccb2d7219d47dd51fc54d2958a4"
+    },
+    {
+      "path": "participant/FORM_B.csv",
+      "sha256": "7fb3d38cb399fee60604521abcf590f3661729b2c3b1d52d27084c050393230f"
+    },
+    {
+      "path": "participant/FORM_C.csv",
+      "sha256": "3039accb46462a70625033af6fe8c1d4ebef595b2acb8dfeb159ebb19d0f500c"
+    },
+    {
+      "path": "participant/FORM_D.csv",
+      "sha256": "e6651108f4d382e2f04c76222526f17d95cce7ebfc07edd6cd720058de3faa21"
+    },
+    {
+      "path": "participant/FORM_E.csv",
+      "sha256": "6955a790303f623355a100df27ed6f970cf91e87ac81df365b488d50db76cc59"
+    },
+    {
+      "path": "participant/SESSION_GUIDE.md",
+      "sha256": "88a5be025dd39c67343c3f0c6d78af3b06304cfbf1edf5ac0b8e54a6eb64ee7d"
+    }
+  ]
+}

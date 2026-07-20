@@ -1,0 +1,13 @@
+protocol_version,form_id,order_index,study_item_id,context_label,prompt_text,response_format
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,1,GC1-024,하던 일을 일상적인 이유로 잠시 멈춘 뒤,다시 시작할 계기가 생길 때까지 그대로 둔다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,2,GC1-039,상대의 답이나 반응이 늦어질 때,좋지 않은 이유가 반복해서 떠오른다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,3,GC1-021,여럿이 가벼운 활동을 한동안 함께할 때,시간이 지날수록 기운이 줄어든다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,4,GC1-038,해야 할 일이 몇 가지 겹쳐 있을 때,할 일을 순서나 묶음으로 정리한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,5,GC1-025,상대와 의견이 달라 대화가 길어질 때,의견 차이가 이어져도 감정의 크기는 크게 달라지지 않는다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,6,GC1-036,가벼운 주제에서 의견이 엇갈릴 때,내 생각을 먼저 말한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,7,GC1-055,하던 중 예상하지 못한 작은 문제가 생겼을 때,문제를 확인하는 동안 감정 변화는 크지 않다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,8,GC1-037,현실과 다른 가벼운 가정을 접할 때,그 안에서 일어날 장면을 이어서 떠올린다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,9,GC1-022,일상에서 음악을 들을 때,그 인상에 머무는 시간은 짧다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,10,GC1-033,누군가 해결책을 묻지 않고 속상한 일을 이야기할 때,그 사람이 느낀 마음을 더 들어보고 싶어진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,11,GC1-030,궁금했던 질문의 답을 찾았을 때,답을 확인한 뒤에는 관련 내용을 더 찾아보지 않는다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_D,12,GC1-047,하나의 가벼운 가능성이 떠올랐을 때,뒤에 이어질 장면까지 펼쳐본다.,frequency_5_plus_difficult_reason

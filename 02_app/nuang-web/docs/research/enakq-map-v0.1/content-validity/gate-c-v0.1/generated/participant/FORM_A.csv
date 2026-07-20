@@ -1,0 +1,13 @@
+protocol_version,form_id,order_index,study_item_id,context_label,prompt_text,response_format
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,1,GC1-001,익숙한 사람들과 대화가 이어질 때,기운이 점점 살아난다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,2,GC1-017,하나의 가벼운 가능성이 떠올랐을 때,처음 떠오른 장면만 생각하고 다른 일로 넘어간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,3,GC1-043,가깝지는 않은 사람이 힘든 일에 대한 내 의견을 물을 때,처음에는 그 사람이 어떤 마음이었는지가 궁금해진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,4,GC1-051,사람들과 부담 없이 시간을 보낸 뒤,혼자 조용히 회복할 시간이 필요해진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,5,GC1-002,일상에서 색과 빛이 어우러진 장면을 볼 때,그 인상에 눈길이 오래 머문다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,6,GC1-016,여럿이 간단한 선택을 정할 때,다른 사람이 선택지를 꺼낸 뒤 내 의견을 보탠다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,7,GC1-010,궁금했던 질문의 답을 찾았을 때,그 답이 나온 이유나 배경까지 더 알아본다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,8,GC1-013,누군가 속상한 일과 해결할 문제를 함께 이야기할 때,원인과 해결할 부분이 먼저 눈에 들어온다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,9,GC1-004,미뤄도 당장 문제없는 할 일이 생겼을 때,해야 할 때가 가까워지기 전에 첫 행동을 시작한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,10,GC1-019,결과가 아직 정해지지 않은 일을 기다릴 때,잘못될 가능성을 오래 생각하지 않는다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,11,GC1-005,사소한 일이 생각대로 되지 않을 때,짜증이 금방 커진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_A,12,GC1-018,나중에 다시 쓸 자료를 보관할 때,"따로 정해둔 자리 없이, 그때 두기 편한 곳에 둔다.",frequency_5_plus_difficult_reason

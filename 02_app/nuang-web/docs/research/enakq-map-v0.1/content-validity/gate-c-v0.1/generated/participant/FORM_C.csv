@@ -1,0 +1,13 @@
+protocol_version,form_id,order_index,study_item_id,context_label,prompt_text,response_format
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,1,GC1-040,처음 보는 기능이 있는 생활용품을 사용할 때,왜 그런 방식으로 작동하는지 궁금해진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,2,GC1-023,누군가 해결책을 묻지 않고 속상한 일을 이야기할 때,이야기의 원인과 결과가 먼저 궁금해진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,3,GC1-034,하던 일을 일상적인 이유로 잠시 멈춘 뒤,다음 기회에 다시 돌아와 이어간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,4,GC1-029,결과를 확신하기 어려운 선택을 해야 할 때,걱정이 생겨도 필요한 시점에는 결정을 내린다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,5,GC1-048,이번 주 안에 할 일이 생겼을 때,언제 할지 대략적인 때를 정해둔다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,6,GC1-026,여럿이 모였지만 대화가 시작되지 않았을 때,다른 사람이 대화를 시작한 뒤 참여한다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,7,GC1-035,상대와 의견이 달라 대화가 길어질 때,답답함과 짜증이 빠르게 커진다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,8,GC1-028,여러 단계를 거친 일을 마무리할 때,"정해둔 확인 순서 없이, 그때 생각나는 부분부터 살핀다.",frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,9,GC1-031,여럿이 가벼운 활동을 함께할 때,그 흐름에 들어가면 기운이 살아난다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,10,GC1-052,처음 들어간 일상 공간을 둘러볼 때,분위기에는 눈길이 짧게 머문다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,11,GC1-027,평범한 일상 장면을 보고 있을 때,보이는 장면만 살펴보고 그대로 지나간다.,frequency_5_plus_difficult_reason
+ENAKQ-GATE-C-COGNITIVE-CONTENT-VALIDITY.v0.1,FORM_C,12,GC1-032,일상에서 음악을 들을 때,소리와 분위기가 주는 인상에 관심이 간다.,frequency_5_plus_difficult_reason
