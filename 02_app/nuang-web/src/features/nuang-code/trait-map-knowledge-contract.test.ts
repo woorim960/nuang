@@ -48,6 +48,18 @@ function createEntry() {
         sectionId: "overview",
         title: "한눈에 이해하기",
       },
+      {
+        body: "역할명은 능력이나 지위를 뜻하지 않아요.",
+        claimRefs: ["ENAKQ.general.strength.01"],
+        sectionId: "role_name",
+        title: "역할명의 의미",
+      },
+      {
+        body: "여러 자리가 함께 나타날 때의 가설을 살펴봐요.",
+        claimRefs: ["ENAKQ.general.strength.01"],
+        sectionId: "code_interactions",
+        title: "자리 조합 보기",
+      },
     ],
     status: "draft",
     updatedAt: "2026-07-20T00:00:00.000Z",

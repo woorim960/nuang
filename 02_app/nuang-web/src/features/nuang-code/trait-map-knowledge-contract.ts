@@ -74,7 +74,9 @@ const traitMapSectionSchema = z.object({
   claimRefs: z.array(z.string().min(1)),
   sectionId: z.enum([
     "overview",
+    "role_name",
     "five_code_positions",
+    "code_interactions",
     "inner_thought_and_response",
     "daily_life",
     "family",
