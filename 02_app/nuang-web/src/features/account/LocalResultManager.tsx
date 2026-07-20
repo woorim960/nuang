@@ -2,7 +2,6 @@
 
 import {
   ChevronRight,
-  Download,
   FileText,
   FlaskConical,
   Trash2,
@@ -14,7 +13,6 @@ import type {
   AccountComparisonReportSummary,
   AccountResultSummary,
 } from "@/features/account/account-result-contract";
-import { buildLocalExportPayload } from "@/features/account/local-export";
 import { readJsonResponse } from "@/features/account/response-json";
 import {
   deleteLocalAttempt,
@@ -88,9 +86,6 @@ export function LocalResultManager() {
     AccountComparisonReportSummary[]
   >([]);
   const [loaded, setLoaded] = useState(false);
-  const [exportState, setExportState] = useState<"idle" | "done" | "error">(
-    "idle",
-  );
   const [deletingEntryId, setDeletingEntryId] = useState<string | null>(null);
   const [deleteMessage, setDeleteMessage] = useState("");
   const [expandedGroups, setExpandedGroups] = useState<string[]>([]);
@@ -294,29 +289,6 @@ export function LocalResultManager() {
     }
   }
 
-  function handleExport() {
-    try {
-      const exportedAt = new Date().toISOString();
-      const payload = buildLocalExportPayload({
-        coreAttempts,
-        exportedAt,
-        labResults,
-      });
-      const blob = new Blob([JSON.stringify(payload, null, 2)], {
-        type: "application/json",
-      });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
-      anchor.download = `nuang-local-data-${exportedAt.slice(0, 10)}.json`;
-      anchor.href = url;
-      anchor.click();
-      URL.revokeObjectURL(url);
-      setExportState("done");
-    } catch {
-      setExportState("error");
-    }
-  }
-
   function toggleGroup(groupId: string) {
     setExpandedGroups((current) =>
       current.includes(groupId)
@@ -419,44 +391,6 @@ export function LocalResultManager() {
         <p className={styles.deleteMessage} role="alert">
           {deleteMessage}
         </p>
-      ) : null}
-
-      {loaded ? (
-        <section className={styles.dataSection}>
-          <div className={styles.dataHeading}>
-            <div className={styles.dataIcon}>
-              <Download aria-hidden="true" size={17} strokeWidth={1.7} />
-            </div>
-            <div>
-              <h2>내 데이터 보관하기</h2>
-              <p>검사 응답과 결과를 파일로 저장해 둘 수 있어요.</p>
-            </div>
-          </div>
-          <button
-            aria-label="내 데이터 JSON 내려받기"
-            onClick={handleExport}
-            type="button"
-          >
-            내 데이터 내려받기
-          </button>
-          <p className={styles.deleteGuide}>
-            리포트를 삭제하면 연결된 공유 주소와 비교 기록도 함께 정리돼요.
-          </p>
-          {exportState === "done" ? (
-            <p
-              aria-live="polite"
-              className={styles.exportMessage}
-              role="status"
-            >
-              내보내기 파일을 준비했어요.
-            </p>
-          ) : null}
-          {exportState === "error" ? (
-            <p className={styles.exportMessage} role="alert">
-              내보내기를 완료하지 못했어요. 잠시 뒤 다시 시도해 주세요.
-            </p>
-          ) : null}
-        </section>
       ) : null}
     </section>
   );

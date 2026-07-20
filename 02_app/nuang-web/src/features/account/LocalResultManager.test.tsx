@@ -58,9 +58,6 @@ describe("LocalResultManager", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "관계 비교" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "주제 검사" })).toBeVisible();
-    expect(
-      screen.getByText(/공유 주소와 비교 기록도 함께 정리돼요/),
-    ).toBeInTheDocument();
     expect(screen.getByText("아직 결과가 없어요")).toBeInTheDocument();
     expect(screen.queryByText(/기기|계정 저장|로컬/)).not.toBeInTheDocument();
   });
@@ -76,7 +73,7 @@ describe("LocalResultManager", () => {
     expect(screen.getByText("아직 결과가 없어요")).toBeInTheDocument();
   });
 
-  it("keeps delete and export rights visible for stored local results", async () => {
+  it("keeps report access and delete rights visible for stored local results", async () => {
     vi.mocked(listLocalAttempts).mockResolvedValue([
       {
         assessmentId: "nu-core-full",
@@ -104,12 +101,7 @@ describe("LocalResultManager", () => {
     expect(
       screen.getByRole("button", { name: "정밀 코어 삭제" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "내 데이터 JSON 내려받기" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/검사 응답과 결과를 파일로 저장해 둘 수 있어요/),
-    ).toBeInTheDocument();
+    expect(screen.queryByText("내 데이터 보관하기")).not.toBeInTheDocument();
   });
 
   it("does not delete a core result when confirmation is cancelled", async () => {
