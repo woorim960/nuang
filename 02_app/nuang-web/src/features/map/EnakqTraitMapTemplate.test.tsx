@@ -1,12 +1,12 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
-import { EnakqTraitMapTemplate } from "@/features/map/EnakqTraitMapTemplate";
+import { TraitMapDetailTemplate } from "@/features/map/EnakqTraitMapTemplate";
 import { enakqCustomerGuideV2 as guide } from "@/features/nuang-code/enakq-customer-guide-v2";
 
-describe("EnakqTraitMapTemplate", () => {
+describe("TraitMapDetailTemplate", () => {
   it("shows a detailed 15-chapter guide centered on typical ENAKQ patterns", () => {
-    render(<EnakqTraitMapTemplate />);
+    render(<TraitMapDetailTemplate guide={guide} />);
 
     expect(
       screen.getByRole("heading", { name: "관계를 여는 지휘자" }),
@@ -33,7 +33,7 @@ describe("EnakqTraitMapTemplate", () => {
     const user = userEvent.setup();
     const scrollIntoView = vi.fn();
     HTMLElement.prototype.scrollIntoView = scrollIntoView;
-    render(<EnakqTraitMapTemplate />);
+    render(<TraitMapDetailTemplate guide={guide} />);
 
     await user.click(screen.getByRole("button", { name: /핵심 모습/ }));
 

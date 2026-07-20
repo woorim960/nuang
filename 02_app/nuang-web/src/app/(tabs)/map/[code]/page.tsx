@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
-import { EnakqTraitMapTemplate } from "@/features/map/EnakqTraitMapTemplate";
+import { TraitMapDetailTemplate } from "@/features/map/EnakqTraitMapTemplate";
+import { getPublishedTraitMapCustomerGuide } from "@/features/nuang-code/trait-map-customer-guide-registry";
 
 export default async function TraitMapDetailPage({
   params,
@@ -8,9 +9,8 @@ export default async function TraitMapDetailPage({
 }) {
   const { code } = await params;
 
-  if (code.toUpperCase() !== "ENAKQ") {
-    notFound();
-  }
+  const guide = getPublishedTraitMapCustomerGuide(code);
+  if (!guide) notFound();
 
-  return <EnakqTraitMapTemplate />;
+  return <TraitMapDetailTemplate guide={guide} />;
 }

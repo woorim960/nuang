@@ -1,32 +1,18 @@
-export type EnakqCustomerGuideReference = {
-  description: string;
-  href: string;
-  title: string;
-};
+import {
+  countTraitMapCustomerGuideCharacters,
+  traitMapCustomerGuideContractVersion,
+  traitMapCustomerGuideSchema,
+  type TraitMapCustomerGuideChapter,
+} from "@/features/nuang-code/trait-map-customer-guide-contract";
 
-export type EnakqCustomerGuideSection = {
-  paragraphs: string[];
-  title: string;
-};
-
-export type EnakqCustomerGuideChapter = {
-  checkQuestion: string;
-  id: string;
-  label: string;
-  number: number;
-  references?: EnakqCustomerGuideReference[];
-  sections: EnakqCustomerGuideSection[];
-  summary: string;
-  title: string;
-};
-
-const chapters: EnakqCustomerGuideChapter[] = [
+const chapters: TraitMapCustomerGuideChapter[] = [
   {
     checkQuestion:
       "사람, 가능성, 상대의 마음, 다음 행동 중 내가 가장 먼저 챙기는 것은 무엇인가요?",
     id: "chapter-01",
     label: "핵심 모습",
     number: 1,
+    slot: "core_pattern",
     summary:
       "ENAKQ는 사람과 새로운 가능성을 연결하고, 상대의 마음을 살피며, 함께 정한 일을 꾸준히 이어가려는 성향이에요.",
     title: "ENAKQ는 관계와 가능성을 다음 행동으로 이어요",
@@ -60,6 +46,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-02",
     label: "이름 뜻",
     number: 2,
+    slot: "role_meaning",
     summary:
       "‘관계를 여는 지휘자’는 대화를 시작하고 여러 사람의 생각을 모아 다음 흐름을 만드는 ENAKQ의 모습을 담은 이름이에요.",
     title: "‘관계를 여는 지휘자’는 이런 사람이에요",
@@ -93,6 +80,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-03",
     label: "다섯 글자",
     number: 3,
+    slot: "five_letters",
     summary:
       "E는 함께할 때의 활력, N은 가능성 탐색, A는 상대 마음에 대한 관심, K는 꾸준한 이어감, Q는 빠른 걱정과 감정 반응을 뜻해요.",
     title: "E·N·A·K·Q를 한 글자씩 깊이 알아봐요",
@@ -145,6 +133,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-04",
     label: "조합의 모습",
     number: 4,
+    slot: "combined_pattern",
     summary:
       "다섯 글자가 함께 움직이면 ENAKQ는 사람을 연결하고 가능성을 넓힌 뒤, 모두의 마음을 살피며 실제 행동을 이어가는 흐름을 보여요.",
     title: "다섯 경향이 함께 움직이는 방식을 살펴봐요",
@@ -192,6 +181,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-05",
     label: "생각과 반응",
     number: 5,
+    slot: "thought_and_response",
     summary:
       "ENAKQ는 먼저 상대의 마음과 여러 가능성을 떠올리고, 실제로는 대화를 열거나 다음 행동을 정리하는 반응을 자주 보여요.",
     title: "처음 드는 생각과 실제 나타나는 반응을 나누어 봐요",
@@ -232,6 +222,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-06",
     label: "평소 생활",
     number: 6,
+    slot: "daily_life",
     summary:
       "ENAKQ의 일상은 사람과의 대화, 새로운 선택, 이어지는 일정으로 채워져요. 즐거운 자극이 많을수록 활력이 오르지만 정리할 여백도 필요해요.",
     title: "대화하고, 선택하고, 쉬는 평소 모습을 알아봐요",
@@ -272,6 +263,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-07",
     label: "가족",
     number: 7,
+    slot: "family",
     summary:
       "가족 안에서 ENAKQ는 연락과 일정을 잇고, 구성원의 마음을 살피며, 어색해진 분위기를 다시 움직이는 역할을 자주 맡아요.",
     title: "가족과 함께 있을 때의 ENAKQ를 알아봐요",
@@ -305,6 +297,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-08",
     label: "친구",
     number: 8,
+    slot: "friend",
     summary:
       "ENAKQ는 먼저 연락하고 새로운 경험을 제안하며 우정을 움직여요. 깊은 대화와 꾸준한 행동을 통해 가까움을 확인하는 편이에요.",
     title: "친구와 가까워지고 우정을 이어가는 방식을 알아봐요",
@@ -345,6 +338,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-09",
     label: "연인",
     number: 9,
+    slot: "partner",
     summary:
       "연인 관계에서 ENAKQ는 마음을 적극적으로 나누고 함께할 미래를 그리며, 꾸준한 연락과 행동으로 애정을 확인해요.",
     title: "연인과 사랑을 나누는 ENAKQ의 모습을 알아봐요",
@@ -385,6 +379,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-10",
     label: "마음 가는 사람",
     number: 10,
+    slot: "person_of_interest",
     summary:
       "마음 가는 사람이 생기면 ENAKQ는 작은 신호를 세심하게 읽고 관계의 가능성을 넓게 상상하며, 자연스러운 대화와 만남을 만들려 해요.",
     title: "마음 가는 사람을 알아갈 때의 ENAKQ를 알아봐요",
@@ -425,6 +420,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-11",
     label: "일·공부",
     number: 11,
+    slot: "work",
     summary:
       "일과 공부에서 ENAKQ는 사람들의 의견을 모으고 새로운 방법을 찾으며, 정한 목표가 실제 결과로 이어지도록 흐름을 관리해요.",
     title: "일하고 공부할 때의 ENAKQ를 알아봐요",
@@ -465,6 +461,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-12",
     label: "부담과 회복",
     number: 12,
+    slot: "stress_and_recovery",
     summary:
       "관계의 불확실함과 계획의 흔들림이 겹치면 ENAKQ의 걱정이 빠르게 커져요. 분명한 정보와 작은 다음 행동이 회복을 도와요.",
     title: "부담이 커지는 순간과 회복 방식을 알아봐요",
@@ -505,6 +502,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-13",
     label: "강점과 성장",
     number: 13,
+    slot: "strength_and_growth",
     summary:
       "ENAKQ의 강점은 사람과 아이디어를 연결해 실제 흐름을 만드는 데 있어요. 모든 것을 혼자 책임지지 않을 때 이 힘이 오래가요.",
     title: "ENAKQ의 좋은 힘과 더 편안하게 쓰는 방법을 알아봐요",
@@ -552,6 +550,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-14",
     label: "오해와 대화",
     number: 14,
+    slot: "misread_and_conversation",
     summary:
       "ENAKQ를 단순히 사교적이고 감성적인 사람으로 보면 핵심을 놓쳐요. 관계와 가능성, 행동, 걱정이 함께 움직이는 사람으로 이해해야 해요.",
     title: "자주 생기는 오해와 잘 통하는 대화법을 알아봐요",
@@ -599,6 +598,7 @@ const chapters: EnakqCustomerGuideChapter[] = [
     id: "chapter-15",
     label: "신뢰 근거",
     number: 15,
+    slot: "evidence",
     summary:
       "뉴앙은 널리 연구된 성격 모형과 세부 성향 연구를 바탕으로 다섯 축을 설계하고, 여러 생활 장면의 응답을 종합해 반복되는 경향을 설명해요.",
     title: "뉴앙이 성향을 해석하는 근거를 알아봐요",
@@ -686,19 +686,14 @@ const chapters: EnakqCustomerGuideChapter[] = [
   },
 ];
 
-export const enakqCustomerGuideV2 = {
+export const enakqCustomerGuideV2 = traitMapCustomerGuideSchema.parse({
   chapters,
   code: "ENAKQ",
+  contractVersion: traitMapCustomerGuideContractVersion,
+  heroSummary:
+    "사람과 함께할 때 활력이 오르고, 새로운 가능성을 찾으며, 관계에서는 상대의 마음을 세심하게 살펴요. 사람과 생각을 연결한 뒤 다음 행동까지 꾸준히 이어가는 편이고, 중요한 관계가 불확실할 때는 걱정과 감정이 빠르게 커져요.",
+  profileName: "관계를 여는 지휘자",
   readingMinutes: 24,
-  totalCharacters: chapters.reduce(
-    (total, chapter) =>
-      total +
-      chapter.sections.reduce(
-        (chapterTotal, section) =>
-          chapterTotal + section.paragraphs.join("").replace(/\s/g, "").length,
-        0,
-      ),
-    0,
-  ),
+  totalCharacters: countTraitMapCustomerGuideCharacters(chapters),
   version: "ENAKQ-CUSTOMER-GUIDE-2.0",
-};
+});

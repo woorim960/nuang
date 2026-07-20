@@ -15,6 +15,7 @@ import {
   candidatePublicPairOrder,
   type CandidateProfileDefinition,
 } from "@/features/nuang-code/candidate-profile-names";
+import { hasPublishedTraitMapCustomerGuide } from "@/features/nuang-code/trait-map-customer-guide-catalog";
 import styles from "./TraitMapExplorer.module.css";
 
 const SAVED_CODE_STORAGE_KEY = "nuang.map.saved-codes.v1";
@@ -589,9 +590,9 @@ function ProfileResult({
         </ol>
       </details>
 
-      {profile.code === "ENAKQ" ? (
-        <Link className={styles.detailLink} href="/map/ENAKQ">
-          ENAKQ 상세 지도 보기
+      {hasPublishedTraitMapCustomerGuide(profile.code) ? (
+        <Link className={styles.detailLink} href={`/map/${profile.code}`}>
+          {profile.code} 상세 지도 보기
           <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
         </Link>
       ) : null}

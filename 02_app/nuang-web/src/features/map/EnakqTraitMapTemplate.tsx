@@ -10,14 +10,17 @@ import {
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
-import { enakqCustomerGuideV2 } from "@/features/nuang-code/enakq-customer-guide-v2";
-import { enakqTraitMapTemplateV1 } from "@/features/nuang-code/enakq-trait-map-template-v1";
+import type {
+  TraitMapCustomerGuide,
+  TraitMapCustomerGuideChapter,
+} from "@/features/nuang-code/trait-map-customer-guide-contract";
 import styles from "@/features/map/EnakqTraitMapTemplate.module.css";
 
-const template = enakqTraitMapTemplateV1;
-const guide = enakqCustomerGuideV2;
-
-export function EnakqTraitMapTemplate() {
+export function TraitMapDetailTemplate({
+  guide,
+}: {
+  guide: TraitMapCustomerGuide;
+}) {
   const [activeChapter, setActiveChapter] = useState(1);
   const [tableOfContentsOpen, setTableOfContentsOpen] = useState(false);
   const chapterSelectionLocked = useRef(false);
@@ -49,7 +52,7 @@ export function EnakqTraitMapTemplate() {
     }
 
     return () => observer.disconnect();
-  }, []);
+  }, [guide.chapters]);
 
   useEffect(
     () => () => {
@@ -101,14 +104,9 @@ export function EnakqTraitMapTemplate() {
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}>5글자 뉴앙 코드</p>
-          <CodeLetters />
-          <h1>{template.profileName}</h1>
-          <p>
-            사람과 함께할 때 활력이 오르고, 새로운 가능성을 찾으며, 관계에서는
-            상대의 마음을 세심하게 살펴요. 사람과 생각을 연결한 뒤 다음 행동까지
-            꾸준히 이어가는 편이고, 중요한 관계가 불확실할 때는 걱정과 감정이
-            빠르게 커져요.
-          </p>
+          <CodeLetters code={guide.code} />
+          <h1>{guide.profileName}</h1>
+          <p>{guide.heroSummary}</p>
         </div>
         <div className={styles.characterWrap}>
           <span aria-hidden="true" />
@@ -125,17 +123,17 @@ export function EnakqTraitMapTemplate() {
             <BookOpen aria-hidden="true" size={18} strokeWidth={1.7} />
           </span>
           <div>
-            <p>ENAKQ를 깊이 이해하는 안내서</p>
+            <p>{guide.code}를 깊이 이해하는 안내서</p>
             <h2 id="guide-intro-title">
               생각의 이유와 행동까지 자세히 살펴봐요
             </h2>
           </div>
         </div>
         <p>
-          이 안내서는 {guide.chapters.length}개 장에서 ENAKQ가 중요하게 여기는
-          가치와 생각의 흐름, 관계별 행동, 부담이 커지는 순간과 회복 방법까지
-          구체적으로 설명해요. 나를 이해할 때도, 궁금한 사람을 알아갈 때도
-          원하는 장부터 골라 읽을 수 있어요.
+          이 안내서는 {guide.chapters.length}개 장에서 {guide.code}가 중요하게
+          여기는 가치와 생각의 흐름, 관계별 행동, 부담이 커지는 순간과 회복
+          방법까지 구체적으로 설명해요. 나를 이해할 때도, 궁금한 사람을 알아갈
+          때도 원하는 장부터 골라 읽을 수 있어요.
         </p>
         <div className={styles.guideStats}>
           <span>
@@ -159,7 +157,7 @@ export function EnakqTraitMapTemplate() {
         </div>
         <ol>
           {[
-            "먼저 다섯 글자와 ENAKQ의 중심 가치를 이해해요.",
+            `먼저 다섯 글자와 ${guide.code}의 중심 가치를 이해해요.`,
             "가족·친구·연인·마음 가는 사람과의 행동을 살펴봐요.",
             "마지막에는 강점, 대화법, 뉴앙의 신뢰 근거를 확인해요.",
           ].map((item, index) => (
@@ -170,13 +168,16 @@ export function EnakqTraitMapTemplate() {
           ))}
         </ol>
         <p>
-          본문은 ENAKQ에서 대체로 반복되는 경향을 중심으로 설명해요. 각 행동이
-          나타나는 이유까지 함께 읽으면 단순한 특징 목록보다 이 성향을 훨씬
-          구체적으로 이해할 수 있어요.
+          본문은 {guide.code}에서 대체로 반복되는 경향을 중심으로 설명해요. 각
+          행동이 나타나는 이유까지 함께 읽으면 단순한 특징 목록보다 이 성향을
+          훨씬 구체적으로 이해할 수 있어요.
         </p>
       </section>
 
-      <nav className={styles.chapterNavigator} aria-label="ENAKQ 상세 목차">
+      <nav
+        className={styles.chapterNavigator}
+        aria-label={`${guide.code} 상세 목차`}
+      >
         <button
           aria-expanded={tableOfContentsOpen}
           className={styles.chapterNavigatorButton}
@@ -325,10 +326,10 @@ function GuideChapter({ chapter }: { chapter: GuideChapterDocument }) {
   );
 }
 
-function CodeLetters() {
+function CodeLetters({ code }: { code: string }) {
   return (
-    <p aria-label={`뉴앙 코드 ${template.code}`} className={styles.codeLetters}>
-      {template.code.split("").map((letter, index) => (
+    <p aria-label={`뉴앙 코드 ${code}`} className={styles.codeLetters}>
+      {code.split("").map((letter, index) => (
         <span data-position={index + 1} key={`${letter}-${index}`}>
           {letter}
         </span>
@@ -353,4 +354,4 @@ function getChapterTone(chapterNumber: number) {
   return "identity";
 }
 
-type GuideChapterDocument = (typeof guide.chapters)[number];
+type GuideChapterDocument = TraitMapCustomerGuideChapter;
