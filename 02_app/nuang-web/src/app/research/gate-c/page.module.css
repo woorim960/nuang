@@ -1,0 +1,170 @@
+.page {
+  width: 100%;
+  max-width: 520px;
+  min-height: 100dvh;
+  margin-inline: auto;
+  padding: clamp(2rem, 7vw, 3rem) clamp(1.1rem, 5vw, 1.5rem)
+    max(2rem, env(safe-area-inset-bottom));
+  color: var(--foreground);
+}
+
+.hero {
+  padding-inline: 0.2rem;
+}
+
+.eyebrow,
+.sectionHeading p {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.75rem;
+  font-weight: 680;
+  letter-spacing: 0.045em;
+}
+
+.hero h1 {
+  margin: 0.55rem 0 0;
+  font-size: clamp(1.9rem, 8vw, 2.4rem);
+  font-weight: 730;
+  letter-spacing: -0.04em;
+  line-height: 1.22;
+}
+
+.hero > p:last-child {
+  margin: 0.9rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+
+.boundary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, var(--conversation) 14%, var(--line));
+  border-radius: 17px;
+  background: color-mix(in srgb, var(--conversation-soft) 62%, var(--surface));
+  color: var(--conversation);
+}
+
+.boundary strong {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 680;
+}
+
+.boundary p {
+  margin: 0.3rem 0 0;
+  font-size: 0.75rem;
+  line-height: 1.55;
+}
+
+.formSection {
+  margin-top: 2rem;
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-inline: 0.2rem;
+}
+
+.sectionHeading h2 {
+  margin: 0.25rem 0 0;
+  font-size: 1.1rem;
+  font-weight: 680;
+  letter-spacing: -0.02em;
+}
+
+.sectionHeading > span {
+  color: var(--muted);
+  font-size: 0.6875rem;
+  white-space: nowrap;
+}
+
+.formList {
+  margin-top: 0.75rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 19px;
+  background: color-mix(in srgb, var(--surface) 96%, var(--background));
+}
+
+.formRow {
+  display: grid;
+  min-height: 72px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--line);
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 170ms ease;
+}
+
+.formRow:last-child {
+  border-bottom: 0;
+}
+
+.formRow:hover {
+  background: color-mix(in srgb, var(--primary) 4%, var(--surface));
+}
+
+.formRow:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: -2px;
+}
+
+.formIndex {
+  color: color-mix(in srgb, var(--primary) 72%, var(--muted));
+  font-size: 0.75rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
+.formCopy {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.formCopy strong {
+  font-size: 0.9375rem;
+  font-weight: 650;
+}
+
+.formCopy small {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.4;
+}
+
+.formRow > svg {
+  color: var(--muted);
+}
+
+.footerNote {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.6rem;
+  margin-top: 1.25rem;
+  padding-inline: 0.2rem;
+  color: var(--muted);
+}
+
+.footerNote p {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .formRow {
+    transition: none;
+  }
+}

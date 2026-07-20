@@ -84,6 +84,10 @@
     {
       "path": "participant/SESSION_GUIDE.md",
       "sha256": "88a5be025dd39c67343c3f0c6d78af3b06304cfbf1edf5ac0b8e54a6eb64ee7d"
+    },
+    {
+      "path": "runner/gate-c-runner.json",
+      "sha256": "c4ffe631b6cb038c69c0f9146a7d8989a072f2d572d22e8bb1d9c13a9d2a8fbb"
     }
   ]
 }

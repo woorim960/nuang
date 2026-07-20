@@ -1,0 +1,393 @@
+.setup,
+.centerStage {
+  display: grid;
+  width: 100%;
+  flex: 1;
+  justify-items: stretch;
+  padding: clamp(2rem, 8vw, 3.25rem) clamp(1.25rem, 6vw, 2rem)
+    max(2rem, env(safe-area-inset-bottom));
+}
+
+.setup {
+  align-content: start;
+}
+
+.centerStage {
+  align-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.8125rem;
+  font-weight: 680;
+  letter-spacing: 0.01em;
+}
+
+.setupTitle,
+.centerTitle {
+  margin: 0.55rem 0 0;
+  font-size: clamp(1.75rem, 7vw, 2.15rem);
+  font-weight: 720;
+  letter-spacing: -0.035em;
+  line-height: 1.3;
+  text-wrap: balance;
+}
+
+.centerTitle {
+  max-width: 15ch;
+}
+
+.setupCopy,
+.centerCopy {
+  margin: 0.9rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  text-wrap: balance;
+}
+
+.centerCopy {
+  max-width: 29rem;
+}
+
+.privacyNotice {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+  margin-top: 1.5rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--conversation) 14%, var(--line));
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--conversation-soft) 64%, var(--surface));
+  color: var(--conversation);
+}
+
+.privacyNotice p {
+  margin: 0;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.setupFields {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.fieldLabel,
+.probeField {
+  display: grid;
+  gap: 0.45rem;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 620;
+}
+
+.textInput,
+.selectInput,
+.textarea {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--surface) 96%, var(--background));
+  color: var(--foreground);
+  outline: 0;
+  transition:
+    border-color 170ms ease,
+    box-shadow 170ms ease,
+    background-color 170ms ease;
+}
+
+.textInput,
+.selectInput {
+  min-height: 50px;
+  padding: 0.75rem 0.85rem;
+}
+
+.textarea {
+  min-height: 92px;
+  padding: 0.75rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 480;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.textInput:focus,
+.selectInput:focus,
+.textarea:focus {
+  border-color: color-mix(in srgb, var(--primary) 52%, var(--line));
+  background: var(--surface);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 9%, transparent);
+}
+
+.textInput::placeholder,
+.textarea::placeholder {
+  color: color-mix(in srgb, var(--muted) 72%, transparent);
+}
+
+.consentRow {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+  padding: 0.75rem 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 520;
+  line-height: 1.55;
+  cursor: pointer;
+}
+
+.consentRow input,
+.issueOption input {
+  width: 18px;
+  height: 18px;
+  margin: 0.05rem 0 0;
+  accent-color: var(--primary);
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 13px;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 680;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.primaryAction {
+  width: 100%;
+  margin-top: 1.25rem;
+  background: var(--foreground);
+  color: var(--surface);
+}
+
+.secondaryAction {
+  margin-top: 0.5rem;
+  background: transparent;
+  color: var(--muted);
+}
+
+.primaryAction:disabled {
+  cursor: not-allowed;
+  opacity: 0.34;
+}
+
+.primaryAction:focus-visible,
+.secondaryAction:focus-visible,
+.consentRow input:focus-visible,
+.issueOption input:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+.successMark {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  margin-bottom: 1.1rem;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--conversation) 16%, var(--line));
+  border-radius: 19px;
+  background: color-mix(in srgb, var(--conversation-soft) 72%, var(--surface));
+  color: var(--conversation);
+  box-shadow: 0 14px 30px
+    color-mix(in srgb, var(--conversation) 10%, transparent);
+}
+
+.handoffNote {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 1.35rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: var(--surface-soft);
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.centerStage .primaryAction {
+  max-width: 28rem;
+}
+
+.probeContent {
+  flex: 1;
+  padding: 1.4rem clamp(1rem, 5.1vw, 1.25rem) 1.5rem;
+}
+
+.itemRecall {
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--line);
+}
+
+.itemRecall p {
+  margin: 0;
+  color: var(--primary);
+  font-size: 0.8125rem;
+  font-weight: 640;
+  line-height: 1.45;
+}
+
+.itemRecall h1 {
+  margin: 0.4rem 0 0;
+  font-size: 1.2rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+  line-height: 1.45;
+}
+
+.itemRecall span {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--primary) 7%, var(--surface));
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 570;
+}
+
+.probeGuide {
+  margin: 1rem 0 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.55;
+}
+
+.probeFields {
+  display: grid;
+  gap: 1.1rem;
+  margin-top: 1.25rem;
+}
+
+.probeLabel {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.probeLabel small {
+  color: var(--muted);
+  font-size: 0.6875rem;
+  font-weight: 520;
+}
+
+.probeQuestion {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 470;
+  line-height: 1.5;
+}
+
+.detailPanel {
+  margin-top: 1rem;
+  border-top: 1px solid var(--line);
+}
+
+.detailPanel summary {
+  padding: 1rem 0;
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 620;
+  cursor: pointer;
+  list-style-position: inside;
+}
+
+.detailBody,
+.issueBody {
+  display: grid;
+  gap: 1.1rem;
+  padding: 0.25rem 0 1rem;
+}
+
+.issueGrid {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.issueOption {
+  display: grid;
+  min-height: 42px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 0.2rem;
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 520;
+  cursor: pointer;
+}
+
+.sessionSummary {
+  display: grid;
+  width: 100%;
+  max-width: 28rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  margin: 1.5rem 0 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 15px;
+  background: var(--line);
+}
+
+.sessionSummary div {
+  min-width: 0;
+  padding: 0.75rem 0.45rem;
+  background: var(--surface);
+}
+
+.sessionSummary dt {
+  color: var(--muted);
+  font-size: 0.6875rem;
+}
+
+.sessionSummary dd {
+  overflow: hidden;
+  margin: 0.25rem 0 0;
+  font-size: 0.75rem;
+  font-weight: 650;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.downloadStatus {
+  min-height: 2.5rem;
+  margin: 0.65rem 0 0;
+  color: var(--conversation);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+@media (min-width: 640px) {
+  .setup,
+  .centerStage {
+    padding-inline: 2.5rem;
+  }
+
+  .probeContent {
+    padding-inline: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .textInput,
+  .selectInput,
+  .textarea {
+    transition: none;
+  }
+}

@@ -139,6 +139,8 @@ generated/
 ├── participant/
 │   ├── SESSION_GUIDE.md
 │   └── FORM_A~FORM_E.csv
+├── runner/
+│   └── gate-c-runner.json
 └── internal/
     ├── item_mapping_and_probes.csv
     ├── issue_codebook.csv
@@ -155,6 +157,8 @@ npm run research:core:gate-c-kit:check
 ```
 
 `--check`는 60문항, facet별 3 HIGH·3 LOW, 5개 폼의 12문항·10 facet·6 HIGH·6 LOW, 세 교체 문항, 참여자 파일의 채점 정보 비노출, 필수 탐침, 생성 파일 해시가 현재 규칙과 같은지 확인한다.
+
+개발 환경의 `/research/gate-c`에서는 배정 폼 선택, 가명 세션 설정, 실제 검사 UI와 같은 첫 응답, 진행자 탐침 기록, 로컬 JSON 내보내기를 실행할 수 있다. 이 경로는 프로덕션에서 404로 닫히며 서버·Supabase·고객 결과 저장소를 호출하지 않는다.
 
 ## 11. 방법론 근거와 한계
 

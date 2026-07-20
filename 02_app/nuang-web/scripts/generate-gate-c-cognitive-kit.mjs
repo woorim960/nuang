@@ -401,6 +401,12 @@ for (const [formId, items] of forms) {
   );
 }
 outputFiles.set(
+  "runner/gate-c-runner.json",
+  await prettier.format(JSON.stringify(createRunnerFixture(forms)), {
+    parser: "json",
+  }),
+);
+outputFiles.set(
   "participant/SESSION_GUIDE.md",
   await prettier.format(createSessionGuide(), { parser: "markdown" }),
 );
@@ -666,6 +672,33 @@ function createParticipantForm(formId, items) {
       "frequency_5_plus_difficult_reason",
     ]),
   ]);
+}
+
+function createRunnerFixture(forms) {
+  return {
+    protocolVersion,
+    candidateSetId,
+    status: "PREPARED_NOT_RUN_NOT_EXTERNAL_VALIDATION",
+    responseFormatId: "frequency_5_plus_difficult_reason",
+    forms: [...forms].map(([formId, items]) => ({
+      formId,
+      items: items.map((item, index) => ({
+        studyItemId: item.studyItemId,
+        orderIndex: index + 1,
+        contextLabel: item.contextLabel,
+        promptText: item.promptText,
+        probes: {
+          comprehension: item.probes.comprehension,
+          recall: item.probes.recall,
+          judgment: item.probes.judgment,
+          responseSelection: item.probes.response,
+          desirability: item.probes.desirability,
+          access: item.probes.access,
+          seam: item.probes.seam,
+        },
+      })),
+    })),
+  };
 }
 
 function createSessionGuide() {
@@ -936,7 +969,12 @@ function validateParticipantFiles(files) {
     /\b(?:SERE|SEAI|OEAE|OECI|OEIE|ROEC|SMEP|SMOS|ERIR|ERWD)-[A-Z0-9-]+\b/u,
   ];
   for (const [relativePath, content] of files) {
-    if (!relativePath.startsWith("participant/FORM_")) continue;
+    if (
+      !relativePath.startsWith("participant/FORM_") &&
+      relativePath !== "runner/gate-c-runner.json"
+    ) {
+      continue;
+    }
     const [header] = content.split("\n");
     for (const token of forbiddenHeaderTokens) {
       invariant(
