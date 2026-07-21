@@ -18,6 +18,7 @@ const profile = {
     source: "user_uploaded" as const,
     src: "https://example.com/avatar.webp",
   },
+  avatarCharacterKey: "purple" as const,
   bio: "카페와 산책을 좋아해요.",
   code: "ENAKQ",
   displayName: "여름",
@@ -79,7 +80,7 @@ describe("ProfileEditForm", () => {
     expect(body.get("removeAvatar")).toBe("false");
   });
 
-  it("uses the Nuang character when the user removes a custom photo", async () => {
+  it("lets the user choose and persist a built-in Nuang character", async () => {
     const fetchMock = vi
       .fn()
       .mockResolvedValueOnce(jsonResponse({ ok: true, profile }))
@@ -89,11 +90,12 @@ describe("ProfileEditForm", () => {
           profile: {
             ...profile,
             avatar: {
-              alt: "뉴앙 기본 프로필 캐릭터",
-              motif: "purple",
+              alt: "아쿠아 뉴앙 캐릭터",
+              motif: "water",
               source: "character",
-              src: "/assets/characters/nuang-character-purple.webp",
+              src: "/assets/characters/nuang-character-water.webp",
             },
+            avatarCharacterKey: "water",
             revision: 5,
           },
         }),
@@ -105,9 +107,10 @@ describe("ProfileEditForm", () => {
     fireEvent.click(
       await screen.findByRole("button", { name: "기본 캐릭터 사용" }),
     );
+    fireEvent.click(screen.getByRole("radio", { name: "아쿠아 캐릭터 선택" }));
     expect(screen.getByAltText("뉴앙 기본 프로필 캐릭터")).toHaveAttribute(
       "src",
-      "/assets/characters/nuang-character-purple.webp",
+      "/assets/characters/nuang-character-water.webp",
     );
 
     fireEvent.click(screen.getByRole("button", { name: "저장" }));
@@ -115,6 +118,7 @@ describe("ProfileEditForm", () => {
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
     const body = fetchMock.mock.calls[1]?.[1]?.body as FormData;
     expect(body.get("removeAvatar")).toBe("true");
+    expect(body.get("avatarCharacterKey")).toBe("water");
   });
 
   it("keeps invalid handles out of the save flow", async () => {

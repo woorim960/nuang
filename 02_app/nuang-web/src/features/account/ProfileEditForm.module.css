@@ -128,6 +128,67 @@
   font-weight: 650;
 }
 
+.characterPicker {
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.35rem;
+  margin-top: 0.65rem;
+  padding: 0.55rem;
+  border: 1px solid #e8e5f6;
+  border-radius: 18px;
+  background: #fbfaff;
+}
+
+.characterChoice {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.25rem 0.1rem;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  color: #737887;
+  font-size: 0.625rem;
+}
+
+.characterChoice[aria-checked="true"] {
+  border-color: #cfc7ff;
+  color: #5f53bd;
+  background: #f0edff;
+}
+
+.characterImage {
+  position: relative;
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff;
+}
+
+.characterImage img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+}
+
+.characterImage i {
+  position: absolute;
+  right: -1px;
+  bottom: -1px;
+  display: grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  color: #fff;
+  background: #6657d9;
+}
+
 .photoHint {
   margin: -0.1rem 0 0;
   color: #858993;

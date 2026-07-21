@@ -4,7 +4,7 @@
   max-width: 32.5rem;
   margin-inline: auto;
   color: var(--foreground);
-  background: var(--background);
+  background: #fcfcfe;
 }
 
 .appBar {
@@ -18,6 +18,7 @@
   padding-inline: clamp(1rem, 5vw, 1.5rem);
   background: color-mix(in srgb, var(--background) 91%, transparent);
   backdrop-filter: blur(18px);
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 72%, transparent);
 }
 
 .appBar p {
@@ -57,7 +58,7 @@
 
 .content {
   display: grid;
-  gap: 1.5rem;
+  gap: 2.15rem;
   padding: 0 clamp(1rem, 5.2vw, 1.5rem)
     calc(1.25rem + env(safe-area-inset-bottom));
 }
@@ -68,11 +69,9 @@
   grid-template-columns: minmax(0, 1fr) clamp(5.25rem, 27vw, 8rem);
   gap: 1rem;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--primary) 10%, var(--line));
-  border-radius: 1.35rem;
-  padding: clamp(1.25rem, 5.2vw, 1.5rem);
-  background: var(--surface);
-  box-shadow: var(--shadow-soft);
+  border-bottom: 1px solid color-mix(in srgb, var(--primary) 14%, var(--line));
+  padding: clamp(1.6rem, 7vw, 2.15rem) 0 1.35rem;
+  background: linear-gradient(135deg, #ffffff 0%, #f7f6ff 100%);
   animation: result-settle 420ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
@@ -227,10 +226,9 @@
 .overviewCard {
   margin-top: 0.9rem;
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--primary) 10%, var(--line));
-  border-radius: 1.2rem;
-  background: var(--surface);
-  background: color-mix(in srgb, var(--surface-soft) 35%, var(--surface));
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
 }
 
 .overviewList {
@@ -273,8 +271,9 @@
   min-height: 3.55rem;
   place-items: center;
   gap: 0.08rem;
-  border: 1px solid var(--line);
-  border-radius: 0.9rem;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
   padding: 0.35rem 0.15rem;
   color: var(--muted);
   background: var(--surface);
@@ -342,17 +341,17 @@
 }
 
 .tabs .activeTab {
-  border-color: color-mix(in srgb, var(--primary) 32%, var(--line));
+  border-color: var(--primary);
   color: var(--primary-strong);
-  background: var(--surface-soft);
+  background: transparent;
 }
 
 .detail {
   margin-top: 0.75rem;
-  border-radius: 1rem;
-  padding: 1rem;
-  background: var(--surface);
-  box-shadow: 0 0.6rem 1.8rem color-mix(in srgb, var(--primary) 8%, transparent);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 1.15rem 0;
+  background: transparent;
   animation: detail-change 220ms ease-out both;
   outline: none;
 }
@@ -409,9 +408,9 @@
 .scoreComparison {
   margin-top: 0.9rem;
   border: 1px solid color-mix(in srgb, var(--primary) 10%, var(--line));
-  border-radius: 0.9rem;
-  padding: 0.85rem;
-  background: color-mix(in srgb, var(--surface-soft) 46%, var(--surface));
+  border-radius: 1.1rem;
+  padding: 1rem;
+  background: #f7f6fc;
 }
 
 .scoreEyebrow {
@@ -696,7 +695,7 @@
   border-top: 1px solid var(--line);
   padding: 1.2rem clamp(1rem, 5.2vw, 1.5rem)
     calc(1.2rem + env(safe-area-inset-bottom));
-  background: color-mix(in srgb, var(--surface-soft) 34%, var(--background));
+  background: linear-gradient(135deg, #f4f2ff, #f2faf8);
 }
 
 .nextStepEyebrow {
@@ -728,13 +727,13 @@
   justify-content: center;
   gap: 0.5rem;
   margin-top: 0.85rem;
-  border-radius: 1rem;
-  color: var(--surface);
+  border-radius: 999px;
+  color: #5147ae;
   font-size: 0.9rem;
   font-weight: 770;
-  background: var(--foreground);
+  background: #e9e6ff;
   box-shadow: 0 0.8rem 1.8rem
-    color-mix(in srgb, var(--foreground) 18%, transparent);
+    color-mix(in srgb, var(--primary) 12%, transparent);
   transition: transform 160ms ease;
 }
 
@@ -765,6 +764,12 @@
     color 160ms ease,
     background 160ms ease,
     transform 160ms ease;
+}
+
+/* Result pages share the soft, editorial rhythm used by Community and Trait Map. */
+.trustSection {
+  border-block: 1px solid var(--line);
+  padding-block: 0.25rem;
 }
 
 .secondaryAction:hover {
@@ -1010,5 +1015,175 @@
   .nextAxisButton,
   .scoreSegment {
     transition: none;
+  }
+}
+
+/* Community-aligned result experience */
+.root,
+.loadingRoot {
+  max-width: 430px;
+  background: #fff;
+  font-family:
+    "Pretendard Variable",
+    Pretendard,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Apple SD Gothic Neo",
+    "Noto Sans KR",
+    sans-serif;
+}
+
+.appBar {
+  min-height: 56px;
+  padding-inline: 0.875rem;
+  border-bottom: 1px solid #ececf1;
+  background: rgb(255 255 255 / 96%);
+}
+
+.shareButton {
+  border-radius: 12px;
+  padding: 0.4rem 0.35rem;
+  color: #585d68;
+  background: transparent;
+}
+
+.content {
+  gap: 0;
+  padding: 0 0 calc(1rem + env(safe-area-inset-bottom));
+}
+
+.hero {
+  grid-template-columns: minmax(0, 1fr) clamp(6rem, 29vw, 7.6rem);
+  border: 0;
+  border-bottom: 8px solid #f6f5f2;
+  border-radius: 0;
+  padding: 1.65rem 1rem 1.3rem;
+  background:
+    radial-gradient(circle at 88% 16%, rgb(232 228 255 / 76%), transparent 31%),
+    linear-gradient(145deg, #fff 12%, #fbfaff 70%, #f6fbfa);
+  box-shadow: none;
+}
+
+.heroGlow {
+  background: rgb(229 224 255 / 46%);
+}
+
+.statusTag {
+  border-radius: 8px;
+  padding: 0.24rem 0.55rem;
+}
+
+.resultNav {
+  position: sticky;
+  z-index: 16;
+  top: 56px;
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-bottom: 1px solid #ececf1;
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: blur(16px);
+}
+
+.resultNav a {
+  display: grid;
+  place-items: center;
+  color: #7a7f8b;
+  font-size: 0.75rem;
+  font-weight: 620;
+}
+
+.resultNav a:hover,
+.resultNav a:focus-visible {
+  color: #5f53bd;
+  background: #faf9ff;
+}
+
+.section {
+  scroll-margin-top: 112px;
+  padding: 1.45rem 1rem 1.5rem;
+  border-bottom: 8px solid #f6f5f2;
+}
+
+.overviewCard {
+  border: 0;
+  border-top: 1px solid #ececf1;
+  border-radius: 0;
+  background: transparent;
+}
+
+.overviewList {
+  padding: 0;
+}
+
+.overviewItem {
+  padding: 1rem 0;
+}
+
+.overviewItem + .overviewItem {
+  border-top: 1px solid #ececf1;
+}
+
+.tabs {
+  gap: 0;
+}
+
+.tabs button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+}
+
+.tabs .activeTab {
+  border-color: #7467dc;
+  background: transparent;
+}
+
+.detail {
+  border: 0;
+  border-top: 1px solid #ececf1;
+  border-radius: 0;
+  padding: 1.15rem 0 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.scoreComparison {
+  border: 0;
+  border-radius: 16px;
+  padding: 1rem;
+  background: linear-gradient(135deg, #f7f5ff, #f6faf9);
+}
+
+.nextAxisButton {
+  border: 0;
+  border-radius: 13px;
+  background: #f7f6fb;
+}
+
+.trustSection {
+  padding: 0 1rem;
+  border-top: 0;
+  border-bottom: 8px solid #f6f5f2;
+}
+
+.nextStepSection {
+  margin: 0;
+  border-top: 0;
+  padding: 1.45rem 1rem calc(1.35rem + env(safe-area-inset-bottom));
+  background: linear-gradient(135deg, #f8f6ff, #f3faf8);
+}
+
+.homeAction {
+  border-radius: 14px;
+  color: #fff;
+  background: #6d61ce;
+  box-shadow: 0 0.65rem 1.4rem rgb(86 72 185 / 14%);
+}
+
+@media (max-width: 26.25rem) {
+  .hero {
+    grid-template-columns: minmax(0, 1fr) 5.5rem;
   }
 }

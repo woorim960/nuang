@@ -4,6 +4,7 @@ import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { ensureAccountForUser } from "@/features/account/server-writes";
 import {
   communityProfileAvatarBucket,
+  type CommunityProfileCharacterKey,
   createDefaultCommunityHandle,
   normalizeCommunityProfileRow,
   type CommunityProfileEditorPayload,
@@ -16,7 +17,7 @@ import {
 import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
 
 const communityProfileSelect =
-  "id,account_id,handle,display_name,bio,avatar_bucket,avatar_object_path,avatar_revision,code_visibility,detail_visibility,comparison_enabled,status,revision";
+  "id,account_id,handle,display_name,bio,avatar_bucket,avatar_object_path,avatar_revision,avatar_character_key,code_visibility,detail_visibility,comparison_enabled,status,revision";
 
 export async function ensureCommunityProfile({
   client,
@@ -119,6 +120,7 @@ export type UpdateCommunityProfileResult =
 
 export async function updateCommunityProfile({
   avatar,
+  avatarCharacterKey,
   bio,
   client,
   displayName,
@@ -130,6 +132,7 @@ export async function updateCommunityProfile({
     bucket: string;
     objectPath: string;
   } | null;
+  avatarCharacterKey?: CommunityProfileCharacterKey;
   bio: string;
   client: SupabaseClient;
   displayName: string;
@@ -151,6 +154,8 @@ export async function updateCommunityProfile({
     updateRow.avatar_object_path = avatar?.objectPath ?? null;
     updateRow.avatar_revision = profile.avatarRevision + 1;
   }
+  if (avatarCharacterKey !== undefined)
+    updateRow.avatar_character_key = avatarCharacterKey;
 
   const response = await client
     .schema("profile")
@@ -193,7 +198,8 @@ export async function createCommunityProfileEditorPayload({
     client,
   });
   const code = snapshot?.profile.code ?? null;
-  const motif = snapshot?.displayProfile.motif ?? "purple";
+  const motif =
+    profile.avatarCharacterKey ?? snapshot?.displayProfile.motif ?? "purple";
   const avatar = await resolveCommunityProfileImage({
     client,
     fallback:
@@ -207,6 +213,7 @@ export async function createCommunityProfileEditorPayload({
 
   return {
     avatar,
+    avatarCharacterKey: profile.avatarCharacterKey,
     bio: profile.bio,
     code,
     displayName: profile.displayName,
@@ -246,7 +253,10 @@ export async function mergeCommunityProfileIntoSnapshot({
       handle: profile.handle,
       profileImage: await resolveCommunityProfileImage({
         client,
-        fallback: snapshot.displayProfile.profileImage,
+        fallback: createCharacterProfileImage({
+          alt: `${profile.displayName} 프로필 이미지`,
+          motif: profile.avatarCharacterKey,
+        }),
         profile,
       }),
       profileMessage: profile.bio,

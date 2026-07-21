@@ -5,6 +5,15 @@ export const communityProfileDisplayNameMaxLength = 20;
 export const communityProfileBioMaxLength = 120;
 export const communityProfileAvatarMaxBytes = 5 * 1024 * 1024;
 export const communityProfileAvatarBucket = "profile-avatars";
+export const communityProfileCharacterKeys = [
+  "purple",
+  "flame",
+  "sun",
+  "water",
+  "forest",
+] as const;
+export type CommunityProfileCharacterKey =
+  (typeof communityProfileCharacterKeys)[number];
 
 export const communityProfileTextSchema = z
   .object({
@@ -36,6 +45,7 @@ export type CommunityProfileRecord = {
   avatarBucket: string | null;
   avatarObjectPath: string | null;
   avatarRevision: number;
+  avatarCharacterKey: CommunityProfileCharacterKey;
   bio: string;
   codeVisibility: "private" | "public";
   comparisonEnabled: boolean;
@@ -49,6 +59,7 @@ export type CommunityProfileRecord = {
 
 export type CommunityProfileEditorPayload = {
   avatar: PublicProfileImage;
+  avatarCharacterKey: CommunityProfileCharacterKey;
   bio: string;
   code: string | null;
   displayName: string;
@@ -81,6 +92,11 @@ export function normalizeCommunityProfileRow(value: unknown) {
         : null,
     avatarRevision:
       typeof row.avatar_revision === "number" ? row.avatar_revision : 0,
+    avatarCharacterKey: communityProfileCharacterKeys.includes(
+      row.avatar_character_key as CommunityProfileCharacterKey,
+    )
+      ? (row.avatar_character_key as CommunityProfileCharacterKey)
+      : "purple",
     bio: typeof row.bio === "string" ? row.bio : "",
     codeVisibility: row.code_visibility === "private" ? "private" : "public",
     comparisonEnabled: row.comparison_enabled !== false,

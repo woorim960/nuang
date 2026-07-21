@@ -186,9 +186,16 @@ export function CandidateCoreResultView({
           </p>
         </section>
 
+        <nav aria-label="결과 리포트 바로가기" className={styles.resultNav}>
+          <a href="#result-overview">한눈에 보기</a>
+          <a href="#result-map">성향지도</a>
+          <a href="#result-code">5글자 분석</a>
+        </nav>
+
         <section
           aria-labelledby="candidate-profile-overview"
           className={`${styles.section} ${styles.overviewSection}`}
+          id="result-overview"
         >
           <div className={styles.sectionHeading}>
             <div>
@@ -215,14 +222,17 @@ export function CandidateCoreResultView({
           </div>
         </section>
 
-        <TraitMapResultBridge
-          code={result.code}
-          profileName={profile.displayName}
-        />
+        <div id="result-map">
+          <TraitMapResultBridge
+            code={result.code}
+            profileName={profile.displayName}
+          />
+        </div>
 
         <section
           aria-labelledby="candidate-code-explorer"
           className={styles.section}
+          id="result-code"
         >
           <div className={styles.sectionHeading}>
             <div>
@@ -522,10 +532,15 @@ export function CandidateCoreResultView({
               </Link>
             </>
           ) : (
-            <Link className={styles.homeAction} href="/home">
-              홈에서 계속 둘러보기
-              <ArrowRight aria-hidden="true" size={18} strokeWidth={1.9} />
-            </Link>
+            <>
+              <Link className={styles.homeAction} href={`/map/${result.code}`}>
+                성향지도에서 자세히 보기
+                <ArrowRight aria-hidden="true" size={18} strokeWidth={1.9} />
+              </Link>
+              <Link className={styles.secondaryAction} href="/feed">
+                커뮤니티 둘러보기
+              </Link>
+            </>
           )}
         </section>
       </div>

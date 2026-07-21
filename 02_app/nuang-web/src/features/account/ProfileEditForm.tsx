@@ -1,6 +1,7 @@
 "use client";
 
-import { ArrowLeft, Camera, ImageOff, RotateCcw } from "lucide-react";
+import { ArrowLeft, Camera, Check, ImageOff, RotateCcw } from "lucide-react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   type ChangeEvent,
@@ -10,7 +11,11 @@ import {
   useRef,
   useState,
 } from "react";
-import { nuangCharacterAssetPaths } from "@/components/character/nuang-character-assets";
+import {
+  nuangCharacterAssetPaths,
+  nuangCharacterMotifs,
+  type NuangCharacterMotif,
+} from "@/components/character/nuang-character-assets";
 import { readJsonResponse } from "@/features/account/response-json";
 import type { PublicProfileImage } from "@/features/public-profile/profile-image";
 import styles from "./ProfileEditForm.module.css";
@@ -25,6 +30,7 @@ const allowedAvatarTypes = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 type EditableProfile = {
   avatar: PublicProfileImage;
+  avatarCharacterKey: NuangCharacterMotif;
   bio: string;
   code: string | null;
   displayName: string;
@@ -59,6 +65,9 @@ export function ProfileEditForm() {
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | null>(null);
   const [removeAvatar, setRemoveAvatar] = useState(false);
+  const [avatarCharacterKey, setAvatarCharacterKey] =
+    useState<NuangCharacterMotif>("purple");
+  const [characterPickerOpen, setCharacterPickerOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [notice, setNotice] = useState<FormNotice>(null);
@@ -94,6 +103,7 @@ export function ProfileEditForm() {
       setDisplayName(payload.profile.displayName);
       setHandle(payload.profile.handle);
       setBio(payload.profile.bio);
+      setAvatarCharacterKey(payload.profile.avatarCharacterKey ?? "purple");
       setAvatarFile(null);
       setAvatarPreviewUrl(null);
       setRemoveAvatar(false);
@@ -130,7 +140,8 @@ export function ProfileEditForm() {
       trimmedHandle !== profile.handle ||
       trimmedBio !== profile.bio ||
       avatarFile ||
-      removeAvatar),
+      removeAvatar ||
+      avatarCharacterKey !== profile.avatarCharacterKey),
   );
   const canSave = Boolean(
     profile && hasChanges && !displayNameError && !handleError && !saving,
@@ -138,8 +149,8 @@ export function ProfileEditForm() {
   const avatarSrc =
     avatarPreviewUrl ??
     (removeAvatar
-      ? nuangCharacterAssetPaths.purple
-      : (profile?.avatar.src ?? nuangCharacterAssetPaths.purple));
+      ? nuangCharacterAssetPaths[avatarCharacterKey]
+      : (profile?.avatar.src ?? nuangCharacterAssetPaths[avatarCharacterKey]));
   const avatarAlt = avatarPreviewUrl
     ? "새 프로필 사진 미리보기"
     : removeAvatar
@@ -199,6 +210,12 @@ export function ProfileEditForm() {
   }
 
   function useDefaultAvatar() {
+    setCharacterPickerOpen(true);
+    setNotice(null);
+  }
+
+  function chooseCharacter(motif: NuangCharacterMotif) {
+    setAvatarCharacterKey(motif);
     if (previewUrlRef.current) {
       URL.revokeObjectURL(previewUrlRef.current);
       previewUrlRef.current = null;
@@ -206,6 +223,7 @@ export function ProfileEditForm() {
     setAvatarFile(null);
     setAvatarPreviewUrl(null);
     setRemoveAvatar(true);
+    setCharacterPickerOpen(false);
     setNotice(null);
   }
 
@@ -222,6 +240,7 @@ export function ProfileEditForm() {
     formData.set("bio", trimmedBio);
     formData.set("expectedRevision", String(profile.revision));
     formData.set("removeAvatar", String(removeAvatar));
+    formData.set("avatarCharacterKey", avatarFile ? "" : avatarCharacterKey);
     if (avatarFile) formData.set("avatar", avatarFile);
 
     try {
@@ -258,6 +277,7 @@ export function ProfileEditForm() {
       setAvatarFile(null);
       setAvatarPreviewUrl(null);
       setRemoveAvatar(false);
+      setAvatarCharacterKey(payload.profile.avatarCharacterKey ?? "purple");
       setNotice({ message: "프로필을 저장했어요.", tone: "success" });
       router.push("/my");
       router.refresh();
@@ -328,8 +348,53 @@ export function ProfileEditForm() {
                 기본 캐릭터 사용
               </button>
             ) : (
-              <p className={styles.photoHint}>얼굴 사진이 아니어도 괜찮아요.</p>
+              <>
+                <button
+                  className={styles.defaultPhotoButton}
+                  onClick={useDefaultAvatar}
+                  type="button"
+                >
+                  기본 캐릭터 바꾸기
+                </button>
+                <p className={styles.photoHint}>
+                  원하는 뉴앙 캐릭터를 프로필로 사용해 보세요.
+                </p>
+              </>
             )}
+            {characterPickerOpen ? (
+              <div
+                aria-label="기본 캐릭터 선택"
+                className={styles.characterPicker}
+                role="radiogroup"
+              >
+                {nuangCharacterMotifs.map((motif) => (
+                  <button
+                    aria-checked={avatarCharacterKey === motif}
+                    aria-label={`${getCharacterLabel(motif)} 캐릭터 선택`}
+                    className={styles.characterChoice}
+                    key={motif}
+                    onClick={() => chooseCharacter(motif)}
+                    role="radio"
+                    type="button"
+                  >
+                    <span className={styles.characterImage}>
+                      <Image
+                        alt={`${getCharacterLabel(motif)} 뉴앙 캐릭터`}
+                        height={42}
+                        src={nuangCharacterAssetPaths[motif]}
+                        width={42}
+                      />
+                      {avatarCharacterKey === motif ? (
+                        <i aria-hidden="true">
+                          <Check size={11} strokeWidth={2.4} />
+                        </i>
+                      ) : null}
+                    </span>
+                    <span>{getCharacterLabel(motif)}</span>
+                  </button>
+                ))}
+              </div>
+            ) : null}
             <input
               accept="image/jpeg,image/png,image/webp"
               aria-label="프로필 사진 파일"
@@ -548,6 +613,18 @@ function getDisplayNameError(value: string) {
     return `이름은 ${MAX_DISPLAY_NAME_LENGTH}자까지 입력할 수 있어요.`;
   }
   return null;
+}
+
+function getCharacterLabel(motif: NuangCharacterMotif) {
+  return motif === "purple"
+    ? "라일락"
+    : motif === "flame"
+      ? "코랄"
+      : motif === "sun"
+        ? "레몬"
+        : motif === "water"
+          ? "아쿠아"
+          : "포레스트";
 }
 
 function getHandleError(value: string) {

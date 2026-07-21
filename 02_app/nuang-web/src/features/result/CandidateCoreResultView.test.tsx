@@ -85,8 +85,11 @@ describe("CandidateCoreResultView", () => {
         .querySelector("strong")?.className,
     ).toContain("clearTabLetter");
     expect(
-      screen.getByRole("link", { name: /홈에서 계속 둘러보기/ }),
-    ).toHaveAttribute("href", "/home");
+      screen.getByRole("link", { name: /성향지도에서 자세히 보기/ }),
+    ).toHaveAttribute("href", "/map/ENAKQ");
+    expect(
+      screen.getByRole("link", { name: /커뮤니티 둘러보기/ }),
+    ).toHaveAttribute("href", "/feed");
 
     fireEvent.click(
       screen.getByRole("tab", { name: /A.*관계에서 관심이 가는 곳/ }),

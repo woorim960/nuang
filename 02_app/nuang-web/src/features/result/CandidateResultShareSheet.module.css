@@ -33,7 +33,7 @@
 
 .sheet {
   position: relative;
-  width: min(100%, 32.5rem);
+  width: min(100%, 430px);
   max-height: min(calc(100dvh - 0.35rem), 52rem);
   overflow: auto;
   border: 1px solid color-mix(in srgb, var(--primary) 10%, var(--line));
@@ -42,7 +42,8 @@
   padding: 0 1.25rem calc(1rem + env(safe-area-inset-bottom));
   color: var(--foreground);
   background: var(--surface);
-  box-shadow: 0 -1.2rem 4rem color-mix(in srgb, var(--foreground) 18%, transparent);
+  box-shadow: 0 -1.2rem 4rem
+    color-mix(in srgb, var(--foreground) 18%, transparent);
   transform: translateY(1.5rem) scale(0.985);
   transform-origin: bottom center;
   transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -209,10 +210,10 @@
   border: 0;
   border-radius: 1rem;
   padding: 0.7rem 0.9rem;
-  color: var(--surface);
+  color: #5147ae;
   text-align: left;
-  background: var(--foreground);
-  box-shadow: 0 0.7rem 1.5rem color-mix(in srgb, var(--foreground) 15%, transparent);
+  background: #eeebff;
+  box-shadow: none;
   transition:
     opacity 160ms ease,
     transform 160ms ease;
@@ -248,7 +249,7 @@
 
 .primaryAction small {
   margin-top: 0.15rem;
-  color: color-mix(in srgb, var(--surface) 70%, transparent);
+  color: #77718f;
   font-size: 0.63rem;
   line-height: 1.4;
 }
@@ -332,11 +333,11 @@
   align-items: center;
   border-radius: 0.75rem;
   padding: 0.45rem 0.7rem;
-  color: var(--surface);
+  color: #fff;
   font-size: 0.69rem;
   font-weight: 760;
   white-space: nowrap;
-  background: var(--foreground);
+  background: #6d61ce;
   transition: transform 160ms ease;
 }
 

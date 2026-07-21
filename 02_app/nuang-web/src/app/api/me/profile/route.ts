@@ -5,6 +5,7 @@ import {
   communityProfileAvatarBucket,
   communityProfileAvatarMaxBytes,
   communityProfileTextSchema,
+  communityProfileCharacterKeys,
   isSupportedCommunityAvatarType,
 } from "@/features/account/community-profile";
 import {
@@ -74,8 +75,17 @@ export async function PATCH(request: Request) {
   const avatarValue = formData.data.get("avatar");
   const avatar = isFileValue(avatarValue) ? avatarValue : null;
   const removeAvatar = booleanFormValue(formData.data, "removeAvatar");
+  const requestedCharacter = stringFormValue(
+    formData.data,
+    "avatarCharacterKey",
+  );
+  const avatarCharacterKey = communityProfileCharacterKeys.includes(
+    requestedCharacter as (typeof communityProfileCharacterKeys)[number],
+  )
+    ? (requestedCharacter as (typeof communityProfileCharacterKeys)[number])
+    : null;
 
-  if (avatar && removeAvatar) {
+  if (avatar && (removeAvatar || avatarCharacterKey)) {
     return profileFailure({
       code: "profile_invalid",
       message: "사진 변경과 삭제는 한 번에 하나만 선택해 주세요.",
@@ -124,6 +134,7 @@ export async function PATCH(request: Request) {
 
   const update = await updateCommunityProfile({
     avatar: avatarUpdate,
+    avatarCharacterKey: avatarCharacterKey ?? undefined,
     bio: parsedText.data.bio,
     client: context.client,
     displayName: parsedText.data.displayName,
