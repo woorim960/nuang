@@ -45,6 +45,7 @@ import {
   CandidateResultShareSheet,
   type CandidateShareAccountController,
 } from "@/features/result/CandidateResultShareSheet";
+import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
 import styles from "@/features/result/CandidateCoreResultView.module.css";
 
 type CandidateCoreResultViewProps = {
@@ -109,8 +110,7 @@ export function CandidateCoreResultView({
   const nextPosition = (selectedPosition + 1) % candidateAxisCopy.length;
   const isQuickResult = isCandidateQuickRelease(attempt);
   const isShareAvailable = Boolean(
-    shareAccount &&
-      (isQuickResult || isCandidateFullRelease(attempt)),
+    shareAccount && (isQuickResult || isCandidateFullRelease(attempt)),
   );
   const resultLabel = isQuickResult ? "첫 성향 결과" : "정밀 성향 결과";
   const precisionHref = isQuickResult
@@ -214,6 +214,11 @@ export function CandidateCoreResultView({
             </div>
           </div>
         </section>
+
+        <TraitMapResultBridge
+          code={result.code}
+          profileName={profile.displayName}
+        />
 
         <section
           aria-labelledby="candidate-code-explorer"
@@ -559,7 +564,7 @@ export function CandidateUndeterminedResultView({
         ? candidateQuickCoreAssessment
         : isCandidateFullRelease(attempt)
           ? candidateFullCoreAssessment
-        : betaCoreAssessment;
+          : betaCoreAssessment;
       const adaptiveDomainIds = attempt.resultSnapshot?.scoreResult
         ? getDisplayedTieDomainIds(attempt.resultSnapshot.scoreResult)
         : prepareAssessmentCompletion(assessment, {
