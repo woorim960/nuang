@@ -51,6 +51,7 @@ import {
   getLowestDomains,
 } from "@/features/result/report-copy";
 import { shareResultImage } from "@/features/result/share-image";
+import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
 import {
   CandidateCoreResultView,
   CandidateResponseReviewResultView,
@@ -175,9 +176,9 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
       ? betaCoreAssessment
       : attempt && isCandidateFullRelease(attempt)
         ? candidateFullCoreAssessment
-      : attempt && isCandidateQuickRelease(attempt)
-        ? candidateQuickCoreAssessment
-        : null;
+        : attempt && isCandidateQuickRelease(attempt)
+          ? candidateQuickCoreAssessment
+          : null;
   const isCandidateResult = Boolean(candidateAssessment);
   const needsResponseReview = Boolean(
     attempt &&
@@ -185,7 +186,8 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
     hasUniformCoreResponses(candidateAssessment, attempt),
   );
   const shouldWithholdCandidateResult = useMemo(() => {
-    if (!attempt || !candidateAssessment || attempt.resultSnapshot) return false;
+    if (!attempt || !candidateAssessment || attempt.resultSnapshot)
+      return false;
 
     try {
       return (
@@ -717,6 +719,8 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
           centerLabel="코드 지도"
         />
       </section>
+
+      <TraitMapResultBridge code={code} profileName={profileName} />
 
       {isFull && (
         <section className="border-b border-line py-6">

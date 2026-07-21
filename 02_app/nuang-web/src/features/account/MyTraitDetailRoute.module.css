@@ -1,0 +1,43 @@
+.page {
+  min-height: 100dvh;
+  background: #fff;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) 40px;
+  align-items: center;
+  height: 3.5rem;
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--line, #ececf0);
+  background: rgb(255 255 255 / 95%);
+  backdrop-filter: blur(18px);
+}
+
+.header a {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  color: var(--ink, #22242a);
+}
+
+.header p {
+  margin: 0;
+  color: var(--ink, #22242a);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.loading {
+  display: grid;
+  min-height: 50dvh;
+  place-items: center;
+  margin: 0;
+  color: var(--muted, #757780);
+  font-size: 0.875rem;
+}

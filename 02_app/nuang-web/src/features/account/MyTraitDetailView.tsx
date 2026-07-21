@@ -1,7 +1,7 @@
 "use client";
 
-import { ChevronRight } from "lucide-react";
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
@@ -22,6 +22,7 @@ import {
 } from "@/features/nuang-code/candidate-profile-names";
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import type { CoreScoreResult, FacetScore } from "@/lib/scoring/types";
+import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
 import styles from "./MyTraitDetailView.module.css";
 
 const domainShortLabel: Record<string, string> = {
@@ -163,6 +164,11 @@ export function MyTraitDetailView() {
           />
         </div>
       </section>
+
+      <TraitMapResultBridge
+        code={detail.code}
+        profileName={detail.profileName}
+      />
 
       <section className={styles.section}>
         <SectionHeading

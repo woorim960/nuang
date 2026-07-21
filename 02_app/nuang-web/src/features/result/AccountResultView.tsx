@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
 
 const domainShortLabel: Record<string, string> = {
   ER: "마음",
@@ -30,7 +31,9 @@ export function AccountResultView({
 }) {
   const router = useRouter();
   const [result, setResult] = useState<AccountResultSummary | null>(null);
-  const [state, setState] = useState<"loading" | "missing" | "ready">("loading");
+  const [state, setState] = useState<"loading" | "missing" | "ready">(
+    "loading",
+  );
   const [deleteState, setDeleteState] = useState<"error" | "idle" | "working">(
     "idle",
   );
@@ -131,14 +134,18 @@ export function AccountResultView({
         >
           <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.9} />
         </Link>
-        <p className="truncate px-2 text-center text-sm font-bold">결과 리포트</p>
+        <p className="truncate px-2 text-center text-sm font-bold">
+          결과 리포트
+        </p>
         <span aria-hidden="true" />
       </header>
 
       <section className="border-b border-line pb-6 pt-7">
         <div className="flex items-center justify-between gap-4">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-muted">{result.resultLabel}</p>
+            <p className="text-sm font-semibold text-muted">
+              {result.resultLabel}
+            </p>
             <p className="mt-2 text-[34px] font-black leading-none tracking-normal text-ink">
               {result.profileCode}
             </p>
@@ -183,6 +190,11 @@ export function AccountResultView({
           </div>
         </section>
       )}
+
+      <TraitMapResultBridge
+        code={result.profileCode}
+        profileName={result.profileName}
+      />
 
       <section className="border-b border-line py-6">
         <h2 className="text-base font-bold">영역별 요약</h2>
@@ -255,10 +267,16 @@ function CenteredFacetBar({
       </div>
       <div className="mt-2 grid grid-cols-2 gap-px bg-line">
         <div className="flex h-2.5 justify-end bg-[#f6f5f9]">
-          <div className="h-full bg-water" style={{ width: `${leftWidth * 2}%` }} />
+          <div
+            className="h-full bg-water"
+            style={{ width: `${leftWidth * 2}%` }}
+          />
         </div>
         <div className="h-2.5 bg-[#f6f5f9]">
-          <div className="h-full bg-primary" style={{ width: `${rightWidth * 2}%` }} />
+          <div
+            className="h-full bg-primary"
+            style={{ width: `${rightWidth * 2}%` }}
+          />
         </div>
       </div>
     </div>
