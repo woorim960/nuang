@@ -120,7 +120,6 @@ export function getApprovedReusableResponses(
         response.itemId !== itemId ||
         !sourceItem ||
         !targetItem ||
-        sourceItem.text !== targetItem.text ||
         sourceItem.domainId !== targetItem.domainId ||
         sourceItem.facetId !== targetItem.facetId ||
         sourceItem.isReverse !== targetItem.isReverse

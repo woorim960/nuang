@@ -10,7 +10,7 @@ export default function MyProfileDetailPage() {
         <Link aria-label="마이로 돌아가기" href="/my">
           <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.7} />
         </Link>
-        <p>내 성향</p>
+        <p>내 성향 상세</p>
         <span aria-hidden="true" />
       </header>
 

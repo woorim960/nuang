@@ -68,7 +68,10 @@ export function CommunitySearchScreen({ posts }: { posts: FeedItem[] }) {
         .join(" ")
         .toLocaleLowerCase("ko-KR");
       if (profileText.includes(normalizedQuery)) {
-        profiles.set(profile.source.publicSnapshotId, profile);
+        profiles.set(
+          profile.source.communityProfileId ?? profile.source.publicSnapshotId,
+          profile,
+        );
       }
     }
 
@@ -106,8 +109,8 @@ export function CommunitySearchScreen({ posts }: { posts: FeedItem[] }) {
         <div className={styles.definitionCard}>
           <strong>검색에서 찾을 수 있는 것</strong>
           <p>
-            공개 게시물의 내용과 주제, #태그, 닉네임, 공개된 뉴앙 코드를
-            찾아요. 태그를 바로 찾으려면 #을 붙여 입력해 보세요.
+            공개 게시물의 내용과 주제, #태그, 닉네임, 공개된 뉴앙 코드를 찾아요.
+            태그를 바로 찾으려면 #을 붙여 입력해 보세요.
           </p>
         </div>
       ) : (
@@ -129,7 +132,9 @@ export function CommunitySearchScreen({ posts }: { posts: FeedItem[] }) {
                         key={tag.label}
                       >
                         <span>#{tag.label}</span>
-                        <small>게시물 {tag.count.toLocaleString("ko-KR")}개</small>
+                        <small>
+                          게시물 {tag.count.toLocaleString("ko-KR")}개
+                        </small>
                       </Link>
                     ))}
                   </div>
@@ -142,8 +147,11 @@ export function CommunitySearchScreen({ posts }: { posts: FeedItem[] }) {
                     {profileResults.map((profile) => (
                       <Link
                         className={styles.resultItem}
-                        href={`/feed/profiles/${profile.source.publicSnapshotId}`}
-                        key={profile.source.publicSnapshotId}
+                        href={`/feed/profiles/${profile.source.communityProfileId ?? profile.source.publicSnapshotId}`}
+                        key={
+                          profile.source.communityProfileId ??
+                          profile.source.publicSnapshotId
+                        }
                       >
                         <span className={styles.resultAvatar}>
                           {profile.display.displayName.slice(0, 1)}

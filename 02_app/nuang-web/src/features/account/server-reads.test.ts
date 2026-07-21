@@ -194,7 +194,9 @@ function createClient(responses: Record<string, QueryResponse>) {
             limit: () => builder,
             maybeSingle: async () => response,
             order: () =>
-              key === "sharing.share_link" ? Promise.resolve(response) : builder,
+              key === "sharing.share_link"
+                ? Promise.resolve(response)
+                : builder,
             select: () => builder,
             then: (
               resolve: (value: QueryResponse) => unknown,

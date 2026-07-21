@@ -32,6 +32,15 @@
   white-space: nowrap;
 }
 
+.handle,
+.privateCode {
+  display: block;
+  margin-top: 0.22rem;
+  color: #737887;
+  font-size: 0.71875rem;
+  font-weight: 650;
+}
+
 .roleRow {
   display: flex;
   flex-wrap: wrap;
@@ -103,13 +112,34 @@
 }
 
 .actions button,
-.ownProfileButton {
+.ownProfileButton,
+.editProfileButton {
   display: flex;
   min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 0.25rem;
   border-radius: 14px;
+  font-size: 0.8125rem;
+  font-weight: 750;
+}
+
+.editProfileButton {
+  border: 1px solid #dedaf8;
+  color: #5144b5;
+  background: #f7f5ff;
+}
+
+.previewCloseButton {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1.1rem;
+  border: 1px solid #dedaf8;
+  border-radius: 14px;
+  color: #5144b5;
+  background: #f7f5ff;
   font-size: 0.8125rem;
   font-weight: 750;
 }
@@ -137,6 +167,37 @@
   border: 1px solid #e6e7eb;
   color: #20232a;
   background: #fff;
+}
+
+.myShortcuts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 1rem;
+  border-top: 1px solid #ececf1;
+  border-bottom: 1px solid #ececf1;
+}
+
+.myShortcuts a {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  color: #525761;
+  font-size: 0.6875rem;
+  font-weight: 720;
+  text-align: center;
+}
+
+.myShortcuts a + a {
+  border-left: 1px solid #ececf1;
+}
+
+.comparisonNotice {
+  margin: 0.8rem 0 0;
+  color: #737887;
+  font-size: 0.6875rem;
+  line-height: 1.5;
+  text-align: center;
 }
 
 .message {

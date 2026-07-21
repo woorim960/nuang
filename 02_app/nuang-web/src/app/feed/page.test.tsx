@@ -25,7 +25,7 @@ describe("FeedPage", () => {
   });
 
   it("renders the approved community navigation without fake posts", async () => {
-    render(await FeedPage());
+    render(await FeedPage({}));
 
     expect(
       screen.getByRole("heading", { name: "커뮤니티" }),
@@ -63,7 +63,7 @@ describe("FeedPage", () => {
   });
 
   it("keeps the bottom navigation as the only way back to main tabs", async () => {
-    render(await FeedPage());
+    render(await FeedPage({}));
 
     expect(screen.getByRole("link", { name: "홈 탭" })).toHaveAttribute(
       "href",
@@ -97,7 +97,7 @@ describe("FeedPage", () => {
       ],
     });
 
-    render(await FeedPage());
+    render(await FeedPage({}));
 
     expect(screen.getByRole("link", { name: "댓글 2개 보기" })).toHaveAttribute(
       "href",

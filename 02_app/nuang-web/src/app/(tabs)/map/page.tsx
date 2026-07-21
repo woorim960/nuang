@@ -7,7 +7,7 @@ type MapPageProps = {
   }>;
 };
 
-export default async function MapPage({ searchParams }: MapPageProps = {}) {
+export default async function MapPage({ searchParams }: MapPageProps) {
   const params: { code?: string | string[] } = searchParams
     ? await searchParams
     : {};

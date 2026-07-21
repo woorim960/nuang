@@ -12,9 +12,17 @@ vi.mock("@/features/account/MyOverview", () => ({
   ),
 }));
 
+vi.mock("@/lib/supabase/server", () => ({
+  createServerSupabaseClient: vi.fn().mockResolvedValue(null),
+}));
+
+vi.mock("@/lib/supabase/service", () => ({
+  createSupabaseServiceClient: vi.fn().mockReturnValue(null),
+}));
+
 describe("MyPage", () => {
-  it("renders the compact my overview instead of stacking every settings section", () => {
-    render(<MyPage />);
+  it("keeps the helpful fallback when a signed-in profile is unavailable", async () => {
+    render(await MyPage());
 
     expect(screen.getByLabelText("my-overview")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "내 리포트" })).toHaveAttribute(

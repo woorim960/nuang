@@ -3,7 +3,7 @@
   max-width: 430px;
   min-height: 100dvh;
   margin: 0 auto;
-  padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
   color: #20232a;
   background: #fff;
 }
@@ -43,14 +43,24 @@
 }
 
 .intro {
-  padding: 1.45rem 1rem 1.2rem;
+  padding: 1.55rem 1.15rem 1.35rem;
   border-bottom: 8px solid #f6f5f2;
+  background:
+    radial-gradient(circle at 94% 5%, rgb(235 232 255 / 55%), transparent 42%),
+    #fff;
+}
+
+.intro > span {
+  color: #766cc8;
+  font-size: 0.6875rem;
+  font-weight: 720;
+  letter-spacing: 0.035em;
 }
 
 .intro h1 {
-  max-width: 18rem;
-  margin: 0;
-  font-size: 1.25rem;
+  max-width: 19rem;
+  margin: 0.42rem 0 0;
+  font-size: 1.28rem;
   font-weight: 720;
   letter-spacing: -0.03em;
   line-height: 1.4;
@@ -58,7 +68,7 @@
 }
 
 .intro p {
-  margin: 0.45rem 0 0;
+  margin: 0.48rem 0 0;
   color: #737887;
   font-size: 0.8125rem;
   line-height: 1.6;
@@ -77,10 +87,6 @@
   letter-spacing: 0.01em;
 }
 
-.accountPanel {
-  padding: 0.65rem 0 1.1rem;
-}
-
 .list {
   display: grid;
 }
@@ -88,9 +94,9 @@
 .list > a {
   display: grid;
   min-height: 64px;
-  grid-template-columns: 24px minmax(0, 1fr) 20px;
+  grid-template-columns: 38px minmax(0, 1fr) 20px;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.8rem;
   border-top: 1px solid #ececf1;
   color: #20232a;
 }
@@ -100,7 +106,11 @@
 }
 
 .list > a > svg:first-child {
-  color: #737887;
+  box-sizing: content-box;
+  padding: 0.6rem;
+  border-radius: 13px;
+  color: #655ab9;
+  background: #f3f1ff;
 }
 
 .list > a > svg:last-child {
@@ -114,14 +124,14 @@
 }
 
 .list strong {
-  font-size: 0.8125rem;
+  font-size: 0.84375rem;
   font-weight: 650;
 }
 
 .list small {
   overflow: hidden;
   color: #858993;
-  font-size: 0.71875rem;
+  font-size: 0.75rem;
   line-height: 1.45;
   text-overflow: ellipsis;
   white-space: nowrap;

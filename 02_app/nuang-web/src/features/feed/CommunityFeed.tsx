@@ -476,7 +476,7 @@ function ProfileIdentity({ post }: { post: FeedItem }) {
     <Link
       aria-label={`${post.authorName} 프로필 보기`}
       className={styles.profileButton}
-      href={`/feed/profiles/${post.authorProfile.source.publicSnapshotId}`}
+      href={`/feed/profiles/${post.authorProfile.source.communityProfileId ?? post.authorProfile.source.publicSnapshotId}`}
     >
       {identity}
     </Link>

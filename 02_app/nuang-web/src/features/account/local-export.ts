@@ -1,5 +1,8 @@
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
-import { getLabExpiresAt, type StoredLabResult } from "@/features/lab/lab-storage";
+import {
+  getLabExpiresAt,
+  type StoredLabResult,
+} from "@/features/lab/lab-storage";
 
 export const localExportSchemaVersion = "nuang.local-export.v0.1";
 

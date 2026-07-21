@@ -1,4 +1,9 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import {
+  mergeCommunityProfileIntoSnapshot,
+  readCommunityProfileForAccount,
+  readCommunityProfilesForAccounts,
+} from "@/features/account/server-community-profile";
 import { createPublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
@@ -321,53 +326,58 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     items: dbItems,
     stories: [],
     viewerCode: accountId
-      ? (authorProfilesByAccountId.get(accountId)?.display.code ?? null)
+      ? normalizeVisibleCode(
+          authorProfilesByAccountId.get(accountId)?.display.code ?? null,
+        )
       : null,
   };
 }
 
 export async function createServerCommunityProfilePayload(
-  publicSnapshotId: string,
+  profileId: string,
 ): Promise<CommunityProfileReadPayload | null> {
   const serviceClient = createSupabaseServiceClient();
 
-  if (!serviceClient || !uuidPattern.test(publicSnapshotId)) return null;
+  if (!serviceClient || !uuidPattern.test(profileId)) return null;
 
-  const response = await serviceClient
-    .schema("profile")
-    .from("profile_public_snapshot")
-    .select("id, account_id, snapshot_payload")
-    .eq("id", publicSnapshotId)
-    .eq("status", "active")
-    .is("deleted_at", null)
-    .maybeSingle();
+  const source = await readCommunityProfileSource({
+    client: serviceClient,
+    profileId,
+  });
+  if (!source) return null;
 
-  if (response.error || !response.data) return null;
-
-  const row = response.data as PublicProfileSnapshotRow;
-  const snapshot = coercePublicProfileSnapshotPayload(
-    row.snapshot_payload,
-    row.id,
+  const baseSnapshot = coercePublicProfileSnapshotPayload(
+    source.snapshot.snapshot_payload,
+    source.snapshot.id,
   );
 
-  if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) return null;
+  if (!baseSnapshot || !isCurrentNuangCode(baseSnapshot.profile.code)) {
+    return null;
+  }
+
+  const snapshot = await mergeCommunityProfileIntoSnapshot({
+    client: serviceClient,
+    profile: source.communityProfile,
+    snapshot: baseSnapshot,
+  });
 
   const accountId = await getCurrentAccountId(serviceClient);
   const blockedAccountIds = await readBlockedCommunityAccountIds({
     accountId,
     client: serviceClient,
   });
-  if (blockedAccountIds.has(row.account_id)) return null;
+  if (blockedAccountIds.has(source.snapshot.account_id)) return null;
 
   const profile = createPublicProfileCardPayload({
-    cardId: `profile_${row.id}`,
+    cardId: `profile_${source.snapshot.id}`,
+    communityProfileId: source.communityProfile?.id ?? source.snapshot.id,
     snapshot,
     status: "published",
   });
   const postRows = await readProfilePosts({
-    accountId: row.account_id,
+    accountId: source.snapshot.account_id,
     client: serviceClient,
-    includeNonPublished: accountId === row.account_id,
+    includeNonPublished: accountId === source.snapshot.account_id,
   });
   const [engagementByPostId, pollByPostId, mediaByPostId] = await Promise.all([
     readPostEngagements({ accountId, client: serviceClient, rows: postRows }),
@@ -394,6 +404,88 @@ export async function createServerCommunityProfilePayload(
   };
 }
 
+async function readCommunityProfileSource({
+  client,
+  profileId,
+}: {
+  client: SupabaseClient;
+  profileId: string;
+}) {
+  const communityResponse = await client
+    .schema("profile")
+    .from("community_profile")
+    .select("account_id")
+    .eq("id", profileId)
+    .eq("status", "active")
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (!communityResponse.error && communityResponse.data?.account_id) {
+    const accountId = String(communityResponse.data.account_id);
+    const snapshotResponse = await client
+      .schema("profile")
+      .from("profile_public_snapshot")
+      .select("id, account_id, snapshot_payload")
+      .eq("account_id", accountId)
+      .eq("status", "active")
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (!snapshotResponse.error && snapshotResponse.data) {
+      return {
+        communityProfile: await readCommunityProfileForAccount({
+          accountId,
+          client,
+        }),
+        snapshot: snapshotResponse.data as PublicProfileSnapshotRow,
+      };
+    }
+  }
+
+  const snapshotResponse = await client
+    .schema("profile")
+    .from("profile_public_snapshot")
+    .select("id, account_id, snapshot_payload")
+    .eq("id", profileId)
+    .eq("status", "active")
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (snapshotResponse.error || !snapshotResponse.data) return null;
+  const snapshot = snapshotResponse.data as PublicProfileSnapshotRow;
+
+  return {
+    communityProfile: await readCommunityProfileForAccount({
+      accountId: snapshot.account_id,
+      client,
+    }),
+    snapshot,
+  };
+}
+
+/*
+ * `profileId` accepts both the new stable community profile id and the old
+ * public snapshot id so existing shared links keep working.
+ */
+export async function resolveCurrentCommunityProfileId() {
+  const serviceClient = createSupabaseServiceClient();
+  if (!serviceClient) return null;
+
+  const accountId = await getCurrentAccountId(serviceClient);
+  if (!accountId) return null;
+
+  const profile = await readCommunityProfileForAccount({
+    accountId,
+    client: serviceClient,
+  });
+  if (profile) return profile.id;
+
+  return resolveCurrentCommunityProfileSnapshotId();
+}
+
+/* Legacy snapshot lookup remains available for comparison and old links. */
 export async function resolveCurrentCommunityProfileSnapshotId() {
   const serviceClient = createSupabaseServiceClient();
   if (!serviceClient) return null;
@@ -1080,7 +1172,7 @@ async function readPublishedPosts(client: SupabaseClient) {
     .from("feed_post")
     .select(feedPostSelectWithTopics)
     .eq("moderation_status", "published")
-    .in("visibility", ["public", "profile_public"])
+    .eq("visibility", "public")
     .is("deleted_at", null)
     .order("published_at", { ascending: false })
     .limit(20);
@@ -1091,7 +1183,7 @@ async function readPublishedPosts(client: SupabaseClient) {
       .from("feed_post")
       .select(feedPostSelectLegacy)
       .eq("moderation_status", "published")
-      .in("visibility", ["public", "profile_public"])
+      .eq("visibility", "public")
       .is("deleted_at", null)
       .order("published_at", { ascending: false })
       .limit(20);
@@ -1721,24 +1813,37 @@ async function readPublicProfileCardsForAccounts({
     return profilesByAccountId;
   }
 
+  const communityProfiles = await readCommunityProfilesForAccounts({
+    accountIds: uniqueAccountIds,
+    client,
+  });
+
   for (const row of response.data as PublicProfileSnapshotRow[]) {
     if (profilesByAccountId.has(row.account_id)) {
       continue;
     }
 
-    const snapshot = coercePublicProfileSnapshotPayload(
+    const baseSnapshot = coercePublicProfileSnapshotPayload(
       row.snapshot_payload,
       row.id,
     );
 
-    if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) {
+    if (!baseSnapshot || !isCurrentNuangCode(baseSnapshot.profile.code)) {
       continue;
     }
+
+    const communityProfile = communityProfiles.get(row.account_id) ?? null;
+    const snapshot = await mergeCommunityProfileIntoSnapshot({
+      client,
+      profile: communityProfile,
+      snapshot: baseSnapshot,
+    });
 
     profilesByAccountId.set(
       row.account_id,
       createPublicProfileCardPayload({
         cardId: `profile_${row.id}`,
+        communityProfileId: communityProfile?.id ?? row.id,
         snapshot,
         status: "published",
       }),
@@ -1813,7 +1918,8 @@ function mapPostRowToFeedItem(
       publicProjection.authorHandle ??
       (isOwnPost
         ? "me"
-        : createFallbackHandle(authorProfile?.display.displayName)),
+        : (authorProfile?.display.handle ??
+          createFallbackHandle(authorProfile?.display.displayName))),
     authorName:
       publicProjection.authorName ??
       authorProfile?.display.displayName ??
@@ -2044,6 +2150,10 @@ function createFallbackHandle(displayName?: string) {
       .replace(/^\.+|\.+$/g, "")
       .slice(0, 24) || "nuang.user"
   );
+}
+
+function normalizeVisibleCode(value: string | null) {
+  return value && isCurrentNuangCode(value) ? value : null;
 }
 
 function coercePublicProfileSnapshotPayload(

@@ -40,9 +40,9 @@ export function PublicProfileImageView({
         height={imageSize[size]}
         priority={priority}
         src={image.src}
+        unoptimized={image.source === "user_uploaded"}
         width={imageSize[size]}
       />
     </span>
   );
 }
-

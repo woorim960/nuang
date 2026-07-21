@@ -12,7 +12,7 @@ export default async function FeedPage({
   searchParams,
 }: {
   searchParams?: Promise<{ posted?: string }>;
-} = {}) {
+}) {
   const feedPayload = await createServerFeedReadPayload();
   const query = searchParams ? await searchParams : {};
 

@@ -54,7 +54,9 @@ describe("share link contract", () => {
       revokedAt: "2026-07-04T00:00:00.000Z",
       shareLinkId: "11111111-1111-4111-8111-111111111111",
     });
-    const failurePayload = createShareLinkFailurePayload("share_token_hash_failed");
+    const failurePayload = createShareLinkFailurePayload(
+      "share_token_hash_failed",
+    );
     const publicJson = JSON.stringify([
       createPayload,
       revokePayload,

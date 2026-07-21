@@ -62,8 +62,7 @@ export type AccountComparisonReportSummary = {
 };
 
 export type AccountResultReadFailureCode =
-  | "account_results_read_failed"
-  | "account_result_attempts_read_failed";
+  "account_results_read_failed" | "account_result_attempts_read_failed";
 
 export type DeleteAccountResultResult = {
   deleted: boolean;

@@ -39,7 +39,7 @@ export function CommunityTagScreen({
                   <Link
                     aria-label={`${post.authorName} 프로필 보기`}
                     className={styles.profileLink}
-                    href={`/feed/profiles/${post.authorProfile.source.publicSnapshotId}`}
+                    href={`/feed/profiles/${post.authorProfile.source.communityProfileId ?? post.authorProfile.source.publicSnapshotId}`}
                   >
                     <PublicProfileImageView
                       className={styles.profileImage}
@@ -69,7 +69,10 @@ export function CommunityTagScreen({
                 ) : null}
               </header>
 
-              <Link className={styles.postContent} href={`/feed/posts/${post.id}`}>
+              <Link
+                className={styles.postContent}
+                href={`/feed/posts/${post.id}`}
+              >
                 <p>{post.body || post.title}</p>
                 {post.media?.[0] ? (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -92,7 +95,9 @@ export function CommunityTagScreen({
               ) : null}
 
               <footer>
-                <span>좋아요 {(post.likeCount ?? 0).toLocaleString("ko-KR")}</span>
+                <span>
+                  좋아요 {(post.likeCount ?? 0).toLocaleString("ko-KR")}
+                </span>
                 <Link href={`/feed/posts/${post.id}`}>
                   <MessageCircle aria-hidden="true" size={15} />
                   댓글 {(post.replyCount ?? 0).toLocaleString("ko-KR")}

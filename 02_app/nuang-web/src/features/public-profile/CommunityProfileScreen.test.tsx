@@ -214,11 +214,17 @@ describe("CommunityProfileScreen", () => {
     );
 
     expect(
-      screen.getByRole("button", { name: "내 프로필 공유" }),
+      screen.getByRole("button", { name: "프로필 공유" }),
     ).toBeInTheDocument();
     expect(screen.queryByText("내 프로필 관리")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "내 프로필 공유" }));
+    fireEvent.click(screen.getByRole("button", { name: "프로필 공유" }));
 
-    await waitFor(() => expect(writeText).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(writeText).toHaveBeenCalledWith(
+        expect.stringContaining(
+          `/feed/profiles/${profile.source.communityProfileId ?? profile.source.publicSnapshotId}`,
+        ),
+      ),
+    );
   });
 });

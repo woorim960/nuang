@@ -1,21 +1,44 @@
 import {
   ArrowLeft,
+  Ban,
   ChevronRight,
   FileCheck2,
+  KeyRound,
   LockKeyhole,
   ShieldCheck,
+  UserRoundPen,
 } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { AccountConnectPanel } from "@/features/consent/AccountConnectPanel";
 import styles from "./page.module.css";
 
-const privacyItems = [
+const profileItems = [
   {
-    description: "다른 사람에게 보이는 프로필과 비교 정보",
+    description: "사진, 닉네임과 프로필 메시지를 바꿔요",
+    href: "/my/profile/edit",
+    icon: UserRoundPen,
+    title: "프로필 편집",
+  },
+  {
+    description: "프로필에 보이는 성향과 비교 허용 범위를 정해요",
     href: "/my/settings/visibility",
     icon: LockKeyhole,
-    title: "공개 정보 안내",
+    title: "공개 정보",
+  },
+] as const;
+
+const accountItems = [
+  {
+    description: "로그인한 계정과 로그아웃을 관리해요",
+    href: "/my/settings/account",
+    icon: KeyRound,
+    title: "로그인 계정",
+  },
+  {
+    description: "내 커뮤니티에서 보이지 않게 한 프로필을 확인해요",
+    href: "/my/settings/blocked",
+    icon: Ban,
+    title: "차단한 프로필",
   },
 ] as const;
 
@@ -46,18 +69,17 @@ export default function MySettingsPage() {
       </header>
 
       <section className={styles.intro}>
-        <h1>내 계정과 공개 정보를 관리해요</h1>
-        <p>현재 사용할 수 있는 설정만 모아 한눈에 확인할 수 있어요.</p>
+        <span>내가 정하는 뉴앙</span>
+        <h1>프로필과 계정을 편하게 관리해요</h1>
+        <p>지금 바로 바꿀 수 있는 설정만 모았어요.</p>
       </section>
 
-      <SettingsSection title="계정">
-        <div className={styles.accountPanel}>
-          <AccountConnectPanel />
-        </div>
+      <SettingsSection title="프로필">
+        <SettingsList items={profileItems} />
       </SettingsSection>
 
-      <SettingsSection title="개인정보와 커뮤니티">
-        <SettingsList items={privacyItems} />
+      <SettingsSection title="계정과 안전">
+        <SettingsList items={accountItems} />
       </SettingsSection>
 
       <SettingsSection title="서비스 정보">
@@ -65,7 +87,7 @@ export default function MySettingsPage() {
       </SettingsSection>
 
       <p className={styles.safetyNote}>
-        검사 답변과 원점수, 계정 정보는 다른 사람에게 공개되지 않아요.
+        문항별 답변과 원점수, 로그인 정보는 항상 나만 볼 수 있어요.
       </p>
     </main>
   );

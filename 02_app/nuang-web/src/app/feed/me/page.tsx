@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { resolveCurrentCommunityProfileSnapshotId } from "@/features/feed/server-read";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
@@ -17,11 +16,5 @@ export default async function MyCommunityProfilePage() {
     redirect("/login?next=%2Ffeed%2Fme&reason=community");
   }
 
-  const publicSnapshotId = await resolveCurrentCommunityProfileSnapshotId();
-
-  if (!publicSnapshotId) {
-    redirect("/my");
-  }
-
-  redirect(`/feed/profiles/${publicSnapshotId}`);
+  redirect("/my");
 }

@@ -120,7 +120,8 @@ export const shareLinkFailures: Record<
   },
   share_token_hash_failed: {
     httpStatus: 500,
-    message: "공유 링크를 안전하게 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    message:
+      "공유 링크를 안전하게 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "hash_share_token",
   },

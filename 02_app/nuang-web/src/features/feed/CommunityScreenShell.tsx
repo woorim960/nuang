@@ -11,7 +11,7 @@ export function CommunityScreenShell({
   trailing,
 }: {
   backLabel?: string;
-  backHref?: string;
+  backHref?: string | null;
   children: ReactNode;
   title: string;
   trailing?: ReactNode;
@@ -19,9 +19,13 @@ export function CommunityScreenShell({
   return (
     <main className={styles.screen}>
       <header className={styles.screenHeader}>
-        <Link aria-label={backLabel} href={backHref}>
-          <ArrowLeft aria-hidden="true" size={24} strokeWidth={2} />
-        </Link>
+        {backHref ? (
+          <Link aria-label={backLabel} href={backHref}>
+            <ArrowLeft aria-hidden="true" size={24} strokeWidth={2} />
+          </Link>
+        ) : (
+          <span aria-hidden="true" />
+        )}
         <h1>{title}</h1>
         <span className={styles.trailing}>{trailing}</span>
       </header>

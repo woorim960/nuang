@@ -52,6 +52,7 @@ export type CommunityProfileSocialState = {
 
 export type CommunityProfileConnection = {
   code: string;
+  communityProfileId?: string;
   connectedAt: string;
   displayName: string;
   profileImage: PublicProfileImage;

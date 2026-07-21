@@ -49,9 +49,9 @@ describe("profile visibility contract", () => {
     expect(payload.profileVisibility.policyVersion).toBe(
       profileVisibilityPolicyVersion,
     );
-    expect(payload.profileVisibility.settings.map((setting) => setting.fieldId)).toEqual(
-      profileVisibilityFieldIds,
-    );
+    expect(
+      payload.profileVisibility.settings.map((setting) => setting.fieldId),
+    ).toEqual(profileVisibilityFieldIds);
   });
 
   it("keeps public visibility payloads free of private data surfaces", () => {

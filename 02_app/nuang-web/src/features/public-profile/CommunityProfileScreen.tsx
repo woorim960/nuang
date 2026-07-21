@@ -6,6 +6,8 @@ import {
   Flag,
   Heart,
   MessageCircle,
+  Pencil,
+  Settings,
   Share2,
   X,
 } from "lucide-react";
@@ -26,10 +28,12 @@ import styles from "./CommunityProfileScreen.module.css";
 
 export function CommunityProfileScreen({
   initialSocialState,
+  mode = "other",
   posts,
   profile,
 }: {
   initialSocialState: CommunityProfileSocialState;
+  mode?: "other" | "preview" | "self";
   posts: FeedItem[];
   profile: PublicProfileCardPayload;
 }) {
@@ -59,7 +63,14 @@ export function CommunityProfileScreen({
     activeTopic === "전체"
       ? posts
       : posts.filter((post) => post.topic?.label === activeTopic);
-  const interestCopy = topics.slice(1, 3).join("과 ") || "일상의 여러 장면";
+  const isPreview = mode === "preview";
+  const isSelf =
+    mode === "self" || (mode === "other" && initialSocialState.isOwnProfile);
+  const codeIsVisible = profile.display.code !== "-----";
+  const comparisonAvailable =
+    profile.visibility.includedFields.includes("representative_profile") &&
+    profile.visibility.includedFields.includes("core_domain_map") &&
+    profile.visibility.includedFields.includes("core_facet_summary");
 
   async function toggleFollow() {
     if (followPending) return;
@@ -154,9 +165,16 @@ export function CommunityProfileScreen({
   }
 
   async function shareProfile() {
-    const url = window.location.href;
+    const publicProfileId =
+      profile.source.communityProfileId ?? profile.source.publicSnapshotId;
+    const url = new URL(
+      `/feed/profiles/${publicProfileId}`,
+      window.location.origin,
+    ).toString();
     const shareData = {
-      text: `${profile.display.displayName}님의 뉴앙 코드 ${profile.display.code}`,
+      text: codeIsVisible
+        ? `${profile.display.displayName}님의 뉴앙 코드 ${profile.display.code}`
+        : `${profile.display.displayName}님의 뉴앙 프로필`,
       title: `${profile.display.displayName}님의 뉴앙 프로필`,
       url,
     };
@@ -220,15 +238,29 @@ export function CommunityProfileScreen({
 
   return (
     <CommunityScreenShell
-      title={profile.display.displayName}
+      backHref={isSelf ? null : isPreview ? "/my/settings/visibility" : "/feed"}
+      backLabel={isPreview ? "공개 정보 설정으로 돌아가기" : undefined}
+      title={
+        isSelf
+          ? "마이"
+          : isPreview
+            ? "프로필 미리보기"
+            : profile.display.displayName
+      }
       trailing={
-        <button
-          aria-label="프로필 더보기"
-          onClick={() => setMoreOpen(true)}
-          type="button"
-        >
-          <Ellipsis aria-hidden="true" size={22} />
-        </button>
+        isSelf ? (
+          <Link aria-label="설정 열기" href="/my/settings">
+            <Settings aria-hidden="true" size={20} strokeWidth={1.7} />
+          </Link>
+        ) : isPreview ? null : (
+          <button
+            aria-label="프로필 더보기"
+            onClick={() => setMoreOpen(true)}
+            type="button"
+          >
+            <Ellipsis aria-hidden="true" size={21} strokeWidth={1.7} />
+          </button>
+        )
       }
     >
       <section className={styles.hero}>
@@ -241,21 +273,30 @@ export function CommunityProfileScreen({
           />
           <div className={styles.profileIdentity}>
             <h2>{profile.display.displayName}</h2>
-            <div className={styles.roleRow}>
-              <span>{profile.display.code}</span>
-              <strong>{profile.display.profileName}</strong>
-            </div>
+            {profile.display.handle ? (
+              <span className={styles.handle}>@{profile.display.handle}</span>
+            ) : null}
+            {codeIsVisible ? (
+              <div className={styles.roleRow}>
+                <span>{profile.display.code}</span>
+                <strong>{profile.display.profileName}</strong>
+              </div>
+            ) : (
+              <span className={styles.privateCode}>성향 정보 비공개</span>
+            )}
           </div>
         </div>
 
         <p className={styles.bio}>
-          {profile.display.profileName} 성향으로, {interestCopy}에 관한 이야기를
-          나누고 있어요.
+          {profile.display.profileMessage ||
+            (isSelf
+              ? "나를 소개하는 한마디를 프로필에 남겨보세요."
+              : "아직 프로필 메시지를 작성하지 않았어요.")}
         </p>
 
         <div className={styles.stats}>
           <span>
-            <strong>{posts.length.toLocaleString("ko-KR")}</strong>공개 게시물
+            <strong>{posts.length.toLocaleString("ko-KR")}</strong>게시물
           </span>
           <Link
             href={`/feed/profiles/${profile.source.publicSnapshotId}/connections?tab=followers`}
@@ -272,14 +313,28 @@ export function CommunityProfileScreen({
           </Link>
         </div>
 
-        {initialSocialState.isOwnProfile ? (
-          <button
-            className={styles.ownProfileButton}
-            onClick={shareProfile}
-            type="button"
+        {isSelf ? (
+          <div className={styles.actions}>
+            <Link className={styles.editProfileButton} href="/my/profile/edit">
+              <Pencil aria-hidden="true" size={16} strokeWidth={1.7} />
+              프로필 편집
+            </Link>
+            <button
+              className={styles.ownProfileButton}
+              onClick={shareProfile}
+              type="button"
+            >
+              <Share2 aria-hidden="true" size={16} strokeWidth={1.7} />
+              프로필 공유
+            </button>
+          </div>
+        ) : isPreview ? (
+          <Link
+            className={styles.previewCloseButton}
+            href="/my/settings/visibility"
           >
-            <Share2 aria-hidden="true" size={17} />내 프로필 공유
-          </button>
+            미리보기 닫기
+          </Link>
         ) : (
           <div className={styles.actions}>
             <button
@@ -294,14 +349,30 @@ export function CommunityProfileScreen({
             </button>
             <button
               className={styles.compareButton}
-              disabled={comparePending}
+              disabled={comparePending || !comparisonAvailable}
               onClick={compareWithMe}
               type="button"
             >
-              {comparePending ? "비교 중" : "나와 비교"}
+              {comparePending
+                ? "비교 중"
+                : comparisonAvailable
+                  ? "나와 비교"
+                  : "비교 비공개"}
             </button>
           </div>
         )}
+
+        {isSelf ? (
+          <nav aria-label="내 프로필 바로가기" className={styles.myShortcuts}>
+            <Link href="/my/profile">내 성향 상세</Link>
+            <Link href="/my/reports">내 리포트</Link>
+            <Link href="/feed/perspectives?from=my">놀이터 기록</Link>
+          </nav>
+        ) : !isPreview && !comparisonAvailable ? (
+          <p className={styles.comparisonNotice}>
+            이 사용자는 상세 성향 비교를 공개하지 않았어요.
+          </p>
+        ) : null}
 
         {message ? (
           <p aria-live="polite" className={styles.message} role="status">
@@ -312,7 +383,9 @@ export function CommunityProfileScreen({
 
       <section className={styles.feedToolbar}>
         <div className={styles.feedTitle}>
-          <strong>{profile.display.displayName}님의 게시물</strong>
+          <strong>
+            {isSelf ? "내 게시물" : `${profile.display.displayName}님의 게시물`}
+          </strong>
           <span>{posts.length}개</span>
         </div>
         <span className={styles.filterLabel}>주제별 보기</span>

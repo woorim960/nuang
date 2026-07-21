@@ -6,6 +6,11 @@ import type {
   CommunityProfileConnectionsResult,
   CommunityProfileSocialState,
 } from "@/features/feed/community-social-contract";
+import { ensureAccountForUser } from "@/features/account/server-writes";
+import {
+  mergeCommunityProfileIntoSnapshot,
+  readCommunityProfilesForAccounts,
+} from "@/features/account/server-community-profile";
 import { getModerationSeverity } from "@/features/moderation/moderation-queue-contract";
 import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
@@ -219,7 +224,9 @@ export async function writeProfileFollow({
 }) {
   const [snapshot, followerAccountId] = await Promise.all([
     readSnapshotOwner(client, publicSnapshotId),
-    readAccountId(client, user.id),
+    ensureAccountForUser(client, user).then((result) =>
+      result.ok ? result.accountId : null,
+    ),
   ]);
 
   if (!snapshot || !followerAccountId) {
@@ -228,6 +235,16 @@ export async function writeProfileFollow({
 
   if (snapshot.accountId === followerAccountId) {
     return { code: "cannot_follow_self" as const, ok: false as const };
+  }
+
+  if (
+    await hasBlockRelationship({
+      accountId: followerAccountId,
+      client,
+      targetAccountId: snapshot.accountId,
+    })
+  ) {
+    return { code: "profile_not_found" as const, ok: false as const };
   }
 
   const now = new Date().toISOString();
@@ -337,16 +354,58 @@ export async function readBlockedCommunityAccountIds({
 }) {
   if (!accountId) return new Set<string>();
 
-  const response = await client
-    .schema("feed")
-    .from("profile_block")
-    .select("blocked_account_id")
-    .eq("blocker_account_id", accountId)
-    .is("deleted_at", null);
+  const [blockedByMe, blockedMe] = await Promise.all([
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("blocked_account_id")
+      .eq("blocker_account_id", accountId)
+      .is("deleted_at", null),
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("blocker_account_id")
+      .eq("blocked_account_id", accountId)
+      .is("deleted_at", null),
+  ]);
 
-  if (response.error) return new Set<string>();
-  return new Set(
-    (response.data ?? []).map((row) => String(row.blocked_account_id)),
+  if (blockedByMe.error || blockedMe.error) return new Set<string>();
+
+  return new Set([
+    ...(blockedByMe.data ?? []).map((row) => String(row.blocked_account_id)),
+    ...(blockedMe.data ?? []).map((row) => String(row.blocker_account_id)),
+  ]);
+}
+
+async function hasBlockRelationship({
+  accountId,
+  client,
+  targetAccountId,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  targetAccountId: string;
+}) {
+  const [outgoing, incoming] = await Promise.all([
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("id", { count: "exact", head: true })
+      .eq("blocker_account_id", accountId)
+      .eq("blocked_account_id", targetAccountId)
+      .is("deleted_at", null),
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("id", { count: "exact", head: true })
+      .eq("blocker_account_id", targetAccountId)
+      .eq("blocked_account_id", accountId)
+      .is("deleted_at", null),
+  ]);
+
+  return (
+    (!outgoing.error && (outgoing.count ?? 0) > 0) ||
+    (!incoming.error && (incoming.count ?? 0) > 0)
   );
 }
 
@@ -491,19 +550,35 @@ async function readConnectionProfiles({
 
   if (response.error) return null;
 
+  const communityProfiles = await readCommunityProfilesForAccounts({
+    accountIds: uniqueAccountIds,
+    client,
+  });
+
   for (const row of response.data ?? []) {
     const accountId = String(row.account_id);
     if (profilesByAccountId.has(accountId)) continue;
 
     const publicSnapshotId = String(row.id);
-    const snapshot = coerceSnapshotPayload(
+    const baseSnapshot = coerceSnapshotPayload(
       row.snapshot_payload,
       publicSnapshotId,
     );
-    if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) continue;
+    if (!baseSnapshot || !isCurrentNuangCode(baseSnapshot.profile.code)) {
+      continue;
+    }
+
+    const communityProfile = communityProfiles.get(accountId) ?? null;
+    const snapshot = await mergeCommunityProfileIntoSnapshot({
+      client,
+      profile: communityProfile,
+      snapshot: baseSnapshot,
+    });
+    if (!isCurrentNuangCode(snapshot.profile.code)) continue;
 
     profilesByAccountId.set(accountId, {
       code: snapshot.profile.code,
+      communityProfileId: communityProfile?.id,
       connectedAt: "",
       displayName: snapshot.displayProfile.displayName,
       profileImage: snapshot.displayProfile.profileImage,

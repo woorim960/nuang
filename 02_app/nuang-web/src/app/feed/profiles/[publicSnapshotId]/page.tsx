@@ -8,6 +8,7 @@ import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
 type CommunityProfilePageProps = {
   params: Promise<{ publicSnapshotId: string }>;
+  searchParams: Promise<{ view?: string }>;
 };
 
 export const metadata: Metadata = {
@@ -16,17 +17,28 @@ export const metadata: Metadata = {
 
 export default async function CommunityProfilePage({
   params,
+  searchParams,
 }: CommunityProfilePageProps) {
-  const { publicSnapshotId } = await params;
+  const [{ publicSnapshotId }, query] = await Promise.all([
+    params,
+    searchParams,
+  ]);
   const payload = await createServerCommunityProfilePayload(publicSnapshotId);
 
   if (!payload) notFound();
 
-  const socialState = await resolveSocialState(publicSnapshotId);
+  const socialState = await resolveSocialState(
+    payload.profile.source.publicSnapshotId,
+  );
 
   return (
     <CommunityProfileScreen
       initialSocialState={socialState}
+      mode={
+        query.view === "public" && socialState.isOwnProfile
+          ? "preview"
+          : "other"
+      }
       posts={payload.posts}
       profile={payload.profile}
     />

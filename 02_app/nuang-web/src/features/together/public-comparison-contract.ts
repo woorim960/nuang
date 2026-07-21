@@ -51,7 +51,9 @@ type CandidateDomainId =
 
 export type PublicProfileDisplay = {
   displayName: string;
+  handle?: string;
   motif: "flame" | "forest" | "purple" | "sun" | "water";
+  profileMessage?: string;
   profileImage: PublicProfileImage;
 };
 

@@ -93,7 +93,8 @@ export const profileVisibilityFailures: Record<
   },
   visibility_policy_version_mismatch: {
     httpStatus: 409,
-    message: "공개 범위 정책이 바뀌었어요. 화면을 새로고침한 뒤 다시 확인해 주세요.",
+    message:
+      "공개 범위 정책이 바뀌었어요. 화면을 새로고침한 뒤 다시 확인해 주세요.",
     retryable: false,
     step: "validate_visibility_policy_version",
   },
@@ -117,13 +118,15 @@ export const profileVisibilityFailures: Record<
   },
   comparison_revalidation_failed: {
     httpStatus: 500,
-    message: "기존 비교 접근 범위를 다시 확인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    message:
+      "기존 비교 접근 범위를 다시 확인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "invalidate_out_of_scope_comparisons",
   },
   visibility_audit_write_failed: {
     httpStatus: 500,
-    message: "공개 범위 변경 기록을 남기지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    message:
+      "공개 범위 변경 기록을 남기지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "record_visibility_audit_event",
   },

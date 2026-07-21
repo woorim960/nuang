@@ -1,4 +1,8 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import {
+  mergeCommunityProfileIntoSnapshot,
+  readCommunityProfileForAccount,
+} from "@/features/account/server-community-profile";
 import { getNuangProfileCharacterRule } from "@/components/character/nuang-profile-character-system";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
@@ -141,6 +145,14 @@ export async function createPublicComparisonForUser({
     return { code: "target_public_snapshot_not_active", ok: false };
   }
 
+  const targetComparisonEnabled = await readCommunityComparisonEnabled({
+    accountId: targetSnapshotRow.account_id,
+    client,
+  });
+  if (!targetComparisonEnabled) {
+    return { code: "target_comparison_scope_missing", ok: false };
+  }
+
   if (
     targetSnapshotRow.visibility_policy_version !==
     profileVisibilityPolicyVersion
@@ -148,14 +160,23 @@ export async function createPublicComparisonForUser({
     return { code: "snapshot_policy_version_mismatch", ok: false };
   }
 
-  const targetSnapshot = coercePublicProfileSnapshotPayload(
+  const targetSnapshotBase = coercePublicProfileSnapshotPayload(
     targetSnapshotRow.snapshot_payload,
     targetSnapshotRow.id,
   );
 
-  if (!targetSnapshot) {
+  if (!targetSnapshotBase) {
     return { code: "target_public_snapshot_missing", ok: false };
   }
+
+  const targetSnapshot = await mergeCommunityProfileIntoSnapshot({
+    client,
+    profile: await readCommunityProfileForAccount({
+      accountId: targetSnapshotRow.account_id,
+      client,
+    }),
+    snapshot: targetSnapshotBase,
+  });
 
   const viewerSnapshot = await readOrCreateViewerPublicSnapshot({
     accountId,
@@ -168,7 +189,13 @@ export async function createPublicComparisonForUser({
     return { code: "comparison_report_build_failed", ok: false };
   }
 
-  if (!hasRequiredPublicComparisonScope(viewerSnapshot.payload)) {
+  const viewerPayload = await mergeCommunityProfileIntoSnapshot({
+    client,
+    profile: await readCommunityProfileForAccount({ accountId, client }),
+    snapshot: viewerSnapshot.payload,
+  });
+
+  if (!hasRequiredPublicComparisonScope(viewerPayload)) {
     return { code: "viewer_comparison_scope_missing", ok: false };
   }
 
@@ -181,7 +208,7 @@ export async function createPublicComparisonForUser({
     comparisonId: comparisonReportId,
     createdAt: new Date().toISOString(),
     target: targetSnapshot,
-    viewer: viewerSnapshot.payload,
+    viewer: viewerPayload,
   });
   const insertResponse = await client
     .schema("comparison")
@@ -230,6 +257,28 @@ export async function createPublicComparisonForUser({
     },
     ok: true,
   };
+}
+
+async function readCommunityComparisonEnabled({
+  accountId,
+  client,
+}: {
+  accountId: string;
+  client: ServiceClient;
+}) {
+  const response = await client
+    .schema("profile")
+    .from("community_profile")
+    .select("comparison_enabled")
+    .eq("account_id", accountId)
+    .eq("status", "active")
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  // Existing profiles created before the community profile migration keep the
+  // previous comparison behavior until the backfill runs.
+  if (response.error || !response.data) return true;
+  return response.data.comparison_enabled !== false;
 }
 
 export async function readPublicComparisonForUser({

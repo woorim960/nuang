@@ -12,8 +12,10 @@ export type PublicProfileCardPayload = {
   display: {
     code: string;
     displayName: string;
+    handle?: string;
     motif: PublicProfileSnapshotPayload["displayProfile"]["motif"];
     profileName: string;
+    profileMessage?: string;
     profileImage: PublicProfileSnapshotPayload["displayProfile"]["profileImage"];
   };
   highlights: {
@@ -21,6 +23,7 @@ export type PublicProfileCardPayload = {
     facetSummaryCount: number;
   };
   source: {
+    communityProfileId?: string;
     publicSnapshotContractVersion: typeof publicProfileSnapshotContractVersion;
     publicSnapshotId: string;
   };
@@ -39,10 +42,12 @@ export type PublicProfileCardPayload = {
 
 export function createPublicProfileCardPayload({
   cardId,
+  communityProfileId,
   snapshot,
   status = "preview",
 }: {
   cardId: string;
+  communityProfileId?: string;
   snapshot: PublicProfileSnapshotPayload;
   status?: PublicProfileCardPayload["status"];
 }): PublicProfileCardPayload {
@@ -52,17 +57,24 @@ export function createPublicProfileCardPayload({
     display: {
       code: snapshot.profile.code,
       displayName: snapshot.displayProfile.displayName,
+      handle:
+        snapshot.displayProfile.handle ??
+        createFallbackHandle(snapshot.displayProfile.displayName),
       motif: snapshot.displayProfile.motif,
       profileName: snapshot.profile.name,
+      profileMessage: snapshot.displayProfile.profileMessage ?? "",
       profileImage: snapshot.displayProfile.profileImage,
     },
     highlights: {
-      domainHighlights: selectDomainHighlights(snapshot.publicData.coreDomainMap),
+      domainHighlights: selectDomainHighlights(
+        snapshot.publicData.coreDomainMap,
+      ),
       facetSummaryCount: snapshot.publicData.coreFacetSummary.filter(
         (facet) => facet.score !== null,
       ).length,
     },
     source: {
+      communityProfileId: communityProfileId ?? snapshot.snapshotId,
       publicSnapshotContractVersion: snapshot.contractVersion,
       publicSnapshotId: snapshot.snapshotId,
     },
@@ -79,6 +91,17 @@ export function createPublicProfileCardPayload({
       includesSensitiveAssessments: false,
     },
   };
+}
+
+function createFallbackHandle(displayName: string) {
+  return (
+    displayName
+      .trim()
+      .toLowerCase()
+      .replace(/[^\p{Letter}\p{Number}]+/gu, ".")
+      .replace(/^\.+|\.+$/g, "")
+      .slice(0, 24) || "nuang.user"
+  );
 }
 
 function selectDomainHighlights(domains: PublicAxisSummary[]) {

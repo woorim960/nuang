@@ -46,8 +46,7 @@ const termsVersion = "terms.v0.1";
 const privacyVersion = "privacy.v0.1";
 
 export type ServerWriteResult<TSuccess, TFailureCode extends string> =
-  | { data: TSuccess; ok: true }
-  | { code: TFailureCode; ok: false };
+  { data: TSuccess; ok: true } | { code: TFailureCode; ok: false };
 
 export async function claimResultToAccount({
   client,
@@ -431,14 +430,13 @@ export async function deleteResultForAccount({
   }
 
   const accountId = (accountResponse.data as { account_id: string }).account_id;
-  const deleteResponse = await client.schema("report").rpc(
-    "delete_result_for_account",
-    {
+  const deleteResponse = await client
+    .schema("report")
+    .rpc("delete_result_for_account", {
       p_account_id: accountId,
       p_local_result_id: payload.localResultId ?? null,
       p_result_report_id: payload.resultReportId ?? null,
-    },
-  );
+    });
 
   if (deleteResponse.error || !Array.isArray(deleteResponse.data)) {
     return { code: "account_result_delete_failed", ok: false };
@@ -455,7 +453,8 @@ export async function deleteResultForAccount({
   return {
     data: {
       deleted: row?.deleted ?? false,
-      localResultId: row?.deleted_local_result_id ?? payload.localResultId ?? null,
+      localResultId:
+        row?.deleted_local_result_id ?? payload.localResultId ?? null,
       resultReportId:
         row?.deleted_result_report_id ?? payload.resultReportId ?? null,
     },
@@ -612,18 +611,15 @@ async function writeContactProfile(
     return;
   }
 
-  await client
-    .schema("identity")
-    .from("contact_profile")
-    .upsert(
-      {
-        account_id: accountId,
-        avatar_url: avatarUrl,
-        display_name: displayName,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: "account_id" },
-    );
+  await client.schema("identity").from("contact_profile").upsert(
+    {
+      account_id: accountId,
+      avatar_url: avatarUrl,
+      display_name: displayName,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: "account_id" },
+  );
 }
 
 function getProvider(user: User) {
@@ -644,7 +640,9 @@ function getProviderSubject(user: User, provider: string) {
     user.identities?.find((item) => item.provider === provider) ??
     user.identities?.[0];
 
-  return stringValue(identity?.id) ?? stringValue(identity?.identity_id) ?? user.id;
+  return (
+    stringValue(identity?.id) ?? stringValue(identity?.identity_id) ?? user.id
+  );
 }
 
 function stringValue(value: unknown) {
@@ -659,7 +657,8 @@ function buildResultSummary(payload: ClaimResultPayload) {
     facets: payload.resultSummary.facets ?? [],
     profileCode: payload.resultSummary.profileCode,
     profileName: payload.resultSummary.profileName,
-    resultLabel: payload.resultSummary.resultLabel ?? "현재 가장 가까운 대표 성향",
+    resultLabel:
+      payload.resultSummary.resultLabel ?? "현재 가장 가까운 대표 성향",
     versionBundle: payload.versionBundle,
   };
 }
@@ -671,7 +670,8 @@ function buildShareSummary(payload: ClaimResultPayload) {
     domains: payload.resultSummary.domains ?? [],
     profileCode: payload.resultSummary.profileCode,
     profileName: payload.resultSummary.profileName,
-    resultLabel: payload.resultSummary.resultLabel ?? "현재 가장 가까운 대표 성향",
+    resultLabel:
+      payload.resultSummary.resultLabel ?? "현재 가장 가까운 대표 성향",
     versionBundle: payload.versionBundle,
   };
 }

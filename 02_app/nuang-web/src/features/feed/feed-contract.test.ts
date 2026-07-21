@@ -174,6 +174,6 @@ describe("feed contract", () => {
       "map_reflection_001",
       "official_note_001",
     ]);
-    expect(JSON.stringify(payload)).not.toContain("community");
+    expect(payload).not.toHaveProperty("community");
   });
 });

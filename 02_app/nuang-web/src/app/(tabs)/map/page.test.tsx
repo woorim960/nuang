@@ -23,7 +23,7 @@ describe("MapPage", () => {
 
   it("starts without a fixed profile and opens ENAKQ only after selection", async () => {
     const user = userEvent.setup();
-    render(await MapPage());
+    render(await MapPage({}));
 
     expect(
       screen.getByRole("heading", { name: "성향지도" }),
@@ -100,7 +100,7 @@ describe("MapPage", () => {
 
   it("finds a profile by its role name", async () => {
     const user = userEvent.setup();
-    render(await MapPage());
+    render(await MapPage({}));
 
     await user.type(
       screen.getByRole("searchbox", { name: "코드 또는 역할 이름 검색" }),

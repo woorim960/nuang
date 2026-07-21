@@ -113,9 +113,12 @@ describe("account api schemas", () => {
   });
 
   it("requires the immutable assessment and scoring release bundle", () => {
-    const { versionBundle: _versionBundle, ...withoutBundle } = validClaimPayload;
+    const withoutBundle = { ...validClaimPayload };
+    delete (withoutBundle as Partial<typeof validClaimPayload>).versionBundle;
 
-    expect(claimResultRequestSchema.safeParse(withoutBundle).success).toBe(false);
+    expect(claimResultRequestSchema.safeParse(withoutBundle).success).toBe(
+      false,
+    );
   });
 
   it("keeps share links summary-only with a 30 day maximum ttl", () => {
@@ -218,7 +221,9 @@ describe("account api route contract before credentials", () => {
   });
 
   it("valid result deletes stop at the closed auth gate", async () => {
-    const response = await accountResultsDelete(jsonRequest(validDeletePayload, "DELETE"));
+    const response = await accountResultsDelete(
+      jsonRequest(validDeletePayload, "DELETE"),
+    );
     const body = await response.json();
 
     expect(response.status).toBe(503);

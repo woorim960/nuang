@@ -102,7 +102,7 @@ function ConnectionItem({
     <Link
       aria-label={`${connection.displayName}님의 프로필 보기`}
       className={styles.item}
-      href={`/feed/profiles/${connection.publicSnapshotId}`}
+      href={`/feed/profiles/${connection.communityProfileId ?? connection.publicSnapshotId}`}
     >
       <PublicProfileImageView image={connection.profileImage} size="md" />
       <span className={styles.itemCopy}>

@@ -217,7 +217,7 @@ function PostAvatar({ post }: { post: FeedItem }) {
       <Link
         aria-label={`${post.authorName} 프로필 사진 보기`}
         className={styles.avatarButton}
-        href={`/feed/profiles/${post.authorProfile.source.publicSnapshotId}`}
+        href={`/feed/profiles/${post.authorProfile.source.communityProfileId ?? post.authorProfile.source.publicSnapshotId}`}
       >
         <PublicProfileImageView
           className={styles.profileImage}
@@ -256,7 +256,7 @@ function PostAuthor({ post }: { post: FeedItem }) {
         <Link
           aria-label={`${post.authorName} 프로필 보기`}
           className={styles.authorButton}
-          href={`/feed/profiles/${post.authorProfile.source.publicSnapshotId}`}
+          href={`/feed/profiles/${post.authorProfile.source.communityProfileId ?? post.authorProfile.source.publicSnapshotId}`}
         >
           {author}
         </Link>
