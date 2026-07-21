@@ -1,0 +1,333 @@
+.panel {
+  color: #20232a;
+}
+
+.intro h2,
+.connectedHeading h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.intro p,
+.connectedHeading p {
+  margin: 0.35rem 0 0;
+  color: #737887;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.consentBox {
+  margin-top: 1.1rem;
+  overflow: hidden;
+  border: 1px solid #e6e7eb;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.consentGroup {
+  padding: 0.15rem 0.75rem;
+  border-top: 1px solid #ececf1;
+}
+
+.consentRow {
+  position: relative;
+  display: flex;
+  min-height: 44px;
+  cursor: pointer;
+  align-items: center;
+  gap: 0.625rem;
+  color: #555a65;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.consentRow[data-emphasis="true"] {
+  min-height: 48px;
+  padding: 0 0.75rem;
+  color: #20232a;
+  background: #faf9ff;
+  font-size: 0.8125rem;
+  font-weight: 700;
+}
+
+.consentGroup .consentRow + .consentRow,
+.optionalConsent .consentRow + .consentRow {
+  border-top: 1px solid #f0f0f2;
+}
+
+.consentRow input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+}
+
+.checkmark {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #d6d8de;
+  border-radius: 7px;
+  color: #fff;
+  background: #fff;
+}
+
+.consentRow input:checked + .checkmark {
+  border-color: #6e62ce;
+  background: #6e62ce;
+}
+
+.consentRow input:focus-visible + .checkmark {
+  outline: 2px solid #c8c2f5;
+  outline-offset: 2px;
+}
+
+.consentLabel {
+  min-width: 0;
+  flex: 1;
+}
+
+.consentRow small {
+  color: #92959d;
+  font-size: 0.6875rem;
+}
+
+.optionalConsent {
+  padding: 0 0.75rem;
+  border-top: 1px solid #ececf1;
+}
+
+.optionalConsent summary {
+  min-height: 42px;
+  cursor: pointer;
+  color: #737887;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 42px;
+}
+
+.policyCopy {
+  margin: 0.65rem 0 0;
+  color: #8a8d96;
+  font-size: 0.6875rem;
+  line-height: 1.55;
+}
+
+.policyCopy a {
+  color: #59509f;
+  font-weight: 650;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.providerList {
+  display: grid;
+  gap: 0.625rem;
+  margin-top: 1.15rem;
+}
+
+.providerButton {
+  display: grid;
+  min-height: 52px;
+  grid-template-columns: 24px minmax(0, 1fr) 24px;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0 0.875rem;
+  border: 1px solid transparent;
+  border-radius: 13px;
+  font-size: 0.875rem;
+  font-weight: 650;
+  transition:
+    transform 120ms ease,
+    opacity 120ms ease;
+}
+
+.providerButton[data-provider="kakao"] {
+  color: #191919;
+  background: #fee500;
+}
+
+.providerButton[data-provider="google"] {
+  border-color: #dadce0;
+  color: #1f1f1f;
+  background: #fff;
+}
+
+.providerButton:not(:disabled):active {
+  transform: scale(0.988);
+}
+
+.providerButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+
+.providerButton:focus-visible {
+  outline: 2px solid #9c92e8;
+  outline-offset: 2px;
+}
+
+.providerLogo {
+  width: 22px;
+  height: 22px;
+}
+
+.genericProviderLogo {
+  display: grid;
+  width: 22px;
+  height: 22px;
+  place-items: center;
+  color: #fff;
+  background: #03c75a;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.providerSpacer {
+  width: 17px;
+}
+
+.spinner {
+  animation: spin 700ms linear infinite;
+}
+
+.authHint,
+.retryHint {
+  margin: 0.75rem 0 0;
+  color: #858993;
+  font-size: 0.75rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.statusNotice {
+  margin: 0.8rem 0 0;
+  padding: 0.7rem 0.75rem;
+  border: 1px solid #eedec5;
+  border-radius: 12px;
+  color: #72561f;
+  background: #fffaf0;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.connectedHeading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.65rem;
+}
+
+.connectedIcon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 50%;
+  color: #306e60;
+  background: #e6f4ef;
+}
+
+.connectedRow {
+  display: grid;
+  min-height: 64px;
+  grid-template-columns: 28px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding: 0.65rem 0;
+  border-top: 1px solid #ececf1;
+  border-bottom: 1px solid #ececf1;
+}
+
+.connectedRow > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.18rem;
+}
+
+.connectedRow strong {
+  overflow: hidden;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.connectedRow small {
+  color: #858993;
+  font-size: 0.6875rem;
+}
+
+.connectedRow > button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0 0.25rem;
+  color: #737887;
+  font-size: 0.75rem;
+  font-weight: 650;
+}
+
+.skeleton {
+  display: grid;
+  gap: 0.7rem;
+}
+
+.skeleton > span {
+  display: block;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #f3f3f4, #fafafa, #f3f3f4);
+  background-size: 220% 100%;
+  animation: shimmer 1.1s ease-in-out infinite;
+}
+
+.skeletonTitle {
+  width: 42%;
+  height: 18px;
+}
+
+.skeletonCopy {
+  width: 78%;
+  height: 13px;
+}
+
+.skeletonButton {
+  width: 100%;
+  height: 52px;
+}
+
+.skeleton p {
+  margin: 0;
+  color: #858993;
+  font-size: 0.75rem;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -120% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .providerButton,
+  .spinner,
+  .skeleton > span {
+    animation: none;
+    transition: none;
+  }
+}

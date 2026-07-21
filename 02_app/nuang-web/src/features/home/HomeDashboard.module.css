@@ -935,3 +935,34 @@
     background-position: -100% 0;
   }
 }
+.playgroundUnavailable {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1.1rem 1rem;
+  border-bottom: 8px solid #f6f5f2;
+  background: linear-gradient(180deg, #fffdf8, #fff);
+}
+
+.playgroundUnavailable strong {
+  color: #20232a;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.playgroundUnavailable p {
+  margin: 0;
+  color: #737887;
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.playgroundUnavailable a {
+  display: inline-flex;
+  min-height: 36px;
+  width: fit-content;
+  align-items: center;
+  gap: 0.25rem;
+  color: #7468bd;
+  font-size: 0.75rem;
+  font-weight: 700;
+}

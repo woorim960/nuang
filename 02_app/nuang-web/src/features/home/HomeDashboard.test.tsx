@@ -49,11 +49,8 @@ describe("HomeDashboard", () => {
     expect(
       screen.getByRole("link", { name: /첫 성향 검사 시작/ }),
     ).toHaveAttribute("href", "/assessments/nu-core-quick?returnTo=%2Fhome");
-    expect(screen.getByText("오늘의 성향 놀이터")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", {
-        name: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
-      }),
+      screen.getByText("오늘의 질문을 준비하고 있어요"),
     ).toBeInTheDocument();
     expect(screen.getByText("오늘 발견할 성향")).toBeInTheDocument();
     const profileLink = await screen.findByRole("link", {
@@ -119,34 +116,26 @@ describe("HomeDashboard", () => {
       "/feed/posts/home-preview-server-post",
     );
     expect(screen.queryByText("ㅣㅏㅡㅔ")).not.toBeInTheDocument();
-    expect(screen.getByText("오늘의 성향 놀이터")).toBeInTheDocument();
-  });
-
-  it("lets a visitor answer the daily choice without signing in", async () => {
-    const user = userEvent.setup();
-
-    render(<HomeDashboard />);
-
-    const option = await screen.findByRole("button", {
-      name: /사람을 만나 함께 보낸다/,
-    });
-    await user.click(option);
-
-    expect(option).toHaveAttribute("aria-pressed", "true");
-    expect(screen.getByRole("status")).toHaveTextContent(
-      "누군가와 시간을 나누는 쪽이 더 끌렸네요",
-    );
-    const storedChoiceKey = window.localStorage.key(0);
-    expect(storedChoiceKey).toMatch(
-      /^nuang:home:daily-choice:free-day-choice-v1:\d{4}-\d{2}-\d{2}$/,
-    );
-    expect(window.localStorage.getItem(storedChoiceKey ?? "")).toBe("together");
     expect(
-      screen.getByRole("link", { name: /다른 사람들의 생각도 보기/ }),
-    ).toHaveAttribute("href", "/feed");
+      screen.getByText("오늘의 질문을 준비하고 있어요"),
+    ).toBeInTheDocument();
   });
 
-  it("shows live totals and community links when the official poll is connected", async () => {
+  it("does not invent a separate local vote when the official poll is unavailable", async () => {
+    render(<HomeDashboard feedPreviewItems={[]} />);
+
+    expect(
+      await screen.findByText("오늘의 질문을 준비하고 있어요"),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /커뮤니티 보기/ })).toHaveAttribute(
+      "href",
+      "/feed",
+    );
+    expect(window.localStorage.length).toBe(0);
+  });
+
+  it("uses the same playground post, actions, and replies as the community", async () => {
+    const user = userEvent.setup();
     const communityPollItem: FeedItem = {
       authorHandle: "nuang.official",
       authorName: "NUANG",
@@ -203,30 +192,36 @@ describe("HomeDashboard", () => {
 
     render(<HomeDashboard feedPreviewItems={[communityPollItem]} />);
 
-    expect(await screen.findByText("실시간 커뮤니티 투표")).toBeInTheDocument();
+    expect(await screen.findByText("오늘의 성향 놀이터")).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "오늘의 밸런스 게임" }),
+    ).toBeInTheDocument();
     expect(screen.getByText("10명 참여")).toBeInTheDocument();
     expect(screen.getByText("60%")).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /코드별 관점 보기/ }),
-    ).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "내 기록" })).toHaveAttribute(
       "href",
-      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats?from=home",
+      "/feed/perspectives?from=home",
     );
     expect(
-      screen.getByText("뉴앙 코드별 관점도 함께 볼 수 있어요"),
+      screen.getByRole("link", { name: "커뮤니티에서 이어보기" }),
+    ).toHaveAttribute(
+      "href",
+      "/feed?posted=6af1b7c2-b8e1-4ee5-9c68-76b92bda0801",
+    );
+    expect(
+      screen.getByRole("button", { name: /코드별 관점 펼치기/ }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /좋아요/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /공유/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /저장/ })).toBeInTheDocument();
+
+    await user.click(screen.getByRole("button", { name: "댓글" }));
     expect(
       screen.getByText("오늘은 혼자 쉬는 시간이 더 필요했어요."),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /3개 댓글 모두 보기/ }),
-    ).toHaveAttribute(
-      "href",
-      "/feed/polls/7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801/stats?from=home",
-    );
   });
 
-  it("explains the low-participation state without inventing code statistics", async () => {
+  it("opens code perspectives even when the first participant has voted", async () => {
     const communityPollItem: FeedItem = {
       authorHandle: "nuang.official",
       authorName: "NUANG",
@@ -237,8 +232,26 @@ describe("HomeDashboard", () => {
       layout: "thread",
       likeLabel: "좋아요 0개",
       poll: {
-        canViewCodeStats: false,
-        codePerspectives: [],
+        canViewCodeStats: true,
+        codePerspectives: [
+          {
+            code: "INGMC",
+            name: "새 길을 찾는 탐구자",
+            options: [
+              {
+                label: "사람을 만나 함께 보낸다",
+                ratio: 100,
+                voteCount: 1,
+              },
+              {
+                label: "혼자 여유롭게 보낸다",
+                ratio: 0,
+                voteCount: 0,
+              },
+            ],
+            totalVotes: 1,
+          },
+        ],
         id: "poll-low-participation",
         options: [
           {
@@ -277,21 +290,8 @@ describe("HomeDashboard", () => {
 
     expect(await screen.findByText("1명 참여")).toBeInTheDocument();
     expect(
-      screen.getByText("사람들의 선택이 모이기 시작했어요"),
+      screen.getByRole("button", { name: /코드별 관점 펼치기/ }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText("참여가 모이면 코드별 선택 차이도 확인할 수 있어요."),
-    ).toBeInTheDocument();
-    expect(screen.queryByText("코드별 관점 보기")).not.toBeInTheDocument();
-    expect(
-      screen.getByText("내가 고른 이유를 먼저 남겨보세요."),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /첫 댓글 남기기/ }),
-    ).toHaveAttribute(
-      "href",
-      "/feed/polls/poll-low-participation/stats?from=home",
-    );
   });
 
   it("resumes the current full assessment with accurate base-item progress", async () => {

@@ -9,7 +9,6 @@ import {
   Search,
   X,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
@@ -17,6 +16,7 @@ import { FeedComposer } from "@/features/feed/FeedComposer";
 import { FeedMediaCarousel } from "@/features/feed/FeedMediaCarousel";
 import { FeedMoreMenu } from "@/features/feed/FeedMoreMenu";
 import { FeedPollCard } from "@/features/feed/FeedPollCard";
+import { PersonalityPlaygroundPost } from "@/features/feed/PersonalityPlaygroundPost";
 import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import { candidateRoleNames } from "@/features/nuang-code/candidate-profile-names";
@@ -331,13 +331,7 @@ function CommunityPost({
   });
 
   if (isOfficialDailyPoll && post.poll) {
-    return (
-      <PersonalityPlaygroundPost
-        highlighted={highlighted}
-        poll={post.poll}
-        post={post}
-      />
-    );
+    return <PersonalityPlaygroundPost highlighted={highlighted} post={post} />;
   }
 
   return (
@@ -454,66 +448,6 @@ function CommunityPost({
             : "첫 댓글 남기기"}
         </Link>
       ) : null}
-    </article>
-  );
-}
-
-function PersonalityPlaygroundPost({
-  highlighted,
-  poll,
-  post,
-}: {
-  highlighted: boolean;
-  poll: NonNullable<FeedItem["poll"]>;
-  post: FeedItem;
-}) {
-  return (
-    <article
-      className={`${styles.postCard} ${styles.playgroundPost}`}
-      data-highlighted={highlighted ? "true" : "false"}
-      data-official="true"
-      id={`community-post-${post.id}`}
-    >
-      <header className={styles.playgroundHeader}>
-        <Image
-          alt="뉴앙 캐릭터"
-          className={styles.nuangCharacterAvatar}
-          height={48}
-          priority
-          src="/assets/characters/nuang-character-purple.webp"
-          width={48}
-        />
-        <div>
-          <strong>오늘의 성향 놀이터</strong>
-          <small>뉴앙이 고른 오늘의 질문 · 관계</small>
-        </div>
-        <Link className={styles.perspectiveLink} href="/feed/perspectives">
-          내 기록
-        </Link>
-      </header>
-
-      <h3 className={styles.playgroundTitle}>오늘의 밸런스 게임</h3>
-
-      <div className={styles.playgroundPoll}>
-        <FeedPollCard poll={poll} returnTo="/feed" variant="playground" />
-      </div>
-
-      <div className={styles.playgroundFootnote}>
-        <p>가볍게 고른 선택은 공식 검사 결과를 바꾸지 않아요.</p>
-      </div>
-
-      <div className={styles.postActions}>
-        <FeedActionButtons
-          includeBookmark
-          includeShare
-          initialBookmarked={post.viewerHasBookmarked}
-          initialLiked={post.viewerHasLiked}
-          likeCount={post.likeCount}
-          postId={post.id}
-          replyCount={post.replyCount}
-          targetType={post.targetType}
-        />
-      </div>
     </article>
   );
 }

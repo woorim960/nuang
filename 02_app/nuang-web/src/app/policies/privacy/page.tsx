@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     follow: false,
     index: false,
   },
-  title: "개인정보 처리방침 준비 중 | NUANG",
+  title: "개인정보 처리방침 | NUANG",
 };
 
 export default function PrivacyPolicyPage() {

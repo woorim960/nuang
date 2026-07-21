@@ -56,19 +56,21 @@ describe("AccountConnectPanel", () => {
     expect(kakaoButton).toBeDisabled();
 
     fireEvent.click(
-      screen.getByRole("checkbox", { name: "이용약관에 동의합니다" }),
+      screen.getByRole("checkbox", { name: "이용약관에 동의해요" }),
     );
     fireEvent.click(
       screen.getByRole("checkbox", {
-        name: "필수 개인정보 처리에 동의합니다",
+        name: "개인정보 처리방침에 동의해요",
       }),
     );
 
     expect(kakaoButton).toBeEnabled();
     expect(
-      screen.getByText("네이버", { selector: "span" }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("준비 중")).toBeInTheDocument();
+      screen.getByRole("button", { name: "Google로 계속하기" }),
+    ).toBeEnabled();
+    expect(
+      screen.queryByRole("button", { name: /네이버/ }),
+    ).not.toBeInTheDocument();
   });
 
   it("falls back to the sign-in form when account check fails", async () => {
@@ -95,10 +97,10 @@ describe("AccountConnectPanel", () => {
     render(<AccountConnectPanel />);
 
     expect(
-      await screen.findByRole("heading", { name: "연결된 계정" }),
+      await screen.findByRole("heading", { name: "로그인 정보" }),
     ).toBeInTheDocument();
     expect(screen.getByText("탐험가")).toBeInTheDocument();
-    expect(screen.getByText("카카오 계정 연결됨")).toBeInTheDocument();
+    expect(screen.getByText("카카오로 로그인 중")).toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: "카카오로 계속하기" }),
     ).not.toBeInTheDocument();

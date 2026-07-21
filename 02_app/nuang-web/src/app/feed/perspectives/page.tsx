@@ -19,7 +19,7 @@ export default async function PerspectiveCollectionPage({
 
   return (
     <PerspectiveCollection
-      backHref={from === "my" ? "/my" : "/feed"}
+      backHref={from === "home" ? "/home" : from === "my" ? "/my" : "/feed"}
       payload={payload}
     />
   );

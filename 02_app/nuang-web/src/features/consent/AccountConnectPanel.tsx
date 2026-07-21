@@ -1,13 +1,14 @@
 "use client";
 
 import type { User } from "@supabase/supabase-js";
-import { CheckCircle2, LogOut } from "lucide-react";
+import { Check, CheckCircle2, LoaderCircle, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
   getSupabaseOAuthProvider,
   socialAuthProviders,
+  type SocialAuthProviderId,
 } from "@/features/auth/auth-policy";
 import { startSocialSignIn } from "@/features/auth/start-social-sign-in";
 import {
@@ -17,11 +18,12 @@ import {
 } from "@/features/consent/consent-draft";
 import { createApiClosedPayload } from "@/lib/api/closed-state-data";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
-import { cn } from "@/lib/utils/cn";
+import styles from "./AccountConnectPanel.module.css";
 
 type ClosedState = ReturnType<typeof createApiClosedPayload>;
 type ConnectedAccount = {
   displayName: string;
+  providerId: SocialAuthProviderId | null;
   providerLabel: string;
 };
 
@@ -48,18 +50,11 @@ export function AccountConnectPanel({
   const [connectedAccount, setConnectedAccount] =
     useState<ConnectedAccount | null>(null);
   const [isCheckingAccount, setIsCheckingAccount] = useState(true);
-  const isReadyForAuth = isRequiredConsentComplete({
-    privacy,
-    terms,
-  });
+  const isReadyForAuth = isRequiredConsentComplete({ privacy, terms });
+  const allRequiredChecked = terms && privacy;
 
   const consentSummary = useMemo(
-    () => ({
-      terms,
-      privacy,
-      analytics,
-      marketing,
-    }),
+    () => ({ terms, privacy, analytics, marketing }),
     [analytics, marketing, privacy, terms],
   );
 
@@ -69,16 +64,16 @@ export function AccountConnectPanel({
     let nextClosedState: ClosedState | null = null;
 
     if (authStatus === "connected") {
-      nextMessage = "계정 연결이 완료됐어요.";
+      nextMessage = "로그인이 완료됐어요.";
     }
 
     if (authStatus === "missing_code" || authStatus === "error") {
-      nextMessage = "계정 연결을 마치지 못했어요. 다시 시도해 주세요.";
+      nextMessage = "로그인을 마치지 못했어요. 다시 시도해 주세요.";
     }
 
     if (authStatus === "env_missing") {
       nextClosedState = createApiClosedPayload("supabase_env_missing");
-      nextMessage = nextClosedState.display.message;
+      nextMessage = "로그인을 시작하지 못했어요. 잠시 후 다시 시도해 주세요.";
     }
 
     if (nextMessage) {
@@ -94,19 +89,14 @@ export function AccountConnectPanel({
       const timeoutId = window.setTimeout(() => {
         setIsCheckingAccount(false);
       }, 0);
-
-      return () => {
-        window.clearTimeout(timeoutId);
-      };
+      return () => window.clearTimeout(timeoutId);
     }
 
     let isActive = true;
 
     void (async () => {
       const user = await readCurrentUserWithTimeout(supabase);
-
       if (!isActive) return;
-
       setConnectedAccount(user ? createConnectedAccount(user) : null);
       setIsCheckingAccount(false);
     })();
@@ -136,7 +126,11 @@ export function AccountConnectPanel({
     const result = await startSocialSignIn(provider.id);
 
     if (result.status !== "redirecting") {
-      setMessage(result.message);
+      setMessage(
+        result.status === "missing_env"
+          ? "로그인을 시작하지 못했어요. 잠시 후 다시 시도해 주세요."
+          : result.message,
+      );
       setClosedState(result.closedState ?? null);
       setPendingProviderId(null);
     }
@@ -152,7 +146,6 @@ export function AccountConnectPanel({
 
     setPendingProviderId("signout");
     setMessage("");
-
     const { error } = await supabase.auth.signOut();
 
     if (error) {
@@ -169,169 +162,244 @@ export function AccountConnectPanel({
   }
 
   if (isCheckingAccount) {
-    return (
-      <section
-        aria-label="계정 연결 확인"
-        className="border-y border-line py-4"
-      >
-        <p className="text-sm text-muted">계정 연결을 확인하고 있어요.</p>
-      </section>
-    );
+    return <AccountSkeleton />;
   }
 
   if (connectedAccount) {
     return (
-      <section aria-labelledby="account-connect-title">
-        <div>
-          <h2 className="text-base font-bold" id="account-connect-title">
-            연결된 계정
-          </h2>
-          <p className="mt-1 text-sm leading-6 text-muted">
-            내 결과와 공유 기능에 사용할 계정이에요.
-          </p>
+      <section aria-labelledby="account-connect-title" className={styles.panel}>
+        <div className={styles.connectedHeading}>
+          <span className={styles.connectedIcon}>
+            <CheckCircle2 aria-hidden="true" size={19} strokeWidth={1.8} />
+          </span>
+          <span>
+            <h2 id="account-connect-title">로그인 정보</h2>
+            <p>이 계정으로 결과와 커뮤니티 활동을 이어가고 있어요.</p>
+          </span>
         </div>
 
-        <div className="mt-3 flex items-center gap-3 border-y border-line py-4">
-          <CheckCircle2
-            aria-hidden="true"
-            className="shrink-0 text-ink"
-            size={20}
-          />
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-bold">
-              {connectedAccount.displayName}
-            </p>
-            <p className="mt-0.5 text-xs text-muted">
-              {connectedAccount.providerLabel} 계정 연결됨
-            </p>
+        <div className={styles.connectedRow}>
+          <ProviderLogo providerId={connectedAccount.providerId} />
+          <div>
+            <strong>{connectedAccount.displayName}</strong>
+            <small>{connectedAccount.providerLabel}로 로그인 중</small>
           </div>
           <button
-            className="inline-flex min-h-10 shrink-0 items-center gap-2 px-1 text-sm font-semibold text-muted hover:text-ink disabled:cursor-not-allowed disabled:opacity-50"
             disabled={pendingProviderId !== null}
             onClick={handleSignOut}
             type="button"
           >
-            <LogOut aria-hidden="true" size={17} />
+            <LogOut aria-hidden="true" size={16} strokeWidth={1.8} />
             {pendingProviderId === "signout" ? "처리 중" : "로그아웃"}
           </button>
         </div>
 
-        {message && (
-          <p
-            aria-live="polite"
-            className="mt-3 text-xs text-muted"
-            role="status"
-          >
-            {message}
-          </p>
-        )}
+        {message ? <StatusNotice message={message} /> : null}
       </section>
     );
   }
 
+  const availableProviders = socialAuthProviders.filter((provider) =>
+    getSupabaseOAuthProvider(provider.id),
+  );
+
   return (
-    <section aria-labelledby="account-connect-title">
-      <div>
-        <h2 className="text-base font-bold" id="account-connect-title">
-          계정 연결
-        </h2>
-        <p className="mt-1 text-sm leading-6 text-muted">
+    <section aria-labelledby="account-connect-title" className={styles.panel}>
+      <div className={styles.intro}>
+        <h2 id="account-connect-title">원하는 계정으로 시작하세요</h2>
+        <p>
           {context === "community"
-            ? "투표와 댓글을 안전하게 운영하기 위해 계정을 연결해요. 검사와 결과 확인은 로그인 없이도 이용할 수 있어요."
-            : "검사는 로그인 없이 시작할 수 있어요. 리포트 저장과 공유가 필요할 때 로그인하세요."}
+            ? "처음이어도 바로 가입돼요. 로그인 후 방금 하던 투표나 댓글로 돌아갑니다."
+            : "처음이어도 별도 회원가입 없이 바로 시작할 수 있어요."}
         </p>
       </div>
 
-      <div className="mt-4 border-y border-line">
+      <div className={styles.consentBox}>
         <ConsentCheck
-          checked={terms}
-          label="이용약관에 동의합니다"
-          onChange={setTerms}
+          checked={allRequiredChecked}
+          emphasis
+          label="필수 항목 모두 동의"
+          onChange={(checked) => {
+            setTerms(checked);
+            setPrivacy(checked);
+          }}
         />
-        <ConsentCheck
-          checked={privacy}
-          label="필수 개인정보 처리에 동의합니다"
-          onChange={setPrivacy}
-        />
-        <ConsentCheck
-          checked={analytics}
-          label="서비스 개선 분석에 동의합니다"
-          onChange={setAnalytics}
-          optional
-        />
-        <ConsentCheck
-          checked={marketing}
-          label="소식과 혜택 알림을 받습니다"
-          onChange={setMarketing}
-          optional
-        />
+        <div className={styles.consentGroup}>
+          <ConsentCheck
+            checked={terms}
+            label="이용약관에 동의해요"
+            onChange={setTerms}
+          />
+          <ConsentCheck
+            checked={privacy}
+            label="개인정보 처리방침에 동의해요"
+            onChange={setPrivacy}
+          />
+        </div>
+        <details className={styles.optionalConsent}>
+          <summary>선택 동의 보기</summary>
+          <ConsentCheck
+            checked={analytics}
+            label="서비스 개선을 위한 이용 데이터 수집"
+            onChange={setAnalytics}
+            optional
+          />
+          <ConsentCheck
+            checked={marketing}
+            label="새로운 검사와 소식 알림"
+            onChange={setMarketing}
+            optional
+          />
+        </details>
       </div>
-      <p className="mt-3 text-xs leading-5 text-muted">
-        연결 전에{" "}
-        <Link className="font-bold text-primary" href="/policies/terms">
-          이용약관
-        </Link>
-        과{" "}
-        <Link className="font-bold text-primary" href="/policies/privacy">
-          개인정보 처리방침
-        </Link>
-        을 확인해 주세요.
+
+      <p className={styles.policyCopy}>
+        계속하면 <Link href="/policies/terms">이용약관</Link>과{" "}
+        <Link href="/policies/privacy">개인정보 처리방침</Link>에 동의하게
+        됩니다.
       </p>
 
-      <div className="mt-5 grid gap-2">
-        {socialAuthProviders.map((provider) =>
-          getSupabaseOAuthProvider(provider.id) ? (
-            <button
-              className="min-h-12 rounded-lg border border-line bg-white px-4 text-sm font-bold text-ink transition-colors hover:bg-surface disabled:cursor-not-allowed disabled:text-muted"
-              disabled={!isReadyForAuth || pendingProviderId !== null}
-              key={provider.id}
-              onClick={() => handleProviderClick(provider)}
-              type="button"
-            >
-              {pendingProviderId === provider.id
-                ? `${provider.label} 연결 중`
-                : `${provider.label}로 계속하기`}
-            </button>
-          ) : (
-            <div
-              className="flex min-h-12 items-center justify-between border-t border-line px-1 text-sm"
-              key={provider.id}
-            >
-              <span className="font-semibold">{provider.label}</span>
-              <span className="text-xs font-semibold text-muted">준비 중</span>
-            </div>
-          ),
-        )}
+      <div className={styles.providerList}>
+        {availableProviders.map((provider) => (
+          <SocialAuthButton
+            disabled={!isReadyForAuth || pendingProviderId !== null}
+            key={provider.id}
+            onClick={() => handleProviderClick(provider)}
+            pending={pendingProviderId === provider.id}
+            providerId={provider.id}
+          />
+        ))}
       </div>
-      <p className="mt-3 text-center text-xs leading-5 text-muted">
+
+      <p className={styles.authHint} aria-live="polite">
         {isReadyForAuth
-          ? "원하는 계정으로 안전하게 연결할 수 있어요."
-          : "필수 확인 2가지를 선택하면 소셜 로그인 버튼이 열려요."}
+          ? "내 결과와 활동을 이 계정에서 안전하게 이어볼 수 있어요."
+          : "필수 항목에 동의하면 로그인 버튼을 사용할 수 있어요."}
       </p>
 
-      {message && (
-        <p
-          aria-live="polite"
-          className="mt-3 text-center text-xs text-muted"
-          role="status"
-        >
-          {message}
+      {message ? <StatusNotice message={message} /> : null}
+      {closedState ? (
+        <p className={styles.retryHint}>
+          잠시 후 같은 계정으로 다시 시도해 주세요.
         </p>
-      )}
-      {closedState && <ClosedStateNotice closedState={closedState} />}
+      ) : null}
     </section>
   );
 }
 
-function ClosedStateNotice({ closedState }: { closedState: ClosedState }) {
+function AccountSkeleton() {
   return (
-    <div className="mt-3 border-t border-line pt-3 text-sm leading-6 text-muted">
-      <p className="font-semibold text-foreground">
-        {closedState.feature.label}
-      </p>
-      <p className="mt-1">{closedState.safeFallback}</p>
-      <p className="mt-2">{closedState.display.nextStep}</p>
-    </div>
+    <section
+      aria-label="로그인 상태 확인"
+      aria-live="polite"
+      className={styles.skeleton}
+      role="status"
+    >
+      <span className={styles.skeletonTitle} />
+      <span className={styles.skeletonCopy} />
+      <span className={styles.skeletonButton} />
+      <span className={styles.skeletonButton} />
+      <p>로그인 상태를 확인하고 있어요.</p>
+    </section>
+  );
+}
+
+function SocialAuthButton({
+  disabled,
+  onClick,
+  pending,
+  providerId,
+}: {
+  disabled: boolean;
+  onClick: () => void;
+  pending: boolean;
+  providerId: SocialAuthProviderId;
+}) {
+  const label =
+    providerId === "google"
+      ? "Google"
+      : providerId === "kakao"
+        ? "카카오"
+        : "네이버";
+
+  return (
+    <button
+      className={styles.providerButton}
+      data-provider={providerId}
+      disabled={disabled}
+      onClick={onClick}
+      type="button"
+    >
+      <ProviderLogo providerId={providerId} />
+      <span>{pending ? label + "로 로그인 중" : label + "로 계속하기"}</span>
+      {pending ? (
+        <LoaderCircle aria-hidden="true" className={styles.spinner} size={17} />
+      ) : (
+        <span aria-hidden="true" className={styles.providerSpacer} />
+      )}
+    </button>
+  );
+}
+
+function ProviderLogo({
+  providerId,
+}: {
+  providerId: SocialAuthProviderId | null;
+}) {
+  if (providerId === "kakao") {
+    return (
+      <svg
+        aria-hidden="true"
+        className={styles.providerLogo}
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M12 4.2c-4.86 0-8.8 3.02-8.8 6.75 0 2.4 1.67 4.52 4.16 5.72l-.94 3.45c-.08.3.26.54.52.37l4.12-2.73c.31.03.62.04.94.04 4.86 0 8.8-3.02 8.8-6.85S16.86 4.2 12 4.2Z"
+          fill="currentColor"
+        />
+      </svg>
+    );
+  }
+
+  if (providerId === "google") {
+    return (
+      <svg
+        aria-hidden="true"
+        className={styles.providerLogo}
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M21.35 12.2c0-.72-.06-1.25-.2-1.8H12v3.45h5.37a4.6 4.6 0 0 1-1.99 2.92v2.38h3.23c1.89-1.75 2.74-4.32 2.74-6.95Z"
+          fill="#4285F4"
+        />
+        <path
+          d="M12 21.7c2.62 0 4.82-.86 6.61-2.55l-3.23-2.38c-.9.6-2.04.96-3.38.96-2.53 0-4.68-1.71-5.45-4.01H3.22v2.45A9.98 9.98 0 0 0 12 21.7Z"
+          fill="#34A853"
+        />
+        <path
+          d="M6.55 13.72a6.04 6.04 0 0 1 0-3.85V7.42H3.22a10.02 10.02 0 0 0 0 8.75l3.33-2.45Z"
+          fill="#FBBC05"
+        />
+        <path
+          d="M12 5.85c1.48 0 2.8.51 3.85 1.5l2.83-2.82A9.5 9.5 0 0 0 12 1.8a9.98 9.98 0 0 0-8.78 5.62l3.33 2.45C7.32 7.56 9.47 5.85 12 5.85Z"
+          fill="#EA4335"
+        />
+      </svg>
+    );
+  }
+
+  return (
+    <span aria-hidden="true" className={styles.genericProviderLogo}>
+      N
+    </span>
+  );
+}
+
+function StatusNotice({ message }: { message: string }) {
+  return (
+    <p aria-live="polite" className={styles.statusNotice} role="status">
+      {message}
+    </p>
   );
 }
 
@@ -339,60 +407,58 @@ function readCurrentUserWithTimeout(
   supabase: NonNullable<ReturnType<typeof createBrowserSupabaseClient>>,
 ) {
   return new Promise<User | null>((resolve) => {
-    const timeoutId = window.setTimeout(() => {
-      resolve(null);
-    }, 2500);
+    const timeoutId = window.setTimeout(() => resolve(null), 2500);
 
     void supabase.auth
       .getUser()
       .then((result: { data: { user: User | null } }) => {
         resolve(result.data.user ?? null);
       })
-      .catch(() => {
-        resolve(null);
-      })
-      .finally(() => {
-        window.clearTimeout(timeoutId);
-      });
+      .catch(() => resolve(null))
+      .finally(() => window.clearTimeout(timeoutId));
   });
 }
 
 function ConsentCheck({
   checked,
+  emphasis = false,
   label,
   onChange,
-  optional,
+  optional = false,
 }: {
   checked: boolean;
+  emphasis?: boolean;
   label: string;
   onChange: (checked: boolean) => void;
   optional?: boolean;
 }) {
   return (
-    <label className="flex min-h-12 cursor-pointer items-center gap-3 border-b border-line py-3 last:border-b-0">
+    <label
+      className={styles.consentRow}
+      data-emphasis={emphasis ? "true" : "false"}
+    >
       <input
         checked={checked}
-        className={cn(
-          "h-5 w-5 shrink-0 rounded border-line accent-ink",
-          "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink",
-        )}
         onChange={(event) => onChange(event.target.checked)}
         type="checkbox"
       />
-      <span className="min-w-0 flex-1">{label}</span>
-      {optional && <span className="text-xs text-muted">선택</span>}
+      <span aria-hidden="true" className={styles.checkmark}>
+        {checked ? <Check size={14} strokeWidth={2.5} /> : null}
+      </span>
+      <span className={styles.consentLabel}>{label}</span>
+      {optional ? <small>선택</small> : null}
     </label>
   );
 }
 
 function createConnectedAccount(user: User): ConnectedAccount {
-  const providerId =
+  const rawProviderId =
     typeof user.app_metadata.provider === "string"
       ? user.app_metadata.provider
       : user.identities?.[0]?.provider;
-  const providerLabel =
-    socialAuthProviders.find((provider) => provider.id === providerId)?.label ??
-    "소셜";
+  const provider = socialAuthProviders.find(
+    (candidate) => candidate.id === rawProviderId,
+  );
   const displayNameCandidates = [
     user.user_metadata.full_name,
     user.user_metadata.name,
@@ -406,7 +472,8 @@ function createConnectedAccount(user: User): ConnectedAccount {
 
   return {
     displayName,
-    providerLabel,
+    providerId: provider?.id ?? null,
+    providerLabel: provider?.label ?? "소셜 계정",
   };
 }
 
@@ -419,7 +486,6 @@ function readSavedConsentDraft(): ConsentDraft | null {
   }
 
   const savedDraft = localStorage.getItem("nuang-consent-draft");
-
   if (!savedDraft) return null;
 
   try {

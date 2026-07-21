@@ -93,13 +93,13 @@ describe("MyOverview", () => {
       await screen.findByText("내 뉴앙 코드를 만나보세요"),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "코어 검사 시작하기" }),
+      screen.getByRole("link", { name: "첫 성향 검사 시작하기" }),
     ).toHaveAttribute("href", "/assessments");
 
     await waitFor(() => {
       expect(
         screen.getByRole("link", {
-          name: /로그인하기.*리포트와 활동을 계정에 안전하게 이어서 저장해요/,
+          name: /로그인 또는 가입.*커뮤니티와 계정 기능을 이용해요/,
         }),
       ).toHaveAttribute("href", "/login?next=/my");
     });

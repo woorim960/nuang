@@ -195,10 +195,10 @@ export function MyOverview() {
         />
         {!isLoggedIn && !isCheckingAuth ? (
           <MyMenuLink
-            description="리포트와 활동을 계정에 안전하게 이어서 저장해요"
+            description="커뮤니티와 계정 기능을 이용해요"
             href="/login?next=/my"
             icon={LogIn}
-            title="로그인하기"
+            title="로그인 또는 가입"
             tone="neutral"
           />
         ) : null}
@@ -246,11 +246,11 @@ function EmptyProfile({
         </div>
       </div>
       <p className={styles.profileDescription}>
-        짧은 코어 검사로 대표 성향을 확인하고, 준비된 검사를 더할수록 나를 더
+        첫 성향 검사로 대표 성향을 확인하고, 준비된 검사를 더할수록 나를 더
         자세히 이해할 수 있어요.
       </p>
       <Link className={styles.startAssessment} href="/assessments">
-        코어 검사 시작하기
+        첫 성향 검사 시작하기
         <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
       </Link>
     </section>

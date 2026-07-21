@@ -3,7 +3,6 @@
 import {
   ArrowRight,
   Bell,
-  Check,
   LockKeyhole,
   MessageCircle,
   UsersRound,
@@ -18,7 +17,7 @@ import {
 } from "react";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
-import { FeedPollCard } from "@/features/feed/FeedPollCard";
+import { PersonalityPlaygroundPost } from "@/features/feed/PersonalityPlaygroundPost";
 import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
 import {
   type FeedItem,
@@ -116,9 +115,14 @@ export function HomeDashboard({
       {model.hero.kind === "full_complete" ? <HomeRelationshipPrompt /> : null}
 
       {communityPollItem?.poll ? (
-        <HomeCommunityPoll item={communityPollItem} />
+        <PersonalityPlaygroundPost
+          continueHref={`/feed?posted=${communityPollItem.id}`}
+          post={communityPollItem}
+          recordHref="/feed/perspectives?from=home"
+          returnTo="/home"
+        />
       ) : (
-        <HomeDailyChoice />
+        <HomePlaygroundUnavailable />
       )}
 
       <HomeProfileDiscovery profile={featuredProfile} />
@@ -421,151 +425,15 @@ function HomeProfileDiscovery({
   );
 }
 
-function HomeDailyChoice() {
-  const selectedOptionId = useSyncExternalStore(
-    subscribeToHomeDailyChoice,
-    getHomeDailyChoiceSnapshot,
-    getServerHomeDailyChoiceSnapshot,
-  );
-  const selectedOption = homeDailyChoice.options.find(
-    (option) => option.id === selectedOptionId,
-  );
-
+function HomePlaygroundUnavailable() {
   return (
-    <section className={styles.section}>
-      <SectionHeading
-        description="하나를 고르면 다른 사람들의 선택도 바로 볼 수 있어요."
-        title="오늘의 성향 놀이터"
-      />
-      <div className={styles.playgroundBody}>
-        <div className={styles.dailyChoiceMeta}>
-          <span>오늘의 가벼운 선택</span>
-          <span>검사 결과에는 반영되지 않아요</span>
-        </div>
-        <h3>{homeDailyChoice.question}</h3>
-        <div
-          aria-label="오늘의 선택지"
-          className={styles.dailyChoiceOptions}
-          role="group"
-        >
-          {homeDailyChoice.options.map((option) => {
-            const selected = option.id === selectedOptionId;
-
-            return (
-              <button
-                aria-pressed={selected}
-                className={styles.dailyChoiceOption}
-                data-selected={selected ? "true" : "false"}
-                key={option.id}
-                onClick={() => saveHomeDailyChoice(option.id)}
-                type="button"
-              >
-                <span>
-                  <strong>{option.label}</strong>
-                  <small>{option.detail}</small>
-                </span>
-                {selected ? (
-                  <span aria-hidden="true" className={styles.choiceCheck}>
-                    <Check size={16} strokeWidth={2.4} />
-                  </span>
-                ) : null}
-              </button>
-            );
-          })}
-        </div>
-        {selectedOption ? (
-          <div className={styles.dailyChoiceResult}>
-            <p aria-live="polite" role="status">
-              {selectedOption.resultTitle}
-            </p>
-            <p>{selectedOption.resultBody}</p>
-            <Link href="/feed">
-              다른 사람들의 생각도 보기
-              <ArrowRight aria-hidden="true" size={16} strokeWidth={2} />
-            </Link>
-          </div>
-        ) : (
-          <p className={styles.dailyChoiceHint}>
-            하나를 고르면 선택에 맞는 설명을 바로 보여드려요.
-          </p>
-        )}
-      </div>
-    </section>
-  );
-}
-
-function HomeCommunityPoll({ item }: { item: FeedItem }) {
-  if (!item.poll) return null;
-
-  const statsHref = `${item.poll.statsHref}?from=home`;
-  const hasVoted = Boolean(item.poll.viewerVoteOptionId);
-  const latestReply = hasVoted ? item.replyPreview?.[0] : undefined;
-  const replyCount = item.replyCount ?? item.replyPreview?.length ?? 0;
-
-  return (
-    <section className={styles.section}>
-      <SectionHeading
-        description="하나를 고르면 뉴앙 코드마다 어떻게 답했는지 바로 볼 수 있어요."
-        title="오늘의 성향 놀이터"
-      />
-      <div className={styles.playgroundBody}>
-        <div className={styles.dailyChoiceMeta}>
-          <span>실시간 커뮤니티 투표</span>
-          <span>{item.poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
-        </div>
-        <FeedPollCard poll={item.poll} returnTo="/home" variant="home" />
-        {hasVoted ? (
-          <div className={styles.communityResultNote}>
-            <strong>
-              {item.poll.canViewCodeStats
-                ? "뉴앙 코드별 관점도 함께 볼 수 있어요"
-                : "사람들의 선택이 모이기 시작했어요"}
-            </strong>
-            <p>
-              {item.poll.canViewCodeStats
-                ? "어떤 코드가 무엇을 골랐는지 같은 자리에서 비교해 보세요."
-                : "참여가 모이면 코드별 선택 차이도 확인할 수 있어요."}
-            </p>
-            {item.poll.canViewCodeStats ? (
-              <Link href={statsHref}>
-                코드별 관점 보기
-                <ArrowRight aria-hidden="true" size={14} strokeWidth={2} />
-              </Link>
-            ) : null}
-          </div>
-        ) : null}
-
-        {hasVoted ? (
-          <Link className={styles.communityDiscussion} href={statsHref}>
-            <span aria-hidden="true" className={styles.communityDiscussionIcon}>
-              <MessageCircle size={17} strokeWidth={2} />
-            </span>
-            <span className={styles.communityDiscussionCopy}>
-              {latestReply ? (
-                <>
-                  <small>최근 댓글 · {latestReply.authorName}</small>
-                  <strong>{latestReply.body}</strong>
-                  <span>
-                    {replyCount.toLocaleString("ko-KR")}개 댓글 모두 보기
-                  </span>
-                </>
-              ) : (
-                <>
-                  <small>아직 댓글이 없어요</small>
-                  <strong>내가 고른 이유를 먼저 남겨보세요.</strong>
-                  <span>첫 댓글 남기기</span>
-                </>
-              )}
-            </span>
-            <ArrowRight
-              aria-hidden="true"
-              className={styles.communityDiscussionArrow}
-              size={17}
-              strokeWidth={2}
-            />
-          </Link>
-        ) : null}
-      </div>
+    <section className={styles.playgroundUnavailable}>
+      <strong>오늘의 질문을 준비하고 있어요</strong>
+      <p>커뮤니티의 다른 이야기부터 가볍게 둘러보세요.</p>
+      <Link href="/feed">
+        커뮤니티 보기
+        <ArrowRight aria-hidden="true" size={16} strokeWidth={1.8} />
+      </Link>
     </section>
   );
 }
@@ -723,84 +591,6 @@ function getHeroResultCode(hero: HomeHeroModel) {
   }
 
   return hero.kind === "in_progress" ? (hero.latestResult?.code ?? null) : null;
-}
-
-const homeDailyChoice = {
-  id: "free-day-choice-v1",
-  question: "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
-  options: [
-    {
-      detail: "대화하거나 함께 무언가 하기",
-      id: "together",
-      label: "사람을 만나 함께 보낸다",
-      resultBody:
-        "그날의 상황에 따라 선택은 달라질 수 있어요. 한 번의 선택만으로 성향을 판단하지 않아요.",
-      resultTitle: "오늘은 누군가와 시간을 나누는 쪽이 더 끌렸네요.",
-    },
-    {
-      detail: "쉬거나 좋아하는 것에 집중하기",
-      id: "solo",
-      label: "혼자 여유롭게 보낸다",
-      resultBody:
-        "그날의 상황에 따라 선택은 달라질 수 있어요. 한 번의 선택만으로 성향을 판단하지 않아요.",
-      resultTitle: "오늘은 혼자 내 시간을 채우는 쪽이 더 끌렸네요.",
-    },
-  ],
-} as const;
-
-const homeDailyChoiceStorageKeyPrefix = `nuang:home:daily-choice:${homeDailyChoice.id}`;
-const homeDailyChoiceListeners = new Set<() => void>();
-let homeDailyChoiceMemory: string | null = null;
-
-function subscribeToHomeDailyChoice(listener: () => void) {
-  homeDailyChoiceListeners.add(listener);
-
-  function handleStorage(event: StorageEvent) {
-    if (event.key === getHomeDailyChoiceStorageKey()) listener();
-  }
-
-  window.addEventListener("storage", handleStorage);
-
-  return () => {
-    homeDailyChoiceListeners.delete(listener);
-    window.removeEventListener("storage", handleStorage);
-  };
-}
-
-function getHomeDailyChoiceSnapshot() {
-  try {
-    homeDailyChoiceMemory = window.localStorage.getItem(
-      getHomeDailyChoiceStorageKey(),
-    );
-  } catch {
-    // Use the in-memory choice when browser storage is unavailable.
-  }
-
-  return homeDailyChoice.options.some(
-    (option) => option.id === homeDailyChoiceMemory,
-  )
-    ? homeDailyChoiceMemory
-    : null;
-}
-
-function getServerHomeDailyChoiceSnapshot() {
-  return null;
-}
-
-function saveHomeDailyChoice(optionId: string) {
-  homeDailyChoiceMemory = optionId;
-
-  try {
-    window.localStorage.setItem(getHomeDailyChoiceStorageKey(), optionId);
-  } catch {
-    // The current visit still keeps the choice in memory.
-  }
-
-  homeDailyChoiceListeners.forEach((listener) => listener());
-}
-
-function getHomeDailyChoiceStorageKey() {
-  return `${homeDailyChoiceStorageKeyPrefix}:${new Date().toISOString().slice(0, 10)}`;
 }
 
 function selectFeaturedProfile() {

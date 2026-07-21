@@ -1,106 +1,116 @@
 import {
   ArrowLeft,
-  Bell,
   ChevronRight,
-  Database,
+  FileCheck2,
   LockKeyhole,
   ShieldCheck,
-  UserRound,
 } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { AccountConnectPanel } from "@/features/consent/AccountConnectPanel";
+import styles from "./page.module.css";
 
-const settingsItems = [
+const privacyItems = [
   {
-    description: "프로필과 로그인 상태",
-    href: "#account",
-    icon: UserRound,
-    title: "계정 설정",
-  },
-  {
-    description: "프로필과 비교에 쓰이는 정보",
+    description: "다른 사람에게 보이는 프로필과 비교 정보",
     href: "/my/settings/visibility",
     icon: LockKeyhole,
-    title: "공개 범위 설정",
+    title: "공개 정보 안내",
+  },
+] as const;
+
+const serviceItems = [
+  {
+    description: "뉴앙 서비스 이용 기준",
+    href: "/policies/terms",
+    icon: FileCheck2,
+    title: "이용약관",
   },
   {
-    description: "준비 중",
-    href: "#notifications",
-    icon: Bell,
-    title: "알림 설정",
-  },
-  {
-    description: "내보내기와 삭제",
-    href: "/my/reports",
-    icon: Database,
-    title: "데이터 관리",
+    description: "개인정보를 수집하고 보호하는 방법",
+    href: "/policies/privacy",
+    icon: ShieldCheck,
+    title: "개인정보 처리방침",
   },
 ] as const;
 
 export default function MySettingsPage() {
   return (
-    <main className="mx-auto min-h-dvh max-w-[520px] bg-white px-5 pb-12">
-      <header className="sticky top-0 z-10 -mx-5 grid h-14 grid-cols-[40px_minmax(0,1fr)_40px] items-center border-b border-line bg-white/95 px-4 backdrop-blur-xl">
-        <Link
-          aria-label="마이로 돌아가기"
-          className="grid h-10 w-10 place-items-center rounded-full text-ink hover:bg-surface"
-          href="/my"
-        >
-          <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.9} />
+    <main className={styles.page}>
+      <header className={styles.header}>
+        <Link aria-label="마이로 돌아가기" href="/my">
+          <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.7} />
         </Link>
-        <p className="truncate px-2 text-center text-sm font-bold">설정</p>
+        <p>설정</p>
         <span aria-hidden="true" />
       </header>
 
-      <section className="border-b border-line pb-5 pt-7">
-        <h1 className="text-2xl font-black">설정</h1>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          계정, 공개 범위, 데이터 관리를 이곳에서 조정해요.
-        </p>
+      <section className={styles.intro}>
+        <h1>내 계정과 공개 정보를 관리해요</h1>
+        <p>현재 사용할 수 있는 설정만 모아 한눈에 확인할 수 있어요.</p>
       </section>
 
-      <nav aria-label="설정 메뉴" className="border-b border-line">
-        {settingsItems.map((item) => {
-          const Icon = item.icon;
-          const isReadyLink = item.href.startsWith("/");
-
-          return (
-            <Link
-              aria-disabled={!isReadyLink}
-              className="flex min-h-16 items-center gap-3 border-b border-line py-3 last:border-b-0"
-              href={item.href}
-              key={item.title}
-            >
-              <Icon aria-hidden="true" className="shrink-0 text-muted" size={19} />
-              <span className="min-w-0 flex-1">
-                <span className="block text-sm font-bold">{item.title}</span>
-                <span className="mt-1 block truncate text-xs text-muted">
-                  {item.description}
-                </span>
-              </span>
-              <ChevronRight
-                aria-hidden="true"
-                className="shrink-0 text-muted"
-                size={17}
-              />
-            </Link>
-          );
-        })}
-      </nav>
-
-      <section className="border-b border-line py-5">
-        <div className="flex items-start gap-3 text-muted">
-          <ShieldCheck aria-hidden="true" className="mt-0.5 shrink-0" size={18} />
-          <p className="text-sm leading-6">
-            일반 기능은 전연령으로 이용할 수 있고, 19세 이상 전용 기능은 해당
-            기능을 열 때 별도로 확인합니다.
-          </p>
+      <SettingsSection title="계정">
+        <div className={styles.accountPanel}>
+          <AccountConnectPanel />
         </div>
-      </section>
+      </SettingsSection>
 
-      <section className="py-5" id="account">
-        <AccountConnectPanel />
-      </section>
+      <SettingsSection title="개인정보와 커뮤니티">
+        <SettingsList items={privacyItems} />
+      </SettingsSection>
+
+      <SettingsSection title="서비스 정보">
+        <SettingsList items={serviceItems} />
+      </SettingsSection>
+
+      <p className={styles.safetyNote}>
+        검사 답변과 원점수, 계정 정보는 다른 사람에게 공개되지 않아요.
+      </p>
     </main>
+  );
+}
+
+function SettingsSection({
+  children,
+  title,
+}: {
+  children: ReactNode;
+  title: string;
+}) {
+  return (
+    <section className={styles.section}>
+      <h2>{title}</h2>
+      {children}
+    </section>
+  );
+}
+
+function SettingsList({
+  items,
+}: {
+  items: ReadonlyArray<{
+    description: string;
+    href: string;
+    icon: typeof LockKeyhole;
+    title: string;
+  }>;
+}) {
+  return (
+    <nav className={styles.list}>
+      {items.map((item) => {
+        const Icon = item.icon;
+        return (
+          <Link href={item.href} key={item.title}>
+            <Icon aria-hidden="true" size={18} strokeWidth={1.7} />
+            <span>
+              <strong>{item.title}</strong>
+              <small>{item.description}</small>
+            </span>
+            <ChevronRight aria-hidden="true" size={17} strokeWidth={1.7} />
+          </Link>
+        );
+      })}
+    </nav>
   );
 }

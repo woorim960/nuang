@@ -95,7 +95,7 @@
 
 .profileIdentity small {
   color: #777b86;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   font-weight: 550;
 }
 
@@ -112,7 +112,7 @@
   margin-top: 0.48rem;
   overflow: hidden;
   color: #4e5260;
-  font-size: 0.8rem;
+  font-size: 0.8125rem;
   font-weight: 650;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -130,7 +130,7 @@
   max-width: 24rem;
   margin: 1.1rem 0 0;
   color: #666b76;
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
   line-height: 1.7;
   letter-spacing: -0.01em;
   word-break: keep-all;
@@ -148,7 +148,7 @@
   display: grid;
   gap: 0.2rem;
   color: #858994;
-  font-size: 0.64rem;
+  font-size: 0.71875rem;
 }
 
 .profileStats span + span {
@@ -174,7 +174,7 @@
   min-height: 44px;
   place-items: center;
   border-radius: 13px;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
 }
 
@@ -210,13 +210,13 @@
 
 .nextStep small {
   color: #6d62c7;
-  font-size: 0.63rem;
+  font-size: 0.7rem;
   font-weight: 650;
 }
 
 .nextStep strong {
   overflow: hidden;
-  font-size: 0.76rem;
+  font-size: 0.8125rem;
   font-weight: 650;
   line-height: 1.45;
   text-overflow: ellipsis;
@@ -247,7 +247,7 @@
 .sectionHeading p {
   margin: 0.3rem 0 0;
   color: #838690;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   line-height: 1.5;
 }
 
@@ -313,14 +313,14 @@
 }
 
 .menuCopy strong {
-  font-size: 0.78rem;
+  font-size: 0.8125rem;
   font-weight: 680;
 }
 
 .menuCopy small {
   overflow: hidden;
   color: #868a94;
-  font-size: 0.65rem;
+  font-size: 0.75rem;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -393,7 +393,7 @@
   grid-column: 1 / -1;
   margin: 0.5rem 0 0;
   color: #898d96;
-  font-size: 0.68rem;
+  font-size: 0.75rem;
   text-align: center;
 }
 

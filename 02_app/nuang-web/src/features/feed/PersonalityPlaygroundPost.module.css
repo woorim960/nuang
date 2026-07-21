@@ -1,0 +1,134 @@
+.post {
+  padding: 1rem;
+  border: 0;
+  border-bottom: 8px solid #f6f5f2;
+  color: #20232a;
+  background: linear-gradient(180deg, #fffdf8 0, #fff 22%);
+  animation: post-in 220ms ease-out both;
+}
+
+.post[data-highlighted="true"] {
+  position: relative;
+  z-index: 1;
+  border-bottom-color: #eeeafd;
+  background: linear-gradient(180deg, #fcfbff, #fff 34%);
+  box-shadow: inset 3px 0 0 #8c7ee4;
+}
+
+.header {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.avatar {
+  width: 2.5rem;
+  height: 2.5rem;
+  border: 1px solid #ebd8b6;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+}
+
+.identity {
+  display: grid;
+  min-width: 0;
+  gap: 0.08rem;
+}
+
+.identity strong {
+  color: #20232a;
+  font-size: 0.84375rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+.identity small {
+  overflow: hidden;
+  color: #737887;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.recordLink {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  padding-left: 0.4rem;
+  color: #8b621f;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.title {
+  margin: 1rem 0 0;
+  color: #20232a;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.45;
+}
+
+.poll {
+  margin-top: 0.875rem;
+}
+
+.footnote {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-top: 0.7rem;
+}
+
+.footnote p {
+  margin: 0;
+  color: #92939a;
+  font-size: 0.6875rem;
+  font-weight: 450;
+  line-height: 1.45;
+  word-break: keep-all;
+}
+
+.footnote a {
+  flex: 0 0 auto;
+  min-height: 32px;
+  color: #7468bd;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  line-height: 32px;
+  white-space: nowrap;
+}
+
+.actions {
+  margin-top: 0.4375rem;
+}
+
+.recordLink:focus-visible,
+.footnote a:focus-visible {
+  border-radius: 8px;
+  outline: 2px solid #c8c2f5;
+  outline-offset: 2px;
+}
+
+@keyframes post-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .post {
+    animation: none;
+  }
+}

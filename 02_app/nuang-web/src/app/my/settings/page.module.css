@@ -1,0 +1,150 @@
+.page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  color: #20232a;
+  background: #fff;
+}
+
+.header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: grid;
+  min-height: calc(56px + env(safe-area-inset-top));
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  padding: env(safe-area-inset-top) 0.875rem 0;
+  border-bottom: 1px solid #ececf1;
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: blur(16px);
+}
+
+.header > a {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #30333a;
+}
+
+.header > a:hover {
+  background: #f6f5f2;
+}
+
+.header p {
+  margin: 0;
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-align: center;
+}
+
+.intro {
+  padding: 1.45rem 1rem 1.2rem;
+  border-bottom: 8px solid #f6f5f2;
+}
+
+.intro h1 {
+  max-width: 18rem;
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 720;
+  letter-spacing: -0.03em;
+  line-height: 1.4;
+  word-break: keep-all;
+}
+
+.intro p {
+  margin: 0.45rem 0 0;
+  color: #737887;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+.section {
+  padding: 1rem 1rem 0;
+  border-bottom: 8px solid #f6f5f2;
+}
+
+.section > h2 {
+  margin: 0 0 0.55rem;
+  color: #737887;
+  font-size: 0.71875rem;
+  font-weight: 650;
+  letter-spacing: 0.01em;
+}
+
+.accountPanel {
+  padding: 0.65rem 0 1.1rem;
+}
+
+.list {
+  display: grid;
+}
+
+.list > a {
+  display: grid;
+  min-height: 64px;
+  grid-template-columns: 24px minmax(0, 1fr) 20px;
+  align-items: center;
+  gap: 0.75rem;
+  border-top: 1px solid #ececf1;
+  color: #20232a;
+}
+
+.list > a:first-child {
+  border-top: 0;
+}
+
+.list > a > svg:first-child {
+  color: #737887;
+}
+
+.list > a > svg:last-child {
+  color: #a0a3aa;
+}
+
+.list > a > span {
+  display: grid;
+  min-width: 0;
+  gap: 0.18rem;
+}
+
+.list strong {
+  font-size: 0.8125rem;
+  font-weight: 650;
+}
+
+.list small {
+  overflow: hidden;
+  color: #858993;
+  font-size: 0.71875rem;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.safetyNote {
+  margin: 1rem;
+  color: #858993;
+  font-size: 0.71875rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.header > a:focus-visible,
+.list > a:focus-visible {
+  outline: 2px solid #c8c2f5;
+  outline-offset: -2px;
+}
+
+@media (max-width: 350px) {
+  .intro,
+  .section {
+    padding-right: 0.875rem;
+    padding-left: 0.875rem;
+  }
+}

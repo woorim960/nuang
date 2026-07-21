@@ -1,0 +1,179 @@
+.page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding: 0 1rem calc(2rem + env(safe-area-inset-bottom));
+  color: #20232a;
+  background: #fff;
+}
+
+.header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: grid;
+  min-height: calc(56px + env(safe-area-inset-top));
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  margin: 0 -1rem;
+  padding: env(safe-area-inset-top) 0.875rem 0;
+  border-bottom: 1px solid #ececf1;
+  background: rgb(255 255 255 / 96%);
+  backdrop-filter: blur(16px);
+}
+
+.header > a {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: #30333a;
+}
+
+.header > a:hover {
+  background: #f6f5f2;
+}
+
+.header p {
+  overflow: hidden;
+  margin: 0;
+  padding: 0 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 650;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hero {
+  display: grid;
+  min-height: 172px;
+  grid-template-columns: minmax(0, 1fr) 104px;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1.6rem 0.25rem 1.25rem;
+  border-bottom: 1px solid #ececf1;
+}
+
+.heroCopy {
+  min-width: 0;
+}
+
+.heroCopy > span {
+  color: #6657d9;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.heroCopy h1 {
+  max-width: 15rem;
+  margin: 0.55rem 0 0;
+  color: #20232a;
+  font-size: clamp(1.35rem, 6.2vw, 1.65rem);
+  font-weight: 720;
+  letter-spacing: -0.035em;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+.heroCopy p {
+  margin: 0.65rem 0 0;
+  color: #737887;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.6;
+  word-break: keep-all;
+}
+
+.character {
+  display: grid;
+  width: 104px;
+  height: 104px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #ebe8f7;
+  border-radius: 50%;
+  background: linear-gradient(145deg, #f5f2ff, #edf7f4);
+}
+
+.character img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+}
+
+.benefits {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid #ececf1;
+}
+
+.benefits span {
+  display: flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 0.45rem;
+  color: #606570;
+  font-size: 0.71875rem;
+  font-weight: 600;
+}
+
+.benefits span + span {
+  padding-left: 0.75rem;
+  border-left: 1px solid #ececf1;
+}
+
+.benefits svg {
+  flex: 0 0 auto;
+  color: #6e62ce;
+}
+
+.authSection {
+  padding: 1.35rem 0 1rem;
+}
+
+.backLink {
+  display: grid;
+  min-height: 44px;
+  place-items: center;
+  color: #737887;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.backLink:focus-visible,
+.header > a:focus-visible {
+  outline: 2px solid #c8c2f5;
+  outline-offset: 2px;
+}
+
+@media (max-width: 350px) {
+  .page {
+    padding-right: 0.875rem;
+    padding-left: 0.875rem;
+  }
+
+  .header {
+    margin-right: -0.875rem;
+    margin-left: -0.875rem;
+  }
+
+  .hero {
+    grid-template-columns: minmax(0, 1fr) 84px;
+  }
+
+  .character {
+    width: 84px;
+    height: 84px;
+  }
+
+  .character img {
+    width: 78px;
+    height: 78px;
+  }
+}

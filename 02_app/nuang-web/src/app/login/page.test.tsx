@@ -21,7 +21,7 @@ describe("LoginPage", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: "선택을 저장하고 결과를 확인해요",
+        name: "내 선택을 저장하려면 로그인해 주세요",
       }),
     ).toBeInTheDocument();
     expect(screen.getByTestId("account-connect-context")).toHaveTextContent(
@@ -36,7 +36,7 @@ describe("LoginPage", () => {
     render(await LoginPage({}));
 
     expect(
-      screen.getByRole("heading", { name: "뉴앙에 로그인" }),
+      screen.getByRole("heading", { name: "로그인하고 뉴앙을 이어가요" }),
     ).toBeInTheDocument();
     expect(screen.getByTestId("account-connect-context")).toHaveTextContent(
       "account",

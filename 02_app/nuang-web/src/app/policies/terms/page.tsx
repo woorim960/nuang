@@ -7,7 +7,7 @@ export const metadata: Metadata = {
     follow: false,
     index: false,
   },
-  title: "이용약관 준비 중 | NUANG",
+  title: "이용약관 | NUANG",
 };
 
 export default function TermsPolicyPage() {
