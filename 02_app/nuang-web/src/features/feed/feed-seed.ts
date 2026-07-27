@@ -2,6 +2,7 @@ import type { PublicProfileCardPayload } from "@/features/public-profile/public-
 import { createPublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import { createPublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
 import type { CoreScoreResult } from "@/lib/scoring/types";
+import type { FeedExternalLink } from "./link-safety";
 
 export type FeedItemKind =
   | "balance_game"
@@ -21,6 +22,8 @@ export type FeedReplyPreview = {
   authorName: string;
   body: string;
   id: string;
+  links?: FeedExternalLink[];
+  reportable?: boolean;
   statusLabel?: string;
   timeLabel?: string;
 };
@@ -52,6 +55,7 @@ export type FeedPollSummary = {
   options: FeedPollOptionSummary[];
   promptId: string;
   question: string;
+  status?: "active" | "closed";
   statsHref: string;
   totalVotes: number;
   viewerCode: string | null;
@@ -101,10 +105,12 @@ export type FeedItem = {
   id: string;
   kind: FeedItemKind;
   layout: FeedItemLayout;
+  links?: FeedExternalLink[];
   likeCount?: number;
   likeLabel: string;
   media?: FeedPostMedia[];
   mediaLabel?: string;
+  officialFeatured?: boolean;
   poll?: FeedPollSummary;
   priority: number;
   questionAudience?: FeedQuestionAudience;
@@ -112,6 +118,8 @@ export type FeedItem = {
   replyCount?: number;
   replyLabel: string;
   replyPreview?: FeedReplyPreview[];
+  responseClosesAt?: string | null;
+  responseStatus?: "closed" | "open";
   statusLabel?: string;
   targetType?: "feed_post" | "feed_seed_card";
   timeLabel: string;
@@ -180,7 +188,7 @@ const feedPublicProfiles = {
     displayName: "성향지도 노트",
     motif: "forest",
     profileCode: "INGMC",
-    profileName: "새 길을 찾는 탐구자",
+    profileName: "새 가능성을 찾는 탐험가",
     snapshotId: "44444444-4444-4444-8444-444444444444",
     scores: [66, 58, 62, 71, 73],
   }),
@@ -198,7 +206,7 @@ const feedPublicProfiles = {
     displayName: "오늘의 질문",
     motif: "water",
     profileCode: "IRGMQ",
-    profileName: "질문을 품은 탐구자",
+    profileName: "변화의 원인을 좇는 추적자",
     snapshotId: "22222222-2222-4222-8222-222222222222",
     scores: [54, 70, 61, 63, 69],
   }),
@@ -207,7 +215,7 @@ const feedPublicProfiles = {
     displayName: "성향 카드",
     motif: "flame",
     profileCode: "ENGKQ",
-    profileName: "영감을 키우는 기획자",
+    profileName: "변화에 답하는 혁신가",
     snapshotId: "33333333-3333-4333-8333-333333333333",
     scores: [78, 67, 72, 57, 74],
   }),

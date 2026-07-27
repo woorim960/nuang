@@ -1,0 +1,114 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-05.0.1",
+  "batchId": "P1-IAS-05",
+  "status": "P1_INFERRED_AXIS_BATCH_05_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 1,
+    "variants": 2,
+    "retainCandidates": 0,
+    "revisionCandidates": 2,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-OE-WORK-SUCCESS-ATTENTION",
+      "claimKey": ".scenario.work.success.attention",
+      "claimKind": "attention",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-ATTENTION-OE-R",
+      "claimKey": ".scenario.work.success.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "업무나 학업에서 좋은 결과가 생기면 칭찬 자체보다 실제로 효과가 있었던 과정과 다시 활용할 수 있는 방법을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "업무나 학업에서 좋은 결과가 생기면 칭찬 자체보다 실제로 효과가 있었던 과정과 다시 활용할 수 있는 방법을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast",
+        "rationale": "R은 확인한 결과·과정·조건, N은 새 기회·확장 가능성·아이디어 연결을 직접 보여 주도록 양방향을 함께 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "업무나 학업에서 좋은 결과가 생기면 구체적으로 달라진 결과와 실제로 효과가 있었던 과정, 다시 확인해 볼 수 있는 조건을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "업무나 학업에서 좋은 결과가 생기면 구체적으로 달라진 결과와 실제로 효과가 있었던 과정, 다시 확인해 볼 수 있는 조건을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "업무나 학업에서 좋은 결과가 생기면 칭찬 자체보다 실제로 효과가 있었던 과정과 다시 활용할 수 있는 방법을 먼저 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-ATTENTION-OE-N",
+      "claimKey": ".scenario.work.success.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "좋은 업무 결과가 생기면 기여한 사람과 잘 작동한 과정, 다음에 확장할 가능성, 반복할 실행 방식을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "좋은 업무 결과가 생기면 기여한 사람과 잘 작동한 과정, 다음에 확장할 가능성, 반복할 실행 방식을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast",
+        "rationale": "R은 확인한 결과·과정·조건, N은 새 기회·확장 가능성·아이디어 연결을 직접 보여 주도록 양방향을 함께 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "업무나 학업에서 좋은 결과가 생기면 이 성과가 열어 줄 새로운 기회와 다른 일로 확장할 가능성, 새롭게 연결할 아이디어가 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "업무나 학업에서 좋은 결과가 생기면 이 성과가 열어 줄 새로운 기회와 다른 일로 확장할 가능성, 새롭게 연결할 아이디어가 먼저 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "좋은 업무 결과가 생기면 기여한 사람과 잘 작동한 과정, 다음에 확장할 가능성, 반복할 실행 방식을 먼저 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_05_RECOMPOSITION_AND_BATCH_06_SCREEN",
+    "actions": [
+      "2개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "RO·family 맥락의 P1-IAS-06을 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

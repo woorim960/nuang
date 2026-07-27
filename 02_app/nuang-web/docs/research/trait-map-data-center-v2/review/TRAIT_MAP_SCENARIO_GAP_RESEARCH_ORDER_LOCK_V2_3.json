@@ -1,0 +1,253 @@
+{
+  "contractVersion": "nuang-trait-map-scenario-gap-research-order-lock.v2.3",
+  "lockId": "TRAIT-MAP-SCENARIO-GAP-RESEARCH-ORDER-LOCK.2.3",
+  "status": "LOCKED_UNTIL_NEW_EVIDENCE_OR_SCOPE_CHANGE",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceReportId": "TRAIT-MAP-SCENARIO-GAP-PRIORITY-MATRIX.2.3",
+  "changePolicy": "새 근거 추출, 문장 수 변경, 축 범위 변경이 있을 때만 점수를 재생성하며 수동으로 순위를 덮어쓰지 않는다.",
+  "directValidationOrder": [
+    {
+      "rank": 1,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "score": 71,
+      "tier": "P0",
+      "label": "관심 상대의 뜻이 분명하지 않을 때"
+    },
+    {
+      "rank": 2,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "score": 59,
+      "tier": "P0",
+      "label": "관심 상대 앞에서 실수하거나 기대와 다른 반응을 받았을 때"
+    },
+    {
+      "rank": 3,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "score": 53,
+      "tier": "P0",
+      "label": "관심 상대에게 자신의 필요를 말할 때"
+    },
+    {
+      "rank": 4,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "score": 44,
+      "tier": "P0",
+      "label": "관심 상대가 도움을 요청할 때"
+    },
+    {
+      "rank": 5,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "score": 41,
+      "tier": "P0",
+      "label": "관심 상대와 의견이 다를 때"
+    },
+    {
+      "rank": 6,
+      "scenarioRef": "SCN-FAMILY-7",
+      "score": 40,
+      "tier": "P0",
+      "label": "가족이 도움을 요청할 때"
+    },
+    {
+      "rank": 7,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "score": 35,
+      "tier": "P1",
+      "label": "관심 상대와의 계획이 갑자기 바뀔 때"
+    },
+    {
+      "rank": 8,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "score": 32,
+      "tier": "P1",
+      "label": "관심 상대와 일이 지나간 뒤 돌아볼 때"
+    },
+    {
+      "rank": 9,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "score": 26,
+      "tier": "P1",
+      "label": "관심 상대가 있는 모임에 참여할 때"
+    },
+    {
+      "rank": 10,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "score": 26,
+      "tier": "P1",
+      "label": "관심 상대와 경계를 정해야 할 때"
+    },
+    {
+      "rank": 11,
+      "scenarioRef": "SCN-FAMILY-12",
+      "score": 23,
+      "tier": "P2",
+      "label": "가족과 일이 지나간 뒤 돌아볼 때"
+    },
+    {
+      "rank": 12,
+      "scenarioRef": "SCN-FAMILY-9",
+      "score": 23,
+      "tier": "P2",
+      "label": "가족과 경계를 정해야 할 때"
+    },
+    {
+      "rank": 13,
+      "scenarioRef": "SCN-FAMILY-11",
+      "score": 22,
+      "tier": "P2",
+      "label": "가족 안에서 실수나 기대와 다른 일이 생겼을 때"
+    },
+    {
+      "rank": 14,
+      "scenarioRef": "SCN-FAMILY-3",
+      "score": 18,
+      "tier": "P2",
+      "label": "가족 모임이나 공동 활동에 참여할 때"
+    },
+    {
+      "rank": 15,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "score": 17,
+      "tier": "ARCHIVE_COMMON_ONLY",
+      "label": "관심 상대에게 좋은 일이 생겼을 때"
+    },
+    {
+      "rank": 16,
+      "scenarioRef": "SCN-FAMILY-5",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족의 뜻이나 상황이 분명하지 않을 때"
+    }
+  ],
+  "backgroundResearchOrder": [
+    {
+      "rank": 1,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "score": 57,
+      "tier": "P0",
+      "label": "관심 상대의 뜻이 분명하지 않을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 2,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "score": 45,
+      "tier": "P0",
+      "label": "관심 상대 앞에서 실수하거나 기대와 다른 반응을 받았을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 3,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "score": 34,
+      "tier": "P1",
+      "label": "관심 상대에게 자신의 필요를 말할 때",
+      "backgroundAlreadyExtracted": true
+    },
+    {
+      "rank": 4,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "score": 28,
+      "tier": "P1",
+      "label": "관심 상대와 의견이 다를 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 5,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "score": 28,
+      "tier": "P1",
+      "label": "관심 상대가 도움을 요청할 때",
+      "backgroundAlreadyExtracted": true
+    },
+    {
+      "rank": 6,
+      "scenarioRef": "SCN-FAMILY-7",
+      "score": 26,
+      "tier": "P1",
+      "label": "가족이 도움을 요청할 때",
+      "backgroundAlreadyExtracted": true
+    },
+    {
+      "rank": 7,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "score": 23,
+      "tier": "P1",
+      "label": "관심 상대와 일이 지나간 뒤 돌아볼 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 8,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "score": 23,
+      "tier": "P1",
+      "label": "관심 상대와의 계획이 갑자기 바뀔 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 9,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "score": 18,
+      "tier": "P2",
+      "label": "관심 상대가 있는 모임에 참여할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 10,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "score": 18,
+      "tier": "P2",
+      "label": "관심 상대와 경계를 정해야 할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 11,
+      "scenarioRef": "SCN-FAMILY-11",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족 안에서 실수나 기대와 다른 일이 생겼을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 12,
+      "scenarioRef": "SCN-FAMILY-12",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족과 일이 지나간 뒤 돌아볼 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 13,
+      "scenarioRef": "SCN-FAMILY-9",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족과 경계를 정해야 할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 14,
+      "scenarioRef": "SCN-FAMILY-3",
+      "score": 13,
+      "tier": "P2",
+      "label": "가족 모임이나 공동 활동에 참여할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 15,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "score": 13,
+      "tier": "P2",
+      "label": "관심 상대에게 좋은 일이 생겼을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 16,
+      "scenarioRef": "SCN-FAMILY-5",
+      "score": 10,
+      "tier": "P2",
+      "label": "가족의 뜻이나 상황이 분명하지 않을 때",
+      "backgroundAlreadyExtracted": false
+    }
+  ]
+}

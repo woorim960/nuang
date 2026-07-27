@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { MyOverview } from "@/features/account/MyOverview";
+import { resolveAdminIdentityForUser } from "@/features/admin/server-admin-access";
 import {
   createServerCommunityProfilePayload,
   resolveCurrentCommunityProfileId,
@@ -22,14 +23,26 @@ export default async function MyPage() {
   const { data } = serverClient
     ? await serverClient.auth.getUser()
     : { data: { user: null } };
+  const adminIdentity =
+    data.user && serviceClient
+      ? await resolveAdminIdentityForUser({
+          client: serviceClient,
+          user: data.user,
+        })
+      : null;
+  const showAdminEntry = Boolean(adminIdentity);
 
-  if (!data.user || !serviceClient) return <MyOverview />;
+  if (!data.user || !serviceClient) {
+    return <MyOverview showAdminEntry={showAdminEntry} />;
+  }
 
   const communityProfileId = await resolveCurrentCommunityProfileId();
-  if (!communityProfileId) return <MyOverview />;
+  if (!communityProfileId) {
+    return <MyOverview showAdminEntry={showAdminEntry} />;
+  }
 
   const payload = await createServerCommunityProfilePayload(communityProfileId);
-  if (!payload) return <MyOverview />;
+  if (!payload) return <MyOverview showAdminEntry={showAdminEntry} />;
 
   const socialState = await readCommunityProfileSocialState({
     client: serviceClient,
@@ -44,6 +57,7 @@ export default async function MyPage() {
         mode="self"
         posts={payload.posts}
         profile={payload.profile}
+        showAdminEntry={showAdminEntry}
       />
     </div>
   );

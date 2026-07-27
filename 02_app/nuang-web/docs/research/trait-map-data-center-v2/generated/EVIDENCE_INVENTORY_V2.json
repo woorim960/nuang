@@ -1,0 +1,280 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "TRAIT-MAP-EVIDENCE-INVENTORY.0.1",
+  "status": "RESEARCH_INVENTORY_NOT_FOR_PRODUCTION",
+  "normalizedRegistry": {
+    "totalSources": 41,
+    "includedSources": 40,
+    "excludedSources": 1,
+    "totalFindings": 40
+  },
+  "enakqLegacyCandidateAudit": {
+    "totalCandidates": 42,
+    "normalizedIncluded": 39,
+    "normalizedExcluded": 1,
+    "aliasesNeedingMerge": 2,
+    "normalizationPending": 0
+  },
+  "candidateRows": [
+    {
+      "sourceId": "SRC-BERKELEY-BFI",
+      "status": "alias_needs_source_id_merge",
+      "normalizedSourceId": "SRC-BFI2-2017",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-BFAS-2007",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-BFAS-2007",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-BFI2-2017",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-BFI2-2017",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-CONTENT-VALIDITY-2018",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-CONTENT-VALIDITY-2018",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-CREATIVITY-DISTINCTION-2014",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-CREATIVITY-DISTINCTION-2014",
+      "sourceFile": "src/features/nuang-code/trait-map-change-context-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-CURVILINEAR-PERFORMANCE-2011",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-CURVILINEAR-PERFORMANCE-2011",
+      "sourceFile": "src/features/nuang-code/trait-map-work-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-DAILY-STRESS-STATES-2024",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-DAILY-STRESS-STATES-2024",
+      "sourceFile": "src/features/nuang-code/trait-map-change-context-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-DIGITAL-CHANGE-2021",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-DIGITAL-CHANGE-2021",
+      "sourceFile": "src/features/nuang-code/trait-map-change-context-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-DYAD-2010",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-DYAD-2010",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-EMOTION-PROCESS-1998",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-EMOTION-PROCESS-1998",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-EXTRAVERSION-PA-2015",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-EXTRAVERSION-PA-2015",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-FRIEND-DAILY-2015",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-FRIEND-DAILY-2015",
+      "sourceFile": "src/features/nuang-code/trait-map-friendship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-FRIEND-DYAD-2023",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-FRIEND-DYAD-2023",
+      "sourceFile": "src/features/nuang-code/trait-map-friendship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-FRIEND-SIMILARITY-2026",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-FRIEND-SIMILARITY-2026",
+      "sourceFile": "src/features/nuang-code/trait-map-friendship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-INITIAL-ATTRACTION-2023",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-INITIAL-ATTRACTION-2023",
+      "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-INTENTION-BEHAVIOR-2016",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-INTENTION-BEHAVIOR-2016",
+      "sourceFile": "src/features/nuang-code/trait-map-process-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-INTERVENTION-META-2017",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-INTERVENTION-META-2017",
+      "sourceFile": "src/features/nuang-code/trait-map-change-context-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-IPC-2013",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-IPC-2013",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-ITC-2017",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-ITC-2017",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-JOB-META-1991",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-JOB-META-1991",
+      "sourceFile": "src/features/nuang-code/trait-map-work-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-KOREA-SITUATION-2024",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-KOREA-SITUATION-2024",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-OPENNESS-INTELLECT-2009",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-OPENNESS-INTELLECT-2009",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-PERSON-SITUATION-WORK-2015",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-PERSON-SITUATION-WORK-2015",
+      "sourceFile": "src/features/nuang-code/trait-map-work-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-PERSONAL-VALIDATION-1949",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-PERSONAL-VALIDATION-1949",
+      "sourceFile": "src/features/nuang-code/trait-map-process-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-REACTIVITY-RECOVERY-2023",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-REACTIVITY-RECOVERY-2023",
+      "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-REALTIME-PERSON-SITUATION-2015",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-REALTIME-PERSON-SITUATION-2015",
+      "sourceFile": "src/features/nuang-code/trait-map-process-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-RELATIONAL-UNCERTAINTY-2011",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-RELATIONAL-UNCERTAINTY-2011",
+      "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-RESPONSIVENESS-2017",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-RESPONSIVENESS-2017",
+      "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-RESPONSIVENESS-STRESS-2021",
+      "status": "normalized_excluded",
+      "normalizedSourceId": "SRC-RESPONSIVENESS-STRESS-2021",
+      "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-ROMANTIC-SIMILARITY-2023",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-ROMANTIC-SIMILARITY-2023",
+      "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-SELF-KNOWLEDGE-2010",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-SELF-KNOWLEDGE-2010",
+      "sourceFile": "src/features/nuang-code/trait-map-process-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-SITUATION-CONTINGENCY-2007",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-SITUATION-CONTINGENCY-2007",
+      "sourceFile": "src/features/nuang-code/trait-map-process-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-SOKA-2010",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-SOKA-2010",
+      "sourceFile": "src/features/nuang-code/trait-map-process-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-STATE-DISTRIBUTION-2001",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-STATE-DISTRIBUTION-2001",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-STATE-MEASUREMENT-2020",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-STATE-MEASUREMENT-2020",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-STRESS-STATE-2026",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-STRESS-STATE-2026",
+      "sourceFile": "src/features/nuang-code/trait-map-change-context-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-SUPPORT-MATCHING-2007",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-SUPPORT-MATCHING-2007",
+      "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-TEST-ADAPTATION-ITC",
+      "status": "alias_needs_source_id_merge",
+      "normalizedSourceId": "SRC-ITC-2017",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-TEST-STANDARDS-2014",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-TEST-STANDARDS-2014",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-TRAIT-ACTIVATION-2003",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-TRAIT-ACTIVATION-2003",
+      "sourceFile": "src/features/nuang-code/trait-map-work-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-TRAIT-ENACTMENT-2015",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-TRAIT-ENACTMENT-2015",
+      "sourceFile": "src/features/nuang-code/trait-map-process-evidence-v2.ts"
+    },
+    {
+      "sourceId": "SRC-WHOLE-TRAIT-2015",
+      "status": "normalized_included",
+      "normalizedSourceId": "SRC-WHOLE-TRAIT-2015",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    }
+  ],
+  "supplementalSources": [
+    {
+      "sourceId": "SRC-DIAMONDS-2014",
+      "screeningStatus": "included",
+      "sourceFile": "src/features/nuang-code/trait-map-foundation-evidence-v2.ts"
+    }
+  ],
+  "nextRule": "normalization_pending 자료는 원문 서지·방법·결과·제한을 확인하기 전까지 claim에 연결하지 않는다."
+}

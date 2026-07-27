@@ -95,13 +95,19 @@ describe("AccountResultView", () => {
     expect(
       screen.getByRole("heading", { name: "세부 신호" }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/현재 성향을 코드 자리로 요약한 결과/))
-      .toBeInTheDocument();
+    expect(
+      screen.getByText(/현재 성향을 코드 자리로 요약한 결과/),
+    ).toBeInTheDocument();
     expect(screen.getByText("결과 리포트")).toBeInTheDocument();
+    expect(
+      screen.queryByRole("navigation", { name: "결과 리포트 바로가기" }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText(/계정 결과|기기|로컬/)).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "결과 삭제" }))
-      .toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "내 리포트로 돌아가기" }))
-      .toHaveAttribute("href", "/my/reports");
+    expect(
+      screen.getByRole("button", { name: "이 결과 삭제" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "내 리포트로 돌아가기" }),
+    ).toHaveAttribute("href", "/my/reports");
   });
 });

@@ -174,7 +174,6 @@ export function AccountConnectPanel({
           </span>
           <span>
             <h2 id="account-connect-title">로그인 정보</h2>
-            <p>이 계정으로 결과와 커뮤니티 활동을 이어가고 있어요.</p>
           </span>
         </div>
 
@@ -207,11 +206,9 @@ export function AccountConnectPanel({
     <section aria-labelledby="account-connect-title" className={styles.panel}>
       <div className={styles.intro}>
         <h2 id="account-connect-title">원하는 계정으로 시작하세요</h2>
-        <p>
-          {context === "community"
-            ? "처음이어도 바로 가입돼요. 로그인 후 방금 하던 투표나 댓글로 돌아갑니다."
-            : "처음이어도 별도 회원가입 없이 바로 시작할 수 있어요."}
-        </p>
+        {context === "community" ? (
+          <p>로그인 후 방금 하던 활동으로 돌아갑니다.</p>
+        ) : null}
       </div>
 
       <div className={styles.consentBox}>
@@ -271,11 +268,11 @@ export function AccountConnectPanel({
         ))}
       </div>
 
-      <p className={styles.authHint} aria-live="polite">
-        {isReadyForAuth
-          ? "내 결과와 활동을 이 계정에서 안전하게 이어볼 수 있어요."
-          : "필수 항목에 동의하면 로그인 버튼을 사용할 수 있어요."}
-      </p>
+      {!isReadyForAuth ? (
+        <p className={styles.authHint} aria-live="polite">
+          필수 항목에 동의하면 로그인할 수 있어요.
+        </p>
+      ) : null}
 
       {message ? <StatusNotice message={message} /> : null}
       {closedState ? (
@@ -299,7 +296,6 @@ function AccountSkeleton() {
       <span className={styles.skeletonCopy} />
       <span className={styles.skeletonButton} />
       <span className={styles.skeletonButton} />
-      <p>로그인 상태를 확인하고 있어요.</p>
     </section>
   );
 }
@@ -370,19 +366,19 @@ function ProviderLogo({
       >
         <path
           d="M21.35 12.2c0-.72-.06-1.25-.2-1.8H12v3.45h5.37a4.6 4.6 0 0 1-1.99 2.92v2.38h3.23c1.89-1.75 2.74-4.32 2.74-6.95Z"
-          fill="#4285F4"
+          fill="var(--nu-provider-google-blue)"
         />
         <path
           d="M12 21.7c2.62 0 4.82-.86 6.61-2.55l-3.23-2.38c-.9.6-2.04.96-3.38.96-2.53 0-4.68-1.71-5.45-4.01H3.22v2.45A9.98 9.98 0 0 0 12 21.7Z"
-          fill="#34A853"
+          fill="var(--nu-provider-google-green)"
         />
         <path
           d="M6.55 13.72a6.04 6.04 0 0 1 0-3.85V7.42H3.22a10.02 10.02 0 0 0 0 8.75l3.33-2.45Z"
-          fill="#FBBC05"
+          fill="var(--nu-provider-google-yellow)"
         />
         <path
           d="M12 5.85c1.48 0 2.8.51 3.85 1.5l2.83-2.82A9.5 9.5 0 0 0 12 1.8a9.98 9.98 0 0 0-8.78 5.62l3.33 2.45C7.32 7.56 9.47 5.85 12 5.85Z"
-          fill="#EA4335"
+          fill="var(--nu-provider-google-red)"
         />
       </svg>
     );

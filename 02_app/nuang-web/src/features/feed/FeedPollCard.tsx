@@ -32,13 +32,15 @@ export function FeedPollCard({
     poll.viewerVoteOptionId,
   );
   const [perspectiveOpen, setPerspectiveOpen] = useState(
-    !poll.viewerVoteOptionId,
+    poll.status === "closed" || !poll.viewerVoteOptionId,
   );
   const [perspectiveCode, setPerspectiveCode] = useState<string | null>(null);
   const [showParticipatingCodes, setShowParticipatingCodes] = useState(false);
   const resumedVoteRef = useRef(false);
+  const isClosed = poll.status === "closed";
   const hasVoted = Boolean(viewerVoteOptionId);
-  const canVote = allowVote && status.status !== "pending";
+  const showResults = hasVoted || isClosed;
+  const canVote = allowVote && !isClosed && status.status !== "pending";
   const selectedPerspective = perspectiveCode
     ? (poll.codePerspectives.find((row) => row.code === perspectiveCode) ??
       null)
@@ -51,7 +53,7 @@ export function FeedPollCard({
     : null;
 
   useEffect(() => {
-    if (!allowVote || hasVoted || resumedVoteRef.current) return;
+    if (!allowVote || isClosed || hasVoted || resumedVoteRef.current) return;
 
     const searchParams = new URLSearchParams(window.location.search);
     const resumedPollId = searchParams.get("pollId");
@@ -93,7 +95,7 @@ export function FeedPollCard({
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [allowVote, hasVoted, poll.id, poll.options, returnTo, router]);
+  }, [allowVote, hasVoted, isClosed, poll.id, poll.options, returnTo, router]);
 
   async function handleVote(optionId: string) {
     if (!canVote || optionId === viewerVoteOptionId) return;
@@ -118,10 +120,18 @@ export function FeedPollCard({
       }
 
       if (!response.ok) {
+        const failure = (await response.json().catch(() => null)) as {
+          code?: string;
+          message?: string;
+        } | null;
         setStatus({
-          message: "투표를 저장하지 못했어요.",
+          message:
+            failure?.code === "feed_response_closed"
+              ? "방금 투표가 마감됐어요. 최종 결과를 새로 불러올게요."
+              : (failure?.message ?? "투표를 저장하지 못했어요."),
           status: "error",
         });
+        if (failure?.code === "feed_response_closed") router.refresh();
         return;
       }
 
@@ -148,23 +158,28 @@ export function FeedPollCard({
           ? "mt-3"
           : variant === "playground"
             ? "mt-0"
-            : "mt-4 border-y border-[#ececec] py-3",
+            : "mt-4 border-y border-[var(--nu-neutral-150)] py-3",
       )}
     >
-      <p
-        className={cn(
-          variant === "playground"
-            ? "text-[13px] font-medium leading-[1.55] tracking-[-0.012em] text-[#20232a]"
-            : "font-extrabold text-[#111111]",
-          variant === "home"
-            ? "max-w-[25ch] text-[19px] leading-7 tracking-[-0.025em]"
-            : variant === "feed"
-              ? "text-[15px] leading-6"
-              : "",
-        )}
-      >
-        {poll.question}
-      </p>
+      <div className={styles.questionRow}>
+        <p
+          className={cn(
+            variant === "playground"
+              ? "text-label font-medium leading-[1.55] tracking-[-0.012em] text-[var(--nu-color-text)]"
+              : "font-extrabold text-[var(--nu-color-text-strong)]",
+            variant === "home"
+              ? "max-w-[25ch] text-xl leading-7 tracking-[-0.025em]"
+              : variant === "feed"
+                ? "text-callout leading-6"
+                : "",
+          )}
+        >
+          {poll.question}
+        </p>
+        {isClosed ? (
+          <span className={styles.closedBadge}>투표 마감</span>
+        ) : null}
+      </div>
       <div className={cn("space-y-2", variant === "home" ? "mt-4" : "mt-3")}>
         {poll.options.map((option) => (
           <button
@@ -172,14 +187,14 @@ export function FeedPollCard({
             className={cn(
               "w-full text-left disabled:cursor-default",
               variant === "playground"
-                ? "min-h-[52px] rounded-[13px] border border-[#e6e7eb] bg-white px-3.5 py-3 transition-[border-color,background-color,opacity]"
+                ? "min-h-[52px] rounded-[13px] border border-[var(--nu-color-border-strong)] bg-white px-3.5 py-3 transition-[border-color,background-color,opacity]"
                 : variant === "home"
-                  ? "min-h-[56px] rounded-[13px] border border-[#ebe8ef] bg-[#fdfcfd] px-3 py-3 transition-[border-color,background-color,transform]"
+                  ? "min-h-[56px] rounded-[13px] border border-[var(--nu-brand-100)] bg-[var(--nu-neutral-0)] px-3 py-3 transition-[border-color,background-color,transform]"
                   : "py-2 transition-opacity",
               variant === "playground" && option.id === viewerVoteOptionId
-                ? "border-[#8b621f] bg-[#fbf3e4]"
+                ? "border-[var(--nu-color-play)] bg-[var(--nu-warm-100)]"
                 : variant === "home" && option.id === viewerVoteOptionId
-                  ? "border-[#8b621f] bg-[#fbf3e4]"
+                  ? "border-[var(--nu-color-play)] bg-[var(--nu-warm-100)]"
                   : "",
               canVote ? "hover:opacity-70" : "",
             )}
@@ -192,24 +207,24 @@ export function FeedPollCard({
               <span
                 className={cn(
                   variant === "playground"
-                    ? "text-[12px] font-medium text-[#20232a]"
-                    : "text-[15px] font-bold text-[#111111]",
+                    ? "text-caption font-medium text-[var(--nu-color-text)]"
+                    : "text-callout font-bold text-[var(--nu-color-text-strong)]",
                   variant === "playground" && option.id === viewerVoteOptionId
-                    ? "text-[#8b621f]"
+                    ? "text-[var(--nu-color-play)]"
                     : "",
                 )}
               >
                 {option.label}
               </span>
-              {hasVoted ? (
+              {showResults ? (
                 <span
                   className={cn(
                     "tabular-nums",
                     variant === "playground"
-                      ? "text-[11px] font-medium text-[#737887]"
-                      : "text-sm font-black text-[#111111]",
+                      ? "text-caption font-medium text-[var(--nu-color-text-muted)]"
+                      : "text-sm font-black text-[var(--nu-color-text-strong)]",
                     variant === "playground" && option.id === viewerVoteOptionId
-                      ? "text-[#8b621f]"
+                      ? "text-[var(--nu-color-play)]"
                       : "",
                   )}
                 >
@@ -217,25 +232,25 @@ export function FeedPollCard({
                 </span>
               ) : null}
             </div>
-            {hasVoted ? (
+            {showResults ? (
               <div
                 className={cn(
                   "mt-2 w-full",
                   variant === "playground"
-                    ? "h-[3px] rounded-full bg-[#e9e8ef]"
+                    ? "h-[3px] rounded-full bg-[var(--nu-info-100)]"
                     : variant === "home"
-                      ? "h-1 rounded-full bg-[#eeeeee]"
-                      : "h-[3px] bg-[#eeeeee]",
+                      ? "h-1 rounded-full bg-[var(--nu-neutral-75)]"
+                      : "h-[3px] bg-[var(--nu-neutral-75)]",
                 )}
               >
                 <div
                   className={cn(
                     "h-full",
                     variant === "playground"
-                      ? "rounded-full bg-[#8b621f]"
+                      ? "rounded-full bg-[var(--nu-color-play)]"
                       : variant === "home"
-                        ? "rounded-full bg-[#8b621f]"
-                        : "bg-[#8b621f]",
+                        ? "rounded-full bg-[var(--nu-color-play)]"
+                        : "bg-[var(--nu-color-play)]",
                   )}
                   style={{ width: `${option.ratio}%` }}
                 />
@@ -244,12 +259,12 @@ export function FeedPollCard({
           </button>
         ))}
       </div>
-      {hasVoted && variant === "feed" ? (
-        <div className="mt-3 flex items-center justify-between gap-4 text-[13px] font-semibold text-[#737373]">
+      {showResults && variant === "feed" ? (
+        <div className="mt-3 flex items-center justify-between gap-4 text-label font-semibold text-[var(--nu-color-text-muted)]">
           <span>총 {poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
           {poll.canViewCodeStats ? (
             <Link
-              className="text-[#111111]"
+              className="text-[var(--nu-color-text-strong)]"
               href={createStatsHref(poll.statsHref, variant)}
             >
               뉴앙 코드별 통계 보기
@@ -258,21 +273,18 @@ export function FeedPollCard({
             <span>코드별 비교는 참여자가 더 모이면 열려요</span>
           )}
         </div>
-      ) : hasVoted && variant === "playground" ? (
-        <section
-          aria-label="뉴앙 코드별 관점 보기"
-          className={styles.perspective}
-        >
+      ) : showResults && variant === "playground" ? (
+        <section aria-label="뉴앙 코드별 선택" className={styles.perspective}>
           <div className={styles.perspectiveHeader}>
             <button
               aria-controls={`poll-perspective-${poll.id}`}
               aria-expanded={perspectiveOpen}
-              aria-label={`코드별 관점 ${perspectiveOpen ? "접기" : "펼치기"}`}
+              aria-label={`코드별 선택 ${perspectiveOpen ? "접기" : "펼치기"}`}
               className={styles.perspectiveToggle}
               onClick={() => setPerspectiveOpen((current) => !current)}
               type="button"
             >
-              <strong>코드별 관점 보기</strong>
+              <strong>코드별 선택</strong>
               <span>
                 {poll.totalVotes.toLocaleString("ko-KR")}명 참여
                 <ChevronDown
@@ -385,30 +397,31 @@ export function FeedPollCard({
             </div>
           ) : null}
         </section>
-      ) : !hasVoted ? (
-        <p
-          className={cn(
-            "mt-3",
-            variant === "playground"
-              ? "text-[11px] font-normal text-[#8d8f96]"
-              : "text-[13px] font-semibold text-[#737373]",
-          )}
-        >
-          하나를 고르면 결과와 코드별 관점을 볼 수 있어요.
-        </p>
+      ) : null}
+      {isClosed && variant !== "feed" ? (
+        <p className={styles.closedNote}>마감된 최종 결과예요.</p>
       ) : null}
       {status.status === "pending" ? (
-        <p className="mt-2 text-xs font-medium text-[#737373]" role="status">
+        <p
+          className="mt-2 text-xs font-medium text-[var(--nu-color-text-muted)]"
+          role="status"
+        >
           투표 저장 중
         </p>
       ) : null}
       {status.status === "error" ? (
-        <p className="mt-2 text-xs font-medium text-[#9a6400]" role="alert">
+        <p
+          className="mt-2 text-xs font-medium text-[var(--nu-warm-700)]"
+          role="alert"
+        >
           {status.message}
         </p>
       ) : null}
       {status.status === "success" ? (
-        <p className="mt-2 text-xs font-medium text-[#8b621f]" role="status">
+        <p
+          className="mt-2 text-xs font-medium text-[var(--nu-color-play)]"
+          role="status"
+        >
           {status.message}
         </p>
       ) : null}

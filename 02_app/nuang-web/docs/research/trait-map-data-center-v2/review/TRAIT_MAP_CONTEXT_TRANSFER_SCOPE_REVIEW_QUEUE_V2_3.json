@@ -1,0 +1,586 @@
+{
+  "contractVersion": "nuang-trait-map-context-transfer-scope-review-queue.v2.3",
+  "queueId": "TRAIT-MAP-CONTEXT-TRANSFER-SCOPE-REVIEW-QUEUE.2.3",
+  "status": "P0_CONTEXT_TRANSFER_REVIEW_READY",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceReportId": "TRAIT-MAP-REMAINING-FINDING-CONTEXT-APPLICABILITY-SCREEN.2.3",
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "가족이 도움을 요청하면 어떤 일이 있었고 실제로 필요한 지원이 무엇인지, 자신이 책임질 범위가 어디까지인지 먼저 확인하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 도움을 요청하면 어떤 일이 있었고 실제로 필요한 지원이 무엇인지, 자신이 책임질 범위가 어디까지인지 먼저 확인하려는 경향이 있다.",
+          "가족이 힘든 일을 말하면 구체적으로 무슨 일이 있었고 무엇이 부담을 키웠는지, 지금 줄일 수 있는 문제를 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "가족이 힘든 일을 말하면 가장 힘든 마음과 가족 생활에 생길 영향, 함께 마련할 수 있는 도움 방법을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 힘든 일을 말하면 가장 힘든 마음과 가족 생활에 생길 영향, 함께 마련할 수 있는 도움 방법을 먼저 살피는 경향이 있다.",
+          "가족이 힘든 일을 말하면 그 사람이 겪은 마음과 가족에게 바라는 이해, 혼자 감당해 온 부담을 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“무엇을 해결해야 하고, 내가 맡는 것이 가장 효과적인 부분은 어디지?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“무엇을 해결해야 하고, 내가 맡는 것이 가장 효과적인 부분은 어디지?”를 생각하기 쉽다.",
+          "“가장 힘든 원인이 무엇이고, 내가 실제로 맡거나 바꿀 수 있는 일은 무엇이지?”라는 생각이 먼저 들기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“지금 이 사람이 혼자라고 느끼지 않으려면 무엇을 해야 하고, 우리 가족이 함께할 수 있는 일은 무엇일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“지금 이 사람이 혼자라고 느끼지 않으려면 무엇을 해야 하고, 우리 가족이 함께할 수 있는 일은 무엇일까?”를 생각하기 쉽다.",
+          "“어떤 마음을 가장 알아주길 바라고, 가족으로서 지금 어떻게 곁에 있어야 할까?”라는 생각이 먼저 들기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "요청을 들은 뒤 필요한 행동을 구체화하고, 가능한 범위 안에서 연락·동행·정리 같은 실질적인 도움을 제공하는 편이다.",
+        "detailParagraphs": [
+          "요청을 들은 뒤 필요한 행동을 구체화하고, 가능한 범위 안에서 연락·동행·정리 같은 실질적인 도움을 제공하는 편이다.",
+          "가족의 마음과 원하는 지원을 확인한 뒤 일정·이동·연락·역할 분담처럼 실질적인 도움을 계획으로 이어가는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "가족의 이야기를 듣고 원하는 도움을 확인한 뒤, 역할을 나누어 실제 지원과 다음 확인을 꾸준히 이어가는 편이다.",
+        "detailParagraphs": [
+          "가족의 이야기를 듣고 원하는 도움을 확인한 뒤, 역할을 나누어 실제 지원과 다음 확인을 꾸준히 이어가는 편이다.",
+          "마음을 충분히 들은 뒤 원하는 도움을 물어보고, 그날 가능한 범위에서 역할을 나누거나 실질적인 지원을 이어가는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“내가 오늘 할 수 있는 건 이 두 가지야. 무엇이 더 필요해?”처럼 가능 범위와 추가 필요를 함께 확인하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“내가 오늘 할 수 있는 건 이 두 가지야. 무엇이 더 필요해?”처럼 가능 범위와 추가 필요를 함께 확인하는 방식이 잘 맞는다.",
+          "“그 일이 계속 겹쳐서 힘들었겠어. 지금 내가 대신할 일과 같이 해결할 일을 나눠보자”처럼 마음 확인과 행동을 연결해 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“지금 가장 힘든 부분이 무엇인지 말해줘. 우리가 같이 할 수 있는 일을 하나씩 정해보자”처럼 경험 확인과 실행을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“지금 가장 힘든 부분이 무엇인지 말해줘. 우리가 같이 할 수 있는 일을 하나씩 정해보자”처럼 경험 확인과 실행을 연결해 말하는 방식이 자연스럽다.",
+          "“그 상황에서 정말 외롭고 힘들었겠어. 오늘은 내가 무엇을 같이 하면 가장 도움이 될까?”처럼 마음과 행동을 연결한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람이 힘든 일을 말하면 막연한 위로를 서둘러 건네기보다 무슨 일이 있었고 지금 어떤 도움을 요청하는지 구체적으로 파악하려는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람이 힘든 일을 말하면 막연한 위로를 서둘러 건네기보다 무슨 일이 있었고 지금 어떤 도움을 요청하는지 구체적으로 파악하려는 경향이 있다.",
+          "마음에 드는 사람이 고민을 말하면 그 문제의 원인과 가능한 해결 방향, 자신이 도와도 되는 범위를 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람이 힘든 일을 말하면 감정이 상한 지점과 문제의 원인, 지금 자신에게 기대하는 도움이 무엇인지 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람이 힘든 일을 말하면 감정이 상한 지점과 문제의 원인, 지금 자신에게 기대하는 도움이 무엇인지 함께 살피는 경향이 있다.",
+          "마음에 드는 사람이 고민을 말하면 그 사람이 어떤 마음으로 자신에게 이야기했는지와 부담 없이 받을 수 있는 반응을 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“당장 해결할 수 있는 부분은 무엇이고, 지금은 해결보다 들어주는 것이 필요한가?”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“당장 해결할 수 있는 부분은 무엇이고, 지금은 해결보다 들어주는 것이 필요한가?”를 구분하고 싶어 하기 쉽다.",
+          "“어떤 부분이 가장 막혀 있고, 내가 의견을 말하거나 행동으로 도우면 실제 도움이 될까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“무슨 일이고 어떻게 해결할까?”가 궁금해도, “아직 가까워지는 중이라 조언이 부담이 되지 않을까?”라는 생각이 빠르게 따라오기 쉽다.",
+        "detailParagraphs": [
+          "“무슨 일이고 어떻게 해결할까?”가 궁금해도, “아직 가까워지는 중이라 조언이 부담이 되지 않을까?”라는 생각이 빠르게 따라오기 쉽다.",
+          "“이 사람이 지금 어떤 마음을 알아주길 바라고, 내가 어디까지 다가가야 편안할까?”라는 생각이 먼저 들기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "상황을 차분히 듣고 필요한 도움의 종류를 물은 뒤, 부탁받은 범위 안에서 실제로 할 수 있는 행동을 제안하는 편이다.",
+        "detailParagraphs": [
+          "상황을 차분히 듣고 필요한 도움의 종류를 물은 뒤, 부탁받은 범위 안에서 실제로 할 수 있는 행동을 제안하는 편이다.",
+          "호감을 얻기 위해 해결을 서두르지 않고 상대가 원하는 반응을 물은 뒤, 동의한 범위 안에서만 의견이나 도움을 제안하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "바로 답을 정해 주기보다 이야기를 듣고 원하는 지원을 물은 뒤, 상대가 동의할 때에만 함께 방법을 찾거나 실제 도움을 제안하는 편이다.",
+        "detailParagraphs": [
+          "바로 답을 정해 주기보다 이야기를 듣고 원하는 지원을 물은 뒤, 상대가 동의할 때에만 함께 방법을 찾거나 실제 도움을 제안하는 편이다.",
+          "경험과 마음을 들어준 뒤 원하는 지원을 묻고, 호감을 얻기 위해 과하게 돕지 않도록 동의한 범위에서만 행동하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“지금 내가 들어주면 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움을 고를 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금 내가 들어주면 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움을 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "“내가 방법을 같이 생각해도 괜찮을까, 아니면 지금은 이야기를 들어주는 게 더 좋아?”처럼 도움의 허락을 먼저 묻는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "canonicalWording": {
+        "summaryText": "“지금은 그냥 들어주는 게 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움의 종류를 고를 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금은 그냥 들어주는 게 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움의 종류를 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "“이 이야기를 해줘서 고마워. 내가 그냥 들어주는 게 좋은지, 함께 방법을 찾아도 괜찮은지 알려줘”처럼 허락을 묻는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE", "OE"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE", "OE"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말하기 전, 관계가 이어질 수 있는 여러 방향과 서로의 바람을 연결할 표현을 혼자 떠올려 보는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말하기 전, 관계가 이어질 수 있는 여러 방향과 서로의 바람을 연결할 표현을 혼자 떠올려 보는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "canonicalWording": {
+        "summaryText": "“내가 바라는 것을 먼저 말하고 상대의 답을 들으면, 서로 가능한 방법을 더 분명하게 정할 수 있겠다”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 바라는 것을 먼저 말하고 상대의 답을 들으면, 서로 가능한 방법을 더 분명하게 정할 수 있겠다”라고 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "canonicalWording": {
+        "summaryText": "“내 마음을 먼저 정확히 정리한 뒤, 상대에게 부담을 덜 주면서 어떻게 표현할까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내 마음을 먼저 정확히 정리한 뒤, 상대에게 부담을 덜 주면서 어떻게 표현할까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "canonicalWording": {
+        "summaryText": "적절한 때에 먼저 대화를 열어 자신의 바람을 말하고, 상대의 답을 들으면서 만남이나 연락 방식을 함께 조정하는 편이다.",
+        "detailParagraphs": [
+          "적절한 때에 먼저 대화를 열어 자신의 바람을 말하고, 상대의 답을 들으면서 만남이나 연락 방식을 함께 조정하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "canonicalWording": {
+        "summaryText": "마음이 정리될 때까지 서두르지 않다가 적절한 순간에 대화를 요청하고, 자신이 바라는 것과 상대가 선택할 수 있는 여지를 차분히 설명하는 편이다.",
+        "detailParagraphs": [
+          "마음이 정리될 때까지 서두르지 않다가 적절한 순간에 대화를 요청하고, 자신이 바라는 것과 상대가 선택할 수 있는 여지를 차분히 설명하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "canonicalWording": {
+        "summaryText": "“나는 다음 주에도 만나고 싶어. 너도 같은 마음인지 편하게 알려줘”처럼 자신의 뜻과 상대 선택을 분명히 나누는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 다음 주에도 만나고 싶어. 너도 같은 마음인지 편하게 알려줘”처럼 자신의 뜻과 상대 선택을 분명히 나누는 방식이 잘 맞는다.",
+          "“나는 이번 주에 한 번 더 만나고 싶어. 너는 언제가 편해?”처럼 바람과 구체적인 질문을 함께 꺼내 대화 안에서 맞추는 방식이 자연스럽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "canonicalWording": {
+        "summaryText": "“이번 주에 한 번 더 만나고 싶은데, 너도 괜찮은지 알려줘”처럼 자신의 뜻과 상대 선택을 동시에 분명히 하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“이번 주에 한 번 더 만나고 싶은데, 너도 괜찮은지 알려줘”처럼 자신의 뜻과 상대 선택을 동시에 분명히 하는 방식이 자연스럽다.",
+          "“나는 더 알아가고 싶은 마음이 있어. 바로 답하지 않아도 괜찮으니 네 생각이 정리되면 들려줘”처럼 뜻과 기다릴 시간을 함께 전하는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "EVIDENCE_CONTEXT_TRANSFER_NOT_ESTABLISHED",
+      "requiredAction": "동일 맥락 직접 근거를 연결하거나, 현재 finding의 역할을 일반 방법론·경계 근거로 낮추고 문구 범위를 재판정한다.",
+      "reviewerDecision": null,
+      "reviewerRef": null,
+      "reviewedAt": null,
+      "publicationState": "research_only"
+    }
+  ]
+}

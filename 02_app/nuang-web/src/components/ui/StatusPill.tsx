@@ -9,7 +9,7 @@ type StatusPillProps = {
 const toneClass = {
   primary: "text-primary",
   success: "text-success",
-  caution: "text-[#9a6400]",
+  caution: "text-[var(--nu-warm-700)]",
   neutral: "text-muted",
 };
 

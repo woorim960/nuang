@@ -58,6 +58,9 @@ describe("CandidateCoreResultView", () => {
       }),
     ).toBeInTheDocument();
     expect(
+      screen.getByText("외향형 · 함께 활력·먼저 표현"),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("heading", {
         name: "이번 답에서 보인 내 모습",
       }),
@@ -73,9 +76,7 @@ describe("CandidateCoreResultView", () => {
     fireEvent.click(
       screen.getByRole("button", { name: "이 결과는 어떻게 봐야 하나요?" }),
     );
-    expect(
-      screen.getByText(/여러 생활 상황에서 답한 내용/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/생활 상황에 대한 답변/)).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "뉴앙 코드 소개 보기" }),
     ).toHaveAttribute("href", "/map?view=code-guide");
@@ -85,11 +86,24 @@ describe("CandidateCoreResultView", () => {
         .querySelector("strong")?.className,
     ).toContain("clearTabLetter");
     expect(
-      screen.getByRole("link", { name: /성향지도에서 자세히 보기/ }),
+      screen.queryByRole("navigation", { name: "결과 리포트 바로가기" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("다섯 글자가 말해주는 것")).toBeInTheDocument();
+    expect(screen.getByText("마음 가는 사람 앞에서는")).toBeInTheDocument();
+    expect(screen.getByText("연인과 함께할 때")).toBeInTheDocument();
+    expect(screen.getByText("가족 안에서는")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "ENAKQ 성향지도 전체 보기" }),
     ).toHaveAttribute("href", "/map/ENAKQ");
     expect(
-      screen.getByRole("link", { name: /커뮤니티 둘러보기/ }),
+      document.querySelector('a[href*="#chapter-"]'),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "커뮤니티 둘러보기" }),
     ).toHaveAttribute("href", "/feed");
+    expect(
+      screen.getByRole("link", { name: "다른 검사 만나보기" }),
+    ).toHaveAttribute("href", "/assessments");
 
     fireEvent.click(
       screen.getByRole("tab", { name: /A.*관계에서 관심이 가는 곳/ }),
@@ -104,9 +118,7 @@ describe("CandidateCoreResultView", () => {
         name: /G 방향 0퍼센트, A 방향 100퍼센트/,
       }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/성향일 확률이나 검사 정확도를 뜻하지 않아요/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/성향일 확률이 아니에요/)).toBeInTheDocument();
 
     rerender(
       <CandidateCoreResultView

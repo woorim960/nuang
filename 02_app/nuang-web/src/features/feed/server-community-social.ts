@@ -1,4 +1,5 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { checkCommunityWriteGuard } from "@/features/feed/server-write-guard";
 import type {
   CommunityNotification,
   CommunityNotificationsResult,
@@ -444,6 +445,18 @@ export async function writeProfileSafetyAction({
       return { code: "report_reason_required" as const, ok: false as const };
     }
 
+    const guardFailure = await checkCommunityWriteGuard({
+      accountId: viewerAccountId,
+      action: "report_content",
+      client,
+    });
+    if (guardFailure === "rate_limited") {
+      return {
+        code: "profile_report_rate_limited" as const,
+        ok: false as const,
+      };
+    }
+
     const response = await client
       .schema("feed")
       .from("profile_report")
@@ -457,6 +470,13 @@ export async function writeProfileSafetyAction({
         target_account_id: snapshot.accountId,
         target_public_snapshot_id: publicSnapshotId,
       });
+
+    if (response.error?.code === "23505") {
+      return {
+        code: "profile_already_reported" as const,
+        ok: false as const,
+      };
+    }
 
     return response.error
       ? { code: "profile_report_failed" as const, ok: false as const }

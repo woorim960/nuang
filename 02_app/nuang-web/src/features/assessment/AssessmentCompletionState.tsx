@@ -65,6 +65,7 @@ export function AssessmentCompletionState({
     state === "adaptive" ||
     state === "response-review" ||
     state === "undetermined";
+  const showBody = needsAction || state === "slow";
   const liveMessage =
     state === "ready"
       ? "결과가 준비됐어요"
@@ -122,7 +123,7 @@ export function AssessmentCompletionState({
           role={isFailure ? "alert" : needsAction ? "status" : undefined}
         >
           <h1>{copy.title}</h1>
-          <p>{copy.body}</p>
+          {showBody ? <p>{copy.body}</p> : null}
         </div>
       </section>
 

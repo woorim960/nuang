@@ -1,0 +1,641 @@
+{
+  "manifestVersion": "nuang-ordinal-models.v2.3",
+  "measurementReleaseId": "NUANG-CORE-BETA-1.0",
+  "itemCount": 60,
+  "orderedVariables": [
+    "NU_B1_001",
+    "NU_B1_002",
+    "NU_B1_003",
+    "NU_B1_004",
+    "NU_B1_005",
+    "NU_B1_006",
+    "NU_B1_007",
+    "NU_B1_008",
+    "NU_B1_009",
+    "NU_B1_010",
+    "NU_B1_011",
+    "NU_B1_012",
+    "NU_B1_013",
+    "NU_B1_014",
+    "NU_B1_015",
+    "NU_B1_016",
+    "NU_B1_017",
+    "NU_B1_018",
+    "NU_B1_019",
+    "NU_B1_020",
+    "NU_B1_021",
+    "NU_B1_022",
+    "NU_B1_023",
+    "NU_B1_024",
+    "NU_B1_025",
+    "NU_B1_026",
+    "NU_B1_027",
+    "NU_B1_028",
+    "NU_B1_029",
+    "NU_B1_030",
+    "NU_B1_031",
+    "NU_B1_032",
+    "NU_B1_033",
+    "NU_B1_034",
+    "NU_B1_035",
+    "NU_B1_036",
+    "NU_B1_037",
+    "NU_B1_038",
+    "NU_B1_039",
+    "NU_B1_040",
+    "NU_B1_041",
+    "NU_B1_042",
+    "NU_B1_043",
+    "NU_B1_044",
+    "NU_B1_045",
+    "NU_B1_046",
+    "NU_B1_047",
+    "NU_B1_048",
+    "NU_B1_049",
+    "NU_B1_050",
+    "NU_B1_051",
+    "NU_B1_052",
+    "NU_B1_053",
+    "NU_B1_054",
+    "NU_B1_055",
+    "NU_B1_056",
+    "NU_B1_057",
+    "NU_B1_058",
+    "NU_B1_059",
+    "NU_B1_060"
+  ],
+  "itemMap": [
+    {
+      "itemRevisionId": "NX-051",
+      "itemId": "NU-B1-001",
+      "analysisVariable": "NU_B1_001",
+      "domainId": "SE",
+      "facetId": "SE-RE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-074",
+      "itemId": "NU-B1-002",
+      "analysisVariable": "NU_B1_002",
+      "domainId": "OE",
+      "facetId": "OE-AE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-098",
+      "itemId": "NU-B1-003",
+      "analysisVariable": "NU_B1_003",
+      "domainId": "RO",
+      "facetId": "RO-EC",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-027",
+      "itemId": "NU-B1-004",
+      "analysisVariable": "NU_B1_004",
+      "domainId": "SM",
+      "facetId": "SM-EP",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-102",
+      "itemId": "NU-B1-005",
+      "analysisVariable": "NU_B1_005",
+      "domainId": "ER",
+      "facetId": "ER-IR",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-128",
+      "itemId": "NU-B1-006",
+      "analysisVariable": "NU_B1_006",
+      "domainId": "SE",
+      "facetId": "SE-AI",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-038",
+      "itemId": "NU-B1-007",
+      "analysisVariable": "NU_B1_007",
+      "domainId": "OE",
+      "facetId": "OE-CI",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-079",
+      "itemId": "NU-B1-008",
+      "analysisVariable": "NU_B1_008",
+      "domainId": "SM",
+      "facetId": "SM-OS",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-075",
+      "itemId": "NU-B1-009",
+      "analysisVariable": "NU_B1_009",
+      "domainId": "ER",
+      "facetId": "ER-WD",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-023",
+      "itemId": "NU-B1-010",
+      "analysisVariable": "NU_B1_010",
+      "domainId": "OE",
+      "facetId": "OE-IE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-063",
+      "itemId": "NU-B1-011",
+      "analysisVariable": "NU_B1_011",
+      "domainId": "SE",
+      "facetId": "SE-RE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-136",
+      "itemId": "NU-B1-012",
+      "analysisVariable": "NU_B1_012",
+      "domainId": "OE",
+      "facetId": "OE-AE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-047",
+      "itemId": "NU-B1-013",
+      "analysisVariable": "NU_B1_013",
+      "domainId": "RO",
+      "facetId": "RO-EC",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-056",
+      "itemId": "NU-B1-014",
+      "analysisVariable": "NU_B1_014",
+      "domainId": "SM",
+      "facetId": "SM-EP",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-037",
+      "itemId": "NU-B1-015",
+      "analysisVariable": "NU_B1_015",
+      "domainId": "ER",
+      "facetId": "ER-IR",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-055",
+      "itemId": "NU-B1-016",
+      "analysisVariable": "NU_B1_016",
+      "domainId": "SE",
+      "facetId": "SE-AI",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-070",
+      "itemId": "NU-B1-017",
+      "analysisVariable": "NU_B1_017",
+      "domainId": "OE",
+      "facetId": "OE-CI",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-001",
+      "itemId": "NU-B1-018",
+      "analysisVariable": "NU_B1_018",
+      "domainId": "SM",
+      "facetId": "SM-OS",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-053",
+      "itemId": "NU-B1-019",
+      "analysisVariable": "NU_B1_019",
+      "domainId": "ER",
+      "facetId": "ER-WD",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-109",
+      "itemId": "NU-B1-020",
+      "analysisVariable": "NU_B1_020",
+      "domainId": "OE",
+      "facetId": "OE-IE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-125",
+      "itemId": "NU-B1-021",
+      "analysisVariable": "NU_B1_021",
+      "domainId": "SE",
+      "facetId": "SE-RE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-022",
+      "itemId": "NU-B1-022",
+      "analysisVariable": "NU_B1_022",
+      "domainId": "OE",
+      "facetId": "OE-AE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-005",
+      "itemId": "NU-B1-023",
+      "analysisVariable": "NU_B1_023",
+      "domainId": "RO",
+      "facetId": "RO-EC",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-134",
+      "itemId": "NU-B1-024",
+      "analysisVariable": "NU_B1_024",
+      "domainId": "SM",
+      "facetId": "SM-EP",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-043",
+      "itemId": "NU-B1-025",
+      "analysisVariable": "NU_B1_025",
+      "domainId": "ER",
+      "facetId": "ER-IR",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-021",
+      "itemId": "NU-B1-026",
+      "analysisVariable": "NU_B1_026",
+      "domainId": "SE",
+      "facetId": "SE-AI",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-009",
+      "itemId": "NU-B1-027",
+      "analysisVariable": "NU_B1_027",
+      "domainId": "OE",
+      "facetId": "OE-CI",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-122",
+      "itemId": "NU-B1-028",
+      "analysisVariable": "NU_B1_028",
+      "domainId": "SM",
+      "facetId": "SM-OS",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-039",
+      "itemId": "NU-B1-029",
+      "analysisVariable": "NU_B1_029",
+      "domainId": "ER",
+      "facetId": "ER-WD",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-133",
+      "itemId": "NU-B1-030",
+      "analysisVariable": "NU_B1_030",
+      "domainId": "OE",
+      "facetId": "OE-IE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-139",
+      "itemId": "NU-B1-031",
+      "analysisVariable": "NU_B1_031",
+      "domainId": "SE",
+      "facetId": "SE-RE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-042",
+      "itemId": "NU-B1-032",
+      "analysisVariable": "NU_B1_032",
+      "domainId": "OE",
+      "facetId": "OE-AE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-142",
+      "itemId": "NU-B1-033",
+      "analysisVariable": "NU_B1_033",
+      "domainId": "RO",
+      "facetId": "RO-EC",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-071",
+      "itemId": "NU-B1-034",
+      "analysisVariable": "NU_B1_034",
+      "domainId": "SM",
+      "facetId": "SM-EP",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-116",
+      "itemId": "NU-B1-035",
+      "analysisVariable": "NU_B1_035",
+      "domainId": "ER",
+      "facetId": "ER-IR",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-131",
+      "itemId": "NU-B1-036",
+      "analysisVariable": "NU_B1_036",
+      "domainId": "SE",
+      "facetId": "SE-AI",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-140",
+      "itemId": "NU-B1-037",
+      "analysisVariable": "NU_B1_037",
+      "domainId": "OE",
+      "facetId": "OE-CI",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-004",
+      "itemId": "NU-B1-038",
+      "analysisVariable": "NU_B1_038",
+      "domainId": "SM",
+      "facetId": "SM-OS",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-015",
+      "itemId": "NU-B1-039",
+      "analysisVariable": "NU_B1_039",
+      "domainId": "ER",
+      "facetId": "ER-WD",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-072",
+      "itemId": "NU-B1-040",
+      "analysisVariable": "NU_B1_040",
+      "domainId": "OE",
+      "facetId": "OE-IE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-120",
+      "itemId": "NU-B1-041",
+      "analysisVariable": "NU_B1_041",
+      "domainId": "SE",
+      "facetId": "SE-RE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-048",
+      "itemId": "NU-B1-042",
+      "analysisVariable": "NU_B1_042",
+      "domainId": "OE",
+      "facetId": "OE-AE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-089",
+      "itemId": "NU-B1-043",
+      "analysisVariable": "NU_B1_043",
+      "domainId": "RO",
+      "facetId": "RO-EC",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-111",
+      "itemId": "NU-B1-044",
+      "analysisVariable": "NU_B1_044",
+      "domainId": "SM",
+      "facetId": "SM-EP",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-049",
+      "itemId": "NU-B1-045",
+      "analysisVariable": "NU_B1_045",
+      "domainId": "ER",
+      "facetId": "ER-IR",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-050",
+      "itemId": "NU-B1-046",
+      "analysisVariable": "NU_B1_046",
+      "domainId": "SE",
+      "facetId": "SE-AI",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-132",
+      "itemId": "NU-B1-047",
+      "analysisVariable": "NU_B1_047",
+      "domainId": "OE",
+      "facetId": "OE-CI",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-143",
+      "itemId": "NU-B1-048",
+      "analysisVariable": "NU_B1_048",
+      "domainId": "SM",
+      "facetId": "SM-OS",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-060",
+      "itemId": "NU-B1-049",
+      "analysisVariable": "NU_B1_049",
+      "domainId": "ER",
+      "facetId": "ER-WD",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-068",
+      "itemId": "NU-B1-050",
+      "analysisVariable": "NU_B1_050",
+      "domainId": "OE",
+      "facetId": "OE-IE",
+      "keyedDirection": "HIGH",
+      "scoringKey": "direct"
+    },
+    {
+      "itemRevisionId": "NX-067",
+      "itemId": "NU-B1-051",
+      "analysisVariable": "NU_B1_051",
+      "domainId": "SE",
+      "facetId": "SE-RE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-095",
+      "itemId": "NU-B1-052",
+      "analysisVariable": "NU_B1_052",
+      "domainId": "OE",
+      "facetId": "OE-AE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-031",
+      "itemId": "NU-B1-053",
+      "analysisVariable": "NU_B1_053",
+      "domainId": "RO",
+      "facetId": "RO-EC",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-126",
+      "itemId": "NU-B1-054",
+      "analysisVariable": "NU_B1_054",
+      "domainId": "SM",
+      "facetId": "SM-EP",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-100",
+      "itemId": "NU-B1-055",
+      "analysisVariable": "NU_B1_055",
+      "domainId": "ER",
+      "facetId": "ER-IR",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-086",
+      "itemId": "NU-B1-056",
+      "analysisVariable": "NU_B1_056",
+      "domainId": "SE",
+      "facetId": "SE-AI",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-057",
+      "itemId": "NU-B1-057",
+      "analysisVariable": "NU_B1_057",
+      "domainId": "OE",
+      "facetId": "OE-CI",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-150",
+      "itemId": "NU-B1-058",
+      "analysisVariable": "NU_B1_058",
+      "domainId": "SM",
+      "facetId": "SM-OS",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-110",
+      "itemId": "NU-B1-059",
+      "analysisVariable": "NU_B1_059",
+      "domainId": "ER",
+      "facetId": "ER-WD",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    },
+    {
+      "itemRevisionId": "NX-130",
+      "itemId": "NU-B1-060",
+      "analysisVariable": "NU_B1_060",
+      "domainId": "OE",
+      "facetId": "OE-IE",
+      "keyedDirection": "LOW",
+      "scoringKey": "reverse"
+    }
+  ],
+  "models": [
+    {
+      "modelId": "M1_TEN_CORRELATED_FACETS",
+      "state": "READY_FOR_SIMULATION_AND_EMPIRICAL_FIT",
+      "syntax": "ER_IR =~ NU_B1_005 + NU_B1_015 + NU_B1_025 + NU_B1_035 + NU_B1_045 + NU_B1_055\nER_WD =~ NU_B1_009 + NU_B1_019 + NU_B1_029 + NU_B1_039 + NU_B1_049 + NU_B1_059\nOE_AE =~ NU_B1_002 + NU_B1_012 + NU_B1_022 + NU_B1_032 + NU_B1_042 + NU_B1_052\nOE_CI =~ NU_B1_007 + NU_B1_017 + NU_B1_027 + NU_B1_037 + NU_B1_047 + NU_B1_057\nOE_IE =~ NU_B1_010 + NU_B1_020 + NU_B1_030 + NU_B1_040 + NU_B1_050 + NU_B1_060\nRO_EC =~ NU_B1_003 + NU_B1_013 + NU_B1_023 + NU_B1_033 + NU_B1_043 + NU_B1_053\nSE_AI =~ NU_B1_006 + NU_B1_016 + NU_B1_026 + NU_B1_036 + NU_B1_046 + NU_B1_056\nSE_RE =~ NU_B1_001 + NU_B1_011 + NU_B1_021 + NU_B1_031 + NU_B1_041 + NU_B1_051\nSM_EP =~ NU_B1_004 + NU_B1_014 + NU_B1_024 + NU_B1_034 + NU_B1_044 + NU_B1_054\nSM_OS =~ NU_B1_008 + NU_B1_018 + NU_B1_028 + NU_B1_038 + NU_B1_048 + NU_B1_058",
+      "rationale": "10개 세부 성향을 각각 6문항으로 측정하고 모든 세부 성향 상관을 추정한다."
+    },
+    {
+      "modelId": "M2_FIVE_CORRELATED_AXES",
+      "state": "READY_AS_COARSE_COMPARATOR",
+      "syntax": "ER =~ NU_B1_005 + NU_B1_009 + NU_B1_015 + NU_B1_019 + NU_B1_025 + NU_B1_029 + NU_B1_035 + NU_B1_039 + NU_B1_045 + NU_B1_049 + NU_B1_055 + NU_B1_059\nOE =~ NU_B1_002 + NU_B1_007 + NU_B1_010 + NU_B1_012 + NU_B1_017 + NU_B1_020 + NU_B1_022 + NU_B1_027 + NU_B1_030 + NU_B1_032 + NU_B1_037 + NU_B1_040 + NU_B1_042 + NU_B1_047 + NU_B1_050 + NU_B1_052 + NU_B1_057 + NU_B1_060\nRO =~ NU_B1_003 + NU_B1_013 + NU_B1_023 + NU_B1_033 + NU_B1_043 + NU_B1_053\nSE =~ NU_B1_001 + NU_B1_006 + NU_B1_011 + NU_B1_016 + NU_B1_021 + NU_B1_026 + NU_B1_031 + NU_B1_036 + NU_B1_041 + NU_B1_046 + NU_B1_051 + NU_B1_056\nSM =~ NU_B1_004 + NU_B1_008 + NU_B1_014 + NU_B1_018 + NU_B1_024 + NU_B1_028 + NU_B1_034 + NU_B1_038 + NU_B1_044 + NU_B1_048 + NU_B1_054 + NU_B1_058",
+      "rationale": "세부 성향을 접고 5개 축으로 직접 적재한다. 단순하지만 세부 구조를 잃는 비교 모형이다."
+    },
+    {
+      "modelId": "M3_PARTIAL_SECOND_ORDER",
+      "state": "BLOCKED_IDENTIFICATION_AND_THEORY_CONSTRAINTS_REQUIRED",
+      "syntax": null,
+      "rationale": "OE는 세 개의 1차 요인이 있으나 SE·SM·ER은 두 개, RO는 한 개뿐이다. 임의의 동일성 제약 없이 동일한 2차 구조를 강요하지 않는다."
+    },
+    {
+      "modelId": "M4_TARGET_ESEM",
+      "state": "ENGINE_AND_ROTATION_SPEC_REQUIRED",
+      "syntax": null,
+      "rationale": "작은 교차적재를 허용하되 목표 회전·허용 범위·확인 표본 재현 규칙을 먼저 잠가야 한다."
+    },
+    {
+      "modelId": "M5_REVERSE_METHOD_FACTOR",
+      "state": "READY_AS_SENSITIVITY_MODEL",
+      "syntax": "ER_IR =~ NU_B1_005 + NU_B1_015 + NU_B1_025 + NU_B1_035 + NU_B1_045 + NU_B1_055\nER_WD =~ NU_B1_009 + NU_B1_019 + NU_B1_029 + NU_B1_039 + NU_B1_049 + NU_B1_059\nOE_AE =~ NU_B1_002 + NU_B1_012 + NU_B1_022 + NU_B1_032 + NU_B1_042 + NU_B1_052\nOE_CI =~ NU_B1_007 + NU_B1_017 + NU_B1_027 + NU_B1_037 + NU_B1_047 + NU_B1_057\nOE_IE =~ NU_B1_010 + NU_B1_020 + NU_B1_030 + NU_B1_040 + NU_B1_050 + NU_B1_060\nRO_EC =~ NU_B1_003 + NU_B1_013 + NU_B1_023 + NU_B1_033 + NU_B1_043 + NU_B1_053\nSE_AI =~ NU_B1_006 + NU_B1_016 + NU_B1_026 + NU_B1_036 + NU_B1_046 + NU_B1_056\nSE_RE =~ NU_B1_001 + NU_B1_011 + NU_B1_021 + NU_B1_031 + NU_B1_041 + NU_B1_051\nSM_EP =~ NU_B1_004 + NU_B1_014 + NU_B1_024 + NU_B1_034 + NU_B1_044 + NU_B1_054\nSM_OS =~ NU_B1_008 + NU_B1_018 + NU_B1_028 + NU_B1_038 + NU_B1_048 + NU_B1_058\nREV_METHOD =~ NU_B1_011 + NU_B1_012 + NU_B1_013 + NU_B1_014 + NU_B1_015 + NU_B1_016 + NU_B1_017 + NU_B1_018 + NU_B1_019 + NU_B1_020 + NU_B1_021 + NU_B1_022 + NU_B1_023 + NU_B1_024 + NU_B1_025 + NU_B1_026 + NU_B1_027 + NU_B1_028 + NU_B1_029 + NU_B1_030 + NU_B1_051 + NU_B1_052 + NU_B1_053 + NU_B1_054 + NU_B1_055 + NU_B1_056 + NU_B1_057 + NU_B1_058 + NU_B1_059 + NU_B1_060\nSE_RE ~~ 0*REV_METHOD\nOE_AE ~~ 0*REV_METHOD\nRO_EC ~~ 0*REV_METHOD\nSM_EP ~~ 0*REV_METHOD\nER_IR ~~ 0*REV_METHOD\nSE_AI ~~ 0*REV_METHOD\nOE_CI ~~ 0*REV_METHOD\nSM_OS ~~ 0*REV_METHOD\nER_WD ~~ 0*REV_METHOD\nOE_IE ~~ 0*REV_METHOD",
+      "rationale": "10개 세부 성향에 역문항 방법 요인을 직교로 추가한다. 방법 요인이 강하면 문항 문구를 우선 점검한다."
+    }
+  ]
+}

@@ -1,0 +1,515 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-17.0.1",
+  "batchId": "P1-IAS-17",
+  "status": "P1_INFERRED_AXIS_BATCH_17_INTERNAL_SCREEN_COMPLETE_SCOPE_REBUILD_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 4,
+    "variants": 14,
+    "retainCandidates": 9,
+    "revisionCandidates": 5,
+    "scopeRemovalClaimAxes": 0,
+    "scopeRemovalVariants": 0,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-SM-WORK-AFTERMATH-RESPONSE",
+      "claimKey": ".scenario.work.aftermath.response",
+      "claimKind": "actual_response",
+      "axisRef": "SM",
+      "internalDecision": "retain_inferred_sm_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SM-WORK-DISAGREEMENT-RESPONSE",
+      "claimKey": ".scenario.work.disagreement.response",
+      "claimKind": "actual_response",
+      "axisRef": "SM",
+      "internalDecision": "retain_inferred_sm_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SM-WORK-GROUP_PARTICIPATION-RESPONSE",
+      "claimKey": ".scenario.work.group_participation.response",
+      "claimKind": "actual_response",
+      "axisRef": "SM",
+      "internalDecision": "retain_inferred_sm_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SM-WORK-UNCERTAINTY-RESPONSE",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "claimKind": "actual_response",
+      "axisRef": "SM",
+      "internalDecision": "retain_inferred_sm_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-RESPONSE-SM-K",
+      "claimKey": ".scenario.work.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "잠시 감정을 정리한 뒤 회고를 열고 잘된 점·막힌 점·바꿀 한 가지를 정리해 다음 실행에 반영하는 편이다.",
+        "detailParagraphs": [
+          "잠시 감정을 정리한 뒤 회고를 열고 잘된 점·막힌 점·바꿀 한 가지를 정리해 다음 실행에 반영하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_sm_contrast_and_secondary_axis_preservation",
+        "rationale": "K는 정한 기준·순서·확인 시점을 이어 가고 M은 현재 자원·반응·에너지에 맞춰 흐름을 바꾸도록 직접 표현하며, 결합된 SE·OE·RO 뜻도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "잠시 감정을 정리한 뒤 회고에서 잘된 점·막힌 점을 확인하고, 다음에도 이어 갈 점검 기준과 실행 순서·확인 시점을 정해 꾸준히 적용하는 편이다.",
+        "detailParagraphs": [
+          "잠시 감정을 정리한 뒤 회고에서 잘된 점·막힌 점을 확인하고, 다음에도 이어 갈 점검 기준과 실행 순서·확인 시점을 정해 꾸준히 적용하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "잠시 감정을 정리한 뒤 회고를 열고 잘된 점·막힌 점·바꿀 한 가지를 정리해 다음 실행에 반영하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-RESPONSE-SM-M",
+      "claimKey": ".scenario.work.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다.",
+        "detailParagraphs": [
+          "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.work.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다.",
+        "detailParagraphs": [
+          "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-K",
+      "claimKey": ".scenario.work.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "상대의 근거를 먼저 확인하고 자신의 기준과 우려를 분명히 제시한 뒤, 검증할 방법이나 다음 결정을 제안하는 편이다.",
+        "detailParagraphs": [
+          "상대의 근거를 먼저 확인하고 자신의 기준과 우려를 분명히 제시한 뒤, 검증할 방법이나 다음 결정을 제안하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_sm_contrast_and_secondary_axis_preservation",
+        "rationale": "K는 정한 기준·순서·확인 시점을 이어 가고 M은 현재 자원·반응·에너지에 맞춰 흐름을 바꾸도록 직접 표현하며, 결합된 SE·OE·RO 뜻도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "각 구성원이 느끼는 부담과 필요한 지원을 확인한 뒤, 모두가 다시 확인할 약속과 점검 기준·다음 대화 시점을 분명히 정하는 편이다.",
+        "detailParagraphs": [
+          "각 구성원이 느끼는 부담과 필요한 지원을 확인한 뒤, 모두가 다시 확인할 약속과 점검 기준·다음 대화 시점을 분명히 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "상대의 근거를 먼저 확인하고 자신의 기준과 우려를 분명히 제시한 뒤, 검증할 방법이나 다음 결정을 제안하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-M",
+      "claimKey": ".scenario.work.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "감정적으로 밀어붙이기보다 근거를 확인하고, 작은 비교나 시험으로 어느 방법이 맞는지 판단할 수 있는 절차를 제안하는 편이다.",
+        "detailParagraphs": [
+          "감정적으로 밀어붙이기보다 근거를 확인하고, 작은 비교나 시험으로 어느 방법이 맞는지 판단할 수 있는 절차를 제안하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_sm_contrast_and_secondary_axis_preservation",
+        "rationale": "K는 정한 기준·순서·확인 시점을 이어 가고 M은 현재 자원·반응·에너지에 맞춰 흐름을 바꾸도록 직접 표현하며, 결합된 SE·OE·RO 뜻도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "의견 차이의 원인과 풀어야 할 문제를 확인하되, 현재 자원과 구성원의 반응에 맞춰 시험 순서와 해결 방법을 바꾸는 편이다.",
+        "detailParagraphs": [
+          "의견 차이의 원인과 풀어야 할 문제를 확인하되, 현재 자원과 구성원의 반응에 맞춰 시험 순서와 해결 방법을 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "감정적으로 밀어붙이기보다 근거를 확인하고, 작은 비교나 시험으로 어느 방법이 맞는지 판단할 수 있는 절차를 제안하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.work.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다.",
+        "detailParagraphs": [
+          "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-K",
+      "claimKey": ".scenario.work.group_participation.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다.",
+        "detailParagraphs": [
+          "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-I-SM-K",
+      "claimKey": ".scenario.work.group_participation.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "회의 흐름을 들으며 생각을 정리한 뒤 핵심 의견을 말하고, 즉석에서 다루기 어려운 내용은 근거를 보강해 문서나 후속 메시지로 전하는 편이다.",
+        "detailParagraphs": [
+          "회의 흐름을 들으며 생각을 정리한 뒤 핵심 의견을 말하고, 즉석에서 다루기 어려운 내용은 근거를 보강해 문서나 후속 메시지로 전하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_sm_contrast_and_secondary_axis_preservation",
+        "rationale": "K는 정한 기준·순서·확인 시점을 이어 가고 M은 현재 자원·반응·에너지에 맞춰 흐름을 바꾸도록 직접 표현하며, 결합된 SE·OE·RO 뜻도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "회의 흐름을 들으며 혼자 생각을 정리한 뒤 핵심 의견을 말하고, 합의된 할 일·마감·확인 시점을 문서로 정리해 이어 가는 편이다.",
+        "detailParagraphs": [
+          "회의 흐름을 들으며 혼자 생각을 정리한 뒤 핵심 의견을 말하고, 합의된 할 일·마감·확인 시점을 문서로 정리해 이어 가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "회의 흐름을 들으며 생각을 정리한 뒤 핵심 의견을 말하고, 즉석에서 다루기 어려운 내용은 근거를 보강해 문서나 후속 메시지로 전하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-M",
+      "claimKey": ".scenario.work.group_participation.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다.",
+        "detailParagraphs": [
+          "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-I-SM-M",
+      "claimKey": ".scenario.work.group_participation.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "계속 대화를 주도하기보다 필요한 순간에 구체적인 문제와 대안을 말하고, 정해진 역할을 자기 방식으로 실행하는 편이다.",
+        "detailParagraphs": [
+          "계속 대화를 주도하기보다 필요한 순간에 구체적인 문제와 대안을 말하고, 정해진 역할을 자기 방식으로 실행하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_sm_contrast_and_secondary_axis_preservation",
+        "rationale": "K는 정한 기준·순서·확인 시점을 이어 가고 M은 현재 자원·반응·에너지에 맞춰 흐름을 바꾸도록 직접 표현하며, 결합된 SE·OE·RO 뜻도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "회의 흐름을 지켜보며 혼자 생각을 정리한 뒤 필요한 의견을 말하고, 현재 역할·시간·에너지에 맞춰 실행 순서와 방법을 조정하는 편이다.",
+        "detailParagraphs": [
+          "회의 흐름을 지켜보며 혼자 생각을 정리한 뒤 필요한 의견을 말하고, 현재 역할·시간·에너지에 맞춰 실행 순서와 방법을 조정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "계속 대화를 주도하기보다 필요한 순간에 구체적인 문제와 대안을 말하고, 정해진 역할을 자기 방식으로 실행하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-K",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=R|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다.",
+        "detailParagraphs": [
+          "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-K",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=N|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "가능성을 넓게 검토한 뒤 확인할 질문과 임시 기준을 세우고, 작은 실행으로 정보를 더 얻는 편이다.",
+        "detailParagraphs": [
+          "가능성을 넓게 검토한 뒤 확인할 질문과 임시 기준을 세우고, 작은 실행으로 정보를 더 얻는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-M",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=R|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "작은 예시나 초안을 만들어 반응을 확인하고, 얻은 정보에 따라 다음 방식과 속도를 조정하는 편이다.",
+        "detailParagraphs": [
+          "작은 예시나 초안을 만들어 반응을 확인하고, 얻은 정보에 따라 다음 방식과 속도를 조정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-M",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=N|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "여러 가설을 혼자 구조화한 뒤 현재 자원으로 시험할 수 있는 방법을 고르고, 결과를 보며 다음 접근을 유연하게 바꾸는 편이다.",
+        "detailParagraphs": [
+          "여러 가설을 혼자 구조화한 뒤 현재 자원으로 시험할 수 있는 방법을 고르고, 결과를 보며 다음 접근을 유연하게 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 합의한 기준과 시점을 이어 가고 M은 현재 정보와 반응에 맞춰 방법·속도를 조정하며 능력이나 성실성의 우열을 뜻하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "P1_SCOPE_AMENDMENT_AND_V2_3_REBUILD",
+    "actions": [
+      "5개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "17개 배치의 유지·교정·축 제거 판정을 통합한다.",
+      "업무 6개 claim의 RO 제거를 반영한 다음 canonical 기준선을 재구축한다."
+    ]
+  }
+}

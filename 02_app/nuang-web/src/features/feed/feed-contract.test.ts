@@ -37,6 +37,7 @@ describe("feed contract", () => {
       "remove_reaction",
       "remove_bookmark",
       "not_interested",
+      "report_content",
       "vote_poll",
     ]);
     expect(feedPostSources).toEqual([

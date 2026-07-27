@@ -43,18 +43,14 @@ type EntrySurface = "error" | "intro" | "loading" | "runner";
 
 const benefits = [
   {
-    description: "여러 생활 상황에서 반복해서 나타나는 방향을 함께 살펴봐요.",
     icon: ScanSearch,
     title: "다섯 글자의 의미가 더 분명해져요",
   },
   {
-    description:
-      "상황에 따라 달라지는 모습과 세부 반응을 더 구체적으로 정리해요.",
     icon: Layers3,
     title: "나를 설명하는 내용이 더 구체적이에요",
   },
   {
-    description: "원하는 사람과 공통점과 차이점을 더 자세히 살펴볼 수 있어요.",
     icon: MessagesSquare,
     title: "가족·친구·연인과 비교할 수 있어요",
   },
@@ -62,20 +58,14 @@ const benefits = [
 
 const candidateBenefits = [
   {
-    description:
-      "여러 생활 상황에서 반복해서 나타나는 방향을 함께 살펴봐요.",
     icon: ScanSearch,
     title: "다섯 글자의 의미가 더 분명해져요",
   },
   {
-    description:
-      "일상에서 보이는 모습과, 일부 관계 상황의 처음 드는 생각·실제 나타나는 반응을 더 구체적으로 정리해요.",
     icon: Layers3,
     title: "내 생활 속 모습을 더 자세히 알려드려요",
   },
   {
-    description:
-      "가족·친구·연인과 공통점과 차이점을 더 자세히 살펴볼 수 있어요.",
     icon: MessagesSquare,
     title: "원하는 사람과 성향을 비교할 수 있어요",
   },
@@ -220,10 +210,7 @@ export function PrecisionAssessmentIntro({
     return (
       <main className={styles.statusShell}>
         <div className={styles.statusCard}>
-          <p
-            aria-live="assertive"
-            role="alert"
-          >
+          <p aria-live="assertive" role="alert">
             {errorMessage}
           </p>
           <button
@@ -243,7 +230,8 @@ export function PrecisionAssessmentIntro({
     assessment.releaseId === candidateFullCoreAssessment.releaseId;
   const hasQuickResult = Boolean(decision?.provisionalCode);
   const isExampleCode = isCandidateAssessment && !hasQuickResult;
-  const codeLetters = decision?.provisionalCode?.split("") ??
+  const codeLetters =
+    decision?.provisionalCode?.split("") ??
     (isExampleCode ? "ENAKQ".split("") : ["", "", "", "", ""]);
   const backLabel = getBackLabel(entrySource);
 
@@ -264,11 +252,6 @@ export function PrecisionAssessmentIntro({
 
       <div className={styles.content}>
         <section className={styles.hero}>
-          <p className={styles.eyebrow}>
-            {isCandidateAssessment
-              ? "생활 속 다양한 상황으로 알아보는 내 성향"
-              : "내 대표 코드를 찾는 다음 단계"}
-          </p>
           <h1>
             {isCandidateAssessment
               ? hasQuickResult
@@ -276,15 +259,6 @@ export function PrecisionAssessmentIntro({
                 : "내 성향을 다섯 글자로 알아볼까요?"
               : "내 성향을 더 자세히 알아볼까요?"}
           </h1>
-          <p className={styles.heroDescription}>
-            {isCandidateAssessment
-              ? hasQuickResult
-                ? "방금 확인한 성향을 출발점으로, 더 다양한 생활 상황에서 내 모습을 구체적으로 살펴봐요."
-                : "생활 속 여러 상황에 답하면, 지금 나와 가까운 다섯 가지 성향을 코드와 설명으로 보여드려요."
-              : hasQuickResult
-              ? "방금 확인한 성향을 출발점으로, 더 다양한 생활 상황에서 나의 모습을 살펴봐요."
-              : "더 다양한 생활 상황에서 나의 모습을 살펴보고, 다섯 글자 대표 코드와 상세 리포트로 정리해요."}
-          </p>
 
           <div className={styles.journey}>
             <div className={styles.journeyCopy}>
@@ -328,11 +302,6 @@ export function PrecisionAssessmentIntro({
                     : "내 대표 코드와 상세 리포트"}
                 </p>
               </div>
-              {hasQuickResult ? (
-                <p className={styles.preserveNote}>
-                  첫 성향 결과도 내 리포트에서 다시 볼 수 있어요.
-                </p>
-              ) : null}
             </div>
             <Image
               alt=""
@@ -362,7 +331,6 @@ export function PrecisionAssessmentIntro({
                     </span>
                     <div>
                       <h3>{benefit.title}</h3>
-                      <p>{benefit.description}</p>
                     </div>
                   </li>
                 );
@@ -396,8 +364,8 @@ export function PrecisionAssessmentIntro({
             type="button"
           >
             {isStarting
-                ? "검사 준비 중"
-                : isCandidateAssessment
+              ? "검사 준비 중"
+              : isCandidateAssessment
                 ? "정밀 검사 시작하기"
                 : "내 대표 코드 알아보기"}
           </button>

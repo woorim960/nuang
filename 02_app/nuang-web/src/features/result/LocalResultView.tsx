@@ -639,7 +639,7 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
             <p className="text-sm font-semibold text-muted">
               {assessment.resultLabel}
             </p>
-            <p className="mt-2 text-[34px] font-black leading-none tracking-normal text-ink">
+            <p className="mt-2 text-4xl font-black leading-none tracking-normal text-ink">
               {code}
             </p>
             <h1 className="mt-3 text-2xl font-black leading-8">
@@ -648,12 +648,14 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
           </div>
           <NuangCharacter motif={motif} size="lg" />
         </div>
-        <p className="mt-4 text-sm leading-6 text-muted">
-          {isFull
-            ? "60문항으로 살펴본 현재의 성향이에요. 점수보다 반복해서 나타나는 방향을 중심으로 읽어보세요."
-            : "20문항으로 살펴본 예비 방향이에요. 정밀 코어를 완료하면 세부 설명과 대표 성향이 달라질 수 있어요."}
-        </p>
-        <p className="mt-3 text-xs leading-5 text-muted">
+        {!isFull && (
+          <p className="mt-4 text-sm leading-6 text-muted">
+            첫 결과로, 정밀 검사 후 달라질 수 있어요.
+          </p>
+        )}
+        <p
+          className={`${isFull ? "mt-4" : "mt-3"} text-xs leading-5 text-muted`}
+        >
           {formatCompletedDate(attempt.completedAt ?? attempt.updatedAt)} · 응답{" "}
           {answeredCount}개
         </p>
@@ -737,15 +739,9 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
       )}
 
       <section aria-label="결과 활용" className="border-b border-line py-6">
-        <h2 className="text-base font-bold">다음으로</h2>
-        <p className="mt-1 text-sm leading-6 text-muted">
-          {isFull
-            ? "성향지도에서 그래프를 다시 보고, 필요한 공개 범위는 설정에서 확인할 수 있어요."
-            : "정밀 코어를 이어서 완료하면 세부 신호와 더 안정적인 대표 성향을 볼 수 있어요."}
-        </p>
         <Link
           aria-label={nextAction.accessibleLabel}
-          className="mt-4 inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[#111111] px-4 text-sm font-bold text-white hover:bg-[#2a2a2a]"
+          className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--nu-color-text-strong)] px-4 text-sm font-bold text-white hover:bg-[var(--nu-neutral-900)]"
           href={nextAction.href}
         >
           {nextAction.label}
@@ -777,7 +773,7 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
             <div className="grid gap-2">
               <button
                 aria-busy={shareLinkState === "making"}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[#111111] px-4 text-sm font-bold text-white hover:bg-[#2a2a2a] disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--nu-color-text-strong)] px-4 text-sm font-bold text-white hover:bg-[var(--nu-neutral-900)] disabled:cursor-not-allowed disabled:opacity-40"
                 disabled={shareLinkState === "making"}
                 onClick={handleCreateShareLink}
                 type="button"
@@ -788,7 +784,7 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
               </button>
               <button
                 aria-busy={feedShareState === "posting"}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-line px-4 text-sm font-bold text-ink hover:bg-[#f7f7f7] disabled:cursor-not-allowed disabled:opacity-40"
+                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-line px-4 text-sm font-bold text-ink hover:bg-[var(--nu-neutral-25)] disabled:cursor-not-allowed disabled:opacity-40"
                 disabled={feedShareState === "posting"}
                 onClick={handleShareToFeed}
                 type="button"
@@ -808,7 +804,7 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
             </p>
           ) : (
             <Link
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[#111111] px-4 text-sm font-bold text-white hover:bg-[#2a2a2a]"
+              className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--nu-color-text-strong)] px-4 text-sm font-bold text-white hover:bg-[var(--nu-neutral-900)]"
               href={`/login?next=${encodeURIComponent(`/results/local/${localResultId}`)}`}
             >
               로그인하고 공유하기
@@ -821,13 +817,6 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
             내 결과 관리
           </Link>
         </div>
-        {(claimState === "missing_consent" ||
-          claimState === "unauthenticated" ||
-          claimState === "idle") && (
-          <p className="mt-3 text-sm leading-6 text-muted" role="status">
-            공유하려면 로그인과 필수 확인을 마쳐 주세요.
-          </p>
-        )}
         {claimState === "error" && (
           <p className="mt-3 text-sm leading-6 text-muted" role="alert">
             공유 기능을 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.
@@ -890,27 +879,24 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
         </section>
       )}
 
-      {isFull && (
-        <section className="border-b border-line py-6">
-          <h2 className="text-base font-bold">균형 구간에서 함께 볼 표현</h2>
-          {boundaryDomains.length > 0 ? (
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {boundaryDomains.map((domain) => domain.label).join(", ")} 영역은
-              한쪽으로만 고정되지 않고 상황에 따라 다른 모습도 함께 나타날 수
-              있어요.
-            </p>
-          ) : (
-            <p className="mt-2 text-sm leading-6 text-muted">
-              지금 결과에서는 균형 구간에 걸친 영역이 크게 보이지 않아요.
-            </p>
-          )}
-          {alternativeNames.length > 0 && (
-            <p className="mt-3 text-sm leading-6 text-muted">
-              가까운 다른 표현: {alternativeNames.join(", ")}
-            </p>
-          )}
-        </section>
-      )}
+      {isFull &&
+        (boundaryDomains.length > 0 || alternativeNames.length > 0) && (
+          <section className="border-b border-line py-6">
+            <h2 className="text-base font-bold">균형에 가까운 영역</h2>
+            {boundaryDomains.length > 0 ? (
+              <p className="mt-2 text-sm leading-6 text-muted">
+                {boundaryDomains.map((domain) => domain.label).join(", ")}{" "}
+                영역은 한쪽으로만 고정되지 않고 상황에 따라 다른 모습도 함께
+                나타날 수 있어요.
+              </p>
+            ) : null}
+            {alternativeNames.length > 0 && (
+              <p className="mt-3 text-sm leading-6 text-muted">
+                가까운 다른 표현: {alternativeNames.join(", ")}
+              </p>
+            )}
+          </section>
+        )}
 
       <details className="border-b border-line py-5">
         <summary className="cursor-pointer text-base font-bold">
@@ -922,8 +908,8 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
             판정이 아니에요.
           </p>
           <p>
-            점수는 뉴앙 내부 변환 점수입니다. 아직 또래 대비 백분위나 순위를
-            의미하지 않아요.
+            점수는 응답을 0~100 기준으로 환산한 값이며, 또래 대비 백분위나
+            순위를 의미하지 않아요.
           </p>
           <p>
             대표 성향 이름은 대화를 쉽게 하기 위한 제목이고, 실제 해석은 각 영역
@@ -1273,8 +1259,7 @@ function UnavailableVersionedResult({
         이 결과는 현재 버전에서 다시 열 수 없어요
       </h1>
       <p className="mt-2 text-sm leading-6 text-muted">
-        이전 방식으로 만든 결과를 지금 기준으로 다시 계산하지 않기 위한 보호
-        조치예요. 새로 답하면 완료 당시 기준으로 결과가 안전하게 보관돼요.
+        이전 방식으로 만든 결과라 현재 기준으로 다시 계산할 수 없어요.
       </p>
       <ButtonLink className="mt-5 w-full" href={restartHref}>
         새 검사 시작하기

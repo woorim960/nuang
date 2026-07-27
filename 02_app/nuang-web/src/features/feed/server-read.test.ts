@@ -125,7 +125,7 @@ describe("feed server read model", () => {
 
     expect(reportPost?.reportShare).toMatchObject({
       profileCode: "INGMQ",
-      profileName: "생각의 파도 탐험가",
+      profileName: "가능성을 깊이 좇는 사색가",
     });
   });
 
@@ -296,7 +296,7 @@ describe("feed server read model", () => {
     expect(payload?.reportShare).toMatchObject({
       href: "/feed/reports/33333333-3333-4333-8333-333333333333",
       profileCode: "INGMC",
-      profileName: "새 길을 찾는 탐구자",
+      profileName: "새 가능성을 찾는 탐험가",
     });
     expect(JSON.stringify(payload)).not.toContain("예전 저장 이름");
   });
@@ -493,7 +493,7 @@ function resolveFeedReadOperation(
       data: [
         {
           author_account_id: "account-other",
-          body: "INGMQ 생각의 파도 탐험가 리포트를 공유했어요.",
+          body: "INGMQ 가능성을 깊이 좇는 사색가 리포트를 공유했어요.",
           created_at: "2026-07-09T07:10:00.000Z",
           id: "post-report-share",
           moderation_status: "published",
@@ -503,7 +503,7 @@ function resolveFeedReadOperation(
               completedAt: "2026-07-04T00:00:00.000Z",
               domains: [],
               profileCode: "INGMQ",
-              profileName: "생각의 파도 탐험가",
+              profileName: "가능성을 깊이 좇는 사색가",
               resultLabel: "현재 가장 가까운 대표 성향",
             },
           },
@@ -611,7 +611,7 @@ function resolveFeedReadOperation(
             nuang_code: "INGMC",
             option_id: "option-sea",
             poll_id: "11111111-1111-4111-8111-111111111111",
-            profile_name: "새 길을 찾는 탐구자",
+            profile_name: "새 가능성을 찾는 탐험가",
           },
           {
             account_id: "account-own",
@@ -639,7 +639,7 @@ function resolveFeedReadOperation(
           nuang_code: "INGMC",
           option_id: "option-sea",
           poll_id: "11111111-1111-4111-8111-111111111111",
-          profile_name: "새 길을 찾는 탐구자",
+          profile_name: "새 가능성을 찾는 탐험가",
         },
       ],
       error: null,

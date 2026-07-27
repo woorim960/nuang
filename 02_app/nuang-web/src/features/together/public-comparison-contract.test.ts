@@ -135,7 +135,7 @@ const targetResult: CoreScoreResult = {
       symbol: "G",
     },
   ],
-  profileName: "질문을 품은 탐구자",
+  profileName: "변화의 원인을 좇는 추적자",
 };
 
 describe("public profile comparison contract", () => {

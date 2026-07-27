@@ -29,8 +29,8 @@
 
 .header > p {
   overflow: hidden;
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -44,8 +44,8 @@
 .headerCopy p {
   overflow: hidden;
   margin: 0;
-  font-size: 0.875rem;
-  font-weight: 700;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -54,14 +54,14 @@
   display: block;
   margin-top: 0.08rem;
   color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 600;
-  line-height: 1.2;
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+  line-height: var(--nu-leading-display);
 }
 
 .count {
-  font-size: 0.75rem;
-  font-weight: 650;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
   color: var(--muted);
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -124,7 +124,7 @@
   z-index: 2;
   width: 79%;
   height: auto;
-  filter: drop-shadow(0 1.15rem 1.7rem rgb(63 56 118 / 12%));
+  filter: drop-shadow(0 1.15rem 1.7rem color-mix(in srgb, var(--nu-info-700) 12%, transparent));
   transform-origin: 50% 82%;
   animation: completion-breathe 2.6s ease-in-out infinite;
 }
@@ -137,7 +137,7 @@
   width: 43%;
   height: 7%;
   border-radius: 999px;
-  background: rgb(48 36 91 / 11%);
+  background: color-mix(in srgb, var(--nu-brand-800) 11%, transparent);
   filter: blur(0.55rem);
   transform: translateX(-50%);
   animation: completion-shadow 2.6s ease-in-out infinite;
@@ -155,7 +155,7 @@
   border: 2px solid color-mix(in srgb, var(--surface) 72%, transparent);
   border-radius: 0.25rem;
   background: var(--primary);
-  box-shadow: 0 0.35rem 0.9rem rgb(63 56 118 / 13%);
+  box-shadow: 0 0.35rem 0.9rem color-mix(in srgb, var(--nu-info-700) 13%, transparent);
   animation: completion-signal 3.2s cubic-bezier(0.22, 0.75, 0.28, 1) infinite;
 }
 
@@ -201,9 +201,9 @@
 .copy h1 {
   max-width: 24rem;
   margin-inline: auto;
-  font-size: clamp(1.55rem, 6.2vw, 1.9rem);
-  font-weight: 850;
-  line-height: 1.34;
+  font-size: var(--nu-text-fluid-title-lg);
+  font-weight: var(--nu-weight-heavy);
+  line-height: var(--nu-leading-title);
   letter-spacing: -0.035em;
   text-wrap: balance;
 }
@@ -211,8 +211,8 @@
 .copy > p:not(.liveStatus) {
   max-width: 23rem;
   margin: 0.75rem auto 0;
-  font-size: 0.93rem;
-  line-height: 1.7;
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body);
   color: var(--muted);
   text-wrap: pretty;
 }
@@ -226,8 +226,8 @@
   padding: 0.35rem 0.75rem;
   border: 1px solid color-mix(in srgb, var(--primary) 13%, var(--line));
   border-radius: 999px;
-  font-size: 0.75rem;
-  font-weight: 700;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
   color: var(--primary-strong);
   background: color-mix(in srgb, var(--surface) 82%, transparent);
 }
@@ -258,11 +258,11 @@
   min-height: 3.5rem;
   border: 0;
   border-radius: 1rem;
-  font-size: 0.9rem;
-  font-weight: 750;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   color: var(--surface);
   background: var(--foreground);
-  box-shadow: 0 0.75rem 1.75rem rgb(32 34 50 / 18%);
+  box-shadow: 0 0.75rem 1.75rem color-mix(in srgb, var(--nu-info-700) 18%, transparent);
   transition:
     transform 160ms ease,
     opacity 160ms ease;
@@ -291,8 +291,8 @@
 .statusNote {
   margin: 0;
   color: var(--muted);
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
   text-align: center;
 }
 

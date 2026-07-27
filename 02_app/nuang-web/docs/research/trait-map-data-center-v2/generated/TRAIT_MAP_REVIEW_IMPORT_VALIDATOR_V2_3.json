@@ -1,0 +1,35 @@
+{
+  "contractVersion": "nuang-trait-map-review-import-validator.v2.3",
+  "reportId": "TRAIT-MAP-REVIEW-IMPORT-VALIDATOR.2.3",
+  "status": "VALID_EMPTY_TEMPLATE_NOT_IMPORTABLE",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "input": {
+    "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_REVIEW_IMPORT_EMPTY_V2_3.json",
+    "customInput": false,
+    "batchId": "EMPTY-NOT-FOR-IMPORT",
+    "sourceSystem": "controlled_manual_import"
+  },
+  "summary": {
+    "knownCanonicalVariants": 605,
+    "reviewerCount": 0,
+    "independentDecisionCount": 0,
+    "cognitiveObservationCount": 0,
+    "revisionProposalCount": 0,
+    "adjudicationCount": 0,
+    "eventCount": 0,
+    "errorCount": 0,
+    "warningCount": 1,
+    "schemaAndRegistryValid": true,
+    "safeToImport": false,
+    "commitPerformed": false
+  },
+  "errors": [],
+  "warnings": [
+    { "code": "EMPTY_TEMPLATE_VALID_BUT_NOT_IMPORTABLE", "location": "batchId" }
+  ],
+  "nextGate": {
+    "name": "WAIT_FOR_REAL_REVIEW_OR_COGNITIVE_EVENTS",
+    "command": null
+  }
+}

@@ -1,0 +1,216 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "REMAINING-BATCH3-CALIBRATION-AUDIT.0.1",
+  "status": "THIRD_REMAINING_BATCH_STRUCTURALLY_COMPLETE_HUMAN_VALIDATION_REQUIRED",
+  "batchId": "BATCH-3-IRGMC-CYCLE",
+  "anchor": "IRGMC",
+  "checks": {
+    "exactProfileCoverage": true,
+    "exactInteractionCoverage": true,
+    "fullResearchStructure": true,
+    "twoParentPathConvergence": true,
+    "directionalSceneChecks": [
+      {
+        "code": "ENGMC",
+        "claimId": "ENGMC.scenario.general.new_encounter.attention",
+        "expectedPhrases": ["먼저 말을", "여러 면", "가능성"],
+        "passed": true
+      },
+      {
+        "code": "INAMC",
+        "claimId": "INAMC.scenario.general.disagreement.response",
+        "expectedPhrases": ["상대 관점", "자신의 생각", "유연하게"],
+        "passed": true
+      },
+      {
+        "code": "IRAKC",
+        "claimId": "IRAKC.scenario.partner.plan_change.response",
+        "expectedPhrases": ["변경 이유", "새 일정", "흐름"],
+        "passed": true
+      },
+      {
+        "code": "IRGKQ",
+        "claimId": "IRGKQ.scenario.general.plan_change.response",
+        "expectedPhrases": ["걱정되는 항목", "새 순서", "완료 기준"],
+        "passed": true
+      },
+      {
+        "code": "ERGMQ",
+        "claimId": "ERGMQ.scenario.general.aftermath.response",
+        "expectedPhrases": ["필요한 사람", "재발 방지", "걱정과 피로"],
+        "passed": true
+      }
+    ],
+    "allContentResearchOnly": true
+  },
+  "profiles": [
+    {
+      "code": "ENGMC",
+      "profileName": "새 길을 여는 개척자",
+      "anchor": "IRGMC",
+      "changedAxes": [
+        "SE_energy_and_expression",
+        "OE_exploration_and_interest"
+      ],
+      "parentPaths": [
+        { "parent": "ERGMC", "applyAxis": "OE_exploration_and_interest" },
+        { "parent": "INGMC", "applyAxis": "SE_energy_and_expression" }
+      ],
+      "scenarioCount": 72,
+      "scenarioClaimCount": 288,
+      "inheritedClaimCount": 280,
+      "interactionClaimCount": 8,
+      "interactionScenarioIds": ["SCN-FRIEND-2", "SCN-GENERAL-2"],
+      "copyAudit": "288/288",
+      "chapterCount": 16,
+      "longformCharacters": 72883,
+      "structuredClaimCount": 314,
+      "evidenceSourceCount": 33,
+      "neighborCount": 5,
+      "neighborClaimCount": 20,
+      "customerVisibleScenarioClaims": 0,
+      "customerApprovedClaims": 0,
+      "manuscriptPresent": true,
+      "parentPathsMatchPlan": true,
+      "lineageCountsMatchPlan": true,
+      "parentCopyConvergencePassed": true
+    },
+    {
+      "code": "INAMC",
+      "profileName": "마음과 가능성을 그리는 상상가",
+      "anchor": "IRGMC",
+      "changedAxes": ["OE_exploration_and_interest", "RO_relational_attention"],
+      "parentPaths": [
+        { "parent": "INGMC", "applyAxis": "RO_relational_attention" },
+        { "parent": "IRAMC", "applyAxis": "OE_exploration_and_interest" }
+      ],
+      "scenarioCount": 72,
+      "scenarioClaimCount": 288,
+      "inheritedClaimCount": 288,
+      "interactionClaimCount": 0,
+      "interactionScenarioIds": [],
+      "copyAudit": "288/288",
+      "chapterCount": 16,
+      "longformCharacters": 73356,
+      "structuredClaimCount": 314,
+      "evidenceSourceCount": 33,
+      "neighborCount": 5,
+      "neighborClaimCount": 20,
+      "customerVisibleScenarioClaims": 0,
+      "customerApprovedClaims": 0,
+      "manuscriptPresent": true,
+      "parentPathsMatchPlan": true,
+      "lineageCountsMatchPlan": true,
+      "parentCopyConvergencePassed": true
+    },
+    {
+      "code": "IRAKC",
+      "profileName": "조용히 마음을 지키는 수호자",
+      "anchor": "IRGMC",
+      "changedAxes": ["RO_relational_attention", "SM_execution_and_structure"],
+      "parentPaths": [
+        { "parent": "IRAMC", "applyAxis": "SM_execution_and_structure" },
+        { "parent": "IRGKC", "applyAxis": "RO_relational_attention" }
+      ],
+      "scenarioCount": 72,
+      "scenarioClaimCount": 288,
+      "inheritedClaimCount": 288,
+      "interactionClaimCount": 0,
+      "interactionScenarioIds": [],
+      "copyAudit": "288/288",
+      "chapterCount": 16,
+      "longformCharacters": 73428,
+      "structuredClaimCount": 314,
+      "evidenceSourceCount": 33,
+      "neighborCount": 5,
+      "neighborClaimCount": 20,
+      "customerVisibleScenarioClaims": 0,
+      "customerApprovedClaims": 0,
+      "manuscriptPresent": true,
+      "parentPathsMatchPlan": true,
+      "lineageCountsMatchPlan": true,
+      "parentCopyConvergencePassed": true
+    },
+    {
+      "code": "IRGKQ",
+      "profileName": "변수를 꼼꼼히 살피는 전략가",
+      "anchor": "IRGMC",
+      "changedAxes": [
+        "SM_execution_and_structure",
+        "ER_emotional_activation_and_worry"
+      ],
+      "parentPaths": [
+        { "parent": "IRGKC", "applyAxis": "ER_emotional_activation_and_worry" },
+        { "parent": "IRGMQ", "applyAxis": "SM_execution_and_structure" }
+      ],
+      "scenarioCount": 72,
+      "scenarioClaimCount": 288,
+      "inheritedClaimCount": 284,
+      "interactionClaimCount": 4,
+      "interactionScenarioIds": ["SCN-GENERAL-4"],
+      "copyAudit": "288/288",
+      "chapterCount": 16,
+      "longformCharacters": 72546,
+      "structuredClaimCount": 314,
+      "evidenceSourceCount": 33,
+      "neighborCount": 5,
+      "neighborClaimCount": 20,
+      "customerVisibleScenarioClaims": 0,
+      "customerApprovedClaims": 0,
+      "manuscriptPresent": true,
+      "parentPathsMatchPlan": true,
+      "lineageCountsMatchPlan": true,
+      "parentCopyConvergencePassed": true
+    },
+    {
+      "code": "ERGMQ",
+      "profileName": "빠르게 움직이는 현장해결가",
+      "anchor": "IRGMC",
+      "changedAxes": [
+        "ER_emotional_activation_and_worry",
+        "SE_energy_and_expression"
+      ],
+      "parentPaths": [
+        { "parent": "IRGMQ", "applyAxis": "SE_energy_and_expression" },
+        { "parent": "ERGMC", "applyAxis": "ER_emotional_activation_and_worry" }
+      ],
+      "scenarioCount": 72,
+      "scenarioClaimCount": 288,
+      "inheritedClaimCount": 284,
+      "interactionClaimCount": 4,
+      "interactionScenarioIds": ["SCN-GENERAL-12"],
+      "copyAudit": "288/288",
+      "chapterCount": 16,
+      "longformCharacters": 72803,
+      "structuredClaimCount": 314,
+      "evidenceSourceCount": 33,
+      "neighborCount": 5,
+      "neighborClaimCount": 20,
+      "customerVisibleScenarioClaims": 0,
+      "customerApprovedClaims": 0,
+      "manuscriptPresent": true,
+      "parentPathsMatchPlan": true,
+      "lineageCountsMatchPlan": true,
+      "parentCopyConvergencePassed": true
+    }
+  ],
+  "totals": {
+    "profiles": 5,
+    "scenarios": 360,
+    "scenarioClaims": 1440,
+    "inheritedScenarioClaims": 1424,
+    "interactionScenarioClaims": 16,
+    "interactionScenes": 4,
+    "structuredClaims": 1570,
+    "neighborClaims": 100,
+    "longformCharacters": 365016,
+    "customerApprovedClaims": 0
+  },
+  "interpretation": "자동 감사는 두 부모 경로의 계보·구조·문장 방향이 설계 계약과 일치함을 확인한다. 사람 대상 인지 인터뷰와 정량 검증을 통과했다는 뜻은 아니다.",
+  "nextGate": [
+    "코드 이름을 가린 상태에서 두 부모 경로 문장이 같은 생활 경험으로 이해되는지 확인",
+    "두 축 상호작용 문장 16개에서 처음 드는 생각과 실제 나타나는 반응이 분리되는지 확인",
+    "한 글자 이웃 5개와의 구분력·반복 응답 재현성·상황 강도 영향을 정량 확인",
+    "사람 검증이 끝나기 전 연구 문장을 고객용 성향지도와 리포트에 발행하지 않음"
+  ]
+}

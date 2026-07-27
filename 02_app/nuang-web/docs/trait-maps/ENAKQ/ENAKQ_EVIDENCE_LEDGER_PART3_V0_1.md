@@ -72,9 +72,9 @@
 
 ### `SRC-RESPONSIVENESS-2017`
 
-- Selçuk, E. et al. (2017). Does Partner Responsiveness Predict Hedonic and Eudaimonic Well-Being? A 10-Year Longitudinal Study.
+- Selçuk, E., Günaydın, G., Ong, A. D., & Almeida, D. M. (2016). Does Partner Responsiveness Predict Hedonic and Eudaimonic Well-Being? A 10-Year Longitudinal Study.
 - PubMed: [PMID 28592909](https://pubmed.ncbi.nlm.nih.gov/28592909/)
-- DOI: [10.1177/0956797617702015](https://doi.org/10.1177/0956797617702015)
+- DOI: [10.1111/jomf.12272](https://doi.org/10.1111/jomf.12272)
 - 확인 범위: 미국의 혼인 성인 2,000명 이상에서 지각된 상대 반응성과 10년 뒤 웰빙의 종단 관계를 검토함.
 - Part 3 사용: 상대가 이해·관심·인정을 받았다고 느끼는 경험은 제공자의 의도나 코드와 분리해 봐야 한다는 배경.
 - 제한: 인과 확정, 뉴앙 A 타당화, 모든 관계 형태의 적용 근거가 아님.
@@ -85,9 +85,10 @@
 - PubMed: [PMID 34370505](https://pubmed.ncbi.nlm.nih.gov/34370505/)
 - 원문: [PubMed Central](https://pmc.ncbi.nlm.nih.gov/articles/PMC8825924/)
 - DOI: [10.1037/fam0000907](https://doi.org/10.1037/fam0000907)
-- 확인 범위: 첫 자녀 출산 뒤 2년간 두 배우자의 반응성 지각과 관계 만족을 추적함. 높은 부모 스트레스에서는 더 높은 반응성 제공이 오히려 만족 저하와 관련된 조건도 보고됨.
-- Part 3 사용: 돌봄과 반응성을 무조건 많을수록 좋은 행동으로 쓰지 않고 부담·상황 조건을 확인함.
-- 제한: 새 부모·부부 맥락이며 모든 가족 돌봄에 일반화하지 않음.
+- 현재 상태: **2025년 철회됨. 근거와 고객 문구에서 사용 금지.**
+- 기존 확인 범위: 첫 자녀 출산 뒤 2년간 두 배우자의 반응성 지각과 관계 만족을 추적했으나, 철회로 인해 결과를 근거로 사용할 수 없음.
+- Part 3 조치: 기존 claim 연결을 제거하고 대체 가능한 독립·비철회 연구를 다시 탐색함.
+- 제외 이유: 철회된 연구는 상황 조건이나 관계 효과를 지지하는 자료로 사용할 수 없음.
 
 ### Part 1·2에서 이어 쓰는 근거
 

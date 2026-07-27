@@ -1,0 +1,1287 @@
+{
+  "contractVersion": "nuang-trait-map-p0-direct-validation-synthetic-analysis-run.v2.3",
+  "reportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-SYNTHETIC-ANALYSIS-RUN.2.3",
+  "status": "FAIL_CLOSED_ADJUDICATION_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceDataContractReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-DATA-CONTRACT.2.3",
+  "sourceFixtureValidationReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-FIXTURE-VALIDATION.2.3",
+  "sourceFixtureId": "TRAIT-MAP-P0-DIRECT-VALIDATION-SYNTHETIC-FIXTURE.2.3",
+  "summary": {
+    "syntheticResponsesInspected": 96,
+    "responsesWithTwoCoderRatings": 96,
+    "rawAgreementCount": 0,
+    "rawAgreementRate": 0,
+    "disagreements": 96,
+    "adjudicationsPresent": 0,
+    "unresolvedDisagreements": 96,
+    "analysisRowsReleased": 0,
+    "inferentialModelsRun": 0,
+    "realParticipants": 0,
+    "canonicalReleaseDecisions": 0,
+    "publicationApprovalsGranted": 0
+  },
+  "failClosedRules": [
+    "두 코더가 다르고 합의가 없으면 해당 응답을 분석 입력에 포함하지 않는다.",
+    "불완전한 코딩에서는 효과 추정·유의확률·신뢰구간을 만들지 않는다.",
+    "합성 fixture 결과를 사람의 성향 또는 문장 타당성 결과로 해석하지 않는다.",
+    "분석 입력 준비와 실제 모델 실행을 서로 다른 게이트로 유지한다."
+  ],
+  "responseCoding": [
+    {
+      "responseRef": "52e87dde-fa33-489f-86ba-289c0a04e5a5",
+      "coderRatingRefs": [
+        "5a61b87c-e2cf-4739-b329-e22c57fc8adc",
+        "a08b4b3b-f9ab-4f93-83f7-9d140bad3f06"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "9521b6ab-5e99-4167-87a4-031a62b908da",
+      "coderRatingRefs": [
+        "0d8dd795-534c-4f31-b444-3315154e1808",
+        "3d879001-5ed5-419c-b37b-06c480c933ed"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "2679a5f3-6cae-471b-bfbd-94de710691cb",
+      "coderRatingRefs": [
+        "29f3827c-e282-467e-9721-6081a3825ac5",
+        "2f378c38-0326-41ac-a9c8-edc15fe079d9"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "e20cfbb3-9c7c-4324-bf4f-d102b29f5251",
+      "coderRatingRefs": [
+        "083fe5f1-af0a-41a7-b5aa-22f55cd18eaa",
+        "32782ba4-61eb-4f39-95bf-c71274efa0a3"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "4d2eed64-d96d-4c74-a0c7-d5c779295719",
+      "coderRatingRefs": [
+        "8917277a-e63a-4e04-b7ce-30f84bb93f27",
+        "db066892-18f0-4c52-98c2-2c02964ede79"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "09e70a91-fa64-4321-b6fa-549b2d94736e",
+      "coderRatingRefs": [
+        "a3ae26c7-1a3c-4cc1-85f2-143714bfb57e",
+        "9d6a49f6-6305-434f-8274-98a3cf788576"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "609edb50-650b-4d21-a178-71aaddf0461b",
+      "coderRatingRefs": [
+        "9bc31b75-620f-4767-9506-ed5f3fa746cc",
+        "a39bc6db-acd1-4d2d-8dbf-2d733abe0092"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "71bafe90-d5bc-45a3-95dd-390ab0eb2e5c",
+      "coderRatingRefs": [
+        "7996f86a-9c7a-49bd-90af-1e577769a2ee",
+        "6f8a3bde-91e9-40de-b67a-4a492e0bbcbe"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "d1d02f15-d7c1-415b-a0b4-541da48fa65b",
+      "coderRatingRefs": [
+        "13f25dc1-52c8-4e00-89e6-35e36946d388",
+        "f16c0047-ad56-41b0-9fcb-316505657ebe"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "018d0e9a-91bc-457e-b104-3aad00dcd886",
+      "coderRatingRefs": [
+        "2191baa6-6d70-46b0-919a-05f0b23b5fb9",
+        "70d1ad3c-ecf8-45b1-9859-3f2589f360bf"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "5683e530-4d82-4b9b-ba4c-429aaf336567",
+      "coderRatingRefs": [
+        "7e1522d9-6676-4963-8e1c-6fd1aaf6e723",
+        "b1b9c58f-0a7e-4de9-8f9e-99cc06ec7ad8"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "ae1f059c-c0ad-47c9-903c-2619520f284e",
+      "coderRatingRefs": [
+        "9587fcb1-d967-496e-b973-73285e3acb46",
+        "bdde0f87-3337-445b-9221-b7971da7276e"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "c49942a9-651d-4792-b826-7aaa8f120b58",
+      "coderRatingRefs": [
+        "7c8f21b3-084b-4771-842b-322cea2b0b46",
+        "081968e6-805c-442b-822f-43dc7f586d72"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "e9ff5306-b194-4c2a-9370-a1fc398c1aec",
+      "coderRatingRefs": [
+        "e7b5544c-6e61-4dd4-ba1a-a945cc754fcc",
+        "586c56d8-235b-4a32-a142-041070556348"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "749bc541-d602-4f8e-81f2-e62250a71051",
+      "coderRatingRefs": [
+        "0e210508-44aa-41d0-b626-76ef9dd92acb",
+        "e906a16e-1b3c-4a00-aa5f-fdc752e7cfc4"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "94a1741e-ad17-4013-8323-2f98d83cad60",
+      "coderRatingRefs": [
+        "f2ce3a91-b509-4494-8a2e-603338afba77",
+        "1e84ccca-a4b4-4e17-b7b1-54457ba1afcd"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "a6e90307-14ce-4bd3-ae97-9b8f7a09821c",
+      "coderRatingRefs": [
+        "291154b8-e51c-4981-bb05-8ffa291b4784",
+        "44945b22-1791-4787-ae95-5671d348699c"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "7375d808-cf7a-4da1-86a4-761acde5f82c",
+      "coderRatingRefs": [
+        "0019e847-5c32-489f-88e7-66b5006cf8e3",
+        "a9dfc1a5-8e8b-44b7-8bdf-0bc6a2facd9a"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "bcf90682-5bfb-45e2-9375-08fd5a81f018",
+      "coderRatingRefs": [
+        "da3e8419-6bba-4d22-8305-952e197561fe",
+        "d584abad-a49b-49cf-a385-6567384f820b"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "3db4392e-51ea-41fe-a4b0-912ab861bc56",
+      "coderRatingRefs": [
+        "c23e4d60-7b92-4c49-b7a4-b0b9f32c2640",
+        "01c3e9f0-f4db-4398-92df-227a5add587e"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "a43ffb30-488b-41dd-af66-49396bae7483",
+      "coderRatingRefs": [
+        "7e4acf3c-e221-4425-abf9-4bacc82f9238",
+        "258832d9-69d8-4c4d-8e07-d98b8fd73bbe"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "6c8f573e-42ac-4daa-a72e-148a12aa6060",
+      "coderRatingRefs": [
+        "b6bcbd46-8909-48df-8628-eaefd4346021",
+        "2196e629-c638-48bc-a819-93b1b4cddff4"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "426435f8-e505-4723-9f57-750f0a63e988",
+      "coderRatingRefs": [
+        "23462b74-3ce0-435f-9e3e-079a85dd5b18",
+        "060d7f46-f133-405d-af3a-f5cf4cccf40a"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "fcea7f54-2197-4d07-a623-fbbe2500fc2c",
+      "coderRatingRefs": [
+        "7434bd64-3f10-4498-a0cc-9eb9d16d9760",
+        "9f675c84-a9dd-43f5-8b9b-f2b5412f2706"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "c37df7b2-8510-45fb-a5a6-44efbb3183fd",
+      "coderRatingRefs": [
+        "3ce24af3-2cfe-4066-b8e3-fd2f3057b96b",
+        "2951c129-4745-4cc0-8067-df6d9535be0a"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "1ce807ea-6ca6-430c-9a1d-a0bdbfb96cac",
+      "coderRatingRefs": [
+        "ebc3d3a5-91d0-4dde-9bc9-4c8c17c34f04",
+        "2690417e-bef8-4251-b713-51fbea2113a1"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "54416e9d-43ea-4350-9768-a7c138c6d816",
+      "coderRatingRefs": [
+        "44248d63-36d4-48a6-94e1-0c31722f4121",
+        "f0096d3b-0800-45dd-bd35-6b283cd099b3"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "d4458fe3-2a3e-4a1d-a07a-a9456264ab9b",
+      "coderRatingRefs": [
+        "69e027b1-870a-4dcf-9df0-1421a0714212",
+        "f681de96-bb60-42e9-8e42-cb0197e93cc8"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "ec4e239d-03e0-4960-a8c9-be85fd049263",
+      "coderRatingRefs": [
+        "619ab69a-a80b-4c0e-9629-e94bbe23e5cf",
+        "1aa72343-8f20-4989-be2c-75617fd0a881"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "66e1df52-0886-406f-9dba-78aae69814b4",
+      "coderRatingRefs": [
+        "6ff69c20-5975-4bc7-9d9d-085d182798d4",
+        "6d0bcc91-3137-46bd-bf80-299d13400469"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "2ef5633a-c70c-4756-bac6-e206a4031068",
+      "coderRatingRefs": [
+        "624d538c-6fb8-42f3-b7ab-ab9f049a6136",
+        "08eebeb8-5756-45cc-8f5e-f795ed6aac5c"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "8cb81edd-3235-4517-8f4b-d8577a477d77",
+      "coderRatingRefs": [
+        "c36a302a-b402-462c-842b-1e9fbfcef794",
+        "815a8314-bce1-4354-8284-fe821bbf512f"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "bf6f3ab7-9c00-4e79-8536-eb31aceb5ca1",
+      "coderRatingRefs": [
+        "83926200-c3f3-4328-a687-5aef116ec77a",
+        "8a0e12bd-7487-4c20-bce5-9cbf84ecb364"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "89897319-d992-4508-922d-630b2e97cd95",
+      "coderRatingRefs": [
+        "fa21dae2-441f-4981-981e-3a3b611babaa",
+        "8aae31a0-e7a5-4e12-9622-391d68794834"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "95d83542-b000-40eb-b998-fcd6a00fea5b",
+      "coderRatingRefs": [
+        "d4cca5df-3210-4865-b433-84533a1269c5",
+        "2838d7f3-7df0-4084-8e54-f821209d1643"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "77c8bbb7-dcd8-4494-88e0-8d4068b714f9",
+      "coderRatingRefs": [
+        "ac96cead-d6ff-474e-b23c-6b44357c4db3",
+        "b8320c1f-7b3b-47d9-84d5-1b904447058d"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "e3432531-18d0-4074-912f-9c91a1f1c675",
+      "coderRatingRefs": [
+        "7efda543-8591-4159-a8fc-6636dfbdb31e",
+        "6c4be0e0-4bbd-4713-b0c3-125050934d24"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "db7c0fee-85a2-41f0-9ac1-06cce66308ab",
+      "coderRatingRefs": [
+        "ef37b374-3d86-46c1-8b66-486237158e1b",
+        "d522a8bf-5417-4e41-b013-af10049ec568"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "d38e02ff-cf54-460e-828f-0731214019e2",
+      "coderRatingRefs": [
+        "b7847501-c42c-4293-ab4a-67f384c19849",
+        "8ebcb4b4-b347-4b18-b32c-8256dd0a6cc7"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "944f0bf3-e4f1-481c-9e79-8ae7e29e0a40",
+      "coderRatingRefs": [
+        "743a4c5e-d78e-4feb-af09-a23e14420f4d",
+        "2e23555e-260e-4ad9-bf2c-9bb058d1e5fd"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "ca96d6e1-24a2-4f09-8dcb-e12a8de5fcde",
+      "coderRatingRefs": [
+        "da5961ce-09c5-47a6-b3bd-14b4afa94199",
+        "07ffe8a9-38ec-4f4a-9602-9ca5413c1639"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "692e509c-a97c-47b4-8a33-e6d57cc07996",
+      "coderRatingRefs": [
+        "b64adc8d-b9e2-4441-bb74-aa379001ed5e",
+        "a066507b-4328-40cb-b6a7-a80a14028a55"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "83bd271f-56ee-4d8c-97a3-0eb1b829a170",
+      "coderRatingRefs": [
+        "8056f954-7cee-498c-9ac9-c5d02122a77e",
+        "9e22754b-cf61-4740-a449-c5b209bee3bd"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "a460816b-6ab8-4072-aa2c-f159d11ff834",
+      "coderRatingRefs": [
+        "5c3239c5-5e68-4421-9ca9-fd82d6c0780b",
+        "2c938ec7-007a-495b-b07a-72e497e81f4d"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "5b63763d-f409-4e94-be3f-0b9e590a95da",
+      "coderRatingRefs": [
+        "2d61fdd3-41ca-4400-907c-f7e4b5636a43",
+        "b66d30da-e65b-43b6-b46e-e5978ea9d73e"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "9175cd6b-3b69-4c82-a963-8b391f26ef44",
+      "coderRatingRefs": [
+        "683feb4e-e9b7-4345-a174-6f0433345d67",
+        "e36b70e0-915b-4980-b720-321b5bcb0fe9"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "c17e0cb4-871e-4595-a1a0-f8cb6b3224bd",
+      "coderRatingRefs": [
+        "8e83d5e5-980b-46c7-a72a-0548edd7642e",
+        "69b741a0-4262-4503-a242-d9467243bd03"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "69422cf5-d358-4355-a790-a48604f4d336",
+      "coderRatingRefs": [
+        "66159d58-592b-4fcd-a380-1648d3ce86c9",
+        "c0049c1a-f681-44ea-99fd-97ec2c9679f4"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "3aa36e05-c56e-434a-98ad-7f726d06050b",
+      "coderRatingRefs": [
+        "6d530c76-4f0d-41be-96ab-d2af1ba721df",
+        "9190a1b8-4259-489c-b50f-f12e1e7f983c"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "3af62fbd-fc5c-43a4-b425-2526e5b3d758",
+      "coderRatingRefs": [
+        "08903461-1611-44b9-8acd-9225169a188c",
+        "47b87729-f5e5-438e-8a52-56b9245cde08"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "1e808a1d-69a2-4cef-844d-1c303bc2ecb8",
+      "coderRatingRefs": [
+        "bb25e3e4-a475-4212-952b-2a5aabdcf134",
+        "1e919362-0156-4f54-96ae-92c6b4917caa"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "14884efa-a1ef-44cf-82a1-3aae32d803c8",
+      "coderRatingRefs": [
+        "55e7142c-51a7-4ca2-b487-4841236d2bf4",
+        "fd3fdcb3-8995-4ebc-84d4-85ed49509951"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "879ab7a2-e9f1-4e48-86dd-1ecd0175a490",
+      "coderRatingRefs": [
+        "b4fddeef-5315-4999-a6c3-3242cb0263b5",
+        "8138e560-fce5-4e9a-9762-79c9df99933d"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "a4ac9b41-68a3-4558-9369-be0563c3fcb3",
+      "coderRatingRefs": [
+        "d108e128-1f08-486e-a7de-25ddf2d1dfaf",
+        "07f07acd-9dac-4d48-80d1-aad97082bd69"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "305329f7-0132-402e-a626-320c501a9659",
+      "coderRatingRefs": [
+        "3461e8d8-489f-4b71-8bc8-81e85773b95e",
+        "9d3f4f8a-5022-4f74-827d-1b75c34e0221"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "4411e402-4027-46e5-94a1-2127cb4a26be",
+      "coderRatingRefs": [
+        "9181da58-99ad-4261-ba7a-7928f778d8d5",
+        "703e58b4-061f-4c8f-9871-a1417692787b"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "4b7ee598-3a56-4ac5-a95d-b3d7a7e5ba2a",
+      "coderRatingRefs": [
+        "560c43e0-44ca-40d0-afed-555bb6011ec7",
+        "85f4e99d-9d5b-4dcd-8bee-66504617299d"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "57cdb236-f204-4965-8f98-f08df3801fbb",
+      "coderRatingRefs": [
+        "010385b0-52b5-4253-b294-9366fce8b4df",
+        "dc3fed96-9daa-429d-8709-11c76f5ec553"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "09e03c6f-0f90-4cff-bd7f-7b8abfa32025",
+      "coderRatingRefs": [
+        "99a9759f-9afc-4d5a-91a5-79a59fe33416",
+        "d9a0a12f-9d65-43f7-871f-425caeac01b5"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "7c42ce3f-f85b-4b48-a54d-ba82df064c42",
+      "coderRatingRefs": [
+        "160fdb60-f69e-48d4-ab69-29ca2d1d233a",
+        "6e9d5440-c0cd-4363-a282-7a49b64cb11d"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "77e4416a-cdfa-4587-a548-0dce97329f96",
+      "coderRatingRefs": [
+        "8b337e83-2e3d-4758-a737-9daf572f61ee",
+        "4678cb1c-f180-49d4-982a-999d7e821e06"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "a03ed099-388e-4074-bd69-f4d34696639b",
+      "coderRatingRefs": [
+        "819c878f-f506-4ea4-9b5f-0701438f2170",
+        "0d6c55da-3304-48f8-8cf0-7c6c96b325cf"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "2aa2d078-da50-4a6c-89bf-fe211d2398b9",
+      "coderRatingRefs": [
+        "8e93c938-03e6-41ab-923d-17edf8b8eaa4",
+        "fa04aa5c-ebdc-4eb4-aefa-1cdf949446ca"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "e0ed1cb5-46eb-47d3-a97e-4bc491dbe977",
+      "coderRatingRefs": [
+        "cae7e2bd-3ed8-40cb-ba65-d67dee2a9d8b",
+        "d21aded9-7780-481d-bd6a-038dadfb0d53"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "8e26801a-7997-4d51-94c6-d47a6e06fa45",
+      "coderRatingRefs": [
+        "297d0807-c447-4490-8ecb-ae2a91589d92",
+        "522cd743-275f-4b9e-9740-673c83aed23e"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "43946a96-5c36-4eaf-8212-26adc4bdb584",
+      "coderRatingRefs": [
+        "e8534746-4d72-4869-8c34-10e633f6ef7e",
+        "014e8740-8143-4fb8-87c0-1c08924dab9e"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "0dafdd98-98eb-4403-9f7b-99ef8dc21800",
+      "coderRatingRefs": [
+        "1df50927-a021-4dcd-9802-f97eb8d525fe",
+        "e3c48d97-c091-4b08-ba08-cefbb29f57a6"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "7fbe315c-e834-4ae3-a45a-303cf3128da4",
+      "coderRatingRefs": [
+        "834ceeae-7027-46a1-9a1a-a7aba7bf1d31",
+        "aea8cafc-49ca-4945-899a-cfdf682a4658"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "d0c81d51-4d57-42fe-ad39-8557a795287d",
+      "coderRatingRefs": [
+        "e430b078-69d4-4aec-9dac-946a564a1734",
+        "4d80e754-0394-483f-9d69-1a686cd7172f"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "4084d38b-a516-4ecb-a871-458df4fb85dd",
+      "coderRatingRefs": [
+        "1175c4c3-6a83-44ac-80fe-f5a00a53afd1",
+        "d3a32cbe-abc2-40f9-bbee-a9f3c226e871"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "0c709c51-8b86-488f-9ba2-deb11d7c19d9",
+      "coderRatingRefs": [
+        "d7b9d13c-3d9f-493d-b789-98925d56884b",
+        "6a1b0f0b-efff-4e5d-a5d5-3587009efa11"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "054f0493-edcc-42d8-8644-476fdb420474",
+      "coderRatingRefs": [
+        "e21a11bb-daac-4657-899a-20958f9738fa",
+        "1d65670f-ca29-49f7-921b-c7dbe1518077"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "46255142-5d83-4276-b4f2-a10d8d6d9cae",
+      "coderRatingRefs": [
+        "371ad136-0955-4dd7-a711-beab0dacd6bc",
+        "a9e20f59-653e-4ff9-9c1d-fdc71ea727af"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "d8dcc9d6-048b-44a9-8a6d-5beb3166fb1c",
+      "coderRatingRefs": [
+        "96c43295-3e94-4c00-9e24-41785f92cd1a",
+        "29ebb201-7eaf-49b8-95b2-74b958b55153"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "980db540-b05e-434e-b65c-5abacfe42229",
+      "coderRatingRefs": [
+        "11ba07d2-ae27-43a1-914a-fa237451cc8d",
+        "adba2ce4-11d7-4d66-9313-d4879656a2ff"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "d783e6f8-dd32-4382-9319-141d37778c57",
+      "coderRatingRefs": [
+        "8def0942-c937-43f0-9851-9c5a729d0aa6",
+        "97e7c411-5aab-4baf-adbd-5af5d7bc603e"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "5413ce9c-acb9-4081-b5d6-f5479e7be322",
+      "coderRatingRefs": [
+        "eea39547-eb27-4f35-829f-ac5aee22c52c",
+        "d5a6a131-bc56-425b-b332-6ef7b5cd8ce4"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "13c31c6b-cf2c-43a8-a3d1-55ee4ef8c472",
+      "coderRatingRefs": [
+        "8b6bd8dd-446e-4824-b393-3b8101436da7",
+        "9abc5532-57d3-40d6-93fc-851c40dacb23"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "484bdd2c-811c-4ba4-9fe7-014a6cbe47ba",
+      "coderRatingRefs": [
+        "29f5e72c-c8be-4e8e-9d88-508b37ccb5ed",
+        "56eb0ad5-85f2-43e2-bcf9-acb270b7b1f0"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "6a9164b5-c567-45b1-85cd-e6243ebc3f95",
+      "coderRatingRefs": [
+        "90e31a59-a5ef-4ce0-9238-eb7e07ac7922",
+        "32ce8d37-93ed-4eef-b5cc-1ebeaa3e1e06"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "91673972-1a79-4e3c-bdd2-0899df675dfc",
+      "coderRatingRefs": [
+        "1ec6dc14-60bc-4040-b272-629f92ecf6d7",
+        "4a93fe4a-683a-4954-94e5-15058732a7d7"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "2a13997e-fb94-49f2-8806-63775123a62b",
+      "coderRatingRefs": [
+        "2fd2256f-7298-48a3-82e6-bd09748307c1",
+        "e6ab9a36-3a2c-4420-9efe-8d7a6a43884a"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "4e49fa7c-b070-4472-bcda-cc1a6a98813c",
+      "coderRatingRefs": [
+        "f2b66373-9fea-4f97-8d69-548552e4f8aa",
+        "a73c0873-e4ab-4ebf-9bfa-e82c75b32afd"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "f7fa9649-f08f-4b57-9b60-e38e3e6440e7",
+      "coderRatingRefs": [
+        "a4e8d76e-98ec-4376-998e-cc4dedbbac64",
+        "cb85d2ba-611a-455a-a5de-72aba5d32d97"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "480a8fdf-f5cb-4356-a182-a04d72aa896b",
+      "coderRatingRefs": [
+        "48f036e9-ae08-4446-ad1a-deba32ab6335",
+        "b4dddec5-9be8-405c-88ac-ef2c46d297e6"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "97eabe11-534c-495d-844b-f4ef4277a50e",
+      "coderRatingRefs": [
+        "8e4e72a0-8582-49e8-9b6e-1726d9eb2771",
+        "ac598af1-53d2-4ffa-b46b-141585614649"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "5d454de4-36d6-46b6-a043-e82cbfe135ec",
+      "coderRatingRefs": [
+        "e7c72505-698e-497d-9412-a9e1d99c1ddc",
+        "d57b6ebd-2cc4-4ddb-9ebd-bb2662d2ad34"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "2fcfd82a-1675-4e6c-813e-ceaae3e606ba",
+      "coderRatingRefs": [
+        "dbdf6af0-3504-4ca3-9e38-ee36f63e3d49",
+        "afdb9729-f60e-4026-9ce2-cfe1a5b5201e"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "a30e3585-a6bf-4e0a-8b95-da3234a923df",
+      "coderRatingRefs": [
+        "38a17f87-6ab9-4e99-803a-86dead428ae5",
+        "3e553fa3-a19d-4a50-b8bb-289c2ab9bd90"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "ae6fb8dc-f4bf-431c-a70d-fe1b1284cf9b",
+      "coderRatingRefs": [
+        "66262cde-60ea-4ae5-8b86-43aa55d98cb3",
+        "eb0581f0-4672-4999-92de-2dc2243b2e0f"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "45165812-2bb0-4bab-bb7f-68203cad3bd5",
+      "coderRatingRefs": [
+        "d8111705-6828-42a9-85c4-388c8317bb4e",
+        "a4b04562-5e50-430a-a1d4-147cd256e93e"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "be5f827e-4727-48c7-a458-e44ecd8aaa79",
+      "coderRatingRefs": [
+        "26e63657-e47d-4c56-b930-79bd7c871ac6",
+        "8c268a3e-05b1-4411-af22-144023dbcd36"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "aa17c154-0366-44b9-a162-986b44dd8ec2",
+      "coderRatingRefs": [
+        "82f129a6-5902-41d0-821f-d41c6c41be66",
+        "1e247ef9-dab5-432c-80db-302f7e72dc45"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "04c73eed-a09b-489c-85e8-502dba7b3c1e",
+      "coderRatingRefs": [
+        "2b2e5574-ba3a-4d1f-a395-9bb8c5c52825",
+        "b925fd97-3e6e-4ccb-818e-1e1c0b42e9dd"
+      ],
+      "directionCodes": ["direction_a", "direction_b"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "67a62849-46ea-4e79-92fc-f022de749350",
+      "coderRatingRefs": [
+        "e5864b03-a5c6-4d03-8bde-fa13bc81243d",
+        "275ba1be-bbea-4c37-91a9-7eb10036bed7"
+      ],
+      "directionCodes": ["mixed", "direction_a"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    },
+    {
+      "responseRef": "e5ed6793-5b88-4e0c-8fc6-6528e1485bf7",
+      "coderRatingRefs": [
+        "ce7e4bf1-696f-46fe-b9a5-72fa1ec7bd59",
+        "28ade13a-989f-4673-89c9-dc081a7cc63e"
+      ],
+      "directionCodes": ["direction_b", "mixed"],
+      "agreement": false,
+      "adjudicationRef": null,
+      "analysisDirectionCode": null,
+      "readyForAnalysis": false
+    }
+  ],
+  "unresolvedDisagreementResponseRefs": [
+    "52e87dde-fa33-489f-86ba-289c0a04e5a5",
+    "9521b6ab-5e99-4167-87a4-031a62b908da",
+    "2679a5f3-6cae-471b-bfbd-94de710691cb",
+    "e20cfbb3-9c7c-4324-bf4f-d102b29f5251",
+    "4d2eed64-d96d-4c74-a0c7-d5c779295719",
+    "09e70a91-fa64-4321-b6fa-549b2d94736e",
+    "609edb50-650b-4d21-a178-71aaddf0461b",
+    "71bafe90-d5bc-45a3-95dd-390ab0eb2e5c",
+    "d1d02f15-d7c1-415b-a0b4-541da48fa65b",
+    "018d0e9a-91bc-457e-b104-3aad00dcd886",
+    "5683e530-4d82-4b9b-ba4c-429aaf336567",
+    "ae1f059c-c0ad-47c9-903c-2619520f284e",
+    "c49942a9-651d-4792-b826-7aaa8f120b58",
+    "e9ff5306-b194-4c2a-9370-a1fc398c1aec",
+    "749bc541-d602-4f8e-81f2-e62250a71051",
+    "94a1741e-ad17-4013-8323-2f98d83cad60",
+    "a6e90307-14ce-4bd3-ae97-9b8f7a09821c",
+    "7375d808-cf7a-4da1-86a4-761acde5f82c",
+    "bcf90682-5bfb-45e2-9375-08fd5a81f018",
+    "3db4392e-51ea-41fe-a4b0-912ab861bc56",
+    "a43ffb30-488b-41dd-af66-49396bae7483",
+    "6c8f573e-42ac-4daa-a72e-148a12aa6060",
+    "426435f8-e505-4723-9f57-750f0a63e988",
+    "fcea7f54-2197-4d07-a623-fbbe2500fc2c",
+    "c37df7b2-8510-45fb-a5a6-44efbb3183fd",
+    "1ce807ea-6ca6-430c-9a1d-a0bdbfb96cac",
+    "54416e9d-43ea-4350-9768-a7c138c6d816",
+    "d4458fe3-2a3e-4a1d-a07a-a9456264ab9b",
+    "ec4e239d-03e0-4960-a8c9-be85fd049263",
+    "66e1df52-0886-406f-9dba-78aae69814b4",
+    "2ef5633a-c70c-4756-bac6-e206a4031068",
+    "8cb81edd-3235-4517-8f4b-d8577a477d77",
+    "bf6f3ab7-9c00-4e79-8536-eb31aceb5ca1",
+    "89897319-d992-4508-922d-630b2e97cd95",
+    "95d83542-b000-40eb-b998-fcd6a00fea5b",
+    "77c8bbb7-dcd8-4494-88e0-8d4068b714f9",
+    "e3432531-18d0-4074-912f-9c91a1f1c675",
+    "db7c0fee-85a2-41f0-9ac1-06cce66308ab",
+    "d38e02ff-cf54-460e-828f-0731214019e2",
+    "944f0bf3-e4f1-481c-9e79-8ae7e29e0a40",
+    "ca96d6e1-24a2-4f09-8dcb-e12a8de5fcde",
+    "692e509c-a97c-47b4-8a33-e6d57cc07996",
+    "83bd271f-56ee-4d8c-97a3-0eb1b829a170",
+    "a460816b-6ab8-4072-aa2c-f159d11ff834",
+    "5b63763d-f409-4e94-be3f-0b9e590a95da",
+    "9175cd6b-3b69-4c82-a963-8b391f26ef44",
+    "c17e0cb4-871e-4595-a1a0-f8cb6b3224bd",
+    "69422cf5-d358-4355-a790-a48604f4d336",
+    "3aa36e05-c56e-434a-98ad-7f726d06050b",
+    "3af62fbd-fc5c-43a4-b425-2526e5b3d758",
+    "1e808a1d-69a2-4cef-844d-1c303bc2ecb8",
+    "14884efa-a1ef-44cf-82a1-3aae32d803c8",
+    "879ab7a2-e9f1-4e48-86dd-1ecd0175a490",
+    "a4ac9b41-68a3-4558-9369-be0563c3fcb3",
+    "305329f7-0132-402e-a626-320c501a9659",
+    "4411e402-4027-46e5-94a1-2127cb4a26be",
+    "4b7ee598-3a56-4ac5-a95d-b3d7a7e5ba2a",
+    "57cdb236-f204-4965-8f98-f08df3801fbb",
+    "09e03c6f-0f90-4cff-bd7f-7b8abfa32025",
+    "7c42ce3f-f85b-4b48-a54d-ba82df064c42",
+    "77e4416a-cdfa-4587-a548-0dce97329f96",
+    "a03ed099-388e-4074-bd69-f4d34696639b",
+    "2aa2d078-da50-4a6c-89bf-fe211d2398b9",
+    "e0ed1cb5-46eb-47d3-a97e-4bc491dbe977",
+    "8e26801a-7997-4d51-94c6-d47a6e06fa45",
+    "43946a96-5c36-4eaf-8212-26adc4bdb584",
+    "0dafdd98-98eb-4403-9f7b-99ef8dc21800",
+    "7fbe315c-e834-4ae3-a45a-303cf3128da4",
+    "d0c81d51-4d57-42fe-ad39-8557a795287d",
+    "4084d38b-a516-4ecb-a871-458df4fb85dd",
+    "0c709c51-8b86-488f-9ba2-deb11d7c19d9",
+    "054f0493-edcc-42d8-8644-476fdb420474",
+    "46255142-5d83-4276-b4f2-a10d8d6d9cae",
+    "d8dcc9d6-048b-44a9-8a6d-5beb3166fb1c",
+    "980db540-b05e-434e-b65c-5abacfe42229",
+    "d783e6f8-dd32-4382-9319-141d37778c57",
+    "5413ce9c-acb9-4081-b5d6-f5479e7be322",
+    "13c31c6b-cf2c-43a8-a3d1-55ee4ef8c472",
+    "484bdd2c-811c-4ba4-9fe7-014a6cbe47ba",
+    "6a9164b5-c567-45b1-85cd-e6243ebc3f95",
+    "91673972-1a79-4e3c-bdd2-0899df675dfc",
+    "2a13997e-fb94-49f2-8806-63775123a62b",
+    "4e49fa7c-b070-4472-bcda-cc1a6a98813c",
+    "f7fa9649-f08f-4b57-9b60-e38e3e6440e7",
+    "480a8fdf-f5cb-4356-a182-a04d72aa896b",
+    "97eabe11-534c-495d-844b-f4ef4277a50e",
+    "5d454de4-36d6-46b6-a043-e82cbfe135ec",
+    "2fcfd82a-1675-4e6c-813e-ceaae3e606ba",
+    "a30e3585-a6bf-4e0a-8b95-da3234a923df",
+    "ae6fb8dc-f4bf-431c-a70d-fe1b1284cf9b",
+    "45165812-2bb0-4bab-bb7f-68203cad3bd5",
+    "be5f827e-4727-48c7-a458-e44ecd8aaa79",
+    "aa17c154-0366-44b9-a162-986b44dd8ec2",
+    "04c73eed-a09b-489c-85e8-502dba7b3c1e",
+    "67a62849-46ea-4e79-92fc-f022de749350",
+    "e5ed6793-5b88-4e0c-8fc6-6528e1485bf7"
+  ],
+  "analysisRows": [],
+  "nextGate": {
+    "name": "SYNTHETIC_ADJUDICATION_FIXTURE_AND_READY_PATH_TEST",
+    "action": "합성 불일치 96개에 제3자 합의 행을 추가한 별도 fixture를 만들고, 원 판정을 보존한 채 96개 분석 행이 열리는 준비 경로를 시험한다."
+  }
+}

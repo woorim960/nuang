@@ -1,0 +1,29 @@
+{
+  "contractVersion": "nuang-trait-map-shared-author-dependence-review.v2.3",
+  "reportId": "TRAIT-MAP-SHARED-AUTHOR-DEPENDENCE-REVIEW.2.3",
+  "status": "SHARED_AUTHOR_PAIRS_REVIEWED_TEAM_INDEPENDENCE_UNMET",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceAuditReportId": "TRAIT-MAP-EVIDENCE-DEPENDENCE-AUDIT.2.3",
+  "reviewedRegistryId": "TRAIT-MAP-EVIDENCE-DEPENDENCE-REVIEWED-SHARED-AUTHOR.2.3",
+  "summary": {
+    "sourcesNormalized": 9,
+    "sharedAuthorHighRiskPairsReviewed": 6,
+    "currentHighRiskVariantsTouched": 151,
+    "confirmedNonOverlappingDatasetPairs": 6,
+    "confirmedIndependentTeamReplications": 0,
+    "partialDatasetReuseRelationshipsDiscovered": 1,
+    "highRiskPairsRemainingUnreviewed": 174
+  },
+  "interpretation": [
+    "저자가 겹친 6개 조합은 원문 방법을 기준으로 서로 다른 dataset임을 확인했다.",
+    "그러나 핵심 저자가 겹치므로 독립 연구팀의 반복 검증으로 세지 않는다.",
+    "IPC 2013은 BFAS 2007의 두 표본을 부분 재사용했다. 두 출처를 별개의 sourceId로 갖더라도 공유 자료 결과를 두 번 세면 안 된다.",
+    "이 내부 서지 감사는 외부 심리측정 전문가의 독립 검토나 실제 타당화 연구를 대신하지 않는다."
+  ],
+  "nextGate": {
+    "name": "REMAINING_HIGH_RISK_PAIR_BIBLIOGRAPHIC_REVIEW",
+    "remainingPairs": 174,
+    "priorityRule": "고위험 문장 사용량, 방법론 문서 제외 후 실질 출처 수, 저자·표본·코호트 겹침 신호 순으로 검토"
+  }
+}

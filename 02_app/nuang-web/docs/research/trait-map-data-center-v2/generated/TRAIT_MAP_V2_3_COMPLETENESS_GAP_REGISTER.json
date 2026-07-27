@@ -1,0 +1,1326 @@
+{
+  "contractVersion": "nuang-trait-map-data-center-completeness-gap-register.v2.3",
+  "reportId": "TRAIT-MAP-V2-3-COMPLETENESS-GAP-REGISTER.2.3",
+  "status": "RESEARCH_MASTER_CONTENT_COMPLETE_EXTERNAL_VALIDATION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceMasterReportId": "TRAIT-MAP-32-MASTER-COMPLETENESS-REAUDIT.2.3",
+  "sourceLegacyMasterReportId": "TRAIT-MAP-32-MASTER-COMPLETENESS-REAUDIT.2.3",
+  "sourceLongformCompletenessReportId": "TRAIT-MAP-32-PROFILE-COMPLETENESS-AUDIT.0.1",
+  "sourceNameAuditReportId": "TRAIT-MAP-32-PROFILE-NAME-FINAL-AUDIT.2.1",
+  "sourceCanonicalLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3",
+  "sourceProfileRebaseReportId": "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4",
+  "sourceRecompositionReportId": "TRAIT-MAP-P2-SCREENED-RECOMPOSITION-AUDIT.2.3",
+  "sourcePublicationGateReportId": "TRAIT-MAP-PUBLICATION-GATE.2.3",
+  "sourceRuntimeHarnessReportId": "TRAIT-MAP-RUNTIME-RESOLVER-HARNESS.2.3",
+  "sourceNoExactContextQueueId": "TRAIT-MAP-ALL-CANONICAL-NO-EXACT-CONTEXT-REVIEW-QUEUE.2.3",
+  "summary": {
+    "profiles": 32,
+    "totalLongformNonWhitespaceCharacters": 2352502,
+    "manuscriptsAtLeastFiftyThousand": 32,
+    "profilesWith288CanonicalRefs": 32,
+    "profilesWithAllCanonicalRefsResolved": 32,
+    "profilesPassingLegacyLongformQualityGate": 32,
+    "profilesPassingCurrentLongformQualityGate": 32,
+    "profilesRequiringLongformContentRepair": 0,
+    "canonicalVariants": 605,
+    "profileClaimRefs": 9216,
+    "neighborEdgesPassed": 80,
+    "neighborEdges": 80,
+    "noExactContextCanonicalEntries": 101,
+    "userValidatedNames": 0,
+    "sevenRoleApprovedCanonicalEntries": 0,
+    "customerApprovedCanonicalEntries": 0,
+    "profilesReadyForCustomerPublication": 0
+  },
+  "interpretationBoundary": [
+    "32/32 자동 내용 gate 통과는 연구 원장 내부 완성 기준이며 실제 참여자 타당화나 고객 발행 승인을 뜻하지 않는다.",
+    "동일 맥락 근거가 없는 101개 canonical은 누락이 아니라 명시적으로 등록한 직접 검증 대상이다.",
+    "별칭 자동 일관성 통과는 사용자의 이해·회상·만족을 뜻하지 않는다.",
+    "내부 판정과 합성 fixture는 독립 외부 검토나 실제 참여자 검증을 대신하지 않는다."
+  ],
+  "domainGates": [
+    {
+      "domain": "32_profile_structure",
+      "state": "passed",
+      "evidence": "32 profiles, 16 chapters, 72 scenarios and 288 refs each"
+    },
+    {
+      "domain": "longform_minimum_length",
+      "state": "passed",
+      "evidence": "32/32 at least 50,000 non-whitespace characters"
+    },
+    {
+      "domain": "longform_substantive_and_editorial_quality",
+      "state": "passed",
+      "evidence": "32/32 current automated content gates passed"
+    },
+    {
+      "domain": "canonical_v2_3_recomposition",
+      "state": "passed",
+      "evidence": "9216 refs, 80/80 neighbor edges"
+    },
+    {
+      "domain": "evidence_scope_registration",
+      "state": "passed_with_explicit_gaps",
+      "evidence": "101 canonical entries without exact-context finding are explicitly registered"
+    },
+    {
+      "domain": "seven_role_human_review",
+      "state": "not_started_external_release_gate",
+      "evidence": "0 approved canonical entries"
+    },
+    {
+      "domain": "cognitive_and_comprehension_validation",
+      "state": "not_started_external_release_gate",
+      "evidence": "0 completed participants"
+    },
+    {
+      "domain": "quantitative_and_direct_validation",
+      "state": "not_started_external_release_gate",
+      "evidence": "0 real participants and 0 empirical analyses"
+    },
+    {
+      "domain": "profile_name_user_validation",
+      "state": "not_started_external_release_gate",
+      "evidence": "0/32 user validated"
+    },
+    {
+      "domain": "runtime_fail_closed_resolver",
+      "state": "harness_ready_not_wired",
+      "evidence": "9216 synthetic refs covered"
+    },
+    {
+      "domain": "customer_publication",
+      "state": "blocked_by_design",
+      "evidence": "0 canonical entries allowlisted"
+    }
+  ],
+  "profiles": [
+    {
+      "code": "IRAKC",
+      "shortName": "수호자",
+      "displayName": "조용히 마음을 지키는 수호자",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/IRAKC/IRAKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73542,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0209,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 54,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 108,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 1
+    },
+    {
+      "code": "IRAMC",
+      "shortName": "지원가",
+      "displayName": "조용히 곁을 맞추는 지원가",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/IRAMC/IRAMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72845,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 54,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 108,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 2
+    },
+    {
+      "code": "IRGKC",
+      "shortName": "분석가",
+      "displayName": "차근차근 답을 쌓는 분석가",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/IRGKC/IRGKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 71493,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 54,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 108,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 3
+    },
+    {
+      "code": "IRGMC",
+      "shortName": "탐구자",
+      "displayName": "단서로 답을 찾는 탐구자",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/IRGMC/IRGMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 78067,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 54,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 108,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 4
+    },
+    {
+      "code": "INAKC",
+      "shortName": "조정자",
+      "displayName": "조용히 관계를 잇는 조정자",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/INAKC/INAKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73397,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0214,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 5
+    },
+    {
+      "code": "INAKQ",
+      "shortName": "안내자",
+      "displayName": "마음과 가능성을 살피는 안내자",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/INAKQ/INAKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 74950,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 6
+    },
+    {
+      "code": "INAMC",
+      "shortName": "상상가",
+      "displayName": "마음과 가능성을 그리는 상상가",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/INAMC/INAMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73471,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0221,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 7
+    },
+    {
+      "code": "INAMQ",
+      "shortName": "기록가",
+      "displayName": "마음의 이야기를 품는 기록가",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/INAMQ/INAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73453,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0223,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 8
+    },
+    {
+      "code": "INGKC",
+      "shortName": "설계자",
+      "displayName": "가능성을 차근차근 짓는 설계자",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/INGKC/INGKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72980,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0213,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 9
+    },
+    {
+      "code": "INGKQ",
+      "shortName": "구상가",
+      "displayName": "가능성과 변수를 살피는 구상가",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/INGKQ/INGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73151,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0226,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 10
+    },
+    {
+      "code": "INGMC",
+      "shortName": "탐험가",
+      "displayName": "새 가능성을 찾는 탐험가",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/INGMC/INGMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72201,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 11
+    },
+    {
+      "code": "INGMQ",
+      "shortName": "사색가",
+      "displayName": "가능성을 깊이 좇는 사색가",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/INGMQ/INGMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72707,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.021,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 12
+    },
+    {
+      "code": "IRAKQ",
+      "shortName": "관찰자",
+      "displayName": "마음 변화를 살피는 관찰자",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/IRAKQ/IRAKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73233,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0206,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 13
+    },
+    {
+      "code": "IRAMQ",
+      "shortName": "경청자",
+      "displayName": "마음 변화를 듣는 경청자",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/IRAMQ/IRAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73184,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0217,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 14
+    },
+    {
+      "code": "IRGKQ",
+      "shortName": "전략가",
+      "displayName": "변수를 꼼꼼히 살피는 전략가",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/IRGKQ/IRGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72660,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0144,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 15
+    },
+    {
+      "code": "IRGMQ",
+      "shortName": "추적자",
+      "displayName": "변화의 원인을 좇는 추적자",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/IRGMQ/IRGMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 77285,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0109,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 53,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 106,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 16
+    },
+    {
+      "code": "ERAKC",
+      "shortName": "조율가",
+      "displayName": "차분히 관계를 맞추는 조율가",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/ERAKC/ERAKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73556,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0215,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 52,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 104,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 17
+    },
+    {
+      "code": "ERAMC",
+      "shortName": "동행가",
+      "displayName": "유연하게 곁을 걷는 동행가",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/ERAMC/ERAMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73569,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.021,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 52,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 104,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 18
+    },
+    {
+      "code": "ERGKC",
+      "shortName": "운영가",
+      "displayName": "차분히 답을 세우는 운영가",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ERGKC/ERGKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73024,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0149,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 52,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 104,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 19
+    },
+    {
+      "code": "ERGMC",
+      "shortName": "대응가",
+      "displayName": "유연하게 답을 찾는 대응가",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ERGMC/ERGMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73275,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 52,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 104,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 20
+    },
+    {
+      "code": "ENAKC",
+      "shortName": "연결가",
+      "displayName": "사람과 가능성을 잇는 연결가",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/ENAKC/ENAKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 77616,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0109,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 21
+    },
+    {
+      "code": "ENAKQ",
+      "shortName": "지휘자",
+      "displayName": "관계를 여는 지휘자",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/ENAKQ/ENAKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 77971,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 22
+    },
+    {
+      "code": "ENAMC",
+      "shortName": "소통가",
+      "displayName": "상상과 마음을 나누는 소통가",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/ENAMC/ENAMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73314,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0211,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 23
+    },
+    {
+      "code": "ENAMQ",
+      "shortName": "이야기꾼",
+      "displayName": "마음과 상상을 펼치는 이야기꾼",
+      "familyId": "POSSIBILITY_CONNECTION",
+      "manuscriptPath": "docs/trait-maps/ENAMQ/ENAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 71855,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 24
+    },
+    {
+      "code": "ENGKC",
+      "shortName": "기획자",
+      "displayName": "가능성을 계획하는 기획자",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ENGKC/ENGKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73272,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0216,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 25
+    },
+    {
+      "code": "ENGKQ",
+      "shortName": "혁신가",
+      "displayName": "변화에 답하는 혁신가",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ENGKQ/ENGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72524,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 26
+    },
+    {
+      "code": "ENGMC",
+      "shortName": "개척자",
+      "displayName": "새 길을 여는 개척자",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ENGMC/ENGMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72993,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0203,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 27
+    },
+    {
+      "code": "ENGMQ",
+      "shortName": "발상가",
+      "displayName": "가능성을 펼치는 발상가",
+      "familyId": "POSSIBILITY_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ENGMQ/ENGMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72795,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0154,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 28
+    },
+    {
+      "code": "ERAKQ",
+      "shortName": "관계지기",
+      "displayName": "관계 변화를 살피는 관계지기",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/ERAKQ/ERAKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72606,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 29
+    },
+    {
+      "code": "ERAMQ",
+      "shortName": "공감자",
+      "displayName": "마음에 바로 반응하는 공감자",
+      "familyId": "CONCRETE_CARE",
+      "manuscriptPath": "docs/trait-maps/ERAMQ/ERAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 73541,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0225,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 30
+    },
+    {
+      "code": "ERGKQ",
+      "shortName": "해결사",
+      "displayName": "변수에 빠르게 반응하는 해결사",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ERGKQ/ERGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72680,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0093,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 31
+    },
+    {
+      "code": "ERGMQ",
+      "shortName": "현장해결가",
+      "displayName": "빠르게 움직이는 현장해결가",
+      "familyId": "PRACTICAL_SOLUTION",
+      "manuscriptPath": "docs/trait-maps/ERGMQ/ERGMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "manuscriptNonWhitespaceCharacters": 72917,
+      "manuscriptAtLeastFiftyThousand": true,
+      "canonicalClaimRefs": 288,
+      "canonicalRefsResolved": true,
+      "currentCanonicalRecompositionPassed": true,
+      "longformQuality": {
+        "currentAutomatedContentGate": "PASS",
+        "legacyAutomatedContentGate": "PASS",
+        "substantiveContentMissingCharacters": 0,
+        "editorialCoreMissingCharacters": 0,
+        "thinChapterCount": 0,
+        "repeatedLongLineCharacterRatio": 0.0212,
+        "requiresRemediation": false
+      },
+      "evidenceAndValidation": {
+        "noExactContextCanonicalRefs": 51,
+        "evidenceScopeRegistration": "complete_with_explicit_context_transfer_gaps",
+        "sevenRoleHumanValidation": "not_started",
+        "cognitiveValidation": "not_started",
+        "directScenarioValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "naming": {
+        "automatedChecksPassed": true,
+        "userValidationState": "not_started",
+        "publicationState": "candidate_only"
+      },
+      "validationPriorityScore": 102,
+      "remediationState": "research_master_content_complete_external_validation_pending",
+      "publicationState": "research_only",
+      "validationPriorityRank": 32
+    }
+  ],
+  "remediationPlan": {
+    "openContentRepairCount": 0,
+    "currentWave": "COMPLETE_NO_OPEN_CONTENT_REPAIR",
+    "perProfileOrder": []
+  },
+  "nextGate": {
+    "name": "FINAL_REPRODUCIBILITY_AND_REQUIREMENT_AUDIT",
+    "action": "최신 생성물 manifest를 갱신하고 전체 current check를 통과한 뒤 RM-01~09 증거를 final completion audit로 고정한다."
+  }
+}

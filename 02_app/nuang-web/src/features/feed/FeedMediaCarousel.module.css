@@ -6,7 +6,7 @@
   position: relative;
   overflow: hidden;
   border-radius: 18px;
-  background: #ececef;
+  background: var(--nu-neutral-75);
 }
 
 .track {
@@ -47,10 +47,10 @@
   align-items: center;
   padding: 0 0.6rem;
   border-radius: 999px;
-  color: #fff;
-  background: rgb(25 23 28 / 66%);
-  font-size: 0.6875rem;
-  font-weight: 750;
+  color: var(--nu-color-surface);
+  background: color-mix(in srgb, var(--nu-neutral-900) 66%, transparent);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
   backdrop-filter: blur(10px);
 }
 
@@ -67,7 +67,7 @@
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: #c8cad0;
+  background: var(--nu-neutral-300);
   transition:
     width 160ms ease,
     background-color 160ms ease;
@@ -76,7 +76,7 @@
 .dots span[data-active="true"] {
   width: 13px;
   border-radius: 999px;
-  background: #6657d9;
+  background: var(--nu-color-brand-action);
 }
 
 @media (prefers-reduced-motion: reduce) {

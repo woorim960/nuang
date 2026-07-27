@@ -1,0 +1,55 @@
+{
+  "contractVersion": "nuang-trait-map-runtime-resolver-harness.v2.3",
+  "reportId": "TRAIT-MAP-RUNTIME-RESOLVER-HARNESS.2.3",
+  "status": "PURE_RESOLVER_AND_UNIT_HARNESS_READY_NOT_APP_WIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceRuntimeContractReportId": "TRAIT-MAP-WITHDRAWAL-FALLBACK-RUNTIME-CONTRACT.2.3",
+  "summary": {
+    "resolverExports": 2,
+    "requiredSourceTokens": 6,
+    "requiredSourceTokensPresent": 6,
+    "requiredTestCases": 5,
+    "requiredTestTokensPresent": 5,
+    "syntheticProfileReferencesCovered": 9216,
+    "appRoutesWired": 0,
+    "productionAllowlistEntries": 0,
+    "canonicalChanges": 0,
+    "publicationChanges": 0
+  },
+  "sourceFiles": [
+    {
+      "path": "src/features/nuang-code/trait-map-runtime-resolver-v2.ts",
+      "bytes": 5647,
+      "sha256": "21f3ae46951a497bd2c1c5b07fe2eae7018340a4c1ef09067e1d62ad59d41a70"
+    },
+    {
+      "path": "src/features/nuang-code/trait-map-runtime-resolver-v2.test.ts",
+      "bytes": 5254,
+      "sha256": "43256050d69c776707c1ca8c10b0a791c36bd4119617293f977e544c275017b9"
+    }
+  ],
+  "unitTestContract": {
+    "command": "npx vitest run src/features/nuang-code/trait-map-runtime-resolver-v2.test.ts",
+    "expectedTestFiles": 1,
+    "expectedTests": 5,
+    "cases": [
+      "정확한 승인 version과 surface만 렌더링",
+      "stale manifest digest 선차단",
+      "retired·COMMON·research_only 차단",
+      "self_only 비교·프로필 유출 차단",
+      "32개 성향 9,216개 연구 참조 전부 고객 payload 제외"
+    ]
+  },
+  "implementationBoundary": {
+    "pureFunctionOnly": true,
+    "databaseReadAdded": false,
+    "routeWiringAdded": false,
+    "cachePurgeWorkerAdded": false,
+    "currentAppRenderingChanged": false
+  },
+  "nextGate": {
+    "name": "DATA_CENTER_COMPLETENESS_GAP_REGISTER_REFRESH",
+    "action": "현재 605개 canonical·32개 성향·근거·문장·runtime 계약을 한 장의 gap register로 다시 계산한다."
+  }
+}

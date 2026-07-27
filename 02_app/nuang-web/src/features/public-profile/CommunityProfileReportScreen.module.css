@@ -5,23 +5,23 @@
   margin: 1rem;
   padding: 1rem;
   border-radius: 18px;
-  color: #6657d9;
-  background: #faf9ff;
+  color: var(--nu-color-brand-action);
+  background: var(--nu-color-brand-surface);
 }
 
 .intro strong {
   display: block;
-  color: #20232a;
-  font-size: 0.875rem;
-  line-height: 1.5;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-label);
   word-break: keep-all;
 }
 
 .intro p {
   margin: 0.3rem 0 0;
-  color: #737887;
-  font-size: 0.75rem;
-  line-height: 1.55;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .reasonList {
@@ -37,7 +37,7 @@
   grid-template-columns: auto minmax(0, 1fr);
   align-items: center;
   gap: 0.75rem;
-  border-bottom: 1px solid #e6e7eb;
+  border-bottom: 1px solid var(--nu-color-border-strong);
   cursor: pointer;
 }
 
@@ -49,14 +49,14 @@
 .reasonMark {
   width: 20px;
   height: 20px;
-  border: 1.5px solid #c8cad1;
+  border: 1.5px solid var(--nu-neutral-200);
   border-radius: 50%;
-  box-shadow: inset 0 0 0 5px #fff;
+  box-shadow: inset 0 0 0 5px var(--nu-color-surface);
 }
 
 .reasonList input:checked + .reasonMark {
-  border-color: #6657d9;
-  background: #6657d9;
+  border-color: var(--nu-color-brand-action);
+  background: var(--nu-color-brand-action);
 }
 
 .reasonList strong,
@@ -65,15 +65,15 @@
 }
 
 .reasonList strong {
-  color: #20232a;
-  font-size: 0.8125rem;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
 }
 
 .reasonList small {
   margin-top: 0.25rem;
-  color: #737887;
-  font-size: 0.6875rem;
-  line-height: 1.45;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
 }
 
 .detailField {
@@ -83,35 +83,35 @@
 }
 
 .detailField > span {
-  color: #20232a;
-  font-size: 0.8125rem;
-  font-weight: 800;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-heavy);
 }
 
 .detailField > span small,
 .detailField > small {
-  color: #737887;
-  font-size: 0.6875rem;
-  font-weight: 600;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
 }
 
 .detailField textarea {
   min-height: 108px;
   resize: vertical;
   padding: 0.85rem;
-  border: 1px solid #e6e7eb;
+  border: 1px solid var(--nu-color-border-strong);
   border-radius: 15px;
   outline: 0;
-  color: #20232a;
-  background: #f6f5f2;
-  font-size: 0.8125rem;
-  line-height: 1.6;
+  color: var(--nu-color-text);
+  background: var(--nu-color-app-bg);
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .detailField textarea:focus {
-  border-color: #6657d9;
-  background: #fff;
-  box-shadow: 0 0 0 3px rgb(102 87 217 / 9%);
+  border-color: var(--nu-color-brand-action);
+  background: var(--nu-color-surface);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nu-info-500) 9%, transparent);
 }
 
 .detailField > small {
@@ -122,9 +122,9 @@
   margin: -5.5rem 1rem 6.5rem;
   padding: 0.75rem;
   border-radius: 12px;
-  color: #a93448;
-  background: #fff0f2;
-  font-size: 0.75rem;
+  color: var(--nu-reaction-500);
+  background: var(--nu-reaction-50);
+  font-size: var(--nu-text-label);
 }
 
 .submitBar {
@@ -134,8 +134,8 @@
   bottom: 0;
   left: max(0px, calc((100vw - 430px) / 2));
   padding: 0.75rem 1rem calc(0.75rem + env(safe-area-inset-bottom));
-  border-top: 1px solid #e6e7eb;
-  background: rgb(255 255 255 / 96%);
+  border-top: 1px solid var(--nu-color-border-strong);
+  background: color-mix(in srgb, var(--nu-neutral-0) 96%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -146,10 +146,10 @@
   align-items: center;
   justify-content: center;
   border-radius: 15px;
-  color: #fff;
-  background: #6657d9;
-  font-size: 0.8125rem;
-  font-weight: 750;
+  color: var(--nu-color-surface);
+  background: var(--nu-color-brand-action);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
 }
 
 .submitBar button {
@@ -157,8 +157,8 @@
 }
 
 .submitBar button:disabled {
-  color: #999ca5;
-  background: #ececf0;
+  color: var(--nu-neutral-400);
+  background: var(--nu-neutral-75);
 }
 
 .completeState {
@@ -179,20 +179,20 @@
   margin: 0 auto 0.4rem;
   place-items: center;
   border-radius: 20px;
-  color: #6657d9;
-  background: #efedff;
+  color: var(--nu-color-brand-action);
+  background: var(--nu-color-brand-surface-strong);
 }
 
 .completeState strong {
-  color: #20232a;
-  font-size: 1rem;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body);
 }
 
 .completeState p {
   margin: 0;
-  color: #737887;
-  font-size: 0.75rem;
-  line-height: 1.65;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body);
   word-break: keep-all;
 }
 

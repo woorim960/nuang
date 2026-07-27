@@ -4,7 +4,11 @@
   margin-inline: auto;
   color: var(--foreground);
   background:
-    radial-gradient(circle at 84% 18%, rgb(101 70 215 / 7%), transparent 25rem),
+    radial-gradient(
+      circle at 84% 18%,
+      color-mix(in srgb, var(--nu-brand-500) 7%, transparent),
+      transparent 25rem
+    ),
     var(--background);
 }
 
@@ -27,15 +31,15 @@
   align-items: center;
   gap: 0.2rem;
   border-radius: 0.75rem;
-  font-size: 0.8rem;
-  font-weight: 720;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
   color: var(--muted);
 }
 
 .appBarTitle {
   overflow: hidden;
-  font-size: 0.88rem;
-  font-weight: 780;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-heavy);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -50,31 +54,14 @@
   animation: intro-settle 520ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.eyebrow {
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.01em;
-  color: var(--primary);
-}
-
 .hero h1 {
   max-width: 27rem;
-  margin-top: 0.7rem;
-  font-size: clamp(1.8rem, 7.2vw, 2.3rem);
-  font-weight: 880;
-  line-height: 1.26;
+  margin-top: 0;
+  font-size: var(--nu-text-fluid-display-sm);
+  font-weight: var(--nu-weight-heavy);
+  line-height: var(--nu-leading-title);
   letter-spacing: -0.045em;
   text-wrap: balance;
-  word-break: keep-all;
-}
-
-.heroDescription {
-  max-width: 28rem;
-  margin-top: 0.85rem;
-  font-size: 0.96rem;
-  line-height: 1.72;
-  color: var(--muted);
-  text-wrap: pretty;
   word-break: keep-all;
 }
 
@@ -85,7 +72,7 @@
   grid-template-columns: minmax(0, 1fr) 5.25rem;
   align-items: center;
   gap: 0.75rem;
-  margin-top: 1.75rem;
+  margin-top: 1.25rem;
   overflow: hidden;
   border-block: 1px solid var(--line);
   padding-block: 1.25rem;
@@ -97,7 +84,7 @@
   width: 6rem;
   height: 6rem;
   border-radius: 999px;
-  background: rgb(101 70 215 / 8%);
+  background: color-mix(in srgb, var(--nu-brand-500) 8%, transparent);
   content: "";
   filter: blur(1.1rem);
 }
@@ -109,8 +96,8 @@
 }
 
 .journeyLabel {
-  font-size: 0.72rem;
-  font-weight: 760;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
   color: var(--muted);
 }
 
@@ -128,8 +115,8 @@
   place-items: center;
   border: 1px solid color-mix(in srgb, var(--primary) 18%, var(--line));
   border-radius: 0.68rem;
-  font-size: 0.94rem;
-  font-weight: 850;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-heavy);
   color: var(--primary-strong);
   background: color-mix(in srgb, var(--surface) 88%, transparent);
   animation: code-reveal 360ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
@@ -155,8 +142,8 @@
 }
 
 .journeyOutcome {
-  font-size: 0.82rem;
-  font-weight: 780;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-heavy);
   word-break: keep-all;
 }
 
@@ -172,22 +159,13 @@
   animation: mascot-arrive 500ms 180ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
-.preserveNote {
-  margin-top: 0.8rem;
-  font-size: 0.76rem;
-  font-weight: 650;
-  line-height: 1.55;
-  color: var(--muted);
-  word-break: keep-all;
-}
-
 .benefits {
-  margin-top: 2.25rem;
+  margin-top: 1.75rem;
 }
 
 .sectionTitle {
-  font-size: 1rem;
-  font-weight: 820;
+  font-size: var(--nu-text-body);
+  font-weight: var(--nu-weight-heavy);
 }
 
 .benefitList {
@@ -199,6 +177,7 @@
 .benefitItem {
   display: grid;
   grid-template-columns: 2.6rem minmax(0, 1fr);
+  align-items: center;
   gap: 0.8rem;
   border-bottom: 1px solid var(--line);
   padding-block: 1rem;
@@ -218,17 +197,9 @@
 }
 
 .benefitItem h3 {
-  font-size: 0.9rem;
-  font-weight: 790;
-  line-height: 1.45;
-  word-break: keep-all;
-}
-
-.benefitItem p {
-  margin-top: 0.25rem;
-  font-size: 0.82rem;
-  line-height: 1.58;
-  color: var(--muted);
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-heavy);
+  line-height: var(--nu-leading-label);
   word-break: keep-all;
 }
 
@@ -246,9 +217,9 @@
   grid-template-columns: 1.4rem minmax(0, 1fr);
   align-items: start;
   gap: 0.55rem;
-  font-size: 0.8rem;
-  font-weight: 650;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
+  line-height: var(--nu-leading-body-sm);
   color: var(--muted);
   word-break: keep-all;
 }
@@ -270,15 +241,16 @@
   min-height: 3.5rem;
   border: 0;
   border-radius: 1rem;
-  font-size: 0.9rem;
-  font-weight: 780;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-heavy);
 }
 
 .primaryAction,
 .retryAction {
-  color: white;
+  color: var(--nu-color-surface);
   background: var(--foreground);
-  box-shadow: 0 0.8rem 1.8rem rgb(32 34 50 / 18%);
+  box-shadow: 0 0.8rem 1.8rem
+    color-mix(in srgb, var(--nu-info-700) 18%, transparent);
   transition:
     transform 160ms ease,
     opacity 160ms ease;
@@ -303,8 +275,8 @@
 
 .error {
   margin-top: 0.75rem;
-  font-size: 0.8rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
   color: var(--danger);
   text-align: center;
 }
@@ -325,8 +297,8 @@
 }
 
 .statusCard p {
-  font-size: 0.88rem;
-  line-height: 1.65;
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body);
   color: var(--muted);
 }
 

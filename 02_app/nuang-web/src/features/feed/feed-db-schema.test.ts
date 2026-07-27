@@ -33,6 +33,10 @@ const communityProfileSocialMigration = readFileSync(
   "supabase/migrations/202607200002_community_profile_social.sql",
   "utf8",
 );
+const communitySafetyMigration = readFileSync(
+  "supabase/migrations/202607280003_community_safety_mvp.sql",
+  "utf8",
+);
 const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}\n${homeCommunityPollMigration}\n${topicMediaMigration}`;
 
 describe("feed db schema draft", () => {
@@ -162,5 +166,35 @@ describe("feed db schema draft", () => {
     expect(topicMediaMigration).toContain("false,");
     expect(topicMediaMigration).not.toContain("openai");
     expect(topicMediaMigration).not.toContain("gemini");
+  });
+
+  it("adds content reporting, write quotas, and link-gated publishing", () => {
+    expect(communitySafetyMigration).toContain(
+      "create table if not exists feed.content_report",
+    );
+    expect(communitySafetyMigration).toContain(
+      "content_report_open_post_reporter_unique",
+    );
+    expect(communitySafetyMigration).toContain(
+      "profile_report_open_reporter_target_unique",
+    );
+    expect(communitySafetyMigration).toContain(
+      "create table if not exists feed.community_write_bucket",
+    );
+    expect(communitySafetyMigration).toContain(
+      "create or replace function feed.check_community_write_guard",
+    );
+    expect(communitySafetyMigration).toContain(
+      "create trigger feed_external_link_moderation_sync",
+    );
+    expect(communitySafetyMigration).toContain(
+      "when v_has_pending then 'pending_review'",
+    );
+    expect(communitySafetyMigration).toContain(
+      "when v_has_blocked then 'removed'",
+    );
+    expect(communitySafetyMigration).toContain(
+      "revoke all on feed.content_report, feed.community_write_bucket",
+    );
   });
 });

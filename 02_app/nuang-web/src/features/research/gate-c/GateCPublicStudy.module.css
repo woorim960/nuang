@@ -6,7 +6,7 @@
   background:
     radial-gradient(
       circle at 88% 4%,
-      rgb(214 236 230 / 62%),
+      color-mix(in srgb, var(--nu-community-100) 62%, transparent),
       transparent 25rem
     ),
     var(--background);
@@ -23,27 +23,21 @@
 .brandRow {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 1rem;
   color: var(--muted);
-  font-size: 0.7rem;
-  font-weight: 620;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
   letter-spacing: 0.035em;
-}
-
-.brandRow span:first-child {
-  color: var(--conversation);
-  font-weight: 720;
-  letter-spacing: 0.09em;
 }
 
 .intro h1 {
   max-width: 15ch;
   margin: 1rem 0 0;
-  font-size: clamp(2rem, 8.3vw, 2.55rem);
-  font-weight: 720;
+  font-size: var(--nu-text-fluid-display);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.045em;
-  line-height: 1.24;
+  line-height: var(--nu-leading-display);
   text-wrap: balance;
 }
 
@@ -51,8 +45,8 @@
   max-width: 31rem;
   margin: 1rem 0 0;
   color: var(--muted);
-  font-size: 0.9375rem;
-  line-height: 1.68;
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body);
 }
 
 .privacyPanel {
@@ -70,14 +64,46 @@
 
 .privacyPanel strong {
   display: block;
-  font-size: 0.8125rem;
-  font-weight: 680;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
 }
 
 .privacyPanel p {
   margin: 0.35rem 0 0;
-  font-size: 0.75rem;
-  line-height: 1.58;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
+}
+
+.rewardPanel {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--nu-warm-300);
+  border-radius: 18px;
+  background: var(--nu-warm-50);
+  color: var(--nu-warm-700);
+}
+
+.rewardPanel strong {
+  display: block;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.rewardPanel p,
+.rewardPanel small {
+  display: block;
+  margin: 0.3rem 0 0;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
+}
+
+.rewardPanel small {
+  color: color-mix(in srgb, var(--nu-warm-700) 72%, var(--nu-neutral-500));
+  font-size: var(--nu-text-caption);
 }
 
 .formFields {
@@ -93,8 +119,8 @@
 
 .selectField > span {
   padding-inline: 0.1rem;
-  font-size: 0.8125rem;
-  font-weight: 620;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
 }
 
 .selectField select {
@@ -135,8 +161,8 @@
   align-items: start;
   gap: 0.7rem;
   color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
   cursor: pointer;
 }
 
@@ -160,8 +186,8 @@
   border-radius: 14px;
   background: var(--foreground);
   color: var(--surface);
-  font-size: 0.875rem;
-  font-weight: 680;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   cursor: pointer;
 }
 
@@ -173,8 +199,8 @@
 .boundaryCopy {
   margin: 0.9rem 0 0;
   color: var(--muted);
-  font-size: 0.6875rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
   text-align: center;
 }
 
@@ -185,8 +211,8 @@
   border-radius: 12px;
   background: transparent;
   color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 560;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-medium);
   cursor: pointer;
 }
 
@@ -203,7 +229,7 @@
 
 .feedbackToggle[aria-pressed="true"] {
   color: var(--conversation);
-  font-weight: 640;
+  font-weight: var(--nu-weight-semibold);
 }
 
 .feedbackArea label {
@@ -215,7 +241,7 @@
 
 .feedbackArea label span {
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: var(--nu-text-label);
 }
 
 .feedbackArea textarea {
@@ -226,8 +252,8 @@
   border-radius: 13px;
   background: var(--surface);
   color: var(--foreground);
-  font-size: 0.8125rem;
-  line-height: 1.5;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-label);
   outline: none;
   resize: vertical;
 }
@@ -244,8 +270,8 @@
   border-radius: 12px;
   background: color-mix(in srgb, var(--danger) 4%, var(--surface));
   color: var(--danger);
-  font-size: 0.75rem;
-  line-height: 1.5;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-label);
 }
 
 .completeStage {
@@ -269,32 +295,27 @@
   border-radius: 20px;
   background: var(--conversation-soft);
   color: var(--conversation);
-  box-shadow: 0 18px 36px rgb(48 110 96 / 10%);
-}
-
-.completeEyebrow {
-  margin: 0;
-  color: var(--conversation);
-  font-size: 0.8125rem;
-  font-weight: 680;
+  box-shadow: 0 18px 36px
+    color-mix(in srgb, var(--nu-info-700) 10%, transparent);
 }
 
 .completeStage > h1 {
   max-width: 15ch;
   margin: 0.55rem 0 0;
-  font-size: clamp(1.8rem, 7vw, 2.2rem);
-  font-weight: 720;
+  font-size: var(--nu-text-fluid-display-sm);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.04em;
-  line-height: 1.28;
+  line-height: var(--nu-leading-title);
   text-wrap: balance;
 }
 
-.completeCopy {
-  max-width: 30rem;
+.impactCopy {
+  max-width: 29rem;
   margin: 0.9rem 0 0;
   color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.68;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body);
+  word-break: keep-all;
 }
 
 .participantCode {
@@ -311,12 +332,205 @@
 
 .participantCode span {
   color: var(--muted);
-  font-size: 0.6875rem;
+  font-size: var(--nu-text-caption);
 }
 
 .participantCode strong {
-  font-size: 0.9375rem;
+  font-size: var(--nu-text-callout);
   letter-spacing: 0.035em;
+}
+
+.rewardEntryPanel,
+.rewardEntrySuccess {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--nu-warm-300);
+  border-radius: 17px;
+  background: var(--nu-warm-50);
+  color: var(--nu-warm-700);
+  text-align: left;
+}
+
+.rewardEntryHeading,
+.rewardEntrySuccess {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+}
+
+.rewardEntryHeading strong,
+.rewardEntrySuccess strong {
+  display: block;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.rewardEntryHeading span,
+.rewardEntrySuccess p {
+  display: block;
+  margin: 0.22rem 0 0;
+  color: color-mix(in srgb, var(--nu-warm-700) 74%, var(--nu-neutral-500));
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+}
+
+.rewardContactField {
+  display: grid;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.rewardContactField > span {
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.rewardContactField input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--nu-warm-300) 80%, var(--line));
+  border-radius: 13px;
+  background: var(--surface);
+  color: var(--foreground);
+  font-size: var(--nu-text-body);
+  outline: none;
+}
+
+.rewardContactField input:focus {
+  border-color: var(--nu-warm-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--nu-warm-300) 24%, transparent);
+}
+
+.rewardConsent {
+  margin: 0.55rem 0 0;
+  color: color-mix(in srgb, var(--nu-warm-700) 74%, var(--nu-neutral-600));
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
+}
+
+.rewardEntryButton {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 0.85rem;
+  border: 0;
+  border-radius: 13px;
+  background: var(--nu-warm-700);
+  color: var(--surface);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
+}
+
+.rewardEntryButton:disabled {
+  cursor: not-allowed;
+  opacity: 0.32;
+}
+
+.rewardEntryLoading {
+  margin: 0;
+  color: var(--nu-warm-700);
+  font-size: var(--nu-text-label);
+  text-align: center;
+}
+
+.rewardSavedContact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.1rem 0.65rem;
+  margin-top: 0.9rem;
+  padding: 0.75rem 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--nu-warm-300) 74%, var(--line));
+  border-radius: 13px;
+  background: var(--surface);
+}
+
+.rewardSavedContact span {
+  grid-column: 1;
+  color: color-mix(in srgb, var(--nu-warm-700) 72%, var(--nu-neutral-500));
+  font-size: var(--nu-text-caption);
+}
+
+.rewardSavedContact strong {
+  grid-column: 1;
+  font-size: var(--nu-text-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.rewardSavedContact button {
+  grid-row: 1 / 3;
+  grid-column: 2;
+  min-height: 40px;
+  padding: 0 0.35rem;
+  color: var(--nu-warm-700);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.rewardEntryCancel {
+  display: block;
+  min-height: 40px;
+  margin: 0.2rem auto -0.35rem;
+  padding: 0 0.4rem;
+  color: color-mix(in srgb, var(--nu-warm-700) 74%, var(--nu-neutral-500));
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.rewardEntryError {
+  margin: 0.7rem 0 0;
+  color: var(--danger);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+}
+
+.rewardEntrySuccess {
+  text-align: left;
+}
+
+.rewardEntrySuccess button {
+  margin-top: 0.55rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.rewardEntryWithdrawn {
+  width: 100%;
+  max-width: 28rem;
+  margin: 1rem 0 0;
+  padding: 0.8rem;
+  border-radius: 13px;
+  background: var(--conversation-soft);
+  color: var(--conversation);
+  font-size: var(--nu-text-label);
+  text-align: center;
+}
+
+.rewardEntryWithdrawn p {
+  margin: 0;
+}
+
+.rewardEntryWithdrawn button {
+  min-height: 38px;
+  margin-top: 0.35rem;
+  padding: 0 0.45rem;
+  color: inherit;
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .homeButton {
@@ -334,8 +548,8 @@
 
 .storageDetails summary {
   padding: 1rem 0;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
   text-align: center;
   cursor: pointer;
 }
@@ -348,8 +562,8 @@
 
 .storageBody > p {
   margin: 0 0 0.35rem;
-  font-size: 0.75rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .storageBody > button,
@@ -363,8 +577,8 @@
   border-radius: 12px;
   background: var(--surface);
   color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
   cursor: pointer;
 }
 
@@ -386,7 +600,7 @@
   grid-column: 1 / -1;
   margin: 0 0 0.2rem;
   color: var(--foreground);
-  font-size: 0.8125rem;
+  font-size: var(--nu-text-body-sm);
   text-align: center;
 }
 

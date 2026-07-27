@@ -1,0 +1,1705 @@
+{
+  "contractVersion": "nuang-trait-map-current-baseline.v2.3",
+  "reportId": "TRAIT-MAP-CURRENT-BASELINE-MANIFEST.2.3",
+  "status": "RESEARCH_MASTER_V2_3_COMPLETE_EXTERNAL_GATES_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "baseline": {
+    "canonicalVariants": 605,
+    "claimKeys": 288,
+    "profileClaimReferences": 9216,
+    "personalizedEntries": 544,
+    "commonArchiveEntries": 61,
+    "p0Entries": 162,
+    "p1Entries": 298,
+    "p2Entries": 84,
+    "safeMigratedRevisions": 147,
+    "p2Revisions": 14,
+    "neighborEdgesPassed": 80,
+    "neighborEdges": 80,
+    "structuralEvidencePassed": 605,
+    "structuralEvidenceFailures": 0
+  },
+  "independentReview": {
+    "protocolReady": true,
+    "p0PacketReady": true,
+    "p1PacketReady": true,
+    "p2StratifiedSampleReady": true,
+    "assignedReviewers": 0,
+    "approvedEntries": 0
+  },
+  "cognitiveInterview": {
+    "protocolReady": true,
+    "dataContractReady": true,
+    "exposurePlanReady": true,
+    "plannedUnits": 347,
+    "plannedExposures": 952,
+    "plannedSessionSlots": 103,
+    "assignedParticipants": 0,
+    "completedParticipants": 0
+  },
+  "measurementValidation": {
+    "productClaims": 8,
+    "approvedProductClaims": 0,
+    "lockedBetaItems": 60,
+    "lockedFacets": 10,
+    "inputContractDatasets": 5,
+    "monteCarloEngineeringCells": 9,
+    "monteCarloIsEmpiricalValidation": false,
+    "statisticalRunnerReady": true,
+    "statisticalRuntimeInstalled": false,
+    "syntheticFixtureRows": 240,
+    "liveParticipantCount": 0,
+    "empiricalAnalysesCompleted": 0
+  },
+  "evidenceScope": {
+    "highRiskVariants": 460,
+    "highRiskVariantsWithIndependentSourcesConfirmed": 0,
+    "canonicalEntriesContextAudited": 605,
+    "findingLinksContextAudited": 2939,
+    "exactRegisteredContextLinks": 1618,
+    "contextTransfersNotEstablished": 1321,
+    "entriesWithNoExactContextFinding": 101,
+    "scenarioGapGroups": 16,
+    "directNuangAxisOrCanonicalValidations": 0
+  },
+  "scenarioDirectValidation": {
+    "p0ModulesSpecified": 6,
+    "affectedDirectionalCanonicalEntries": 60,
+    "modulesExecuted": 0,
+    "participantsCollected": 0,
+    "fixtureChecksPassed": 19,
+    "fixtureChecks": 19,
+    "failClosedUnresolvedDisagreements": 96,
+    "failClosedAnalysisRowsReleased": 0,
+    "syntheticReadyPathAnalysisRows": 96,
+    "nullNoSignalDecisions": 80,
+    "technicalPositiveSyntheticPairsStopped": 40,
+    "canonicalSupportDecisions": 0,
+    "publicationApprovalsGranted": 0
+  },
+  "publicationGate": {
+    "passedGates": 3,
+    "blockingGates": 8,
+    "productionAllowedCanonicalEntries": 0,
+    "productionPublicationBlocked": true
+  },
+  "researchMasterCompletion": {
+    "status": "RESEARCH_MASTER_V2_3_COMPLETE",
+    "requirementsPassed": 10,
+    "requirements": 10,
+    "blockingRequirements": 0,
+    "proofFilesHashed": 19,
+    "customerPublicationValidated": false
+  },
+  "reproducibility": {
+    "oneCommand": "npm run research:trait-map:v2:v2-3-current:check",
+    "expectedChecksIncludingThisManifest": 157,
+    "trackedArtifactCount": 312,
+    "trackedArtifactBytes": 54356621,
+    "trackedArtifacts": [
+      {
+        "path": "analysis/trait-map-v2-3/fixtures/synthetic_reference_n240.csv",
+        "bytes": 32599,
+        "sha256": "971ff90db68bfdfaa650492c6c9a0d4aee70e5700923d76b2ce2a574b8b46814"
+      },
+      {
+        "path": "analysis/trait-map-v2-3/ordinal_model_manifest.json",
+        "bytes": 19123,
+        "sha256": "a1c808a89adc8a5945604f2935d077a75960b1d908c20b82989d79bdfa0249c6"
+      },
+      {
+        "path": "analysis/trait-map-v2-3/run_ordinal_cfa.R",
+        "bytes": 6205,
+        "sha256": "417e62d28566121ceac2209dbee6530218541315cbb0600bd7ab244985b7aec3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_01_V2_3.md",
+        "bytes": 1345,
+        "sha256": "640a199d7d2977f61bd1737d1aee62cb583eebe7725cebac3c45c062cf0997f5"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_02_V2_3.md",
+        "bytes": 1329,
+        "sha256": "d2918082776e2b3491b692dad0a3a5dd23d05bcf70de88c8ae58c8773ac03241"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_03_V2_3.md",
+        "bytes": 1049,
+        "sha256": "1c871d8ca1004645b54aeb9110943edb29d8d0acbc19f96c1d90cb65d882f3ff"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_04_V2_3.md",
+        "bytes": 1049,
+        "sha256": "c7b021962ea0f4ec5f8231a5231ab8f219843c88f1e486e471cdbe7c3c1129da"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_05_V2_3.md",
+        "bytes": 1049,
+        "sha256": "3acc129f79d08f362feff0f54d3e9708b99edebecd24db193fd8182f7e0713b3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_06_V2_3.md",
+        "bytes": 1049,
+        "sha256": "7d50b752f82b47c68427bf2f2f6f69cfcfdc8fd0c3b49726848e072085d4ec64"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_07_V2_3.md",
+        "bytes": 1049,
+        "sha256": "80f257a021866db312fbe915483cf39451f3c12b3fa09e7a5690d605e41c0582"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_08_V2_3.md",
+        "bytes": 1049,
+        "sha256": "8b243a3fa0c634095d8286fa937ea3d96d2adb14968b1a12f48e4af204ba1e7d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_09_V2_3.md",
+        "bytes": 1049,
+        "sha256": "ea7efab1d429e6d7f2642761c295196a55906c09c731448b3b5f8ce1628cc145"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_10_V2_3.md",
+        "bytes": 1049,
+        "sha256": "b487d7b8e6551aae3fc35447feb4161890d2c129019a72c4c12f2c21ae4b6c79"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_11_V2_3.md",
+        "bytes": 1049,
+        "sha256": "c7d50c80c52846e3339a81c61fe0ed46cd06815920cf76be1427a09ec6b3c3c4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/100_TARGETED_AXIS_REWRITE_PACKET_CAB_12_V2_3.md",
+        "bytes": 1049,
+        "sha256": "f0ac9e2a05e18c80d0579ffa09d8198835396b5281bee870d0fb0ee864d486d2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_01_V2_3.md",
+        "bytes": 1348,
+        "sha256": "7535a8d5e49c341878ac59470035e9efcff02e000c7d3132f36780fa68d81c8a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_02_V2_3.md",
+        "bytes": 1348,
+        "sha256": "5129b7f1623307c4df9750b1a16788188934f577d0208fa8c42f7b9ab50702cb"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_03_V2_3.md",
+        "bytes": 1046,
+        "sha256": "aeee474b687ef825b43434f012fd53a75cf0d1daafed503a5f31c8d49688c10a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_04_V2_3.md",
+        "bytes": 1046,
+        "sha256": "9178cebd64ec1d542ad5b215feb2ae3bd00f1de855df41bdae798f79d8e88cc6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_05_V2_3.md",
+        "bytes": 1046,
+        "sha256": "d62de6aed7740ebff82c920cc45a2994e396410a05b886a613015bfbf1d08dca"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_06_V2_3.md",
+        "bytes": 1046,
+        "sha256": "bc894a2a6a526f8e672567b80bcd6ecd749b2608821c106cee9c6256928ebc7f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_07_V2_3.md",
+        "bytes": 1046,
+        "sha256": "a4041b04962b163aa747468a603537cb2dd619b43225ff1f239475a1479aef57"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_08_V2_3.md",
+        "bytes": 1046,
+        "sha256": "8a699e8f19d6306a495ef78e14e56962c5ad4b61db7fca75263f8a1e6f50a9f1"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_09_V2_3.md",
+        "bytes": 1046,
+        "sha256": "d7de7dd6e0de322a3fe51e9bbd3828c5f287837edbd69b9448da0af2ad6d977f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_10_V2_3.md",
+        "bytes": 1046,
+        "sha256": "41c491e94ab53671fc96310f262c0cc052146a91bd249a5cfc946be2d4d56326"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_11_V2_3.md",
+        "bytes": 1046,
+        "sha256": "db4697ca4883cbeecfa195033381e1c614e15f811e541e786ebbc5db4e1aafd0"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/101_CANONICAL_CORRECTED_DRAFT_CAB_12_V2_3.md",
+        "bytes": 1046,
+        "sha256": "8bbaa2909f6a70bf96b3695a8cef5cd7f8234a5abefbf41486920b7567c9d198"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_01_V2_3.md",
+        "bytes": 1088,
+        "sha256": "d02296f08a1124b8005b0957c96f49798a712c8ad38c0f9d413e0164fe7cbf55"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_02_V2_3.md",
+        "bytes": 1088,
+        "sha256": "1fea65588b3d98d2f91b02ae032a5c25a30858552ce29447457a443c5852e630"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_03_V2_3.md",
+        "bytes": 1088,
+        "sha256": "1c192025c5eff7720c5d87b90541fffbe321623d8c75e804aa5d45c5c5819979"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_04_V2_3.md",
+        "bytes": 1088,
+        "sha256": "f31f4373a691ab4fff9786f6fb5ef4dc3a9342975ddc3b81b4ca86730567dab2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_05_V2_3.md",
+        "bytes": 1088,
+        "sha256": "459436e76125ff246c4eccf66395fde24d16298bd0fef948d51e7946f0598d55"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_06_V2_3.md",
+        "bytes": 1088,
+        "sha256": "e688ae0c06957d907b7b624e08d7fb10acf87b621bed401d0a20da62ea11a946"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_07_V2_3.md",
+        "bytes": 1088,
+        "sha256": "4f09d41f99a555d7b2bbba396aeb08e30be13702244cd05c3da0fbf99dff4f5c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_08_V2_3.md",
+        "bytes": 1088,
+        "sha256": "18d4ecf76ca7c5835076751b3bc29c4dbc3dc8c10885789520a42b7879f4c37f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_09_V2_3.md",
+        "bytes": 1088,
+        "sha256": "242c362c1b426b07466fa317fe08ad04149399f8e04ac7cdd8ee1cdb5f7bbf02"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_10_V2_3.md",
+        "bytes": 1088,
+        "sha256": "89033e0caaecd5212b952f9187e32b30b1c1d7f30f855f90183b304541fca41f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_11_V2_3.md",
+        "bytes": 1088,
+        "sha256": "ccda94290596fbd0d91237b1813e5e13ac7fabb5cca5124e8629da346e090246"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/102_CANONICAL_RECOMPOSITION_AUDIT_CAB_12_V2_3.md",
+        "bytes": 1088,
+        "sha256": "a5c85ad14492d7d0e23986305435dc3c901c7c640e044c0e4e4636d8d0a5cd3a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/103_CANONICAL_ALL_BATCH_AUDIT_V2_3.md",
+        "bytes": 1652,
+        "sha256": "9d246a0721910715fdb6ab524980c9e6db10e1ed5cd4b69d17b6dfec14ef9069"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/104_32_PROFILE_CANONICAL_REBASE_V2_3.md",
+        "bytes": 6566,
+        "sha256": "21ab024aa9174bf4d6f8676a6ffbbccaa7f3e460a0d864c83c20dd358af804e1"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/105_CANONICAL_CONTENT_VERSION_REVIEW_LEDGER_V2_3.md",
+        "bytes": 1086,
+        "sha256": "ae0eeff48f3aceaaef40b96f407e0abe0bc7693c052753f5fdfeff7d308fa461"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/106_REVIEWED_LEDGER_SAFE_MIGRATION_RECOMPOSITION_AUDIT_V2_3.md",
+        "bytes": 637,
+        "sha256": "b7b3039f3684705a4cf665c8a8d8637e37dda47d1c3e537f043b8bdafe1489bc"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/107_COMMON_ISOLATION_AUDIT_V2_3.md",
+        "bytes": 552,
+        "sha256": "69306be9e796c364941e2e365b6cefce2eb082b4d158ae39076b6d5c0b847a2b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/108_INDEPENDENT_REVIEW_QUEUE_V2_3.md",
+        "bytes": 708,
+        "sha256": "db6c783c657b4ede0f01b2585547c1a7cb29a862406c28c578e733ac574cfc2d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/109_P0_INDEPENDENT_REVIEW_PACKET_V2_3.md",
+        "bytes": 442,
+        "sha256": "69a171d3c89eba1b655a63b39fe3c59d5a89075280271e723e7962686b3532e0"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/110_P2_AUTOMATED_PREFLIGHT_V2_3.md",
+        "bytes": 461,
+        "sha256": "b47f1ee21590c42819c0b50053ef57e71dfe53353d5712d5ef982f32fa513c41"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/111_P2_FLAGGED_INTERNAL_SCREEN_V2_3.md",
+        "bytes": 813,
+        "sha256": "a4ffaa670259873ab098a14363fd05b0f93938d01a17434d4ca5ba7e316428a8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/112_P2_SCREENED_LEDGER_RECOMPOSITION_AUDIT_V2_3.md",
+        "bytes": 845,
+        "sha256": "ef087519ebf4e502f1558df38e7459141c56c874d474ed15a8764dc82cee0380"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/113_INDEPENDENT_REVIEW_QUEUE_POST_P2_V2_3.md",
+        "bytes": 722,
+        "sha256": "f49ee80b129d2abeeb0b10e8ab4a57493bf4f541c8a36e941f547cbfd2891df7"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/114_P0_INDEPENDENT_REVIEW_PACKET_POST_P2_V2_3.md",
+        "bytes": 456,
+        "sha256": "2f35824998d98944e536b3da29a4a72bf90ca85b478e3ee7bfdf1105a14cacd4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/115_P2_STRATIFIED_REVIEW_SAMPLE_V2_3.md",
+        "bytes": 746,
+        "sha256": "3143a3e2ce32e33f53ab5b8f3eeeb850133747d742880358e508ecbc29503406"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/116_P1_INDEPENDENT_REVIEW_PACKET_V2_3.md",
+        "bytes": 638,
+        "sha256": "2f4d68db85aac88ef25001cfc0280f15745a620c312e648e2ad2e934932a2872"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/117_EVIDENCE_TRACE_AUDIT_V2_3.md",
+        "bytes": 908,
+        "sha256": "cb2a1ee544e1dae5bbcb09efbc3c07a3207ad353f6729d3e0cbd2e83cd9be590"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/118_PUBLICATION_GATE_V2_3.md",
+        "bytes": 1279,
+        "sha256": "eb01440796ed9402f0c38769c74706c3e373a14834c1dad07d2e57e613cb964c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/119_COGNITIVE_INTERVIEW_PROTOCOL_V2_3.md",
+        "bytes": 2327,
+        "sha256": "5ce61d4a54d87f731eead7ef2990c8c6c85d857aa1a63a8c7316c83fd1518ad9"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/120_COGNITIVE_INTERVIEW_DATA_CONTRACT_V2_3.md",
+        "bytes": 948,
+        "sha256": "996124be5d99fb915464ac2694058594b9e938cf238b639a923991ef62eb8452"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/121_COGNITIVE_INTERVIEW_EXPOSURE_PLAN_V2_3.md",
+        "bytes": 756,
+        "sha256": "8670693d295706b0ec01c871dec619e46b2840b27e00e0c618b96c154db17544"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/122_INDEPENDENT_REVIEW_PROTOCOL_V2_3.md",
+        "bytes": 808,
+        "sha256": "9a7468641864d1b4ae2d9a5a2bf3d279883c839008526cbe2ccaf55f596718e6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/123_VALIDITY_ARGUMENT_V2_3.md",
+        "bytes": 1182,
+        "sha256": "6d0edd68847105dc7705895826cded9f4d4560f0791502d532f87e7edf25678d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/124_QUANTITATIVE_VALIDATION_PLAN_V2_3.md",
+        "bytes": 1448,
+        "sha256": "99f3d57ce2728b5529fdf39074965420ecdd7b27eea1551d14055154e001c8fc"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/125_ANALYSIS_INPUT_CONTRACT_V2_3.md",
+        "bytes": 1935,
+        "sha256": "0cea1c117a91f88b224262d1e88463e1ac0016f65a905c19fe2cf3230841e305"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/126_MONTE_CARLO_HARNESS_V2_3.md",
+        "bytes": 2402,
+        "sha256": "664b49ba1166d8afbb935c82dcbcc06fca1ce99bb8c73cdcec5c7aeabb7fc642"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/127_STATISTICAL_ENGINE_AND_MODEL_IDENTIFICATION_V2_3.md",
+        "bytes": 2895,
+        "sha256": "175ef5e86a6fb977f0abfa82540dbd6b65784947fda4ab7c4bdefdc771ab0e3f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/128_SYNTHETIC_ORDINAL_FIXTURE_V2_3.md",
+        "bytes": 671,
+        "sha256": "91df03877b0a55ce3f1c2cd7dc8366d6804daeb9830b4cf82b5fef52c83306ce"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/130_REVIEW_AND_COGNITIVE_IMPORT_CONTRACT_V2_3.md",
+        "bytes": 1153,
+        "sha256": "5cb00b9c5dac186e2c1b5b0c218deabe0baf37ffe45ae2252a4c5e779bd28646"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/131_REVISION_IMPACT_DRY_RUN_ENGINE_V2_3.md",
+        "bytes": 1073,
+        "sha256": "ac34815405933419422830a84f73cc197d000d6c2f965aead5dc1e3a78a0deff"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/132_REVIEW_IMPORT_VALIDATOR_V2_3.md",
+        "bytes": 633,
+        "sha256": "00a933bbb33b0b6689bca92e817cbb9382be51a2c084d00347ca3c6f52e34633"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/133_EVIDENCE_DEPENDENCE_AUDIT_V2_3.md",
+        "bytes": 1224,
+        "sha256": "866f13acf2950a1ee17e6fc44aba731546ecaa927ebf2ecfd1f5fe1f076da830"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/134_SHARED_AUTHOR_EVIDENCE_DEPENDENCE_REVIEW_V2_3.md",
+        "bytes": 1129,
+        "sha256": "80bbfa1520e1c2225320b0e848d9065029514d98e2faca8e66df23dc66e54c54"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/135_HIDDEN_DATASET_REUSE_REVIEW_V2_3.md",
+        "bytes": 991,
+        "sha256": "c48f3345188ecdbeb7d8149e64370aed27e1eac49b6c7e85be2c86e058716997"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/136_SAMPLE_LEVEL_FINDING_TRACE_BFI2_IPC_V2_3.md",
+        "bytes": 1007,
+        "sha256": "4b20535efbd22bf2bfa2bb51f6314d9247402e189ec822dc01b49ea1f7ed07c3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/137_CANONICAL_CLAIM_FINDING_SCOPE_TRIAGE_V2_3.md",
+        "bytes": 1392,
+        "sha256": "7c642ca573404a2442676e14126b4a13376217da7b2a27527a4e0acec07649b6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/138_REMAINING_FINDING_CONTEXT_APPLICABILITY_SCREEN_V2_3.md",
+        "bytes": 1407,
+        "sha256": "72cc047260dadc63ce9b2152ff44491f15333602fe51fe495e98fbbb1b044422"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/139_P0_CONTEXT_EVIDENCE_GAP_PROTOCOL_V2_3.md",
+        "bytes": 1025,
+        "sha256": "a4f9829253eef9e08f78fdc2efde0ee451ba97b0b6428ff8b2f3a7087ed449c3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/140_P0_BACKGROUND_SOURCE_EXTRACTION_V2_3.md",
+        "bytes": 802,
+        "sha256": "51f354ec28880a907587656f04e34f7211e4d484408335a6f95348fb72a43565"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/141_P0_OPPOSITE_DIRECTION_DISCRIMINATION_AUDIT_V2_3.md",
+        "bytes": 1058,
+        "sha256": "8d73fbde0b313c91370571c8e3f3e543201d6470e5dce54a4b86388071547095"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/142_ALL_CANONICAL_CONTEXT_APPLICABILITY_AUDIT_V2_3.md",
+        "bytes": 1019,
+        "sha256": "6ba8ad2cbada09c5b72af80883cc10563ececa3bd35c46b34d7b4651db2dd3ac"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/143_NO_EXACT_CONTEXT_GAP_GROUPS_V2_3.md",
+        "bytes": 733,
+        "sha256": "55b7ec46c03c2a387daba6c4fb7c8fd0bac36809426538303e431031991ac8f5"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/144_SCENARIO_GAP_PRIORITY_MATRIX_V2_3.md",
+        "bytes": 1120,
+        "sha256": "fe4a56352e4849d6148918ba07d89b76d8315f3ea624dc28b2a54c56bf785126"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/145_P0_DIRECT_VALIDATION_MODULE_SPEC_V2_3.md",
+        "bytes": 1004,
+        "sha256": "c7b8b2f49d89e20d8e1fdbdfdcd72a9c664a79b651981d561642358ef085155b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/146_P0_DIRECT_VALIDATION_DATA_CONTRACT_V2_3.md",
+        "bytes": 992,
+        "sha256": "b35f9674836627e9816a293a3e10be84ae1c9282504d13c0749947b076f0e684"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/147_P0_DIRECT_VALIDATION_FIXTURE_VALIDATION_V2_3.md",
+        "bytes": 917,
+        "sha256": "953fb988491faeb20bbe44e3216aff50b6f4f00113ce9746c88c967a3d8e39fb"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/148_P0_DIRECT_VALIDATION_SYNTHETIC_ANALYSIS_RUN_V2_3.md",
+        "bytes": 862,
+        "sha256": "bfdfff6947a32acaf727cbc196c3df2825b27b612895327ef7d2d2a0bd3afaac"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/149_P0_DIRECT_VALIDATION_READY_PATH_RUN_V2_3.md",
+        "bytes": 778,
+        "sha256": "325e266f1b508ad906ba5aeb56e2b478c54dda09e66acb1e3dfb24ab3b8e5ddc"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/150_P0_MODEL_OUTPUT_CONTRACT_AND_NULL_FIXTURE_V2_3.md",
+        "bytes": 1520,
+        "sha256": "a3d84d05ad48c9880153a8f6c10803907d932ef2a0d2708411a35544c5b4ed2a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/151_P0_POSITIVE_SYNTHETIC_BOUNDARY_RUN_V2_3.md",
+        "bytes": 1468,
+        "sha256": "736d38383f09a152090df5d1479cad09b2f0485c38dfee0ab80f7b140d70fa91"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/152_P0_PREREGISTRATION_DECISION_TABLE_V2_3.md",
+        "bytes": 1240,
+        "sha256": "cef41d00c10d39c15a877afd511405f110b84014b8d315ee8ca4d8c681c5a0cd"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/153_P0_PARTICIPANT_RIGHTS_AND_DATA_LIFECYCLE_V2_3.md",
+        "bytes": 2443,
+        "sha256": "3f1f2c72f2dd20ce14e279ebde6712a74390b19256ea5ff2e6647a961bb8cbdc"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/154_MULTI_EVIDENCE_CONFLICT_RESOLUTION_CONTRACT_V2_3.md",
+        "bytes": 2567,
+        "sha256": "9a33a0c7a917155ae6dbc3fb16b7f15ba5ef51b079aee386e3f060d51e9292c7"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/155_REVISION_GATE_REOPEN_MATRIX_V2_3.md",
+        "bytes": 2187,
+        "sha256": "3f8bf711354bad1453148e214428c151d5102c36055630db2d3d4b6d3680c3b4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/156_WITHDRAWAL_FALLBACK_RUNTIME_CONTRACT_V2_3.md",
+        "bytes": 1009,
+        "sha256": "93846b3b2529dd9b50fc43504764d09216d13656d1f2de320916734661a61466"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/157_RUNTIME_RESOLVER_INTERFACE_AND_HARNESS_V2_3.md",
+        "bytes": 957,
+        "sha256": "b2a3147606fff903c74087ae338d9d21c21874cc9126bc143f34d76dfa300e12"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/158_DATA_CENTER_COMPLETENESS_GAP_REGISTER_V2_3.md",
+        "bytes": 2383,
+        "sha256": "9e82ad60f72d5d4792a8c6bf73a1dfa849887805e101c606dba1144d8cef9033"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/159_WAVE1_LONGFORM_REMEDIATION_PACKETS_V2_3.md",
+        "bytes": 1668,
+        "sha256": "a0c76703ae78fa8d9e1068ec3b58627ad37651a2a7c7da8dc31c3055d46a7a1c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/160_DATA_CENTER_DEFINITION_OF_DONE_V2_3.md",
+        "bytes": 4088,
+        "sha256": "6ab237767d12a3dfcc44ac6fff4145abb44f8e38ad49c27f028079f93dcb5c6e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/161_DATA_CENTER_FINAL_COMPLETION_AUDIT_V2_3.md",
+        "bytes": 2761,
+        "sha256": "83cd17178e84196b223b5af910b59c8b4fbb8aa979a2c8f1bd816bfc50103e65"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/93_FINAL_AXIS_DECISIONS_V2_3.md",
+        "bytes": 681,
+        "sha256": "d6fa011fa4bc23600822915c68394e3eef5a2067807288f52fde7d655d6890e5"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/94_CANONICAL_DRAFTING_DRY_RUN_AUDIT_V2_3.md",
+        "bytes": 1650,
+        "sha256": "44bb525a399e152cb9c2839d778caaebe3dce0ff41803647a1293d5c9556bf75"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/95_LINEAGE_MERGE_SEMANTIC_AUDIT_V2_3.md",
+        "bytes": 1961,
+        "sha256": "4dc7b5c2c93f5639ab3af5d652a4d060c2685075eebc8c7cdc957c221d189002"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/96_CANONICAL_AUTHORING_AND_REVIEW_WORKFLOW_V2_3.md",
+        "bytes": 3931,
+        "sha256": "c7717c6eb0c9a6bd2c4352703bd47525732dd802f5fc3520099a5df77c410c92"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_01_V2_3.md",
+        "bytes": 1880,
+        "sha256": "0ceb6f2f66dc1b8dd77dc9285e4113189a60fb795755138b4c333edd103ac45c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_02_V2_3.md",
+        "bytes": 1872,
+        "sha256": "70351132a33824fdb84d1d1112dfd319345c55c0732ea5176149364d942fb7a9"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_03_V2_3.md",
+        "bytes": 1863,
+        "sha256": "d531d2a78aeddb7171c3b57e5e6f2c95db0e7aa098fe2c1f4cdb4260db45338b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_04_V2_3.md",
+        "bytes": 1855,
+        "sha256": "a7de8f54079c733b0bca46955b4373820789e32e2861802afbe2c147f9cfbd76"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_05_V2_3.md",
+        "bytes": 1863,
+        "sha256": "5978281fe6d611f2ab6d3301960ee5e4ce0e3856f025b7d6212f0310376bc90c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_06_V2_3.md",
+        "bytes": 1855,
+        "sha256": "e9c0b01312dc0415386ca7862b1f537a7ff46650aa8cb6579d7a89407a7483ec"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_07_V2_3.md",
+        "bytes": 1879,
+        "sha256": "f7d142329d0825139683235ce5b75b34709a30d2fa140b5058ab802fd7fb958e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_08_V2_3.md",
+        "bytes": 1871,
+        "sha256": "aed967687e44e4a5f01e93184e314b779e4dbc69e1d8c8b710f433e00c356d22"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_09_V2_3.md",
+        "bytes": 2055,
+        "sha256": "c657ccc84f4a83d4ee0b5995a6f79fafdb034b5e2d029076924c08d58056c15a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_10_V2_3.md",
+        "bytes": 2047,
+        "sha256": "db13a02b754ed3ca845899e33a44b657a1613cad6a61f560db20abe8eacde72b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_11_V2_3.md",
+        "bytes": 1831,
+        "sha256": "93407853d46e8faaeae603f58289546796a8ba18f3a10c5030515134ca77a3f1"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/97_CANONICAL_RESEARCH_DRAFT_CAB_12_V2_3.md",
+        "bytes": 1823,
+        "sha256": "3a4270c86e54d56ec503131b035ab57253b688d697bf868e788c10df0391c55f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_01_V2_3.md",
+        "bytes": 2249,
+        "sha256": "8b8d162138624348012e0ed5b8aa82713579bf381b1d6a07272210f524dfc11a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_02_V2_3.md",
+        "bytes": 2233,
+        "sha256": "1c9469fa780760d9b4bcd54eeebbb0fab7d0bf447a94bf3d6ffa7788be9fceb4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_03_V2_3.md",
+        "bytes": 2011,
+        "sha256": "afaa8e0b7f2000ce84396fdd18a1d127cf4442bff04826a36c602b53963ef197"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_04_V2_3.md",
+        "bytes": 2011,
+        "sha256": "cc887acc3cf286738c1397d4a30f4eff449e2d0e1b1e9f32c83867bb9b220e50"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_05_V2_3.md",
+        "bytes": 2011,
+        "sha256": "365f423aff380e68c33ed34c085cda9d5a609236a68952e7fad361ef65635395"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_06_V2_3.md",
+        "bytes": 2011,
+        "sha256": "deb5be8f3df46af33489c9561cc426d3c5c971c3886444d96ad4bfd4cb69cb54"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_07_V2_3.md",
+        "bytes": 2011,
+        "sha256": "a0ee53ebe0864fd2a963c3d89b310dd2124b2a0f8d5a90ef98e0cf9e164f77d8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_08_V2_3.md",
+        "bytes": 2011,
+        "sha256": "e796583b655bd2212cda834309fad56915443542b23913c01b5904be6198fb2d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_09_V2_3.md",
+        "bytes": 2011,
+        "sha256": "7a2364103c0022482ce3451ace6795c76e0cc4321f1822ce1cf296047a500867"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_10_V2_3.md",
+        "bytes": 2011,
+        "sha256": "9fa8d68b828c58d776ab6e158b9580f91a32d78aa6b23d6942864eba9ef92210"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_11_V2_3.md",
+        "bytes": 2011,
+        "sha256": "c4976f3cbc2b6996696cd452a6974689a5453740b4e6d569148d100e327e614a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/98_CANONICAL_PREFLIGHT_CAB_12_V2_3.md",
+        "bytes": 2011,
+        "sha256": "52e4310586a3cb2290521a734aa3a9d90db085cd7e27acb8c97c99f672f28c76"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_01_V2_3.md",
+        "bytes": 1875,
+        "sha256": "601fcffa53625348bf1678ccbc9c8e5ea195e8186193435162b88f99dbf8ea43"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_02_V2_3.md",
+        "bytes": 1851,
+        "sha256": "2f8434926a55304fad90404b6dca70202f865aa9f888c2a5ab09d5a099052f77"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_03_V2_3.md",
+        "bytes": 1421,
+        "sha256": "88e1018b00a0c963ce1de3755ab9106538b8ae4ce11795ca287d9f44887518f3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_04_V2_3.md",
+        "bytes": 1421,
+        "sha256": "4c61a23b55b9003648cc58f89c9429df6c16eec1615036c0b8179493a2ec6c94"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_05_V2_3.md",
+        "bytes": 1421,
+        "sha256": "cc576a2043ed2677b13b73836e9fdd52ea869b548251464391ed4bf324ae8cd6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_06_V2_3.md",
+        "bytes": 1421,
+        "sha256": "81d4591894de836a6f5489a3bfb8d39bdab823f95eeebb4afb42f26b3462dd06"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_07_V2_3.md",
+        "bytes": 1421,
+        "sha256": "1fb9a7484526a62f05ce470ac3cf866491583a00a476c2b0e59ef996ce0f4042"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_08_V2_3.md",
+        "bytes": 1421,
+        "sha256": "4442307002b9ea38887f1a3e6bb0978ca37496dd148674fcda8f2d66286c3af4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_09_V2_3.md",
+        "bytes": 1421,
+        "sha256": "dd43368d4f9bc74016dbe1145bf44e28c1c3703bf649954f2d953c1a285c9545"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_10_V2_3.md",
+        "bytes": 1421,
+        "sha256": "84ce08b634f38b5b29c342a75035cce4204149af33197a69ffc10102d1690b01"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_11_V2_3.md",
+        "bytes": 1421,
+        "sha256": "29244ad0adcf73ed9040946b4ee46d6c627f3703501344e982f3ee759a98a287"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/99_CANONICAL_SEMANTIC_RESOLUTION_CAB_12_V2_3.md",
+        "bytes": 1421,
+        "sha256": "eee91a0c8f1684ed73cc9b873ee16e51c01adf3d54c4c4eea7b4ca9473bc2a5e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_32_PROFILE_CANONICAL_REBASE_V2_3.json",
+        "bytes": 3644474,
+        "sha256": "2fb9b1dac8b8b02d8663039bba4a7ea18e1bf24c25290e6b195055c8acd2ced7"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_ALL_CANONICAL_CONTEXT_APPLICABILITY_AUDIT_V2_3.json",
+        "bytes": 2144435,
+        "sha256": "f4b1736f88dd268d1d7b0492c3b7ac8bfa9947909df616b93e31bd67aa8c8fc4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_ANALYSIS_INPUT_CONTRACT_V2_3.json",
+        "bytes": 16956,
+        "sha256": "239c87e1ade03844995d40e6ca82c6930c927b44b543218bf87306a39490e9e3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_ALL_BATCH_AUDIT_V2_3.json",
+        "bytes": 10022,
+        "sha256": "4f25c0a34b57ecc896ac072685bf910d6e6906c9ecd2662c70c68dd73a55c876"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_AUTHORING_WORKFLOW_V2_3.json",
+        "bytes": 2717566,
+        "sha256": "6d5f0617a32063402584cff8e56148a7147432fed2c838335abbdf9d704663ea"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CLAIM_FINDING_SCOPE_TRIAGE_V2_3.json",
+        "bytes": 317028,
+        "sha256": "fa901c486d1b81481cf95fee6c88e8d0c26e7f778987d28705a9524ad5137c6e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CONTENT_LEDGER_P2_SCREENED_V2_3.json",
+        "bytes": 2627353,
+        "sha256": "8c38fc73a71617651fbf1bc1d1356b72ae485a77a3688f66bd7e6332a3533412"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CONTENT_LEDGER_REVIEWED_V2_3.json",
+        "bytes": 2599685,
+        "sha256": "0bb3393054be254301d863911430b98dad78a11dcf4160c50f89c18df3266a52"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CONTENT_LEDGER_V2_3.json",
+        "bytes": 2218526,
+        "sha256": "6ad649add3d39249da0890ea1b1efe09435021ac8184ced2aaf3150ef80a1c90"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_01_V2_3.json",
+        "bytes": 160307,
+        "sha256": "ea5ada42dc6e2067aed7a4f9f731b48ad8dbb1f768b1cf5a07fafd2b32feb4df"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_02_V2_3.json",
+        "bytes": 147312,
+        "sha256": "443383843a9730440bcfd61270b03bae4598eb48c24d1ce10a5f745529dacfbb"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_03_V2_3.json",
+        "bytes": 75507,
+        "sha256": "3b6b477ad804ecc1fb9d4b9fefdb10b9b105bfc23b9170fa0d506d91ea34fc1d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_04_V2_3.json",
+        "bytes": 95505,
+        "sha256": "778f16d04ac19ccd2ff860f8e8e76c95ab0dec672fd64932be87af849acacda2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_05_V2_3.json",
+        "bytes": 101995,
+        "sha256": "4cd7146500ee9486cf1a8491321d9f406523867e751bceae8ac4d617bd2168cb"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_06_V2_3.json",
+        "bytes": 83676,
+        "sha256": "75522207942ad8212f1c722cd616327f50fed42251c2c3d93759b67f0bf0d8e4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_07_V2_3.json",
+        "bytes": 94437,
+        "sha256": "1cbf1890d6dd078a0ff681e30049d1d6e5d72a2c65153885443b8355908f0fa2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_08_V2_3.json",
+        "bytes": 99296,
+        "sha256": "26f796b41572210ff62416e9d5bbbebc0322892239a3536409dfc54bb2f48e5e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_09_V2_3.json",
+        "bytes": 88945,
+        "sha256": "2d2f9241e3ef01b92958e4835c0c8212d1087cd9b7ae489059553448473210bd"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_10_V2_3.json",
+        "bytes": 107480,
+        "sha256": "943d90225b1ed70cce5f058eaff9dd809c7750091519e4ac1936725c8b9a34b9"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_11_V2_3.json",
+        "bytes": 91795,
+        "sha256": "385053e5c0b5958723456663779a6f1ad8be530b881cd63b6a30686e901c0994"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CORRECTED_DRAFT_CAB_12_V2_3.json",
+        "bytes": 82648,
+        "sha256": "c6640e1f9985b230e555efff4e156c5715f81e1ad720a37a4f8703413a9ffd74"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_DRAFTING_QUEUE_V2_3.json",
+        "bytes": 1846692,
+        "sha256": "273195231817fb9f972d73dd450b50c0f170aa83141977d6fa6adb04076f52a0"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_01_V2_3.json",
+        "bytes": 92802,
+        "sha256": "e91be2d3519f2a93b14d129e29e0a3fca46c2e24214a4123065f86fe0d07d451"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_02_V2_3.json",
+        "bytes": 84372,
+        "sha256": "045a0048ba4bfce0de13a2fef07339942eabbc178d40f6b81e4183e68c4a94df"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_03_V2_3.json",
+        "bytes": 45171,
+        "sha256": "d02882e1ea462d1f72b37457935586634d2ebcee8d2b441a9dd9ad66f1824d9e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_04_V2_3.json",
+        "bytes": 56405,
+        "sha256": "1409c71a8628705ee2f79fa48cabfe1de94c6c12a0392098693a30cae4a209b2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_05_V2_3.json",
+        "bytes": 60611,
+        "sha256": "7205df1ddd8c92dec8866d0d76e2f0ef0528b816d589d5688a4ec1cf84ab8b11"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_06_V2_3.json",
+        "bytes": 50033,
+        "sha256": "5d2ac9a84f27e3dc22e19009680360f8e73bc87fb184563e444fbf6e9f0d87ac"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_07_V2_3.json",
+        "bytes": 55541,
+        "sha256": "6d3e92a3980089235e4f53d4b7cb2e18c4e7cbdd9f95a7e587d21454201f7703"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_08_V2_3.json",
+        "bytes": 57703,
+        "sha256": "c579e450a7391f269250f600fa16f87704998d728f1e74b068e8cde0fc18f76d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_09_V2_3.json",
+        "bytes": 52237,
+        "sha256": "c781162cf25e9fae83b0dee1eb8023a7fc0ac43bcdf6b7ddca5b1fb65d79a37f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_10_V2_3.json",
+        "bytes": 63227,
+        "sha256": "0d93516366f8c1516d6e400d29c44fc6886cde89ace6ead4e4d94c1e097b6140"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_11_V2_3.json",
+        "bytes": 54545,
+        "sha256": "a779874def05945d31fbef9aacbf21c9de86de2697a3b448ec0cde3509316b25"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_PREFLIGHT_CAB_12_V2_3.json",
+        "bytes": 49265,
+        "sha256": "82396206ee8a75b0c87341abf0ca3eecbcac5d6c6af0ef91ae62509ea71eed5a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_01_V2_3.json",
+        "bytes": 763367,
+        "sha256": "9b3e200526b0ca4d0bc1791e3047d7fdeb834b755e483ba98e7d7f9ffac9c0ca"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_02_V2_3.json",
+        "bytes": 761827,
+        "sha256": "5ff8908b6d3971f54c4ec819e831b2efa2be8df08c308c0eda434b087159072a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_03_V2_3.json",
+        "bytes": 729808,
+        "sha256": "040c5366771254f902b3b088a5ed911bd92f9b9b3c2a8b6b7036d3ea5cb6f1a0"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_04_V2_3.json",
+        "bytes": 710898,
+        "sha256": "83ab7b0dd67e7ece9aed5743b607204ee68cd92a92725b3cda0a0902db81ec29"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_05_V2_3.json",
+        "bytes": 723801,
+        "sha256": "d222f40cbfbd7a5ac44e9097239938dd2c3e88aa3ca4cf184aeb8f7be1c5b050"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_06_V2_3.json",
+        "bytes": 727104,
+        "sha256": "b709d9d12636ee9f475d3a5cf72dd98356c3f85a24fdb45ac06894114b14ccf7"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_07_V2_3.json",
+        "bytes": 747153,
+        "sha256": "27125b2910ff320803c26dd005d38c9a1ba7eddc4a8c1d1c4be9b1679776def0"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_08_V2_3.json",
+        "bytes": 724994,
+        "sha256": "ef8d748522dd27c4a7c39aa8e6a4f530e026c193801574f5d388a27b8e1aa62d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_09_V2_3.json",
+        "bytes": 792320,
+        "sha256": "e2e782369730787f569f8032d246a3ea4114a4d7dcfb57bf608c0c4841fa5899"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_10_V2_3.json",
+        "bytes": 767394,
+        "sha256": "388be328c26c6dff9a8fc461c8da6dfe453a0757607b0338b34c2928eb33b77b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_11_V2_3.json",
+        "bytes": 734432,
+        "sha256": "8dfc0531de227e1e4b239e5670535afe5acdab53580a7ca73057eb4c812668af"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RECOMPOSITION_AUDIT_CAB_12_V2_3.json",
+        "bytes": 757664,
+        "sha256": "98e70b56869357576d809498373fd5025c7ef85a4c49004ff2b0e7c9966f93c4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_01_V2_3.json",
+        "bytes": 609611,
+        "sha256": "81c0e272a805622c0e5cb9fd6d55326fcf9973cd5949aea661aac7076e761ee7"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_02_V2_3.json",
+        "bytes": 560312,
+        "sha256": "43c1b387c0e3394a414a0a5eb35c8f9958776499f9cc35a41c1023d1dd3fbfbc"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_03_V2_3.json",
+        "bytes": 311321,
+        "sha256": "e305d69c23ace23db433f3d69ea4b551dab056476246f28664a6e9a29d0f2b30"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_04_V2_3.json",
+        "bytes": 390222,
+        "sha256": "539745d121412283fa7a3b7c8bb033c230463a0295094240d884154610d2fd6b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_05_V2_3.json",
+        "bytes": 421301,
+        "sha256": "68431882678f20652e4cef8480df0d24c2924089ae1ac52d3e136be1af46d083"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_06_V2_3.json",
+        "bytes": 340349,
+        "sha256": "87c39cd14038cd28c4964c7d6a71928a24f60c8e8c06c4439a9f91df70ae1007"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_07_V2_3.json",
+        "bytes": 387690,
+        "sha256": "08c577f0367cfa87dc7f0b0aaabbc92d25a7d7fa5c4dd475bfc687e8b0c23b34"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_08_V2_3.json",
+        "bytes": 408660,
+        "sha256": "e51e409a18f0aa7e41f5516995aad35841d55cdb271cf0e5a9872d7dda2bbb1a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_09_V2_3.json",
+        "bytes": 365849,
+        "sha256": "82feba7b5d29047e0cde72dc27ed2377cd43aa238c44109ab25bfec05bb52d6f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_10_V2_3.json",
+        "bytes": 435056,
+        "sha256": "d83fb03fc1c574407bfb7af885684944c9c86bd821ae1f59c708c2a24514c820"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_11_V2_3.json",
+        "bytes": 381723,
+        "sha256": "75c6cf2328ce74961b31e99516c4e863b5641023e71d786ae83942a80fa75a34"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_RESEARCH_DRAFT_CAB_12_V2_3.json",
+        "bytes": 340259,
+        "sha256": "30a8f44441227cbeb07954b1a0b703d953ac02e6d6d081e933badd0384cce590"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_01_V2_3.json",
+        "bytes": 163718,
+        "sha256": "348d7ef596ef651a0b528a6d88e5f0554f8f9ce2f308dc7b853dd66483a2fa42"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_02_V2_3.json",
+        "bytes": 150227,
+        "sha256": "cd5196da1f1c5bbbcfe16dde646bd4556bbfd89bd007cd7ccbdd07af11ec5d22"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_03_V2_3.json",
+        "bytes": 75940,
+        "sha256": "1c4cc7f6d5302903914e0f93f68d6f63e8fbe422757483b7ce9c4c30f88a61e4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_04_V2_3.json",
+        "bytes": 95953,
+        "sha256": "a2d340d15d742e91c516e57be1c9894d45f4209f30f53cd763be47f6accf0036"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_05_V2_3.json",
+        "bytes": 102442,
+        "sha256": "7cc069fd45ceff3e3151747438ccee0802ff4dc90ddee8f33e29a9fbeb32f17a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_06_V2_3.json",
+        "bytes": 84125,
+        "sha256": "b35700445956ce033c290949e057769ce824a575e3bd7d297be83c59cd5bb4b6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_07_V2_3.json",
+        "bytes": 94885,
+        "sha256": "7cd5c8e0144d9793b22205d1e7c0b17f69fed949400a81c00e41a49de42af75e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_08_V2_3.json",
+        "bytes": 99744,
+        "sha256": "f22b343d62ab5f8a3f28a89523b1b2e76bc85d782bb993151f9898e95f79f345"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_09_V2_3.json",
+        "bytes": 89393,
+        "sha256": "355217b33b2ce7a418395472afb0d6697f7e5fa5ba0f7e1a5c84e3d8bc526ea9"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_10_V2_3.json",
+        "bytes": 107929,
+        "sha256": "2d627b26ce13767523bfe5e0d0701d4b8334d40fd3faa5357603095c01a4e545"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_11_V2_3.json",
+        "bytes": 92244,
+        "sha256": "4bd378b0b7c7285a9f7536ead1e618d8a4fbd301a01567d808946167ceb50c3d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_SEMANTIC_RESOLUTION_CAB_12_V2_3.json",
+        "bytes": 83080,
+        "sha256": "0c869142895fe817677fcebb83f88dbfe4ffc06e220861a0cdf7780196e4f3b2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_COGNITIVE_INTERVIEW_DATA_CONTRACT_V2_3.json",
+        "bytes": 12178,
+        "sha256": "f2eae14ece9bea674177d5bdcb77e50c562539ffab953a118f0e8781bedb15cd"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_COGNITIVE_INTERVIEW_EXPOSURE_PLAN_V2_3.json",
+        "bytes": 689776,
+        "sha256": "ecf7870e2a357290c530b82800d6077c7f4000f67189737b3d4ef0816be3f8e2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_COMMON_ISOLATION_AUDIT_V2_3.json",
+        "bytes": 8342,
+        "sha256": "d4c03e7fa5c6d4b2f2f2ccb02b977573e056e2d31aed2c5240624d1bcdd82cd2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_DATA_CENTER_DEFINITION_OF_DONE_V2_3.json",
+        "bytes": 8237,
+        "sha256": "aaf89c8e27e50de8a1f5ee52e89d7b3ccfe2783d0b2c5eb9f480d2f57b0e7e2c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_DATA_CENTER_FINAL_COMPLETION_AUDIT_V2_3.json",
+        "bytes": 8316,
+        "sha256": "23179787888fe3d9457d9b0edf35678177e2d53ffd712be42fd343f6d2d3ad59"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_EVIDENCE_DEPENDENCE_AUDIT_V2_3.json",
+        "bytes": 598481,
+        "sha256": "0cd80d44d253c0a96e8dbe5116a80eff47626caf3c5fd60326745376e1111167"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_EVIDENCE_TRACE_AUDIT_V2_3.json",
+        "bytes": 813828,
+        "sha256": "be911c1bd071413bae93f653243cdb1cb24d084b80d05e89d7e95dabd16ea9a7"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_FINAL_AXIS_DECISIONS_V2_3.json",
+        "bytes": 688799,
+        "sha256": "f027c7200580e1e1be2ebfbfe5dbbcfbce6368ca87f9df7b5b2fcca58ff9e3ae"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_HIDDEN_DATASET_REUSE_REVIEW_V2_3.json",
+        "bytes": 8719,
+        "sha256": "b60108fc065be85067b0671639cb59479ceb18d6df6de8f2f7a1b12b77d6a2b3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_INDEPENDENT_REVIEW_QUEUE_POST_P2_V2_3.json",
+        "bytes": 1864675,
+        "sha256": "b9d14843855a592390e75fdb14c8347109e6169e2bd84cbafd6f9622902adec8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_INDEPENDENT_REVIEW_QUEUE_V2_3.json",
+        "bytes": 1863669,
+        "sha256": "5a109d313f1ddba43c0eae3857f0fbcc646ed3bc01c9f37eecd3029df331c20f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_LINEAGE_MERGE_SEMANTIC_AUDIT_V2_3.json",
+        "bytes": 2283256,
+        "sha256": "bc8a1985415dcc5786a43572294b27fa380e30e21c8e15ab6e8a18129dbfe12e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_MONTE_CARLO_HARNESS_V2_3.json",
+        "bytes": 19096,
+        "sha256": "42157bbf7fffee36bf23bc49b5e041ae04a24e98a6aa09c4667c05a0212095e6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_MULTI_EVIDENCE_CONFLICT_CONTRACT_V2_3.json",
+        "bytes": 14938,
+        "sha256": "1b0a5d4100eddad47c3287415c2d2fa7a8adb8339843236eeae5a4d67da56e90"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_NO_EXACT_CONTEXT_GAP_GROUPS_V2_3.json",
+        "bytes": 25670,
+        "sha256": "e8650100be7643e6318eedde6fcb103de28f14c90990810990028f37f8ea82b6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_BACKGROUND_SOURCE_EXTRACTION_V2_3.json",
+        "bytes": 9288,
+        "sha256": "9dd86b59f750009d4a4e210d5d841162b09420a89eaafc107c94abedd40672a8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_CONTEXT_EVIDENCE_GAP_PROTOCOL_V2_3.json",
+        "bytes": 9466,
+        "sha256": "701b6ba3d8423044105268b30da9ba6e59363d86a7b3f40157c985ad54fa9848"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_DIRECT_VALIDATION_DATA_CONTRACT_V2_3.json",
+        "bytes": 15047,
+        "sha256": "ee28e90849dd96de169c28bdc0d2e90ba35ac7f24729c9e361551a1ff13d0390"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_DIRECT_VALIDATION_FIXTURE_VALIDATION_V2_3.json",
+        "bytes": 4943,
+        "sha256": "1039f5729eedd686a73768de4df2121a61b572995d025ed72177ba520bc5fc4f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_DIRECT_VALIDATION_MODULE_SPEC_V2_3.json",
+        "bytes": 22302,
+        "sha256": "bb83718073a2402f21fce1bd93296499a73ee3ce87bfc972b10431e52fbed429"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_DIRECT_VALIDATION_READY_PATH_RUN_V2_3.json",
+        "bytes": 67897,
+        "sha256": "b6d8133f80b0e2ed77135ca4bd71f076c5c9034fa24d7c2ad1b5ef60c05ad9cb"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_DIRECT_VALIDATION_SYNTHETIC_ANALYSIS_RUN_V2_3.json",
+        "bytes": 42768,
+        "sha256": "9264d6d27b66c16b5dc0caaf1582e8621783d0d3a11422fa3b8cc0284a112525"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_MODEL_OUTPUT_CONTRACT_V2_3.json",
+        "bytes": 3358,
+        "sha256": "f7fe5edcdd90391224cf42248769d2fa4e56e545e39e995f95f1c22357cef3ef"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_OPPOSITE_DIRECTION_DISCRIMINATION_AUDIT_V2_3.json",
+        "bytes": 15042,
+        "sha256": "d0b05b4ef7fb19ec5938637c25517713c6387aa52aa679e26fa4ab7ac3c427e2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_PARTICIPANT_RIGHTS_LIFECYCLE_V2_3.json",
+        "bytes": 8844,
+        "sha256": "63ac1aa4ef5bfce12193e6c6ad882b4ab88137bf8fa6a24f188ffff73f6c5133"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_POSITIVE_SYNTHETIC_BOUNDARY_RUN_V2_3.json",
+        "bytes": 1805,
+        "sha256": "a73fa2502e68c17734a7e4ddade053afcc015b911b237afcbf62adfba0b91d1d"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P0_PREREGISTRATION_DECISION_TABLE_V2_3.json",
+        "bytes": 24161,
+        "sha256": "7eb2384228a4fc36d033b7be29f98ed192e7492fd09eaf8abd8170e499fe1f1f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P2_SCREENED_RECOMPOSITION_AUDIT_V2_3.json",
+        "bytes": 20104,
+        "sha256": "40fb38a04d3dc34faf50e6324fefc26f19978d287bd7058187a0d9afa6e906d4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_PUBLICATION_GATE_V2_3.json",
+        "bytes": 11075,
+        "sha256": "5eb7af45d751d7fd448b0c888e7db95dc3bb3397d1495ccbf528b61c5ae4bb0a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_QUANTITATIVE_VALIDATION_PLAN_V2_3.json",
+        "bytes": 44044,
+        "sha256": "357e6d290a3d878f685d4d1a4f18923c17a6e46ce2cfbb4acfad6e89db3ef77f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_RECOMPOSITION_DRY_RUN_AUDIT_V2_3.json",
+        "bytes": 3933670,
+        "sha256": "abb0d798d89a075ea073e0634f7297de2898835c94050ea75b9829f342e378c4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_REMAINING_FINDING_CONTEXT_APPLICABILITY_SCREEN_V2_3.json",
+        "bytes": 488238,
+        "sha256": "75dbe978f146fbc94a9b862ca193ac99dc5f7bd43d4fef1b1b87e6026d5554f5"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_REVIEW_IMPORT_CONTRACT_V2_3.json",
+        "bytes": 5913,
+        "sha256": "da1de34ddde99b11f76405a9f7a3341f71e9d01617f3337fc8b32b0d68e63308"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_REVIEW_IMPORT_VALIDATOR_V2_3.json",
+        "bytes": 1075,
+        "sha256": "8bfdbc175d9903f3638cd00029425c2894ede3e273188db469448b2850fe2534"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_REVIEWED_RECOMPOSITION_AUDIT_V2_3.json",
+        "bytes": 18938,
+        "sha256": "93660a0985781280c28dcd70dd79a3e46b9b7287c21e7c01fa2c85d76e4e6ee4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_REVISION_GATE_REOPEN_MATRIX_V2_3.json",
+        "bytes": 9843,
+        "sha256": "ebe6be0ee315132b5703ac19a66feed558da0e2e45cf3970553315e8d41c389c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_REVISION_IMPACT_DRY_RUN_V2_3.json",
+        "bytes": 6099,
+        "sha256": "ba18f9d42b2ee96c494ef12b33f823fb264ba5332738a19f6dea09c72870dacc"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_RUNTIME_RESOLVER_HARNESS_V2_3.json",
+        "bytes": 2011,
+        "sha256": "c50da0b3ccf932ad1b8aae833c82212766329d091819219f77c242a1964f85d0"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_SAMPLE_LEVEL_FINDING_TRACE_BFI2_IPC_V2_3.json",
+        "bytes": 1522,
+        "sha256": "d44e03463805e5dd025cae8e6495218c241e18a5df65a9e7aacef43cdb4e09f6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_SCENARIO_GAP_PRIORITY_MATRIX_V2_3.json",
+        "bytes": 23558,
+        "sha256": "353771901f08ff797fac7d54cbd6e2c4b360675a2f8a13829e9b9d46e867e32c"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_SHARED_AUTHOR_DEPENDENCE_REVIEW_V2_3.json",
+        "bytes": 1583,
+        "sha256": "068c8c40e26795a6af67a81f8b40585f1d7f9cf61d245f83ca7402464c60b6f5"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_STATISTICAL_ENGINE_SPEC_V2_3.json",
+        "bytes": 5111,
+        "sha256": "8b24f165371461ddba33af1cfbe643519e1a9ccba4fc688929431de5a80e9f29"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_SYNTHETIC_ORDINAL_FIXTURE_V2_3.json",
+        "bytes": 9684,
+        "sha256": "a356c87886153d139be23561b2ad8218f3ef2629980dbf4e0d5f9569989cbe25"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_VALIDITY_ARGUMENT_V2_3.json",
+        "bytes": 11617,
+        "sha256": "f7075539f9a2dc4dd3e6538c10b7452b0ada2d4186009acca0eb0495fc305fe8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_WAVE1_LONGFORM_REMEDIATION_PACKETS_V2_3.json",
+        "bytes": 10669,
+        "sha256": "f86d78b2a6e1d5d7b0f44c575b90a2dcf28c2f84744b834b6a1171fffaedf159"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_WITHDRAWAL_FALLBACK_RUNTIME_CONTRACT_V2_3.json",
+        "bytes": 6665,
+        "sha256": "c8be4fb7fbfeafab4cec3bc8617ee2608545262021fb549771bb558e5d0ab85b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_ALL_CANONICAL_NO_EXACT_CONTEXT_REVIEW_QUEUE_V2_3.json",
+        "bytes": 137785,
+        "sha256": "dba4f11933e2ee662b41ff1fe7297596d4b73c3107428a8d79a324685f6e47e4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_CANONICAL_CLAIM_FINDING_SCOPE_REVIEW_QUEUE_V2_3.json",
+        "bytes": 164601,
+        "sha256": "ce5366ce75c310878578fa6df19db1df001471ac5d6dcfb67a884f047418fde2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_COGNITIVE_INTERVIEW_PROTOCOL_V2_3.json",
+        "bytes": 10681,
+        "sha256": "b0032f8dc678620ef18cbb46b385683c9633c7ee42e1d95667201c690a626cd9"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_CONTEXT_TRANSFER_SCOPE_REVIEW_QUEUE_V2_3.json",
+        "bytes": 33700,
+        "sha256": "64e847391dccf12133ca375d862fdb609680d03533c4b4a944fa6083aa01e39a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_DATA_CENTER_COMPLETION_SCOREBOARD_V2_3.json",
+        "bytes": 3576,
+        "sha256": "bd5b34d8db17e59db0d603507e7f1829d8b171147412cc5fb6bd6df2c407b094"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_EVIDENCE_DEPENDENCE_HIDDEN_REUSE_SUPPLEMENT_V2_3.json",
+        "bytes": 4455,
+        "sha256": "900bd1784a4621f8ee3ab0562954245a2a51d4bb4fb34972541418ddb6b5d871"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_EVIDENCE_DEPENDENCE_REGISTRY_TEMPLATE_V2_3.json",
+        "bytes": 24643,
+        "sha256": "335d92b3c06d3c2ff6b5e3fe89f03199dc2e702ca6a35d182f971cccead9d7b5"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_EVIDENCE_DEPENDENCE_REVIEWED_SHARED_AUTHOR_V2_3.json",
+        "bytes": 15883,
+        "sha256": "dd900d6d6c6330cab03ed3a0e97122f38cf61acc1e262a44537b67d2db9c3eff"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_INDEPENDENT_REVIEW_PROTOCOL_V2_3.json",
+        "bytes": 9127,
+        "sha256": "402e0377fa07faa3378ab0dd171f2257d56a008453719abfef244476ca9add93"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_MULTI_EVIDENCE_CONFLICT_SYNTHETIC_FIXTURE_V2_3.json",
+        "bytes": 8137,
+        "sha256": "deac1033153350897f51ef026d398cde4d205967269c3babd6932dbc75cd8d06"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_NO_EXACT_CONTEXT_GAP_GROUP_REGISTER_V2_3.json",
+        "bytes": 27108,
+        "sha256": "3824c66345c81b409c96c249d1388bb36267c548165b04af46479cf5ae7b086b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_BACKGROUND_SOURCE_REVIEW_V2_3.json",
+        "bytes": 2366,
+        "sha256": "0bf6a10f7ede91252c9570c6cb7f37f2eefdd3033aae2fcaaa40e19cc43a28fe"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_CONTEXT_EVIDENCE_GAP_REGISTER_V2_3.json",
+        "bytes": 37413,
+        "sha256": "b563c434167e3ddd36f8db20af6699307e79016bc7e3b8fdcfa87f28e65a232f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_DIRECT_VALIDATION_ADJUDICATED_SYNTHETIC_FIXTURE_V2_3.json",
+        "bytes": 230229,
+        "sha256": "249be29a382691a9f8997f45245bb6bc1a8a28233c4391f655fb42e4f8b55f7e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_DIRECT_VALIDATION_ANALYSIS_INPUT_CONTRACT_V2_3.json",
+        "bytes": 1291,
+        "sha256": "2f53aebd49553f21ecc5519097bec18ac425328b309844f39389e238a6ff79ed"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_DIRECT_VALIDATION_EXECUTION_REGISTER_V2_3.json",
+        "bytes": 3464,
+        "sha256": "fbd3afe9b0905f636ec326897572ac7891eaf7a98c389c30a4c73e93f8781620"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_DIRECT_VALIDATION_SYNTHETIC_FIXTURE_V2_3.json",
+        "bytes": 180206,
+        "sha256": "0d1f832bf209a11b1f19bd34526616f2258ad3a17295d2284b0c255165ab5ddb"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_INDEPENDENT_REVIEW_PACKET_POST_P2_V2_3.json",
+        "bytes": 775536,
+        "sha256": "105f27005d1a406aaa5d6db867d0ade891cf7d15792ce18453e3cefc14e225c2"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_INDEPENDENT_REVIEW_PACKET_V2_3.json",
+        "bytes": 712625,
+        "sha256": "518c2e57f4619e4195f6be4d1939ef8833b60639d3c0443e6bfbefc95fa76f53"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_NULL_SYNTHETIC_MODEL_FIXTURE_V2_3.json",
+        "bytes": 56082,
+        "sha256": "a591f06352fd80cc985ed1a9523af3af0535b57a4123b72991d0692c54d3d5d4"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_OPPOSITE_DIRECTION_REWRITE_PROPOSALS_V2_3.json",
+        "bytes": 2410,
+        "sha256": "d7d4cf611341d1cf2a3a8815c92fe316b33a3d2a21b4257c9d1f7f720b28cc54"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_PARTICIPANT_RIGHTS_IMPLEMENTATION_CHECKLIST_V2_3.json",
+        "bytes": 2331,
+        "sha256": "28e46d0a2bc3d1919aecafc0559361219795101a296cd532b847c74bbcd22394"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_POSITIVE_SYNTHETIC_MODEL_FIXTURE_V2_3.json",
+        "bytes": 62112,
+        "sha256": "f9354ebe5d2f708d54b69dae7fde711676c5451567e202f1fee78629557cf5a8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P0_PREREGISTRATION_LOCK_REGISTER_V2_3.json",
+        "bytes": 2912,
+        "sha256": "651900b0751c4a8fa2bc7d9ad0d25b2343ee69e5eec8ed9de94ff8edf9ec2488"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P1_INDEPENDENT_REVIEW_PACKET_V2_3.json",
+        "bytes": 2032159,
+        "sha256": "c4bd3ee5a4752d82e033519f3bf33246d914a3224b9b0c8cad7d5f00ccd538db"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P2_AUTOMATED_PREFLIGHT_V2_3.json",
+        "bytes": 131789,
+        "sha256": "9778da77370543d2db1f15f370c4e397aa8e71b99b752259431b240dbff129d8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P2_FLAGGED_INTERNAL_SCREEN_V2_3.json",
+        "bytes": 56961,
+        "sha256": "2cdbdcbd77d9fd60d53c8108492df123dbdbc25bca9972c130f9400b7c015f51"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_P2_STRATIFIED_REVIEW_SAMPLE_V2_3.json",
+        "bytes": 159375,
+        "sha256": "dde1fefa0c8ea5bc5f3397eab42eb29219f44a9ed85784067eabc2e50c689097"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_REVIEW_IMPORT_EMPTY_V2_3.json",
+        "bytes": 319,
+        "sha256": "c9ef2b0094eddcf0fda7ad8f4407535434fa5b802e4271da57ae6c5fde3cb464"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_REVIEW_IMPORT_SCHEMA_V2_3.json",
+        "bytes": 8455,
+        "sha256": "a5f2c69ffcf5260581ebee4aad64798a77e0127035fbc3e906dbd36e897ed628"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_REVISION_GATE_REOPEN_SYNTHETIC_FIXTURE_V2_3.json",
+        "bytes": 5016,
+        "sha256": "92e070b55aae90dafc1e2829f1b79f2bd3890e9b4d175dbdb5459b077cff61df"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_SAMPLE_LEVEL_FINDING_REGISTRY_BFI2_IPC_V2_3.json",
+        "bytes": 123046,
+        "sha256": "30d31961ae9a6e3f6919fd2e433cbb6bf2ed6854c2c0ae387f192e65fb103cc5"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_SCENARIO_GAP_RESEARCH_ORDER_LOCK_V2_3.json",
+        "bytes": 7067,
+        "sha256": "b291b14ea4992f7e175d48d9d03b47b116634b5276f8b632f03afdbefed51d62"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_01_V2_3.json",
+        "bytes": 25449,
+        "sha256": "d5df59666c11437083b5a691bd692e8f181d941af99b5e95a22c9c04d39fac2f"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_02_V2_3.json",
+        "bytes": 25368,
+        "sha256": "00e5ccf8f7a814873049a0895225bbf92f82243fa9428f6fb6586df66907f0e3"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_03_V2_3.json",
+        "bytes": 2803,
+        "sha256": "e56b45f249d2fa6d4b91477755addb8cc5f09e8ebaea2cba9be446eea4fe9cf9"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_04_V2_3.json",
+        "bytes": 2803,
+        "sha256": "255a5968cacf719de227c3e9396a824e64ab08ecaa4a6faa41f2490b2459c451"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_05_V2_3.json",
+        "bytes": 2803,
+        "sha256": "9b77c94b6a25217e6d3aef95dc561da6db9ae691694d0d6dab507f8fed532321"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_06_V2_3.json",
+        "bytes": 2803,
+        "sha256": "cb9ec25ffb8449363b5226f3c151c35ec18d405c89c3bb56720a9a3aa7dd5a0b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_07_V2_3.json",
+        "bytes": 2803,
+        "sha256": "e5a90c1b511fe6f3101e318f3e29ac2f49f86abf79a992e82d8b2feb3059b493"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_08_V2_3.json",
+        "bytes": 2803,
+        "sha256": "5a04912f20ac575d169c29c8f234e9769cf62f5ec53ecebca9f5f5dee1be6e14"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_09_V2_3.json",
+        "bytes": 2803,
+        "sha256": "efb794700e568f4cfd32549c72eaa4735348ec3b76b9dca3964f48cfb657db44"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_10_V2_3.json",
+        "bytes": 2803,
+        "sha256": "d49a0d3e520ff27a8b8bd33ddebe635e5d479afce90318dd4678faadbc717e19"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_11_V2_3.json",
+        "bytes": 2803,
+        "sha256": "73838958edc4c2f9ed0bda5d44ff4cd590e786bce7b4b5c6dcb9e0fcd46993a6"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_CAB_12_V2_3.json",
+        "bytes": 2803,
+        "sha256": "675540b9b20ff93c426bd4b5012518d681628223d2d873a910fac12582424630"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_01_V2_3.json",
+        "bytes": 3147,
+        "sha256": "d017af9bf52d12c981507a1c06c2395e7dded1189f1d5f604c9a57b0f2b90db8"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_02_V2_3.json",
+        "bytes": 3170,
+        "sha256": "12bf873d9f43109e4ee3eb23936a4538ae503885019b3dd9242f3349b58cd72e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_03_V2_3.json",
+        "bytes": 1258,
+        "sha256": "bd45e84aa3323ae02a306d5bd2fab4614d759ab08e71b673d778493bb4b7f6bd"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_04_V2_3.json",
+        "bytes": 1258,
+        "sha256": "6fe3c8b67a8b092580e791450e3881483005406c3671714270d7ec5e2b64ad74"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_05_V2_3.json",
+        "bytes": 1258,
+        "sha256": "8888eaa372607c1a120c0b8f88d1161de8a34619138b3278cae8fd50345252e7"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_06_V2_3.json",
+        "bytes": 1258,
+        "sha256": "ea8c20b484ecf373404f3e6a7d1b2ba7b50daca78aa2b58538d8ff3e8758be3b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_07_V2_3.json",
+        "bytes": 1258,
+        "sha256": "ecefb8775cf89a0d8f92b78b46e407f5db906d4bceecc573c7e65fd50859e23e"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_08_V2_3.json",
+        "bytes": 1258,
+        "sha256": "a2697f58d4ca9ac456a3bab831eb3bfaab28146ba42c4cc37a32d3b821ce844b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_09_V2_3.json",
+        "bytes": 1258,
+        "sha256": "5296fe788d3cd1fb77c2e206b6e2674afa58cf9d92d58da7a4845eb6808c6a99"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_10_V2_3.json",
+        "bytes": 1258,
+        "sha256": "b68858a3d3bff48b468f3dc06d03497550d08ec4ce052d802b3d2a0a33bda90b"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_11_V2_3.json",
+        "bytes": 1258,
+        "sha256": "56cf49094e638b69a0ac980917146aeaed133cfb9ea12cf33bc35e44fbe305fd"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_TARGETED_AXIS_REWRITE_DECISIONS_CAB_12_V2_3.json",
+        "bytes": 1258,
+        "sha256": "b0f73829b9b416b754c63bed44712abf814d4997c9a389dc7354af1bd0c7884a"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_WAVE1_LONGFORM_REMEDIATION_WORK_QUEUE_V2_3.json",
+        "bytes": 3459,
+        "sha256": "523a531b5ca4a0c86e984876cd5c96dbac71e4118e49fe9248ddf75f682a77ec"
+      },
+      {
+        "path": "docs/research/trait-map-data-center-v2/review/TRAIT_MAP_WITHDRAWAL_FALLBACK_SYNTHETIC_FIXTURE_V2_3.json",
+        "bytes": 2650,
+        "sha256": "9842a37b28d9f0b37a6544c7e41691f45951858839662d69928af61b58c8918a"
+      }
+    ]
+  },
+  "blockingWork": [
+    {
+      "priority": 1,
+      "gate": "SCENARIO_DIRECT_VALIDATION",
+      "state": "protocol_ready_real_execution_not_started",
+      "cannotBeReplacedBySyntheticData": true
+    },
+    {
+      "priority": 2,
+      "gate": "INDEPENDENT_SEVEN_ROLE_REVIEW",
+      "state": "external_execution_not_started",
+      "cannotBeSelfApproved": true
+    },
+    {
+      "priority": 3,
+      "gate": "COGNITIVE_INTERVIEWS",
+      "state": "protocol_ready_participants_zero",
+      "cannotBeReplacedBySyntheticData": true
+    },
+    {
+      "priority": 4,
+      "gate": "R_RUNTIME_AND_RECOVERY_STUDY",
+      "state": "runner_ready_runtime_missing",
+      "cannotBeReplacedByNodeSmokeHarness": true
+    },
+    {
+      "priority": 5,
+      "gate": "EMPIRICAL_STRUCTURE_RELIABILITY_DIF",
+      "state": "data_collection_not_started",
+      "cannotBeCompletedWithoutParticipantData": true
+    },
+    {
+      "priority": 6,
+      "gate": "CUSTOMER_PUBLICATION_APPROVAL",
+      "state": "zero_entries_approved",
+      "cannotBeSelfApproved": true
+    }
+  ],
+  "nextInternalWork": [
+    "연구 원장 v2.3은 완료 상태로 고정하고 새 내부 문서를 임의로 늘리지 않는다.",
+    "실제 참여자 자료가 확보될 때만 별도 CUSTOMER_PUBLICATION_VALIDATED release를 재개한다."
+  ]
+}

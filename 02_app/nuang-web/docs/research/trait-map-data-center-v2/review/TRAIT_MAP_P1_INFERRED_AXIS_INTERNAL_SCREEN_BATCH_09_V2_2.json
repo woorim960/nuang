@@ -1,0 +1,264 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-09.0.1",
+  "batchId": "P1-IAS-09",
+  "status": "P1_INFERRED_AXIS_BATCH_09_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 3,
+    "variants": 6,
+    "retainCandidates": 2,
+    "revisionCandidates": 4,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-RO-PERSON_OF_INTEREST-BOUNDARY-COMMUNICATION",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PERSON_OF_INTEREST-DISAGREEMENT-ATTENTION",
+      "claimKey": ".scenario.person_of_interest.disagreement.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PERSON_OF_INTEREST-DISAGREEMENT-RESPONSE",
+      "claimKey": ".scenario.person_of_interest.disagreement.response",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "경계 말하기에서 G는 대상 행동과 대안, A는 관계의 뜻과 상대가 받아들일 맥락을 함께 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“너와 계속 알아가고 싶지만 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 관심과 경계를 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“너와 계속 알아가고 싶지만 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 관심과 경계를 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "경계 말하기에서 G는 대상 행동과 대안, A는 관계의 뜻과 상대가 받아들일 맥락을 함께 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-ATTENTION-RO-G",
+      "claimKey": ".scenario.person_of_interest.disagreement.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람과 의견이 다르면 관계가 틀어질 가능성을 상상하기 전에 정확히 어떤 주장과 경험이 다른지를 먼저 파악하려는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 의견이 다르면 관계가 틀어질 가능성을 상상하기 전에 정확히 어떤 주장과 경험이 다른지를 먼저 파악하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "의견 차이 장면이 R/N식 사실·해석 차이로 머물지 않도록 G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람과 의견이 다르면 차이가 생긴 원인과 풀어야 할 오해, 다음 대화에서 바꿀 수 있는 지점을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 의견이 다르면 차이가 생긴 원인과 풀어야 할 오해, 다음 대화에서 바꿀 수 있는 지점을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람과 의견이 다르면 관계가 틀어질 가능성을 상상하기 전에 정확히 어떤 주장과 경험이 다른지를 먼저 파악하려는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-ATTENTION-RO-A",
+      "claimKey": ".scenario.person_of_interest.disagreement.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람과 생각이 다르면 쟁점의 이유뿐 아니라 이 차이가 상대에게 나를 어떻게 보이게 할지, 관계가 어색해질지를 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 생각이 다르면 쟁점의 이유뿐 아니라 이 차이가 상대에게 나를 어떻게 보이게 할지, 관계가 어색해질지를 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "의견 차이 장면이 R/N식 사실·해석 차이로 머물지 않도록 G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람과 의견이 다르면 상대가 어떤 마음일지, 이 차이가 관계에 어떤 영향을 줄지, 서로에게 필요한 존중이 무엇인지 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 의견이 다르면 상대가 어떤 마음일지, 이 차이가 관계에 어떤 영향을 줄지, 서로에게 필요한 존중이 무엇인지 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람과 생각이 다르면 쟁점의 이유뿐 아니라 이 차이가 상대에게 나를 어떻게 보이게 할지, 관계가 어색해질지를 함께 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-RESPONSE-RO-G",
+      "claimKey": ".scenario.person_of_interest.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "감정적으로 밀어붙이기보다 상대가 그렇게 생각한 구체적인 이유를 묻고, 자신의 기준도 실제 경험과 함께 설명하는 편이다.",
+        "detailParagraphs": [
+          "감정적으로 밀어붙이기보다 상대가 그렇게 생각한 구체적인 이유를 묻고, 자신의 기준도 실제 경험과 함께 설명하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "의견 차이 장면이 R/N식 사실·해석 차이로 머물지 않도록 G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "의견 차이가 생긴 원인을 묻고 서로 다르게 이해한 부분을 정리한 뒤, 다음 대화에서 적용할 방법을 함께 찾는 편이다.",
+        "detailParagraphs": [
+          "의견 차이가 생긴 원인을 묻고 서로 다르게 이해한 부분을 정리한 뒤, 다음 대화에서 적용할 방법을 함께 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "감정적으로 밀어붙이기보다 상대가 그렇게 생각한 구체적인 이유를 묻고, 자신의 기준도 실제 경험과 함께 설명하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-RESPONSE-RO-A",
+      "claimKey": ".scenario.person_of_interest.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "의견을 감추기보다 상대의 이유를 먼저 묻고, 관계를 지키면서도 자신의 기준과 다른 점을 차분히 설명하려는 편이다.",
+        "detailParagraphs": [
+          "의견을 감추기보다 상대의 이유를 먼저 묻고, 관계를 지키면서도 자신의 기준과 다른 점을 차분히 설명하려는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "의견 차이 장면이 R/N식 사실·해석 차이로 머물지 않도록 G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "상대가 어떤 마음으로 그 의견을 말했는지 먼저 듣고, 이 차이가 관계에 남긴 느낌과 서로에게 필요한 존중을 나누는 편이다.",
+        "detailParagraphs": [
+          "상대가 어떤 마음으로 그 의견을 말했는지 먼저 듣고, 이 차이가 관계에 남긴 느낌과 서로에게 필요한 존중을 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "의견을 감추기보다 상대의 이유를 먼저 묻고, 관계를 지키면서도 자신의 기준과 다른 점을 차분히 설명하려는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_09_RECOMPOSITION_AND_BATCH_10_SCREEN",
+    "actions": [
+      "4개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "RO·work 맥락의 P1-IAS-10을 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

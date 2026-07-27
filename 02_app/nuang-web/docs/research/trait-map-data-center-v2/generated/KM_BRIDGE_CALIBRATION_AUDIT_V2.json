@@ -1,0 +1,94 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "KM-BRIDGE-CALIBRATION-AUDIT.0.1",
+  "status": "STRUCTURAL_CALIBRATION_PASSED_HUMAN_VALIDATION_REQUIRED",
+  "axis": "SM_execution_and_structure",
+  "pairs": [
+    {
+      "baseAnchor": "ENAKQ",
+      "derivedCode": "ENAMQ",
+      "changedLetters": "K/M",
+      "scenarioCount": 72,
+      "claimCount": 288,
+      "inheritedClaimCount": 248,
+      "axisOverrideClaimCount": 40,
+      "overrideScenarioIds": [
+        "SCN-PARTNER-4",
+        "SCN-FAMILY-4",
+        "SCN-FRIEND-4",
+        "SCN-WORK-4",
+        "SCN-GENERAL-1",
+        "SCN-GENERAL-4",
+        "SCN-FAMILY-1",
+        "SCN-FRIEND-1",
+        "SCN-PARTNER-1",
+        "SCN-WORK-1"
+      ],
+      "copyAudit": "288/288",
+      "longformCharacters": 71740,
+      "chapterCount": 16,
+      "neighborClaimCount": 20,
+      "customerVisibleClaims": 0
+    },
+    {
+      "baseAnchor": "IRGMC",
+      "derivedCode": "IRGKC",
+      "changedLetters": "M/K",
+      "scenarioCount": 72,
+      "claimCount": 288,
+      "inheritedClaimCount": 248,
+      "axisOverrideClaimCount": 40,
+      "overrideScenarioIds": [
+        "SCN-PARTNER-4",
+        "SCN-FAMILY-4",
+        "SCN-FRIEND-4",
+        "SCN-WORK-4",
+        "SCN-GENERAL-1",
+        "SCN-GENERAL-4",
+        "SCN-FAMILY-1",
+        "SCN-FRIEND-1",
+        "SCN-PARTNER-1",
+        "SCN-WORK-1"
+      ],
+      "copyAudit": "288/288",
+      "longformCharacters": 71380,
+      "chapterCount": 16,
+      "neighborClaimCount": 20,
+      "customerVisibleClaims": 0
+    }
+  ],
+  "checks": {
+    "sameTenDiscriminatingScenes": true,
+    "balancedInheritanceAndOverrides": true,
+    "fullProfileResearchStructure": true,
+    "directionalSceneChecks": [
+      {
+        "claimId": "ENAMQ.scenario.general.ordinary_choice.attention",
+        "expectedPhrases": ["지금 가장 마음이 가는", "에너지"],
+        "passed": true
+      },
+      {
+        "claimId": "IRGKC.scenario.general.ordinary_choice.attention",
+        "expectedPhrases": ["목표와 완료 기준", "순서"],
+        "passed": true
+      },
+      {
+        "claimId": "ENAMQ.scenario.work.plan_change.response",
+        "expectedPhrases": ["작업 순서와 방법을 유연하게", "다시 정하는"],
+        "passed": true
+      },
+      {
+        "claimId": "IRGKC.scenario.work.plan_change.response",
+        "expectedPhrases": ["작업 순서", "완료 시점을 다시 정하고"],
+        "passed": true
+      }
+    ]
+  },
+  "customerApprovedProfiles": 0,
+  "nextGate": [
+    "코드 이름을 가린 K/M 양방향 인지 인터뷰",
+    "같은 목표에서 실제 시작·지속·방해 뒤 복귀·마무리를 각각 평정",
+    "미리 정한 순서·완료 기준과 현재 흥미·마감·에너지·지원 조건의 상대적 영향 확인",
+    "K/M 차이를 책임감·성실성·게으름·융통성의 우열로 오해하지 않는지 확인"
+  ]
+}

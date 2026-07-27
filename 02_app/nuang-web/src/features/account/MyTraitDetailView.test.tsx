@@ -53,7 +53,9 @@ describe("MyTraitDetailView", () => {
 
     render(<MyTraitDetailView />);
 
-    expect(await screen.findByText("새 길을 찾는 탐구자")).toBeInTheDocument();
+    expect(
+      await screen.findByText("새 가능성을 찾는 탐험가"),
+    ).toBeInTheDocument();
     expect(screen.getAllByText("INGMC")).toHaveLength(2);
     expect(screen.getAllByTestId("trait-axis-row")).toHaveLength(5);
     expect(screen.getByText("사람 사이 에너지")).toBeInTheDocument();
@@ -61,6 +63,9 @@ describe("MyTraitDetailView", () => {
     expect(screen.getByText("관계에서 관심이 가는 곳")).toBeInTheDocument();
     expect(screen.getByText("일상을 꾸리는 방식")).toBeInTheDocument();
     expect(screen.getByText("걱정과 감정 반응")).toBeInTheDocument();
+    expect(screen.getByText(/I · 내향형/)).toBeInTheDocument();
+    expect(screen.getByText(/N · 가능성형/)).toBeInTheDocument();
+    expect(screen.getByText(/C · 차분반응형/)).toBeInTheDocument();
     expect(screen.getByRole("img", { name: "I 62%, E 38%" })).toBeVisible();
     expect(screen.getByRole("img", { name: "R 27%, N 73%" })).toBeVisible();
     expect(
@@ -84,13 +89,21 @@ describe("MyTraitDetailView", () => {
 
     render(<MyTraitDetailView />);
 
-    expect(await screen.findByText("아직 결과가 없어요")).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "코어 검사 시작하기" }),
-    ).toHaveAttribute(
+      await screen.findByRole("heading", {
+        name: "코어 검사로 내 성향의 기준을 만들어보세요",
+      }),
+    ).toBeInTheDocument();
+    const startLink = screen.getByRole("link", {
+      name: "코어 검사 시작하기",
+    });
+    expect(startLink).toHaveAttribute(
       "href",
       "/assessments/nu-core-quick?returnTo=%2Fmy%2Fprofile",
     );
+    expect(
+      screen.getAllByRole("link", { name: "코어 검사 시작하기" }),
+    ).toHaveLength(1);
   });
 });
 
@@ -142,7 +155,7 @@ function createAccountResult(): AccountResultSummary {
     kind: "full",
     localResultId: null,
     profileCode: "INGMC",
-    profileName: "새 길을 찾는 탐구자",
+    profileName: "새 가능성을 찾는 탐험가",
     resultLabel: "현재 가장 가까운 대표 성향",
     resultReportId: "4292e0e7-0353-43f0-9132-f90149badee5",
   };

@@ -1,0 +1,276 @@
+{
+  "contractVersion": "nuang-trait-map-publication-gate.v2.3",
+  "reportId": "TRAIT-MAP-PUBLICATION-GATE.2.3",
+  "status": "PRODUCTION_PUBLICATION_BLOCKED_RESEARCH_PIPELINE_READY",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3",
+  "sourceRecompositionReportId": "TRAIT-MAP-P2-SCREENED-RECOMPOSITION-AUDIT.2.3",
+  "sourceEvidenceAuditReportId": "TRAIT-MAP-EVIDENCE-TRACE-AUDIT.2.3",
+  "sourceReviewQueueReportId": "TRAIT-MAP-INDEPENDENT-REVIEW-QUEUE-POST-P2.2.3",
+  "sourceCognitiveProtocolReportId": "TRAIT-MAP-COGNITIVE-INTERVIEW-PROTOCOL.2.3",
+  "sourceCognitiveDataContractReportId": "TRAIT-MAP-COGNITIVE-INTERVIEW-DATA-CONTRACT.2.3",
+  "sourceQuantitativePlanReportId": "TRAIT-MAP-QUANTITATIVE-VALIDATION-PLAN.2.3",
+  "sourceStatisticalEngineReportId": "TRAIT-MAP-STATISTICAL-ENGINE-SPEC.2.3",
+  "sourceEvidenceDependenceReportId": "TRAIT-MAP-EVIDENCE-DEPENDENCE-AUDIT.2.3",
+  "sourceSharedAuthorDependenceReportId": "TRAIT-MAP-SHARED-AUTHOR-DEPENDENCE-REVIEW.2.3",
+  "sourceHiddenDatasetReuseReportId": "TRAIT-MAP-HIDDEN-DATASET-REUSE-REVIEW.2.3",
+  "sourceSampleLevelFindingTraceReportId": "TRAIT-MAP-SAMPLE-LEVEL-FINDING-TRACE-BFI2-IPC.2.3",
+  "sourceCanonicalClaimScopeTriageReportId": "TRAIT-MAP-CANONICAL-CLAIM-FINDING-SCOPE-TRIAGE.2.3",
+  "sourceFindingContextApplicabilityReportId": "TRAIT-MAP-REMAINING-FINDING-CONTEXT-APPLICABILITY-SCREEN.2.3",
+  "sourceAllCanonicalContextApplicabilityReportId": "TRAIT-MAP-ALL-CANONICAL-CONTEXT-APPLICABILITY-AUDIT.2.3",
+  "sourceContextGapGroupsReportId": "TRAIT-MAP-NO-EXACT-CONTEXT-GAP-GROUPS.2.3",
+  "sourceScenarioGapPriorityReportId": "TRAIT-MAP-SCENARIO-GAP-PRIORITY-MATRIX.2.3",
+  "sourceDirectValidationModuleSpecReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-MODULE-SPEC.2.3",
+  "sourceDirectValidationDataContractReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-DATA-CONTRACT.2.3",
+  "sourceDirectValidationFixtureValidationReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-FIXTURE-VALIDATION.2.3",
+  "sourceDirectValidationFailClosedReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-SYNTHETIC-ANALYSIS-RUN.2.3",
+  "sourceDirectValidationReadyPathReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-READY-PATH-RUN.2.3",
+  "sourceDirectValidationModelContractId": "TRAIT-MAP-P0-MODEL-OUTPUT-CONTRACT.2.3",
+  "sourcePositiveSyntheticBoundaryReportId": "TRAIT-MAP-P0-POSITIVE-SYNTHETIC-BOUNDARY-RUN.2.3",
+  "summary": {
+    "canonicalVariants": 605,
+    "personalizedEntries": 544,
+    "commonArchiveEntries": 61,
+    "passedGates": 3,
+    "blockingGates": 8,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0,
+    "productionAllowedCanonicalEntries": 0,
+    "productionPublicationBlocked": true
+  },
+  "gateChecks": [
+    {
+      "gateId": "GATE-STRUCTURE-CANONICAL",
+      "state": "passed",
+      "evidence": { "canonicalVariants": 605, "unresolvedProfileRefs": 0 }
+    },
+    {
+      "gateId": "GATE-STRUCTURE-RECOMPOSITION",
+      "state": "passed",
+      "evidence": {
+        "neighborEdgesPassed": 80,
+        "neighborEdges": 80,
+        "duplicateOutputs": 0,
+        "unsafeLanguageFlags": 0
+      }
+    },
+    {
+      "gateId": "GATE-EVIDENCE-TRACE",
+      "state": "passed",
+      "evidence": {
+        "structurallyPassedVariants": 605,
+        "structuralFailures": 0,
+        "highRiskTwoSourceRule": "460/460"
+      }
+    },
+    {
+      "gateId": "GATE-EVIDENCE-INDEPENDENCE-AND-SUBSTANTIVE-SCOPE",
+      "state": "in_progress_blocking_gaps_identified",
+      "evidence": {
+        "highRiskVariants": 460,
+        "highRiskVariantsWithTwoSubstantiveRegisteredSources": 429,
+        "highRiskVariantsWithIndependentSourcesConfirmed": 0,
+        "sourcesWithCompleteDependenceMetadata": 0,
+        "highRiskVariantsWithHiddenDatasetReuse": 120,
+        "highRiskVariantsRetainingNonOverlappingSampleSupport": 120,
+        "highRiskEntriesWhoseAuditedPairDirectlySupportsFullWording": 0,
+        "contextTransferLinksNotEstablished": 278,
+        "entriesWithNoExactContextFinding": 24,
+        "allCanonicalEntriesAudited": 605,
+        "allCanonicalContextTransfersNotEstablished": 1321,
+        "allCanonicalEntriesWithNoExactContextFinding": 101,
+        "directNuangAxisOrCanonicalValidations": 0
+      }
+    },
+    {
+      "gateId": "GATE-SCENARIO-DIRECT-VALIDATION",
+      "state": "not_started_protocol_and_synthetic_safety_ready",
+      "evidence": {
+        "noExactContextEntries": 101,
+        "scenarioGapGroups": 16,
+        "p0DirectValidationGroups": 6,
+        "p0ModulesSpecified": 6,
+        "affectedDirectionalCanonicalEntries": 60,
+        "dataContractTables": 10,
+        "fixtureChecksPassed": "19/19",
+        "failClosedUnresolvedDisagreements": 96,
+        "failClosedAnalysisRowsReleased": 0,
+        "syntheticReadyPathAnalysisRows": 96,
+        "nullOutputsStoppedAsNoSignal": 80,
+        "technicalPositiveSyntheticPairsStopped": 40,
+        "realParticipants": 0,
+        "directValidationCompletedModules": 0,
+        "canonicalSupportDecisions": 0,
+        "publicationApprovalsGranted": 0
+      }
+    },
+    {
+      "gateId": "GATE-INDEPENDENT-SEVEN-ROLE-REVIEW",
+      "state": "not_started",
+      "evidence": { "requiredPersonalizedEntries": 544, "approvedEntries": 0 }
+    },
+    {
+      "gateId": "GATE-COGNITIVE-INTERVIEW",
+      "state": "not_started",
+      "evidence": {
+        "requiredPopulationSegments": [
+          "adolescent_or_young_adult",
+          "adult",
+          "older_adult",
+          "different_education_levels",
+          "both_code_directions"
+        ],
+        "completedParticipants": 0,
+        "protocolReady": true,
+        "dataContractReady": true
+      }
+    },
+    {
+      "gateId": "GATE-COMPREHENSION-TEST",
+      "state": "not_started",
+      "evidence": {
+        "targetMetric": "meaning_recall_and_axis_discrimination",
+        "completedParticipants": 0
+      }
+    },
+    {
+      "gateId": "GATE-CONSTRUCT-VALIDATION",
+      "state": "not_started",
+      "evidence": {
+        "requiredAnalyses": [
+          "factor_structure",
+          "convergent_discriminant_validity",
+          "test_retest",
+          "criterion_scope"
+        ],
+        "analysisPlanReady": true,
+        "engineSpecReady": true,
+        "engineInstalled": false
+      }
+    },
+    {
+      "gateId": "GATE-DIFFERENTIAL-FUNCTIONING",
+      "state": "not_started",
+      "evidence": {
+        "requiredAnalyses": [
+          "age",
+          "gender",
+          "education",
+          "language_comprehension"
+        ]
+      }
+    },
+    {
+      "gateId": "GATE-CUSTOMER-PUBLICATION-APPROVAL",
+      "state": "not_started",
+      "evidence": { "approvedEntries": 0, "approvedSurfaces": [] }
+    }
+  ],
+  "blockingGates": [
+    "GATE-EVIDENCE-INDEPENDENCE-AND-SUBSTANTIVE-SCOPE",
+    "GATE-SCENARIO-DIRECT-VALIDATION",
+    "GATE-INDEPENDENT-SEVEN-ROLE-REVIEW",
+    "GATE-COGNITIVE-INTERVIEW",
+    "GATE-COMPREHENSION-TEST",
+    "GATE-CONSTRUCT-VALIDATION",
+    "GATE-DIFFERENTIAL-FUNCTIONING",
+    "GATE-CUSTOMER-PUBLICATION-APPROVAL"
+  ],
+  "surfacePolicies": [
+    {
+      "surface": "result_summary",
+      "publicationState": "blocked",
+      "allowedCanonicalVariantIds": [],
+      "blockedPersonalizedEntries": 544,
+      "blockedCommonEntries": 61,
+      "reasons": [
+        "independent_seven_role_review_not_completed",
+        "evidence_independence_not_confirmed",
+        "scenario_direct_validation_not_completed",
+        "cognitive_interview_not_completed",
+        "construct_validation_not_completed",
+        "customer_publication_approval_not_completed"
+      ]
+    },
+    {
+      "surface": "trait_map_detail",
+      "publicationState": "blocked",
+      "allowedCanonicalVariantIds": [],
+      "blockedPersonalizedEntries": 544,
+      "blockedCommonEntries": 61,
+      "reasons": [
+        "independent_seven_role_review_not_completed",
+        "evidence_independence_not_confirmed",
+        "scenario_direct_validation_not_completed",
+        "cognitive_interview_not_completed",
+        "construct_validation_not_completed",
+        "customer_publication_approval_not_completed"
+      ]
+    },
+    {
+      "surface": "comparison_report",
+      "publicationState": "blocked",
+      "allowedCanonicalVariantIds": [],
+      "blockedPersonalizedEntries": 544,
+      "blockedCommonEntries": 61,
+      "reasons": [
+        "independent_seven_role_review_not_completed",
+        "evidence_independence_not_confirmed",
+        "scenario_direct_validation_not_completed",
+        "cognitive_interview_not_completed",
+        "construct_validation_not_completed",
+        "customer_publication_approval_not_completed"
+      ]
+    },
+    {
+      "surface": "public_profile",
+      "publicationState": "blocked",
+      "allowedCanonicalVariantIds": [],
+      "blockedPersonalizedEntries": 544,
+      "blockedCommonEntries": 61,
+      "reasons": [
+        "independent_seven_role_review_not_completed",
+        "evidence_independence_not_confirmed",
+        "scenario_direct_validation_not_completed",
+        "cognitive_interview_not_completed",
+        "construct_validation_not_completed",
+        "customer_publication_approval_not_completed"
+      ]
+    },
+    {
+      "surface": "share_card",
+      "publicationState": "blocked",
+      "allowedCanonicalVariantIds": [],
+      "blockedPersonalizedEntries": 544,
+      "blockedCommonEntries": 61,
+      "reasons": [
+        "independent_seven_role_review_not_completed",
+        "evidence_independence_not_confirmed",
+        "scenario_direct_validation_not_completed",
+        "cognitive_interview_not_completed",
+        "construct_validation_not_completed",
+        "customer_publication_approval_not_completed"
+      ]
+    }
+  ],
+  "runtimeContract": {
+    "allowListMode": "explicit_only",
+    "allowedCanonicalVariantIds": [],
+    "defaultOnMissingDecision": "deny",
+    "commonPolicy": "COMMON은 연구 계보 전용이며 개인화·비교·공개·공유에 사용하지 않는다.",
+    "rollbackPolicy": "향후 승인된 버전도 근거·안전·이해도 문제 발생 시 contentKey 버전 단위로 즉시 철회한다."
+  },
+  "nextGate": {
+    "name": "DIRECT_VALIDATION_INDEPENDENT_REVIEW_AND_COGNITIVE_EXECUTION",
+    "actions": [
+      "101개 무동일맥락 문장을 16개 상황군으로 관리하고 우선순위가 잠긴 6개 P0 모듈부터 실제 직접 검증한다.",
+      "1,321개 상황 전이 연결은 별도 근거나 직접 검증 없이 동일 맥락 근거로 세지 않는다.",
+      "실제 실행 전 표본수·제외기준·주효과·다중비교·confirmation 규칙을 사전등록한다.",
+      "독립 7역할 검토자를 배정하고 P0·P1·P2 패킷의 blind 판정을 수집한다.",
+      "잠긴 노출 계획에 따라 인지 면담을 실행하고 수정 문장은 다시 시험한다.",
+      "실제 응답이 모인 뒤 사전 계획대로 구조·신뢰도·DIF·경계 알고리즘을 검증한다.",
+      "승인 규칙을 충족한 canonical ID만 화면별 allowlist에 추가한다."
+    ]
+  }
+}

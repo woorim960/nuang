@@ -8,6 +8,10 @@ import { createPublicProfileCardPayload } from "@/features/public-profile/public
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
 import {
+  readExternalLinksForComments,
+  readExternalLinksForPosts,
+} from "@/features/feed/server-link-safety";
+import {
   createFeedReadPayload,
   type FeedReadPayload,
 } from "@/features/feed/feed-contract";
@@ -23,7 +27,6 @@ import {
   feedPostTopicLabels,
   type FeedPostTopicCategory,
 } from "@/features/feed/feed-topic";
-import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { getCurrentNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
 import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
@@ -115,6 +118,13 @@ type FeedPollRow = {
   post_id: string;
   prompt_id: string;
   question: string;
+  status: "active" | "closed";
+};
+
+type OfficialContentState = {
+  isFeatured: boolean;
+  responseClosesAt: string | null;
+  responseStatus: "closed" | "open";
 };
 
 type FeedPollOptionRow = {
@@ -291,7 +301,13 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     ],
     client: serviceClient,
   });
-  const [engagementByPostId, pollByPostId, mediaByPostId] = await Promise.all([
+  const [
+    engagementByPostId,
+    pollByPostId,
+    mediaByPostId,
+    linksByPostId,
+    officialStateByPostId,
+  ] = await Promise.all([
     readPostEngagements({
       accountId,
       client: serviceClient,
@@ -306,6 +322,14 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
       client: serviceClient,
       rows: visibleRows,
     }),
+    readExternalLinksForPosts({
+      client: serviceClient,
+      postIds: visibleRows.map((row) => row.id),
+    }),
+    readOfficialContentStates({
+      client: serviceClient,
+      postIds: visibleRows.map((row) => row.id),
+    }),
   ]);
   const dbItems = visibleRows
     .map((row, index) =>
@@ -317,6 +341,8 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
         authorProfilesByAccountId.get(row.author_account_id),
         pollByPostId.get(row.id),
         mediaByPostId.get(row.id),
+        linksByPostId.get(row.id),
+        officialStateByPostId.get(row.id),
       ),
     )
     .filter(isUsefulFeedItem);
@@ -379,10 +405,24 @@ export async function createServerCommunityProfilePayload(
     client: serviceClient,
     includeNonPublished: accountId === source.snapshot.account_id,
   });
-  const [engagementByPostId, pollByPostId, mediaByPostId] = await Promise.all([
+  const [
+    engagementByPostId,
+    pollByPostId,
+    mediaByPostId,
+    linksByPostId,
+    officialStateByPostId,
+  ] = await Promise.all([
     readPostEngagements({ accountId, client: serviceClient, rows: postRows }),
     readPollSummaries({ accountId, client: serviceClient, rows: postRows }),
     readPostMedia({ client: serviceClient, rows: postRows }),
+    readExternalLinksForPosts({
+      client: serviceClient,
+      postIds: postRows.map((row) => row.id),
+    }),
+    readOfficialContentStates({
+      client: serviceClient,
+      postIds: postRows.map((row) => row.id),
+    }),
   ]);
   const posts = postRows
     .map((postRow, index) =>
@@ -394,6 +434,8 @@ export async function createServerCommunityProfilePayload(
         profile,
         pollByPostId.get(postRow.id),
         mediaByPostId.get(postRow.id),
+        linksByPostId.get(postRow.id),
+        officialStateByPostId.get(postRow.id),
       ),
     )
     .filter(isUsefulFeedItem);
@@ -511,7 +553,10 @@ export async function resolveCurrentCommunityProfileSnapshotId() {
 export async function createServerHomeFeedPreviewItems() {
   const payload = await createServerFeedReadPayload();
   const communityPoll = payload.items.find(
-    (item) => item.poll?.promptId === homeDailyCommunityPollPromptId,
+    (item) =>
+      item.kind === "balance_game" &&
+      item.authorHandle === "nuang.official" &&
+      Boolean(item.poll),
   );
 
   if (!communityPoll) {
@@ -578,6 +623,8 @@ export async function createServerFeedPostDetailPayload(
     engagementByPostId,
     pollByPostId,
     mediaByPostId,
+    linksByPostId,
+    officialStateByPostId,
     postReplies,
   ] = await Promise.all([
     readPublicProfileCardsForAccounts({
@@ -598,6 +645,14 @@ export async function createServerFeedPostDetailPayload(
       client: serviceClient,
       rows: [row],
     }),
+    readExternalLinksForPosts({
+      client: serviceClient,
+      postIds: [row.id],
+    }),
+    readOfficialContentStates({
+      client: serviceClient,
+      postIds: [row.id],
+    }),
     readPostReplies({
       accountId,
       client: serviceClient,
@@ -612,6 +667,8 @@ export async function createServerFeedPostDetailPayload(
     authorProfiles.get(row.author_account_id),
     pollByPostId.get(row.id),
     mediaByPostId.get(row.id),
+    linksByPostId.get(row.id),
+    officialStateByPostId.get(row.id),
   );
 
   if (!isUsefulFeedItem(post)) {
@@ -1528,15 +1585,18 @@ async function readPostEngagements({
     ]);
 
   if (!commentResponse.error && commentResponse.data) {
+    const commentRows = commentResponse.data as FeedPostCommentRow[];
     const commentProfiles = await readPublicProfileCardsForAccounts({
-      accountIds: (commentResponse.data as FeedPostCommentRow[]).map(
-        (row) => row.author_account_id,
-      ),
+      accountIds: commentRows.map((row) => row.author_account_id),
       client,
+    });
+    const commentLinks = await readExternalLinksForComments({
+      client,
+      commentIds: commentRows.map((row) => row.id),
     });
     const visibleCommentsByPostId = new Map<string, FeedPostCommentRow[]>();
 
-    for (const row of commentResponse.data as FeedPostCommentRow[]) {
+    for (const row of commentRows) {
       if (!isVisibleComment(row, accountId)) {
         continue;
       }
@@ -1564,6 +1624,7 @@ async function readPostEngagements({
             comment,
             accountId,
             commentProfiles.get(comment.author_account_id),
+            commentLinks.get(comment.id),
           ),
         );
     }
@@ -1627,10 +1688,16 @@ async function readPostReplies({
   const visibleComments = (response.data as FeedPostCommentRow[])
     .filter((row) => isVisibleComment(row, accountId))
     .sort(compareCommentsByCreatedAtDesc);
-  const commentProfiles = await readPublicProfileCardsForAccounts({
-    accountIds: visibleComments.map((row) => row.author_account_id),
-    client,
-  });
+  const [commentProfiles, commentLinks] = await Promise.all([
+    readPublicProfileCardsForAccounts({
+      accountIds: visibleComments.map((row) => row.author_account_id),
+      client,
+    }),
+    readExternalLinksForComments({
+      client,
+      commentIds: visibleComments.map((row) => row.id),
+    }),
+  ]);
 
   return {
     replies: visibleComments.map((comment) =>
@@ -1638,6 +1705,7 @@ async function readPostReplies({
         comment,
         accountId,
         commentProfiles.get(comment.author_account_id),
+        commentLinks.get(comment.id),
       ),
     ),
     replyCount: visibleComments.length,
@@ -1665,9 +1733,9 @@ async function readPollSummaries({
   const pollResponse = await client
     .schema("feed")
     .from("feed_poll")
-    .select("id, post_id, prompt_id, question")
+    .select("id, post_id, prompt_id, question, status")
     .in("post_id", balancePostIds)
-    .eq("status", "active")
+    .in("status", ["active", "closed"])
     .is("deleted_at", null);
 
   if (pollResponse.error || !pollResponse.data) {
@@ -1774,6 +1842,7 @@ async function readPollSummaries({
       }),
       promptId: poll.prompt_id,
       question: poll.question,
+      status: poll.status,
       statsHref: `/feed/polls/${poll.id}/stats`,
       totalVotes,
       viewerCode: isCurrentNuangCode(viewerVote?.nuang_code)
@@ -1784,6 +1853,65 @@ async function readPollSummaries({
   }
 
   return pollByPostId;
+}
+
+async function readOfficialContentStates({
+  client,
+  postIds,
+}: {
+  client: SupabaseClient;
+  postIds: string[];
+}) {
+  const stateByPostId = new Map<string, OfficialContentState>();
+  if (postIds.length === 0) return stateByPostId;
+
+  const response = await client
+    .schema("feed")
+    .from("official_community_content")
+    .select("post_id,lifecycle_status,is_featured,response_closes_at")
+    .in("post_id", postIds);
+
+  let rows: Array<{
+    is_featured?: boolean | null;
+    lifecycle_status?: string | null;
+    post_id?: string | null;
+    response_closes_at?: string | null;
+  }> = [];
+
+  if (!response.error && response.data) {
+    rows = response.data;
+  } else {
+    const legacyResponse = await client
+      .schema("feed")
+      .from("official_community_content")
+      .select("post_id,lifecycle_status")
+      .in("post_id", postIds);
+    if (!legacyResponse.error && legacyResponse.data) {
+      rows = legacyResponse.data;
+    }
+  }
+
+  const now = Date.now();
+  for (const candidate of rows) {
+    if (!candidate.post_id) continue;
+    const closeTime = candidate.response_closes_at
+      ? new Date(candidate.response_closes_at).getTime()
+      : Number.NaN;
+    const responseStatus =
+      candidate.lifecycle_status === "closed" ||
+      candidate.lifecycle_status === "archived" ||
+      (Number.isFinite(closeTime) && closeTime <= now)
+        ? "closed"
+        : "open";
+
+    stateByPostId.set(candidate.post_id, {
+      isFeatured: candidate.is_featured === true,
+      responseClosesAt: candidate.response_closes_at ?? null,
+      responseStatus,
+    });
+  }
+
+  return stateByPostId;
 }
 
 async function readPublicProfileCardsForAccounts({
@@ -1897,6 +2025,8 @@ function mapPostRowToFeedItem(
   authorProfile?: FeedItem["authorProfile"],
   poll?: FeedPollSummary,
   media: FeedPostMedia[] = [],
+  links: FeedItem["links"] = [],
+  officialState?: OfficialContentState,
 ): FeedItem {
   const isOwnPost = row.author_account_id === accountId;
   const publicProjection = readPublicProjection(row.public_projection_payload);
@@ -1932,11 +2062,18 @@ function mapPostRowToFeedItem(
       row.public_projection_payload,
     ),
     id: row.id,
-    kind: "user_post",
+    kind:
+      row.source === "balance_game"
+        ? "balance_game"
+        : row.source === "daily_question"
+          ? "daily_question"
+          : "user_post",
     layout: "thread",
+    links,
     likeCount: engagement.likes,
     likeLabel: formatFeedCountLabel("좋아요", engagement.likes),
     media,
+    officialFeatured: officialState?.isFeatured,
     poll,
     priority: -1000 + index,
     questionAudience: parseQuestionAudience(row.source_id),
@@ -1944,6 +2081,8 @@ function mapPostRowToFeedItem(
     replyCount: engagement.replies,
     replyLabel: formatFeedCountLabel("답글", engagement.replies),
     replyPreview: engagement.replyPreview,
+    responseClosesAt: officialState?.responseClosesAt,
+    responseStatus: officialState?.responseStatus,
     statusLabel: getStatusLabel(row),
     targetType: "feed_post",
     timeLabel: formatRelativeFeedTime(row.published_at ?? row.created_at),
@@ -2256,7 +2395,7 @@ function isUsefulFeedItem(item: FeedItem) {
     return isCurrentNuangCode(item.reportShare.profileCode);
   }
 
-  if (item.poll?.promptId === homeDailyCommunityPollPromptId) {
+  if (item.poll) {
     return true;
   }
 
@@ -2304,6 +2443,7 @@ function mapCommentRowToReplyPreview(
   row: FeedCommentBaseRow,
   accountId: string | null,
   authorProfile?: FeedItem["authorProfile"],
+  links: FeedReplyPreview["links"] = [],
 ): FeedReplyPreview {
   const isOwnComment = row.author_account_id === accountId;
 
@@ -2317,6 +2457,8 @@ function mapCommentRowToReplyPreview(
       : (authorProfile?.display.displayName ?? "NUANG 사용자"),
     body: row.body,
     id: row.id,
+    links,
+    reportable: !isOwnComment,
     statusLabel: getCommentStatusLabel(row),
     timeLabel: formatRelativeFeedTime(row.created_at),
   };

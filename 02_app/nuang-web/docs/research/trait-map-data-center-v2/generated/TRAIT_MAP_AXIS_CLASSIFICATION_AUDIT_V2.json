@@ -1,0 +1,701 @@
+{
+  "contractVersion": "nuang-trait-map-scenario-axis-classification-audit.v2",
+  "auditId": "TRAIT-MAP-AXIS-CLASSIFICATION-AUDIT.0.1",
+  "sourceManifestId": "TRAIT-MAP-AXIS-CONTRIBUTION.0.1",
+  "status": "AUTOMATED_STRUCTURE_PASSED_EXPERT_CLASSIFICATION_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-23T00:00:00.000Z",
+  "summary": {
+    "totalSlots": 288,
+    "structurallyValid": true,
+    "structuralIssueCount": 0,
+    "unaccountedSlots": 116,
+    "unresolvedUnaccountedSlots": 103,
+    "suggestedUnaccountedSlots": 13,
+    "controlledSlots": 172,
+    "controlledWithAdditionalAxes": 50,
+    "controlledWithoutAdditionalAxes": 122,
+    "interactionCandidateSlots": 66,
+    "complexThreeOrMoreAxisSlots": 15,
+    "highRiskSlots": 240,
+    "minimumIndependentSourcesAcrossSlots": 2,
+    "approvedSlots": 0
+  },
+  "axisCandidateSummary": {
+    "SE": {
+      "totalCandidateSlots": 42,
+      "existingControlledSlots": 40,
+      "newlySuggestedSlots": 2
+    },
+    "OE": {
+      "totalCandidateSlots": 56,
+      "existingControlledSlots": 40,
+      "newlySuggestedSlots": 16
+    },
+    "RO": {
+      "totalCandidateSlots": 76,
+      "existingControlledSlots": 40,
+      "newlySuggestedSlots": 36
+    },
+    "SM": {
+      "totalCandidateSlots": 54,
+      "existingControlledSlots": 40,
+      "newlySuggestedSlots": 14
+    },
+    "ER": {
+      "totalCandidateSlots": 42,
+      "existingControlledSlots": 40,
+      "newlySuggestedSlots": 2
+    }
+  },
+  "structuralIssues": [],
+  "reviewBatches": [
+    {
+      "batchId": "A_UNRESOLVED_UNACCOUNTED",
+      "priority": 1,
+      "objective": "현재 축 신호도 양쪽 의미 단서도 없어 원문 대비를 직접 읽고 축 없음·단일축·복합축을 결정한다.",
+      "slotCount": 103,
+      "byContext": {
+        "general": 5,
+        "family": 20,
+        "friend": 22,
+        "partner": 14,
+        "person_of_interest": 23,
+        "work": 19
+      },
+      "byClaimKind": {
+        "attention": 22,
+        "first_thought": 26,
+        "actual_response": 28,
+        "communication": 27
+      },
+      "claimKeys": [
+        ".scenario.family.aftermath.communication",
+        ".scenario.family.aftermath.response",
+        ".scenario.family.boundary.attention",
+        ".scenario.family.boundary.communication",
+        ".scenario.family.boundary.response",
+        ".scenario.family.group_participation.attention",
+        ".scenario.family.group_participation.communication",
+        ".scenario.family.group_participation.process",
+        ".scenario.family.group_participation.response",
+        ".scenario.family.need_expression.attention",
+        ".scenario.family.need_expression.process",
+        ".scenario.family.need_expression.response",
+        ".scenario.family.setback.attention",
+        ".scenario.family.setback.communication",
+        ".scenario.family.setback.process",
+        ".scenario.family.setback.response",
+        ".scenario.family.success.attention",
+        ".scenario.family.success.communication",
+        ".scenario.family.success.process",
+        ".scenario.family.success.response",
+        ".scenario.friend.aftermath.attention",
+        ".scenario.friend.aftermath.communication",
+        ".scenario.friend.aftermath.process",
+        ".scenario.friend.aftermath.response",
+        ".scenario.friend.boundary.attention",
+        ".scenario.friend.boundary.communication",
+        ".scenario.friend.boundary.process",
+        ".scenario.friend.boundary.response",
+        ".scenario.friend.need_expression.attention",
+        ".scenario.friend.need_expression.communication",
+        ".scenario.friend.need_expression.process",
+        ".scenario.friend.need_expression.response",
+        ".scenario.friend.setback.attention",
+        ".scenario.friend.setback.communication",
+        ".scenario.friend.setback.process",
+        ".scenario.friend.setback.response",
+        ".scenario.friend.success.communication",
+        ".scenario.friend.success.process",
+        ".scenario.friend.success.response",
+        ".scenario.friend.uncertainty.communication",
+        ".scenario.friend.uncertainty.process",
+        ".scenario.friend.uncertainty.response",
+        ".scenario.general.boundary.attention",
+        ".scenario.general.boundary.process",
+        ".scenario.general.boundary.response",
+        ".scenario.general.success.communication",
+        ".scenario.general.success.process",
+        ".scenario.partner.aftermath.communication",
+        ".scenario.partner.aftermath.process",
+        ".scenario.partner.aftermath.response",
+        ".scenario.partner.boundary.communication",
+        ".scenario.partner.boundary.process",
+        ".scenario.partner.boundary.response",
+        ".scenario.partner.need_expression.attention",
+        ".scenario.partner.need_expression.communication",
+        ".scenario.partner.need_expression.process",
+        ".scenario.partner.need_expression.response",
+        ".scenario.partner.success.attention",
+        ".scenario.partner.success.communication",
+        ".scenario.partner.success.process",
+        ".scenario.partner.success.response",
+        ".scenario.person_of_interest.aftermath.attention",
+        ".scenario.person_of_interest.aftermath.communication",
+        ".scenario.person_of_interest.aftermath.process",
+        ".scenario.person_of_interest.aftermath.response",
+        ".scenario.person_of_interest.boundary.attention",
+        ".scenario.person_of_interest.boundary.communication",
+        ".scenario.person_of_interest.boundary.response",
+        ".scenario.person_of_interest.disagreement.attention",
+        ".scenario.person_of_interest.disagreement.communication",
+        ".scenario.person_of_interest.disagreement.process",
+        ".scenario.person_of_interest.disagreement.response",
+        ".scenario.person_of_interest.group_participation.attention",
+        ".scenario.person_of_interest.group_participation.communication",
+        ".scenario.person_of_interest.group_participation.process",
+        ".scenario.person_of_interest.group_participation.response",
+        ".scenario.person_of_interest.plan_change.attention",
+        ".scenario.person_of_interest.plan_change.communication",
+        ".scenario.person_of_interest.plan_change.process",
+        ".scenario.person_of_interest.plan_change.response",
+        ".scenario.person_of_interest.success.attention",
+        ".scenario.person_of_interest.success.communication",
+        ".scenario.person_of_interest.success.process",
+        ".scenario.person_of_interest.success.response",
+        ".scenario.work.aftermath.attention",
+        ".scenario.work.aftermath.communication",
+        ".scenario.work.aftermath.process",
+        ".scenario.work.aftermath.response",
+        ".scenario.work.boundary.attention",
+        ".scenario.work.boundary.communication",
+        ".scenario.work.boundary.process",
+        ".scenario.work.boundary.response",
+        ".scenario.work.need_expression.attention",
+        ".scenario.work.need_expression.communication",
+        ".scenario.work.need_expression.process",
+        ".scenario.work.need_expression.response",
+        ".scenario.work.success.communication",
+        ".scenario.work.success.process",
+        ".scenario.work.success.response",
+        ".scenario.work.support_requested.attention",
+        ".scenario.work.support_requested.communication",
+        ".scenario.work.support_requested.process",
+        ".scenario.work.support_requested.response"
+      ]
+    },
+    {
+      "batchId": "B_SUGGESTED_UNACCOUNTED",
+      "priority": 2,
+      "objective": "기존에는 축 설명이 없었지만 양쪽 문장 단서로 새 후보가 생겼다. 맥락 단어 오탐을 먼저 제거한다.",
+      "slotCount": 13,
+      "byContext": {
+        "general": 3,
+        "family": 4,
+        "friend": 2,
+        "partner": 2,
+        "person_of_interest": 1,
+        "work": 1
+      },
+      "byClaimKind": {
+        "attention": 7,
+        "first_thought": 3,
+        "actual_response": 1,
+        "communication": 2
+      },
+      "claimKeys": [
+        ".scenario.family.aftermath.attention",
+        ".scenario.family.aftermath.process",
+        ".scenario.family.boundary.process",
+        ".scenario.family.need_expression.communication",
+        ".scenario.friend.success.attention",
+        ".scenario.friend.uncertainty.attention",
+        ".scenario.general.boundary.communication",
+        ".scenario.general.success.attention",
+        ".scenario.general.success.response",
+        ".scenario.partner.aftermath.attention",
+        ".scenario.partner.boundary.attention",
+        ".scenario.person_of_interest.boundary.process",
+        ".scenario.work.success.attention"
+      ]
+    },
+    {
+      "batchId": "C_CONTROLLED_WITH_EXTRA_AXIS",
+      "priority": 3,
+      "objective": "기존 직접 비교 축 외의 새 의미 축이 제안됐다. 실제 상호작용인지 문장 장식인지 구분한다.",
+      "slotCount": 50,
+      "byContext": {
+        "general": 18,
+        "family": 3,
+        "friend": 6,
+        "partner": 12,
+        "person_of_interest": 6,
+        "work": 5
+      },
+      "byClaimKind": {
+        "attention": 19,
+        "first_thought": 10,
+        "actual_response": 16,
+        "communication": 5
+      },
+      "claimKeys": [
+        ".scenario.family.ordinary_choice.process",
+        ".scenario.family.plan_change.attention",
+        ".scenario.family.uncertainty.attention",
+        ".scenario.friend.group_participation.attention",
+        ".scenario.friend.group_participation.response",
+        ".scenario.friend.new_encounter.attention",
+        ".scenario.friend.ordinary_choice.communication",
+        ".scenario.friend.plan_change.process",
+        ".scenario.friend.support_requested.attention",
+        ".scenario.general.aftermath.attention",
+        ".scenario.general.aftermath.process",
+        ".scenario.general.aftermath.response",
+        ".scenario.general.disagreement.response",
+        ".scenario.general.group_participation.communication",
+        ".scenario.general.need_expression.process",
+        ".scenario.general.need_expression.response",
+        ".scenario.general.new_encounter.attention",
+        ".scenario.general.new_encounter.response",
+        ".scenario.general.ordinary_choice.attention",
+        ".scenario.general.ordinary_choice.response",
+        ".scenario.general.plan_change.attention",
+        ".scenario.general.plan_change.response",
+        ".scenario.general.setback.attention",
+        ".scenario.general.setback.communication",
+        ".scenario.general.support_requested.attention",
+        ".scenario.general.uncertainty.communication",
+        ".scenario.general.uncertainty.response",
+        ".scenario.partner.disagreement.process",
+        ".scenario.partner.disagreement.response",
+        ".scenario.partner.new_encounter.attention",
+        ".scenario.partner.ordinary_choice.response",
+        ".scenario.partner.plan_change.attention",
+        ".scenario.partner.plan_change.communication",
+        ".scenario.partner.setback.attention",
+        ".scenario.partner.setback.process",
+        ".scenario.partner.setback.response",
+        ".scenario.partner.support_requested.attention",
+        ".scenario.partner.uncertainty.attention",
+        ".scenario.partner.uncertainty.process",
+        ".scenario.person_of_interest.need_expression.attention",
+        ".scenario.person_of_interest.need_expression.process",
+        ".scenario.person_of_interest.need_expression.response",
+        ".scenario.person_of_interest.setback.attention",
+        ".scenario.person_of_interest.setback.process",
+        ".scenario.person_of_interest.setback.response",
+        ".scenario.work.disagreement.process",
+        ".scenario.work.disagreement.response",
+        ".scenario.work.group_participation.response",
+        ".scenario.work.setback.attention",
+        ".scenario.work.uncertainty.response"
+      ]
+    },
+    {
+      "batchId": "D_CONTROLLED_LINEAGE_MERGE",
+      "priority": 4,
+      "objective": "기존 축은 유지하되 같은 축 조합에서 갈라진 부모 계보 문장을 정보 손실 없이 하나로 합칠 준비를 한다.",
+      "slotCount": 122,
+      "byContext": {
+        "general": 22,
+        "family": 21,
+        "friend": 18,
+        "partner": 20,
+        "person_of_interest": 18,
+        "work": 23
+      },
+      "byClaimKind": {
+        "attention": 24,
+        "first_thought": 33,
+        "actual_response": 27,
+        "communication": 38
+      },
+      "claimKeys": [
+        ".scenario.family.disagreement.attention",
+        ".scenario.family.disagreement.communication",
+        ".scenario.family.disagreement.process",
+        ".scenario.family.disagreement.response",
+        ".scenario.family.new_encounter.attention",
+        ".scenario.family.new_encounter.communication",
+        ".scenario.family.new_encounter.process",
+        ".scenario.family.new_encounter.response",
+        ".scenario.family.ordinary_choice.attention",
+        ".scenario.family.ordinary_choice.communication",
+        ".scenario.family.ordinary_choice.response",
+        ".scenario.family.plan_change.communication",
+        ".scenario.family.plan_change.process",
+        ".scenario.family.plan_change.response",
+        ".scenario.family.support_requested.attention",
+        ".scenario.family.support_requested.communication",
+        ".scenario.family.support_requested.process",
+        ".scenario.family.support_requested.response",
+        ".scenario.family.uncertainty.communication",
+        ".scenario.family.uncertainty.process",
+        ".scenario.family.uncertainty.response",
+        ".scenario.friend.disagreement.attention",
+        ".scenario.friend.disagreement.communication",
+        ".scenario.friend.disagreement.process",
+        ".scenario.friend.disagreement.response",
+        ".scenario.friend.group_participation.communication",
+        ".scenario.friend.group_participation.process",
+        ".scenario.friend.new_encounter.communication",
+        ".scenario.friend.new_encounter.process",
+        ".scenario.friend.new_encounter.response",
+        ".scenario.friend.ordinary_choice.attention",
+        ".scenario.friend.ordinary_choice.process",
+        ".scenario.friend.ordinary_choice.response",
+        ".scenario.friend.plan_change.attention",
+        ".scenario.friend.plan_change.communication",
+        ".scenario.friend.plan_change.response",
+        ".scenario.friend.support_requested.communication",
+        ".scenario.friend.support_requested.process",
+        ".scenario.friend.support_requested.response",
+        ".scenario.general.aftermath.communication",
+        ".scenario.general.disagreement.attention",
+        ".scenario.general.disagreement.communication",
+        ".scenario.general.disagreement.process",
+        ".scenario.general.group_participation.attention",
+        ".scenario.general.group_participation.process",
+        ".scenario.general.group_participation.response",
+        ".scenario.general.need_expression.attention",
+        ".scenario.general.need_expression.communication",
+        ".scenario.general.new_encounter.communication",
+        ".scenario.general.new_encounter.process",
+        ".scenario.general.ordinary_choice.communication",
+        ".scenario.general.ordinary_choice.process",
+        ".scenario.general.plan_change.communication",
+        ".scenario.general.plan_change.process",
+        ".scenario.general.setback.process",
+        ".scenario.general.setback.response",
+        ".scenario.general.support_requested.communication",
+        ".scenario.general.support_requested.process",
+        ".scenario.general.support_requested.response",
+        ".scenario.general.uncertainty.attention",
+        ".scenario.general.uncertainty.process",
+        ".scenario.partner.disagreement.attention",
+        ".scenario.partner.disagreement.communication",
+        ".scenario.partner.group_participation.attention",
+        ".scenario.partner.group_participation.communication",
+        ".scenario.partner.group_participation.process",
+        ".scenario.partner.group_participation.response",
+        ".scenario.partner.new_encounter.communication",
+        ".scenario.partner.new_encounter.process",
+        ".scenario.partner.new_encounter.response",
+        ".scenario.partner.ordinary_choice.attention",
+        ".scenario.partner.ordinary_choice.communication",
+        ".scenario.partner.ordinary_choice.process",
+        ".scenario.partner.plan_change.process",
+        ".scenario.partner.plan_change.response",
+        ".scenario.partner.setback.communication",
+        ".scenario.partner.support_requested.communication",
+        ".scenario.partner.support_requested.process",
+        ".scenario.partner.support_requested.response",
+        ".scenario.partner.uncertainty.communication",
+        ".scenario.partner.uncertainty.response",
+        ".scenario.person_of_interest.need_expression.communication",
+        ".scenario.person_of_interest.new_encounter.attention",
+        ".scenario.person_of_interest.new_encounter.communication",
+        ".scenario.person_of_interest.new_encounter.process",
+        ".scenario.person_of_interest.new_encounter.response",
+        ".scenario.person_of_interest.ordinary_choice.attention",
+        ".scenario.person_of_interest.ordinary_choice.communication",
+        ".scenario.person_of_interest.ordinary_choice.process",
+        ".scenario.person_of_interest.ordinary_choice.response",
+        ".scenario.person_of_interest.setback.communication",
+        ".scenario.person_of_interest.support_requested.attention",
+        ".scenario.person_of_interest.support_requested.communication",
+        ".scenario.person_of_interest.support_requested.process",
+        ".scenario.person_of_interest.support_requested.response",
+        ".scenario.person_of_interest.uncertainty.attention",
+        ".scenario.person_of_interest.uncertainty.communication",
+        ".scenario.person_of_interest.uncertainty.process",
+        ".scenario.person_of_interest.uncertainty.response",
+        ".scenario.work.disagreement.attention",
+        ".scenario.work.disagreement.communication",
+        ".scenario.work.group_participation.attention",
+        ".scenario.work.group_participation.communication",
+        ".scenario.work.group_participation.process",
+        ".scenario.work.new_encounter.attention",
+        ".scenario.work.new_encounter.communication",
+        ".scenario.work.new_encounter.process",
+        ".scenario.work.new_encounter.response",
+        ".scenario.work.ordinary_choice.attention",
+        ".scenario.work.ordinary_choice.communication",
+        ".scenario.work.ordinary_choice.process",
+        ".scenario.work.ordinary_choice.response",
+        ".scenario.work.plan_change.attention",
+        ".scenario.work.plan_change.communication",
+        ".scenario.work.plan_change.process",
+        ".scenario.work.plan_change.response",
+        ".scenario.work.setback.communication",
+        ".scenario.work.setback.process",
+        ".scenario.work.setback.response",
+        ".scenario.work.uncertainty.attention",
+        ".scenario.work.uncertainty.communication",
+        ".scenario.work.uncertainty.process"
+      ]
+    }
+  ],
+  "complexSlotQueue": [
+    {
+      "claimKey": ".scenario.friend.new_encounter.attention",
+      "scenarioRef": "SCN-FRIEND-2",
+      "context": "friend",
+      "claimKind": "attention",
+      "currentControlledAxes": ["SE", "OE"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "RO", "confidence": "medium", "contribution": "secondary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["relationship_outcome"]
+    },
+    {
+      "claimKey": ".scenario.general.aftermath.attention",
+      "scenarioRef": "SCN-GENERAL-12",
+      "context": "general",
+      "claimKind": "attention",
+      "currentControlledAxes": ["SE", "ER"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        {
+          "axisRef": "OE",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        {
+          "axisRef": "RO",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "ER", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.aftermath.process",
+      "scenarioRef": "SCN-GENERAL-12",
+      "context": "general",
+      "claimKind": "first_thought",
+      "currentControlledAxes": ["SE", "ER"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        {
+          "axisRef": "RO",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "ER", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.aftermath.response",
+      "scenarioRef": "SCN-GENERAL-12",
+      "context": "general",
+      "claimKind": "actual_response",
+      "currentControlledAxes": ["SE", "ER"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        {
+          "axisRef": "RO",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        {
+          "axisRef": "SM",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "ER", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.need_expression.process",
+      "scenarioRef": "SCN-GENERAL-8",
+      "context": "general",
+      "claimKind": "first_thought",
+      "currentControlledAxes": ["SE"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        {
+          "axisRef": "OE",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "RO", "confidence": "medium", "contribution": "secondary" }
+      ],
+      "variantCount": 4,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.new_encounter.attention",
+      "scenarioRef": "SCN-GENERAL-2",
+      "context": "general",
+      "claimKind": "attention",
+      "currentControlledAxes": ["SE", "OE"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "RO", "confidence": "medium", "contribution": "secondary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.new_encounter.response",
+      "scenarioRef": "SCN-GENERAL-2",
+      "context": "general",
+      "claimKind": "actual_response",
+      "currentControlledAxes": ["SE", "OE"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "ER", "confidence": "medium", "contribution": "secondary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "scenarioRef": "SCN-GENERAL-1",
+      "context": "general",
+      "claimKind": "attention",
+      "currentControlledAxes": ["OE", "SM"],
+      "candidateSemanticAxes": [
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "RO", "confidence": "high", "contribution": "secondary" },
+        { "axisRef": "SM", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "scenarioRef": "SCN-GENERAL-1",
+      "context": "general",
+      "claimKind": "actual_response",
+      "currentControlledAxes": ["OE", "SM"],
+      "candidateSemanticAxes": [
+        {
+          "axisRef": "SE",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "SM", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.plan_change.attention",
+      "scenarioRef": "SCN-GENERAL-4",
+      "context": "general",
+      "claimKind": "attention",
+      "currentControlledAxes": ["SM", "ER"],
+      "candidateSemanticAxes": [
+        {
+          "axisRef": "OE",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "SM", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "ER", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.plan_change.response",
+      "scenarioRef": "SCN-GENERAL-4",
+      "context": "general",
+      "claimKind": "actual_response",
+      "currentControlledAxes": ["SM", "ER"],
+      "candidateSemanticAxes": [
+        { "axisRef": "RO", "confidence": "high", "contribution": "secondary" },
+        { "axisRef": "SM", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "ER", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.uncertainty.communication",
+      "scenarioRef": "SCN-GENERAL-5",
+      "context": "general",
+      "claimKind": "communication",
+      "currentControlledAxes": ["OE", "ER"],
+      "candidateSemanticAxes": [
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        {
+          "axisRef": "RO",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "ER", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.general.uncertainty.response",
+      "scenarioRef": "SCN-GENERAL-5",
+      "context": "general",
+      "claimKind": "actual_response",
+      "currentControlledAxes": ["OE", "ER"],
+      "candidateSemanticAxes": [
+        {
+          "axisRef": "SE",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        { "axisRef": "RO", "confidence": "high", "contribution": "secondary" },
+        { "axisRef": "SM", "confidence": "high", "contribution": "secondary" },
+        { "axisRef": "ER", "confidence": "high", "contribution": "primary" }
+      ],
+      "variantCount": 8,
+      "riskDomains": ["none"]
+    },
+    {
+      "claimKey": ".scenario.partner.new_encounter.attention",
+      "scenarioRef": "SCN-PARTNER-2",
+      "context": "partner",
+      "claimKind": "attention",
+      "currentControlledAxes": ["OE"],
+      "candidateSemanticAxes": [
+        { "axisRef": "OE", "confidence": "high", "contribution": "primary" },
+        {
+          "axisRef": "RO",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "SM", "confidence": "medium", "contribution": "secondary" }
+      ],
+      "variantCount": 4,
+      "riskDomains": ["relationship_outcome"]
+    },
+    {
+      "claimKey": ".scenario.person_of_interest.need_expression.process",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "context": "person_of_interest",
+      "claimKind": "first_thought",
+      "currentControlledAxes": ["SE"],
+      "candidateSemanticAxes": [
+        { "axisRef": "SE", "confidence": "high", "contribution": "primary" },
+        {
+          "axisRef": "RO",
+          "confidence": "medium",
+          "contribution": "secondary"
+        },
+        { "axisRef": "ER", "confidence": "medium", "contribution": "secondary" }
+      ],
+      "variantCount": 4,
+      "riskDomains": ["relationship_outcome"]
+    }
+  ],
+  "requiredNextGate": [
+    "A 작업군 103개는 축 없음도 정답 후보로 허용하며 의미를 억지로 다섯 축에 끼워 맞추지 않는다.",
+    "B 작업군 13개와 C 작업군 50개는 문장 단서가 상황 자체의 단어인지 실제 성향 차이인지 검토한다.",
+    "세 축 이상 후보 15개는 자동 상호작용 문장을 만들지 않고 우선 분리·축소 가능성을 검토한다.",
+    "관계 결과·정신건강·능력·업무 위험이 있는 240개는 관계심리·임상안전 검토를 포함한다.",
+    "288개 전부의 축 결정과 canonical 조합 문장이 승인되기 전에는 32개 원장을 재생성하거나 고객 화면에 발행하지 않는다."
+  ]
+}

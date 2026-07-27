@@ -1,8 +1,17 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { candidateQuickItemIds } from "@/features/assessment/candidate-quick-core-seed";
 import { gateCParticipantDefinitions } from "@/features/research/gate-c/gate-c-study-fixture";
+import {
+  gateCCandidateBankId,
+  gateCUnifiedProtocolVersion,
+  gateCUnifiedSourceKinds,
+  type GateCUnifiedSourceKind,
+} from "@/features/research/gate-c/gate-c-unified-item-pool";
 
 export type GateCAnalysisSessionRow = {
   id: string;
+  item_assignment?: unknown;
+  pool_version?: string;
   status: "completed" | "started";
   quality_status: "excluded" | "included" | "pending";
 };
@@ -18,6 +27,7 @@ export type GateCAnalysisResponseRow = {
 
 export type GateCItemMetric = {
   studyItemId: string;
+  sourceKind: GateCUnifiedSourceKind | "legacy_fixed";
   observationCount: number;
   unsureRate: number;
   wordingUnclearRate: number;
@@ -26,6 +36,7 @@ export type GateCItemMetric = {
   medianFirstAnswerMs: number | null;
   recommendationStatus: "insufficient_data" | "monitor" | "review_required";
   reasonCodes: string[];
+  publicationState: "review_only";
 };
 
 export type GateCAnalysis = {
@@ -54,8 +65,14 @@ export function buildGateCAnalysis(
   const includedResponses = responses.filter((response) =>
     includedSessionIds.has(response.session_id),
   );
-  const allItemIds = Object.values(gateCParticipantDefinitions).flatMap(
-    (definition) => definition.items.map((item) => item.studyItemId),
+  const itemSourceKinds = collectItemSourceKinds(sessions);
+  const allItemIds = Array.from(
+    new Set([
+      ...Object.values(gateCParticipantDefinitions).flatMap((definition) =>
+        definition.items.map((item) => item.studyItemId),
+      ),
+      ...includedResponses.map((response) => response.study_item_id),
+    ]),
   );
 
   const itemMetrics = allItemIds.map((studyItemId) => {
@@ -92,6 +109,8 @@ export function buildGateCAnalysis(
 
     return {
       studyItemId,
+      sourceKind:
+        itemSourceKinds.get(studyItemId) ?? inferSourceKind(studyItemId),
       observationCount,
       unsureRate: rate(unsureCount, observationCount),
       wordingUnclearRate: rate(wordingUnclearCount, observationCount),
@@ -107,6 +126,7 @@ export function buildGateCAnalysis(
             ? "review_required"
             : "monitor",
       reasonCodes,
+      publicationState: "review_only",
     } satisfies GateCItemMetric;
   });
 
@@ -128,15 +148,32 @@ export function buildGateCAnalysis(
 }
 
 export async function refreshGateCAnalysis(client: SupabaseClient) {
-  const sessionResponse = await client
+  const unifiedSessionResponse = await client
     .from("research_gate_c_session")
-    .select("id,status,quality_status")
+    .select("id,status,quality_status,pool_version,item_assignment")
     .order("created_at", { ascending: false })
     .limit(5000);
+  let sessionRows = (unifiedSessionResponse.data ??
+    []) as GateCAnalysisSessionRow[];
+  let sessionError = unifiedSessionResponse.error;
 
-  if (sessionResponse.error) throw sessionResponse.error;
+  if (isMissingUnifiedResearchSchema(sessionError)) {
+    const legacyResponse = await client
+      .from("research_gate_c_session")
+      .select("id,status,quality_status")
+      .order("created_at", { ascending: false })
+      .limit(5000);
+    sessionRows = (legacyResponse.data ?? []).map((session) => ({
+        ...session,
+        item_assignment: null,
+        pool_version: "GATE-C-FIXED-FORMS-1.0",
+      })) as GateCAnalysisSessionRow[];
+    sessionError = legacyResponse.error;
+  }
 
-  const sessions = (sessionResponse.data ?? []) as GateCAnalysisSessionRow[];
+  if (sessionError) throw sessionError;
+
+  const sessions = sessionRows;
   const includedSessionIds = sessions
     .filter(
       (session) =>
@@ -160,18 +197,19 @@ export async function refreshGateCAnalysis(client: SupabaseClient) {
   }
 
   const analysis = buildGateCAnalysis(sessions, responseRows);
-  const firstDefinition = Object.values(gateCParticipantDefinitions)[0];
   const queueRows = analysis.itemMetrics.map((metric) => ({
-    candidate_set_id: firstDefinition.candidateSetId,
+    candidate_set_id: gateCCandidateBankId,
     metrics: {
       confusionFlagRate: metric.confusionFlagRate,
       medianFirstAnswerMs: metric.medianFirstAnswerMs,
       responseChangeRate: metric.responseChangeRate,
+      sourceKind: metric.sourceKind,
       unsureRate: metric.unsureRate,
       wordingUnclearRate: metric.wordingUnclearRate,
+      publicationState: metric.publicationState,
     },
     observation_count: metric.observationCount,
-    protocol_version: firstDefinition.protocolVersion,
+    protocol_version: gateCUnifiedProtocolVersion,
     reason_codes: metric.reasonCodes,
     recommendation_status: metric.recommendationStatus,
     review_state: "awaiting_human_review",
@@ -190,13 +228,13 @@ export async function refreshGateCAnalysis(client: SupabaseClient) {
     .from("research_gate_c_analysis_snapshot")
     .upsert(
       {
-        candidate_set_id: firstDefinition.candidateSetId,
+        candidate_set_id: gateCCandidateBankId,
         completed_session_count: analysis.completedSessionCount,
         excluded_session_count: analysis.excludedSessionCount,
         generated_at: new Date().toISOString(),
         included_session_count: analysis.includedSessionCount,
         item_metrics: analysis.itemMetrics,
-        protocol_version: firstDefinition.protocolVersion,
+        protocol_version: gateCUnifiedProtocolVersion,
         publication_state: "review_only",
         started_session_count: analysis.startedSessionCount,
       },
@@ -218,4 +256,59 @@ function median(values: number[]) {
   return sorted.length % 2 === 0
     ? Math.round((sorted[middle - 1] + sorted[middle]) / 2)
     : sorted[middle];
+}
+
+function collectItemSourceKinds(sessions: GateCAnalysisSessionRow[]) {
+  const sourceKinds = new Map<
+    string,
+    GateCUnifiedSourceKind | "legacy_fixed"
+  >();
+
+  for (const session of sessions) {
+    if (!Array.isArray(session.item_assignment)) continue;
+
+    for (const assignment of session.item_assignment) {
+      if (!isRecord(assignment)) continue;
+      const studyItemId = assignment.studyItemId;
+      const sourceKind = assignment.sourceKind;
+
+      if (
+        typeof studyItemId === "string" &&
+        typeof sourceKind === "string" &&
+        gateCUnifiedSourceKinds.includes(
+          sourceKind as GateCUnifiedSourceKind,
+        )
+      ) {
+        sourceKinds.set(
+          studyItemId,
+          sourceKind as GateCUnifiedSourceKind,
+        );
+      }
+    }
+  }
+
+  return sourceKinds;
+}
+
+function inferSourceKind(
+  studyItemId: string,
+): GateCUnifiedSourceKind | "legacy_fixed" {
+  if (studyItemId.startsWith("NX-")) return "candidate";
+  if (
+    candidateQuickItemIds.includes(
+      studyItemId as (typeof candidateQuickItemIds)[number],
+    )
+  ) {
+    return "quick_current";
+  }
+  if (studyItemId.startsWith("NU-B1-")) return "full_current";
+  return "legacy_fixed";
+}
+
+function isMissingUnifiedResearchSchema(error: { code?: string } | null) {
+  return error?.code === "42703" || error?.code === "PGRST204";
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
 }

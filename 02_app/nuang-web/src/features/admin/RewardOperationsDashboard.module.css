@@ -1,0 +1,221 @@
+.content {
+  display: grid;
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+
+.summary,
+.draw,
+.winners {
+  overflow: hidden;
+  padding: 1.25rem 1rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 14px;
+  background: var(--nu-color-surface);
+}
+
+.summary > div:first-child,
+.draw > div:first-child {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.summary > div:first-child > span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--nu-color-play);
+  background: var(--nu-color-play-soft);
+}
+
+.summary strong,
+.draw strong,
+.winners strong {
+  font-size: var(--nu-text-callout);
+}
+
+.summary p,
+.draw p,
+.winners p {
+  margin: 0.15rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+}
+
+.summary dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+}
+
+.summary dl > div {
+  padding: 0.75rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 9px;
+  background: var(--nu-color-surface-raised);
+}
+
+.summary dt,
+.summary dd {
+  margin: 0;
+}
+
+.summary dt {
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+}
+
+.summary dd {
+  margin-top: 0.25rem;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.draw {
+  display: grid;
+  gap: 0.9rem;
+}
+
+.draw > div:first-child > svg {
+  color: var(--nu-color-community);
+}
+
+.draw > button {
+  min-height: 46px;
+  border-radius: 10px;
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-brand-action);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.draw > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+}
+
+.winners {
+  padding: 0;
+}
+
+.winners > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.1rem 1rem 0.8rem;
+  border-bottom: 1px solid var(--nu-color-border);
+}
+
+.winners > header > button {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  border-radius: 9px;
+  color: var(--nu-color-text-muted);
+}
+
+.winners article {
+  display: grid;
+  min-height: 76px;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--nu-color-border);
+}
+
+.winners article > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.winners article > div > strong {
+  font-size: var(--nu-text-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.winners article > svg {
+  color: var(--nu-color-success);
+}
+
+.reveal,
+.winnerActions button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  padding: 0 0.65rem;
+  border-radius: 9px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.winnerActions {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.winnerActions button:last-child {
+  color: var(--nu-color-community);
+  background: var(--nu-color-community-soft);
+}
+
+.loading,
+.message {
+  margin: 0;
+  padding: 1rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 18px;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-body-sm);
+}
+
+.emptyWinners {
+  padding: 1.25rem 1rem;
+  text-align: center;
+}
+
+@media (min-width: 760px) {
+  .summary dl {
+    gap: 0.75rem;
+  }
+
+  .draw {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .draw > button {
+    min-width: 140px;
+    padding-inline: 1.25rem;
+  }
+}
+
+@media (min-width: 1100px) {
+  .content {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+
+  .winners {
+    grid-column: 1 / -1;
+  }
+}

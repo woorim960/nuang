@@ -2,6 +2,7 @@
 
 import {
   Ban,
+  ChevronRight,
   Ellipsis,
   Flag,
   Heart,
@@ -9,6 +10,7 @@ import {
   Pencil,
   Settings,
   Share2,
+  ShieldCheck,
   X,
 } from "lucide-react";
 import Link from "next/link";
@@ -31,11 +33,13 @@ export function CommunityProfileScreen({
   mode = "other",
   posts,
   profile,
+  showAdminEntry = false,
 }: {
   initialSocialState: CommunityProfileSocialState;
   mode?: "other" | "preview" | "self";
   posts: FeedItem[];
   profile: PublicProfileCardPayload;
+  showAdminEntry?: boolean;
 }) {
   const pathname = usePathname();
   const router = useRouter();
@@ -363,11 +367,27 @@ export function CommunityProfileScreen({
         )}
 
         {isSelf ? (
-          <nav aria-label="내 프로필 바로가기" className={styles.myShortcuts}>
-            <Link href="/my/profile">내 성향 상세</Link>
-            <Link href="/my/reports">내 리포트</Link>
-            <Link href="/feed/perspectives?from=my">놀이터 기록</Link>
-          </nav>
+          <>
+            <nav aria-label="내 프로필 바로가기" className={styles.myShortcuts}>
+              <Link href="/my/profile">내 성향 상세</Link>
+              <Link href="/my/reports">내 리포트</Link>
+              <Link href="/feed/perspectives?from=my">놀이터 기록</Link>
+              <Link href="/my/events">참여한 이벤트</Link>
+            </nav>
+            {showAdminEntry ? (
+              <Link className={styles.adminEntry} href="/admin">
+                <span>
+                  <ShieldCheck aria-hidden="true" size={18} strokeWidth={1.65} />
+                </span>
+                <strong>관리자 운영 센터</strong>
+                <ChevronRight
+                  aria-hidden="true"
+                  size={17}
+                  strokeWidth={1.65}
+                />
+              </Link>
+            ) : null}
+          </>
         ) : !isPreview && !comparisonAvailable ? (
           <p className={styles.comparisonNotice}>
             이 사용자는 상세 성향 비교를 공개하지 않았어요.

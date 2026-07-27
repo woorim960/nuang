@@ -1,0 +1,501 @@
+{
+  "contractVersion": "nuang-trait-map-p0-direct-validation-data-contract.v2.3",
+  "reportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-DATA-CONTRACT.2.3",
+  "status": "DATA_CONTRACT_AND_SYNTHETIC_FIXTURE_READY_DB_NOT_APPLIED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceModuleSpecReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-MODULE-SPEC.2.3",
+  "namespace": "research",
+  "summary": {
+    "tables": 10,
+    "prohibitedDirectIdentifierFields": 6,
+    "syntheticParticipants": 12,
+    "syntheticSessions": 12,
+    "syntheticAssignments": 24,
+    "syntheticResponses": 96,
+    "syntheticCoderAssignments": 192,
+    "syntheticCoderRatings": 192,
+    "realParticipants": 0,
+    "databaseMigrationsApplied": 0,
+    "publicationApprovalsGranted": 0
+  },
+  "enums": {
+    "studyStage": ["feasibility_pilot", "discovery", "confirmation"],
+    "sessionState": [
+      "consented",
+      "in_progress",
+      "completed",
+      "withdrawn",
+      "excluded_quality"
+    ],
+    "responseLayer": [
+      "attention",
+      "first_thought",
+      "actual_response",
+      "communication"
+    ],
+    "directionCode": [
+      "direction_a",
+      "direction_b",
+      "mixed",
+      "not_observable",
+      "off_scenario"
+    ]
+  },
+  "tables": [
+    {
+      "table": "trait_map_dv_study_version",
+      "purpose": "연구·검사·분석 계획의 잠긴 버전",
+      "primaryKey": "study_version_id",
+      "fields": [
+        {
+          "name": "study_version_id",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "module_spec_report_id",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "assessment_release_id",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "analysis_plan_hash",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        { "name": "state", "type": "text", "rule": "required" },
+        { "name": "opened_at", "type": "timestamptz", "rule": "nullable" },
+        {
+          "name": "analysis_locked_at",
+          "type": "timestamptz",
+          "rule": "nullable"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": []
+    },
+    {
+      "table": "trait_map_dv_module_version",
+      "purpose": "실제로 보여 준 장면 자극과 응답 순서",
+      "primaryKey": "module_version_id",
+      "fields": [
+        {
+          "name": "module_version_id",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "study_version_id",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        { "name": "module_id", "type": "text", "rule": "required_immutable" },
+        {
+          "name": "scenario_ref",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "stimulus_version",
+          "type": "integer",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "stimulus_text",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "stimulus_hash",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "target_axes",
+          "type": "text[]",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "response_sequence",
+          "type": "jsonb",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "created_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": [["study_version_id", "module_id", "stimulus_version"]]
+    },
+    {
+      "table": "trait_map_dv_participant",
+      "purpose": "직접 식별자를 저장하지 않는 연구 참여자",
+      "primaryKey": "participant_ref",
+      "fields": [
+        {
+          "name": "participant_ref",
+          "type": "uuid",
+          "rule": "required_immutable_random"
+        },
+        {
+          "name": "study_version_id",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        { "name": "age_band", "type": "text", "rule": "required" },
+        {
+          "name": "korean_language_comfort",
+          "type": "text",
+          "rule": "required"
+        },
+        {
+          "name": "relationship_context_experience",
+          "type": "text",
+          "rule": "required"
+        },
+        {
+          "name": "personality_test_familiarity",
+          "type": "text",
+          "rule": "required"
+        },
+        {
+          "name": "consent_version",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "consented_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        },
+        { "name": "withdrawn_at", "type": "timestamptz", "rule": "nullable" },
+        { "name": "deletion_state", "type": "text", "rule": "required" }
+      ],
+      "unique": [],
+      "prohibitedFields": [
+        "name",
+        "email",
+        "phone",
+        "account_id",
+        "profile_id",
+        "social_handle"
+      ]
+    },
+    {
+      "table": "trait_map_dv_session",
+      "purpose": "참여자의 counterbalanced 모듈 회기",
+      "primaryKey": "session_ref",
+      "fields": [
+        { "name": "session_ref", "type": "uuid", "rule": "required_immutable" },
+        {
+          "name": "study_version_id",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        {
+          "name": "participant_ref",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        { "name": "stage", "type": "text", "rule": "required_immutable" },
+        {
+          "name": "assignment_seed",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "assessment_order",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        { "name": "state", "type": "text", "rule": "required" },
+        { "name": "started_at", "type": "timestamptz", "rule": "nullable" },
+        { "name": "completed_at", "type": "timestamptz", "rule": "nullable" },
+        { "name": "quality_signals", "type": "jsonb", "rule": "required" }
+      ],
+      "unique": [["participant_ref", "study_version_id"]]
+    },
+    {
+      "table": "trait_map_dv_assignment",
+      "purpose": "한 회기에서 노출할 모듈과 순서",
+      "primaryKey": "assignment_ref",
+      "fields": [
+        {
+          "name": "assignment_ref",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "session_ref",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        {
+          "name": "module_version_id",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        {
+          "name": "module_order",
+          "type": "integer",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "assigned_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": [
+        ["session_ref", "module_order"],
+        ["session_ref", "module_version_id"]
+      ]
+    },
+    {
+      "table": "trait_map_dv_axis_score_snapshot",
+      "purpose": "분석 당시 잠긴 검사 버전의 연속 축 점수와 불확실성",
+      "primaryKey": "axis_snapshot_ref",
+      "fields": [
+        {
+          "name": "axis_snapshot_ref",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "session_ref",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        {
+          "name": "assessment_release_id",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "assessment_response_hash",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "axis_scores",
+          "type": "jsonb",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "score_uncertainty",
+          "type": "jsonb",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "scored_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": [["session_ref", "assessment_release_id"]]
+    },
+    {
+      "table": "trait_map_dv_response",
+      "purpose": "수정하지 않는 열린 응답·행동 선택·시간 기록",
+      "primaryKey": "response_ref",
+      "fields": [
+        {
+          "name": "response_ref",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "assignment_ref",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        {
+          "name": "response_layer",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "prompt_snapshot",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "open_text_redacted",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "behavior_choice",
+          "type": "text",
+          "rule": "nullable_immutable"
+        },
+        {
+          "name": "response_time_ms",
+          "type": "integer",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "submitted_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": [["assignment_ref", "response_layer"]]
+    },
+    {
+      "table": "trait_map_dv_coder_assignment",
+      "purpose": "코더가 점수·다른 코더 판정을 보지 못하게 하는 배정",
+      "primaryKey": "coder_assignment_ref",
+      "fields": [
+        {
+          "name": "coder_assignment_ref",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "response_ref",
+          "type": "uuid",
+          "rule": "required_immutable_fk"
+        },
+        { "name": "coder_ref", "type": "uuid", "rule": "required_immutable" },
+        {
+          "name": "blind_packet_hash",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "assigned_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": [["response_ref", "coder_ref"]]
+    },
+    {
+      "table": "trait_map_dv_coder_rating",
+      "purpose": "각 코더의 최초 독립 판정",
+      "primaryKey": "coder_rating_ref",
+      "fields": [
+        {
+          "name": "coder_rating_ref",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "coder_assignment_ref",
+          "type": "uuid",
+          "rule": "required_immutable_fk_unique"
+        },
+        {
+          "name": "direction_code",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "continuous_rating",
+          "type": "numeric",
+          "rule": "nullable_immutable"
+        },
+        {
+          "name": "evidence_span",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "confidence",
+          "type": "integer",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "submitted_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": []
+    },
+    {
+      "table": "trait_map_dv_adjudication",
+      "purpose": "두 판정이 다를 때 원 판정을 보존한 제3자 합의",
+      "primaryKey": "adjudication_ref",
+      "fields": [
+        {
+          "name": "adjudication_ref",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "response_ref",
+          "type": "uuid",
+          "rule": "required_immutable_fk_unique"
+        },
+        {
+          "name": "adjudicator_ref",
+          "type": "uuid",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "final_direction_code",
+          "type": "text",
+          "rule": "required_immutable"
+        },
+        {
+          "name": "source_coder_rating_refs",
+          "type": "uuid[]",
+          "rule": "required_immutable"
+        },
+        { "name": "rationale", "type": "text", "rule": "required_immutable" },
+        {
+          "name": "adjudicated_at",
+          "type": "timestamptz",
+          "rule": "required_immutable"
+        }
+      ],
+      "unique": []
+    }
+  ],
+  "rowLevelSecurity": [
+    "참여자는 자신에게 배정된 자극 제출 API만 사용하며 연구 테이블을 직접 조회하지 않는다.",
+    "코더는 blind packet만 읽으며 참여자 축 점수·배경·다른 코더 판정에 접근하지 않는다.",
+    "분석 역할은 analysis lock 뒤 비식별 view로만 응답·점수·코딩을 결합한다.",
+    "운영 앱 서비스 역할은 research namespace를 읽을 수 없다.",
+    "서비스 역할 키도 목적별 함수만 호출하며 원문 전체 조회를 기본 금지한다."
+  ],
+  "integrityChecks": [
+    "한 회기에는 서로 다른 모듈이 최대 2개만 배정된다.",
+    "한 assignment에는 네 response layer가 정확히 한 번씩 제출된다.",
+    "모든 자극문은 module_version의 hash와 일치해야 한다.",
+    "한 응답에는 서로 다른 두 코더가 배정되고 최초 판정은 수정하지 않는다.",
+    "코더 blind packet에는 participant_ref, axis score, 다른 coder_ref가 포함되지 않는다.",
+    "합의 행은 원 코더 판정 두 개를 참조하며 원 판정을 덮어쓰지 않는다.",
+    "withdrawn 참여자는 분석 view와 이후 배정에서 제외한다."
+  ],
+  "retentionAndDeletion": {
+    "directIdentifiers": "not_collected",
+    "participantWithdrawal": "analysis lock 전 participant_ref 기준 응답·점수·배정을 삭제 또는 별도 철회 구역으로 이동한다.",
+    "rawOpenText": "자유응답은 자동·수동 비식별 처리 뒤 최소 기간만 보존하고 보존 기간을 연구 버전에 잠근다.",
+    "aggregateResults": "재식별 위험이 없는 집계 결과만 장기 보존하며 작은 셀은 공개하지 않는다."
+  },
+  "implementationState": {
+    "jsonContractReady": true,
+    "syntheticFixtureReady": true,
+    "databaseMigrationApplied": false,
+    "rlsApplied": false,
+    "apiImplemented": false,
+    "realDataCollected": false
+  },
+  "nextGate": {
+    "name": "SYNTHETIC_FIXTURE_VALIDATOR_AND_MIGRATION_DRAFT",
+    "action": "fixture의 배정 균형·4층 응답·2코더 blind 규칙을 실행 검증하고, 통과 후에만 research namespace 마이그레이션 초안을 만든다."
+  }
+}

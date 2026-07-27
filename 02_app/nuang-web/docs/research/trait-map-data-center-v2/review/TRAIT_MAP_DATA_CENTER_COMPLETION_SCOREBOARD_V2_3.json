@@ -1,0 +1,104 @@
+{
+  "scoreboardVersion": "nuang-trait-map-data-center-completion-scoreboard.v2.3",
+  "sourceReportId": "TRAIT-MAP-DATA-CENTER-DEFINITION-OF-DONE.2.3",
+  "targetId": "RESEARCH_MASTER_V2_3_COMPLETE",
+  "updatedAt": "2026-07-24T00:00:00.000Z",
+  "requirements": [
+    {
+      "requirementId": "RM-01",
+      "title": "705 canonical 계보의 완전한 재구축",
+      "state": "passed",
+      "actual": "705 → 611 → 605; 구조 오류 0",
+      "proofRefs": [null, null, null]
+    },
+    {
+      "requirementId": "RM-02",
+      "title": "CAB-01~12 문장 교정 원장 완결",
+      "state": "passed",
+      "actual": "12/12 CAB; 72 상황; 288 슬롯; 605 canonical",
+      "proofRefs": [
+        "TRAIT-MAP-CANONICAL-ALL-BATCH-AUDIT.0.4",
+        "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3"
+      ]
+    },
+    {
+      "requirementId": "RM-03",
+      "title": "32개 성향 재조합과 한 글자 이웃 완결",
+      "state": "passed",
+      "actual": "9216 참조; unresolved 0; 이웃 80/80; CAB 960/960",
+      "proofRefs": [
+        "TRAIT-MAP-P2-SCREENED-RECOMPOSITION-AUDIT.2.3",
+        "TRAIT-MAP-CANONICAL-ALL-BATCH-AUDIT.0.4"
+      ]
+    },
+    {
+      "requirementId": "RM-04",
+      "title": "32개 장문 원고 구조와 최소 분량",
+      "state": "passed",
+      "actual": "32/32 원고 5만 자; 32/32 288개 참조; 32/32 해결",
+      "proofRefs": [
+        "TRAIT-MAP-V2-3-COMPLETENESS-GAP-REGISTER.2.3",
+        "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4"
+      ]
+    },
+    {
+      "requirementId": "RM-05",
+      "title": "32개 장문 원고 실질 품질 gate",
+      "state": "passed",
+      "actual": "32/32 통과; 이웃 80/80; 0개 보수 필요",
+      "proofRefs": [
+        "TRAIT-MAP-32-CONTENT-QUALITY-AUDIT.0.1",
+        "TRAIT-MAP-32-MASTER-COMPLETENESS-REAUDIT.2.3"
+      ]
+    },
+    {
+      "requirementId": "RM-06",
+      "title": "근거·맥락 범위의 완전한 등록",
+      "state": "passed",
+      "actual": "605 canonical; 2939 연결; exact 1618; 전이 미확립 1321; 동일 맥락 없음 101",
+      "proofRefs": [
+        "TRAIT-MAP-ALL-CANONICAL-CONTEXT-APPLICABILITY-AUDIT.2.3",
+        "TRAIT-MAP-V2-3-COMPLETENESS-GAP-REGISTER.2.3"
+      ]
+    },
+    {
+      "requirementId": "RM-07",
+      "title": "공식 10글자 언어와 32개 별칭 내부 계약",
+      "state": "passed",
+      "actual": "32/32 공식 언어; 짧은 32/32; 긴 32/32; 명칭 검사 9/9",
+      "proofRefs": [
+        "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4",
+        "TRAIT-MAP-32-PROFILE-NAME-FINAL-AUDIT.2.1"
+      ]
+    },
+    {
+      "requirementId": "RM-08",
+      "title": "COMMON·미승인 문장 발행 차단",
+      "state": "passed",
+      "actual": "COMMON 위반 0; allowlist 0; 합성 참조 9216; route 0",
+      "proofRefs": [
+        "TRAIT-MAP-COMMON-ISOLATION-AUDIT.2.3",
+        "TRAIT-MAP-PUBLICATION-GATE.2.3",
+        "TRAIT-MAP-RUNTIME-RESOLVER-HARNESS.2.3"
+      ]
+    },
+    {
+      "requirementId": "RM-09",
+      "title": "최종 기준선 전체 재현 검사",
+      "state": "passed",
+      "actual": "156개 current check 통과, exit 0",
+      "proofRefs": [
+        "TRAIT-MAP-DATA-CENTER-FINAL-COMPLETION-AUDIT.2.3",
+        "npm run research:trait-map:v2:v2-3-current:check"
+      ]
+    },
+    {
+      "requirementId": "RM-10",
+      "title": "요구사항별 최종 완료 감사",
+      "state": "passed",
+      "actual": "10/10 통과; 차단 0; 증거 해시 19개",
+      "proofRefs": ["TRAIT-MAP-DATA-CENTER-FINAL-COMPLETION-AUDIT.2.3"]
+    }
+  ],
+  "goalComplete": true
+}

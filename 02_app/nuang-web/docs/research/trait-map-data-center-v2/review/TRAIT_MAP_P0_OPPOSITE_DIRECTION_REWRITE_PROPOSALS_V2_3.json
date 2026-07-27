@@ -1,0 +1,39 @@
+{
+  "contractVersion": "nuang-trait-map-p0-opposite-direction-rewrite-proposals.v2.3",
+  "proposalSetId": "TRAIT-MAP-P0-OPPOSITE-DIRECTION-REWRITE-PROPOSALS.2.3",
+  "status": "INTERNAL_PROPOSAL_PENDING_INDEPENDENT_REVIEW",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceAuditReportId": "TRAIT-MAP-P0-OPPOSITE-DIRECTION-DISCRIMINATION-AUDIT.2.3",
+  "proposals": [
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-7|communication",
+      "issueCodes": [
+        "OPPOSITE_DIRECTION_NEAR_DUPLICATE",
+        "RO_DIRECTION_CUE_TOO_WEAK"
+      ],
+      "rationale": "두 문장 모두 ‘들어줄까, 같이 방법을 찾아볼까’를 묻고 있어 G의 원인·해결 초점과 A의 마음·관계 초점이 거의 구분되지 않는다.",
+      "variantProposals": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+          "axisSignature": "RO=G",
+          "currentText": "“지금 내가 들어주면 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움을 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "proposedText": "“무슨 일이 있었는지부터 알려줘. 내가 바로 도울 수 있는 일을 같이 정해보자”처럼 원인과 실행 방법을 분명히 묻는 방식이 잘 맞는다.",
+          "intendedDirectionCue": "원인 확인과 실제 해결 방법을 앞세운다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+          "axisSignature": "RO=A",
+          "currentText": "“지금은 그냥 들어주는 게 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움의 종류를 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "proposedText": "“지금 어떤 도움이 가장 편할지 말해줘. 네가 원하는 방식에 맞출게”처럼 상대의 마음과 원하는 지원 방식을 먼저 묻는 표현이 자연스럽다.",
+          "intendedDirectionCue": "상대의 마음과 관계에서 편안한 지원 방식을 앞세운다."
+        }
+      ],
+      "directEvidenceState": "pending_empirical_validation",
+      "independentRoleReviewState": "not_started",
+      "cognitiveInterviewState": "not_started",
+      "approvedForCanonicalLedger": false,
+      "approvedForPublication": false
+    }
+  ]
+}

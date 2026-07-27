@@ -1,0 +1,48 @@
+.wrap {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.wrap[data-mode="review"],
+.wrap[data-mode="atom"] {
+  margin-top: 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.actions button {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 8px;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.actions .primary {
+  border-color: transparent;
+  color: var(--nu-color-text-on-accent);
+  background: var(--admin-accent, var(--nu-color-brand-action));
+}
+
+.actions button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.wrap p {
+  margin: 0;
+  color: var(--nu-color-danger);
+  font-size: var(--nu-text-caption);
+}

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default async function FeedPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ posted?: string }>;
+  searchParams?: Promise<{ posted?: string; review?: string }>;
 }) {
   const feedPayload = await createServerFeedReadPayload();
   const query = searchParams ? await searchParams : {};
@@ -20,6 +20,7 @@ export default async function FeedPage({
     <div className={styles.shell}>
       <CommunityFeed
         highlightedPostId={query.posted ?? null}
+        pendingReviewNotice={query.review === "pending"}
         posts={feedPayload.items}
         viewerCode={feedPayload.viewerCode}
       />

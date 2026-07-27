@@ -1,0 +1,4705 @@
+{
+  "contractVersion": "nuang-trait-map-p0-direct-validation-synthetic-fixture.v2.3",
+  "fixtureId": "TRAIT-MAP-P0-DIRECT-VALIDATION-SYNTHETIC-FIXTURE.2.3",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "synthetic": true,
+  "containsRealParticipantData": false,
+  "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+  "moduleVersions": [
+    {
+      "moduleVersionId": "4a8d9e64-4b0a-4973-847f-c5aa7636c4e6",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "moduleId": "DVM-P0-01",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "stimulusVersion": 1,
+      "stimulusText": "마음에 드는 사람과 연락을 주고받고 있습니다. 최근 답장 간격과 말투가 전과 조금 달라졌지만, 그 이유는 아직 확인하지 못했습니다.",
+      "stimulusHash": "3eb452971f9be7400b2f9a6b2bfd6c100126c3d16cd158d6906f7fb9935b862d",
+      "targetAxes": ["OE", "ER"],
+      "synthetic": true
+    },
+    {
+      "moduleVersionId": "4062ed3f-ae46-4576-a0e0-cf8fd4493168",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "moduleId": "DVM-P0-02",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "stimulusVersion": 1,
+      "stimulusText": "마음에 드는 사람과 이야기하던 중 내가 한 말에 상대가 예상과 다른 표정을 보였습니다. 정확히 어떤 뜻이었는지는 아직 듣지 못했습니다.",
+      "stimulusHash": "2119816cb5ceb01779101f9d1cbc3dca56815b4ce95ee5a07daef638e00d4f35",
+      "targetAxes": ["OE", "ER"],
+      "synthetic": true
+    },
+    {
+      "moduleVersionId": "7a668e9c-26cb-4444-b28a-302f14e54a2a",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "moduleId": "DVM-P0-03",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "stimulusVersion": 1,
+      "stimulusText": "마음에 드는 사람을 다음 주에도 만나고 싶습니다. 상대도 같은 마음인지는 아직 모르며, 지금 말해도 되는 상황입니다.",
+      "stimulusHash": "b429c7b2f48a5dddbfed42760e3ac15359f2c330b2bc6437a4e9bcdb73c4fe55",
+      "targetAxes": ["SE", "OE"],
+      "synthetic": true
+    },
+    {
+      "moduleVersionId": "9c8a36f8-735f-4348-aa63-0d6e045c22e3",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "moduleId": "DVM-P0-04",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "stimulusVersion": 1,
+      "stimulusText": "마음에 드는 사람이 오늘 힘든 일이 있었다며 잠깐 이야기할 수 있는지 물었습니다. 어떤 도움을 원하는지는 아직 말하지 않았습니다.",
+      "stimulusHash": "444694adcddd3bb0b0404a5b80e56e5fbd894f264c5d7b530ea6e09168709229",
+      "targetAxes": ["RO"],
+      "synthetic": true
+    },
+    {
+      "moduleVersionId": "f69aa8b0-9eaa-4c25-ad3c-267240fbb666",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "moduleId": "DVM-P0-05",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "stimulusVersion": 1,
+      "stimulusText": "마음에 드는 사람과 함께 갈 장소를 정하고 있습니다. 서로 원하는 장소가 다르다는 것을 알게 됐습니다.",
+      "stimulusHash": "1bfb1134cfa786e0f4cf54075a82367ea6c565ebc69db8282e2c99b445dd7f79",
+      "targetAxes": ["OE", "RO"],
+      "synthetic": true
+    },
+    {
+      "moduleVersionId": "d12355f4-22c4-4f07-9723-ad65bbe8d7e0",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "moduleId": "DVM-P0-06",
+      "scenarioRef": "SCN-FAMILY-7",
+      "stimulusVersion": 1,
+      "stimulusText": "가족이 최근 힘든 일이 있어 도움을 받고 싶다고 말했습니다. 어떤 도움을 원하는지는 아직 구체적으로 말하지 않았습니다.",
+      "stimulusHash": "6c1cfe96d4675e5d16e28e1660ff089a9837fbf2a53856d0c3dfe1e285213f25",
+      "targetAxes": ["RO"],
+      "synthetic": true
+    }
+  ],
+  "participants": [
+    {
+      "participantRef": "2f4d81a9-db36-476e-978c-fb872ac8ea52",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "19_24",
+      "koreanLanguageComfort": "very_easy",
+      "relationshipContextExperience": "some",
+      "personalityTestFamiliarity": "none",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "53336ef6-bbf6-4c0f-86e3-e3b1f5d0aaa1",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "25_34",
+      "koreanLanguageComfort": "easy",
+      "relationshipContextExperience": "prefer_not_to_answer",
+      "personalityTestFamiliarity": "low",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "a6a4fe99-ea29-4fd6-b876-868e5dc3c3d2",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "35_49",
+      "koreanLanguageComfort": "mixed",
+      "relationshipContextExperience": "some",
+      "personalityTestFamiliarity": "medium",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "f19df212-2357-4db7-a596-940216f3f28b",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "50_64",
+      "koreanLanguageComfort": "very_easy",
+      "relationshipContextExperience": "prefer_not_to_answer",
+      "personalityTestFamiliarity": "none",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "2670a2d4-e1a1-4ded-918c-a8214d94f4b1",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "19_24",
+      "koreanLanguageComfort": "easy",
+      "relationshipContextExperience": "some",
+      "personalityTestFamiliarity": "low",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "b27158c4-031c-4987-9af3-2f6ace69002f",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "25_34",
+      "koreanLanguageComfort": "mixed",
+      "relationshipContextExperience": "prefer_not_to_answer",
+      "personalityTestFamiliarity": "medium",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "bce5a281-121f-4521-bdfa-542ea0a6dca5",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "35_49",
+      "koreanLanguageComfort": "very_easy",
+      "relationshipContextExperience": "some",
+      "personalityTestFamiliarity": "none",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "2c20883a-c56f-4cb5-8bc9-47a61b245c15",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "50_64",
+      "koreanLanguageComfort": "easy",
+      "relationshipContextExperience": "prefer_not_to_answer",
+      "personalityTestFamiliarity": "low",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "0b040e6b-030f-45a7-aecb-148d848fa2b7",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "19_24",
+      "koreanLanguageComfort": "mixed",
+      "relationshipContextExperience": "some",
+      "personalityTestFamiliarity": "medium",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "285c21fa-f381-4e23-b3ef-679673e4d301",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "25_34",
+      "koreanLanguageComfort": "very_easy",
+      "relationshipContextExperience": "prefer_not_to_answer",
+      "personalityTestFamiliarity": "none",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "b1515438-2232-4364-a81d-86528608d8da",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "35_49",
+      "koreanLanguageComfort": "easy",
+      "relationshipContextExperience": "some",
+      "personalityTestFamiliarity": "low",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    },
+    {
+      "participantRef": "342357e1-0d02-4de0-90ea-56038c33cc89",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "ageBand": "50_64",
+      "koreanLanguageComfort": "mixed",
+      "relationshipContextExperience": "prefer_not_to_answer",
+      "personalityTestFamiliarity": "medium",
+      "consentVersion": "SYNTHETIC-NOT-A-CONSENT",
+      "synthetic": true
+    }
+  ],
+  "sessions": [
+    {
+      "sessionRef": "84097828-fc31-48c8-9292-10df48901a85",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "2f4d81a9-db36-476e-978c-fb872ac8ea52",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-1",
+      "assessmentOrder": "assessment_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "5d906140-8048-412d-8539-25aed45333a1",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "53336ef6-bbf6-4c0f-86e3-e3b1f5d0aaa1",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-2",
+      "assessmentOrder": "scenario_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "eb278475-f606-4143-97df-8cb657e1c7ee",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "a6a4fe99-ea29-4fd6-b876-868e5dc3c3d2",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-3",
+      "assessmentOrder": "assessment_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "e1cdfcfb-8292-4831-b0a3-c977a5fd646f",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "f19df212-2357-4db7-a596-940216f3f28b",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-4",
+      "assessmentOrder": "scenario_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "d7b2fab4-95bd-492a-ad57-a1cc49972141",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "2670a2d4-e1a1-4ded-918c-a8214d94f4b1",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-5",
+      "assessmentOrder": "assessment_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "977ee55f-21e4-4dd3-9217-8f9f39af6fb3",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "b27158c4-031c-4987-9af3-2f6ace69002f",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-6",
+      "assessmentOrder": "scenario_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "cef8bce5-49cd-4050-8b3d-a30f5672426b",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "bce5a281-121f-4521-bdfa-542ea0a6dca5",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-7",
+      "assessmentOrder": "assessment_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "50d71bf2-9b36-4e63-8057-59d7f5307419",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "2c20883a-c56f-4cb5-8bc9-47a61b245c15",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-8",
+      "assessmentOrder": "scenario_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "94467c45-436d-451a-b67f-55ec8052a2c3",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "0b040e6b-030f-45a7-aecb-148d848fa2b7",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-9",
+      "assessmentOrder": "assessment_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "f630bcaa-0525-4c3a-82bb-6a222ba4854a",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "285c21fa-f381-4e23-b3ef-679673e4d301",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-10",
+      "assessmentOrder": "scenario_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "83148699-8277-4cb3-b0fe-a7a6d5efecf8",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "b1515438-2232-4364-a81d-86528608d8da",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-11",
+      "assessmentOrder": "assessment_first",
+      "state": "completed",
+      "synthetic": true
+    },
+    {
+      "sessionRef": "b84039f9-4b49-4093-b1cc-2afb5ad7dfdd",
+      "studyVersionId": "1d98cf43-87a8-4746-9de3-1a5ea75d0a72",
+      "participantRef": "342357e1-0d02-4de0-90ea-56038c33cc89",
+      "stage": "feasibility_pilot",
+      "assignmentSeed": "synthetic-12",
+      "assessmentOrder": "scenario_first",
+      "state": "completed",
+      "synthetic": true
+    }
+  ],
+  "assignments": [
+    {
+      "assignmentRef": "6124d474-8b7d-45d1-a92c-c063627bdc4a",
+      "sessionRef": "84097828-fc31-48c8-9292-10df48901a85",
+      "moduleVersionId": "4a8d9e64-4b0a-4973-847f-c5aa7636c4e6",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "8d962e07-96a1-46c1-8566-ed37399c3b29",
+      "sessionRef": "84097828-fc31-48c8-9292-10df48901a85",
+      "moduleVersionId": "9c8a36f8-735f-4348-aa63-0d6e045c22e3",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "87ff048d-d055-4e8a-9afe-261cfc544d4c",
+      "sessionRef": "5d906140-8048-412d-8539-25aed45333a1",
+      "moduleVersionId": "4062ed3f-ae46-4576-a0e0-cf8fd4493168",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "0f530dc4-ff39-4139-9700-a5569ec82129",
+      "sessionRef": "5d906140-8048-412d-8539-25aed45333a1",
+      "moduleVersionId": "f69aa8b0-9eaa-4c25-ad3c-267240fbb666",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "d56bf964-183b-43b9-a1e1-58917b10fd82",
+      "sessionRef": "eb278475-f606-4143-97df-8cb657e1c7ee",
+      "moduleVersionId": "7a668e9c-26cb-4444-b28a-302f14e54a2a",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "aa111768-9695-4311-aa51-2f07e5059599",
+      "sessionRef": "eb278475-f606-4143-97df-8cb657e1c7ee",
+      "moduleVersionId": "d12355f4-22c4-4f07-9723-ad65bbe8d7e0",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "d849760f-bdb3-4584-861b-e0ab0001cd6d",
+      "sessionRef": "e1cdfcfb-8292-4831-b0a3-c977a5fd646f",
+      "moduleVersionId": "9c8a36f8-735f-4348-aa63-0d6e045c22e3",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "c7bf9af2-abd1-45fd-a12d-67577bb957a1",
+      "sessionRef": "e1cdfcfb-8292-4831-b0a3-c977a5fd646f",
+      "moduleVersionId": "4a8d9e64-4b0a-4973-847f-c5aa7636c4e6",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "f1f0f679-7364-43dd-a3f5-c68111e9299b",
+      "sessionRef": "d7b2fab4-95bd-492a-ad57-a1cc49972141",
+      "moduleVersionId": "f69aa8b0-9eaa-4c25-ad3c-267240fbb666",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "c55c4919-77b0-4414-af86-a464c7f8322f",
+      "sessionRef": "d7b2fab4-95bd-492a-ad57-a1cc49972141",
+      "moduleVersionId": "4062ed3f-ae46-4576-a0e0-cf8fd4493168",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "f822f2d5-f287-40e2-b2f1-f2031e900918",
+      "sessionRef": "977ee55f-21e4-4dd3-9217-8f9f39af6fb3",
+      "moduleVersionId": "d12355f4-22c4-4f07-9723-ad65bbe8d7e0",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "77447999-277a-4e82-8e71-25fae738681c",
+      "sessionRef": "977ee55f-21e4-4dd3-9217-8f9f39af6fb3",
+      "moduleVersionId": "7a668e9c-26cb-4444-b28a-302f14e54a2a",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "1b2a5365-a9c2-443e-97db-e7fe227f67ee",
+      "sessionRef": "cef8bce5-49cd-4050-8b3d-a30f5672426b",
+      "moduleVersionId": "4a8d9e64-4b0a-4973-847f-c5aa7636c4e6",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "bdd6a5c3-3d1a-445c-96fd-05452416653d",
+      "sessionRef": "cef8bce5-49cd-4050-8b3d-a30f5672426b",
+      "moduleVersionId": "9c8a36f8-735f-4348-aa63-0d6e045c22e3",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "94292895-5954-4a81-8b77-04c684471d46",
+      "sessionRef": "50d71bf2-9b36-4e63-8057-59d7f5307419",
+      "moduleVersionId": "4062ed3f-ae46-4576-a0e0-cf8fd4493168",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "fe47454f-f5ff-4c65-83e6-2ce0c974c8e8",
+      "sessionRef": "50d71bf2-9b36-4e63-8057-59d7f5307419",
+      "moduleVersionId": "f69aa8b0-9eaa-4c25-ad3c-267240fbb666",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "83a81a29-7f67-46db-94a1-0a39f8492c69",
+      "sessionRef": "94467c45-436d-451a-b67f-55ec8052a2c3",
+      "moduleVersionId": "7a668e9c-26cb-4444-b28a-302f14e54a2a",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "ea612ee3-5e41-4542-864c-91d4e2a727a3",
+      "sessionRef": "94467c45-436d-451a-b67f-55ec8052a2c3",
+      "moduleVersionId": "d12355f4-22c4-4f07-9723-ad65bbe8d7e0",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "bd18554a-6d32-4aa7-bf78-0ecc76c2225b",
+      "sessionRef": "f630bcaa-0525-4c3a-82bb-6a222ba4854a",
+      "moduleVersionId": "9c8a36f8-735f-4348-aa63-0d6e045c22e3",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "9d420aa5-c84e-4b87-a69e-afc39632d534",
+      "sessionRef": "f630bcaa-0525-4c3a-82bb-6a222ba4854a",
+      "moduleVersionId": "4a8d9e64-4b0a-4973-847f-c5aa7636c4e6",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "a9e77800-de1e-49e9-884e-1f47eca5d293",
+      "sessionRef": "83148699-8277-4cb3-b0fe-a7a6d5efecf8",
+      "moduleVersionId": "f69aa8b0-9eaa-4c25-ad3c-267240fbb666",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "d3a89d84-6ef0-4bf5-bc94-e40a3aaa5aab",
+      "sessionRef": "83148699-8277-4cb3-b0fe-a7a6d5efecf8",
+      "moduleVersionId": "4062ed3f-ae46-4576-a0e0-cf8fd4493168",
+      "moduleOrder": 2,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "5473b86d-258d-4d59-83ca-584cfd6bf2d1",
+      "sessionRef": "b84039f9-4b49-4093-b1cc-2afb5ad7dfdd",
+      "moduleVersionId": "d12355f4-22c4-4f07-9723-ad65bbe8d7e0",
+      "moduleOrder": 1,
+      "synthetic": true
+    },
+    {
+      "assignmentRef": "7bb74c1b-38e3-47a0-a39b-0e92e9b5fce5",
+      "sessionRef": "b84039f9-4b49-4093-b1cc-2afb5ad7dfdd",
+      "moduleVersionId": "7a668e9c-26cb-4444-b28a-302f14e54a2a",
+      "moduleOrder": 2,
+      "synthetic": true
+    }
+  ],
+  "axisScoreSnapshots": [
+    {
+      "axisSnapshotRef": "bef5ca74-4192-4bf2-a88c-bf010d3e4093",
+      "sessionRef": "84097828-fc31-48c8-9292-10df48901a85",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "07012aaa933c93e318d5f3c06054a7921b1b3ffc9f2dc33f931452d9a3f8d31c",
+      "axisScores": { "SE": 0, "OE": 0.07, "RO": 0.11, "SM": 0.13, "ER": 0.17 },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "955fcaf6-2824-458d-bbae-039d4f5492e2",
+      "sessionRef": "5d906140-8048-412d-8539-25aed45333a1",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "0ea9fc331a7f7c5ac0f78386600fab26eebb909061416bd6c0f3c7f5ddb50fba",
+      "axisScores": {
+        "SE": 0.17,
+        "OE": 0.36,
+        "RO": 0.48,
+        "SM": 0.56,
+        "ER": 0.7
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "947d1d0e-b746-427b-bc2a-65c01a723b7b",
+      "sessionRef": "eb278475-f606-4143-97df-8cb657e1c7ee",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "ae62eae99bb188dbe1aaf161db7fb79c5265f36ffd08d511f5a744e14c1ebef5",
+      "axisScores": {
+        "SE": 0.34,
+        "OE": 0.65,
+        "RO": 0.85,
+        "SM": 0.99,
+        "ER": 0.22
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "b1cc78d3-21b9-4265-be84-5e195383519c",
+      "sessionRef": "e1cdfcfb-8292-4831-b0a3-c977a5fd646f",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "23db058c6347b25ce30dd6afa57e7ef7ce178b226ab210be09e6ec7a84dc8ddf",
+      "axisScores": {
+        "SE": 0.51,
+        "OE": 0.94,
+        "RO": 0.21,
+        "SM": 0.41,
+        "ER": 0.75
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "377aabf7-f17b-4d76-9f88-f48713990b0b",
+      "sessionRef": "d7b2fab4-95bd-492a-ad57-a1cc49972141",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "81de4b006c26c99f845df2068c9f2bd4f340034615f53d2d86e411a249e5b220",
+      "axisScores": {
+        "SE": 0.68,
+        "OE": 0.22,
+        "RO": 0.58,
+        "SM": 0.84,
+        "ER": 0.27
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "0780d251-d5f1-4d4d-9581-23416fa3fa25",
+      "sessionRef": "977ee55f-21e4-4dd3-9217-8f9f39af6fb3",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "09323add7151fa899e79d77c3b242352ad511a4cfc2fe09b3be15646609c1800",
+      "axisScores": {
+        "SE": 0.85,
+        "OE": 0.51,
+        "RO": 0.95,
+        "SM": 0.26,
+        "ER": 0.8
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "9a7bfa86-9bde-4cfe-990d-11d6a75908cb",
+      "sessionRef": "cef8bce5-49cd-4050-8b3d-a30f5672426b",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "e5a558f6d3ebef5b2f7b3e8cd952eda1b2b8fd1720e63be81b82e0157f3dc774",
+      "axisScores": {
+        "SE": 0.01,
+        "OE": 0.8,
+        "RO": 0.31,
+        "SM": 0.69,
+        "ER": 0.32
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "c8ffa935-c4b8-4074-8f9a-244547ab3a03",
+      "sessionRef": "50d71bf2-9b36-4e63-8057-59d7f5307419",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "dcea515e7c336f1e91deda87b3df8c17a7c85a6b007e76d25a4c12cef841ebca",
+      "axisScores": {
+        "SE": 0.18,
+        "OE": 0.08,
+        "RO": 0.68,
+        "SM": 0.11,
+        "ER": 0.85
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "a7fc7ca3-c014-49c6-8bd6-0b83b5b627e0",
+      "sessionRef": "94467c45-436d-451a-b67f-55ec8052a2c3",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "5c75f0fc0ae0e691c0281948918517422e085954fd429c05d0a38506aa052b31",
+      "axisScores": {
+        "SE": 0.35,
+        "OE": 0.37,
+        "RO": 0.04,
+        "SM": 0.54,
+        "ER": 0.37
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "b01a82d7-3199-4286-bfa7-c687d4ebd3c6",
+      "sessionRef": "f630bcaa-0525-4c3a-82bb-6a222ba4854a",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "f0cbd4db10427629ea2121486624113cc6f363f750a84e84916cda98841d7404",
+      "axisScores": {
+        "SE": 0.52,
+        "OE": 0.66,
+        "RO": 0.41,
+        "SM": 0.97,
+        "ER": 0.9
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "5109dc5b-8fcd-45b5-b551-0cf38e33c47f",
+      "sessionRef": "83148699-8277-4cb3-b0fe-a7a6d5efecf8",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "a3a55b6a05be9dd9254e763502dc587dfd592f6cb6367af30c425d7caf08cc2b",
+      "axisScores": {
+        "SE": 0.69,
+        "OE": 0.95,
+        "RO": 0.78,
+        "SM": 0.39,
+        "ER": 0.42
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    },
+    {
+      "axisSnapshotRef": "002e1d8a-c7f2-4d5f-851e-18c856ba2067",
+      "sessionRef": "b84039f9-4b49-4093-b1cc-2afb5ad7dfdd",
+      "assessmentReleaseId": "SYNTHETIC-NUANG-CORE-1",
+      "assessmentResponseHash": "75a88b027ef493176aea8f778ab9682d8ee62ff2a98affcaf4736a9750ac0af1",
+      "axisScores": {
+        "SE": 0.86,
+        "OE": 0.23,
+        "RO": 0.14,
+        "SM": 0.82,
+        "ER": 0.95
+      },
+      "scoreUncertainty": { "standardError": 0.1, "synthetic": true },
+      "synthetic": true
+    }
+  ],
+  "responses": [
+    {
+      "responseRef": "52e87dde-fa33-489f-86ba-289c0a04e5a5",
+      "assignmentRef": "6124d474-8b7d-45d1-a92c-c063627bdc4a",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 1-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3000,
+      "synthetic": true
+    },
+    {
+      "responseRef": "9521b6ab-5e99-4167-87a4-031a62b908da",
+      "assignmentRef": "6124d474-8b7d-45d1-a92c-c063627bdc4a",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 1-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3101,
+      "synthetic": true
+    },
+    {
+      "responseRef": "2679a5f3-6cae-471b-bfbd-94de710691cb",
+      "assignmentRef": "6124d474-8b7d-45d1-a92c-c063627bdc4a",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 1-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3202,
+      "synthetic": true
+    },
+    {
+      "responseRef": "e20cfbb3-9c7c-4324-bf4f-d102b29f5251",
+      "assignmentRef": "6124d474-8b7d-45d1-a92c-c063627bdc4a",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 1-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3303,
+      "synthetic": true
+    },
+    {
+      "responseRef": "4d2eed64-d96d-4c74-a0c7-d5c779295719",
+      "assignmentRef": "8d962e07-96a1-46c1-8566-ed37399c3b29",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 2-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3017,
+      "synthetic": true
+    },
+    {
+      "responseRef": "09e70a91-fa64-4321-b6fa-549b2d94736e",
+      "assignmentRef": "8d962e07-96a1-46c1-8566-ed37399c3b29",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 2-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3118,
+      "synthetic": true
+    },
+    {
+      "responseRef": "609edb50-650b-4d21-a178-71aaddf0461b",
+      "assignmentRef": "8d962e07-96a1-46c1-8566-ed37399c3b29",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 2-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3219,
+      "synthetic": true
+    },
+    {
+      "responseRef": "71bafe90-d5bc-45a3-95dd-390ab0eb2e5c",
+      "assignmentRef": "8d962e07-96a1-46c1-8566-ed37399c3b29",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 2-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3320,
+      "synthetic": true
+    },
+    {
+      "responseRef": "d1d02f15-d7c1-415b-a0b4-541da48fa65b",
+      "assignmentRef": "87ff048d-d055-4e8a-9afe-261cfc544d4c",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 3-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3034,
+      "synthetic": true
+    },
+    {
+      "responseRef": "018d0e9a-91bc-457e-b104-3aad00dcd886",
+      "assignmentRef": "87ff048d-d055-4e8a-9afe-261cfc544d4c",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 3-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3135,
+      "synthetic": true
+    },
+    {
+      "responseRef": "5683e530-4d82-4b9b-ba4c-429aaf336567",
+      "assignmentRef": "87ff048d-d055-4e8a-9afe-261cfc544d4c",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 3-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3236,
+      "synthetic": true
+    },
+    {
+      "responseRef": "ae1f059c-c0ad-47c9-903c-2619520f284e",
+      "assignmentRef": "87ff048d-d055-4e8a-9afe-261cfc544d4c",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 3-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3337,
+      "synthetic": true
+    },
+    {
+      "responseRef": "c49942a9-651d-4792-b826-7aaa8f120b58",
+      "assignmentRef": "0f530dc4-ff39-4139-9700-a5569ec82129",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 4-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3051,
+      "synthetic": true
+    },
+    {
+      "responseRef": "e9ff5306-b194-4c2a-9370-a1fc398c1aec",
+      "assignmentRef": "0f530dc4-ff39-4139-9700-a5569ec82129",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 4-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3152,
+      "synthetic": true
+    },
+    {
+      "responseRef": "749bc541-d602-4f8e-81f2-e62250a71051",
+      "assignmentRef": "0f530dc4-ff39-4139-9700-a5569ec82129",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 4-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3253,
+      "synthetic": true
+    },
+    {
+      "responseRef": "94a1741e-ad17-4013-8323-2f98d83cad60",
+      "assignmentRef": "0f530dc4-ff39-4139-9700-a5569ec82129",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 4-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3354,
+      "synthetic": true
+    },
+    {
+      "responseRef": "a6e90307-14ce-4bd3-ae97-9b8f7a09821c",
+      "assignmentRef": "d56bf964-183b-43b9-a1e1-58917b10fd82",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 5-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3068,
+      "synthetic": true
+    },
+    {
+      "responseRef": "7375d808-cf7a-4da1-86a4-761acde5f82c",
+      "assignmentRef": "d56bf964-183b-43b9-a1e1-58917b10fd82",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 5-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3169,
+      "synthetic": true
+    },
+    {
+      "responseRef": "bcf90682-5bfb-45e2-9375-08fd5a81f018",
+      "assignmentRef": "d56bf964-183b-43b9-a1e1-58917b10fd82",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 5-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3270,
+      "synthetic": true
+    },
+    {
+      "responseRef": "3db4392e-51ea-41fe-a4b0-912ab861bc56",
+      "assignmentRef": "d56bf964-183b-43b9-a1e1-58917b10fd82",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 5-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3371,
+      "synthetic": true
+    },
+    {
+      "responseRef": "a43ffb30-488b-41dd-af66-49396bae7483",
+      "assignmentRef": "aa111768-9695-4311-aa51-2f07e5059599",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 6-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3085,
+      "synthetic": true
+    },
+    {
+      "responseRef": "6c8f573e-42ac-4daa-a72e-148a12aa6060",
+      "assignmentRef": "aa111768-9695-4311-aa51-2f07e5059599",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 6-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3186,
+      "synthetic": true
+    },
+    {
+      "responseRef": "426435f8-e505-4723-9f57-750f0a63e988",
+      "assignmentRef": "aa111768-9695-4311-aa51-2f07e5059599",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 6-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3287,
+      "synthetic": true
+    },
+    {
+      "responseRef": "fcea7f54-2197-4d07-a623-fbbe2500fc2c",
+      "assignmentRef": "aa111768-9695-4311-aa51-2f07e5059599",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 6-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3388,
+      "synthetic": true
+    },
+    {
+      "responseRef": "c37df7b2-8510-45fb-a5a6-44efbb3183fd",
+      "assignmentRef": "d849760f-bdb3-4584-861b-e0ab0001cd6d",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 7-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3102,
+      "synthetic": true
+    },
+    {
+      "responseRef": "1ce807ea-6ca6-430c-9a1d-a0bdbfb96cac",
+      "assignmentRef": "d849760f-bdb3-4584-861b-e0ab0001cd6d",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 7-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3203,
+      "synthetic": true
+    },
+    {
+      "responseRef": "54416e9d-43ea-4350-9768-a7c138c6d816",
+      "assignmentRef": "d849760f-bdb3-4584-861b-e0ab0001cd6d",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 7-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3304,
+      "synthetic": true
+    },
+    {
+      "responseRef": "d4458fe3-2a3e-4a1d-a07a-a9456264ab9b",
+      "assignmentRef": "d849760f-bdb3-4584-861b-e0ab0001cd6d",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 7-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3405,
+      "synthetic": true
+    },
+    {
+      "responseRef": "ec4e239d-03e0-4960-a8c9-be85fd049263",
+      "assignmentRef": "c7bf9af2-abd1-45fd-a12d-67577bb957a1",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 8-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3119,
+      "synthetic": true
+    },
+    {
+      "responseRef": "66e1df52-0886-406f-9dba-78aae69814b4",
+      "assignmentRef": "c7bf9af2-abd1-45fd-a12d-67577bb957a1",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 8-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3220,
+      "synthetic": true
+    },
+    {
+      "responseRef": "2ef5633a-c70c-4756-bac6-e206a4031068",
+      "assignmentRef": "c7bf9af2-abd1-45fd-a12d-67577bb957a1",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 8-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3321,
+      "synthetic": true
+    },
+    {
+      "responseRef": "8cb81edd-3235-4517-8f4b-d8577a477d77",
+      "assignmentRef": "c7bf9af2-abd1-45fd-a12d-67577bb957a1",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 8-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3422,
+      "synthetic": true
+    },
+    {
+      "responseRef": "bf6f3ab7-9c00-4e79-8536-eb31aceb5ca1",
+      "assignmentRef": "f1f0f679-7364-43dd-a3f5-c68111e9299b",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 9-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3136,
+      "synthetic": true
+    },
+    {
+      "responseRef": "89897319-d992-4508-922d-630b2e97cd95",
+      "assignmentRef": "f1f0f679-7364-43dd-a3f5-c68111e9299b",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 9-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3237,
+      "synthetic": true
+    },
+    {
+      "responseRef": "95d83542-b000-40eb-b998-fcd6a00fea5b",
+      "assignmentRef": "f1f0f679-7364-43dd-a3f5-c68111e9299b",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 9-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3338,
+      "synthetic": true
+    },
+    {
+      "responseRef": "77c8bbb7-dcd8-4494-88e0-8d4068b714f9",
+      "assignmentRef": "f1f0f679-7364-43dd-a3f5-c68111e9299b",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 9-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3439,
+      "synthetic": true
+    },
+    {
+      "responseRef": "e3432531-18d0-4074-912f-9c91a1f1c675",
+      "assignmentRef": "c55c4919-77b0-4414-af86-a464c7f8322f",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 10-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3153,
+      "synthetic": true
+    },
+    {
+      "responseRef": "db7c0fee-85a2-41f0-9ac1-06cce66308ab",
+      "assignmentRef": "c55c4919-77b0-4414-af86-a464c7f8322f",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 10-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3254,
+      "synthetic": true
+    },
+    {
+      "responseRef": "d38e02ff-cf54-460e-828f-0731214019e2",
+      "assignmentRef": "c55c4919-77b0-4414-af86-a464c7f8322f",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 10-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3355,
+      "synthetic": true
+    },
+    {
+      "responseRef": "944f0bf3-e4f1-481c-9e79-8ae7e29e0a40",
+      "assignmentRef": "c55c4919-77b0-4414-af86-a464c7f8322f",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 10-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3456,
+      "synthetic": true
+    },
+    {
+      "responseRef": "ca96d6e1-24a2-4f09-8dcb-e12a8de5fcde",
+      "assignmentRef": "f822f2d5-f287-40e2-b2f1-f2031e900918",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 11-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3170,
+      "synthetic": true
+    },
+    {
+      "responseRef": "692e509c-a97c-47b4-8a33-e6d57cc07996",
+      "assignmentRef": "f822f2d5-f287-40e2-b2f1-f2031e900918",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 11-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3271,
+      "synthetic": true
+    },
+    {
+      "responseRef": "83bd271f-56ee-4d8c-97a3-0eb1b829a170",
+      "assignmentRef": "f822f2d5-f287-40e2-b2f1-f2031e900918",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 11-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3372,
+      "synthetic": true
+    },
+    {
+      "responseRef": "a460816b-6ab8-4072-aa2c-f159d11ff834",
+      "assignmentRef": "f822f2d5-f287-40e2-b2f1-f2031e900918",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 11-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3473,
+      "synthetic": true
+    },
+    {
+      "responseRef": "5b63763d-f409-4e94-be3f-0b9e590a95da",
+      "assignmentRef": "77447999-277a-4e82-8e71-25fae738681c",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 12-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3187,
+      "synthetic": true
+    },
+    {
+      "responseRef": "9175cd6b-3b69-4c82-a963-8b391f26ef44",
+      "assignmentRef": "77447999-277a-4e82-8e71-25fae738681c",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 12-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3288,
+      "synthetic": true
+    },
+    {
+      "responseRef": "c17e0cb4-871e-4595-a1a0-f8cb6b3224bd",
+      "assignmentRef": "77447999-277a-4e82-8e71-25fae738681c",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 12-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3389,
+      "synthetic": true
+    },
+    {
+      "responseRef": "69422cf5-d358-4355-a790-a48604f4d336",
+      "assignmentRef": "77447999-277a-4e82-8e71-25fae738681c",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 12-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3490,
+      "synthetic": true
+    },
+    {
+      "responseRef": "3aa36e05-c56e-434a-98ad-7f726d06050b",
+      "assignmentRef": "1b2a5365-a9c2-443e-97db-e7fe227f67ee",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 13-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3204,
+      "synthetic": true
+    },
+    {
+      "responseRef": "3af62fbd-fc5c-43a4-b425-2526e5b3d758",
+      "assignmentRef": "1b2a5365-a9c2-443e-97db-e7fe227f67ee",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 13-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3305,
+      "synthetic": true
+    },
+    {
+      "responseRef": "1e808a1d-69a2-4cef-844d-1c303bc2ecb8",
+      "assignmentRef": "1b2a5365-a9c2-443e-97db-e7fe227f67ee",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 13-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3406,
+      "synthetic": true
+    },
+    {
+      "responseRef": "14884efa-a1ef-44cf-82a1-3aae32d803c8",
+      "assignmentRef": "1b2a5365-a9c2-443e-97db-e7fe227f67ee",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 13-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3507,
+      "synthetic": true
+    },
+    {
+      "responseRef": "879ab7a2-e9f1-4e48-86dd-1ecd0175a490",
+      "assignmentRef": "bdd6a5c3-3d1a-445c-96fd-05452416653d",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 14-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3221,
+      "synthetic": true
+    },
+    {
+      "responseRef": "a4ac9b41-68a3-4558-9369-be0563c3fcb3",
+      "assignmentRef": "bdd6a5c3-3d1a-445c-96fd-05452416653d",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 14-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3322,
+      "synthetic": true
+    },
+    {
+      "responseRef": "305329f7-0132-402e-a626-320c501a9659",
+      "assignmentRef": "bdd6a5c3-3d1a-445c-96fd-05452416653d",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 14-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3423,
+      "synthetic": true
+    },
+    {
+      "responseRef": "4411e402-4027-46e5-94a1-2127cb4a26be",
+      "assignmentRef": "bdd6a5c3-3d1a-445c-96fd-05452416653d",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 14-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3524,
+      "synthetic": true
+    },
+    {
+      "responseRef": "4b7ee598-3a56-4ac5-a95d-b3d7a7e5ba2a",
+      "assignmentRef": "94292895-5954-4a81-8b77-04c684471d46",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 15-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3238,
+      "synthetic": true
+    },
+    {
+      "responseRef": "57cdb236-f204-4965-8f98-f08df3801fbb",
+      "assignmentRef": "94292895-5954-4a81-8b77-04c684471d46",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 15-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3339,
+      "synthetic": true
+    },
+    {
+      "responseRef": "09e03c6f-0f90-4cff-bd7f-7b8abfa32025",
+      "assignmentRef": "94292895-5954-4a81-8b77-04c684471d46",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 15-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3440,
+      "synthetic": true
+    },
+    {
+      "responseRef": "7c42ce3f-f85b-4b48-a54d-ba82df064c42",
+      "assignmentRef": "94292895-5954-4a81-8b77-04c684471d46",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 15-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3541,
+      "synthetic": true
+    },
+    {
+      "responseRef": "77e4416a-cdfa-4587-a548-0dce97329f96",
+      "assignmentRef": "fe47454f-f5ff-4c65-83e6-2ce0c974c8e8",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 16-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3255,
+      "synthetic": true
+    },
+    {
+      "responseRef": "a03ed099-388e-4074-bd69-f4d34696639b",
+      "assignmentRef": "fe47454f-f5ff-4c65-83e6-2ce0c974c8e8",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 16-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3356,
+      "synthetic": true
+    },
+    {
+      "responseRef": "2aa2d078-da50-4a6c-89bf-fe211d2398b9",
+      "assignmentRef": "fe47454f-f5ff-4c65-83e6-2ce0c974c8e8",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 16-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3457,
+      "synthetic": true
+    },
+    {
+      "responseRef": "e0ed1cb5-46eb-47d3-a97e-4bc491dbe977",
+      "assignmentRef": "fe47454f-f5ff-4c65-83e6-2ce0c974c8e8",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 16-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3558,
+      "synthetic": true
+    },
+    {
+      "responseRef": "8e26801a-7997-4d51-94c6-d47a6e06fa45",
+      "assignmentRef": "83a81a29-7f67-46db-94a1-0a39f8492c69",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 17-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3272,
+      "synthetic": true
+    },
+    {
+      "responseRef": "43946a96-5c36-4eaf-8212-26adc4bdb584",
+      "assignmentRef": "83a81a29-7f67-46db-94a1-0a39f8492c69",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 17-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3373,
+      "synthetic": true
+    },
+    {
+      "responseRef": "0dafdd98-98eb-4403-9f7b-99ef8dc21800",
+      "assignmentRef": "83a81a29-7f67-46db-94a1-0a39f8492c69",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 17-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3474,
+      "synthetic": true
+    },
+    {
+      "responseRef": "7fbe315c-e834-4ae3-a45a-303cf3128da4",
+      "assignmentRef": "83a81a29-7f67-46db-94a1-0a39f8492c69",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 17-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3575,
+      "synthetic": true
+    },
+    {
+      "responseRef": "d0c81d51-4d57-42fe-ad39-8557a795287d",
+      "assignmentRef": "ea612ee3-5e41-4542-864c-91d4e2a727a3",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 18-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3289,
+      "synthetic": true
+    },
+    {
+      "responseRef": "4084d38b-a516-4ecb-a871-458df4fb85dd",
+      "assignmentRef": "ea612ee3-5e41-4542-864c-91d4e2a727a3",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 18-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3390,
+      "synthetic": true
+    },
+    {
+      "responseRef": "0c709c51-8b86-488f-9ba2-deb11d7c19d9",
+      "assignmentRef": "ea612ee3-5e41-4542-864c-91d4e2a727a3",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 18-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3491,
+      "synthetic": true
+    },
+    {
+      "responseRef": "054f0493-edcc-42d8-8644-476fdb420474",
+      "assignmentRef": "ea612ee3-5e41-4542-864c-91d4e2a727a3",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 18-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3592,
+      "synthetic": true
+    },
+    {
+      "responseRef": "46255142-5d83-4276-b4f2-a10d8d6d9cae",
+      "assignmentRef": "bd18554a-6d32-4aa7-bf78-0ecc76c2225b",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 19-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3306,
+      "synthetic": true
+    },
+    {
+      "responseRef": "d8dcc9d6-048b-44a9-8a6d-5beb3166fb1c",
+      "assignmentRef": "bd18554a-6d32-4aa7-bf78-0ecc76c2225b",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 19-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3407,
+      "synthetic": true
+    },
+    {
+      "responseRef": "980db540-b05e-434e-b65c-5abacfe42229",
+      "assignmentRef": "bd18554a-6d32-4aa7-bf78-0ecc76c2225b",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 19-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3508,
+      "synthetic": true
+    },
+    {
+      "responseRef": "d783e6f8-dd32-4382-9319-141d37778c57",
+      "assignmentRef": "bd18554a-6d32-4aa7-bf78-0ecc76c2225b",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 19-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3609,
+      "synthetic": true
+    },
+    {
+      "responseRef": "5413ce9c-acb9-4081-b5d6-f5479e7be322",
+      "assignmentRef": "9d420aa5-c84e-4b87-a69e-afc39632d534",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 20-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3323,
+      "synthetic": true
+    },
+    {
+      "responseRef": "13c31c6b-cf2c-43a8-a3d1-55ee4ef8c472",
+      "assignmentRef": "9d420aa5-c84e-4b87-a69e-afc39632d534",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 20-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3424,
+      "synthetic": true
+    },
+    {
+      "responseRef": "484bdd2c-811c-4ba4-9fe7-014a6cbe47ba",
+      "assignmentRef": "9d420aa5-c84e-4b87-a69e-afc39632d534",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 20-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3525,
+      "synthetic": true
+    },
+    {
+      "responseRef": "6a9164b5-c567-45b1-85cd-e6243ebc3f95",
+      "assignmentRef": "9d420aa5-c84e-4b87-a69e-afc39632d534",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 20-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3626,
+      "synthetic": true
+    },
+    {
+      "responseRef": "91673972-1a79-4e3c-bdd2-0899df675dfc",
+      "assignmentRef": "a9e77800-de1e-49e9-884e-1f47eca5d293",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 21-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3340,
+      "synthetic": true
+    },
+    {
+      "responseRef": "2a13997e-fb94-49f2-8806-63775123a62b",
+      "assignmentRef": "a9e77800-de1e-49e9-884e-1f47eca5d293",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 21-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3441,
+      "synthetic": true
+    },
+    {
+      "responseRef": "4e49fa7c-b070-4472-bcda-cc1a6a98813c",
+      "assignmentRef": "a9e77800-de1e-49e9-884e-1f47eca5d293",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 21-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3542,
+      "synthetic": true
+    },
+    {
+      "responseRef": "f7fa9649-f08f-4b57-9b60-e38e3e6440e7",
+      "assignmentRef": "a9e77800-de1e-49e9-884e-1f47eca5d293",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 21-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3643,
+      "synthetic": true
+    },
+    {
+      "responseRef": "480a8fdf-f5cb-4356-a182-a04d72aa896b",
+      "assignmentRef": "d3a89d84-6ef0-4bf5-bc94-e40a3aaa5aab",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 22-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3357,
+      "synthetic": true
+    },
+    {
+      "responseRef": "97eabe11-534c-495d-844b-f4ef4277a50e",
+      "assignmentRef": "d3a89d84-6ef0-4bf5-bc94-e40a3aaa5aab",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 22-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3458,
+      "synthetic": true
+    },
+    {
+      "responseRef": "5d454de4-36d6-46b6-a043-e82cbfe135ec",
+      "assignmentRef": "d3a89d84-6ef0-4bf5-bc94-e40a3aaa5aab",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 22-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3559,
+      "synthetic": true
+    },
+    {
+      "responseRef": "2fcfd82a-1675-4e6c-813e-ceaae3e606ba",
+      "assignmentRef": "d3a89d84-6ef0-4bf5-bc94-e40a3aaa5aab",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 22-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3660,
+      "synthetic": true
+    },
+    {
+      "responseRef": "a30e3585-a6bf-4e0a-8b95-da3234a923df",
+      "assignmentRef": "5473b86d-258d-4d59-83ca-584cfd6bf2d1",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 23-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3374,
+      "synthetic": true
+    },
+    {
+      "responseRef": "ae6fb8dc-f4bf-431c-a70d-fe1b1284cf9b",
+      "assignmentRef": "5473b86d-258d-4d59-83ca-584cfd6bf2d1",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 23-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3475,
+      "synthetic": true
+    },
+    {
+      "responseRef": "45165812-2bb0-4bab-bb7f-68203cad3bd5",
+      "assignmentRef": "5473b86d-258d-4d59-83ca-584cfd6bf2d1",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 23-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3576,
+      "synthetic": true
+    },
+    {
+      "responseRef": "be5f827e-4727-48c7-a458-e44ecd8aaa79",
+      "assignmentRef": "5473b86d-258d-4d59-83ca-584cfd6bf2d1",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 23-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3677,
+      "synthetic": true
+    },
+    {
+      "responseRef": "aa17c154-0366-44b9-a162-986b44dd8ec2",
+      "assignmentRef": "7bb74c1b-38e3-47a0-a39b-0e92e9b5fce5",
+      "responseLayer": "attention",
+      "promptSnapshot": "SYNTHETIC PROMPT attention",
+      "openTextRedacted": "합성 응답 24-1",
+      "behaviorChoice": null,
+      "responseTimeMs": 3391,
+      "synthetic": true
+    },
+    {
+      "responseRef": "04c73eed-a09b-489c-85e8-502dba7b3c1e",
+      "assignmentRef": "7bb74c1b-38e3-47a0-a39b-0e92e9b5fce5",
+      "responseLayer": "first_thought",
+      "promptSnapshot": "SYNTHETIC PROMPT first_thought",
+      "openTextRedacted": "합성 응답 24-2",
+      "behaviorChoice": null,
+      "responseTimeMs": 3492,
+      "synthetic": true
+    },
+    {
+      "responseRef": "67a62849-46ea-4e79-92fc-f022de749350",
+      "assignmentRef": "7bb74c1b-38e3-47a0-a39b-0e92e9b5fce5",
+      "responseLayer": "actual_response",
+      "promptSnapshot": "SYNTHETIC PROMPT actual_response",
+      "openTextRedacted": "합성 응답 24-3",
+      "behaviorChoice": "choice_a",
+      "responseTimeMs": 3593,
+      "synthetic": true
+    },
+    {
+      "responseRef": "e5ed6793-5b88-4e0c-8fc6-6528e1485bf7",
+      "assignmentRef": "7bb74c1b-38e3-47a0-a39b-0e92e9b5fce5",
+      "responseLayer": "communication",
+      "promptSnapshot": "SYNTHETIC PROMPT communication",
+      "openTextRedacted": "합성 응답 24-4",
+      "behaviorChoice": null,
+      "responseTimeMs": 3694,
+      "synthetic": true
+    }
+  ],
+  "coderAssignments": [
+    {
+      "coderAssignmentRef": "a993e775-f05d-49ab-abf7-846f37a68c76",
+      "responseRef": "52e87dde-fa33-489f-86ba-289c0a04e5a5",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "22bf68ab75145c01ece1acc2507e9d93244cf007f7a01f8003854f93fe0aaa39",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "de106897-b3bc-415e-8755-bf6342b5efdb",
+      "responseRef": "52e87dde-fa33-489f-86ba-289c0a04e5a5",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "22bf68ab75145c01ece1acc2507e9d93244cf007f7a01f8003854f93fe0aaa39",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "0b0ad0bd-8193-4ef6-96b4-cb84b4701891",
+      "responseRef": "9521b6ab-5e99-4167-87a4-031a62b908da",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "5e534f1ff591e50a0dd21e304129113064e3f8ee623ae14415a8716328e162c8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "3c906d18-d440-4438-8506-92f9adc908c2",
+      "responseRef": "9521b6ab-5e99-4167-87a4-031a62b908da",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "5e534f1ff591e50a0dd21e304129113064e3f8ee623ae14415a8716328e162c8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f0b254ab-9182-4034-8b79-011c80ae77a8",
+      "responseRef": "2679a5f3-6cae-471b-bfbd-94de710691cb",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "3754e582632c8dfbf34a6dc819d56916f68c4560600ef56c293a7f44a0838ba2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "86fdd959-1526-4d39-8beb-d5827e4c20be",
+      "responseRef": "2679a5f3-6cae-471b-bfbd-94de710691cb",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "3754e582632c8dfbf34a6dc819d56916f68c4560600ef56c293a7f44a0838ba2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f9ad515c-8e13-4505-affb-ca27ab8292a1",
+      "responseRef": "e20cfbb3-9c7c-4324-bf4f-d102b29f5251",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "c34da5915df2d306537e5b2308d54d757a16719df3b52622914828d2f5332871",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b9afbbb9-fdc8-41a2-82ec-97aa45b07d50",
+      "responseRef": "e20cfbb3-9c7c-4324-bf4f-d102b29f5251",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "c34da5915df2d306537e5b2308d54d757a16719df3b52622914828d2f5332871",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b40b83b0-922f-44be-a729-c1f7413eea4d",
+      "responseRef": "4d2eed64-d96d-4c74-a0c7-d5c779295719",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "3fdb5888dddaebdc277899a394681c139bbda41f6dd26c9fdb30321d253b817a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "e4ef2ba4-10da-4408-b105-55e33427fad3",
+      "responseRef": "4d2eed64-d96d-4c74-a0c7-d5c779295719",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "3fdb5888dddaebdc277899a394681c139bbda41f6dd26c9fdb30321d253b817a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b9fcad21-1281-44e8-aaac-778d0a408734",
+      "responseRef": "09e70a91-fa64-4321-b6fa-549b2d94736e",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "27b8bf6ffca245904449efb2683d074abf1c054a5c324b2b15c74b9fc33003ee",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "187ea147-8dab-4a8c-94fc-886ab903507b",
+      "responseRef": "09e70a91-fa64-4321-b6fa-549b2d94736e",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "27b8bf6ffca245904449efb2683d074abf1c054a5c324b2b15c74b9fc33003ee",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "cee03cc6-807a-43f0-87ca-6e29a3ff11dd",
+      "responseRef": "609edb50-650b-4d21-a178-71aaddf0461b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "6f1ec03164e4941f8126fc0af5cc8b6366136116ad4e29063b881d6b9e024f94",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "47f5d267-3c37-43be-8b66-c995f50b3ece",
+      "responseRef": "609edb50-650b-4d21-a178-71aaddf0461b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "6f1ec03164e4941f8126fc0af5cc8b6366136116ad4e29063b881d6b9e024f94",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "d4b54fa5-89e2-4b84-9260-a88a819d2335",
+      "responseRef": "71bafe90-d5bc-45a3-95dd-390ab0eb2e5c",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "fbb5179b7584ece6fef771f1e9e42084def00a93c7e1fd4061edba71d3cbaeec",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c32b669a-7168-4d8e-9254-8bbc8ce9108a",
+      "responseRef": "71bafe90-d5bc-45a3-95dd-390ab0eb2e5c",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "fbb5179b7584ece6fef771f1e9e42084def00a93c7e1fd4061edba71d3cbaeec",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "414d5e59-3d1e-4a59-bdd1-feb981db2b28",
+      "responseRef": "d1d02f15-d7c1-415b-a0b4-541da48fa65b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "f0023946f023e6ded9fa41f4a7eabb55e8e40b7dffbd28dc43c08926cded7767",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b2c0c596-260a-446b-8321-262bbef5504a",
+      "responseRef": "d1d02f15-d7c1-415b-a0b4-541da48fa65b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "f0023946f023e6ded9fa41f4a7eabb55e8e40b7dffbd28dc43c08926cded7767",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "59f43358-a30c-4687-9419-4c044b0156cd",
+      "responseRef": "018d0e9a-91bc-457e-b104-3aad00dcd886",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "340584577402c12aa5824ed0b13c7b035338bd20de0f71d92887825c63c66ff4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "798871ea-a9e3-4529-afda-e79a97b5fbbf",
+      "responseRef": "018d0e9a-91bc-457e-b104-3aad00dcd886",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "340584577402c12aa5824ed0b13c7b035338bd20de0f71d92887825c63c66ff4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f049af20-0753-42b3-948f-61211aa46666",
+      "responseRef": "5683e530-4d82-4b9b-ba4c-429aaf336567",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "a0ce9b31bf2f6f6081f40ab6b0797942a924be1aa33ee77f4b753771d87a9703",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f4e8aa19-45b6-47af-908a-f30d958dd6d9",
+      "responseRef": "5683e530-4d82-4b9b-ba4c-429aaf336567",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "a0ce9b31bf2f6f6081f40ab6b0797942a924be1aa33ee77f4b753771d87a9703",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "021be95e-4677-4b9b-b4c7-f1273cb22f2f",
+      "responseRef": "ae1f059c-c0ad-47c9-903c-2619520f284e",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "32139629a794ffc1a626966d956d0062eebc0aaa965392ab76433cd253d7afb8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "1987926a-2cc5-466d-993a-d9fc54a58650",
+      "responseRef": "ae1f059c-c0ad-47c9-903c-2619520f284e",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "32139629a794ffc1a626966d956d0062eebc0aaa965392ab76433cd253d7afb8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "67bad901-a3fb-449c-a7a8-224fe100c714",
+      "responseRef": "c49942a9-651d-4792-b826-7aaa8f120b58",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "6ce6e21a3fe3b07454ce5165e41fd09fb1c3ab72b955f9f9de1cf2a04a6dbcdc",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "2094a06d-4aee-40f3-8e2e-adb65f5fd86e",
+      "responseRef": "c49942a9-651d-4792-b826-7aaa8f120b58",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "6ce6e21a3fe3b07454ce5165e41fd09fb1c3ab72b955f9f9de1cf2a04a6dbcdc",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "8d15df54-f133-416e-8d4f-c1e9a8848d57",
+      "responseRef": "e9ff5306-b194-4c2a-9370-a1fc398c1aec",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "b9c20ab3b2ee4f9b5f63ff43a0a3d4083f9c2feaa6c2149d24784ffab9789172",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "e8e0d431-9966-49c9-97d5-efd56294b52f",
+      "responseRef": "e9ff5306-b194-4c2a-9370-a1fc398c1aec",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "b9c20ab3b2ee4f9b5f63ff43a0a3d4083f9c2feaa6c2149d24784ffab9789172",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "35c5368a-f6ee-4385-8138-afbacd0f52a9",
+      "responseRef": "749bc541-d602-4f8e-81f2-e62250a71051",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "4ef5b4da888f8e162ece53e6fb11f8f1f49e47feb51991018432910803c5edb6",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6750170c-d3de-40ef-8fff-738ec394a56d",
+      "responseRef": "749bc541-d602-4f8e-81f2-e62250a71051",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "4ef5b4da888f8e162ece53e6fb11f8f1f49e47feb51991018432910803c5edb6",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "53be9e78-80d7-408e-936e-8d618cbca556",
+      "responseRef": "94a1741e-ad17-4013-8323-2f98d83cad60",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "92833ff45c6144846c96ced7a338e0e9ae50bbbfb41c0913c980b1cafe0baae2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9c0df749-c380-4ff8-8d61-b3da3d7d7b41",
+      "responseRef": "94a1741e-ad17-4013-8323-2f98d83cad60",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "92833ff45c6144846c96ced7a338e0e9ae50bbbfb41c0913c980b1cafe0baae2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "fb6f9579-5825-4727-b546-71280b78d813",
+      "responseRef": "a6e90307-14ce-4bd3-ae97-9b8f7a09821c",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "eb9bef35545044fb0ed176a65785a6d6359d218de6f5a2f1ac85bbbf06cb8c3f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "800699f8-b50b-4a02-a9de-d145b7887193",
+      "responseRef": "a6e90307-14ce-4bd3-ae97-9b8f7a09821c",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "eb9bef35545044fb0ed176a65785a6d6359d218de6f5a2f1ac85bbbf06cb8c3f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "dbf44954-d214-43c5-ad05-0d74a3472108",
+      "responseRef": "7375d808-cf7a-4da1-86a4-761acde5f82c",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "89cf7b0d2285b9cc5613e4d693a3a1fd9447e99a9a57ba3263cc11bff9a1a267",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9c6ce2ae-bd3f-4485-b685-2ee59bf3c900",
+      "responseRef": "7375d808-cf7a-4da1-86a4-761acde5f82c",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "89cf7b0d2285b9cc5613e4d693a3a1fd9447e99a9a57ba3263cc11bff9a1a267",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b79090dc-ef04-4619-9057-fc567998130f",
+      "responseRef": "bcf90682-5bfb-45e2-9375-08fd5a81f018",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "1c5a093a077d0003028583e6511de099519b3935d6f4adb8fb0208051896175d",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "621e59e2-ab33-4cd9-aa7c-e58580fbe4fe",
+      "responseRef": "bcf90682-5bfb-45e2-9375-08fd5a81f018",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "1c5a093a077d0003028583e6511de099519b3935d6f4adb8fb0208051896175d",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "eff1cdc9-838d-40e3-add4-7e0b8600004b",
+      "responseRef": "3db4392e-51ea-41fe-a4b0-912ab861bc56",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "7c9b1404e2320439ee4720518f0622c4695e289b3f61d90dfa2d108a7bffcdab",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "efbc13ac-bf79-40eb-9d3d-f6f5bc56d6ab",
+      "responseRef": "3db4392e-51ea-41fe-a4b0-912ab861bc56",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "7c9b1404e2320439ee4720518f0622c4695e289b3f61d90dfa2d108a7bffcdab",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "cbea1cdc-4f3f-48f7-b33c-8d6baa28739e",
+      "responseRef": "a43ffb30-488b-41dd-af66-49396bae7483",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "f4e4e52503525bcf34894db7fb5f0f64b7bbc67849df6cb2d286eb13fb455feb",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "06ecb869-6d29-4ba0-add1-dc7a5652fcad",
+      "responseRef": "a43ffb30-488b-41dd-af66-49396bae7483",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "f4e4e52503525bcf34894db7fb5f0f64b7bbc67849df6cb2d286eb13fb455feb",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c58518cd-0fdf-4460-9860-fc6184b4e1d7",
+      "responseRef": "6c8f573e-42ac-4daa-a72e-148a12aa6060",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "a0db14c87ca5d85898b74346581c5a792fd4ad232e8e49eab0522ee020fd5012",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "dbd8481d-b3f2-4fc5-8988-ca81dae52193",
+      "responseRef": "6c8f573e-42ac-4daa-a72e-148a12aa6060",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "a0db14c87ca5d85898b74346581c5a792fd4ad232e8e49eab0522ee020fd5012",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a0800051-3e97-4d8d-9e78-6b85a6d220b3",
+      "responseRef": "426435f8-e505-4723-9f57-750f0a63e988",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "b7d851e14a025e55c23cedf42d498ad64992df6538f750a3d1d6390a49fa01ed",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "101b25ad-b87c-439a-9dc9-39b67d379751",
+      "responseRef": "426435f8-e505-4723-9f57-750f0a63e988",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "b7d851e14a025e55c23cedf42d498ad64992df6538f750a3d1d6390a49fa01ed",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a311728b-64d0-441a-9ec1-6d11e97aeb2e",
+      "responseRef": "fcea7f54-2197-4d07-a623-fbbe2500fc2c",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "ee48b95205cb986f0035aeb7e5817b454156b914596f173de6e526494581ee90",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "e32cdbbb-0cb4-48c5-9615-8249434f4729",
+      "responseRef": "fcea7f54-2197-4d07-a623-fbbe2500fc2c",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "ee48b95205cb986f0035aeb7e5817b454156b914596f173de6e526494581ee90",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c30e5113-1e19-49c1-b72e-bd0e8f75c2e4",
+      "responseRef": "c37df7b2-8510-45fb-a5a6-44efbb3183fd",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "95127a7ac3c310f7234344b120089e8c7695d5152d8f72ce24959d47864022d6",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6a82095c-2bba-462d-8b9c-033a2580c8bb",
+      "responseRef": "c37df7b2-8510-45fb-a5a6-44efbb3183fd",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "95127a7ac3c310f7234344b120089e8c7695d5152d8f72ce24959d47864022d6",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "48a91292-bc6e-4409-8275-9e28bbcaed27",
+      "responseRef": "1ce807ea-6ca6-430c-9a1d-a0bdbfb96cac",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "cb06a800e721dc95cbb79634724a6992c01a4b1136cce350ecd24f26c4ab6f1e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "798ed7da-e968-4dc1-bb85-89d4b6ad09a1",
+      "responseRef": "1ce807ea-6ca6-430c-9a1d-a0bdbfb96cac",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "cb06a800e721dc95cbb79634724a6992c01a4b1136cce350ecd24f26c4ab6f1e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "dd8f2a95-b7ff-4cd4-8a79-67bf2e427d3e",
+      "responseRef": "54416e9d-43ea-4350-9768-a7c138c6d816",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "1fa2bc4ebcd706c812c749ee4e62ec161873cc032238b8a763e932bc29af8671",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "1b35f302-1125-4a1b-ac0b-d5b3d0b1898a",
+      "responseRef": "54416e9d-43ea-4350-9768-a7c138c6d816",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "1fa2bc4ebcd706c812c749ee4e62ec161873cc032238b8a763e932bc29af8671",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c25fe33c-08e0-4cae-a7a7-ec8ea70c90b2",
+      "responseRef": "d4458fe3-2a3e-4a1d-a07a-a9456264ab9b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "5b2cfec0b37ac3c6335570378111c7e7f9422e60fe682b8e7c61bed6dbbc2ab4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ab19be2f-1b23-4766-9a81-3c1df4cc5eaf",
+      "responseRef": "d4458fe3-2a3e-4a1d-a07a-a9456264ab9b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "5b2cfec0b37ac3c6335570378111c7e7f9422e60fe682b8e7c61bed6dbbc2ab4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f5241995-b937-4d91-b4e6-2688129e859d",
+      "responseRef": "ec4e239d-03e0-4960-a8c9-be85fd049263",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "9a7e20c0f7d048e1361db01c24820c9b8e54e212b414d6cbd387e748313a278e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "69870494-9722-4026-abb3-da3b2be1a936",
+      "responseRef": "ec4e239d-03e0-4960-a8c9-be85fd049263",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "9a7e20c0f7d048e1361db01c24820c9b8e54e212b414d6cbd387e748313a278e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a27ae651-0402-42ee-ae55-3860a7a8a1f4",
+      "responseRef": "66e1df52-0886-406f-9dba-78aae69814b4",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "db325b4ca8331a349c34860ca0438137af6e980f9a5a6a585f248431ad528149",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "2d719430-bf92-49ba-b627-74d864e20e22",
+      "responseRef": "66e1df52-0886-406f-9dba-78aae69814b4",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "db325b4ca8331a349c34860ca0438137af6e980f9a5a6a585f248431ad528149",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "67c46a34-4a4d-4541-bd8f-ebca4b72cb3a",
+      "responseRef": "2ef5633a-c70c-4756-bac6-e206a4031068",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "4ce08016689dfa81a68992391f645e9d7f9cf376fbd0e0588ce31e87478e791e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "2e67c058-91c7-472d-9e96-ddd4038845e7",
+      "responseRef": "2ef5633a-c70c-4756-bac6-e206a4031068",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "4ce08016689dfa81a68992391f645e9d7f9cf376fbd0e0588ce31e87478e791e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ebb2d938-22a0-43d7-84a6-4274e89811b9",
+      "responseRef": "8cb81edd-3235-4517-8f4b-d8577a477d77",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "7aab72eab0956420435d0e7ab5be68ed2cf54e676c76b0198340e8e1fedb0695",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ae9273e7-4e52-4813-bc55-8efe819c2bb8",
+      "responseRef": "8cb81edd-3235-4517-8f4b-d8577a477d77",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "7aab72eab0956420435d0e7ab5be68ed2cf54e676c76b0198340e8e1fedb0695",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "e5ad04ff-6f5d-432f-89a7-2f84489f6485",
+      "responseRef": "bf6f3ab7-9c00-4e79-8536-eb31aceb5ca1",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "af5641827513c34a6ee0baf31326971cbe51494dae5da2a6afc41e39272839fa",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "2049cf7b-7070-4e8e-97e3-18aa775f891a",
+      "responseRef": "bf6f3ab7-9c00-4e79-8536-eb31aceb5ca1",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "af5641827513c34a6ee0baf31326971cbe51494dae5da2a6afc41e39272839fa",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "640de001-fb2d-41e5-b167-477928e3ceeb",
+      "responseRef": "89897319-d992-4508-922d-630b2e97cd95",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "9a9c68d409796c52acebbade68e18a612ab6490875578384ac8c8b47c0fd08f9",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "e1340435-4169-4eff-975f-52da5430c2cf",
+      "responseRef": "89897319-d992-4508-922d-630b2e97cd95",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "9a9c68d409796c52acebbade68e18a612ab6490875578384ac8c8b47c0fd08f9",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c7fd0d10-f965-4412-b897-8fbeee7c8f5c",
+      "responseRef": "95d83542-b000-40eb-b998-fcd6a00fea5b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "2e6edc1b4e31e8e14ff8b75939ac338b6ebccffa9dc87e16bbf02f546c9d967a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9a597f00-cac9-446e-92b1-bf0fbc30ac1f",
+      "responseRef": "95d83542-b000-40eb-b998-fcd6a00fea5b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "2e6edc1b4e31e8e14ff8b75939ac338b6ebccffa9dc87e16bbf02f546c9d967a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "0132cc3c-0165-4fcd-9879-725eb2522146",
+      "responseRef": "77c8bbb7-dcd8-4494-88e0-8d4068b714f9",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "a93cad2f54072f4049fb0e0ae39e2106530f7dbbf2ffb4c4e1bdd7f6c1aeb79c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b2bccb94-68f6-4a37-861f-5d744bf7ee09",
+      "responseRef": "77c8bbb7-dcd8-4494-88e0-8d4068b714f9",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "a93cad2f54072f4049fb0e0ae39e2106530f7dbbf2ffb4c4e1bdd7f6c1aeb79c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6c98c767-fe9b-425b-b5ce-5e8328efaa10",
+      "responseRef": "e3432531-18d0-4074-912f-9c91a1f1c675",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "b0bb1a3eb61792cb95287a568ce0abc4db290a55744746164e0b9863d276b060",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "cf926700-6971-4870-9fec-6b6249a46965",
+      "responseRef": "e3432531-18d0-4074-912f-9c91a1f1c675",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "b0bb1a3eb61792cb95287a568ce0abc4db290a55744746164e0b9863d276b060",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "593bc330-e74e-4505-b0a5-0dde9c190b94",
+      "responseRef": "db7c0fee-85a2-41f0-9ac1-06cce66308ab",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "3ec3f193540e562afd3d01c4ad0ffb2be77305023f588dddb5fa1f6703d3d6ea",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "5d8be856-6c5e-4bb3-847c-4e39138f2d7b",
+      "responseRef": "db7c0fee-85a2-41f0-9ac1-06cce66308ab",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "3ec3f193540e562afd3d01c4ad0ffb2be77305023f588dddb5fa1f6703d3d6ea",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6ea9a2ed-befd-4ab5-b039-83ebb8e7903c",
+      "responseRef": "d38e02ff-cf54-460e-828f-0731214019e2",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "bf18e818b6a8e02a686e5da6cf1c83634eeba75cdd956fa016ec284d2d7f1de8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "d59f81ea-b382-45da-babc-00e75bf407b0",
+      "responseRef": "d38e02ff-cf54-460e-828f-0731214019e2",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "bf18e818b6a8e02a686e5da6cf1c83634eeba75cdd956fa016ec284d2d7f1de8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b9862341-cb65-4ac1-b813-275ad3b20686",
+      "responseRef": "944f0bf3-e4f1-481c-9e79-8ae7e29e0a40",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "4bbf6c573906fd2bb675bdbd601af300ae875dcc30685b4ec0826a07c7e9283f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "33e4b1a0-67b7-4870-877e-ce505c1d1b91",
+      "responseRef": "944f0bf3-e4f1-481c-9e79-8ae7e29e0a40",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "4bbf6c573906fd2bb675bdbd601af300ae875dcc30685b4ec0826a07c7e9283f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "322708b5-f49b-4bde-ba76-fca177ec4f14",
+      "responseRef": "ca96d6e1-24a2-4f09-8dcb-e12a8de5fcde",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "4d7968df740728f6911e69bcd860ab912c4d4b9cd840af6d84f2f5b0ba0e87d2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b5c3d39b-b710-4700-8b8a-f1681c5c43fc",
+      "responseRef": "ca96d6e1-24a2-4f09-8dcb-e12a8de5fcde",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "4d7968df740728f6911e69bcd860ab912c4d4b9cd840af6d84f2f5b0ba0e87d2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "28ca91d2-8d06-472a-8a85-f574db6a71c8",
+      "responseRef": "692e509c-a97c-47b4-8a33-e6d57cc07996",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "5c005e7e62695e13bc420b7bfb9d0aa0f3cc602c50330a90ca4fecc8a27eb397",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "4145a5a5-2ae5-479d-99be-ccbf00add7fc",
+      "responseRef": "692e509c-a97c-47b4-8a33-e6d57cc07996",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "5c005e7e62695e13bc420b7bfb9d0aa0f3cc602c50330a90ca4fecc8a27eb397",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "86d57656-8d7f-4ec3-a762-62b28430f192",
+      "responseRef": "83bd271f-56ee-4d8c-97a3-0eb1b829a170",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "04dc16be04850bcc38af2cb4070ffece742164251f88b93b32e5a133d0924c87",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6c634e26-acec-4c26-8668-48c7f678e92e",
+      "responseRef": "83bd271f-56ee-4d8c-97a3-0eb1b829a170",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "04dc16be04850bcc38af2cb4070ffece742164251f88b93b32e5a133d0924c87",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c611b391-a641-4f8e-b186-861cffad6b32",
+      "responseRef": "a460816b-6ab8-4072-aa2c-f159d11ff834",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "0528098f9fab1381ae7f126d9acdfef36e724d3348889e8b19e6ca3fc650d243",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "98dea2d6-3319-4a91-b9f6-e926af3b7e6e",
+      "responseRef": "a460816b-6ab8-4072-aa2c-f159d11ff834",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "0528098f9fab1381ae7f126d9acdfef36e724d3348889e8b19e6ca3fc650d243",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "7f089e43-80a3-4983-8dd8-63454648c565",
+      "responseRef": "5b63763d-f409-4e94-be3f-0b9e590a95da",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "58c73f5fe3db49934fb885e215de39f0a4f8eb2c1cbf05482bb8d5f1257c8765",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "05be5f79-4bfa-4ac2-9b69-6681a4a50e73",
+      "responseRef": "5b63763d-f409-4e94-be3f-0b9e590a95da",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "58c73f5fe3db49934fb885e215de39f0a4f8eb2c1cbf05482bb8d5f1257c8765",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "1cb3b14f-3669-46aa-8a75-d92fd282fe2c",
+      "responseRef": "9175cd6b-3b69-4c82-a963-8b391f26ef44",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "7431cec94e3251538e49de249d1debfbecd84dbcc1097dd3edddf0130755ed3d",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "847312b8-ccdf-437a-9810-00ecea95d45f",
+      "responseRef": "9175cd6b-3b69-4c82-a963-8b391f26ef44",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "7431cec94e3251538e49de249d1debfbecd84dbcc1097dd3edddf0130755ed3d",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "75d05787-c7f9-4ed2-a8f9-f9ba762d1e94",
+      "responseRef": "c17e0cb4-871e-4595-a1a0-f8cb6b3224bd",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "d8700d089c60d09689e55289752b9f8c778bb9a04a9b5a709a35e15befbc72de",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f25472b0-a4b5-474f-bd38-6142871ff29e",
+      "responseRef": "c17e0cb4-871e-4595-a1a0-f8cb6b3224bd",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "d8700d089c60d09689e55289752b9f8c778bb9a04a9b5a709a35e15befbc72de",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "877b99f1-eddf-4bf9-8891-708fd462a1bb",
+      "responseRef": "69422cf5-d358-4355-a790-a48604f4d336",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "88f078499ee24f4bdd47977bf69bb3c2ca0a514356ddff015441620d170d2b61",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b3549d36-520b-48ab-99e4-a1c43c800011",
+      "responseRef": "69422cf5-d358-4355-a790-a48604f4d336",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "88f078499ee24f4bdd47977bf69bb3c2ca0a514356ddff015441620d170d2b61",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "64b70248-cc3b-40c5-b7b2-4e0b64e00c88",
+      "responseRef": "3aa36e05-c56e-434a-98ad-7f726d06050b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "a3595d54c529251bdec7a9e5f8821d664468c4f469ec0472d8486661a7eecdb4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "4baa9de4-4ec0-4612-b360-9a17caa01d8e",
+      "responseRef": "3aa36e05-c56e-434a-98ad-7f726d06050b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "a3595d54c529251bdec7a9e5f8821d664468c4f469ec0472d8486661a7eecdb4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "acc82e5e-bcac-4f14-98b0-7d29115311b5",
+      "responseRef": "3af62fbd-fc5c-43a4-b425-2526e5b3d758",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "d851b21bd929268ab143534fffe964a361208a85386f8d15473b25fc1068dfa8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "3e800f43-5b6e-4a09-8255-f31550354a24",
+      "responseRef": "3af62fbd-fc5c-43a4-b425-2526e5b3d758",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "d851b21bd929268ab143534fffe964a361208a85386f8d15473b25fc1068dfa8",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9955e56d-701f-4390-8c9a-c6e06c7ab17d",
+      "responseRef": "1e808a1d-69a2-4cef-844d-1c303bc2ecb8",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "1311f3d95c787252b7378c8702d899dc4586ec54f87ce27b42546023a182bcd3",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "674f1cc1-31cf-498d-a926-a0ae42a6a9d3",
+      "responseRef": "1e808a1d-69a2-4cef-844d-1c303bc2ecb8",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "1311f3d95c787252b7378c8702d899dc4586ec54f87ce27b42546023a182bcd3",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b4b42556-fb63-422f-a3b8-140f94479557",
+      "responseRef": "14884efa-a1ef-44cf-82a1-3aae32d803c8",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "929fd702e3b5abf91505419d330940f997885612fa06f2f8da3982929a5b75a5",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "8a6e177d-f307-48ab-aef0-73b0add540b7",
+      "responseRef": "14884efa-a1ef-44cf-82a1-3aae32d803c8",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "929fd702e3b5abf91505419d330940f997885612fa06f2f8da3982929a5b75a5",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "21f539cd-6207-4952-8811-f44f98498868",
+      "responseRef": "879ab7a2-e9f1-4e48-86dd-1ecd0175a490",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "bfea10e4fd5e277aca537cb9b35129175a08c8284e16f5e0300aa99ea7564d92",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b3453256-330b-4f84-9143-d01266427c01",
+      "responseRef": "879ab7a2-e9f1-4e48-86dd-1ecd0175a490",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "bfea10e4fd5e277aca537cb9b35129175a08c8284e16f5e0300aa99ea7564d92",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "d858c48d-369b-4d92-aaf8-ec043d2b61a6",
+      "responseRef": "a4ac9b41-68a3-4558-9369-be0563c3fcb3",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "5b7679693ec15bee0178de041984aa29e2dec08e24ba408c9d2583b519144571",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6db1f8f2-4789-45c1-bd7c-f754281d7002",
+      "responseRef": "a4ac9b41-68a3-4558-9369-be0563c3fcb3",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "5b7679693ec15bee0178de041984aa29e2dec08e24ba408c9d2583b519144571",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "12dda4e7-1439-496c-8af8-d40c3de6d43a",
+      "responseRef": "305329f7-0132-402e-a626-320c501a9659",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "99ed14292495a0f96cf4e794d7157e57fd91223d37e65ae293cf416fa06ccb0a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "03a25f57-0c0d-4d9d-8630-c299fb214be5",
+      "responseRef": "305329f7-0132-402e-a626-320c501a9659",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "99ed14292495a0f96cf4e794d7157e57fd91223d37e65ae293cf416fa06ccb0a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b4e2cb0e-7910-46df-b4c6-d0ee67da333e",
+      "responseRef": "4411e402-4027-46e5-94a1-2127cb4a26be",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "9c050f6dc8741db60fe125090a6fc59848839af934746e3893593dacf292ee1c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6d33eb1b-26e6-4bc3-9b29-0002eeb95420",
+      "responseRef": "4411e402-4027-46e5-94a1-2127cb4a26be",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "9c050f6dc8741db60fe125090a6fc59848839af934746e3893593dacf292ee1c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b0cefeff-695e-40e4-ab4f-8e767b258902",
+      "responseRef": "4b7ee598-3a56-4ac5-a95d-b3d7a7e5ba2a",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "b48f293981ca478d4c36bf08c8339344441c8786ee8a915f7b9da0b9821f9c3c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "3a7b06d2-a83d-4306-84ce-f84a958208ec",
+      "responseRef": "4b7ee598-3a56-4ac5-a95d-b3d7a7e5ba2a",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "b48f293981ca478d4c36bf08c8339344441c8786ee8a915f7b9da0b9821f9c3c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "8c120a14-a578-4304-a8a5-a7721b44dbce",
+      "responseRef": "57cdb236-f204-4965-8f98-f08df3801fbb",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "3024f1362ad8cc4ff9a9523a9c9b7360b8ef8015ec4808a443648688eaec647e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "d50a3dee-16cb-4cce-9826-0a80a7167b36",
+      "responseRef": "57cdb236-f204-4965-8f98-f08df3801fbb",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "3024f1362ad8cc4ff9a9523a9c9b7360b8ef8015ec4808a443648688eaec647e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "5d84847f-19d6-42a2-be94-8a0f55f5c8e2",
+      "responseRef": "09e03c6f-0f90-4cff-bd7f-7b8abfa32025",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "31915ea363ded31809256136be99bf1bfd5923c696fbe11a711a4e563d81627b",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ac9be08d-b283-4adb-b242-3ac0d217a0de",
+      "responseRef": "09e03c6f-0f90-4cff-bd7f-7b8abfa32025",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "31915ea363ded31809256136be99bf1bfd5923c696fbe11a711a4e563d81627b",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "6f323fff-a09b-417f-9251-0b32cc06f4cd",
+      "responseRef": "7c42ce3f-f85b-4b48-a54d-ba82df064c42",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "cd988831c398b654002ca46949c2878c433f58edb1f1070567cb9894de5f54f7",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b559c753-c37d-4453-8924-6c4497570292",
+      "responseRef": "7c42ce3f-f85b-4b48-a54d-ba82df064c42",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "cd988831c398b654002ca46949c2878c433f58edb1f1070567cb9894de5f54f7",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "eeed436d-4891-479e-8aa0-945be5dd8bd7",
+      "responseRef": "77e4416a-cdfa-4587-a548-0dce97329f96",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "9e6c008ee832459051048f8cd11d7091bf68257a10464b0f4989cf33c2822063",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "52c04a5e-e165-46b2-8859-9d3b9e7ab114",
+      "responseRef": "77e4416a-cdfa-4587-a548-0dce97329f96",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "9e6c008ee832459051048f8cd11d7091bf68257a10464b0f4989cf33c2822063",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "79546546-7c58-4ff0-b8a2-4b01421c2e04",
+      "responseRef": "a03ed099-388e-4074-bd69-f4d34696639b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "66be147084ba308edfe2d14a187a7101defcd8654d26ac27b97891ec13482ab4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "286e994e-b531-4747-b7bd-bf5bb52a8733",
+      "responseRef": "a03ed099-388e-4074-bd69-f4d34696639b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "66be147084ba308edfe2d14a187a7101defcd8654d26ac27b97891ec13482ab4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "4f18212d-5132-44ae-8a49-c7555de41f5e",
+      "responseRef": "2aa2d078-da50-4a6c-89bf-fe211d2398b9",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "d685ffa2c036f9d7ca5620a800fd35dff522b0a17447227478aff9493a5a6f76",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "339cdade-09dd-4ce7-852c-e89429a4e3b3",
+      "responseRef": "2aa2d078-da50-4a6c-89bf-fe211d2398b9",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "d685ffa2c036f9d7ca5620a800fd35dff522b0a17447227478aff9493a5a6f76",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "cb25980b-cc2b-44ea-9d86-99f7abc6cb9c",
+      "responseRef": "e0ed1cb5-46eb-47d3-a97e-4bc491dbe977",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "73c7790558403a8a1c6dd2112da1da22afb235bf245d4e2a924dd445bfd3f178",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ceda8321-26eb-4415-bc46-1221045bcdd3",
+      "responseRef": "e0ed1cb5-46eb-47d3-a97e-4bc491dbe977",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "73c7790558403a8a1c6dd2112da1da22afb235bf245d4e2a924dd445bfd3f178",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b5aaf39e-6714-4c26-9eab-65ac4407ebcb",
+      "responseRef": "8e26801a-7997-4d51-94c6-d47a6e06fa45",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "a89937b1f6b6354a5632e9fa592491e8b970d03f4b43124c1b53bccbdd52a47b",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "38d3b68d-5a64-4268-89c7-bf7aeab0682b",
+      "responseRef": "8e26801a-7997-4d51-94c6-d47a6e06fa45",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "a89937b1f6b6354a5632e9fa592491e8b970d03f4b43124c1b53bccbdd52a47b",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "e959332f-f025-4500-a0aa-69fd1e9befa3",
+      "responseRef": "43946a96-5c36-4eaf-8212-26adc4bdb584",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "a9440e2238d70b0563b52e02c709a894a36d95e58280cd62b463dd10cf783602",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "327e10d9-c021-4992-b849-8e441dc83794",
+      "responseRef": "43946a96-5c36-4eaf-8212-26adc4bdb584",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "a9440e2238d70b0563b52e02c709a894a36d95e58280cd62b463dd10cf783602",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f9ea1abd-a97e-48c2-b9d1-463dc39f16d7",
+      "responseRef": "0dafdd98-98eb-4403-9f7b-99ef8dc21800",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "845bee9639ef2ae5910c9178bc2e4b417cfc4e53ca37f04c0363ade0f44aec5f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "47b5ce61-c313-4d2f-b1c8-aff6fbd97f6b",
+      "responseRef": "0dafdd98-98eb-4403-9f7b-99ef8dc21800",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "845bee9639ef2ae5910c9178bc2e4b417cfc4e53ca37f04c0363ade0f44aec5f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "60fd2aa5-a5fa-4191-9be3-131045ffcd68",
+      "responseRef": "7fbe315c-e834-4ae3-a45a-303cf3128da4",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "4d9d408055f655bddfb81789ebdd5eea5d96eef3a59035cef50ccb6533e267b7",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b9a2e39e-0548-4b69-a3ac-cb648e025087",
+      "responseRef": "7fbe315c-e834-4ae3-a45a-303cf3128da4",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "4d9d408055f655bddfb81789ebdd5eea5d96eef3a59035cef50ccb6533e267b7",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "8541f255-180f-4ce4-8bf0-b9d42fc14a9a",
+      "responseRef": "d0c81d51-4d57-42fe-ad39-8557a795287d",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "7cdb33fae7351c4cc970685530b7f4fd947244f1f06dfc54bdfdf97a5fea8347",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a777e1c6-5b83-46ad-b361-35cabe9bfd77",
+      "responseRef": "d0c81d51-4d57-42fe-ad39-8557a795287d",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "7cdb33fae7351c4cc970685530b7f4fd947244f1f06dfc54bdfdf97a5fea8347",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "838a223d-8cab-431d-8fd4-865059f8f466",
+      "responseRef": "4084d38b-a516-4ecb-a871-458df4fb85dd",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "25bf12a52fb263ad86962fc159b8f6a8df8400932eb36bc0859a058ba22e80fd",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "0dc13cc9-cfde-46b4-b89a-630e9f6571d4",
+      "responseRef": "4084d38b-a516-4ecb-a871-458df4fb85dd",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "25bf12a52fb263ad86962fc159b8f6a8df8400932eb36bc0859a058ba22e80fd",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9f9acadf-fd65-4e54-a0e6-1ee775e787c1",
+      "responseRef": "0c709c51-8b86-488f-9ba2-deb11d7c19d9",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "34fb0d394b883fa8735a2953bd079da3ba134364c7f0bb1d9ea1afa2efbc7c1d",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "42396d62-ea3a-4bda-8edc-a60f976db85e",
+      "responseRef": "0c709c51-8b86-488f-9ba2-deb11d7c19d9",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "34fb0d394b883fa8735a2953bd079da3ba134364c7f0bb1d9ea1afa2efbc7c1d",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a88ce26b-e461-45b6-bc74-4cbb33c10ec4",
+      "responseRef": "054f0493-edcc-42d8-8644-476fdb420474",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "16d25063af17bb7b403b4373d83a9d04117d001fd79988ca0368f8a0bf4cbe6e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "db270daf-45f7-4a8f-ae2a-ac84720501ca",
+      "responseRef": "054f0493-edcc-42d8-8644-476fdb420474",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "16d25063af17bb7b403b4373d83a9d04117d001fd79988ca0368f8a0bf4cbe6e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "dbd1c785-0145-412a-b8df-755e94204319",
+      "responseRef": "46255142-5d83-4276-b4f2-a10d8d6d9cae",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "fa45dfc9aeadb896c5c4b6b3c4384bec3bd154823f4334de69a3086bd7a9cde1",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b00e8cb6-53dc-4268-b889-e525e5de019a",
+      "responseRef": "46255142-5d83-4276-b4f2-a10d8d6d9cae",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "fa45dfc9aeadb896c5c4b6b3c4384bec3bd154823f4334de69a3086bd7a9cde1",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "7189e3fa-b6a0-43ae-a73d-abe6646a17a2",
+      "responseRef": "d8dcc9d6-048b-44a9-8a6d-5beb3166fb1c",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "07981bb96909306574b55de69fedab0f7415a53793fb26b576dba7c745f93a41",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "3a75e20c-436f-4c61-936c-f7d97497f92e",
+      "responseRef": "d8dcc9d6-048b-44a9-8a6d-5beb3166fb1c",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "07981bb96909306574b55de69fedab0f7415a53793fb26b576dba7c745f93a41",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a082635d-79b2-4ed3-9f42-7ff13c4460bb",
+      "responseRef": "980db540-b05e-434e-b65c-5abacfe42229",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "c6349a42aa727149c51125f9f4c1123534fd57c32f8f350260feafe69f598ea4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "489c4bef-1832-4c33-94b8-28b748747f30",
+      "responseRef": "980db540-b05e-434e-b65c-5abacfe42229",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "c6349a42aa727149c51125f9f4c1123534fd57c32f8f350260feafe69f598ea4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "d605308b-42b6-4b1f-9be7-8df1cc8f8851",
+      "responseRef": "d783e6f8-dd32-4382-9319-141d37778c57",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "f69aab62926f24bd26b2606b0c919da963f4998ef2fe0621ab19c6b124651012",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "59206f83-b09a-4959-b965-2f1a12efe6f9",
+      "responseRef": "d783e6f8-dd32-4382-9319-141d37778c57",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "f69aab62926f24bd26b2606b0c919da963f4998ef2fe0621ab19c6b124651012",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "266767f5-821a-4eac-8d96-8319ab7b5f4b",
+      "responseRef": "5413ce9c-acb9-4081-b5d6-f5479e7be322",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "f145023af0be80f7458fdb4c3e4b5069db1e67b25b64852ad3797989b65ca1e4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "b286037f-de7d-481d-a38d-84b3d2f301d2",
+      "responseRef": "5413ce9c-acb9-4081-b5d6-f5479e7be322",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "f145023af0be80f7458fdb4c3e4b5069db1e67b25b64852ad3797989b65ca1e4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "dd26ed89-1718-4ae7-abf8-246d578a8b29",
+      "responseRef": "13c31c6b-cf2c-43a8-a3d1-55ee4ef8c472",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "8e22ac8d174947f3b5669375dec2642f9c08b268d97da0f394973ab9f3cdb752",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "99a087b1-1a7f-4771-a065-e012880de664",
+      "responseRef": "13c31c6b-cf2c-43a8-a3d1-55ee4ef8c472",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "8e22ac8d174947f3b5669375dec2642f9c08b268d97da0f394973ab9f3cdb752",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "3c8c6760-1058-413a-b290-9785a87147e8",
+      "responseRef": "484bdd2c-811c-4ba4-9fe7-014a6cbe47ba",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "69da8c37c44ff8447c4f0a783f2024f1f93b7a46e89a8248c647a853822b0eb9",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a4cb1847-6b87-4a23-bac7-17dcd186cadd",
+      "responseRef": "484bdd2c-811c-4ba4-9fe7-014a6cbe47ba",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "69da8c37c44ff8447c4f0a783f2024f1f93b7a46e89a8248c647a853822b0eb9",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9e6c081d-1cc4-4b99-8db6-04dea4796e4b",
+      "responseRef": "6a9164b5-c567-45b1-85cd-e6243ebc3f95",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "7e655042dd25c0f80c6b2ece277a9ffd6e19673259921c28c5149676509c7e6f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "875e82c6-55d3-48ac-ab08-4a65a8fba3d0",
+      "responseRef": "6a9164b5-c567-45b1-85cd-e6243ebc3f95",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "7e655042dd25c0f80c6b2ece277a9ffd6e19673259921c28c5149676509c7e6f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c700975b-72d8-41a4-a2ef-adeb914e7670",
+      "responseRef": "91673972-1a79-4e3c-bdd2-0899df675dfc",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "c9118f33cb1666b7d6bb5b4860779038b26bd92194c66dabf40693079956b6b3",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "7de96b00-79da-47fe-a5fe-9769514f6e47",
+      "responseRef": "91673972-1a79-4e3c-bdd2-0899df675dfc",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "c9118f33cb1666b7d6bb5b4860779038b26bd92194c66dabf40693079956b6b3",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "41b4e068-8726-4096-916a-4eaf3fa5fe5b",
+      "responseRef": "2a13997e-fb94-49f2-8806-63775123a62b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "c5642ef74cdbd6c208fc77a5b1091f64dc239e4f1667c2457ebcbd32938a19f5",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a0b6e695-3512-4468-ad98-c4098d5c0141",
+      "responseRef": "2a13997e-fb94-49f2-8806-63775123a62b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "c5642ef74cdbd6c208fc77a5b1091f64dc239e4f1667c2457ebcbd32938a19f5",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "d399f261-0e5f-4e45-ab91-c2b77863e8c6",
+      "responseRef": "4e49fa7c-b070-4472-bcda-cc1a6a98813c",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "13121d9b78f83bf4409a1fde520b60546b05df8ed46c7bf6105fabe07702db7f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "d4a27d93-7585-4677-a8a7-29c640468aaf",
+      "responseRef": "4e49fa7c-b070-4472-bcda-cc1a6a98813c",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "13121d9b78f83bf4409a1fde520b60546b05df8ed46c7bf6105fabe07702db7f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f430e1b3-8f25-44fd-a03c-8f131dfd1f7f",
+      "responseRef": "f7fa9649-f08f-4b57-9b60-e38e3e6440e7",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "70a8edfbfc44d8577fef785e4481e5d39e0fde38e162b7ef641042e71526f659",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a7c850f0-0004-4be1-864b-4340ea866d88",
+      "responseRef": "f7fa9649-f08f-4b57-9b60-e38e3e6440e7",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "70a8edfbfc44d8577fef785e4481e5d39e0fde38e162b7ef641042e71526f659",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "17b758eb-5a4e-4f94-99a6-b598f064a514",
+      "responseRef": "480a8fdf-f5cb-4356-a182-a04d72aa896b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "3fbd11dffb95c574d4dad1315735e54ba55011a577a308f0a14a716d45c3403a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a1e38da8-5b5f-405c-8681-32c71ec1e767",
+      "responseRef": "480a8fdf-f5cb-4356-a182-a04d72aa896b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "3fbd11dffb95c574d4dad1315735e54ba55011a577a308f0a14a716d45c3403a",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c517b461-c9c3-47eb-97ff-88170e34e890",
+      "responseRef": "97eabe11-534c-495d-844b-f4ef4277a50e",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "c4be0d5f3981b69207773c355245c99d1004e014fce4f3e838996ea9a06b84cc",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ba59f33e-de0d-441a-8a36-79164d85a5bf",
+      "responseRef": "97eabe11-534c-495d-844b-f4ef4277a50e",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "c4be0d5f3981b69207773c355245c99d1004e014fce4f3e838996ea9a06b84cc",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "a965a0c3-b1e0-44ba-b460-7957852387b4",
+      "responseRef": "5d454de4-36d6-46b6-a043-e82cbfe135ec",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "72c1bc33753851cbcccd5fd722b2549e419d4ec157f35675ae77f55079e982fb",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "742981bf-79e7-406b-9cc3-a446c6a00dd9",
+      "responseRef": "5d454de4-36d6-46b6-a043-e82cbfe135ec",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "72c1bc33753851cbcccd5fd722b2549e419d4ec157f35675ae77f55079e982fb",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "f2287a94-8b43-4157-b0b5-dae1bea39b47",
+      "responseRef": "2fcfd82a-1675-4e6c-813e-ceaae3e606ba",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "d701439a0e9d27f8e3ec9b3ab672af9641ffd584a79611b03f2b5a1797b14ce4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "3a97afef-cef0-4eb2-a02b-e9814e541b76",
+      "responseRef": "2fcfd82a-1675-4e6c-813e-ceaae3e606ba",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "d701439a0e9d27f8e3ec9b3ab672af9641ffd584a79611b03f2b5a1797b14ce4",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "c611c950-c841-4867-b130-c6303db77581",
+      "responseRef": "a30e3585-a6bf-4e0a-8b95-da3234a923df",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "b682718119a31ccde53bade49a9219e95731c9fae6cbaf6f036f2154111d47e2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "94016af1-5f79-43c6-9f42-4725232e268e",
+      "responseRef": "a30e3585-a6bf-4e0a-8b95-da3234a923df",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "b682718119a31ccde53bade49a9219e95731c9fae6cbaf6f036f2154111d47e2",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ab231945-bb46-4d8b-b50d-23be95d28e6f",
+      "responseRef": "ae6fb8dc-f4bf-431c-a70d-fe1b1284cf9b",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "de133b130fe61d87b456cdffcb1eb404d7ef4f56ae706108109d1412ebca333f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "72997a3b-99d2-4a50-ae75-dc75e480fe6c",
+      "responseRef": "ae6fb8dc-f4bf-431c-a70d-fe1b1284cf9b",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "de133b130fe61d87b456cdffcb1eb404d7ef4f56ae706108109d1412ebca333f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "34257928-e316-4777-a458-a7175786106a",
+      "responseRef": "45165812-2bb0-4bab-bb7f-68203cad3bd5",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "b7bc111fee2a1a7ffbe6b817c38595f96299ff0dffbfa7abaa6e3252158953e5",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "7bc957fb-dc85-4911-bff1-30e02706e234",
+      "responseRef": "45165812-2bb0-4bab-bb7f-68203cad3bd5",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "b7bc111fee2a1a7ffbe6b817c38595f96299ff0dffbfa7abaa6e3252158953e5",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "16d5a045-3977-4431-b163-71a6723b152b",
+      "responseRef": "be5f827e-4727-48c7-a458-e44ecd8aaa79",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "ef07126514a79645995b3335ff5378d6d6ce4fa014f321dea08a82c30bc0da9c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "ee0aa704-e025-42f7-bb82-95629ede9f4e",
+      "responseRef": "be5f827e-4727-48c7-a458-e44ecd8aaa79",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "ef07126514a79645995b3335ff5378d6d6ce4fa014f321dea08a82c30bc0da9c",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "36313b16-f661-403a-bfae-2c3b29e04a7c",
+      "responseRef": "aa17c154-0366-44b9-a162-986b44dd8ec2",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "b8bf094ee3e6fdad147e60fb1ac8aaabc990405442d7bc8243c19f5d34632223",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "dbf29a8b-38cc-4db5-9f1b-9d5f0d1ee89e",
+      "responseRef": "aa17c154-0366-44b9-a162-986b44dd8ec2",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "b8bf094ee3e6fdad147e60fb1ac8aaabc990405442d7bc8243c19f5d34632223",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9bc4738e-e190-4422-9ad8-76fc1f4df7f5",
+      "responseRef": "04c73eed-a09b-489c-85e8-502dba7b3c1e",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "270856cbe3f2c3c64fbff2c05d042c3dc43c086c1242204a8deb5fa5aa89523f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "fbfded83-3ff5-4889-9763-17577466af96",
+      "responseRef": "04c73eed-a09b-489c-85e8-502dba7b3c1e",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "270856cbe3f2c3c64fbff2c05d042c3dc43c086c1242204a8deb5fa5aa89523f",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "fa33f7ec-72a2-4726-880e-3fd18688c6fa",
+      "responseRef": "67a62849-46ea-4e79-92fc-f022de749350",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "81f7a363941ab6bd847fa77cc2ca006c3dafb8a929a4c8bd958f913c9ca53e5e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "9f4a6d5b-658a-44d5-9bb4-70ac2188a8f9",
+      "responseRef": "67a62849-46ea-4e79-92fc-f022de749350",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "81f7a363941ab6bd847fa77cc2ca006c3dafb8a929a4c8bd958f913c9ca53e5e",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "bccb8eae-0bb8-4172-9117-9e15113c9e38",
+      "responseRef": "e5ed6793-5b88-4e0c-8fc6-6528e1485bf7",
+      "coderRef": "e19269d9-ba9c-42fd-a1d2-ec94ef29d743",
+      "blindPacketHash": "3908a9cb03fb0733e43813494aa47c9b13906c328de87b1b1711560959cf99e5",
+      "synthetic": true
+    },
+    {
+      "coderAssignmentRef": "3e562a76-3cd2-42bc-ba4d-9d1d4cb8455d",
+      "responseRef": "e5ed6793-5b88-4e0c-8fc6-6528e1485bf7",
+      "coderRef": "5838978b-e560-4799-955f-637d45e9932f",
+      "blindPacketHash": "3908a9cb03fb0733e43813494aa47c9b13906c328de87b1b1711560959cf99e5",
+      "synthetic": true
+    }
+  ],
+  "coderRatings": [
+    {
+      "coderRatingRef": "5a61b87c-e2cf-4739-b329-e22c57fc8adc",
+      "coderAssignmentRef": "a993e775-f05d-49ab-abf7-846f37a68c76",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 1",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a08b4b3b-f9ab-4f93-83f7-9d140bad3f06",
+      "coderAssignmentRef": "de106897-b3bc-415e-8755-bf6342b5efdb",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 2",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "0d8dd795-534c-4f31-b444-3315154e1808",
+      "coderAssignmentRef": "0b0ad0bd-8193-4ef6-96b4-cb84b4701891",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 3",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "3d879001-5ed5-419c-b37b-06c480c933ed",
+      "coderAssignmentRef": "3c906d18-d440-4438-8506-92f9adc908c2",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 4",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "29f3827c-e282-467e-9721-6081a3825ac5",
+      "coderAssignmentRef": "f0b254ab-9182-4034-8b79-011c80ae77a8",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 5",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2f378c38-0326-41ac-a9c8-edc15fe079d9",
+      "coderAssignmentRef": "86fdd959-1526-4d39-8beb-d5827e4c20be",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 6",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "083fe5f1-af0a-41a7-b5aa-22f55cd18eaa",
+      "coderAssignmentRef": "f9ad515c-8e13-4505-affb-ca27ab8292a1",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 7",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "32782ba4-61eb-4f39-95bf-c71274efa0a3",
+      "coderAssignmentRef": "b9afbbb9-fdc8-41a2-82ec-97aa45b07d50",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 8",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8917277a-e63a-4e04-b7ce-30f84bb93f27",
+      "coderAssignmentRef": "b40b83b0-922f-44be-a729-c1f7413eea4d",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 9",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "db066892-18f0-4c52-98c2-2c02964ede79",
+      "coderAssignmentRef": "e4ef2ba4-10da-4408-b105-55e33427fad3",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 10",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a3ae26c7-1a3c-4cc1-85f2-143714bfb57e",
+      "coderAssignmentRef": "b9fcad21-1281-44e8-aaac-778d0a408734",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 11",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9d6a49f6-6305-434f-8274-98a3cf788576",
+      "coderAssignmentRef": "187ea147-8dab-4a8c-94fc-886ab903507b",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 12",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9bc31b75-620f-4767-9506-ed5f3fa746cc",
+      "coderAssignmentRef": "cee03cc6-807a-43f0-87ca-6e29a3ff11dd",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 13",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a39bc6db-acd1-4d2d-8dbf-2d733abe0092",
+      "coderAssignmentRef": "47f5d267-3c37-43be-8b66-c995f50b3ece",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 14",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "7996f86a-9c7a-49bd-90af-1e577769a2ee",
+      "coderAssignmentRef": "d4b54fa5-89e2-4b84-9260-a88a819d2335",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 15",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "6f8a3bde-91e9-40de-b67a-4a492e0bbcbe",
+      "coderAssignmentRef": "c32b669a-7168-4d8e-9254-8bbc8ce9108a",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 16",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "13f25dc1-52c8-4e00-89e6-35e36946d388",
+      "coderAssignmentRef": "414d5e59-3d1e-4a59-bdd1-feb981db2b28",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 17",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "f16c0047-ad56-41b0-9fcb-316505657ebe",
+      "coderAssignmentRef": "b2c0c596-260a-446b-8321-262bbef5504a",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 18",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2191baa6-6d70-46b0-919a-05f0b23b5fb9",
+      "coderAssignmentRef": "59f43358-a30c-4687-9419-4c044b0156cd",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 19",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "70d1ad3c-ecf8-45b1-9859-3f2589f360bf",
+      "coderAssignmentRef": "798871ea-a9e3-4529-afda-e79a97b5fbbf",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 20",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "7e1522d9-6676-4963-8e1c-6fd1aaf6e723",
+      "coderAssignmentRef": "f049af20-0753-42b3-948f-61211aa46666",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 21",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b1b9c58f-0a7e-4de9-8f9e-99cc06ec7ad8",
+      "coderAssignmentRef": "f4e8aa19-45b6-47af-908a-f30d958dd6d9",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 22",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9587fcb1-d967-496e-b973-73285e3acb46",
+      "coderAssignmentRef": "021be95e-4677-4b9b-b4c7-f1273cb22f2f",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 23",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "bdde0f87-3337-445b-9221-b7971da7276e",
+      "coderAssignmentRef": "1987926a-2cc5-466d-993a-d9fc54a58650",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 24",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "7c8f21b3-084b-4771-842b-322cea2b0b46",
+      "coderAssignmentRef": "67bad901-a3fb-449c-a7a8-224fe100c714",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 25",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "081968e6-805c-442b-822f-43dc7f586d72",
+      "coderAssignmentRef": "2094a06d-4aee-40f3-8e2e-adb65f5fd86e",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 26",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e7b5544c-6e61-4dd4-ba1a-a945cc754fcc",
+      "coderAssignmentRef": "8d15df54-f133-416e-8d4f-c1e9a8848d57",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 27",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "586c56d8-235b-4a32-a142-041070556348",
+      "coderAssignmentRef": "e8e0d431-9966-49c9-97d5-efd56294b52f",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 28",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "0e210508-44aa-41d0-b626-76ef9dd92acb",
+      "coderAssignmentRef": "35c5368a-f6ee-4385-8138-afbacd0f52a9",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 29",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e906a16e-1b3c-4a00-aa5f-fdc752e7cfc4",
+      "coderAssignmentRef": "6750170c-d3de-40ef-8fff-738ec394a56d",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 30",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "f2ce3a91-b509-4494-8a2e-603338afba77",
+      "coderAssignmentRef": "53be9e78-80d7-408e-936e-8d618cbca556",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 31",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1e84ccca-a4b4-4e17-b7b1-54457ba1afcd",
+      "coderAssignmentRef": "9c0df749-c380-4ff8-8d61-b3da3d7d7b41",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 32",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "291154b8-e51c-4981-bb05-8ffa291b4784",
+      "coderAssignmentRef": "fb6f9579-5825-4727-b546-71280b78d813",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 33",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "44945b22-1791-4787-ae95-5671d348699c",
+      "coderAssignmentRef": "800699f8-b50b-4a02-a9de-d145b7887193",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 34",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "0019e847-5c32-489f-88e7-66b5006cf8e3",
+      "coderAssignmentRef": "dbf44954-d214-43c5-ad05-0d74a3472108",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 35",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a9dfc1a5-8e8b-44b7-8bdf-0bc6a2facd9a",
+      "coderAssignmentRef": "9c6ce2ae-bd3f-4485-b685-2ee59bf3c900",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 36",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "da3e8419-6bba-4d22-8305-952e197561fe",
+      "coderAssignmentRef": "b79090dc-ef04-4619-9057-fc567998130f",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 37",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d584abad-a49b-49cf-a385-6567384f820b",
+      "coderAssignmentRef": "621e59e2-ab33-4cd9-aa7c-e58580fbe4fe",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 38",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "c23e4d60-7b92-4c49-b7a4-b0b9f32c2640",
+      "coderAssignmentRef": "eff1cdc9-838d-40e3-add4-7e0b8600004b",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 39",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "01c3e9f0-f4db-4398-92df-227a5add587e",
+      "coderAssignmentRef": "efbc13ac-bf79-40eb-9d3d-f6f5bc56d6ab",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 40",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "7e4acf3c-e221-4425-abf9-4bacc82f9238",
+      "coderAssignmentRef": "cbea1cdc-4f3f-48f7-b33c-8d6baa28739e",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 41",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "258832d9-69d8-4c4d-8e07-d98b8fd73bbe",
+      "coderAssignmentRef": "06ecb869-6d29-4ba0-add1-dc7a5652fcad",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 42",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b6bcbd46-8909-48df-8628-eaefd4346021",
+      "coderAssignmentRef": "c58518cd-0fdf-4460-9860-fc6184b4e1d7",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 43",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2196e629-c638-48bc-a819-93b1b4cddff4",
+      "coderAssignmentRef": "dbd8481d-b3f2-4fc5-8988-ca81dae52193",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 44",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "23462b74-3ce0-435f-9e3e-079a85dd5b18",
+      "coderAssignmentRef": "a0800051-3e97-4d8d-9e78-6b85a6d220b3",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 45",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "060d7f46-f133-405d-af3a-f5cf4cccf40a",
+      "coderAssignmentRef": "101b25ad-b87c-439a-9dc9-39b67d379751",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 46",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "7434bd64-3f10-4498-a0cc-9eb9d16d9760",
+      "coderAssignmentRef": "a311728b-64d0-441a-9ec1-6d11e97aeb2e",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 47",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9f675c84-a9dd-43f5-8b9b-f2b5412f2706",
+      "coderAssignmentRef": "e32cdbbb-0cb4-48c5-9615-8249434f4729",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 48",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "3ce24af3-2cfe-4066-b8e3-fd2f3057b96b",
+      "coderAssignmentRef": "c30e5113-1e19-49c1-b72e-bd0e8f75c2e4",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 49",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2951c129-4745-4cc0-8067-df6d9535be0a",
+      "coderAssignmentRef": "6a82095c-2bba-462d-8b9c-033a2580c8bb",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 50",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "ebc3d3a5-91d0-4dde-9bc9-4c8c17c34f04",
+      "coderAssignmentRef": "48a91292-bc6e-4409-8275-9e28bbcaed27",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 51",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2690417e-bef8-4251-b713-51fbea2113a1",
+      "coderAssignmentRef": "798ed7da-e968-4dc1-bb85-89d4b6ad09a1",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 52",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "44248d63-36d4-48a6-94e1-0c31722f4121",
+      "coderAssignmentRef": "dd8f2a95-b7ff-4cd4-8a79-67bf2e427d3e",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 53",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "f0096d3b-0800-45dd-bd35-6b283cd099b3",
+      "coderAssignmentRef": "1b35f302-1125-4a1b-ac0b-d5b3d0b1898a",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 54",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "69e027b1-870a-4dcf-9df0-1421a0714212",
+      "coderAssignmentRef": "c25fe33c-08e0-4cae-a7a7-ec8ea70c90b2",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 55",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "f681de96-bb60-42e9-8e42-cb0197e93cc8",
+      "coderAssignmentRef": "ab19be2f-1b23-4766-9a81-3c1df4cc5eaf",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 56",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "619ab69a-a80b-4c0e-9629-e94bbe23e5cf",
+      "coderAssignmentRef": "f5241995-b937-4d91-b4e6-2688129e859d",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 57",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1aa72343-8f20-4989-be2c-75617fd0a881",
+      "coderAssignmentRef": "69870494-9722-4026-abb3-da3b2be1a936",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 58",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "6ff69c20-5975-4bc7-9d9d-085d182798d4",
+      "coderAssignmentRef": "a27ae651-0402-42ee-ae55-3860a7a8a1f4",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 59",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "6d0bcc91-3137-46bd-bf80-299d13400469",
+      "coderAssignmentRef": "2d719430-bf92-49ba-b627-74d864e20e22",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 60",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "624d538c-6fb8-42f3-b7ab-ab9f049a6136",
+      "coderAssignmentRef": "67c46a34-4a4d-4541-bd8f-ebca4b72cb3a",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 61",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "08eebeb8-5756-45cc-8f5e-f795ed6aac5c",
+      "coderAssignmentRef": "2e67c058-91c7-472d-9e96-ddd4038845e7",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 62",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "c36a302a-b402-462c-842b-1e9fbfcef794",
+      "coderAssignmentRef": "ebb2d938-22a0-43d7-84a6-4274e89811b9",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 63",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "815a8314-bce1-4354-8284-fe821bbf512f",
+      "coderAssignmentRef": "ae9273e7-4e52-4813-bc55-8efe819c2bb8",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 64",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "83926200-c3f3-4328-a687-5aef116ec77a",
+      "coderAssignmentRef": "e5ad04ff-6f5d-432f-89a7-2f84489f6485",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 65",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8a0e12bd-7487-4c20-bce5-9cbf84ecb364",
+      "coderAssignmentRef": "2049cf7b-7070-4e8e-97e3-18aa775f891a",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 66",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "fa21dae2-441f-4981-981e-3a3b611babaa",
+      "coderAssignmentRef": "640de001-fb2d-41e5-b167-477928e3ceeb",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 67",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8aae31a0-e7a5-4e12-9622-391d68794834",
+      "coderAssignmentRef": "e1340435-4169-4eff-975f-52da5430c2cf",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 68",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d4cca5df-3210-4865-b433-84533a1269c5",
+      "coderAssignmentRef": "c7fd0d10-f965-4412-b897-8fbeee7c8f5c",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 69",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2838d7f3-7df0-4084-8e54-f821209d1643",
+      "coderAssignmentRef": "9a597f00-cac9-446e-92b1-bf0fbc30ac1f",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 70",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "ac96cead-d6ff-474e-b23c-6b44357c4db3",
+      "coderAssignmentRef": "0132cc3c-0165-4fcd-9879-725eb2522146",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 71",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b8320c1f-7b3b-47d9-84d5-1b904447058d",
+      "coderAssignmentRef": "b2bccb94-68f6-4a37-861f-5d744bf7ee09",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 72",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "7efda543-8591-4159-a8fc-6636dfbdb31e",
+      "coderAssignmentRef": "6c98c767-fe9b-425b-b5ce-5e8328efaa10",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 73",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "6c4be0e0-4bbd-4713-b0c3-125050934d24",
+      "coderAssignmentRef": "cf926700-6971-4870-9fec-6b6249a46965",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 74",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "ef37b374-3d86-46c1-8b66-486237158e1b",
+      "coderAssignmentRef": "593bc330-e74e-4505-b0a5-0dde9c190b94",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 75",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d522a8bf-5417-4e41-b013-af10049ec568",
+      "coderAssignmentRef": "5d8be856-6c5e-4bb3-847c-4e39138f2d7b",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 76",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b7847501-c42c-4293-ab4a-67f384c19849",
+      "coderAssignmentRef": "6ea9a2ed-befd-4ab5-b039-83ebb8e7903c",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 77",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8ebcb4b4-b347-4b18-b32c-8256dd0a6cc7",
+      "coderAssignmentRef": "d59f81ea-b382-45da-babc-00e75bf407b0",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 78",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "743a4c5e-d78e-4feb-af09-a23e14420f4d",
+      "coderAssignmentRef": "b9862341-cb65-4ac1-b813-275ad3b20686",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 79",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2e23555e-260e-4ad9-bf2c-9bb058d1e5fd",
+      "coderAssignmentRef": "33e4b1a0-67b7-4870-877e-ce505c1d1b91",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 80",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "da5961ce-09c5-47a6-b3bd-14b4afa94199",
+      "coderAssignmentRef": "322708b5-f49b-4bde-ba76-fca177ec4f14",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 81",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "07ffe8a9-38ec-4f4a-9602-9ca5413c1639",
+      "coderAssignmentRef": "b5c3d39b-b710-4700-8b8a-f1681c5c43fc",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 82",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b64adc8d-b9e2-4441-bb74-aa379001ed5e",
+      "coderAssignmentRef": "28ca91d2-8d06-472a-8a85-f574db6a71c8",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 83",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a066507b-4328-40cb-b6a7-a80a14028a55",
+      "coderAssignmentRef": "4145a5a5-2ae5-479d-99be-ccbf00add7fc",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 84",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8056f954-7cee-498c-9ac9-c5d02122a77e",
+      "coderAssignmentRef": "86d57656-8d7f-4ec3-a762-62b28430f192",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 85",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9e22754b-cf61-4740-a449-c5b209bee3bd",
+      "coderAssignmentRef": "6c634e26-acec-4c26-8668-48c7f678e92e",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 86",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "5c3239c5-5e68-4421-9ca9-fd82d6c0780b",
+      "coderAssignmentRef": "c611b391-a641-4f8e-b186-861cffad6b32",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 87",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2c938ec7-007a-495b-b07a-72e497e81f4d",
+      "coderAssignmentRef": "98dea2d6-3319-4a91-b9f6-e926af3b7e6e",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 88",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2d61fdd3-41ca-4400-907c-f7e4b5636a43",
+      "coderAssignmentRef": "7f089e43-80a3-4983-8dd8-63454648c565",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 89",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b66d30da-e65b-43b6-b46e-e5978ea9d73e",
+      "coderAssignmentRef": "05be5f79-4bfa-4ac2-9b69-6681a4a50e73",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 90",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "683feb4e-e9b7-4345-a174-6f0433345d67",
+      "coderAssignmentRef": "1cb3b14f-3669-46aa-8a75-d92fd282fe2c",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 91",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e36b70e0-915b-4980-b720-321b5bcb0fe9",
+      "coderAssignmentRef": "847312b8-ccdf-437a-9810-00ecea95d45f",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 92",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8e83d5e5-980b-46c7-a72a-0548edd7642e",
+      "coderAssignmentRef": "75d05787-c7f9-4ed2-a8f9-f9ba762d1e94",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 93",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "69b741a0-4262-4503-a242-d9467243bd03",
+      "coderAssignmentRef": "f25472b0-a4b5-474f-bd38-6142871ff29e",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 94",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "66159d58-592b-4fcd-a380-1648d3ce86c9",
+      "coderAssignmentRef": "877b99f1-eddf-4bf9-8891-708fd462a1bb",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 95",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "c0049c1a-f681-44ea-99fd-97ec2c9679f4",
+      "coderAssignmentRef": "b3549d36-520b-48ab-99e4-a1c43c800011",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 96",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "6d530c76-4f0d-41be-96ab-d2af1ba721df",
+      "coderAssignmentRef": "64b70248-cc3b-40c5-b7b2-4e0b64e00c88",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 97",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9190a1b8-4259-489c-b50f-f12e1e7f983c",
+      "coderAssignmentRef": "4baa9de4-4ec0-4612-b360-9a17caa01d8e",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 98",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "08903461-1611-44b9-8acd-9225169a188c",
+      "coderAssignmentRef": "acc82e5e-bcac-4f14-98b0-7d29115311b5",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 99",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "47b87729-f5e5-438e-8a52-56b9245cde08",
+      "coderAssignmentRef": "3e800f43-5b6e-4a09-8255-f31550354a24",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 100",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "bb25e3e4-a475-4212-952b-2a5aabdcf134",
+      "coderAssignmentRef": "9955e56d-701f-4390-8c9a-c6e06c7ab17d",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 101",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1e919362-0156-4f54-96ae-92c6b4917caa",
+      "coderAssignmentRef": "674f1cc1-31cf-498d-a926-a0ae42a6a9d3",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 102",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "55e7142c-51a7-4ca2-b487-4841236d2bf4",
+      "coderAssignmentRef": "b4b42556-fb63-422f-a3b8-140f94479557",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 103",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "fd3fdcb3-8995-4ebc-84d4-85ed49509951",
+      "coderAssignmentRef": "8a6e177d-f307-48ab-aef0-73b0add540b7",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 104",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b4fddeef-5315-4999-a6c3-3242cb0263b5",
+      "coderAssignmentRef": "21f539cd-6207-4952-8811-f44f98498868",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 105",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8138e560-fce5-4e9a-9762-79c9df99933d",
+      "coderAssignmentRef": "b3453256-330b-4f84-9143-d01266427c01",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 106",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d108e128-1f08-486e-a7de-25ddf2d1dfaf",
+      "coderAssignmentRef": "d858c48d-369b-4d92-aaf8-ec043d2b61a6",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 107",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "07f07acd-9dac-4d48-80d1-aad97082bd69",
+      "coderAssignmentRef": "6db1f8f2-4789-45c1-bd7c-f754281d7002",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 108",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "3461e8d8-489f-4b71-8bc8-81e85773b95e",
+      "coderAssignmentRef": "12dda4e7-1439-496c-8af8-d40c3de6d43a",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 109",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9d3f4f8a-5022-4f74-827d-1b75c34e0221",
+      "coderAssignmentRef": "03a25f57-0c0d-4d9d-8630-c299fb214be5",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 110",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9181da58-99ad-4261-ba7a-7928f778d8d5",
+      "coderAssignmentRef": "b4e2cb0e-7910-46df-b4c6-d0ee67da333e",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 111",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "703e58b4-061f-4c8f-9871-a1417692787b",
+      "coderAssignmentRef": "6d33eb1b-26e6-4bc3-9b29-0002eeb95420",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 112",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "560c43e0-44ca-40d0-afed-555bb6011ec7",
+      "coderAssignmentRef": "b0cefeff-695e-40e4-ab4f-8e767b258902",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 113",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "85f4e99d-9d5b-4dcd-8bee-66504617299d",
+      "coderAssignmentRef": "3a7b06d2-a83d-4306-84ce-f84a958208ec",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 114",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "010385b0-52b5-4253-b294-9366fce8b4df",
+      "coderAssignmentRef": "8c120a14-a578-4304-a8a5-a7721b44dbce",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 115",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "dc3fed96-9daa-429d-8709-11c76f5ec553",
+      "coderAssignmentRef": "d50a3dee-16cb-4cce-9826-0a80a7167b36",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 116",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "99a9759f-9afc-4d5a-91a5-79a59fe33416",
+      "coderAssignmentRef": "5d84847f-19d6-42a2-be94-8a0f55f5c8e2",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 117",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d9a0a12f-9d65-43f7-871f-425caeac01b5",
+      "coderAssignmentRef": "ac9be08d-b283-4adb-b242-3ac0d217a0de",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 118",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "160fdb60-f69e-48d4-ab69-29ca2d1d233a",
+      "coderAssignmentRef": "6f323fff-a09b-417f-9251-0b32cc06f4cd",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 119",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "6e9d5440-c0cd-4363-a282-7a49b64cb11d",
+      "coderAssignmentRef": "b559c753-c37d-4453-8924-6c4497570292",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 120",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8b337e83-2e3d-4758-a737-9daf572f61ee",
+      "coderAssignmentRef": "eeed436d-4891-479e-8aa0-945be5dd8bd7",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 121",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "4678cb1c-f180-49d4-982a-999d7e821e06",
+      "coderAssignmentRef": "52c04a5e-e165-46b2-8859-9d3b9e7ab114",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 122",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "819c878f-f506-4ea4-9b5f-0701438f2170",
+      "coderAssignmentRef": "79546546-7c58-4ff0-b8a2-4b01421c2e04",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 123",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "0d6c55da-3304-48f8-8cf0-7c6c96b325cf",
+      "coderAssignmentRef": "286e994e-b531-4747-b7bd-bf5bb52a8733",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 124",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8e93c938-03e6-41ab-923d-17edf8b8eaa4",
+      "coderAssignmentRef": "4f18212d-5132-44ae-8a49-c7555de41f5e",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 125",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "fa04aa5c-ebdc-4eb4-aefa-1cdf949446ca",
+      "coderAssignmentRef": "339cdade-09dd-4ce7-852c-e89429a4e3b3",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 126",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "cae7e2bd-3ed8-40cb-ba65-d67dee2a9d8b",
+      "coderAssignmentRef": "cb25980b-cc2b-44ea-9d86-99f7abc6cb9c",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 127",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d21aded9-7780-481d-bd6a-038dadfb0d53",
+      "coderAssignmentRef": "ceda8321-26eb-4415-bc46-1221045bcdd3",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 128",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "297d0807-c447-4490-8ecb-ae2a91589d92",
+      "coderAssignmentRef": "b5aaf39e-6714-4c26-9eab-65ac4407ebcb",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 129",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "522cd743-275f-4b9e-9740-673c83aed23e",
+      "coderAssignmentRef": "38d3b68d-5a64-4268-89c7-bf7aeab0682b",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 130",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e8534746-4d72-4869-8c34-10e633f6ef7e",
+      "coderAssignmentRef": "e959332f-f025-4500-a0aa-69fd1e9befa3",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 131",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "014e8740-8143-4fb8-87c0-1c08924dab9e",
+      "coderAssignmentRef": "327e10d9-c021-4992-b849-8e441dc83794",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 132",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1df50927-a021-4dcd-9802-f97eb8d525fe",
+      "coderAssignmentRef": "f9ea1abd-a97e-48c2-b9d1-463dc39f16d7",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 133",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e3c48d97-c091-4b08-ba08-cefbb29f57a6",
+      "coderAssignmentRef": "47b5ce61-c313-4d2f-b1c8-aff6fbd97f6b",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 134",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "834ceeae-7027-46a1-9a1a-a7aba7bf1d31",
+      "coderAssignmentRef": "60fd2aa5-a5fa-4191-9be3-131045ffcd68",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 135",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "aea8cafc-49ca-4945-899a-cfdf682a4658",
+      "coderAssignmentRef": "b9a2e39e-0548-4b69-a3ac-cb648e025087",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 136",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e430b078-69d4-4aec-9dac-946a564a1734",
+      "coderAssignmentRef": "8541f255-180f-4ce4-8bf0-b9d42fc14a9a",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 137",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "4d80e754-0394-483f-9d69-1a686cd7172f",
+      "coderAssignmentRef": "a777e1c6-5b83-46ad-b361-35cabe9bfd77",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 138",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1175c4c3-6a83-44ac-80fe-f5a00a53afd1",
+      "coderAssignmentRef": "838a223d-8cab-431d-8fd4-865059f8f466",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 139",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d3a32cbe-abc2-40f9-bbee-a9f3c226e871",
+      "coderAssignmentRef": "0dc13cc9-cfde-46b4-b89a-630e9f6571d4",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 140",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d7b9d13c-3d9f-493d-b789-98925d56884b",
+      "coderAssignmentRef": "9f9acadf-fd65-4e54-a0e6-1ee775e787c1",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 141",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "6a1b0f0b-efff-4e5d-a5d5-3587009efa11",
+      "coderAssignmentRef": "42396d62-ea3a-4bda-8edc-a60f976db85e",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 142",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e21a11bb-daac-4657-899a-20958f9738fa",
+      "coderAssignmentRef": "a88ce26b-e461-45b6-bc74-4cbb33c10ec4",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 143",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1d65670f-ca29-49f7-921b-c7dbe1518077",
+      "coderAssignmentRef": "db270daf-45f7-4a8f-ae2a-ac84720501ca",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 144",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "371ad136-0955-4dd7-a711-beab0dacd6bc",
+      "coderAssignmentRef": "dbd1c785-0145-412a-b8df-755e94204319",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 145",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a9e20f59-653e-4ff9-9c1d-fdc71ea727af",
+      "coderAssignmentRef": "b00e8cb6-53dc-4268-b889-e525e5de019a",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 146",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "96c43295-3e94-4c00-9e24-41785f92cd1a",
+      "coderAssignmentRef": "7189e3fa-b6a0-43ae-a73d-abe6646a17a2",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 147",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "29ebb201-7eaf-49b8-95b2-74b958b55153",
+      "coderAssignmentRef": "3a75e20c-436f-4c61-936c-f7d97497f92e",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 148",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "11ba07d2-ae27-43a1-914a-fa237451cc8d",
+      "coderAssignmentRef": "a082635d-79b2-4ed3-9f42-7ff13c4460bb",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 149",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "adba2ce4-11d7-4d66-9313-d4879656a2ff",
+      "coderAssignmentRef": "489c4bef-1832-4c33-94b8-28b748747f30",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 150",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8def0942-c937-43f0-9851-9c5a729d0aa6",
+      "coderAssignmentRef": "d605308b-42b6-4b1f-9be7-8df1cc8f8851",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 151",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "97e7c411-5aab-4baf-adbd-5af5d7bc603e",
+      "coderAssignmentRef": "59206f83-b09a-4959-b965-2f1a12efe6f9",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 152",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "eea39547-eb27-4f35-829f-ac5aee22c52c",
+      "coderAssignmentRef": "266767f5-821a-4eac-8d96-8319ab7b5f4b",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 153",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d5a6a131-bc56-425b-b332-6ef7b5cd8ce4",
+      "coderAssignmentRef": "b286037f-de7d-481d-a38d-84b3d2f301d2",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 154",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8b6bd8dd-446e-4824-b393-3b8101436da7",
+      "coderAssignmentRef": "dd26ed89-1718-4ae7-abf8-246d578a8b29",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 155",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "9abc5532-57d3-40d6-93fc-851c40dacb23",
+      "coderAssignmentRef": "99a087b1-1a7f-4771-a065-e012880de664",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 156",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "29f5e72c-c8be-4e8e-9d88-508b37ccb5ed",
+      "coderAssignmentRef": "3c8c6760-1058-413a-b290-9785a87147e8",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 157",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "56eb0ad5-85f2-43e2-bcf9-acb270b7b1f0",
+      "coderAssignmentRef": "a4cb1847-6b87-4a23-bac7-17dcd186cadd",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 158",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "90e31a59-a5ef-4ce0-9238-eb7e07ac7922",
+      "coderAssignmentRef": "9e6c081d-1cc4-4b99-8db6-04dea4796e4b",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 159",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "32ce8d37-93ed-4eef-b5cc-1ebeaa3e1e06",
+      "coderAssignmentRef": "875e82c6-55d3-48ac-ab08-4a65a8fba3d0",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 160",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1ec6dc14-60bc-4040-b272-629f92ecf6d7",
+      "coderAssignmentRef": "c700975b-72d8-41a4-a2ef-adeb914e7670",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 161",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "4a93fe4a-683a-4954-94e5-15058732a7d7",
+      "coderAssignmentRef": "7de96b00-79da-47fe-a5fe-9769514f6e47",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 162",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2fd2256f-7298-48a3-82e6-bd09748307c1",
+      "coderAssignmentRef": "41b4e068-8726-4096-916a-4eaf3fa5fe5b",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 163",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e6ab9a36-3a2c-4420-9efe-8d7a6a43884a",
+      "coderAssignmentRef": "a0b6e695-3512-4468-ad98-c4098d5c0141",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 164",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "f2b66373-9fea-4f97-8d69-548552e4f8aa",
+      "coderAssignmentRef": "d399f261-0e5f-4e45-ab91-c2b77863e8c6",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 165",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a73c0873-e4ab-4ebf-9bfa-e82c75b32afd",
+      "coderAssignmentRef": "d4a27d93-7585-4677-a8a7-29c640468aaf",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 166",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a4e8d76e-98ec-4376-998e-cc4dedbbac64",
+      "coderAssignmentRef": "f430e1b3-8f25-44fd-a03c-8f131dfd1f7f",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 167",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "cb85d2ba-611a-455a-a5de-72aba5d32d97",
+      "coderAssignmentRef": "a7c850f0-0004-4be1-864b-4340ea866d88",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 168",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "48f036e9-ae08-4446-ad1a-deba32ab6335",
+      "coderAssignmentRef": "17b758eb-5a4e-4f94-99a6-b598f064a514",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 169",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b4dddec5-9be8-405c-88ac-ef2c46d297e6",
+      "coderAssignmentRef": "a1e38da8-5b5f-405c-8681-32c71ec1e767",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 170",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8e4e72a0-8582-49e8-9b6e-1726d9eb2771",
+      "coderAssignmentRef": "c517b461-c9c3-47eb-97ff-88170e34e890",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 171",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "ac598af1-53d2-4ffa-b46b-141585614649",
+      "coderAssignmentRef": "ba59f33e-de0d-441a-8a36-79164d85a5bf",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 172",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e7c72505-698e-497d-9412-a9e1d99c1ddc",
+      "coderAssignmentRef": "a965a0c3-b1e0-44ba-b460-7957852387b4",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 173",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d57b6ebd-2cc4-4ddb-9ebd-bb2662d2ad34",
+      "coderAssignmentRef": "742981bf-79e7-406b-9cc3-a446c6a00dd9",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 174",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "dbdf6af0-3504-4ca3-9e38-ee36f63e3d49",
+      "coderAssignmentRef": "f2287a94-8b43-4157-b0b5-dae1bea39b47",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 175",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "afdb9729-f60e-4026-9ce2-cfe1a5b5201e",
+      "coderAssignmentRef": "3a97afef-cef0-4eb2-a02b-e9814e541b76",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 176",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "38a17f87-6ab9-4e99-803a-86dead428ae5",
+      "coderAssignmentRef": "c611c950-c841-4867-b130-c6303db77581",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 177",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "3e553fa3-a19d-4a50-b8bb-289c2ab9bd90",
+      "coderAssignmentRef": "94016af1-5f79-43c6-9f42-4725232e268e",
+      "directionCode": "direction_a",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 178",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "66262cde-60ea-4ae5-8b86-43aa55d98cb3",
+      "coderAssignmentRef": "ab231945-bb46-4d8b-b50d-23be95d28e6f",
+      "directionCode": "direction_b",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 179",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "eb0581f0-4672-4999-92de-2dc2243b2e0f",
+      "coderAssignmentRef": "72997a3b-99d2-4a50-ae75-dc75e480fe6c",
+      "directionCode": "mixed",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 180",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "d8111705-6828-42a9-85c4-388c8317bb4e",
+      "coderAssignmentRef": "34257928-e316-4777-a458-a7175786106a",
+      "directionCode": "direction_a",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 181",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "a4b04562-5e50-430a-a1d4-147cd256e93e",
+      "coderAssignmentRef": "7bc957fb-dc85-4911-bff1-30e02706e234",
+      "directionCode": "direction_b",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 182",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "26e63657-e47d-4c56-b930-79bd7c871ac6",
+      "coderAssignmentRef": "16d5a045-3977-4431-b163-71a6723b152b",
+      "directionCode": "mixed",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 183",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "8c268a3e-05b1-4411-af22-144023dbcd36",
+      "coderAssignmentRef": "ee0aa704-e025-42f7-bb82-95629ede9f4e",
+      "directionCode": "direction_a",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 184",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "82f129a6-5902-41d0-821f-d41c6c41be66",
+      "coderAssignmentRef": "36313b16-f661-403a-bfae-2c3b29e04a7c",
+      "directionCode": "direction_b",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 185",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "1e247ef9-dab5-432c-80db-302f7e72dc45",
+      "coderAssignmentRef": "dbf29a8b-38cc-4db5-9f1b-9d5f0d1ee89e",
+      "directionCode": "mixed",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 186",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "2b2e5574-ba3a-4d1f-a395-9bb8c5c52825",
+      "coderAssignmentRef": "9bc4738e-e190-4422-9ad8-76fc1f4df7f5",
+      "directionCode": "direction_a",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 187",
+      "confidence": 2,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "b925fd97-3e6e-4ccb-818e-1e1c0b42e9dd",
+      "coderAssignmentRef": "fbfded83-3ff5-4889-9763-17577466af96",
+      "directionCode": "direction_b",
+      "continuousRating": 3,
+      "evidenceSpan": "합성 근거 구절 188",
+      "confidence": 3,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "e5864b03-a5c6-4d03-8bde-fa13bc81243d",
+      "coderAssignmentRef": "fa33f7ec-72a2-4726-880e-3fd18688c6fa",
+      "directionCode": "mixed",
+      "continuousRating": 4,
+      "evidenceSpan": "합성 근거 구절 189",
+      "confidence": 4,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "275ba1be-bbea-4c37-91a9-7eb10036bed7",
+      "coderAssignmentRef": "9f4a6d5b-658a-44d5-9bb4-70ac2188a8f9",
+      "directionCode": "direction_a",
+      "continuousRating": 5,
+      "evidenceSpan": "합성 근거 구절 190",
+      "confidence": 5,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "ce7e4bf1-696f-46fe-b9a5-72fa1ec7bd59",
+      "coderAssignmentRef": "bccb8eae-0bb8-4172-9117-9e15113c9e38",
+      "directionCode": "direction_b",
+      "continuousRating": 1,
+      "evidenceSpan": "합성 근거 구절 191",
+      "confidence": 1,
+      "synthetic": true
+    },
+    {
+      "coderRatingRef": "28ade13a-989f-4673-89c9-dc081a7cc63e",
+      "coderAssignmentRef": "3e562a76-3cd2-42bc-ba4d-9d1d4cb8455d",
+      "directionCode": "mixed",
+      "continuousRating": 2,
+      "evidenceSpan": "합성 근거 구절 192",
+      "confidence": 2,
+      "synthetic": true
+    }
+  ],
+  "adjudications": []
+}

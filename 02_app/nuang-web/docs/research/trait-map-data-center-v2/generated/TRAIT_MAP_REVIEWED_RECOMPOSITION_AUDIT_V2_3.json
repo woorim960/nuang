@@ -1,0 +1,755 @@
+{
+  "contractVersion": "nuang-trait-map-reviewed-recomposition-audit.v2.3",
+  "reportId": "TRAIT-MAP-REVIEWED-RECOMPOSITION-AUDIT.2.3",
+  "status": "V2_3_REVIEWED_RECOMPOSITION_PASSED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "summary": {
+    "canonicalVariants": 605,
+    "migratedRevisions": 147,
+    "p0Migrations": 73,
+    "p1Migrations": 74,
+    "profileClaimReferences": 9216,
+    "unresolvedReferences": 0,
+    "duplicateOutputsWithinClaim": 0,
+    "unsafeLanguageFlags": 0,
+    "commonEntries": 61,
+    "commonSurfaceViolations": 0,
+    "neighborEdges": 80,
+    "neighborEdgesPassed": 80,
+    "unexpectedChanges": 0,
+    "missingExpectedChanges": 0,
+    "indistinguishableExpectedChanges": 0,
+    "recompositionPassed": true
+  },
+  "neighborEdges": [
+    {
+      "leftCode": "ENAKC",
+      "rightCode": "INAKC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENAKC",
+      "rightCode": "ENAMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENAKC",
+      "rightCode": "ENAKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENAKQ",
+      "rightCode": "INAKQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENAKQ",
+      "rightCode": "ENAMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENAMC",
+      "rightCode": "INAMC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENAMC",
+      "rightCode": "ENAMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENAMQ",
+      "rightCode": "INAMQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGKC",
+      "rightCode": "INGKC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGKC",
+      "rightCode": "ENAKC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGKC",
+      "rightCode": "ENGMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGKC",
+      "rightCode": "ENGKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGKQ",
+      "rightCode": "INGKQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGKQ",
+      "rightCode": "ENAKQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGKQ",
+      "rightCode": "ENGMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGMC",
+      "rightCode": "INGMC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGMC",
+      "rightCode": "ENAMC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGMC",
+      "rightCode": "ENGMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGMQ",
+      "rightCode": "INGMQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ENGMQ",
+      "rightCode": "ENAMQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAKC",
+      "rightCode": "IRAKC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAKC",
+      "rightCode": "ENAKC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAKC",
+      "rightCode": "ERAMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAKC",
+      "rightCode": "ERAKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAKQ",
+      "rightCode": "IRAKQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAKQ",
+      "rightCode": "ENAKQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAKQ",
+      "rightCode": "ERAMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAMC",
+      "rightCode": "IRAMC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAMC",
+      "rightCode": "ENAMC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAMC",
+      "rightCode": "ERAMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAMQ",
+      "rightCode": "IRAMQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERAMQ",
+      "rightCode": "ENAMQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKC",
+      "rightCode": "IRGKC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKC",
+      "rightCode": "ENGKC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKC",
+      "rightCode": "ERAKC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKC",
+      "rightCode": "ERGMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKC",
+      "rightCode": "ERGKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKQ",
+      "rightCode": "IRGKQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKQ",
+      "rightCode": "ENGKQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKQ",
+      "rightCode": "ERAKQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGKQ",
+      "rightCode": "ERGMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGMC",
+      "rightCode": "IRGMC",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGMC",
+      "rightCode": "ENGMC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGMC",
+      "rightCode": "ERAMC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGMC",
+      "rightCode": "ERGMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGMQ",
+      "rightCode": "IRGMQ",
+      "axisRef": "SE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGMQ",
+      "rightCode": "ENGMQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "ERGMQ",
+      "rightCode": "ERAMQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INAKC",
+      "rightCode": "INAMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INAKC",
+      "rightCode": "INAKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INAKQ",
+      "rightCode": "INAMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INAMC",
+      "rightCode": "INAMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGKC",
+      "rightCode": "INAKC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGKC",
+      "rightCode": "INGMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGKC",
+      "rightCode": "INGKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGKQ",
+      "rightCode": "INAKQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGKQ",
+      "rightCode": "INGMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGMC",
+      "rightCode": "INAMC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGMC",
+      "rightCode": "INGMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "INGMQ",
+      "rightCode": "INAMQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAKC",
+      "rightCode": "INAKC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAKC",
+      "rightCode": "IRAMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAKC",
+      "rightCode": "IRAKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAKQ",
+      "rightCode": "INAKQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAKQ",
+      "rightCode": "IRAMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAMC",
+      "rightCode": "INAMC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAMC",
+      "rightCode": "IRAMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRAMQ",
+      "rightCode": "INAMQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGKC",
+      "rightCode": "INGKC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGKC",
+      "rightCode": "IRAKC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGKC",
+      "rightCode": "IRGMC",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGKC",
+      "rightCode": "IRGKQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGKQ",
+      "rightCode": "INGKQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGKQ",
+      "rightCode": "IRAKQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGKQ",
+      "rightCode": "IRGMQ",
+      "axisRef": "SM",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGMC",
+      "rightCode": "INGMC",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGMC",
+      "rightCode": "IRAMC",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGMC",
+      "rightCode": "IRGMQ",
+      "axisRef": "ER",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGMQ",
+      "rightCode": "INGMQ",
+      "axisRef": "OE",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    },
+    {
+      "leftCode": "IRGMQ",
+      "rightCode": "IRAMQ",
+      "axisRef": "RO",
+      "unexpectedChanges": 0,
+      "missingExpectedChanges": 0,
+      "indistinguishableExpectedChanges": 0,
+      "passed": true
+    }
+  ],
+  "nextGate": {
+    "name": "V2_3_NEW_COMMON_AND_P2_REVIEW",
+    "actions": [
+      "v2.3에서 새로 합쳐진 COMMON 6개 문장의 의미 손실과 중복을 판독한다.",
+      "P2 개인화 문장의 쉬운 한국어·중복·축 선명도를 검사한다.",
+      "독립 역할 검토와 사용자 검증 전까지 research_only로 유지한다."
+    ]
+  }
+}

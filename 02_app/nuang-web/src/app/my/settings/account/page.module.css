@@ -4,8 +4,8 @@
   min-height: 100dvh;
   margin: 0 auto;
   padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
-  color: #20232a;
-  background: #fff;
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface);
 }
 
 .header {
@@ -17,8 +17,8 @@
   grid-template-columns: 42px minmax(0, 1fr) 42px;
   align-items: center;
   padding: env(safe-area-inset-top) 0.875rem 0;
-  border-bottom: 1px solid #ececf1;
-  background: rgb(255 255 255 / 96%);
+  border-bottom: 1px solid var(--nu-color-border);
+  background: color-mix(in srgb, var(--nu-neutral-0) 96%, transparent);
   backdrop-filter: blur(16px);
 }
 
@@ -28,50 +28,23 @@
   height: 42px;
   place-items: center;
   border-radius: 50%;
-  color: #30333a;
+  color: var(--nu-neutral-800);
 }
 
 .header a:hover {
-  background: #f6f5f2;
+  background: var(--nu-color-app-bg);
 }
 
 .header p {
   margin: 0;
-  font-size: 0.875rem;
-  font-weight: 680;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   text-align: center;
 }
 
-.intro {
-  padding: 1.5rem 1.15rem 1.25rem;
-  border-bottom: 8px solid #f6f5f2;
-  background:
-    radial-gradient(circle at 94% 0%, rgb(232 245 241 / 68%), transparent 42%),
-    #fff;
-}
-
-.intro h1 {
-  max-width: 20rem;
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 730;
-  line-height: 1.42;
-  letter-spacing: -0.035em;
-  word-break: keep-all;
-}
-
-.intro p {
-  max-width: 22rem;
-  margin: 0.55rem 0 0;
-  color: #737887;
-  font-size: 0.8125rem;
-  line-height: 1.65;
-  word-break: keep-all;
-}
-
 .accountSection {
-  padding: 1.35rem 1.15rem;
-  border-bottom: 8px solid #f6f5f2;
+  padding: 1.15rem;
+  border-bottom: 8px solid var(--nu-color-app-bg);
 }
 
 .protectionNote {
@@ -81,21 +54,21 @@
   gap: 0.65rem;
   margin: 1rem 1.15rem 0;
   padding: 0.85rem;
-  border: 1px solid #e3eee9;
+  border: 1px solid var(--nu-community-100);
   border-radius: 15px;
-  color: #477066;
-  background: #f5fbf8;
+  color: var(--nu-info-700);
+  background: var(--nu-community-50);
 }
 
 .protectionNote p {
   margin: 0;
-  color: #5f736e;
-  font-size: 0.75rem;
-  line-height: 1.6;
+  color: var(--nu-neutral-600);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
   word-break: keep-all;
 }
 
 .header a:focus-visible {
-  outline: 2px solid #c8c2f5;
+  outline: 2px solid var(--nu-color-brand-border);
   outline-offset: -2px;
 }

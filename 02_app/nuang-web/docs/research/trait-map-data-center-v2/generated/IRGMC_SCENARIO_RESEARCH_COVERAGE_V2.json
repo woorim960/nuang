@@ -1,0 +1,669 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "IRGMC-SCENARIO-RESEARCH-COVERAGE.0.1",
+  "status": "RESEARCH_COVERAGE_NOT_FOR_PRODUCTION",
+  "code": "IRGMC",
+  "canonicalScenarioCount": 72,
+  "totalResearchCandidateCovered": 72,
+  "remainingResearchGaps": 0,
+  "researchCandidateClaims": 288,
+  "customerApprovedScenarios": 0,
+  "contextCounts": {
+    "general": 12,
+    "family": 12,
+    "friend": 12,
+    "partner": 12,
+    "person_of_interest": 12,
+    "work": 12
+  },
+  "rows": [
+    {
+      "scenarioId": "SCN-GENERAL-1",
+      "relationshipContext": "general",
+      "moment": "ordinary_choice",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-2",
+      "relationshipContext": "general",
+      "moment": "new_encounter",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-3",
+      "relationshipContext": "general",
+      "moment": "group_participation",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-4",
+      "relationshipContext": "general",
+      "moment": "plan_change",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-5",
+      "relationshipContext": "general",
+      "moment": "uncertainty",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-6",
+      "relationshipContext": "general",
+      "moment": "disagreement",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-7",
+      "relationshipContext": "general",
+      "moment": "support_requested",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-8",
+      "relationshipContext": "general",
+      "moment": "need_expression",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-9",
+      "relationshipContext": "general",
+      "moment": "boundary",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-10",
+      "relationshipContext": "general",
+      "moment": "success",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-11",
+      "relationshipContext": "general",
+      "moment": "setback",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-GENERAL-12",
+      "relationshipContext": "general",
+      "moment": "aftermath",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-1",
+      "relationshipContext": "family",
+      "moment": "ordinary_choice",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-2",
+      "relationshipContext": "family",
+      "moment": "new_encounter",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-3",
+      "relationshipContext": "family",
+      "moment": "group_participation",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-4",
+      "relationshipContext": "family",
+      "moment": "plan_change",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-5",
+      "relationshipContext": "family",
+      "moment": "uncertainty",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-6",
+      "relationshipContext": "family",
+      "moment": "disagreement",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-7",
+      "relationshipContext": "family",
+      "moment": "support_requested",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-8",
+      "relationshipContext": "family",
+      "moment": "need_expression",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-9",
+      "relationshipContext": "family",
+      "moment": "boundary",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-10",
+      "relationshipContext": "family",
+      "moment": "success",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-11",
+      "relationshipContext": "family",
+      "moment": "setback",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FAMILY-12",
+      "relationshipContext": "family",
+      "moment": "aftermath",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-1",
+      "relationshipContext": "friend",
+      "moment": "ordinary_choice",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-2",
+      "relationshipContext": "friend",
+      "moment": "new_encounter",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-3",
+      "relationshipContext": "friend",
+      "moment": "group_participation",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-4",
+      "relationshipContext": "friend",
+      "moment": "plan_change",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-5",
+      "relationshipContext": "friend",
+      "moment": "uncertainty",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-6",
+      "relationshipContext": "friend",
+      "moment": "disagreement",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-7",
+      "relationshipContext": "friend",
+      "moment": "support_requested",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-8",
+      "relationshipContext": "friend",
+      "moment": "need_expression",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-9",
+      "relationshipContext": "friend",
+      "moment": "boundary",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-10",
+      "relationshipContext": "friend",
+      "moment": "success",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-11",
+      "relationshipContext": "friend",
+      "moment": "setback",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-FRIEND-12",
+      "relationshipContext": "friend",
+      "moment": "aftermath",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-1",
+      "relationshipContext": "partner",
+      "moment": "ordinary_choice",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-2",
+      "relationshipContext": "partner",
+      "moment": "new_encounter",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-3",
+      "relationshipContext": "partner",
+      "moment": "group_participation",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-4",
+      "relationshipContext": "partner",
+      "moment": "plan_change",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-5",
+      "relationshipContext": "partner",
+      "moment": "uncertainty",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-6",
+      "relationshipContext": "partner",
+      "moment": "disagreement",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-7",
+      "relationshipContext": "partner",
+      "moment": "support_requested",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-8",
+      "relationshipContext": "partner",
+      "moment": "need_expression",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-9",
+      "relationshipContext": "partner",
+      "moment": "boundary",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-10",
+      "relationshipContext": "partner",
+      "moment": "success",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-11",
+      "relationshipContext": "partner",
+      "moment": "setback",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PARTNER-12",
+      "relationshipContext": "partner",
+      "moment": "aftermath",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-1",
+      "relationshipContext": "person_of_interest",
+      "moment": "ordinary_choice",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "relationshipContext": "person_of_interest",
+      "moment": "new_encounter",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "relationshipContext": "person_of_interest",
+      "moment": "group_participation",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "relationshipContext": "person_of_interest",
+      "moment": "plan_change",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-5",
+      "relationshipContext": "person_of_interest",
+      "moment": "uncertainty",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "relationshipContext": "person_of_interest",
+      "moment": "disagreement",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "relationshipContext": "person_of_interest",
+      "moment": "support_requested",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-8",
+      "relationshipContext": "person_of_interest",
+      "moment": "need_expression",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-9",
+      "relationshipContext": "person_of_interest",
+      "moment": "boundary",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "relationshipContext": "person_of_interest",
+      "moment": "success",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "relationshipContext": "person_of_interest",
+      "moment": "setback",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "relationshipContext": "person_of_interest",
+      "moment": "aftermath",
+      "priority": "p0",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-1",
+      "relationshipContext": "work",
+      "moment": "ordinary_choice",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-2",
+      "relationshipContext": "work",
+      "moment": "new_encounter",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-3",
+      "relationshipContext": "work",
+      "moment": "group_participation",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-4",
+      "relationshipContext": "work",
+      "moment": "plan_change",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-5",
+      "relationshipContext": "work",
+      "moment": "uncertainty",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-6",
+      "relationshipContext": "work",
+      "moment": "disagreement",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-7",
+      "relationshipContext": "work",
+      "moment": "support_requested",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-8",
+      "relationshipContext": "work",
+      "moment": "need_expression",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-9",
+      "relationshipContext": "work",
+      "moment": "boundary",
+      "priority": "p2",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-10",
+      "relationshipContext": "work",
+      "moment": "success",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-11",
+      "relationshipContext": "work",
+      "moment": "setback",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    },
+    {
+      "scenarioId": "SCN-WORK-12",
+      "relationshipContext": "work",
+      "moment": "aftermath",
+      "priority": "p1",
+      "claimCount": 4,
+      "researchCandidateCovered": true,
+      "customerApproved": false
+    }
+  ]
+}

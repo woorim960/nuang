@@ -72,11 +72,10 @@ export default async function EnakqTraitMapReviewPage() {
 
       <section className={styles.hero}>
         <div>
-          <p className={styles.eyebrow}>성향지도 운영 게이트</p>
-          <h2>검토가 끝난 문장만 고객에게 보여요</h2>
+          <h2>승인된 문장만 공개</h2>
           <p>
-            앱 화면과 DB가 같은 콘텐츠 ID를 사용합니다. 문구별 근거와 네 가지
-            검토가 모두 통과되기 전에는 공개 조회에서 자동으로 제외됩니다.
+            앱·DB는 같은 콘텐츠 ID를 사용하며, 근거와 네 가지 검토를 모두
+            통과한 문구만 공개 조회에 포함됩니다.
           </p>
         </div>
         <div
@@ -120,8 +119,8 @@ export default async function EnakqTraitMapReviewPage() {
           <div>
             <strong>고객 공개 차단 중</strong>
             <p>
-              현재 코드 체계와 역할형 명칭도 후보 상태입니다. 콘텐츠 검토만
-              끝나도 측정 릴리스가 활성화되기 전에는 게시할 수 없습니다.
+              코드 체계와 역할형 명칭은 후보 상태이며, 검토 후에도 측정 릴리스
+              활성화 전에는 게시할 수 없습니다.
             </p>
           </div>
         </div>
@@ -130,7 +129,6 @@ export default async function EnakqTraitMapReviewPage() {
       <section className={styles.section}>
         <div className={styles.sectionHeading}>
           <div>
-            <p>REQUIRED REVIEWS</p>
             <h2>필수 검토 네 가지</h2>
           </div>
           <span>문구 {snapshot.atoms.length}개 기준</span>
@@ -158,10 +156,8 @@ export default async function EnakqTraitMapReviewPage() {
       <section className={styles.section}>
         <div className={styles.sectionHeading}>
           <div>
-            <p>CONTENT ATOMS</p>
             <h2>문구별 검토 현황</h2>
           </div>
-          <span>근거와 출처를 함께 확인</span>
         </div>
         <div className={styles.atomList}>
           {snapshot.atoms.map((atom) => (
@@ -192,10 +188,6 @@ export default async function EnakqTraitMapReviewPage() {
       </section>
 
       <footer className={styles.footer}>
-        <p>
-          이 화면은 localhost 내부 검토용입니다. 고객용 성향지도에는 승인된
-          문구만 별도 공개 조회를 통해 전달됩니다.
-        </p>
         <Link href="/map/ENAKQ">ENAKQ 화면 확인하기</Link>
       </footer>
     </main>

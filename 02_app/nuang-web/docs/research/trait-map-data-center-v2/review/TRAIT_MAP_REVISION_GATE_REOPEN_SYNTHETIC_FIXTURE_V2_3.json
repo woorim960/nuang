@@ -1,0 +1,173 @@
+{
+  "fixtureVersion": "nuang-trait-map-revision-gate-reopen-synthetic-fixture.v2.3",
+  "sourceReportId": "TRAIT-MAP-REVISION-GATE-REOPEN-MATRIX.2.3",
+  "synthetic": true,
+  "impacts": [
+    {
+      "fixtureId": "REOPEN-WORDING-ONLY",
+      "synthetic": true,
+      "changeType": "wording_only",
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-ATTENTION-OE-R",
+      "contentKey": "trait-map.v2.3.can-scn-general-success-attention-oe-r",
+      "semanticAxes": ["OE"],
+      "impactedProfileCount": 16,
+      "impactedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERAMC",
+        "ERAMQ",
+        "ERGKC",
+        "ERGKQ",
+        "ERGMC",
+        "ERGMQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRAMC",
+        "IRAMQ",
+        "IRGKC",
+        "IRGKQ",
+        "IRGMC",
+        "IRGMQ"
+      ],
+      "reopenedGates": [
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [
+        "source_trace",
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation"
+      ],
+      "affectedSurfaces": [
+        "comparison_report",
+        "public_profile",
+        "result_summary",
+        "share_card",
+        "trait_map_detail"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    },
+    {
+      "fixtureId": "REOPEN-SEMANTIC-NARROWING",
+      "synthetic": true,
+      "changeType": "semantic_narrowing",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K",
+      "contentKey": "trait-map.v2.3.can-scn-general-ordinary-choice-attention-oe-r-sm-k",
+      "semanticAxes": ["OE", "SM"],
+      "impactedProfileCount": 8,
+      "impactedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERGKC",
+        "ERGKQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRGKC",
+        "IRGKQ"
+      ],
+      "reopenedGates": [
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation",
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": ["source_trace"],
+      "affectedSurfaces": [
+        "comparison_report",
+        "public_profile",
+        "result_summary",
+        "share_card",
+        "trait_map_detail"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    },
+    {
+      "fixtureId": "REOPEN-AXIS-OR-DIRECTION-CHANGE",
+      "synthetic": true,
+      "changeType": "axis_or_direction_change",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-K",
+      "contentKey": "trait-map.v2.3.can-scn-general-ordinary-choice-response-se-e-oe-r-sm-k",
+      "semanticAxes": ["SE", "OE", "SM"],
+      "impactedProfileCount": 4,
+      "impactedProfileCodes": ["ERAKC", "ERAKQ", "ERGKC", "ERGKQ"],
+      "reopenedGates": [
+        "source_trace",
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation",
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [],
+      "affectedSurfaces": [
+        "comparison_report",
+        "public_profile",
+        "result_summary",
+        "share_card",
+        "trait_map_detail"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    },
+    {
+      "fixtureId": "REOPEN-WITHDRAWAL",
+      "synthetic": true,
+      "changeType": "withdrawal",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K",
+      "contentKey": "trait-map.v2.3.can-scn-general-ordinary-choice-attention-oe-r-sm-k",
+      "semanticAxes": ["OE", "SM"],
+      "impactedProfileCount": 8,
+      "impactedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERGKC",
+        "ERGKQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRGKC",
+        "IRGKQ"
+      ],
+      "reopenedGates": [
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [],
+      "affectedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    }
+  ]
+}

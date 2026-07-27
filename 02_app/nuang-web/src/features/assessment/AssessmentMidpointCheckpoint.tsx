@@ -37,12 +37,8 @@ export function AssessmentMidpointCheckpoint({
         >
           절반까지 답했어요
         </h1>
-        <p className="mt-3 text-sm leading-6 text-muted">
-          <span className="block">바로 이어가거나,</span>
-          <span className="block">잠시 쉬었다가 계속해도 괜찮아요.</span>
-        </p>
 
-        <div className="mt-6 w-full rounded-2xl bg-surface-soft px-4 py-4 text-sm font-semibold leading-6 text-foreground">
+        <div className="mt-5 w-full rounded-2xl bg-surface-soft px-4 py-4 text-sm font-semibold leading-6 text-foreground">
           <p aria-label="최근 6개월 동안 반복된 평소 모습을 떠올려 주세요.">
             <span aria-hidden="true" className="block">
               최근 6개월 동안 반복된
@@ -52,19 +48,6 @@ export function AssessmentMidpointCheckpoint({
             </span>
           </p>
         </div>
-
-        <p className="mt-5 text-sm leading-6 text-muted">
-          <span className="block">
-            검사를 마치면{" "}
-            <strong className="font-bold text-foreground">
-              다섯 글자 뉴앙 코드
-            </strong>
-            와
-          </span>
-          <span className="block">
-            나를 더 자세히 설명하는 리포트가 열려요.
-          </span>
-        </p>
       </div>
 
       <div className="sticky bottom-0 border-t border-line bg-background/95 px-4 pb-[calc(14px+env(safe-area-inset-bottom))] pt-3 backdrop-blur-xl">

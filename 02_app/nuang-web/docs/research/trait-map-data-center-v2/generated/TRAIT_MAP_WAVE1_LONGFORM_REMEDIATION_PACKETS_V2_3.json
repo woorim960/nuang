@@ -1,0 +1,277 @@
+{
+  "contractVersion": "nuang-trait-map-wave1-longform-remediation-packets.v2.3",
+  "reportId": "TRAIT-MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3",
+  "status": "WAVE_1_AUTOMATED_CONTENT_REMEDIATION_COMPLETE",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceCompletenessReportId": "TRAIT-MAP-V2-3-COMPLETENESS-GAP-REGISTER.2.3",
+  "sourceContentAuditReportId": "TRAIT-MAP-32-CONTENT-QUALITY-AUDIT.0.1",
+  "sourceProfileRebaseReportId": "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4",
+  "summary": {
+    "waveProfiles": 8,
+    "totalCanonicalClaimRefs": 2304,
+    "initialThinChapters": 64,
+    "initialSubstantiveMissingCharacters": 12506,
+    "initialEditorialCoreMissingCharacters": 9448,
+    "currentThinChapters": 0,
+    "profilesPassingAutomatedContentGate": 8,
+    "profilesCanonicalV23Rebased": 8,
+    "openAutomatedContentRepairs": 0,
+    "externalIndependentApprovals": 0,
+    "customerPublicationApprovals": 0
+  },
+  "packets": [
+    {
+      "packetId": "LONGFORM-REMEDIATION-INGKQ-V2.3",
+      "code": "INGKQ",
+      "shortName": "구상가",
+      "displayName": "가능성과 변수를 살피는 구상가",
+      "historicalPriorityRank": 1,
+      "manuscriptPath": "docs/trait-maps/INGKQ/INGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 73036,
+        "contentCharactersExcludingEvidence": 59099,
+        "editorialCharacters": 9823,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.0226,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-INAMC-V2.3",
+      "code": "INAMC",
+      "shortName": "상상가",
+      "displayName": "마음과 가능성을 그리는 상상가",
+      "historicalPriorityRank": 2,
+      "manuscriptPath": "docs/trait-maps/INAMC/INAMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 73356,
+        "contentCharactersExcludingEvidence": 59419,
+        "editorialCharacters": 9765,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.0221,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-IRAMQ-V2.3",
+      "code": "IRAMQ",
+      "shortName": "경청자",
+      "displayName": "마음 변화를 듣는 경청자",
+      "historicalPriorityRank": 3,
+      "manuscriptPath": "docs/trait-maps/IRAMQ/IRAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 73072,
+        "contentCharactersExcludingEvidence": 59135,
+        "editorialCharacters": 9691,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.0217,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-IRAKC-V2.3",
+      "code": "IRAKC",
+      "shortName": "수호자",
+      "displayName": "조용히 마음을 지키는 수호자",
+      "historicalPriorityRank": 4,
+      "manuscriptPath": "docs/trait-maps/IRAKC/IRAKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 73428,
+        "contentCharactersExcludingEvidence": 59491,
+        "editorialCharacters": 9721,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.0209,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-INAMQ-V2.3",
+      "code": "INAMQ",
+      "shortName": "기록가",
+      "displayName": "마음의 이야기를 품는 기록가",
+      "historicalPriorityRank": 5,
+      "manuscriptPath": "docs/trait-maps/INAMQ/INAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 73339,
+        "contentCharactersExcludingEvidence": 59402,
+        "editorialCharacters": 9845,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.0223,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-IRGKQ-V2.3",
+      "code": "IRGKQ",
+      "shortName": "전략가",
+      "displayName": "변수를 꼼꼼히 살피는 전략가",
+      "historicalPriorityRank": 6,
+      "manuscriptPath": "docs/trait-maps/IRGKQ/IRGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 72546,
+        "contentCharactersExcludingEvidence": 58609,
+        "editorialCharacters": 9585,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.0144,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-ERAMQ-V2.3",
+      "code": "ERAMQ",
+      "shortName": "공감자",
+      "displayName": "마음에 바로 반응하는 공감자",
+      "historicalPriorityRank": 7,
+      "manuscriptPath": "docs/trait-maps/ERAMQ/ERAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 73427,
+        "contentCharactersExcludingEvidence": 59490,
+        "editorialCharacters": 9996,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.0225,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-INGMQ-V2.3",
+      "code": "INGMQ",
+      "shortName": "사색가",
+      "displayName": "가능성을 깊이 좇는 사색가",
+      "historicalPriorityRank": 8,
+      "manuscriptPath": "docs/trait-maps/INGMQ/INGMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "initialState": {
+        "thinChapters": 8,
+        "remediationWave": "WAVE-1",
+        "sourceSnapshot": "TRAIT_MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3 pre-remediation baseline"
+      },
+      "currentState": {
+        "totalNonWhitespaceCharacters": 72594,
+        "contentCharactersExcludingEvidence": 58657,
+        "editorialCharacters": 9589,
+        "canonicalClaimRefs": 288,
+        "thinChapters": 0,
+        "repeatedLongLineCharacterRatio": 0.021,
+        "missingCanonicalClaimsInManifest": 0,
+        "automatedContentGate": "PASS"
+      },
+      "completion": {
+        "automatedContentRepair": "passed",
+        "canonicalV23Rebase": "passed",
+        "externalIndependentReview": "not_started",
+        "participantValidation": "not_started",
+        "customerPublicationApproval": "not_started"
+      },
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "FINAL_REPRODUCIBILITY_AND_REQUIREMENT_AUDIT",
+    "action": "WAVE-1을 포함한 32개 원장 전체 current check와 요구사항별 최종 완료 감사를 실행한다."
+  }
+}

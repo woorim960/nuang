@@ -2,8 +2,40 @@ import type {
   GateCResponseChoice,
   GateCUnsureReason,
 } from "@/features/research/gate-c/gate-c-study-contract";
+import type { GateCAssignedItem } from "@/features/research/gate-c/gate-c-unified-item-pool";
+import type { GateCRewardContactMethod } from "@/features/research/gate-c/gate-c-reward-entry-contract";
 
-export const gateCPublicConsentVersion = "GATE-C-PUBLIC-2026-07-20";
+export const gateCPublicConsentVersion = "GATE-C-PUBLIC-2026-07-24";
+
+export const gateCReviewRewardCampaignStatuses = [
+  "details_pending",
+  "upcoming",
+  "active",
+  "closed",
+] as const;
+
+export type GateCReviewRewardCampaignStatus =
+  (typeof gateCReviewRewardCampaignStatuses)[number];
+
+export type GateCReviewRewardCampaign = {
+  announcementLabel: string | null;
+  contactMethod: GateCRewardContactMethod | null;
+  entryEnabled: boolean;
+  periodLabel: string | null;
+  prize: string;
+  status: GateCReviewRewardCampaignStatus;
+  winnerCount: number;
+};
+
+export const gateCReviewRewardCampaign: GateCReviewRewardCampaign = {
+  announcementLabel: null,
+  contactMethod: null,
+  entryEnabled: false,
+  periodLabel: null,
+  prize: "스타벅스 모바일 금액권 5,000원",
+  status: "details_pending",
+  winnerCount: 10,
+};
 
 export const gateCAgeBands = [
   "18_19",
@@ -48,8 +80,11 @@ export type GateCPublicResponseRecord = {
 };
 
 export type GateCPublicSessionStart = {
+  assignmentProof: string;
   formId: string;
+  items: GateCAssignedItem[];
   participantCode: string;
+  poolVersion: string;
   sessionId: string;
   sessionToken: string;
   withdrawalCode: string;

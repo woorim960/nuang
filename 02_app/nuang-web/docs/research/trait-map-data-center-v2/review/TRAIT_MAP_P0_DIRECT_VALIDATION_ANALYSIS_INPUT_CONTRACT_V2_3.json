@@ -1,0 +1,36 @@
+{
+  "contractVersion": "nuang-trait-map-p0-direct-validation-analysis-input.v2.3",
+  "contractId": "TRAIT-MAP-P0-DIRECT-VALIDATION-ANALYSIS-INPUT.2.3",
+  "status": "FAIL_CLOSED_UNTIL_CODER_RESOLUTION_COMPLETE",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "requiredGrain": "one_row_per_response_layer",
+  "requiredFields": [
+    "responseRef",
+    "participantRef",
+    "sessionRef",
+    "moduleId",
+    "scenarioRef",
+    "targetAxes",
+    "responseLayer",
+    "directionCode",
+    "responseTimeMs",
+    "axisScores",
+    "scoreUncertainty"
+  ],
+  "inclusionRules": [
+    "두 코더가 같은 방향을 판정했거나 제3자 합의가 완료된 응답만 포함한다.",
+    "withdrawn·excluded_quality 회기는 제외한다.",
+    "잠긴 검사·자극 버전과 해시가 있는 응답만 포함한다.",
+    "축 점수와 장면 응답은 같은 문항으로 순환 산출하지 않는다."
+  ],
+  "prohibitedOutputsBeforeReady": [
+    "axis_effect_estimate",
+    "p_value",
+    "confidence_interval",
+    "canonical_release_decision",
+    "customer_facing_interpretation"
+  ],
+  "plannedModel": "response layer nested in scenario nested in participant; continuous axis score with score uncertainty",
+  "currentSyntheticRowsEligible": 0
+}

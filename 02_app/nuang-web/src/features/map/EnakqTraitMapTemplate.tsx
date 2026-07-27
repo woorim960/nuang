@@ -1,15 +1,10 @@
 "use client";
 
-import {
-  ArrowLeft,
-  BookOpen,
-  ChevronDown,
-  Clock3,
-  ExternalLink,
-} from "lucide-react";
+import { ArrowLeft, Check, ChevronDown, ExternalLink, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import { candidateAxisCopy } from "@/features/nuang-code/candidate-profile-names";
 import type {
   TraitMapCustomerGuide,
   TraitMapCustomerGuideChapter,
@@ -23,6 +18,10 @@ export function TraitMapDetailTemplate({
 }) {
   const [activeChapter, setActiveChapter] = useState(1);
   const [tableOfContentsOpen, setTableOfContentsOpen] = useState(false);
+  const [feedbackEnabled, setFeedbackEnabled] = useState(false);
+  const [savedFeedback, setSavedFeedback] = useState<
+    Record<string, SectionFeedbackValue>
+  >({});
   const chapterSelectionLocked = useRef(false);
   const chapterSelectionTimer = useRef<number | null>(null);
   const chapterNavigatorButtonRef = useRef<HTMLButtonElement>(null);
@@ -90,6 +89,50 @@ export function TraitMapDetailTemplate({
     [],
   );
 
+  useEffect(() => {
+    let mounted = true;
+
+    async function loadFeedback() {
+      try {
+        const response = await fetch(
+          `/api/research/trait-map-feedback?code=${encodeURIComponent(guide.code)}`,
+          { cache: "no-store" },
+        );
+        if (!response.ok) return;
+        const body = (await response.json()) as {
+          eligible?: boolean;
+          feedback?: Array<
+            SectionFeedbackValue & {
+              chapterId: string;
+              sectionKey: string;
+            }
+          >;
+        };
+        if (!mounted || !body.eligible) return;
+
+        setFeedbackEnabled(true);
+        setSavedFeedback(
+          Object.fromEntries(
+            (body.feedback ?? []).map((entry) => [
+              createSectionFeedbackKey(entry.chapterId, entry.sectionKey),
+              {
+                fitRating: entry.fitRating,
+                note: entry.note,
+              },
+            ]),
+          ),
+        );
+      } catch {
+        // Feedback remains hidden when account eligibility cannot be confirmed.
+      }
+    }
+
+    void loadFeedback();
+    return () => {
+      mounted = false;
+    };
+  }, [guide.code]);
+
   const currentChapter =
     guide.chapters.find((chapter) => chapter.number === activeChapter) ??
     guide.chapters[0];
@@ -143,63 +186,19 @@ export function TraitMapDetailTemplate({
       </section>
 
       <section
-        className={styles.guideIntro}
-        aria-labelledby="guide-intro-title"
+        aria-label={`${guide.code} 다섯 글자의 성향 이름`}
+        className={styles.codeLanguage}
       >
-        <div className={styles.guideIntroHeading}>
-          <span className={styles.guideIcon}>
-            <BookOpen aria-hidden="true" size={18} strokeWidth={1.7} />
-          </span>
-          <div>
-            <p>{guide.code}를 깊이 이해하는 안내서</p>
-            <h2 id="guide-intro-title">
-              생각의 이유와 행동까지 자세히 살펴봐요
-            </h2>
-          </div>
-        </div>
-        <p>
-          이 안내서는 {guide.chapters.length}개 장에서 {guide.code}가 중요하게
-          여기는 가치와 생각의 흐름, 관계별 행동, 부담이 커지는 순간과 회복
-          방법까지 구체적으로 설명해요. 나를 이해할 때도, 궁금한 사람을 알아갈
-          때도 원하는 장부터 골라 읽을 수 있어요.
-        </p>
-        <div className={styles.guideStats}>
-          <span>
-            <BookOpen aria-hidden="true" size={14} strokeWidth={1.7} />
-            {guide.chapters.length}개 장
-          </span>
-          <span>
-            <Clock3 aria-hidden="true" size={14} strokeWidth={1.7} />
-            천천히 약 {guide.readingMinutes}분
-          </span>
-        </div>
-      </section>
-
-      <section
-        className={styles.readingGuide}
-        aria-labelledby="reading-guide-title"
-      >
-        <div>
-          <span>이렇게 읽어보세요</span>
-          <h2 id="reading-guide-title">핵심부터 관계별 모습까지 이어져요</h2>
-        </div>
-        <ol>
-          {[
-            `먼저 다섯 글자와 ${guide.code}의 중심 가치를 이해해요.`,
-            "가족·친구·연인·마음 가는 사람과의 행동을 살펴봐요.",
-            "마지막에는 강점, 대화법, 뉴앙의 신뢰 근거를 확인해요.",
-          ].map((item, index) => (
-            <li key={item}>
-              <span>{index + 1}</span>
-              {item}
-            </li>
-          ))}
-        </ol>
-        <p>
-          본문은 {guide.code}에서 대체로 반복되는 경향을 중심으로 설명해요. 각
-          행동이 나타나는 이유까지 함께 읽으면 단순한 특징 목록보다 이 성향을
-          훨씬 구체적으로 이해할 수 있어요.
-        </p>
+        {guide.code.split("").map((symbol, index) => {
+          const direction = candidateAxisCopy[index]?.directions[symbol];
+          if (!direction) return null;
+          return (
+            <span key={`${symbol}-${index}`}>
+              <b>{symbol}</b>
+              <em>{direction.publicTypeName}</em>
+            </span>
+          );
+        })}
       </section>
 
       <nav
@@ -238,7 +237,6 @@ export function TraitMapDetailTemplate({
         </span>
         {tableOfContentsOpen ? (
           <div className={styles.tableOfContents}>
-            <p>궁금한 내용을 바로 골라 보세요</p>
             <ol>
               {guide.chapters.map((chapter) => (
                 <li key={chapter.id}>
@@ -261,27 +259,47 @@ export function TraitMapDetailTemplate({
 
       <div className={styles.chapterList}>
         {guide.chapters.map((chapter) => (
-          <GuideChapter chapter={chapter} key={chapter.id} />
+          <GuideChapter
+            chapter={chapter}
+            code={guide.code}
+            feedbackEnabled={feedbackEnabled}
+            key={chapter.id}
+            onFeedbackSaved={(chapterId, sectionKey, value) => {
+              setSavedFeedback((current) => ({
+                ...current,
+                [createSectionFeedbackKey(chapterId, sectionKey)]: value,
+              }));
+            }}
+            savedFeedback={savedFeedback}
+          />
         ))}
       </div>
 
       <section className={styles.nextStep} aria-labelledby="next-step-title">
-        <span>다 읽은 뒤</span>
         <h2 id="next-step-title">다른 코드와 나란히 살펴봐요</h2>
-        <p>
-          다른 코드를 함께 보면 두 사람이 대화를 시작하는 방식, 상대의 마음을
-          살피는 순서, 계획과 걱정을 다루는 차이를 더 분명하게 이해할 수 있어요.
-        </p>
         <Link href="/map">다른 뉴앙 코드 둘러보기</Link>
-        {process.env.NODE_ENV === "development" ? (
-          <Link href="/research/trait-map/enakq">내부 콘텐츠 검토 현황</Link>
-        ) : null}
       </section>
     </article>
   );
 }
 
-function GuideChapter({ chapter }: { chapter: GuideChapterDocument }) {
+function GuideChapter({
+  chapter,
+  code,
+  feedbackEnabled,
+  onFeedbackSaved,
+  savedFeedback,
+}: {
+  chapter: GuideChapterDocument;
+  code: string;
+  feedbackEnabled: boolean;
+  onFeedbackSaved: (
+    chapterId: string,
+    sectionKey: string,
+    value: SectionFeedbackValue,
+  ) => void;
+  savedFeedback: Record<string, SectionFeedbackValue>;
+}) {
   return (
     <section
       className={styles.chapter}
@@ -317,6 +335,28 @@ function GuideChapter({ chapter }: { chapter: GuideChapterDocument }) {
                 ),
               )}
             </div>
+            {feedbackEnabled ? (
+              <SectionFitFeedback
+                chapterId={chapter.id}
+                code={code}
+                onSaved={(value) =>
+                  onFeedbackSaved(
+                    chapter.id,
+                    createSectionKey(sectionIndex),
+                    value,
+                  )
+                }
+                savedValue={
+                  savedFeedback[
+                    createSectionFeedbackKey(
+                      chapter.id,
+                      createSectionKey(sectionIndex),
+                    )
+                  ]
+                }
+                sectionKey={createSectionKey(sectionIndex)}
+              />
+            ) : null}
           </section>
         ))}
       </div>
@@ -355,6 +395,131 @@ function GuideChapter({ chapter }: { chapter: GuideChapterDocument }) {
   );
 }
 
+function SectionFitFeedback({
+  chapterId,
+  code,
+  onSaved,
+  savedValue,
+  sectionKey,
+}: {
+  chapterId: string;
+  code: string;
+  onSaved: (value: SectionFeedbackValue) => void;
+  savedValue?: SectionFeedbackValue;
+  sectionKey: string;
+}) {
+  const [open, setOpen] = useState(false);
+  const [fitRating, setFitRating] = useState<SectionFitRating | "">(
+    savedValue?.fitRating ?? "",
+  );
+  const [note, setNote] = useState(savedValue?.note ?? "");
+  const [status, setStatus] = useState<"error" | "idle" | "saving" | "saved">(
+    savedValue ? "saved" : "idle",
+  );
+
+  async function save() {
+    if (!fitRating || status === "saving") return;
+    setStatus("saving");
+
+    try {
+      const response = await fetch("/api/research/trait-map-feedback", {
+        body: JSON.stringify({
+          chapterId,
+          code,
+          fitRating,
+          note,
+          sectionKey,
+        }),
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      });
+      if (!response.ok) throw new Error("save_failed");
+
+      const value = { fitRating, note: note.trim() };
+      onSaved(value);
+      setStatus("saved");
+      setOpen(false);
+    } catch {
+      setStatus("error");
+    }
+  }
+
+  return (
+    <div className={styles.sectionFeedback} data-open={open}>
+      <button
+        className={styles.sectionFeedbackLink}
+        onClick={() => setOpen((current) => !current)}
+        type="button"
+      >
+        {savedValue ? (
+          <>
+            <Check aria-hidden="true" size={14} strokeWidth={1.8} />내 느낌
+            수정하기
+          </>
+        ) : (
+          "이 설명은 나와 얼마나 비슷한가요?"
+        )}
+      </button>
+
+      {open ? (
+        <div className={styles.sectionFeedbackForm}>
+          <div className={styles.sectionFeedbackHeading}>
+            <strong>내 실제 모습과 비교해 주세요</strong>
+            <button
+              aria-label="의견 남기기 닫기"
+              onClick={() => setOpen(false)}
+              type="button"
+            >
+              <X aria-hidden="true" size={17} strokeWidth={1.7} />
+            </button>
+          </div>
+          <div className={styles.fitOptions}>
+            {sectionFitOptions.map((option) => (
+              <button
+                aria-pressed={fitRating === option.value}
+                key={option.value}
+                onClick={() => {
+                  setFitRating(option.value);
+                  setStatus("idle");
+                }}
+                type="button"
+              >
+                {option.label}
+              </button>
+            ))}
+          </div>
+          <label>
+            <span>덧붙이고 싶은 내용 (선택)</span>
+            <textarea
+              maxLength={500}
+              onChange={(event) => {
+                setNote(event.target.value);
+                setStatus("idle");
+              }}
+              placeholder="어떤 점이 비슷하거나 달랐는지 알려주세요."
+              rows={3}
+              value={note}
+            />
+          </label>
+          {status === "error" ? (
+            <p className={styles.feedbackError}>
+              저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.
+            </p>
+          ) : null}
+          <button
+            className={styles.feedbackSave}
+            disabled={!fitRating || status === "saving"}
+            onClick={save}
+            type="button"
+          >
+            {status === "saving" ? "저장하고 있어요" : "의견 보내기"}
+          </button>
+        </div>
+      ) : null}
+    </div>
+  );
+}
+
 function CodeLetters({ code }: { code: string }) {
   return (
     <p aria-label={`뉴앙 코드 ${code}`} className={styles.codeLetters}>
@@ -384,3 +549,29 @@ function getChapterTone(chapterNumber: number) {
 }
 
 type GuideChapterDocument = TraitMapCustomerGuideChapter;
+
+type SectionFitRating =
+  "very_close" | "mostly_close" | "partly_different" | "very_different";
+
+type SectionFeedbackValue = {
+  fitRating: SectionFitRating;
+  note: string;
+};
+
+const sectionFitOptions: ReadonlyArray<{
+  label: string;
+  value: SectionFitRating;
+}> = [
+  { label: "매우 비슷해요", value: "very_close" },
+  { label: "대체로 비슷해요", value: "mostly_close" },
+  { label: "조금 달라요", value: "partly_different" },
+  { label: "많이 달라요", value: "very_different" },
+];
+
+function createSectionKey(sectionIndex: number) {
+  return `section-${String(sectionIndex + 1).padStart(2, "0")}`;
+}
+
+function createSectionFeedbackKey(chapterId: string, sectionKey: string) {
+  return `${chapterId}:${sectionKey}`;
+}

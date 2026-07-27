@@ -1,0 +1,125 @@
+{
+  "contractVersion": "nuang-trait-map-statistical-engine-spec.v2.3",
+  "reportId": "TRAIT-MAP-STATISTICAL-ENGINE-SPEC.2.3",
+  "status": "ENGINE_SPEC_AND_RUNNER_READY_ENGINE_NOT_INSTALLED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "officialReferences": [
+    {
+      "id": "LAVAAN-CATEGORICAL",
+      "url": "https://lavaan.ugent.be/tutorial/cat.html",
+      "applied": "1–5 응답을 ordered로 지정하고 주 분석에 WLSMV를 사용한다. 순서형 자료의 FIML은 지원되지 않으므로 결측 처리를 별도 계획한다."
+    },
+    {
+      "id": "SIMSEM-CRAN",
+      "url": "https://cran.r-project.org/package=simsem",
+      "applied": "구조방정식 Monte Carlo와 결측·표본 계획을 위한 회수 연구 후보 엔진으로 둔다."
+    },
+    {
+      "id": "MIRT-CRAN",
+      "url": "https://cran.r-project.org/package=mirt",
+      "applied": "다차원 순서형 IRT, 문항 정보, 다집단 DIF, 추가 문항 후보 분석에 사용한다."
+    },
+    {
+      "id": "SEMTOOLS-CRAN",
+      "url": "https://cran.r-project.org/package=semTools",
+      "applied": "요인모형 기반 신뢰도와 측정동일성 보조 분석에 사용한다."
+    }
+  ],
+  "engineLock": {
+    "primaryRuntime": "R",
+    "minimumRVersion": "4.1.0",
+    "packagesObservedOn20260724": {
+      "lavaan": "0.6-21",
+      "simsem": "0.5-17",
+      "mirt": "1.46.1",
+      "semTools": "0.5-9"
+    },
+    "reproducibilityRule": "첫 성공 실행 때 R 버전·OS·패키지·의존성을 renv.lock과 sessionInfo()로 고정하고 이후 결과에 lock hash를 기록한다.",
+    "currentEnvironment": {
+      "rscriptAvailable": false,
+      "packagesInstalled": false,
+      "runnerExecuted": false
+    }
+  },
+  "modelIdentificationAudit": [
+    {
+      "modelId": "M1_TEN_CORRELATED_FACETS",
+      "state": "READY_FOR_SIMULATION_AND_EMPIRICAL_FIT",
+      "rationale": "10개 세부 성향을 각각 6문항으로 측정하고 모든 세부 성향 상관을 추정한다."
+    },
+    {
+      "modelId": "M2_FIVE_CORRELATED_AXES",
+      "state": "READY_AS_COARSE_COMPARATOR",
+      "rationale": "세부 성향을 접고 5개 축으로 직접 적재한다. 단순하지만 세부 구조를 잃는 비교 모형이다."
+    },
+    {
+      "modelId": "M3_PARTIAL_SECOND_ORDER",
+      "state": "BLOCKED_IDENTIFICATION_AND_THEORY_CONSTRAINTS_REQUIRED",
+      "rationale": "OE는 세 개의 1차 요인이 있으나 SE·SM·ER은 두 개, RO는 한 개뿐이다. 임의의 동일성 제약 없이 동일한 2차 구조를 강요하지 않는다."
+    },
+    {
+      "modelId": "M4_TARGET_ESEM",
+      "state": "ENGINE_AND_ROTATION_SPEC_REQUIRED",
+      "rationale": "작은 교차적재를 허용하되 목표 회전·허용 범위·확인 표본 재현 규칙을 먼저 잠가야 한다."
+    },
+    {
+      "modelId": "M5_REVERSE_METHOD_FACTOR",
+      "state": "READY_AS_SENSITIVITY_MODEL",
+      "rationale": "10개 세부 성향에 역문항 방법 요인을 직교로 추가한다. 방법 요인이 강하면 문항 문구를 우선 점검한다."
+    }
+  ],
+  "estimationContract": {
+    "observedItems": "60개 5범주 순서형 문항",
+    "estimator": "WLSMV",
+    "ordered": true,
+    "missingPrimary": "pairwise는 주 분석 후보이나, 결측 기제와 판단 어려움을 함께 고려한 민감도 분석 없이 단독 결론으로 사용하지 않는다.",
+    "parameterization": "기본 delta; theta는 사전 명세된 민감도 분석에서만 비교",
+    "developmentConfirmationSplit": "participant_ref 단위로 사전 seed 기반 분할하며 같은 참여자·재검사 쌍이 양쪽에 걸치지 않는다."
+  },
+  "reportingContract": {
+    "fit": [
+      "scaled chi-square와 자유도",
+      "robust CFI·TLI",
+      "robust RMSEA와 구간",
+      "SRMR"
+    ],
+    "parameters": [
+      "표준화 적재와 구간",
+      "문항 threshold",
+      "요인 상관",
+      "잔차·국소 의존",
+      "Heywood case"
+    ],
+    "recovery": [
+      "convergence rate",
+      "parameter bias",
+      "standard error bias",
+      "interval coverage",
+      "improper solution rate",
+      "model selection error"
+    ],
+    "noSingleFitIndexApproval": true
+  },
+  "generatedAssets": [
+    "analysis/trait-map-v2-3/ordinal_model_manifest.json",
+    "analysis/trait-map-v2-3/run_ordinal_cfa.R"
+  ],
+  "executionState": {
+    "modelManifestGenerated": true,
+    "runnerGenerated": true,
+    "rRuntimeInstalled": false,
+    "simulationRecoveryExecuted": false,
+    "empiricalFitExecuted": false
+  },
+  "nextGate": {
+    "name": "R_RUNTIME_LOCK_AND_SYNTHETIC_RECOVERY_EXECUTION",
+    "blockedBy": "현재 환경에 Rscript와 필요한 검증 패키지가 없다.",
+    "actions": [
+      "R과 네 패키지를 격리 환경에 설치하고 renv.lock을 생성한다.",
+      "synthetic input으로 M1·M2·M5 runner를 실행한다.",
+      "M3 식별 제약은 심리측정 전문가의 이론 승인 전 구현하지 않는다.",
+      "M4는 목표 회전 사양을 확정한 뒤 별도 runner로 구현한다."
+    ]
+  }
+}

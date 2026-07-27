@@ -21,6 +21,9 @@ export function PersonalityPlaygroundPost({
   returnTo?: string;
 }) {
   if (!post.poll) return null;
+  const isClosed =
+    post.poll.status === "closed" || post.responseStatus === "closed";
+  const isFeatured = post.officialFeatured !== false && !isClosed;
 
   return (
     <article
@@ -39,15 +42,16 @@ export function PersonalityPlaygroundPost({
           width={48}
         />
         <div className={styles.identity}>
-          <strong>오늘의 성향 놀이터</strong>
-          <small>뉴앙이 고른 오늘의 질문 · 관계</small>
+          <strong>{isFeatured ? "오늘의 성향 놀이터" : "성향 놀이터"}</strong>
         </div>
         <Link className={styles.recordLink} href={recordHref}>
           내 기록
         </Link>
       </header>
 
-      <h3 className={styles.title}>오늘의 밸런스 게임</h3>
+      <h3 className={styles.title}>
+        {isFeatured ? "오늘의 밸런스 게임" : "밸런스 게임"}
+      </h3>
 
       <div className={styles.poll}>
         <FeedPollCard
@@ -57,15 +61,20 @@ export function PersonalityPlaygroundPost({
         />
       </div>
 
-      <div className={styles.footnote}>
-        <p>가볍게 고른 선택은 공식 검사 결과를 바꾸지 않아요.</p>
-        {continueHref ? (
+      {continueHref ? (
+        <div className={styles.footnote}>
           <Link href={continueHref}>커뮤니티에서 이어보기</Link>
-        ) : null}
-      </div>
+        </div>
+      ) : null}
 
       <div className={styles.actions}>
         <FeedActionButtons
+          allowComment={!isClosed}
+          commentDisabledMessage={
+            isClosed
+              ? "투표와 새 댓글이 마감됐어요. 최종 결과와 기존 댓글은 계속 볼 수 있어요."
+              : undefined
+          }
           includeBookmark
           includeShare
           initialBookmarked={post.viewerHasBookmarked}

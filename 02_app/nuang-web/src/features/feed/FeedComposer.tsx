@@ -25,6 +25,7 @@ import {
   type MouseEvent,
 } from "react";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
+import { extractExternalLinks } from "@/features/feed/link-safety";
 import { analyzeLocalFeedImages } from "@/features/feed/feed-image-analysis";
 import {
   maxFeedPhotoCount,
@@ -56,6 +57,7 @@ type FeedComposerResponse =
       error?: string;
       feedWrite?: {
         id?: string;
+        moderationStatus?: string | null;
       };
       message?: string;
       ok?: boolean;
@@ -128,6 +130,9 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
     (trimmedBody.length >= 2 || photos.length > 0);
   const canRecommendCategory =
     !recommendingTopic && (trimmedBody.length > 0 || photos.length > 0);
+  const pendingExternalLinkCount = extractExternalLinks(body).filter(
+    (link) => link.status === "pending",
+  ).length;
 
   useEffect(() => {
     const objectUrls = objectUrlsRef.current;
@@ -169,7 +174,9 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
 
   useEffect(() => {
     const syncComposerStep = () => {
-      const preview = new URLSearchParams(window.location.search).get("preview");
+      const preview = new URLSearchParams(window.location.search).get(
+        "preview",
+      );
       setComposerStep(preview === "post" ? "preview" : "edit");
     };
 
@@ -294,8 +301,14 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
       window.sessionStorage.removeItem(pendingPostStorageKey);
       const createdPostId =
         payload && "feedWrite" in payload ? payload.feedWrite?.id : undefined;
+      const pendingReview =
+        payload &&
+        "feedWrite" in payload &&
+        payload.feedWrite?.moderationStatus === "pending_review";
       router.push(
-        createdPostId
+        pendingReview
+          ? "/feed?review=pending"
+          : createdPostId
           ? `/feed?posted=${encodeURIComponent(createdPostId)}`
           : "/feed?posted=complete",
       );
@@ -475,7 +488,6 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
           </span>
           <span className={styles.launchCopy}>
             <strong>오늘의 이야기를 나눠보세요</strong>
-            <small>글과 사진을 한곳에서 나눠요</small>
           </span>
           <span aria-hidden="true" className={styles.launchCta}>
             <PenLine size={16} strokeWidth={2} />
@@ -503,304 +515,292 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
               photos={photos}
               status={status}
               tags={tags}
+              pendingExternalLinkCount={pendingExternalLinkCount}
               visibilityLabel={visibilityLabel}
             />
           ) : (
             <section
               aria-labelledby="feed-composer-title"
               aria-modal={standalone ? undefined : "true"}
-              className={cn(
-                styles.sheet,
-                standalone && styles.standaloneSheet,
-              )}
+              className={cn(styles.sheet, standalone && styles.standaloneSheet)}
               role={standalone ? undefined : "dialog"}
             >
-            <header className={styles.sheetHeader}>
-              <button
-                aria-label="글쓰기 닫기"
-                className={styles.closeButton}
-                onClick={closeComposer}
-                type="button"
-              >
-                <X aria-hidden="true" size={22} strokeWidth={1.9} />
-              </button>
-              <h2 id="feed-composer-title">새 게시물</h2>
-              <button
-                className={styles.publishButton}
-                disabled={!canSubmit}
-                onClick={openPreview}
-                type="button"
-              >
-                업로드
-              </button>
-            </header>
-
-            <form
-              className={styles.composerForm}
-              id="feed-composer-form"
-              onSubmit={(event) => event.preventDefault()}
-            >
-              <div className={styles.identityRow}>
-                <span aria-hidden="true" className={styles.identityAvatar}>
-                  나
-                </span>
-                <Link className={styles.identityProfileLink} href="/feed/me">
-                  <strong>나</strong>
-                  <span>내 프로필 보기</span>
-                </Link>
+              <header className={styles.sheetHeader}>
                 <button
-                  className={styles.audienceButton}
-                  onClick={() => setAudienceOpen(true)}
+                  aria-label="글쓰기 닫기"
+                  className={styles.closeButton}
+                  onClick={closeComposer}
                   type="button"
                 >
-                  <Globe2 aria-hidden="true" size={15} />
-                  {visibilityLabel}
+                  <X aria-hidden="true" size={22} strokeWidth={1.9} />
                 </button>
-              </div>
+                <h2 id="feed-composer-title">새 게시물</h2>
+                <button
+                  className={styles.publishButton}
+                  disabled={!canSubmit}
+                  onClick={openPreview}
+                  type="button"
+                >
+                  업로드
+                </button>
+              </header>
 
-              <p className={styles.trustNote}>
-                <ShieldCheck aria-hidden="true" size={15} />
-                성향 상세 점수와 검사 응답은 게시물에 공개되지 않아요.
-              </p>
-
-              <label className="sr-only" htmlFor="feed-composer-body">
-                글 내용
-              </label>
-              <div className={styles.editorWrap}>
-                <textarea
-                  className={styles.bodyInput}
-                  id="feed-composer-body"
-                  maxLength={800}
-                  onChange={(event) => handleBodyChange(event.target.value)}
-                  placeholder="지금 나누고 싶은 생각이나 경험이 있나요?"
-                  ref={textareaRef}
-                  rows={6}
-                  value={body}
-                />
-                {body.length >= 700 ? (
-                  <span className={styles.characterCount}>
-                    {body.length} / 800
+              <form
+                className={styles.composerForm}
+                id="feed-composer-form"
+                onSubmit={(event) => event.preventDefault()}
+              >
+                <div className={styles.identityRow}>
+                  <span aria-hidden="true" className={styles.identityAvatar}>
+                    나
                   </span>
-                ) : null}
-              </div>
-
-              {tags.length > 0 ? (
-                <div aria-label="추가한 태그" className={styles.tagChips}>
-                  {tags.map((tag) => (
-                    <button
-                      aria-label={`${tag} 태그 삭제`}
-                      key={tag}
-                      onClick={() => removeTag(tag)}
-                      type="button"
-                    >
-                      <span>#{tag}</span>
-                      <X aria-hidden="true" size={13} strokeWidth={2.2} />
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                <p className={styles.tagHint}>
-                  <strong>#태그</strong>를 추가해서 추천 알고리즘을 조정할 수
-                  있어요.
-                </p>
-              )}
-
-              <section className={styles.topicSection}>
-                <div className={styles.topicHeading}>
-                  <div>
-                    <strong>주제</strong>
-                    <span>하나만 선택</span>
-                  </div>
+                  <Link className={styles.identityProfileLink} href="/feed/me">
+                    <strong>나</strong>
+                  </Link>
                   <button
-                    className={styles.topicRecommendButton}
-                    disabled={!canRecommendCategory}
-                    onClick={recommendCategory}
+                    className={styles.audienceButton}
+                    onClick={() => setAudienceOpen(true)}
                     type="button"
                   >
-                    <ScanSearch aria-hidden="true" size={15} />
-                    {recommendingTopic ? "추천 중" : "추천"}
+                    <Globe2 aria-hidden="true" size={15} />
+                    {visibilityLabel}
                   </button>
                 </div>
-                <div
-                  aria-label="게시물 주제"
-                  className={styles.categoryScroller}
-                  role="radiogroup"
-                >
-                  {feedPostTopicCategories.map((category) => (
-                    <button
-                      aria-checked={selectedCategory === category}
-                      aria-label={`${feedPostTopicLabels[category]} 주제`}
-                      key={category}
-                      onClick={() => {
-                        setSelectedCategory(category);
-                        setTopicSource("manual");
-                        setTopicNote(null);
-                      }}
-                      role="radio"
-                      type="button"
-                    >
-                      {feedPostTopicLabels[category]}
-                    </button>
-                  ))}
-                </div>
-                {topicNote ? (
-                  <p className={styles.topicNote}>{topicNote}</p>
-                ) : null}
-              </section>
 
-              {selectedPhoto ? (
-                <section className={styles.photoSection}>
-                  <div className={styles.photoHeading}>
-                    <strong>사진</strong>
-                    <span>첫 사진이 대표로 보여요</span>
-                  </div>
-                  <div className={styles.photoStage}>
-                    {photos[0]?.id === selectedPhoto.id ? (
-                      <span className={styles.coverBadge}>대표 사진</span>
-                    ) : null}
-                    <span className={styles.photoCounter}>
-                      {photos.findIndex(
-                        (photo) => photo.id === selectedPhoto.id,
-                      ) + 1}{" "}
-                      / {photos.length}
+                <label className="sr-only" htmlFor="feed-composer-body">
+                  글 내용
+                </label>
+                <div className={styles.editorWrap}>
+                  <textarea
+                    className={styles.bodyInput}
+                    id="feed-composer-body"
+                    maxLength={800}
+                    onChange={(event) => handleBodyChange(event.target.value)}
+                    placeholder="지금 나누고 싶은 생각이나 경험이 있나요?"
+                    ref={textareaRef}
+                    rows={6}
+                    value={body}
+                  />
+                  {body.length >= 700 ? (
+                    <span className={styles.characterCount}>
+                      {body.length} / 800
                     </span>
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      alt="선택한 게시물 사진 미리보기"
-                      src={selectedPhoto.previewUrl}
-                    />
-                  </div>
-                  <div className={styles.photoActions}>
-                    <button
-                      disabled={photos[0]?.id === selectedPhoto.id}
-                      onClick={setSelectedPhotoAsCover}
-                      type="button"
-                    >
-                      <ImageUp aria-hidden="true" size={16} />
-                      {photos[0]?.id === selectedPhoto.id
-                        ? "대표 사진"
-                        : "대표로 설정"}
-                    </button>
-                    <button onClick={removeSelectedPhoto} type="button">
-                      <Trash2 aria-hidden="true" size={16} />
-                      삭제
-                    </button>
-                  </div>
-                  <div className={styles.thumbnailStrip}>
-                    {photos.map((photo, index) => (
+                  ) : null}
+                </div>
+
+                {tags.length > 0 ? (
+                  <div aria-label="추가한 태그" className={styles.tagChips}>
+                    {tags.map((tag) => (
                       <button
-                        aria-label={`${index + 1}번째 사진 선택`}
-                        aria-pressed={photo.id === selectedPhoto.id}
-                        className={styles.thumbnailButton}
-                        key={photo.id}
-                        onClick={() => setSelectedPhotoId(photo.id)}
+                        aria-label={`${tag} 태그 삭제`}
+                        key={tag}
+                        onClick={() => removeTag(tag)}
                         type="button"
                       >
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img alt="" src={photo.previewUrl} />
-                        <span>{index + 1}</span>
+                        <span>#{tag}</span>
+                        <X aria-hidden="true" size={13} strokeWidth={2.2} />
                       </button>
                     ))}
-                    {photos.length < maxFeedPhotoCount ? (
+                  </div>
+                ) : (
+                  <p className={styles.tagHint}>
+                    <strong>#태그</strong>를 추가해서 추천 알고리즘을 조정할 수
+                    있어요.
+                  </p>
+                )}
+
+                <section className={styles.topicSection}>
+                  <div className={styles.topicHeading}>
+                    <strong>주제</strong>
+                    <button
+                      className={styles.topicRecommendButton}
+                      disabled={!canRecommendCategory}
+                      onClick={recommendCategory}
+                      type="button"
+                    >
+                      <ScanSearch aria-hidden="true" size={15} />
+                      {recommendingTopic ? "추천 중" : "추천"}
+                    </button>
+                  </div>
+                  <div
+                    aria-label="게시물 주제"
+                    className={styles.categoryScroller}
+                    role="radiogroup"
+                  >
+                    {feedPostTopicCategories.map((category) => (
                       <button
-                        aria-label="사진 더 추가"
-                        className={styles.addPhotoTile}
-                        onClick={() => fileInputRef.current?.click()}
+                        aria-checked={selectedCategory === category}
+                        aria-label={`${feedPostTopicLabels[category]} 주제`}
+                        key={category}
+                        onClick={() => {
+                          setSelectedCategory(category);
+                          setTopicSource("manual");
+                          setTopicNote(null);
+                        }}
+                        role="radio"
                         type="button"
                       >
-                        <Plus aria-hidden="true" size={20} />
+                        {feedPostTopicLabels[category]}
                       </button>
-                    ) : null}
+                    ))}
                   </div>
-                  <p className={styles.photoPrivacyNote}>
-                    <ShieldCheck aria-hidden="true" size={14} />
-                    사진에 위치 정보가 포함될 수 있어요. 다른 사람의 얼굴과 위치
-                    정보는 게시 전 확인해 주세요.
-                  </p>
+                  {topicNote ? (
+                    <p className={styles.topicNote}>{topicNote}</p>
+                  ) : null}
                 </section>
-              ) : (
-                <section className={styles.emptyPhotoSection}>
-                  <div className={styles.photoHeading}>
-                    <strong>사진</strong>
-                    <span>최대 {maxFeedPhotoCount}장</span>
-                  </div>
-                  <button
-                    aria-label="사진 추가"
-                    className={styles.emptyPhotoTile}
-                    onClick={() => fileInputRef.current?.click()}
-                    type="button"
-                  >
-                    <span aria-hidden="true">
-                      <Plus size={23} strokeWidth={1.8} />
-                    </span>
-                    <strong>사진 추가</strong>
-                  </button>
-                  <p className={styles.photoPrivacyNote}>
-                    <ShieldCheck aria-hidden="true" size={14} />
-                    다른 사람의 얼굴과 위치 정보는 게시 전 확인해 주세요.
-                  </p>
-                </section>
-              )}
 
-              <ComposerStatusMessage status={status} />
-            </form>
-
-            <input
-              accept="image/jpeg,image/png,image/webp"
-              aria-label="게시물 사진 선택"
-              className="sr-only"
-              multiple
-              onChange={handlePhotoSelection}
-              ref={fileInputRef}
-              type="file"
-            />
-
-            {audienceOpen ? (
-              <div
-                className={styles.audienceBackdrop}
-                onMouseDown={(event) => {
-                  if (event.target === event.currentTarget)
-                    setAudienceOpen(false);
-                }}
-              >
-                <section
-                  aria-label="게시물 공개 범위"
-                  className={styles.audienceSheet}
-                >
-                  <header>
-                    <strong>공개 범위</strong>
-                    <button
-                      aria-label="공개 범위 닫기"
-                      onClick={() => setAudienceOpen(false)}
-                      type="button"
-                    >
-                      <X aria-hidden="true" size={19} />
-                    </button>
-                  </header>
-                  {visibilityOptions.map((option) => (
-                    <button
-                      aria-pressed={visibility === option.value}
-                      className={styles.audienceOption}
-                      key={option.value}
-                      onClick={() => {
-                        setVisibility(option.value);
-                        setAudienceOpen(false);
-                      }}
-                      type="button"
-                    >
-                      <span>
-                        <strong>{option.label}</strong>
-                        <small>{option.description}</small>
+                {selectedPhoto ? (
+                  <section className={styles.photoSection}>
+                    <div className={styles.photoHeading}>
+                      <strong>사진</strong>
+                    </div>
+                    <div className={styles.photoStage}>
+                      {photos[0]?.id === selectedPhoto.id ? (
+                        <span className={styles.coverBadge}>대표 사진</span>
+                      ) : null}
+                      <span className={styles.photoCounter}>
+                        {photos.findIndex(
+                          (photo) => photo.id === selectedPhoto.id,
+                        ) + 1}{" "}
+                        / {photos.length}
                       </span>
-                      <span
-                        aria-hidden="true"
-                        className={styles.audienceCheck}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        alt="선택한 게시물 사진 미리보기"
+                        src={selectedPhoto.previewUrl}
                       />
+                    </div>
+                    <div className={styles.photoActions}>
+                      <button
+                        disabled={photos[0]?.id === selectedPhoto.id}
+                        onClick={setSelectedPhotoAsCover}
+                        type="button"
+                      >
+                        <ImageUp aria-hidden="true" size={16} />
+                        {photos[0]?.id === selectedPhoto.id
+                          ? "대표 사진"
+                          : "대표로 설정"}
+                      </button>
+                      <button onClick={removeSelectedPhoto} type="button">
+                        <Trash2 aria-hidden="true" size={16} />
+                        삭제
+                      </button>
+                    </div>
+                    <div className={styles.thumbnailStrip}>
+                      {photos.map((photo, index) => (
+                        <button
+                          aria-label={`${index + 1}번째 사진 선택`}
+                          aria-pressed={photo.id === selectedPhoto.id}
+                          className={styles.thumbnailButton}
+                          key={photo.id}
+                          onClick={() => setSelectedPhotoId(photo.id)}
+                          type="button"
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img alt="" src={photo.previewUrl} />
+                          <span>{index + 1}</span>
+                        </button>
+                      ))}
+                      {photos.length < maxFeedPhotoCount ? (
+                        <button
+                          aria-label="사진 더 추가"
+                          className={styles.addPhotoTile}
+                          onClick={() => fileInputRef.current?.click()}
+                          type="button"
+                        >
+                          <Plus aria-hidden="true" size={20} />
+                        </button>
+                      ) : null}
+                    </div>
+                    <p className={styles.photoPrivacyNote}>
+                      <ShieldCheck aria-hidden="true" size={14} />
+                      사진에 위치 정보가 포함될 수 있어요. 다른 사람의 얼굴과
+                      위치 정보는 게시 전 확인해 주세요.
+                    </p>
+                  </section>
+                ) : (
+                  <section className={styles.emptyPhotoSection}>
+                    <div className={styles.photoHeading}>
+                      <strong>사진</strong>
+                      <span>최대 {maxFeedPhotoCount}장</span>
+                    </div>
+                    <button
+                      aria-label="사진 추가"
+                      className={styles.emptyPhotoTile}
+                      onClick={() => fileInputRef.current?.click()}
+                      type="button"
+                    >
+                      <span aria-hidden="true">
+                        <Plus size={23} strokeWidth={1.8} />
+                      </span>
+                      <strong>사진 추가</strong>
                     </button>
-                  ))}
-                </section>
-              </div>
-            ) : null}
+                    <p className={styles.photoPrivacyNote}>
+                      <ShieldCheck aria-hidden="true" size={14} />
+                      다른 사람의 얼굴과 위치 정보는 게시 전 확인해 주세요.
+                    </p>
+                  </section>
+                )}
+
+                <ComposerStatusMessage status={status} />
+              </form>
+
+              <input
+                accept="image/jpeg,image/png,image/webp"
+                aria-label="게시물 사진 선택"
+                className="sr-only"
+                multiple
+                onChange={handlePhotoSelection}
+                ref={fileInputRef}
+                type="file"
+              />
+
+              {audienceOpen ? (
+                <div
+                  className={styles.audienceBackdrop}
+                  onMouseDown={(event) => {
+                    if (event.target === event.currentTarget)
+                      setAudienceOpen(false);
+                  }}
+                >
+                  <section
+                    aria-label="게시물 공개 범위"
+                    className={styles.audienceSheet}
+                  >
+                    <header>
+                      <strong>공개 범위</strong>
+                      <button
+                        aria-label="공개 범위 닫기"
+                        onClick={() => setAudienceOpen(false)}
+                        type="button"
+                      >
+                        <X aria-hidden="true" size={19} />
+                      </button>
+                    </header>
+                    {visibilityOptions.map((option) => (
+                      <button
+                        aria-pressed={visibility === option.value}
+                        className={styles.audienceOption}
+                        key={option.value}
+                        onClick={() => {
+                          setVisibility(option.value);
+                          setAudienceOpen(false);
+                        }}
+                        type="button"
+                      >
+                        <span>
+                          <strong>{option.label}</strong>
+                          <small>{option.description}</small>
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className={styles.audienceCheck}
+                        />
+                      </button>
+                    ))}
+                  </section>
+                </div>
+              ) : null}
             </section>
           )}
         </div>
@@ -817,6 +817,7 @@ function ComposerPreview({
   photos,
   status,
   tags,
+  pendingExternalLinkCount,
   visibilityLabel,
 }: {
   body: string;
@@ -826,6 +827,7 @@ function ComposerPreview({
   photos: ComposerPhoto[];
   status: ComposerStatus;
   tags: string[];
+  pendingExternalLinkCount: number;
   visibilityLabel: string;
 }) {
   return (
@@ -843,13 +845,10 @@ function ComposerPreview({
       </header>
 
       <div className={styles.previewBody}>
-        <div className={styles.previewIntro}>
-          <span>업로드 전 마지막 확인</span>
-          <strong>커뮤니티에서는 이렇게 보여요</strong>
-          <p>내용과 사진, 주제와 공개 범위를 확인해 주세요.</p>
-        </div>
-
-        <article aria-label="게시물 최종 미리보기" className={styles.previewCard}>
+        <article
+          aria-label="게시물 최종 미리보기"
+          className={styles.previewCard}
+        >
           <header className={styles.previewIdentity}>
             <span aria-hidden="true" className={styles.identityAvatar}>
               나
@@ -877,9 +876,7 @@ function ComposerPreview({
             <div className={styles.previewMedia}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img alt="업로드할 게시물 대표 사진" src={photos[0].previewUrl} />
-              {photos.length > 1 ? (
-                <span>1 / {photos.length}</span>
-              ) : null}
+              {photos.length > 1 ? <span>1 / {photos.length}</span> : null}
             </div>
           ) : null}
 
@@ -903,6 +900,13 @@ function ComposerPreview({
           <ShieldCheck aria-hidden="true" size={15} />
           검사 응답과 상세 점수는 게시물에 포함되지 않아요.
         </p>
+        {pendingExternalLinkCount > 0 ? (
+          <p className={styles.previewTrustNote}>
+            <ShieldCheck aria-hidden="true" size={15} />
+            처음 보는 사이트 링크 {pendingExternalLinkCount}개는 글과 함께
+            게시되지만, 안전 확인 전까지 열리지 않아요.
+          </p>
+        ) : null}
         <ComposerStatusMessage status={status} />
       </div>
 

@@ -16,24 +16,24 @@
 .sectionHeading p {
   margin: 0;
   color: var(--primary);
-  font-size: 0.75rem;
-  font-weight: 680;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: 0.045em;
 }
 
 .hero h1 {
   margin: 0.55rem 0 0;
-  font-size: clamp(1.9rem, 8vw, 2.4rem);
-  font-weight: 730;
+  font-size: var(--nu-text-fluid-display);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.04em;
-  line-height: 1.22;
+  line-height: var(--nu-leading-display);
 }
 
 .hero > p:last-child {
   margin: 0.9rem 0 0;
   color: var(--muted);
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body);
 }
 
 .boundary {
@@ -51,14 +51,14 @@
 
 .boundary strong {
   display: block;
-  font-size: 0.8125rem;
-  font-weight: 680;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
 }
 
 .boundary p {
   margin: 0.3rem 0 0;
-  font-size: 0.75rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .formSection {
@@ -86,13 +86,13 @@
 }
 
 .analysisLink strong {
-  font-size: 0.875rem;
-  font-weight: 670;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
 }
 
 .analysisLink small {
   color: color-mix(in srgb, var(--conversation) 72%, var(--muted));
-  font-size: 0.72rem;
+  font-size: var(--nu-text-label);
 }
 
 .sectionHeading {
@@ -105,14 +105,14 @@
 
 .sectionHeading h2 {
   margin: 0.25rem 0 0;
-  font-size: 1.1rem;
-  font-weight: 680;
+  font-size: var(--nu-text-body-lg);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.02em;
 }
 
 .sectionHeading > span {
   color: var(--muted);
-  font-size: 0.6875rem;
+  font-size: var(--nu-text-caption);
   white-space: nowrap;
 }
 
@@ -152,9 +152,9 @@
 
 .formIndex {
   color: color-mix(in srgb, var(--primary) 72%, var(--muted));
-  font-size: 0.75rem;
+  font-size: var(--nu-text-label);
   font-variant-numeric: tabular-nums;
-  font-weight: 650;
+  font-weight: var(--nu-weight-semibold);
 }
 
 .formCopy {
@@ -163,14 +163,14 @@
 }
 
 .formCopy strong {
-  font-size: 0.9375rem;
-  font-weight: 650;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
 }
 
 .formCopy small {
   color: var(--muted);
-  font-size: 0.75rem;
-  line-height: 1.4;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-title);
 }
 
 .formRow > svg {
@@ -189,8 +189,8 @@
 
 .footerNote p {
   margin: 0;
-  font-size: 0.75rem;
-  line-height: 1.5;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-label);
 }
 
 @media (prefers-reduced-motion: reduce) {

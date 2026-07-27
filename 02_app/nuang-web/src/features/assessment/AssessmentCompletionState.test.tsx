@@ -14,13 +14,14 @@ describe("AssessmentCompletionState", () => {
         name: "첫 성향 결과를 준비하고 있어요",
       }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText(/지금의 나와 가장 가까운 성향/),
-    ).toBeInTheDocument();
     expect(screen.getByText("20 / 20")).toBeInTheDocument();
     expect(
       screen.getByRole("progressbar", { name: "검사 진행률" }),
     ).toHaveAttribute("aria-valuenow", "20");
+    expect(screen.getByRole("main")).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "결과를 준비하고 있어요",
+    );
     expect(screen.queryByRole("button")).not.toBeInTheDocument();
     expect(
       screen.queryByRole("button", { name: /홈|닫기/ }),
@@ -43,7 +44,13 @@ describe("AssessmentCompletionState", () => {
     expect(
       screen.getByRole("heading", { name: "성향 결과를 준비하고 있어요" }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/성향 결과를 자세히/)).toBeInTheDocument();
+    expect(screen.getByRole("progressbar")).toHaveAttribute(
+      "aria-valuenow",
+      "60",
+    );
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "결과를 준비하고 있어요",
+    );
     expect(screen.queryByText(/다섯 글자/)).not.toBeInTheDocument();
   });
 

@@ -14,6 +14,8 @@ import type { FormEvent, ReactNode } from "react";
 import { useEffect, useState } from "react";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import type { FeedReplyPreview } from "@/features/feed/feed-seed";
+import { FeedMoreMenu } from "@/features/feed/FeedMoreMenu";
+import { SafeLinkedText } from "@/features/feed/SafeLinkedText";
 import type { ApiClosedPayload } from "@/lib/api/closed-state-data";
 import { cn } from "@/lib/utils/cn";
 
@@ -42,6 +44,7 @@ export function FeedActionButtons({
   allowComment = true,
   className,
   commentComposer = false,
+  commentDisabledMessage,
   commentPlaceholder = "댓글 달기",
   includeBookmark = false,
   includeComment = true,
@@ -59,6 +62,7 @@ export function FeedActionButtons({
   allowComment?: boolean;
   className?: string;
   commentComposer?: boolean;
+  commentDisabledMessage?: string;
   commentPlaceholder?: string;
   includeBookmark?: boolean;
   includeComment?: boolean;
@@ -192,7 +196,7 @@ export function FeedActionButtons({
       {actions.length > 0 ? (
         <div
           className={cn(
-            "flex items-center text-[#6d7280]",
+            "flex items-center text-[var(--nu-color-text-muted)]",
             includeBookmark ? "justify-between" : "gap-1",
           )}
         >
@@ -240,12 +244,12 @@ export function FeedActionButtons({
           </label>
           <input
             className={cn(
-              "min-w-0 flex-1 text-sm font-medium outline-none placeholder:text-[#9a9a9a]",
+              "min-w-0 flex-1 text-sm font-medium outline-none placeholder:text-[var(--nu-neutral-400)]",
               commentComposer
-                ? "min-h-11 rounded-[14px] border border-[#c7e5dc] bg-white px-3 focus:border-[#306e60] focus:ring-2 focus:ring-[#306e60]/10"
+                ? "min-h-11 rounded-[14px] border border-[var(--nu-color-community-border)] bg-white px-3 focus:border-[var(--nu-color-community)] focus:ring-2 focus:ring-[var(--nu-color-community)]/10"
                 : questionMode
-                  ? "min-h-10 rounded-[15px] border border-[#c7e5dc] bg-[#f8fcfa] px-3 focus:border-[#306e60] focus:ring-2 focus:ring-[#306e60]/10"
-                  : "min-h-9 border-0 border-b border-[#dedede] bg-transparent px-0 focus:border-[#111111]",
+                  ? "min-h-10 rounded-[15px] border border-[var(--nu-color-community-border)] bg-[var(--nu-community-50)] px-3 focus:border-[var(--nu-color-community)] focus:ring-2 focus:ring-[var(--nu-color-community)]/10"
+                  : "min-h-9 border-0 border-b border-[var(--nu-neutral-200)] bg-transparent px-0 focus:border-[var(--nu-color-text-strong)]",
             )}
             id={`feed-comment-${postId}`}
             maxLength={400}
@@ -257,10 +261,10 @@ export function FeedActionButtons({
             className={cn(
               "shrink-0 text-sm font-bold disabled:cursor-not-allowed",
               commentComposer
-                ? "h-11 rounded-[14px] bg-[#306e60] px-4 text-white shadow-[0_7px_18px_rgb(48_110_96_/_14%)] disabled:bg-[#d8e3df] disabled:shadow-none"
+                ? "h-11 rounded-[14px] bg-[var(--nu-color-community)] px-4 text-white shadow-community disabled:bg-[var(--nu-community-100)] disabled:shadow-none"
                 : questionMode
-                  ? "h-9 px-1 text-[#306e60] disabled:text-[#aebbb7]"
-                  : "h-9 px-1 text-[#111111] disabled:text-[#b8b8b8]",
+                  ? "h-9 px-1 text-[var(--nu-color-community)] disabled:text-[var(--nu-neutral-300)]"
+                  : "h-9 px-1 text-[var(--nu-color-text-strong)] disabled:text-[var(--nu-neutral-300)]",
             )}
             disabled={
               commentBody.trim().length < 2 || status.status === "pending"
@@ -271,13 +275,16 @@ export function FeedActionButtons({
           </button>
         </form>
       ) : null}
-      {isCommentOpen && questionMode && !allowComment ? (
-        <p className="mt-2 text-[11px] leading-[1.5] text-[#85818b]">
-          답변 대상으로 지정된 성향만 답변을 남길 수 있어요.
+      {isCommentOpen && !allowComment ? (
+        <p className="mt-2 text-caption leading-[1.5] text-[var(--nu-neutral-500)]">
+          {commentDisabledMessage ??
+            (questionMode
+              ? "답변 대상으로 지정된 성향만 답변을 남길 수 있어요."
+              : "새 댓글 작성이 마감됐어요.")}
         </p>
       ) : null}
       {isCommentOpen && questionMode ? (
-        <p className="mt-1.5 text-[11px] leading-[1.45] text-[#85818b]">
+        <p className="mt-1.5 text-caption leading-[1.45] text-[var(--nu-neutral-500)]">
           공개한 뉴앙 코드만 표시되며 검사 점수와 응답 내용은 공개되지 않아요.
         </p>
       ) : null}
@@ -582,20 +589,18 @@ function FeedReplyPreviewList({
     return (
       <section
         aria-label="질문의 답변"
-        className="mt-2 border-t border-[#ebe8ee] pt-3"
+        className="mt-2 border-t border-[var(--nu-brand-100)] pt-3"
       >
         <div className="mb-1.5 flex items-center justify-between gap-3">
-          <strong className="text-[13px] font-bold text-[#343039]">
-            답변 {replyTotal.toLocaleString("ko-KR")}개
+          <strong className="text-label font-bold text-[var(--nu-neutral-800)]">
+            답변
           </strong>
-          {replies.length > 0 ? (
-            <span className="text-[11px] font-medium text-[#89858e]">
-              최근 답변부터
-            </span>
-          ) : null}
+          <span className="text-caption font-medium tabular-nums text-[var(--nu-neutral-500)]">
+            {replyTotal.toLocaleString("ko-KR")}
+          </span>
         </div>
         {replies.length > 0 ? (
-          <div className="divide-y divide-[#efedf1]">
+          <div className="divide-y divide-[var(--nu-neutral-75)]">
             {replies.map((reply) => (
               <article
                 className="grid grid-cols-[30px_minmax(0,1fr)] gap-2 py-2.5"
@@ -603,23 +608,36 @@ function FeedReplyPreviewList({
               >
                 <span
                   aria-hidden="true"
-                  className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[linear-gradient(145deg,#ebe8ff,#def4ef)] text-[10px] font-bold text-[#5a4bc1]"
+                  className="grid h-[30px] w-[30px] place-items-center rounded-full bg-[linear-gradient(145deg,var(--nu-info-50),var(--nu-info-100))] text-caption font-bold text-[var(--nu-info-500)]"
                 >
                   {reply.authorName.slice(0, 1)}
                 </span>
-                <div className="min-w-0">
-                  <p className="m-0 text-[13px] leading-[1.55] text-[#343039]">
-                    <strong className="mr-1 font-bold text-[#242128]">
+                <div className="relative min-w-0 pr-8">
+                  {reply.reportable ? (
+                    <div className="absolute -right-1 -top-1">
+                      <FeedMoreMenu
+                        compact
+                        postId={reply.id}
+                        targetType="feed_comment"
+                      />
+                    </div>
+                  ) : null}
+                  <p className="m-0 text-label leading-[1.55] text-[var(--nu-neutral-800)]">
+                    <strong className="mr-1 font-bold text-[var(--nu-neutral-900)]">
                       {reply.authorName}
                     </strong>
                     {reply.authorCode ? (
-                      <span className="mr-1.5 inline-flex min-h-5 items-center rounded-full bg-[#f0edff] px-1.5 text-[9px] font-bold tracking-[0.04em] text-[#5c4fc2]">
+                      <span className="mr-1.5 inline-flex min-h-5 items-center rounded-full bg-[var(--nu-color-brand-surface-strong)] px-1.5 text-caption font-bold tracking-[0.04em] text-[var(--nu-info-500)]">
                         {reply.authorCode}
                       </span>
                     ) : null}
-                    {reply.body}
+                    <SafeLinkedText
+                      as="span"
+                      links={reply.links}
+                      text={reply.body}
+                    />
                   </p>
-                  <p className="mt-1 flex items-center gap-2.5 text-[10px] font-medium text-[#8a8790]">
+                  <p className="mt-1 flex items-center gap-2.5 text-caption font-medium text-[var(--nu-neutral-500)]">
                     {reply.timeLabel ? <span>{reply.timeLabel}</span> : null}
                     {reply.statusLabel ? (
                       <span>{reply.statusLabel}</span>
@@ -632,7 +650,7 @@ function FeedReplyPreviewList({
             ))}
           </div>
         ) : (
-          <p className="py-2 text-[12px] leading-[1.5] text-[#817d86]">
+          <p className="py-2 text-caption leading-[1.5] text-[var(--nu-neutral-500)]">
             아직 답변이 없어요. 내 경험을 가장 먼저 나눠보세요.
           </p>
         )}
@@ -643,15 +661,29 @@ function FeedReplyPreviewList({
   return (
     <div aria-label="최근 댓글" className="mt-3 space-y-1.5">
       {replies.map((reply) => (
-        <p className="text-[13px] leading-[1.45] text-[#2a2a2a]" key={reply.id}>
-          <span className="font-extrabold text-[#111111]">
-            {reply.authorName}
-          </span>{" "}
-          <span>{reply.body}</span>
-          {reply.statusLabel ? (
-            <span className="ml-1 text-[#737373]">· {reply.statusLabel}</span>
+        <div
+          className="flex items-start gap-1 text-label leading-[1.45] text-[var(--nu-neutral-900)]"
+          key={reply.id}
+        >
+          <p className="min-w-0 flex-1">
+            <span className="font-extrabold text-[var(--nu-color-text-strong)]">
+              {reply.authorName}
+            </span>{" "}
+            <SafeLinkedText as="span" links={reply.links} text={reply.body} />
+            {reply.statusLabel ? (
+              <span className="ml-1 text-[var(--nu-color-text-muted)]">
+                · {reply.statusLabel}
+              </span>
+            ) : null}
+          </p>
+          {reply.reportable ? (
+            <FeedMoreMenu
+              compact
+              postId={reply.id}
+              targetType="feed_comment"
+            />
           ) : null}
-        </p>
+        </div>
       ))}
     </div>
   );
@@ -680,7 +712,7 @@ function ActionButton({
       aria-expanded={action.type === "comment" ? expanded : undefined}
       aria-pressed={isPressable ? active : undefined}
       className={cn(
-        "inline-flex min-h-[38px] items-center gap-[5px] rounded-full px-[7px] text-[12px] font-normal transition-[color,background-color,transform] hover:bg-[#f6f5f2] active:scale-[0.97] disabled:opacity-50",
+        "inline-flex min-h-[38px] items-center gap-[5px] rounded-full px-[7px] text-caption font-normal transition-[color,background-color,transform] hover:bg-[var(--nu-color-app-bg)] active:scale-[0.97] disabled:opacity-50",
         getActionToneClass(action.type, active, expanded),
       )}
       disabled={disabled}
@@ -691,13 +723,12 @@ function ActionButton({
     >
       {getActionIcon(action.type, active)}
       {showCount && action.type === "react" ? (
-        <span className="text-[12px] font-normal tabular-nums">
+        <span className="text-caption font-normal tabular-nums">
           {(action.count ?? 0).toLocaleString("ko-KR")}
         </span>
       ) : null}
       {showCount && action.type === "comment" ? (
-        <span className="text-[12px] font-normal tabular-nums">
-          {action.label === "답변" ? `${action.label} ` : null}
+        <span className="text-caption font-normal tabular-nums">
           {(action.count ?? 0).toLocaleString("ko-KR")}
         </span>
       ) : null}
@@ -711,18 +742,18 @@ function getActionToneClass(
   expanded?: boolean,
 ) {
   if (type === "react" && active) {
-    return "text-[#c94b61] hover:bg-[#fff0f3] focus-visible:outline-[#c94b61]";
+    return "text-[var(--nu-color-reaction)] hover:bg-[var(--nu-color-reaction-soft)] focus-visible:outline-[var(--nu-color-reaction)]";
   }
 
   if (type === "comment" && expanded) {
-    return "text-[#306e60] hover:bg-[#e6f4ef] focus-visible:outline-[#306e60]";
+    return "text-[var(--nu-color-community)] hover:bg-[var(--nu-community-100)] focus-visible:outline-[var(--nu-color-community)]";
   }
 
   if (type === "bookmark" && active) {
-    return "text-[#20232a] hover:bg-[#f3f3f5] focus-visible:outline-[#20232a]";
+    return "text-[var(--nu-color-text)] hover:bg-[var(--nu-neutral-75)] focus-visible:outline-[var(--nu-color-text)]";
   }
 
-  return "text-[#6d7280] focus-visible:outline-[#6d7280]";
+  return "text-[var(--nu-color-text-muted)] focus-visible:outline-[var(--nu-color-text-muted)]";
 }
 
 function getActionIcon(type: FeedAction["type"], active: boolean) {
@@ -778,7 +809,7 @@ function ShareActionSheet({
 }) {
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-end justify-center bg-[#19171d]/35 px-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-[2px]"
+      className="fixed inset-0 z-[100] flex items-end justify-center bg-[var(--nu-neutral-900)]/35 px-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-[2px]"
       onClick={(event) => {
         if (event.currentTarget === event.target) onClose();
       }}
@@ -786,21 +817,23 @@ function ShareActionSheet({
       <section
         aria-label="게시물 공유"
         aria-modal="true"
-        className="w-full max-w-[496px] overflow-hidden rounded-[22px] bg-white shadow-[0_24px_60px_rgb(29_24_37_/_22%)]"
+        className="w-full max-w-[496px] overflow-hidden rounded-[22px] bg-white shadow-sheet"
         role="dialog"
       >
-        <header className="flex min-h-14 items-center justify-between border-b border-[#ebe8ed] px-4">
-          <strong className="text-sm font-bold text-[#2e2a32]">공유하기</strong>
+        <header className="flex min-h-14 items-center justify-between border-b border-[var(--nu-neutral-150)] px-4">
+          <strong className="text-sm font-bold text-[var(--nu-neutral-800)]">
+            공유하기
+          </strong>
           <button
             aria-label="공유 닫기"
-            className="grid h-10 w-10 place-items-center rounded-full text-[#68636d] hover:bg-[#f5f3f6]"
+            className="grid h-10 w-10 place-items-center rounded-full text-[var(--nu-neutral-600)] hover:bg-[var(--nu-brand-100)]"
             onClick={onClose}
             type="button"
           >
             <X aria-hidden="true" size={19} strokeWidth={1.9} />
           </button>
         </header>
-        <div className="grid divide-y divide-[#efedf1] px-1 pb-1">
+        <div className="grid divide-y divide-[var(--nu-neutral-75)] px-1 pb-1">
           <ShareOption
             icon={<Link2 aria-hidden="true" size={20} strokeWidth={1.9} />}
             label="링크 복사"
@@ -835,11 +868,11 @@ function ShareOption({
 }) {
   return (
     <button
-      className="flex min-h-13 items-center gap-3 rounded-xl px-3 text-left text-[13px] font-semibold text-[#38333d] hover:bg-[#f8f6f9]"
+      className="flex min-h-13 items-center gap-3 rounded-xl px-3 text-left text-label font-semibold text-[var(--nu-neutral-800)] hover:bg-[var(--nu-brand-50)]"
       onClick={onClick}
       type="button"
     >
-      <span className="grid h-9 w-9 place-items-center rounded-full bg-[#f2eff8] text-[#6755c7]">
+      <span className="grid h-9 w-9 place-items-center rounded-full bg-[var(--nu-brand-100)] text-[var(--nu-info-500)]">
         {icon}
       </span>
       {label}
@@ -854,7 +887,7 @@ function FeedActionStatusMessage({ status }: { status: FeedActionStatus }) {
     return (
       <p
         aria-live="polite"
-        className="mt-1 text-xs font-medium text-[#737373]"
+        className="mt-1 text-xs font-medium text-[var(--nu-color-text-muted)]"
         role="status"
       >
         {status.actionLabel} 확인 중
@@ -866,7 +899,9 @@ function FeedActionStatusMessage({ status }: { status: FeedActionStatus }) {
     <p
       className={cn(
         "mt-1 text-xs font-medium",
-        status.status === "error" ? "text-[#9a6400]" : "text-[#737373]",
+        status.status === "error"
+          ? "text-[var(--nu-warm-700)]"
+          : "text-[var(--nu-color-text-muted)]",
       )}
       role={status.status === "error" ? "alert" : "status"}
     >

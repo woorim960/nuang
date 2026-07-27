@@ -62,8 +62,8 @@
   overflow: hidden;
   margin: 0;
   padding-inline: 0.25rem;
-  font-size: 0.875rem;
-  font-weight: 650;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
   text-align: center;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -73,9 +73,9 @@
   margin: 0;
   justify-self: end;
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: var(--nu-text-label);
   font-variant-numeric: tabular-nums;
-  font-weight: 600;
+  font-weight: var(--nu-weight-semibold);
   white-space: nowrap;
 }
 
@@ -113,9 +113,9 @@
   padding: 0;
   background: transparent;
   color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 560;
-  line-height: 1.4;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-medium);
+  line-height: var(--nu-leading-title);
   cursor: pointer;
   transition: color 170ms ease;
 }
@@ -139,18 +139,18 @@
 .context {
   margin: 0;
   color: var(--primary);
-  font-size: 0.875rem;
-  font-weight: 650;
-  line-height: 1.45;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
+  line-height: var(--nu-leading-label);
 }
 
 .question {
   max-width: 20ch;
   margin: 0.5rem 0 0;
-  font-size: clamp(1.5rem, 6.3vw, 1.7rem);
-  font-weight: 650;
+  font-size: var(--nu-text-fluid-title);
+  font-weight: var(--nu-weight-semibold);
   letter-spacing: -0.025em;
-  line-height: 1.38;
+  line-height: var(--nu-leading-title);
   text-wrap: balance;
 }
 
@@ -169,8 +169,8 @@
   margin-bottom: 0.75rem;
   padding: 0;
   color: var(--muted);
-  font-size: 0.875rem;
-  font-weight: 560;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-medium);
 }
 
 .options {
@@ -190,9 +190,9 @@
   border-radius: 15px;
   background: color-mix(in srgb, var(--surface) 96%, var(--background));
   color: var(--foreground);
-  font-size: 0.875rem;
-  font-weight: 530;
-  line-height: 1.35;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-medium);
+  line-height: var(--nu-leading-title);
   cursor: pointer;
   transition:
     background-color 170ms ease,
@@ -213,7 +213,7 @@
   border-color: var(--primary);
   background: color-mix(in srgb, var(--primary) 8%, var(--surface));
   box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 11%, transparent);
-  font-weight: 650;
+  font-weight: var(--nu-weight-semibold);
 }
 
 .optionDisabled {
@@ -287,8 +287,8 @@
   border-radius: 12px;
   background: transparent;
   color: var(--muted);
-  font-size: 0.875rem;
-  font-weight: 560;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-medium);
   cursor: pointer;
   transition: background-color 170ms ease, color 170ms ease;
 }
@@ -317,12 +317,12 @@
 .unsureSummary p {
   min-width: 0;
   margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.4;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-title);
 }
 
 .unsureSummary strong {
-  font-weight: 680;
+  font-weight: var(--nu-weight-bold);
 }
 
 .changeButton {
@@ -335,8 +335,8 @@
   border-radius: 11px;
   background: transparent;
   color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 600;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
   cursor: pointer;
 }
 
@@ -350,8 +350,8 @@
   margin: 1rem 0 0;
   padding: 0.75rem 1rem;
   border-radius: 12px;
-  font-size: 0.75rem;
-  line-height: 1.6;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .inlineNotice {
@@ -411,8 +411,8 @@
   padding-inline: 1.25rem;
   background: var(--foreground);
   color: var(--surface);
-  font-size: 0.875rem;
-  font-weight: 680;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
 }
 
 .nextButton:active:not(:disabled),
@@ -472,17 +472,17 @@
 
 .sheetTitle {
   margin: 0;
-  font-size: 1.2rem;
-  font-weight: 680;
+  font-size: var(--nu-text-title);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.02em;
-  line-height: 1.35;
+  line-height: var(--nu-leading-title);
 }
 
 .sheetCopy {
   margin: 0.25rem 0 0;
   color: var(--muted);
-  font-size: 0.875rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .sheetClose {
@@ -523,8 +523,8 @@
   border-radius: 12px;
   background: transparent;
   color: var(--foreground);
-  font-size: 0.875rem;
-  font-weight: 560;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-medium);
   text-align: left;
   cursor: pointer;
 }
@@ -561,8 +561,8 @@
   padding-top: 0.875rem;
   border-top: 1px solid var(--line);
   color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.5;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-label);
 }
 
 .sheetAction {
@@ -576,8 +576,8 @@
   border-radius: 12px;
   background: var(--foreground);
   color: var(--surface);
-  font-size: 0.875rem;
-  font-weight: 680;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   cursor: pointer;
 }
 
@@ -627,7 +627,7 @@
 .loadingMessage {
   margin: 2rem 0 0;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: var(--nu-text-callout);
 }
 
 @keyframes question-forward {
@@ -692,8 +692,8 @@
   }
 
   .question {
-    font-size: 1.45rem;
-    line-height: 1.4;
+    font-size: var(--nu-text-title-lg);
+    line-height: var(--nu-leading-title);
   }
 
   .option {

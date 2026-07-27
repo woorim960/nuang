@@ -1,0 +1,675 @@
+{
+  "contractVersion": "nuang-trait-map-no-exact-context-gap-group-register.v2.3",
+  "registerId": "TRAIT-MAP-NO-EXACT-CONTEXT-GAP-GROUP-REGISTER.2.3",
+  "status": "SIXTEEN_GAP_GROUPS_OPEN",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceReportId": "TRAIT-MAP-NO-EXACT-CONTEXT-GAP-GROUPS.2.3",
+  "groups": [
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-5",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "label": "관심 상대의 뜻이 분명하지 않을 때",
+      "researchTheme": "early_relationship_uncertainty",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 16,
+      "directionalEntryCount": 16,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["ER", "OE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-N-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-N-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-R-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-R-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-N-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-N-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-R-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-R-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-N-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-N-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-R-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-R-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-N-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-N-ER-Q"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-11",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "label": "관심 상대 앞에서 실수하거나 기대와 다른 반응을 받았을 때",
+      "researchTheme": "early_relationship_setback",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 12,
+      "directionalEntryCount": 12,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["ER", "OE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-N-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-N-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-RESPONSE-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-RESPONSE-ER-Q",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-COMMUNICATION-ER-C",
+        "CAN-SCN-PERSON-OF-INTEREST-SETBACK-COMMUNICATION-ER-Q"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-8",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "label": "관심 상대에게 자신의 필요를 말할 때",
+      "researchTheme": "early_relationship_need_expression",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 10,
+      "directionalEntryCount": 10,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["OE", "SE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-N",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-R",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-I",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-E",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-I",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-E",
+        "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-I"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-7",
+      "scenarioRef": "SCN-FAMILY-7",
+      "label": "가족이 도움을 요청할 때",
+      "researchTheme": "family_support_request",
+      "targetContext": "family",
+      "canonicalEntryCount": 8,
+      "directionalEntryCount": 8,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-G",
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-A",
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-G",
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-A",
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-G",
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-A",
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+        "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-A"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-7",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "label": "관심 상대가 도움을 요청할 때",
+      "researchTheme": "early_relationship_support_request",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 8,
+      "directionalEntryCount": 8,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-G",
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-A",
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-G",
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-A",
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-G",
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-A",
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+        "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-A"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-6",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "label": "관심 상대와 의견이 다를 때",
+      "researchTheme": "early_relationship_disagreement",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 7,
+      "directionalEntryCount": 6,
+      "commonArchiveEntryCount": 1,
+      "semanticAxes": ["OE", "RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-ATTENTION-RO-G",
+        "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-ATTENTION-RO-A",
+        "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-R",
+        "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-N",
+        "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-RESPONSE-RO-G",
+        "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-RESPONSE-RO-A",
+        "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-COMMUNICATION-COMMON"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-12",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "label": "관심 상대와 일이 지나간 뒤 돌아볼 때",
+      "researchTheme": "early_relationship_aftermath",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 6,
+      "directionalEntryCount": 4,
+      "commonArchiveEntryCount": 2,
+      "semanticAxes": ["OE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-R",
+        "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-N",
+        "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-PROCESS-OE-R",
+        "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-PROCESS-OE-N",
+        "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-RESPONSE-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-COMMUNICATION-COMMON"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-4",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "label": "관심 상대와의 계획이 갑자기 바뀔 때",
+      "researchTheme": "early_relationship_plan_change",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 6,
+      "directionalEntryCount": 4,
+      "commonArchiveEntryCount": 2,
+      "semanticAxes": ["OE", "SE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-ATTENTION-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-R",
+        "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-N",
+        "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-RESPONSE-SE-E",
+        "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-RESPONSE-SE-I",
+        "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-COMMUNICATION-COMMON"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-12",
+      "scenarioRef": "SCN-FAMILY-12",
+      "label": "가족과 일이 지나간 뒤 돌아볼 때",
+      "researchTheme": "family_aftermath",
+      "targetContext": "family",
+      "canonicalEntryCount": 3,
+      "directionalEntryCount": 3,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": ["attention", "communication", "first_thought"],
+      "transferredFindingRefs": [
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-A",
+        "CAN-SCN-FAMILY-AFTERMATH-PROCESS-RO-A",
+        "CAN-SCN-FAMILY-AFTERMATH-COMMUNICATION-RO-A"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-9",
+      "scenarioRef": "SCN-FAMILY-9",
+      "label": "가족과 경계를 정해야 할 때",
+      "researchTheme": "family_boundary",
+      "targetContext": "family",
+      "canonicalEntryCount": 3,
+      "directionalEntryCount": 3,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": ["actual_response", "attention", "first_thought"],
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
+        "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
+        "CAN-SCN-FAMILY-BOUNDARY-RESPONSE-RO-G"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-11",
+      "scenarioRef": "SCN-FAMILY-11",
+      "label": "가족 안에서 실수나 기대와 다른 일이 생겼을 때",
+      "researchTheme": "family_setback",
+      "targetContext": "family",
+      "canonicalEntryCount": 5,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 3,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-DAILY-STRESS-SHIFTS-TRAIT-STATES",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-FAMILY-SETBACK-ATTENTION-COMMON",
+        "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
+        "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-A",
+        "CAN-SCN-FAMILY-SETBACK-RESPONSE-COMMON",
+        "CAN-SCN-FAMILY-SETBACK-COMMUNICATION-COMMON"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-3",
+      "scenarioRef": "SCN-FAMILY-3",
+      "label": "가족 모임이나 공동 활동에 참여할 때",
+      "researchTheme": "family_group_participation",
+      "targetContext": "family",
+      "canonicalEntryCount": 2,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["SE"],
+      "claimKinds": ["actual_response", "communication"],
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-FAMILY-GROUP-PARTICIPATION-RESPONSE-SE-I",
+        "CAN-SCN-FAMILY-GROUP-PARTICIPATION-COMMUNICATION-SE-I"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-3",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "label": "관심 상대가 있는 모임에 참여할 때",
+      "researchTheme": "early_relationship_group_participation",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 5,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 3,
+      "semanticAxes": ["SE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-ATTENTION-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-PROCESS-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-RESPONSE-SE-E",
+        "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-RESPONSE-SE-I",
+        "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-COMMUNICATION-COMMON"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-9",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "label": "관심 상대와 경계를 정해야 할 때",
+      "researchTheme": "early_relationship_boundary",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 5,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 3,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-ATTENTION-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-PROCESS-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-RESPONSE-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-G",
+        "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-A"
+      ],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-5",
+      "scenarioRef": "SCN-FAMILY-5",
+      "label": "가족의 뜻이나 상황이 분명하지 않을 때",
+      "researchTheme": "family_uncertainty",
+      "targetContext": "family",
+      "canonicalEntryCount": 1,
+      "directionalEntryCount": 1,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["ER", "OE"],
+      "claimKinds": ["attention"],
+      "transferredFindingRefs": [
+        "FND-SELF-KNOWLEDGE-PARTIAL",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "canonicalVariantIds": ["CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-C"],
+      "priority": "P0_DIRECTIONAL_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "label": "관심 상대에게 좋은 일이 생겼을 때",
+      "researchTheme": "early_relationship_positive_event",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 4,
+      "directionalEntryCount": 0,
+      "commonArchiveEntryCount": 4,
+      "semanticAxes": [],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "canonicalVariantIds": [
+        "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-ATTENTION-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-PROCESS-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-RESPONSE-COMMON",
+        "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-COMMUNICATION-COMMON"
+      ],
+      "priority": "P1_COMMON_ARCHIVE_CONTEXT_GAP",
+      "evidenceWorkstreams": [
+        "same_context_background_literature",
+        "nuang_axis_direct_validation",
+        "canonical_clause_scope_review"
+      ],
+      "releaseState": "research_only_context_gap_open",
+      "backgroundEvidenceReviewState": "not_started",
+      "directValidationState": "not_started",
+      "clauseScopeReviewState": "not_started",
+      "independentReviewerDecision": null,
+      "customerDecision": null
+    }
+  ]
+}

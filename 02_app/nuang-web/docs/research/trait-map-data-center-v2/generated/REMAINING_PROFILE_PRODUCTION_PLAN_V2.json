@@ -1,0 +1,614 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "planId": "REMAINING-PROFILE-PRODUCTION-PLAN.0.1",
+  "status": "FOUR_BATCHES_LOCKED_FIRST_BATCH_AUTHORING_READY",
+  "completedFoundation": {
+    "anchorProfiles": ["ENAKQ", "IRGMC"],
+    "directDerivedProfiles": [
+      "INAKQ",
+      "ERGMC",
+      "ERAKQ",
+      "INGMC",
+      "ENGKQ",
+      "IRAMC",
+      "ENAMQ",
+      "IRGKC",
+      "ENAKC",
+      "IRGMQ"
+    ],
+    "structuralAuditStatus": "TEN_DIRECT_DERIVED_PROFILES_STRUCTURALLY_COMPLETE_HUMAN_VALIDATION_REQUIRED"
+  },
+  "productionRules": [
+    "각 목표 코드는 완성된 한 글자 부모 2개에서 독립적으로 도달할 수 있어야 한다.",
+    "한 축에만 민감한 장면은 해당 직접 파생 부모 문장을 계보와 함께 재사용한다.",
+    "두 축 판별 장면이 겹치면 어느 한쪽 문장을 덮어쓰지 않고 4개 채널을 상호작용 문장으로 다시 작성한다.",
+    "두 경로에서 공통으로 도출되는 비중첩 문장은 assertion과 근거 참조가 같아야 한다.",
+    "모든 문장은 research_only를 유지하고 사람 검증 전 고객 화면에 발행하지 않는다.",
+    "각 코드가 72개 상황·288개 상황 claim·16개 장·5만~6만 자·이웃 5개 비교를 충족해야 묶음 감사를 시작한다."
+  ],
+  "batches": [
+    {
+      "batchId": "BATCH-1-ENAKQ-CYCLE",
+      "productionOrder": 1,
+      "anchor": "ENAKQ",
+      "strategy": "두 개의 완성된 한 글자 부모 경로를 함께 사용하고, 두 축 판별 장면이 겹치는 곳만 상호작용 문장으로 새로 작성한다.",
+      "profileCount": 5,
+      "interactionScenarioCount": 4,
+      "interactionClaimCount": 16,
+      "profiles": [
+        {
+          "productionOrder": 1,
+          "code": "IRAKQ",
+          "roleName": "마음 변화를 살피는 관찰자",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "SE_energy_and_expression",
+            "OE_exploration_and_interest"
+          ],
+          "primaryPath": {
+            "parent": "INAKQ",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "alternatePath": {
+            "parent": "ERAKQ",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "interactionScenarioIds": ["SCN-FRIEND-2", "SCN-GENERAL-2"],
+          "composition": {
+            "untouchedAnchorClaims": 216,
+            "singleAxisClaims": 64,
+            "interactionClaims": 8,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 2,
+          "code": "ERGKQ",
+          "roleName": "변수에 빠르게 반응하는 해결사",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "OE_exploration_and_interest",
+            "RO_relational_attention"
+          ],
+          "primaryPath": {
+            "parent": "ERAKQ",
+            "applyAxis": "RO_relational_attention"
+          },
+          "alternatePath": {
+            "parent": "ENGKQ",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 3,
+          "code": "ENGMQ",
+          "roleName": "가능성을 펼치는 발상가",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "RO_relational_attention",
+            "SM_execution_and_structure"
+          ],
+          "primaryPath": {
+            "parent": "ENGKQ",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "alternatePath": {
+            "parent": "ENAMQ",
+            "applyAxis": "RO_relational_attention"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 4,
+          "code": "ENAMC",
+          "roleName": "상상과 마음을 나누는 소통가",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "SM_execution_and_structure",
+            "ER_emotional_activation_and_worry"
+          ],
+          "primaryPath": {
+            "parent": "ENAMQ",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "alternatePath": {
+            "parent": "ENAKC",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "interactionScenarioIds": ["SCN-GENERAL-4"],
+          "composition": {
+            "untouchedAnchorClaims": 212,
+            "singleAxisClaims": 72,
+            "interactionClaims": 4,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 5,
+          "code": "INAKC",
+          "roleName": "조용히 관계를 잇는 조정자",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "ER_emotional_activation_and_worry",
+            "SE_energy_and_expression"
+          ],
+          "primaryPath": {
+            "parent": "ENAKC",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "alternatePath": {
+            "parent": "INAKQ",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "interactionScenarioIds": ["SCN-GENERAL-12"],
+          "composition": {
+            "untouchedAnchorClaims": 212,
+            "singleAxisClaims": 72,
+            "interactionClaims": 4,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        }
+      ]
+    },
+    {
+      "batchId": "BATCH-2-ENAKQ-COMPLEMENT",
+      "productionOrder": 2,
+      "anchor": "ENAKQ",
+      "strategy": "두 개의 완성된 한 글자 부모 경로를 함께 사용하고, 두 축 판별 장면이 겹치는 곳만 상호작용 문장으로 새로 작성한다.",
+      "profileCount": 5,
+      "interactionScenarioCount": 3,
+      "interactionClaimCount": 12,
+      "profiles": [
+        {
+          "productionOrder": 6,
+          "code": "INGKQ",
+          "roleName": "가능성과 변수를 살피는 구상가",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "SE_energy_and_expression",
+            "RO_relational_attention"
+          ],
+          "primaryPath": {
+            "parent": "INAKQ",
+            "applyAxis": "RO_relational_attention"
+          },
+          "alternatePath": {
+            "parent": "ENGKQ",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 7,
+          "code": "INAMQ",
+          "roleName": "마음의 이야기를 품는 기록가",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "SE_energy_and_expression",
+            "SM_execution_and_structure"
+          ],
+          "primaryPath": {
+            "parent": "INAKQ",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "alternatePath": {
+            "parent": "ENAMQ",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 8,
+          "code": "ERAMQ",
+          "roleName": "마음에 바로 반응하는 공감자",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "OE_exploration_and_interest",
+            "SM_execution_and_structure"
+          ],
+          "primaryPath": {
+            "parent": "ERAKQ",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "alternatePath": {
+            "parent": "ENAMQ",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "interactionScenarioIds": ["SCN-GENERAL-1"],
+          "composition": {
+            "untouchedAnchorClaims": 212,
+            "singleAxisClaims": 72,
+            "interactionClaims": 4,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 9,
+          "code": "ERAKC",
+          "roleName": "차분히 관계를 맞추는 조율가",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "OE_exploration_and_interest",
+            "ER_emotional_activation_and_worry"
+          ],
+          "primaryPath": {
+            "parent": "ERAKQ",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "alternatePath": {
+            "parent": "ENAKC",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "interactionScenarioIds": [
+            "SCN-GENERAL-5",
+            "SCN-PERSON-OF-INTEREST-5"
+          ],
+          "composition": {
+            "untouchedAnchorClaims": 216,
+            "singleAxisClaims": 64,
+            "interactionClaims": 8,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 10,
+          "code": "ENGKC",
+          "roleName": "가능성을 계획하는 기획자",
+          "anchor": "ENAKQ",
+          "changedAxes": [
+            "RO_relational_attention",
+            "ER_emotional_activation_and_worry"
+          ],
+          "primaryPath": {
+            "parent": "ENGKQ",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "alternatePath": {
+            "parent": "ENAKC",
+            "applyAxis": "RO_relational_attention"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        }
+      ]
+    },
+    {
+      "batchId": "BATCH-3-IRGMC-CYCLE",
+      "productionOrder": 3,
+      "anchor": "IRGMC",
+      "strategy": "두 개의 완성된 한 글자 부모 경로를 함께 사용하고, 두 축 판별 장면이 겹치는 곳만 상호작용 문장으로 새로 작성한다.",
+      "profileCount": 5,
+      "interactionScenarioCount": 4,
+      "interactionClaimCount": 16,
+      "profiles": [
+        {
+          "productionOrder": 11,
+          "code": "ENGMC",
+          "roleName": "새 길을 여는 개척자",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "SE_energy_and_expression",
+            "OE_exploration_and_interest"
+          ],
+          "primaryPath": {
+            "parent": "ERGMC",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "alternatePath": {
+            "parent": "INGMC",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "interactionScenarioIds": ["SCN-FRIEND-2", "SCN-GENERAL-2"],
+          "composition": {
+            "untouchedAnchorClaims": 216,
+            "singleAxisClaims": 64,
+            "interactionClaims": 8,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 12,
+          "code": "INAMC",
+          "roleName": "마음과 가능성을 그리는 상상가",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "OE_exploration_and_interest",
+            "RO_relational_attention"
+          ],
+          "primaryPath": {
+            "parent": "INGMC",
+            "applyAxis": "RO_relational_attention"
+          },
+          "alternatePath": {
+            "parent": "IRAMC",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 13,
+          "code": "IRAKC",
+          "roleName": "조용히 마음을 지키는 수호자",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "RO_relational_attention",
+            "SM_execution_and_structure"
+          ],
+          "primaryPath": {
+            "parent": "IRAMC",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "alternatePath": {
+            "parent": "IRGKC",
+            "applyAxis": "RO_relational_attention"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 14,
+          "code": "IRGKQ",
+          "roleName": "변수를 꼼꼼히 살피는 전략가",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "SM_execution_and_structure",
+            "ER_emotional_activation_and_worry"
+          ],
+          "primaryPath": {
+            "parent": "IRGKC",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "alternatePath": {
+            "parent": "IRGMQ",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "interactionScenarioIds": ["SCN-GENERAL-4"],
+          "composition": {
+            "untouchedAnchorClaims": 212,
+            "singleAxisClaims": 72,
+            "interactionClaims": 4,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 15,
+          "code": "ERGMQ",
+          "roleName": "빠르게 움직이는 현장해결가",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "ER_emotional_activation_and_worry",
+            "SE_energy_and_expression"
+          ],
+          "primaryPath": {
+            "parent": "IRGMQ",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "alternatePath": {
+            "parent": "ERGMC",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "interactionScenarioIds": ["SCN-GENERAL-12"],
+          "composition": {
+            "untouchedAnchorClaims": 212,
+            "singleAxisClaims": 72,
+            "interactionClaims": 4,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        }
+      ]
+    },
+    {
+      "batchId": "BATCH-4-IRGMC-COMPLEMENT",
+      "productionOrder": 4,
+      "anchor": "IRGMC",
+      "strategy": "두 개의 완성된 한 글자 부모 경로를 함께 사용하고, 두 축 판별 장면이 겹치는 곳만 상호작용 문장으로 새로 작성한다.",
+      "profileCount": 5,
+      "interactionScenarioCount": 3,
+      "interactionClaimCount": 12,
+      "profiles": [
+        {
+          "productionOrder": 16,
+          "code": "ERAMC",
+          "roleName": "유연하게 곁을 걷는 동행가",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "SE_energy_and_expression",
+            "RO_relational_attention"
+          ],
+          "primaryPath": {
+            "parent": "ERGMC",
+            "applyAxis": "RO_relational_attention"
+          },
+          "alternatePath": {
+            "parent": "IRAMC",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 17,
+          "code": "ERGKC",
+          "roleName": "차분히 답을 세우는 운영가",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "SE_energy_and_expression",
+            "SM_execution_and_structure"
+          ],
+          "primaryPath": {
+            "parent": "ERGMC",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "alternatePath": {
+            "parent": "IRGKC",
+            "applyAxis": "SE_energy_and_expression"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 18,
+          "code": "INGKC",
+          "roleName": "가능성을 차근차근 짓는 설계자",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "OE_exploration_and_interest",
+            "SM_execution_and_structure"
+          ],
+          "primaryPath": {
+            "parent": "INGMC",
+            "applyAxis": "SM_execution_and_structure"
+          },
+          "alternatePath": {
+            "parent": "IRGKC",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "interactionScenarioIds": ["SCN-GENERAL-1"],
+          "composition": {
+            "untouchedAnchorClaims": 212,
+            "singleAxisClaims": 72,
+            "interactionClaims": 4,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 19,
+          "code": "INGMQ",
+          "roleName": "가능성을 깊이 좇는 사색가",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "OE_exploration_and_interest",
+            "ER_emotional_activation_and_worry"
+          ],
+          "primaryPath": {
+            "parent": "INGMC",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "alternatePath": {
+            "parent": "IRGMQ",
+            "applyAxis": "OE_exploration_and_interest"
+          },
+          "interactionScenarioIds": [
+            "SCN-GENERAL-5",
+            "SCN-PERSON-OF-INTEREST-5"
+          ],
+          "composition": {
+            "untouchedAnchorClaims": 216,
+            "singleAxisClaims": 64,
+            "interactionClaims": 8,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        },
+        {
+          "productionOrder": 20,
+          "code": "IRAMQ",
+          "roleName": "마음 변화를 듣는 경청자",
+          "anchor": "IRGMC",
+          "changedAxes": [
+            "RO_relational_attention",
+            "ER_emotional_activation_and_worry"
+          ],
+          "primaryPath": {
+            "parent": "IRAMC",
+            "applyAxis": "ER_emotional_activation_and_worry"
+          },
+          "alternatePath": {
+            "parent": "IRGMQ",
+            "applyAxis": "RO_relational_attention"
+          },
+          "interactionScenarioIds": [],
+          "composition": {
+            "untouchedAnchorClaims": 208,
+            "singleAxisClaims": 80,
+            "interactionClaims": 0,
+            "totalClaims": 288
+          },
+          "status": "authoring_ready_research_only"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "remainingProfiles": 20,
+    "batches": 4,
+    "interactionScenarios": 14,
+    "interactionClaims": 56
+  },
+  "firstBatchGate": [
+    "IRAKQ·ERGKQ·ENGMQ·ENAMC·INAKC 상황 패킷을 두 부모 경로로 각각 생성",
+    "중첩 4개 장면의 주의·처음 생각·실제 반응·말하기 상호작용 문장 16개를 독립 작성",
+    "비중첩 문장의 경로 수렴과 근거 계보 자동 감사",
+    "기초 정의·프로필 가설·한 글자 이웃 5개 비교 연결",
+    "장문 원장 제작 전 코드 이름을 가린 문장 감사 준비"
+  ]
+}

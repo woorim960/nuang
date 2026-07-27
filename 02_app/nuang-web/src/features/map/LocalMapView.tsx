@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { ButtonLink } from "@/components/ui/Button";
 import { ScoreBar } from "@/components/ui/ScoreBar";
-import { StatusPill } from "@/components/ui/StatusPill";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import {
   getLocalAttempt,
@@ -168,22 +167,11 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
         <div className="border-b border-line bg-surface-soft p-4">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <StatusPill tone="primary">현재 대표 성향</StatusPill>
-              <h2 className="mt-3 text-2xl font-black leading-8">
-                {profileName}
-              </h2>
+              <h2 className="text-2xl font-black leading-8">{profileName}</h2>
               <p className="mt-2 text-sm font-semibold text-muted">{code}</p>
             </div>
             <NuangCharacter motif={motif} size="lg" />
           </div>
-        </div>
-        <div className="grid grid-cols-3 divide-x divide-line border-t border-line text-center">
-          <MetricTile
-            label="대표 자리"
-            value={highestDomains[0]?.label ?? "계산 중"}
-          />
-          <MetricTile label="지도" value="코드+신호" />
-          <MetricTile label="기준" value="정밀 코어" />
         </div>
         <div className="px-4 pb-4">
           <Link
@@ -198,8 +186,7 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
 
       <section className="grid gap-4 rounded-lg border border-line bg-white p-4 shadow-[var(--shadow-soft)]">
         <div>
-          <StatusPill tone="primary">오각형 성향지도</StatusPill>
-          <h2 className="mt-2 text-base font-bold">코드 자리 요약</h2>
+          <h2 className="text-base font-bold">코드 자리 요약</h2>
           <p className="mt-1 text-sm leading-6 text-muted">
             중심에서 멀수록 해당 성향을 더 자주 쓰는 방향이에요.
           </p>
@@ -230,8 +217,7 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
 
       <section className="grid gap-4 rounded-lg border border-line bg-white p-4 shadow-[var(--shadow-soft)]">
         <div>
-          <StatusPill tone="neutral">세부 신호</StatusPill>
-          <h2 className="mt-2 text-base font-bold">세부 신호 레이어</h2>
+          <h2 className="text-base font-bold">세부 신호</h2>
           <p className="mt-1 text-sm leading-6 text-muted">
             코드 자리 안에서 어떤 세부 신호가 더 도드라지는지 보여줘요.
           </p>
@@ -262,14 +248,6 @@ function CompletedMap({ attemptId }: { attemptId: string }) {
           })}
         </div>
       </section>
-
-      <section className="rounded-lg border border-line bg-white p-4">
-        <h2 className="text-base font-bold">최근 업데이트</h2>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          가장 최근에 완료한 정밀 코어 결과를 기준으로 보여줍니다. 다음 검사를
-          완료하면 변화도 함께 확인할 수 있어요.
-        </p>
-      </section>
     </>
   );
 }
@@ -285,15 +263,9 @@ function EmptyMapState({ hasQuickResult }: { hasQuickResult: boolean }) {
               size="lg"
             />
           </div>
-          <StatusPill tone={hasQuickResult ? "caution" : "neutral"}>
-            정밀 코어 필요
-          </StatusPill>
-          <h2 className="mt-4 text-lg font-bold">
-            아직 성향지도를 만들 수 없어요
-          </h2>
+          <h2 className="mt-4 text-lg font-bold">정밀 검사 후 열려요</h2>
           <p className="mt-2 text-sm leading-6 text-muted">
-            성향지도는 60문항 정밀 코어 결과로만 만들어요. 빠른 코어 결과는 예비
-            리포트로만 사용합니다.
+            성향지도는 정밀 검사 결과로 만들어요.
           </p>
           <ButtonLink
             className="mt-5 w-full"
@@ -310,8 +282,7 @@ function EmptyMapState({ hasQuickResult }: { hasQuickResult: boolean }) {
 
       <div className="rounded-lg border border-line bg-white p-4">
         <div>
-          <StatusPill tone="primary">지도 미리보기</StatusPill>
-          <h3 className="mt-2 text-base font-bold">검사 후 이렇게 열려요</h3>
+          <h3 className="text-base font-bold">성향지도 미리보기</h3>
         </div>
         <TraitRadarChart
           ariaLabel="성향지도 예시"
@@ -321,16 +292,5 @@ function EmptyMapState({ hasQuickResult }: { hasQuickResult: boolean }) {
         />
       </div>
     </section>
-  );
-}
-
-function MetricTile({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="min-w-0 px-3 py-3">
-      <p className="truncate text-[11px] font-bold text-muted">{label}</p>
-      <p className="mt-1 truncate text-xs font-black text-foreground">
-        {value}
-      </p>
-    </div>
   );
 }

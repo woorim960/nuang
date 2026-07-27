@@ -14,9 +14,9 @@ const release = {
 };
 const profiles = [
   profile(1, "ENAKQ", "서연 · 예시", "flame", "관계를 여는 지휘자"),
-  profile(2, "IRGMC", "지호 · 예시", "water", "단서를 좇는 탐구자"),
-  profile(3, "ERAKC", "하린 · 예시", "sun", "온도를 맞추는 조율가"),
-  profile(4, "INAKC", "도윤 · 예시", "forest", "조용히 잇는 연결가"),
+  profile(2, "IRGMC", "지호 · 예시", "water", "단서로 답을 찾는 탐구자"),
+  profile(3, "ERAKC", "하린 · 예시", "sun", "차분히 관계를 맞추는 조율가"),
+  profile(4, "INAKC", "도윤 · 예시", "forest", "조용히 관계를 잇는 조정자"),
 ];
 const posts = [
   reviewPost(1, 0, {

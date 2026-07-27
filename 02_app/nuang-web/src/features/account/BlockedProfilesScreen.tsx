@@ -93,13 +93,10 @@ export function BlockedProfilesScreen() {
         <span className={styles.introMark}>
           <ShieldCheck aria-hidden="true" size={18} strokeWidth={1.7} />
         </span>
-        <div>
-          <h1>내 커뮤니티를 편안하게 관리해요</h1>
-          <p>
-            차단한 사람과는 서로의 프로필과 게시물이 보이지 않아요. 차단 사실은
-            상대에게 알리지 않아요.
-          </p>
-        </div>
+        <p>
+          차단한 사람과는 서로의 프로필과 게시물이 보이지 않으며, 상대에게
+          알리지 않아요.
+        </p>
       </section>
 
       {state.status === "loading" ? (
@@ -124,14 +121,11 @@ export function BlockedProfilesScreen() {
         </section>
       ) : state.blockedProfiles.length === 0 ? (
         <StateMessage
-          body="필요할 때 상대 프로필의 더보기 메뉴에서 차단할 수 있어요."
+          body="상대 프로필의 더보기 메뉴에서 차단할 수 있어요."
           title="차단한 프로필이 없어요"
         />
       ) : (
         <section aria-label="차단한 프로필 목록" className={styles.list}>
-          <p className={styles.listGuide}>
-            차단을 해제하면 서로의 공개 프로필과 게시물을 다시 볼 수 있어요.
-          </p>
           {state.blockedProfiles.map((profile) => (
             <article className={styles.item} key={profile.blockedAccountId}>
               <PublicProfileImageView image={profile.profileImage} size="md" />
@@ -217,7 +211,6 @@ function BlockedProfilesLoading() {
           <em />
         </div>
       ))}
-      <small>차단한 프로필을 불러오고 있어요.</small>
     </section>
   );
 }

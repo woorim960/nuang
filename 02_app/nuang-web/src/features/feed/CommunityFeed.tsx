@@ -17,7 +17,7 @@ import { FeedMediaCarousel } from "@/features/feed/FeedMediaCarousel";
 import { FeedMoreMenu } from "@/features/feed/FeedMoreMenu";
 import { FeedPollCard } from "@/features/feed/FeedPollCard";
 import { PersonalityPlaygroundPost } from "@/features/feed/PersonalityPlaygroundPost";
-import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
+import { SafeLinkedText } from "@/features/feed/SafeLinkedText";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import { candidateRoleNames } from "@/features/nuang-code/candidate-profile-names";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
@@ -32,10 +32,12 @@ const profileOptions = Object.entries(candidateRoleNames)
 
 export function CommunityFeed({
   highlightedPostId = null,
+  pendingReviewNotice = false,
   posts,
   viewerCode: suppliedViewerCode,
 }: {
   highlightedPostId?: string | null;
+  pendingReviewNotice?: boolean;
   posts: FeedItem[];
   viewerCode?: string | null;
 }) {
@@ -165,26 +167,17 @@ export function CommunityFeed({
 
       <FeedComposer />
 
-      {highlightedPostId ? (
+      {pendingReviewNotice ? (
         <div aria-live="polite" className={styles.uploadSuccessBanner}>
           <Check aria-hidden="true" size={17} strokeWidth={2.2} />
-          <span>
-            <strong>게시물이 업로드됐어요</strong>
-            추천 피드에서 방금 올린 글을 확인해 보세요.
-          </span>
+          <strong>링크를 확인하고 있어요. 확인되면 자동으로 공개됩니다.</strong>
+        </div>
+      ) : highlightedPostId ? (
+        <div aria-live="polite" className={styles.uploadSuccessBanner}>
+          <Check aria-hidden="true" size={17} strokeWidth={2.2} />
+          <strong>게시물이 업로드됐어요</strong>
         </div>
       ) : null}
-
-      <section className={styles.feedIntro}>
-        <strong>
-          {mode === "recommended" ? "추천 피드" : "데칼코마니 피드"}
-        </strong>
-        <p>
-          {mode === "recommended"
-            ? "최근 올라온 이야기와 지금 참여할 수 있는 질문을 함께 보여드려요."
-            : "같은 코드뿐 아니라, 뉴앙 코드 여러 자리가 가까운 사람들의 글을 모아요."}
-        </p>
-      </section>
 
       <section aria-label="커뮤니티 게시물" className={styles.feedSection}>
         {visiblePosts.length > 0 ? (
@@ -212,13 +205,6 @@ export function CommunityFeed({
 
       {panel === "filter" ? (
         <CommunityPanelFrame label="성향 필터" onClose={() => setPanel(null)}>
-          <div className={styles.panelIntro}>
-            <strong>여러 성향을 함께 고를 수 있어요</strong>
-            <p>
-              선택한 성향들의 공개 게시물만 한곳에 모아요. 궁금한 상대와 비슷한
-              성향도 함께 살펴볼 수 있어요.
-            </p>
-          </div>
           <label className={styles.panelSearchField}>
             <Search aria-hidden="true" size={18} />
             <span className="sr-only">코드 또는 성향 이름 검색</span>
@@ -329,6 +315,9 @@ function CommunityPost({
     post,
     viewerCode,
   });
+  const showRecommendationReason =
+    !isNuangQuestion && (filterActive || mode === "decal");
+  const responsesClosed = post.responseStatus === "closed";
 
   if (isOfficialDailyPoll && post.poll) {
     return <PersonalityPlaygroundPost highlighted={highlighted} post={post} />;
@@ -346,20 +335,19 @@ function CommunityPost({
         <FeedMoreMenu postId={post.id} targetType={post.targetType} />
       </div>
 
-      <div className={styles.recommendationReason}>
-        <span aria-hidden="true" />
-        <p>
-          <strong>추천한 이유</strong>
-          <small>{recommendationReason}</small>
+      {showRecommendationReason ? (
+        <p className={styles.recommendationReason}>{recommendationReason}</p>
+      ) : null}
+
+      {responsesClosed ? (
+        <p className={styles.responseClosed}>
+          응답 마감 · 기존 답변은 계속 볼 수 있어요
         </p>
-      </div>
+      ) : null}
 
       {isNuangQuestion ? (
         <div className={styles.questionSourceBar}>
-          <div>
-            <strong>뉴앙에게 물어봐</strong>
-            <span>오늘의 질문에 경험과 생각을 나눠보세요</span>
-          </div>
+          <strong>뉴앙에게 물어봐</strong>
           <Link href="/feed/questions/new">
             나도 질문하기
             <ChevronRight aria-hidden="true" size={15} strokeWidth={2} />
@@ -393,15 +381,18 @@ function CommunityPost({
         </div>
       ) : null}
 
-      {post.body ? <p className={styles.postBody}>{post.body}</p> : null}
+      {post.body ? (
+        <SafeLinkedText
+          className={styles.postBody}
+          links={post.links}
+          text={post.body}
+        />
+      ) : null}
       {post.media?.length ? <FeedMediaCarousel media={post.media} /> : null}
 
       {post.poll ? (
         <div className={styles.pollWrap}>
           <FeedPollCard poll={post.poll} returnTo="/feed" variant="home" />
-          <p className={styles.pollNote}>
-            이 선택은 성향 검사 결과에 반영되지 않아요.
-          </p>
           {post.poll.viewerVoteOptionId ? (
             <Link className={styles.pollDetailLink} href={post.poll.statsHref}>
               뉴앙 코드별 선택과 댓글 보기
@@ -414,7 +405,14 @@ function CommunityPost({
 
       <div className={styles.postActions}>
         <FeedActionButtons
-          allowComment={!isNuangQuestion || canAnswerQuestion}
+          allowComment={
+            !responsesClosed && (!isNuangQuestion || canAnswerQuestion)
+          }
+          commentDisabledMessage={
+            responsesClosed
+              ? "응답이 마감됐어요. 기존 답변은 계속 볼 수 있어요."
+              : undefined
+          }
           commentPlaceholder={
             isNuangQuestion ? "내 경험으로 답변하기" : "댓글 달기"
           }
@@ -658,11 +656,22 @@ function getCodeMatchCount(left: string, right: string) {
 }
 
 function orderFeedPosts(posts: FeedItem[], viewerCode: string | null) {
-  const dailyPoll = posts.find(isDailyCommunityPoll);
+  const activeDailyPolls = posts.filter(
+    (post) => isDailyCommunityPoll(post) && post.poll?.status !== "closed",
+  );
+  const dailyPoll =
+    activeDailyPolls.find((post) => post.officialFeatured) ??
+    activeDailyPolls[0];
   const remainingPosts = dailyPoll
     ? posts.filter((post) => post.id !== dailyPoll.id)
     : posts;
   const nuangQuestions = remainingPosts.filter(isNuangQuestionPost);
+  const featuredOfficialQuestions = remainingPosts.filter(
+    (post) =>
+      post.kind === "daily_question" &&
+      post.officialFeatured === true &&
+      post.responseStatus !== "closed",
+  );
   const matchedQuestions = nuangQuestions.filter(
     (post) =>
       post.questionAudience &&
@@ -673,7 +682,9 @@ function orderFeedPosts(posts: FeedItem[], viewerCode: string | null) {
       ),
   );
   const regularPosts = remainingPosts.filter(
-    (post) => !isNuangQuestionPost(post),
+    (post) =>
+      !isNuangQuestionPost(post) &&
+      !featuredOfficialQuestions.some((featured) => featured.id === post.id),
   );
   const unmatchedQuestions = nuangQuestions.filter(
     (post) => !matchedQuestions.some((matched) => matched.id === post.id),
@@ -681,6 +692,7 @@ function orderFeedPosts(posts: FeedItem[], viewerCode: string | null) {
 
   return [
     ...(dailyPoll ? [dailyPoll] : []),
+    ...featuredOfficialQuestions,
     ...matchedQuestions,
     ...regularPosts,
     ...unmatchedQuestions,
@@ -711,24 +723,22 @@ function getQuestionAudienceNotice(
 ) {
   if (audience.mode === "exact") {
     const target = audience.codes[0] ?? "지정된 코드";
-    return matched
-      ? `${target}인 나에게 도착한 질문이에요.`
-      : `${target}의 답변을 기다리는 질문이에요.`;
+    return matched ? `${target}에게 온 질문` : `${target}에게 질문`;
   }
   if (audience.mode === "trait") {
     const target = audience.codes.join(" · ");
-    return matched
-      ? `내 ${target} 성향으로 답해주면 좋은 질문이에요.`
-      : `${target} 성향의 답변을 기다리는 질문이에요.`;
+    return matched ? `${target} 성향에게 온 질문` : `${target} 성향에게 질문`;
   }
-  if (!viewerCode) return "내 뉴앙 코드를 확인하면 답변 대상인지 알려드려요.";
-  return matched
-    ? "내 성향에서 들려줄 답을 기다리는 질문이에요."
-    : "다른 관점의 답변을 기다리는 질문이에요.";
+  if (!viewerCode) return "답변 대상을 지정한 질문";
+  return matched ? "내 성향에게 온 질문" : "다른 관점에게 질문";
 }
 
 function isDailyCommunityPoll(post: FeedItem) {
-  return post.poll?.promptId === homeDailyCommunityPollPromptId;
+  return (
+    post.kind === "balance_game" &&
+    post.authorHandle === "nuang.official" &&
+    Boolean(post.poll)
+  );
 }
 
 function isNuangQuestionPost(post: FeedItem) {

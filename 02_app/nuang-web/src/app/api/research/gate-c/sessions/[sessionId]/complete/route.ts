@@ -4,6 +4,7 @@ import { refreshGateCAnalysis } from "@/features/research/gate-c/gate-c-auto-ana
 import {
   hashGateCSecret,
   isAllowedGateCRequest,
+  verifyGateCAssignmentProof,
 } from "@/features/research/gate-c/gate-c-server-security";
 import { isGateCFormId } from "@/features/research/gate-c/gate-c-study-contract";
 import { getGateCParticipantDefinition } from "@/features/research/gate-c/gate-c-study-fixture";
@@ -23,6 +24,7 @@ const choiceSchema = z.discriminatedUnion("kind", [
   z.object({ kind: z.literal("unsure"), reason: unsureReasonSchema }),
 ]);
 const completeSessionSchema = z.object({
+  assignmentProof: z.string().min(40).max(8_000).optional(),
   clientDurationMs: z.number().int().min(0).max(7_200_000),
   responses: z
     .array(
@@ -42,6 +44,11 @@ const completeSessionSchema = z.object({
     .length(12),
   sessionToken: z.string().min(24).max(128),
 });
+const assignedItemSchema = z.object({
+  orderIndex: z.number().int().min(1).max(12),
+  studyItemId: z.string().min(1).max(120),
+});
+const assignedItemsSchema = z.array(assignedItemSchema).length(12);
 
 export async function POST(
   request: Request,
@@ -64,47 +71,82 @@ export async function POST(
   const serviceClient = createSupabaseServiceClient();
   if (!serviceClient) return createApiClosedResponse("supabase_env_missing");
 
-  const sessionResponse = await serviceClient
+  const unifiedSessionResponse = await serviceClient
     .from("research_gate_c_session")
-    .select("id,form_id,status")
+    .select("id,form_id,item_assignment,status")
     .eq("id", parsedSessionId.data)
     .maybeSingle();
+  let sessionData = unifiedSessionResponse.data as {
+    form_id: unknown;
+    id: string;
+    item_assignment: unknown;
+    status: string;
+  } | null;
+  let sessionError = unifiedSessionResponse.error;
 
-  if (sessionResponse.error) {
+  if (sessionError?.code === "42703" || sessionError?.code === "PGRST204") {
+    const legacyResponse = await serviceClient
+      .from("research_gate_c_session")
+      .select("id,form_id,status")
+      .eq("id", parsedSessionId.data)
+      .maybeSingle();
+    sessionData = legacyResponse.data
+      ? { ...legacyResponse.data, item_assignment: null }
+      : null;
+    sessionError = legacyResponse.error;
+  }
+
+  if (sessionError) {
     return NextResponse.json(
       { error: "research_session_read_failed" },
       { status: 503 },
     );
   }
-  if (!sessionResponse.data) {
+  if (!sessionData) {
     return NextResponse.json(
       { error: "research_session_not_found" },
       { status: 404 },
     );
   }
-  if (sessionResponse.data.status !== "started") {
+  if (sessionData.status !== "started") {
     return NextResponse.json(
       { error: "research_session_already_completed" },
       { status: 409 },
     );
   }
-  if (!isGateCFormId(sessionResponse.data.form_id)) {
+  if (
+    typeof sessionData.form_id !== "string" ||
+    !isGateCFormId(sessionData.form_id)
+  ) {
     return NextResponse.json(
       { error: "research_form_invalid" },
       { status: 500 },
     );
   }
+  const formId = sessionData.form_id;
 
-  const definition = getGateCParticipantDefinition(
-    sessionResponse.data.form_id,
+  const parsedAssignment = assignedItemsSchema.safeParse(
+    sessionData.item_assignment,
   );
-  const expectedItemIds = definition.items.map((item) => item.studyItemId);
+  const verifiedProof = parsedBody.data.assignmentProof
+    ? verifyGateCAssignmentProof(
+        parsedBody.data.assignmentProof,
+        parsedSessionId.data,
+      )
+    : null;
+  const expectedItems = parsedAssignment.success
+    ? parsedAssignment.data
+    : verifiedProof
+      ? verifiedProof.items
+      : getGateCParticipantDefinition(formId).items;
+  const expectedItemIds = expectedItems.map((item) => item.studyItemId);
   const submittedItemIds = parsedBody.data.responses.map(
     (response) => response.studyItemId,
   );
   const hasExactItems = expectedItemIds.every(
     (itemId, index) =>
       submittedItemIds[index] === itemId &&
+      expectedItems[index].orderIndex === index + 1 &&
       parsedBody.data.responses[index].orderIndex === index + 1,
   );
 

@@ -7,16 +7,16 @@ import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import {
   createPublicShareSuccessPayload,
   createPublicShareUnavailablePayload,
-  publicShareMaxDomainCount,
 } from "@/features/share/public-share-contract";
 import { readPublicShareToken } from "@/features/share/public-share-server";
-import { createApiClosedPayload } from "@/lib/api/closed-state-data";
 
 type SharePageProps = {
   params: Promise<{ token: string }>;
 };
 
-type PublicSharePayload = ReturnType<typeof createPublicShareSuccessPayload>["share"];
+type PublicSharePayload = ReturnType<
+  typeof createPublicShareSuccessPayload
+>["share"];
 
 const publicSummaryRules = [
   "뉴앙 코드와 코드 자리 요약만 보여줘요.",
@@ -59,29 +59,23 @@ export default async function SharePage({ params }: SharePageProps) {
     return <UnavailableShareView status={result.status} />;
   }
 
-  const closedState = createApiClosedPayload("share_link_create_db_write_pending");
-
   return (
     <main className="mx-auto min-h-dvh max-w-[520px] bg-white px-5 pb-10">
       <ShareHeader label="공유 리포트" />
 
       <section className="grid min-h-[70dvh] place-items-center py-10">
         <div className="w-full border-y border-line py-8 text-center">
-          <Link2Off aria-hidden="true" className="mx-auto text-muted" size={28} />
-          <p className="mt-5 text-sm font-bold text-muted">공유 리포트 준비 중</p>
-          <h1 className="mt-3 text-2xl font-black">아직 공유 결과를 열 수 없어요</h1>
+          <Link2Off
+            aria-hidden="true"
+            className="mx-auto text-muted"
+            size={28}
+          />
+          <h1 className="mt-5 text-2xl font-black">
+            공유 리포트를 열 수 없어요
+          </h1>
           <p className="mx-auto mt-3 max-w-[360px] text-sm leading-6 text-muted">
-            공유 리포트 조회가 연결되기 전까지는 임의의 결과를 보여주지
-            않습니다. 이 화면은 대표 성향과 최대 {publicShareMaxDomainCount}개
-            영역 요약만 보여주도록 준비하고 있어요.
+            공유한 사람에게 새 주소를 요청해 주세요.
           </p>
-          <div className="mt-6 border-t border-line pt-5 text-left">
-            <p className="text-sm font-bold">{closedState.display.message}</p>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              {closedState.display.nextStep}
-            </p>
-            <PublicSummaryRuleList />
-          </div>
           <ButtonLink className="mt-6 w-full" href="/assessments/nu-core-quick">
             빠른 코어 시작하기
           </ButtonLink>
@@ -110,8 +104,10 @@ function ActiveShareView({ share }: { share: PublicSharePayload }) {
       <section className="border-b border-line pb-6 pt-7">
         <div className="flex items-center justify-between gap-5">
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-muted">{result.resultLabel}</p>
-            <p className="mt-2 text-[38px] font-black leading-none tracking-normal text-ink">
+            <p className="text-sm font-semibold text-muted">
+              {result.resultLabel}
+            </p>
+            <p className="mt-2 text-display-lg font-black leading-none tracking-normal text-ink">
               {result.profileCode}
             </p>
             <h1 className="mt-3 text-2xl font-black leading-8">
@@ -120,11 +116,7 @@ function ActiveShareView({ share }: { share: PublicSharePayload }) {
           </div>
           <NuangCharacter motif={motif} size="lg" />
         </div>
-        <p className="mt-5 text-sm leading-6 text-muted">
-          누군가 공유한 뉴앙 결과 요약이에요. 이 화면은 대화의 시작점으로 볼 수
-          있는 공개 요약만 보여줍니다.
-        </p>
-        <div className="mt-4 flex items-center gap-2 text-xs font-semibold text-muted">
+        <div className="mt-5 flex items-center gap-2 text-xs font-semibold text-muted">
           <CalendarDays aria-hidden="true" size={15} />
           <span>
             {formatCompletedDate(result.completedAt)} · {assessmentLabel}
@@ -178,12 +170,13 @@ function ActiveShareView({ share }: { share: PublicSharePayload }) {
 
       <section className="border-b border-line py-6">
         <div className="flex items-start gap-3">
-          <ShieldCheck aria-hidden="true" className="mt-0.5 shrink-0 text-muted" size={18} />
+          <ShieldCheck
+            aria-hidden="true"
+            className="mt-0.5 shrink-0 text-muted"
+            size={18}
+          />
           <div className="min-w-0">
             <h2 className="text-base font-bold">공유 범위</h2>
-            <p className="mt-1 text-sm leading-6 text-muted">
-              공유 받은 사람에게 보이는 내용은 요약으로 제한됩니다.
-            </p>
           </div>
         </div>
         <PublicSummaryRuleList />
@@ -191,9 +184,6 @@ function ActiveShareView({ share }: { share: PublicSharePayload }) {
 
       <section className="py-6">
         <h2 className="text-base font-bold">나도 알아보기</h2>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          같은 검사를 해보면 내 대표 성향 코드와 성향지도를 확인할 수 있어요.
-        </p>
         <ButtonLink
           className="mt-4 w-full"
           href={assessmentHref}
@@ -219,12 +209,14 @@ function UnavailableShareView({
 
       <section className="grid min-h-[70dvh] place-items-center py-10">
         <div className="w-full border-y border-line py-8 text-center">
-          <Link2Off aria-hidden="true" className="mx-auto text-muted" size={28} />
-          <p className="mt-5 text-sm font-bold text-muted">공유 주소 확인</p>
-          <h1 className="mt-3 text-2xl font-black">{payload.message}</h1>
+          <Link2Off
+            aria-hidden="true"
+            className="mx-auto text-muted"
+            size={28}
+          />
+          <h1 className="mt-5 text-2xl font-black">{payload.message}</h1>
           <p className="mx-auto mt-3 max-w-[360px] text-sm leading-6 text-muted">
-            공유 범위와 만료 상태를 확인한 뒤 안전하게 닫았어요. 뉴앙 검사는
-            로그인 없이도 가볍게 시작할 수 있습니다.
+            공유한 사람에게 새 주소를 요청하거나 내 검사를 시작해 보세요.
           </p>
           <ButtonLink className="mt-6 w-full" href="/assessments/nu-core-quick">
             빠른 코어 시작하기
@@ -248,7 +240,10 @@ function PublicSummaryRuleList() {
   return (
     <ul className="mt-4 grid gap-2 text-sm leading-6 text-muted">
       {publicSummaryRules.map((rule) => (
-        <li className="border-t border-line pt-2 first:border-t-0 first:pt-0" key={rule}>
+        <li
+          className="border-t border-line pt-2 first:border-t-0 first:pt-0"
+          key={rule}
+        >
           {rule}
         </li>
       ))}
@@ -261,7 +256,9 @@ function getMotif(code: string): NuangCharacterMotif {
 }
 
 function getAssessmentHref(kind: "full" | "quick") {
-  return kind === "full" ? "/assessments/nu-core-full" : "/assessments/nu-core-quick";
+  return kind === "full"
+    ? "/assessments/nu-core-full"
+    : "/assessments/nu-core-quick";
 }
 
 function getAssessmentLabel(kind: "full" | "quick") {

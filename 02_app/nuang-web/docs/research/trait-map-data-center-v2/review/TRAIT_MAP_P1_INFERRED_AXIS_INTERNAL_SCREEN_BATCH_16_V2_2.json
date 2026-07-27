@@ -1,0 +1,164 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-16.0.1",
+  "batchId": "P1-IAS-16",
+  "status": "P1_INFERRED_AXIS_BATCH_16_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 1,
+    "variants": 4,
+    "retainCandidates": 3,
+    "revisionCandidates": 1,
+    "scopeRemovalClaimAxes": 0,
+    "scopeRemovalVariants": 0,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-SM-PARTNER-DISAGREEMENT-RESPONSE",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "claimKind": "actual_response",
+      "axisRef": "SM",
+      "internalDecision": "retain_inferred_sm_axis_after_copy_revision"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 다시 지킬 약속·확인 시점을 정하고, M은 현재 상황에 맞춰 수정 행동을 조정하며 결합된 G/A 뜻도 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|SM=K",
+      "axisDirection": "K",
+      "originalContent": {
+        "summaryText": "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 다시 지킬 약속·확인 시점을 정하고, M은 현재 상황에 맞춰 수정 행동을 조정하며 결합된 G/A 뜻도 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-M",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "목소리를 높이기보다 연인의 설명을 듣고 사실과 요구를 정리한 뒤, 둘이 지킬 수 있는 구체적인 방법을 찾는 편이다.",
+        "detailParagraphs": [
+          "목소리를 높이기보다 연인의 설명을 듣고 사실과 요구를 정리한 뒤, 둘이 지킬 수 있는 구체적인 방법을 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_sm_contrast_and_ro_preservation",
+        "rationale": "M이 단순히 둘이 합의할 방법을 찾는 K식 문장으로 보이지 않게 현재 감정·시간에 맞춰 순서와 방법을 조정하는 방향을 직접 나타내고 G의 원인·해결도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "의견 차이의 원인과 풀어야 할 부분을 확인하되, 현재 감정과 대화할 수 있는 시간에 맞춰 순서와 방법을 바꾸며 지금 가능한 해결책을 찾는 편이다.",
+        "detailParagraphs": [
+          "의견 차이의 원인과 풀어야 할 부분을 확인하되, 현재 감정과 대화할 수 있는 시간에 맞춰 순서와 방법을 바꾸며 지금 가능한 해결책을 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "목소리를 높이기보다 연인의 설명을 듣고 사실과 요구를 정리한 뒤, 둘이 지킬 수 있는 구체적인 방법을 찾는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|SM=M",
+      "axisDirection": "M",
+      "originalContent": {
+        "summaryText": "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_sm_contrast_candidate",
+        "rationale": "K는 다시 지킬 약속·확인 시점을 정하고, M은 현재 상황에 맞춰 수정 행동을 조정하며 결합된 G/A 뜻도 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_16_RECOMPOSITION_AND_BATCH_17_SCREEN",
+    "actions": [
+      "1개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "SM·work 맥락의 마지막 P1-IAS-17을 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

@@ -1,0 +1,170 @@
+{
+  "contractVersion": "nuang-trait-map-common-isolation-audit.v2.3",
+  "reportId": "TRAIT-MAP-COMMON-ISOLATION-AUDIT.2.3",
+  "status": "COMMON_RESEARCH_LINEAGE_ISOLATION_PASSED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-REVIEWED.2.3",
+  "summary": {
+    "commonEntries": 61,
+    "preexistingCommonEntries": 55,
+    "newlyAxisFreeEntries": 6,
+    "blockedFromAllPersonalizedSurfaces": 61,
+    "violations": 0,
+    "interpretedAsUniversalTraitClaims": 0,
+    "customerApprovedEntries": 0
+  },
+  "interpretationContract": {
+    "allowedMeaning": "축 방향을 안전하게 개인화할 수 없어 연구 계보와 문장 출처를 보존한 항목",
+    "prohibitedMeaning": "모든 사람 또는 모든 뉴앙코드에 공통으로 나타나는 성향",
+    "allowedUse": [
+      "source_lineage_audit",
+      "research_method_review",
+      "future_construct_reclassification"
+    ],
+    "prohibitedUse": [
+      "result_summary",
+      "trait_map_detail",
+      "comparison_report",
+      "public_profile",
+      "share_card"
+    ]
+  },
+  "newlyAxisFreeEntries": [
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-ATTENTION-COMMON",
+      "claimKey": ".scenario.work.support_requested.attention",
+      "sourceBlockCount": 2,
+      "content": {
+        "summaryText": "동료가 도움을 요청하면 동료가 가장 부담스러워하는 지점과 팀에 미칠 영향, 함께 시도할 수 있는 여러 해결 방법을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "동료가 도움을 요청하면 동료가 가장 부담스러워하는 지점과 팀에 미칠 영향, 함께 시도할 수 있는 여러 해결 방법을 먼저 살피는 경향이 있다.",
+          "동료가 업무 도움을 요청하면 문제의 원인과 현재까지 한 일, 마감, 자신이 맡아야 할 정확한 범위를 먼저 확인하려는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "disposition": "archive_both_direction_lineages_not_a_universal_trait_claim",
+      "blockedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ]
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-PROCESS-COMMON",
+      "claimKey": ".scenario.work.support_requested.process",
+      "sourceBlockCount": 2,
+      "content": {
+        "summaryText": "“이 사람이 혼자 감당하지 않게 하려면 내가 무엇을 맡고, 어떤 다른 방법도 열어둘 수 있을까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“이 사람이 혼자 감당하지 않게 하려면 내가 무엇을 맡고, 어떤 다른 방법도 열어둘 수 있을까?”를 생각하기 쉽다.",
+          "“어느 단계가 막혔고, 내가 알려주는 것이 나은지 직접 맡는 것이 나은지”를 구분하려 하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "disposition": "archive_both_direction_lineages_not_a_universal_trait_claim",
+      "blockedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ]
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-RESPONSE-COMMON",
+      "claimKey": ".scenario.work.support_requested.response",
+      "sourceBlockCount": 2,
+      "content": {
+        "summaryText": "동료의 상황과 원하는 도움을 듣고, 가능한 해결책을 함께 정리한 뒤 역할과 점검 시점을 정해 지원을 이어가는 편이다.",
+        "detailParagraphs": [
+          "동료의 상황과 원하는 도움을 듣고, 가능한 해결책을 함께 정리한 뒤 역할과 점검 시점을 정해 지원을 이어가는 편이다.",
+          "상황을 들은 뒤 필요한 자료나 해결 순서를 정리하고, 자신이 할 수 있는 구체적인 부분을 맡는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "disposition": "archive_both_direction_lineages_not_a_universal_trait_claim",
+      "blockedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ]
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-COMMUNICATION-COMMON",
+      "claimKey": ".scenario.work.support_requested.communication",
+      "sourceBlockCount": 2,
+      "content": {
+        "summaryText": "“어느 부분이 가장 막혔는지 알려주세요. 제가 맡을 일과 같이 확인할 방법을 정해보겠습니다”처럼 경험 확인과 실행을 연결하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“어느 부분이 가장 막혔는지 알려주세요. 제가 맡을 일과 같이 확인할 방법을 정해보겠습니다”처럼 경험 확인과 실행을 연결하는 방식이 자연스럽다.",
+          "“지금 막힌 지점이 여기라면 나는 이 자료를 정리할게요. 나머지는 이 순서로 확인해 보세요”처럼 역할과 방법을 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "disposition": "archive_both_direction_lineages_not_a_universal_trait_claim",
+      "blockedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ]
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-ATTENTION-COMMON",
+      "claimKey": ".scenario.work.need_expression.attention",
+      "sourceBlockCount": 2,
+      "content": {
+        "summaryText": "업무에서 필요한 자원·시간·도움을 말해야 할 때 요청이 다른 사람에게 줄 부담과 요청하지 않았을 때 결과에 생길 위험을 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "업무에서 필요한 자원·시간·도움을 말해야 할 때 요청이 다른 사람에게 줄 부담과 요청하지 않았을 때 결과에 생길 위험을 함께 살피는 경향이 있다.",
+          "업무 도움이 필요할 때 막연히 힘들다고 말하기보다 막힌 지점과 필요한 정보·권한·시간을 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "disposition": "archive_both_direction_lineages_not_a_universal_trait_claim",
+      "blockedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ]
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-BOUNDARY-ATTENTION-COMMON",
+      "claimKey": ".scenario.work.boundary.attention",
+      "sourceBlockCount": 2,
+      "content": {
+        "summaryText": "업무 범위·시간·책임이 계속 넘어오면 불만을 크게 드러내기보다 어떤 요청이 기존 역할과 충돌하고 결과에 어떤 영향을 주는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "업무 범위·시간·책임이 계속 넘어오면 불만을 크게 드러내기보다 어떤 요청이 기존 역할과 충돌하고 결과에 어떤 영향을 주는지 먼저 살피는 경향이 있다.",
+          "업무 범위와 시간이 계속 침범되면 관계가 어색해질 걱정과 팀에 미칠 영향, 목표를 지키기 위해 조정할 기준을 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "disposition": "archive_both_direction_lineages_not_a_universal_trait_claim",
+      "blockedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ]
+    }
+  ],
+  "violations": [],
+  "nextGate": {
+    "name": "V2_3_SEVEN_ROLE_PRIORITY_QUEUE",
+    "actions": [
+      "COMMON 61개는 개인화 검토 큐에서 분리한다.",
+      "새 COMMON 6개의 양방향 원문은 범위 오류 감사 계보로만 보존한다.",
+      "개인화 544개의 수정·계보 복잡도에 따라 독립 검토 우선순위를 계산한다."
+    ]
+  }
+}

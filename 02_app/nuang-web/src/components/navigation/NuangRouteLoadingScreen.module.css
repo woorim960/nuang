@@ -1,6 +1,6 @@
 .root {
   color: var(--foreground);
-  background: rgb(248 247 244 / 96%);
+  background: color-mix(in srgb, var(--nu-play-50) 96%, transparent);
 }
 
 .overlay {
@@ -27,12 +27,12 @@
   background:
     radial-gradient(
       circle at 50% 42%,
-      rgb(224 219 255 / 62%) 0,
-      rgb(239 237 255 / 26%) 24%,
+      color-mix(in srgb, var(--nu-info-100) 62%, transparent) 0,
+      color-mix(in srgb, var(--nu-info-50) 26%, transparent) 24%,
       transparent 49%
     ),
-    radial-gradient(circle at 18% 22%, rgb(223 243 236 / 44%), transparent 28%),
-    #f8f7f4;
+    radial-gradient(circle at 18% 22%, color-mix(in srgb, var(--nu-community-100) 44%, transparent), transparent 28%),
+    var(--nu-play-50);
 }
 
 .progressTrack {
@@ -43,7 +43,7 @@
   left: 0;
   height: 2px;
   overflow: hidden;
-  background: rgb(102 87 217 / 7%);
+  background: color-mix(in srgb, var(--nu-info-500) 7%, transparent);
 }
 
 .progressTrack span {
@@ -51,7 +51,7 @@
   width: 34%;
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #9d92ec, #7063d7, #9d92ec);
+  background: linear-gradient(90deg, var(--nu-info-300), var(--nu-info-500), var(--nu-info-300));
   animation: route-loading-progress 1.4s ease-in-out infinite;
 }
 
@@ -80,7 +80,7 @@
   position: absolute;
   inset: 18%;
   border-radius: 999px;
-  background: rgb(144 128 230 / 18%);
+  background: color-mix(in srgb, var(--nu-info-300) 18%, transparent);
   filter: blur(1.65rem);
   animation: route-loading-glow 1.7s ease-in-out infinite alternate;
 }
@@ -90,7 +90,7 @@
   z-index: 2;
   width: 80%;
   height: auto;
-  filter: drop-shadow(0 1rem 1.6rem rgb(70 57 130 / 12%));
+  filter: drop-shadow(0 1rem 1.6rem color-mix(in srgb, var(--nu-brand-700) 12%, transparent));
   transform-origin: 50% 82%;
   animation: route-loading-breathe 2.45s ease-in-out infinite;
 }
@@ -103,7 +103,7 @@
   width: 43%;
   height: 6.5%;
   border-radius: 999px;
-  background: rgb(48 36 91 / 10%);
+  background: color-mix(in srgb, var(--nu-brand-800) 10%, transparent);
   filter: blur(0.5rem);
   transform: translateX(-50%);
   animation: route-loading-shadow 2.45s ease-in-out infinite;
@@ -118,10 +118,10 @@
   left: 49%;
   width: 0.56rem;
   height: 0.56rem;
-  border: 1.5px solid rgb(255 255 255 / 75%);
+  border: 1.5px solid color-mix(in srgb, var(--nu-neutral-0) 75%, transparent);
   border-radius: 0.22rem;
-  background: #8e82e5;
-  box-shadow: 0 0.3rem 0.8rem rgb(66 53 120 / 12%);
+  background: var(--nu-info-300);
+  box-shadow: 0 0.3rem 0.8rem color-mix(in srgb, var(--nu-brand-700) 12%, transparent);
   animation: route-loading-signal 3.1s cubic-bezier(0.22, 0.75, 0.28, 1)
     infinite;
 }
@@ -129,34 +129,34 @@
 .signalOne {
   --signal-x: -4.9rem;
   --signal-y: -3.6rem;
-  background: #e97958;
+  background: var(--nu-reaction-500);
 }
 
 .signalTwo {
   --signal-x: 5rem;
   --signal-y: -3.1rem;
-  background: #e8b650;
+  background: var(--nu-warm-500);
   animation-delay: -0.62s;
 }
 
 .signalThree {
   --signal-x: -5.2rem;
   --signal-y: 2.6rem;
-  background: #6b9edc;
+  background: var(--nu-info-500);
   animation-delay: -1.24s;
 }
 
 .signalFour {
   --signal-x: 5.1rem;
   --signal-y: 2.8rem;
-  background: #65aa8b;
+  background: var(--nu-community-500);
   animation-delay: -1.86s;
 }
 
 .signalFive {
   --signal-x: 0.2rem;
   --signal-y: -5.1rem;
-  background: #9a8de8;
+  background: var(--nu-info-300);
   animation-delay: -2.48s;
 }
 
@@ -166,25 +166,25 @@
 
 .wordmark {
   margin: 0 0 0.55rem;
-  color: #7a6fce;
-  font-size: 0.67rem;
-  font-weight: 750;
+  color: var(--nu-info-500);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: 0.17em;
 }
 
 .copy h1 {
   margin: 0;
-  font-size: clamp(1.25rem, 5.5vw, 1.5rem);
-  font-weight: 720;
-  line-height: 1.4;
+  font-size: var(--nu-text-fluid-title-sm);
+  font-weight: var(--nu-weight-bold);
+  line-height: var(--nu-leading-title);
   letter-spacing: -0.035em;
 }
 
 .copy > p:not(.wordmark) {
   margin: 0.55rem 0 0;
-  color: #747884;
-  font-size: 0.84rem;
-  line-height: 1.6;
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
   letter-spacing: -0.018em;
 }
 
@@ -194,21 +194,21 @@
   align-items: center;
   gap: 0.42rem;
   margin-top: 1rem;
-  border: 1px solid rgb(119 105 211 / 10%);
+  border: 1px solid color-mix(in srgb, var(--nu-info-500) 10%, transparent);
   border-radius: 999px;
   padding: 0.36rem 0.72rem;
-  color: #6e63bd;
-  font-size: 0.72rem;
-  font-weight: 650;
-  background: rgb(255 255 255 / 62%);
-  box-shadow: 0 0.45rem 1.2rem rgb(68 57 118 / 5%);
+  color: var(--nu-info-500);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+  background: color-mix(in srgb, var(--nu-neutral-0) 62%, transparent);
+  box-shadow: 0 0.45rem 1.2rem color-mix(in srgb, var(--nu-brand-700) 5%, transparent);
 }
 
 .statusDot {
   width: 0.38rem;
   height: 0.38rem;
   border-radius: 999px;
-  background: #8174d8;
+  background: var(--nu-info-500);
   animation: route-loading-live-dot 1.35s ease-out infinite;
 }
 
@@ -307,7 +307,7 @@
 
 @keyframes route-loading-live-dot {
   0% {
-    box-shadow: 0 0 0 0 rgb(129 116 216 / 24%);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--nu-info-500) 24%, transparent);
   }
   70%,
   100% {

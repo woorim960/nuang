@@ -331,9 +331,7 @@ export function LocalResultManager() {
 
       {loaded && inProgressEntries.length > 0 ? (
         <ReportGroup
-          description="멈춘 자리부터 바로 이어서 답할 수 있어요."
           entries={inProgressEntries}
-          eyebrow="CONTINUE"
           onDelete={handleDelete}
           deletingEntryId={deletingEntryId}
           title="이어 하던 검사"
@@ -344,9 +342,7 @@ export function LocalResultManager() {
       {loaded && previousCoreEntries.length > 0 ? (
         <ReportGroup
           collapsedLimit={3}
-          description="이전 결과를 열어 지금의 나와 천천히 비교해보세요."
           entries={previousCoreEntries}
-          eyebrow="CORE"
           expanded={expandedGroups.includes("previous-core")}
           groupId="previous-core"
           onDelete={handleDelete}
@@ -361,10 +357,8 @@ export function LocalResultManager() {
         <ReportGroup
           actionHref="/together"
           actionLabel="비교 시작하기"
-          description="원하는 사람과 나의 공통점과 차이점을 다시 확인해요."
           emptyCopy="아직 저장된 비교 리포트가 없어요."
           entries={comparisonEntries}
-          eyebrow="TOGETHER"
           onDelete={handleDelete}
           deletingEntryId={deletingEntryId}
           title="관계 비교"
@@ -376,10 +370,8 @@ export function LocalResultManager() {
         <ReportGroup
           actionHref="/assessments"
           actionLabel="검사 둘러보기"
-          description="일상 속 궁금한 모습을 가볍게 살펴본 기록이에요."
           emptyCopy="아직 저장된 주제 검사 결과가 없어요."
           entries={labEntries}
-          eyebrow="TOPIC"
           onDelete={handleDelete}
           deletingEntryId={deletingEntryId}
           title="주제 검사"
@@ -408,10 +400,7 @@ function LatestReport({
   return (
     <section className={styles.latestSection}>
       <div className={styles.latestHeading}>
-        <div>
-          <p>가장 최근 결과</p>
-          <h2>현재 내 대표 성향</h2>
-        </div>
+        <h2>현재 내 대표 성향</h2>
         <span>{formatEntryDate(entry)}</span>
       </div>
       <div className={styles.latestIdentity}>
@@ -449,10 +438,8 @@ function ReportGroup({
   actionLabel,
   collapsedLimit,
   deletingEntryId,
-  description,
   emptyCopy,
   entries,
-  eyebrow,
   expanded = false,
   groupId,
   onDelete,
@@ -464,10 +451,8 @@ function ReportGroup({
   actionLabel?: string;
   collapsedLimit?: number;
   deletingEntryId: string | null;
-  description: string;
   emptyCopy?: string;
   entries: ResultEntry[];
-  eyebrow: string;
   expanded?: boolean;
   groupId?: string;
   onDelete: (entry: ResultEntry) => Promise<void>;
@@ -484,12 +469,8 @@ function ReportGroup({
   return (
     <section className={styles.reportGroup} data-tone={tone}>
       <div className={styles.groupHeading}>
-        <div>
-          <p>{eyebrow}</p>
-          <h2>{title}</h2>
-        </div>
+        <h2>{title}</h2>
         <span>{entries.length}개</span>
-        <small>{description}</small>
       </div>
       {entries.length > 0 ? (
         <>
@@ -609,11 +590,7 @@ function ReportEmpty() {
       <div className={styles.emptyIcon}>
         <FileText aria-hidden="true" size={22} strokeWidth={1.5} />
       </div>
-      <p>아직 결과가 없어요</p>
       <h2>첫 성향 리포트를 만들어보세요</h2>
-      <span>
-        검사를 시작하면 진행 상태와 완료한 결과를 이곳에서 다시 볼 수 있어요.
-      </span>
       <Link href="/assessments">
         검사 둘러보기
         <ChevronRight aria-hidden="true" size={15} strokeWidth={1.7} />

@@ -1,0 +1,150 @@
+.health {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem;
+  border: 1px solid var(--nu-color-danger-soft);
+  border-radius: 14px;
+  background: var(--nu-color-danger-soft);
+}
+
+.health[data-ok="true"] {
+  border-color: var(--nu-color-community-soft);
+  background: var(--nu-color-community-soft);
+}
+
+.health > span {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 11px;
+  color: var(--nu-color-danger);
+  background: var(--nu-color-surface);
+}
+
+.health[data-ok="true"] > span {
+  color: var(--nu-color-community);
+}
+
+.health strong {
+  font-size: var(--nu-text-body);
+}
+
+.health p,
+.checkedAt {
+  margin: 0.2rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+}
+
+.checkList {
+  display: grid;
+}
+
+.checkList > div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  min-height: 54px;
+  padding-inline: 1rem;
+}
+
+.checkList > div + div {
+  border-top: 1px solid var(--nu-color-border);
+}
+
+.checkList svg {
+  color: var(--nu-color-danger);
+}
+
+.checkList [data-ok="true"] svg {
+  color: var(--nu-color-success);
+}
+
+.checkList > div > div {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.checkCopy {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.checkCopy em {
+  flex: 0 0 auto;
+  padding: 0.18rem 0.38rem;
+  border-radius: 6px;
+  color: var(--nu-color-danger);
+  background: var(--nu-color-danger-soft);
+  font-size: var(--nu-text-caption);
+  font-style: normal;
+  font-weight: var(--nu-weight-bold);
+}
+
+.checkCopy em[data-severity="warning"] {
+  color: var(--nu-reaction-700);
+  background: var(--nu-reaction-100);
+}
+
+.checkList strong {
+  font-size: var(--nu-text-body-sm);
+}
+
+.checkList > div > div > span:not(.checkCopy) {
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  text-align: right;
+}
+
+.checkList small {
+  grid-column: 1 / -1;
+  margin-top: -0.35rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: 1.45;
+}
+
+.checkedAt {
+  text-align: right;
+}
+
+@media (max-width: 560px) {
+  .checkList > div {
+    align-items: start;
+    padding-block: 0.75rem;
+  }
+
+  .checkList > div > div {
+    grid-template-columns: 1fr;
+    gap: 0.3rem;
+  }
+
+  .checkList > div > div > span:not(.checkCopy) {
+    text-align: left;
+  }
+
+  .checkList small {
+    grid-column: 1;
+    margin-top: 0;
+  }
+}
+
+@media (min-width: 1100px) {
+  .checkList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 1.5rem;
+    padding: 0 0.25rem;
+  }
+
+  .checkList > div:nth-child(2) {
+    border-top: 0;
+  }
+}

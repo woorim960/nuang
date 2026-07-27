@@ -1,0 +1,93 @@
+{
+  "fixtureVersion": "nuang-trait-map-withdrawal-fallback-synthetic-fixture.v2.3",
+  "sourceReportId": "TRAIT-MAP-WITHDRAWAL-FALLBACK-RUNTIME-CONTRACT.2.3",
+  "synthetic": true,
+  "resolverCases": [
+    {
+      "caseId": "RUNTIME-01",
+      "canonicalState": "approved",
+      "allowlistedForSurface": true,
+      "surface": "trait_map_detail",
+      "expected": "render_exact_approved_version",
+      "actual": "render_exact_approved_version",
+      "passed": true
+    },
+    {
+      "caseId": "RUNTIME-02",
+      "canonicalState": "research_only",
+      "allowlistedForSurface": false,
+      "surface": "trait_map_detail",
+      "expected": "omit_claim_section",
+      "actual": "omit_claim_section",
+      "passed": true
+    },
+    {
+      "caseId": "RUNTIME-03",
+      "canonicalState": "retired",
+      "allowlistedForSurface": true,
+      "surface": "result_summary",
+      "expected": "deny_and_invalidate_stale_allowlist",
+      "actual": "deny_and_invalidate_stale_allowlist",
+      "passed": true
+    },
+    {
+      "caseId": "RUNTIME-04",
+      "canonicalState": "missing",
+      "allowlistedForSurface": false,
+      "surface": "comparison_report",
+      "expected": "omit_claim_section_and_log_integrity_error",
+      "actual": "omit_claim_section_and_log_integrity_error",
+      "passed": true
+    },
+    {
+      "caseId": "RUNTIME-05",
+      "canonicalState": "common_archive",
+      "allowlistedForSurface": true,
+      "surface": "public_profile",
+      "expected": "deny_common_personalization",
+      "actual": "deny_common_personalization",
+      "passed": true
+    },
+    {
+      "caseId": "RUNTIME-06",
+      "canonicalState": "approved",
+      "allowlistedForSurface": false,
+      "surface": "share_card",
+      "expected": "omit_claim_section",
+      "actual": "omit_claim_section",
+      "passed": true
+    }
+  ],
+  "simulatedRetirement": {
+    "synthetic": true,
+    "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-ATTENTION-OE-R",
+    "contentKey": "trait-map.v2.3.can-scn-general-success-attention-oe-r",
+    "version": 1,
+    "impactedProfileCount": 16,
+    "impactedProfileCodes": [
+      "ERAKC",
+      "ERAKQ",
+      "ERAMC",
+      "ERAMQ",
+      "ERGKC",
+      "ERGKQ",
+      "ERGMC",
+      "ERGMQ",
+      "IRAKC",
+      "IRAKQ",
+      "IRAMC",
+      "IRAMQ",
+      "IRGKC",
+      "IRGKQ",
+      "IRGMC",
+      "IRGMQ"
+    ],
+    "beforeState": "research_only",
+    "simulatedAfterState": "retired",
+    "oldContentRenderedAfterRetirement": false,
+    "commonUsedAsPersonalizedFallback": false,
+    "emptyCanonicalRefReturnedToClient": false,
+    "profileDataCommitted": false,
+    "publicationChanged": false
+  }
+}

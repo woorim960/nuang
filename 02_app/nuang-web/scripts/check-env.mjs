@@ -33,6 +33,8 @@ const optionalByMode = {
     "NAVER_OAUTH_CLIENT_ID",
     "NAVER_OAUTH_CLIENT_SECRET",
     "ADMIN_BOOTSTRAP_EMAILS",
+    "RESEND_API_KEY",
+    "EMAIL_VERIFICATION_FROM",
   ],
 };
 

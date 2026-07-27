@@ -1,4 +1,4 @@
-import { ArrowLeft, FileText, UsersRound } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -46,9 +46,8 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
-          <span>NUANG ACCOUNT</span>
           <h1>{copy.title}</h1>
-          <p>{copy.description}</p>
+          {copy.description ? <p>{copy.description}</p> : null}
         </div>
         <div className={styles.character}>
           <Image
@@ -60,17 +59,6 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
           />
         </div>
       </section>
-
-      <div aria-label="로그인하면 좋은 점" className={styles.benefits}>
-        <span>
-          <FileText aria-hidden="true" size={17} strokeWidth={1.8} />내 리포트
-          이어보기
-        </span>
-        <span>
-          <UsersRound aria-hidden="true" size={17} strokeWidth={1.8} />
-          커뮤니티와 비교 이용
-        </span>
-      </div>
 
       <section className={styles.authSection}>
         <AccountConnectPanel
@@ -99,6 +87,10 @@ function getLoginCopy(reason: string) {
       description: "로그인 후 선택한 사람과의 비교를 이어갑니다.",
       title: "나와 비교하려면 로그인해 주세요",
     },
+    event: {
+      description: "로그인 후 완료한 리뷰의 이벤트 응모를 바로 이어갈게요.",
+      title: "이벤트에 응모하려면 로그인해 주세요",
+    },
     follow: {
       description: "로그인 후 보고 있던 프로필로 바로 돌아갑니다.",
       title: "팔로우하려면 로그인해 주세요",
@@ -123,8 +115,7 @@ function getLoginCopy(reason: string) {
 
   return (
     reasonCopy[reason] ?? {
-      description:
-        "커뮤니티 활동과 계정 기능을 한곳에서 편하게 이용할 수 있어요.",
+      description: "",
       title: "로그인하고 뉴앙을 이어가요",
     }
   );

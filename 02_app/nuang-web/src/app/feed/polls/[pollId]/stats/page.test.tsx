@@ -44,7 +44,7 @@ describe("FeedPollStatsPage", () => {
         },
         {
           code: "IRGMC",
-          name: "단서를 좇는 탐구자",
+          name: "단서로 답을 찾는 탐구자",
           options: [
             { label: "산", ratio: 100, voteCount: 1 },
             { label: "바다", ratio: 0, voteCount: 0 },
@@ -113,7 +113,10 @@ describe("FeedPollStatsPage", () => {
     fireEvent.click(screen.getByRole("button", { name: /IRGMC.*1명/ }));
     expect(screen.getByText("IRGMC의 관점")).toBeInTheDocument();
     expect(screen.getByText("100%")).toBeInTheDocument();
-    expect(document.body).toHaveTextContent("1명부터 코드별 선택을");
+    expect(screen.getByRole("button", { name: /IRGMC.*1명/ })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
     expect(document.body).not.toHaveTextContent("누가 투표");
   });
 
@@ -162,9 +165,10 @@ describe("FeedPollStatsPage", () => {
     expect(
       screen.getByText("먼저 오늘의 선택을 골라주세요"),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: /투표하고 관점 보기/ }),
-    ).toHaveAttribute("href", "/home");
+    expect(screen.getByRole("link", { name: "투표하러 가기" })).toHaveAttribute(
+      "href",
+      "/home",
+    );
     expect(
       screen.queryByText("코드별 관점을 모으고 있어요"),
     ).not.toBeInTheDocument();

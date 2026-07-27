@@ -1,0 +1,742 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "packageId": "IRGMC-RESEARCH-BASELINE.0.1",
+  "status": "RESEARCH_DRAFT_NOT_FOR_PRODUCTION",
+  "code": "IRGMC",
+  "profileName": "단서로 답을 찾는 탐구자",
+  "oppositeAnchor": "ENAKQ",
+  "nonCopyRule": "ENAKQ 문장의 주어와 형용사만 반대로 바꾸지 않는다. IRGMC의 주의·생각·실제 반응을 상황별로 새로 검증한다.",
+  "metrics": {
+    "foundationClaimCount": 6,
+    "chapterQuestionCount": 16,
+    "canonicalScenarioCount": 72,
+    "authoredScenarioCount": 72,
+    "oneLetterNeighborCount": 5,
+    "availableIncludedEvidenceSources": 40,
+    "longformNonWhitespaceCharacters": 55651,
+    "customerApprovedClaims": 0
+  },
+  "foundationClaims": [
+    {
+      "claimId": "IRGMC.general.definition.I",
+      "entity": { "kind": "profile", "ref": "IRGMC" },
+      "scope": "single_direction",
+      "claimKind": "attention",
+      "assertion": "I는 사람을 싫어하는 성향이 아니라, 에너지를 다시 채우고 생각을 정리할 때 혼자 있는 시간이 더 잘 맞는 방향이다. 말을 꺼내기 전에는 주변 상황과 자신의 생각을 먼저 살피는 경향이 있다.",
+      "contexts": ["general"],
+      "scenarioRefs": [],
+      "requiredSignals": [
+        "representative_code",
+        "domain_scores",
+        "facet_scores"
+      ],
+      "evidenceFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "independentSourceRefs": ["SRC-BFI2-2017", "SRC-STATE-DISTRIBUTION-2001"],
+      "evidenceStatus": "nuang_validation_required",
+      "evidenceGrade": "C",
+      "privacyScope": "self_only",
+      "riskDomains": ["none"],
+      "publicationState": "research_only",
+      "reviews": {
+        "personality_psychology": "not_started",
+        "psychometrics": "not_started",
+        "relationship_psychology": "not_started",
+        "clinical_safety": "not_started",
+        "plain_korean": "not_started",
+        "product": "not_started",
+        "design": "not_started"
+      }
+    },
+    {
+      "claimId": "IRGMC.general.definition.R",
+      "entity": { "kind": "profile", "ref": "IRGMC" },
+      "scope": "single_direction",
+      "claimKind": "attention",
+      "assertion": "R은 이미 확인된 사실, 직접 겪은 경험, 지금 바로 적용할 수 있는 구체적인 정보에서 생각을 시작하는 방향이다. 가능성을 넓히기 전 현재 무엇을 알고 있는지와 실제로 쓸 수 있는지를 먼저 확인하는 경향이 있다.",
+      "contexts": ["general"],
+      "scenarioRefs": [],
+      "requiredSignals": [
+        "representative_code",
+        "domain_scores",
+        "facet_scores"
+      ],
+      "evidenceFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-OPENNESS-INTELLECT-DISTINCTION"
+      ],
+      "independentSourceRefs": ["SRC-BFI2-2017", "SRC-OPENNESS-INTELLECT-2009"],
+      "evidenceStatus": "nuang_validation_required",
+      "evidenceGrade": "C",
+      "privacyScope": "self_only",
+      "riskDomains": ["none"],
+      "publicationState": "research_only",
+      "reviews": {
+        "personality_psychology": "not_started",
+        "psychometrics": "not_started",
+        "relationship_psychology": "not_started",
+        "clinical_safety": "not_started",
+        "plain_korean": "not_started",
+        "product": "not_started",
+        "design": "not_started"
+      }
+    },
+    {
+      "claimId": "IRGMC.general.definition.G",
+      "entity": { "kind": "profile", "ref": "IRGMC" },
+      "scope": "single_direction",
+      "claimKind": "attention",
+      "assertion": "G는 관계에서 문제가 생기면 어떤 일이 있었고 왜 생겼는지, 무엇을 바꾸면 풀리는지에 주의가 먼저 가는 방향이다. 상대 마음도 살피지만 생각의 출발점은 원인과 해결할 부분에 더 가깝다.",
+      "contexts": ["general"],
+      "scenarioRefs": [],
+      "requiredSignals": [
+        "representative_code",
+        "domain_scores",
+        "facet_scores"
+      ],
+      "evidenceFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION"
+      ],
+      "independentSourceRefs": ["SRC-IPC-2013", "SRC-INTENTION-BEHAVIOR-2016"],
+      "evidenceStatus": "nuang_validation_required",
+      "evidenceGrade": "C",
+      "privacyScope": "self_only",
+      "riskDomains": ["relationship_outcome"],
+      "publicationState": "research_only",
+      "reviews": {
+        "personality_psychology": "not_started",
+        "psychometrics": "not_started",
+        "relationship_psychology": "not_started",
+        "clinical_safety": "not_started",
+        "plain_korean": "not_started",
+        "product": "not_started",
+        "design": "not_started"
+      }
+    },
+    {
+      "claimId": "IRGMC.general.definition.M",
+      "entity": { "kind": "profile", "ref": "IRGMC" },
+      "scope": "single_direction",
+      "claimKind": "follow_through",
+      "assertion": "M은 일을 시작하고 이어가는 흐름이 현재의 흥미, 마감, 에너지, 주변 도움 같은 상황 조건에 더 민감한 방향이다. 조건이 맞을 때 집중이 빠르게 올라가고, 조건이 달라지면 실행 방식도 함께 바뀌는 경향이 있다.",
+      "contexts": ["general"],
+      "scenarioRefs": [],
+      "requiredSignals": [
+        "representative_code",
+        "domain_scores",
+        "facet_scores",
+        "current_state"
+      ],
+      "evidenceFindingRefs": [
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "independentSourceRefs": [
+        "SRC-SITUATION-CONTINGENCY-2007",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
+      "evidenceStatus": "nuang_validation_required",
+      "evidenceGrade": "C",
+      "privacyScope": "self_only",
+      "riskDomains": ["none"],
+      "publicationState": "research_only",
+      "reviews": {
+        "personality_psychology": "not_started",
+        "psychometrics": "not_started",
+        "relationship_psychology": "not_started",
+        "clinical_safety": "not_started",
+        "plain_korean": "not_started",
+        "product": "not_started",
+        "design": "not_started"
+      }
+    },
+    {
+      "claimId": "IRGMC.general.definition.C",
+      "entity": { "kind": "profile", "ref": "IRGMC" },
+      "scope": "single_direction",
+      "claimKind": "emotional_activation",
+      "assertion": "C는 불편한 일이 생겨도 걱정과 감정이 비교적 천천히 커지는 방향이다. 감정이 크게 올라오기 전 사실과 대응 방법을 살필 여유가 생기고, 겉으로도 차분한 반응이 이어지는 경향이 있다.",
+      "contexts": ["general"],
+      "scenarioRefs": [],
+      "requiredSignals": [
+        "representative_code",
+        "domain_scores",
+        "facet_scores",
+        "current_state"
+      ],
+      "evidenceFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION"
+      ],
+      "independentSourceRefs": ["SRC-BFI2-2017", "SRC-EMOTION-PROCESS-1998"],
+      "evidenceStatus": "nuang_validation_required",
+      "evidenceGrade": "C",
+      "privacyScope": "self_only",
+      "riskDomains": ["mental_health"],
+      "publicationState": "research_only",
+      "reviews": {
+        "personality_psychology": "not_started",
+        "psychometrics": "not_started",
+        "relationship_psychology": "not_started",
+        "clinical_safety": "not_started",
+        "plain_korean": "not_started",
+        "product": "not_started",
+        "design": "not_started"
+      }
+    },
+    {
+      "claimId": "IRGMC.general.profile.hypothesis",
+      "entity": { "kind": "profile", "ref": "IRGMC" },
+      "scope": "whole_profile",
+      "claimKind": "evidence_statement",
+      "assertion": "IRGMC는 혼자 생각을 정리한 뒤 확인된 사실에서 원인과 해결할 부분을 찾고, 그날의 조건에 맞춰 움직이며, 부담스러운 상황에서도 감정이 천천히 커지는 조합으로 연구한다.",
+      "contexts": ["general"],
+      "scenarioRefs": [],
+      "requiredSignals": [
+        "representative_code",
+        "domain_scores",
+        "facet_scores",
+        "response_history",
+        "current_state"
+      ],
+      "evidenceFindingRefs": [
+        "FND-WHOLE-TRAIT-DESCRIPTION-EXPLANATION",
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME"
+      ],
+      "independentSourceRefs": [
+        "SRC-WHOLE-TRAIT-2015",
+        "SRC-REALTIME-PERSON-SITUATION-2015"
+      ],
+      "evidenceStatus": "nuang_validation_required",
+      "evidenceGrade": "D",
+      "privacyScope": "self_only",
+      "riskDomains": ["none"],
+      "publicationState": "research_only",
+      "reviews": {
+        "personality_psychology": "not_started",
+        "psychometrics": "not_started",
+        "relationship_psychology": "not_started",
+        "clinical_safety": "not_started",
+        "plain_korean": "not_started",
+        "product": "not_started",
+        "design": "not_started"
+      }
+    }
+  ],
+  "chapterResearchQuestions": [
+    {
+      "chapterId": "overview",
+      "question": "다섯 방향이 함께 나타날 때 가장 먼저 보이는 핵심 모습은 무엇인가?"
+    },
+    {
+      "chapterId": "role_name_and_values",
+      "question": "‘단서로 답을 찾는 탐구자’라는 이름이 어떤 행동을 설명하고 어떤 오해를 만드는가?"
+    },
+    {
+      "chapterId": "five_code_positions",
+      "question": "I·R·G·M·C 각 방향과 세부 성향은 어떻게 구분되는가?"
+    },
+    {
+      "chapterId": "code_interactions",
+      "question": "다섯 방향의 조합이 단일 방향 설명을 넘어서는 증분 정보를 주는가?"
+    },
+    {
+      "chapterId": "first_thought_and_actual_response",
+      "question": "원인·해결을 먼저 생각해도 실제로는 어떻게 말하고 행동하는가?"
+    },
+    {
+      "chapterId": "daily_choice_and_change",
+      "question": "평소 선택·새 만남·계획 변화에서 무엇을 먼저 확인하는가?"
+    },
+    {
+      "chapterId": "family",
+      "question": "가족 역할과 의무를 걷어냈을 때 반복되는 생각과 행동은 무엇인가?"
+    },
+    {
+      "chapterId": "friend",
+      "question": "친구의 친숙도와 모임 크기에 따라 참여·연락·지원이 어떻게 달라지는가?"
+    },
+    {
+      "chapterId": "partner",
+      "question": "연인과의 갈등·지원·회복에서 원인 탐색과 감정 확인의 순서는 어떠한가?"
+    },
+    {
+      "chapterId": "person_of_interest",
+      "question": "호감과 불확실성이 생겨도 사실과 추측을 어떻게 구분하는가?"
+    },
+    {
+      "chapterId": "work_and_study",
+      "question": "규칙·재량·마감·자원이 실행 방식과 의견 표현을 어떻게 바꾸는가?"
+    },
+    {
+      "chapterId": "conflict_stress_and_recovery",
+      "question": "감정이 천천히 커지는 것과 회복 속도·방법은 어떻게 다른가?"
+    },
+    {
+      "chapterId": "strength_overuse_and_growth",
+      "question": "구체성·차분함·상황 적응이 도움이 되는 조건과 과해지는 조건은 무엇인가?"
+    },
+    {
+      "chapterId": "misunderstanding_and_communication",
+      "question": "무관심·수동성·창의성 부족으로 오해받지 않도록 무엇을 보여줘야 하는가?"
+    },
+    {
+      "chapterId": "neighbor_contrasts",
+      "question": "한 글자만 다른 5개 코드와 어떤 장면에서 가장 분명히 구분되는가?"
+    },
+    {
+      "chapterId": "evidence_and_method",
+      "question": "어떤 근거와 뉴앙 자료가 각 문장을 승인하거나 기각하는가?"
+    }
+  ],
+  "scenarioInventory": [
+    {
+      "scenarioId": "SCN-GENERAL-1",
+      "relationshipContext": "general",
+      "moment": "ordinary_choice",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-2",
+      "relationshipContext": "general",
+      "moment": "new_encounter",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-3",
+      "relationshipContext": "general",
+      "moment": "group_participation",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-4",
+      "relationshipContext": "general",
+      "moment": "plan_change",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-5",
+      "relationshipContext": "general",
+      "moment": "uncertainty",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-6",
+      "relationshipContext": "general",
+      "moment": "disagreement",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-7",
+      "relationshipContext": "general",
+      "moment": "support_requested",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-8",
+      "relationshipContext": "general",
+      "moment": "need_expression",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-9",
+      "relationshipContext": "general",
+      "moment": "boundary",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-10",
+      "relationshipContext": "general",
+      "moment": "success",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-11",
+      "relationshipContext": "general",
+      "moment": "setback",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-12",
+      "relationshipContext": "general",
+      "moment": "aftermath",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-1",
+      "relationshipContext": "family",
+      "moment": "ordinary_choice",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-2",
+      "relationshipContext": "family",
+      "moment": "new_encounter",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-3",
+      "relationshipContext": "family",
+      "moment": "group_participation",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-4",
+      "relationshipContext": "family",
+      "moment": "plan_change",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-5",
+      "relationshipContext": "family",
+      "moment": "uncertainty",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-6",
+      "relationshipContext": "family",
+      "moment": "disagreement",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-7",
+      "relationshipContext": "family",
+      "moment": "support_requested",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-8",
+      "relationshipContext": "family",
+      "moment": "need_expression",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-9",
+      "relationshipContext": "family",
+      "moment": "boundary",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-10",
+      "relationshipContext": "family",
+      "moment": "success",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-11",
+      "relationshipContext": "family",
+      "moment": "setback",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-12",
+      "relationshipContext": "family",
+      "moment": "aftermath",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-1",
+      "relationshipContext": "friend",
+      "moment": "ordinary_choice",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-2",
+      "relationshipContext": "friend",
+      "moment": "new_encounter",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-3",
+      "relationshipContext": "friend",
+      "moment": "group_participation",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-4",
+      "relationshipContext": "friend",
+      "moment": "plan_change",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-5",
+      "relationshipContext": "friend",
+      "moment": "uncertainty",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-6",
+      "relationshipContext": "friend",
+      "moment": "disagreement",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-7",
+      "relationshipContext": "friend",
+      "moment": "support_requested",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-8",
+      "relationshipContext": "friend",
+      "moment": "need_expression",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-9",
+      "relationshipContext": "friend",
+      "moment": "boundary",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-10",
+      "relationshipContext": "friend",
+      "moment": "success",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-11",
+      "relationshipContext": "friend",
+      "moment": "setback",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-12",
+      "relationshipContext": "friend",
+      "moment": "aftermath",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-1",
+      "relationshipContext": "partner",
+      "moment": "ordinary_choice",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-2",
+      "relationshipContext": "partner",
+      "moment": "new_encounter",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-3",
+      "relationshipContext": "partner",
+      "moment": "group_participation",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-4",
+      "relationshipContext": "partner",
+      "moment": "plan_change",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-5",
+      "relationshipContext": "partner",
+      "moment": "uncertainty",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-6",
+      "relationshipContext": "partner",
+      "moment": "disagreement",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-7",
+      "relationshipContext": "partner",
+      "moment": "support_requested",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-8",
+      "relationshipContext": "partner",
+      "moment": "need_expression",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-9",
+      "relationshipContext": "partner",
+      "moment": "boundary",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-10",
+      "relationshipContext": "partner",
+      "moment": "success",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-11",
+      "relationshipContext": "partner",
+      "moment": "setback",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-12",
+      "relationshipContext": "partner",
+      "moment": "aftermath",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-1",
+      "relationshipContext": "person_of_interest",
+      "moment": "ordinary_choice",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "relationshipContext": "person_of_interest",
+      "moment": "new_encounter",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "relationshipContext": "person_of_interest",
+      "moment": "group_participation",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "relationshipContext": "person_of_interest",
+      "moment": "plan_change",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-5",
+      "relationshipContext": "person_of_interest",
+      "moment": "uncertainty",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "relationshipContext": "person_of_interest",
+      "moment": "disagreement",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "relationshipContext": "person_of_interest",
+      "moment": "support_requested",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-8",
+      "relationshipContext": "person_of_interest",
+      "moment": "need_expression",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-9",
+      "relationshipContext": "person_of_interest",
+      "moment": "boundary",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "relationshipContext": "person_of_interest",
+      "moment": "success",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "relationshipContext": "person_of_interest",
+      "moment": "setback",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "relationshipContext": "person_of_interest",
+      "moment": "aftermath",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-1",
+      "relationshipContext": "work",
+      "moment": "ordinary_choice",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-2",
+      "relationshipContext": "work",
+      "moment": "new_encounter",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-3",
+      "relationshipContext": "work",
+      "moment": "group_participation",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-4",
+      "relationshipContext": "work",
+      "moment": "plan_change",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-5",
+      "relationshipContext": "work",
+      "moment": "uncertainty",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-6",
+      "relationshipContext": "work",
+      "moment": "disagreement",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-7",
+      "relationshipContext": "work",
+      "moment": "support_requested",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-8",
+      "relationshipContext": "work",
+      "moment": "need_expression",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-9",
+      "relationshipContext": "work",
+      "moment": "boundary",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-10",
+      "relationshipContext": "work",
+      "moment": "success",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-11",
+      "relationshipContext": "work",
+      "moment": "setback",
+      "authoringStatus": "not_started"
+    },
+    {
+      "scenarioId": "SCN-WORK-12",
+      "relationshipContext": "work",
+      "moment": "aftermath",
+      "authoringStatus": "not_started"
+    }
+  ],
+  "oneLetterNeighbors": ["ERGMC", "INGMC", "IRAMC", "IRGKC", "IRGMQ"],
+  "completedAuthoringBatches": [
+    "IRGMC-P0: 일상·연인·마음에 드는 사람 우선 상황",
+    "IRGMC-P1: 가족·친구·일과 공부 우선 상황",
+    "IRGMC-P2: 남은 공통 상황",
+    "IRGMC-LONGFORM: 16개 장 50,000~60,000자 연구 원문"
+  ],
+  "publicationBlockers": [
+    "인지 인터뷰 전",
+    "정량 파일럿 전",
+    "다섯 인접 코드 blind 비교 전",
+    "성격심리·심리측정·관계심리·임상안전·쉬운 한국어·제품·디자인 검토 전"
+  ]
+}

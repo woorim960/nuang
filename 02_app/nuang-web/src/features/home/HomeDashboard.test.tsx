@@ -209,7 +209,7 @@ describe("HomeDashboard", () => {
       "/feed?posted=6af1b7c2-b8e1-4ee5-9c68-76b92bda0801",
     );
     expect(
-      screen.getByRole("button", { name: /코드별 관점 펼치기/ }),
+      screen.getByRole("button", { name: /코드별 선택 펼치기/ }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /좋아요/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /공유/ })).toBeInTheDocument();
@@ -236,7 +236,7 @@ describe("HomeDashboard", () => {
         codePerspectives: [
           {
             code: "INGMC",
-            name: "새 길을 찾는 탐구자",
+            name: "새 가능성을 찾는 탐험가",
             options: [
               {
                 label: "사람을 만나 함께 보낸다",
@@ -290,7 +290,7 @@ describe("HomeDashboard", () => {
 
     expect(await screen.findByText("1명 참여")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /코드별 관점 펼치기/ }),
+      screen.getByRole("button", { name: /코드별 선택 펼치기/ }),
     ).toBeInTheDocument();
   });
 

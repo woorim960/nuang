@@ -1,0 +1,863 @@
+{
+  "contractVersion": "nuang-trait-map-axis-amendment-impact.v2",
+  "reportId": "TRAIT-MAP-AXIS-AMENDMENT-IMPACT-CAB-01.0.1",
+  "sourceAmendmentManifestId": "TRAIT-MAP-AXIS-DECISION-AMENDMENT-CAB-01.0.1",
+  "status": "IMPACT_AUDIT_PASSED_SAFE_TO_PREPARE_CORRECTED_DRAFT",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-23T00:00:00.000Z",
+  "summary": {
+    "amendments": 2,
+    "currentCanonicalVariants": 713,
+    "proposedCanonicalVariants": 705,
+    "removedRedundantVariants": 8,
+    "currentProfileClaimRefs": 9216,
+    "proposedProfileClaimRefs": 9216,
+    "impactedProfileRefs": 64,
+    "intendedCollapsedNeighborDifferences": 32,
+    "unexpectedNeighborChanges": 0,
+    "expertApprovedAmendments": 0,
+    "customerApprovedContent": 0
+  },
+  "interpretation": [
+    "정규 variant 수는 713개에서 705개로 줄지만 32개 프로필의 288개 설명 슬롯은 그대로 유지된다.",
+    "일상 선택 attention에서 G/A 한 글자 차이 16쌍, 새 만남 response에서 C/Q 한 글자 차이 16쌍만 의도적으로 같은 claim을 참조하게 된다.",
+    "두 claim 밖의 축 차이와 콘텐츠 참조는 바뀌지 않는다.",
+    "현재 결과는 구조 영향 감사이며 축 amendment의 전문가 승인이 아니다."
+  ],
+  "amendments": [
+    {
+      "amendmentId": "AX-AMEND-CAB-01-01",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "removeAxes": ["RO"],
+      "screeningIssueCodes": ["PSY_CONTEXT_OVERGENERALIZATION"],
+      "decision": "propose_remove_axis_pending_independent_review",
+      "rationale": "RO는 관계 문제에서 원인·해결과 상대 마음·관계 변화 중 어디에 먼저 관심이 가는지를 구분한다. 일반 선택 원문의 문제·마음 단어는 통제된 G/A 차이가 아니며 OE·SM과 프로필별 서술 차이가 섞인 단서다.",
+      "requiredFollowUp": "함께하는 사람에게 영향이 있는 선택을 별도 관계 시나리오로 설계하고, 이 일반 선택 attention claim은 OE·SM만 사용한다.",
+      "currentAxes": ["OE", "RO", "SM"],
+      "proposedAxes": ["OE", "SM"],
+      "currentCanonicalVariants": 8,
+      "proposedCanonicalVariants": 4,
+      "mergeGroups": [
+        {
+          "proposedAxisSignature": "OE=N|SM=K",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-K",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-K"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-n-ro-a-sm-k",
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-n-ro-g-sm-k"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-K:d8764aae08fe",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-K:d8764aae08fe",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-K:f711aecbdfef"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        },
+        {
+          "proposedAxisSignature": "OE=N|SM=M",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-M",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-M"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-n-ro-a-sm-m",
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-n-ro-g-sm-m"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-M:50a4927409d9",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-M:34c14ec77b3f"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        },
+        {
+          "proposedAxisSignature": "OE=R|SM=K",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-K",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-K"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-r-ro-a-sm-k",
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-r-ro-g-sm-k"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-K:1954ea7f5e66",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-K:b2a7d470581f"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        },
+        {
+          "proposedAxisSignature": "OE=R|SM=M",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-M",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-M"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-r-ro-a-sm-m",
+            "trait-map.v2.can-scn-general-ordinary-choice-attention-oe-r-ro-g-sm-m"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-M:19af78fe9782",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-M:493b5ba6fbb3",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-M:493b5ba6fbb3"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        }
+      ],
+      "profileReferenceImpact": [
+        {
+          "code": "ENAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-A-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-K",
+          "proposedAxisSignature": "OE=N|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-M",
+          "proposedAxisSignature": "OE=N|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-A-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-K",
+          "proposedAxisSignature": "OE=R|SM=K",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-M",
+          "proposedAxisSignature": "OE=R|SM=M",
+          "claimSlotPreserved": true
+        }
+      ],
+      "removedAxisNeighborChecks": [
+        {
+          "axisRef": "RO",
+          "leftCode": "ENAKC",
+          "rightCode": "ENGKC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "ENAKQ",
+          "rightCode": "ENGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "ENAMC",
+          "rightCode": "ENGMC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "ENAMQ",
+          "rightCode": "ENGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "ERAKC",
+          "rightCode": "ERGKC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "ERAKQ",
+          "rightCode": "ERGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "ERAMC",
+          "rightCode": "ERGMC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "ERAMQ",
+          "rightCode": "ERGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "INAKC",
+          "rightCode": "INGKC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "INAKQ",
+          "rightCode": "INGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "INAMC",
+          "rightCode": "INGMC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "INAMQ",
+          "rightCode": "INGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "IRAKC",
+          "rightCode": "IRGKC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "IRAKQ",
+          "rightCode": "IRGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "IRAMC",
+          "rightCode": "IRGMC",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "RO",
+          "leftCode": "IRAMQ",
+          "rightCode": "IRGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        }
+      ],
+      "unexpectedChanges": [],
+      "applicationState": "not_applied_pending_independent_review"
+    },
+    {
+      "amendmentId": "AX-AMEND-CAB-01-02",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "removeAxes": ["ER"],
+      "screeningIssueCodes": [
+        "MET_ITEM_CLAIM_MISMATCH",
+        "MET_AXIS_CONTAMINATION"
+      ],
+      "decision": "propose_remove_axis_pending_independent_review",
+      "rationale": "ER은 불편한 상황에서 걱정과 감정이 커지는 상대적 속도다. 새 만남 원문의 차분·긴장·빠른 참여는 정서 활성 속도를 통제해 비교한 결과가 아니라 발화·참여 시작 방식과 섞인 단서다.",
+      "requiredFollowUp": "새 만남에서 실제 정서 활성 속도를 묻는 별도 문항·claim을 설계하기 전까지 response claim은 SE·OE만 사용한다.",
+      "currentAxes": ["SE", "OE", "ER"],
+      "proposedAxes": ["SE", "OE"],
+      "currentCanonicalVariants": 8,
+      "proposedCanonicalVariants": 4,
+      "mergeGroups": [
+        {
+          "proposedAxisSignature": "SE=E|OE=N",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-C",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-Q"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-new-encounter-response-se-e-oe-n-er-c",
+            "trait-map.v2.can-scn-general-new-encounter-response-se-e-oe-n-er-q"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-C:075847044b79",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-C:101f055f3929",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-Q:101f055f3929"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        },
+        {
+          "proposedAxisSignature": "SE=E|OE=R",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-C",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-Q"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-new-encounter-response-se-e-oe-r-er-c",
+            "trait-map.v2.can-scn-general-new-encounter-response-se-e-oe-r-er-q"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-C:dc02424a07f3",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-Q:fa98a76e8f47"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        },
+        {
+          "proposedAxisSignature": "SE=I|OE=N",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-C",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-Q"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-new-encounter-response-se-i-oe-n-er-c",
+            "trait-map.v2.can-scn-general-new-encounter-response-se-i-oe-n-er-q"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-C:ae0db578a2a1",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-Q:d650dab1f300"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        },
+        {
+          "proposedAxisSignature": "SE=I|OE=R",
+          "currentCanonicalVariantIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-C",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-Q"
+          ],
+          "currentContentKeys": [
+            "trait-map.v2.can-scn-general-new-encounter-response-se-i-oe-r-er-c",
+            "trait-map.v2.can-scn-general-new-encounter-response-se-i-oe-r-er-q"
+          ],
+          "sourceUnitIds": [
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-C:445a4c66f859",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-Q:445a4c66f859",
+            "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-Q:7e60efe35e4c"
+          ],
+          "mergeState": "meaning_preserving_merge_required",
+          "proposedPublicationState": "research_only"
+        }
+      ],
+      "profileReferenceImpact": [
+        {
+          "code": "ENAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-C",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-C",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-C",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-C",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ENGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-C",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-C",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-C",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-C",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "ERGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=E|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-C",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-C",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-C",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-C",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "INGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=N",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-C",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-C",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRAMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGKC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-C",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGKQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGMC",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-C",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        },
+        {
+          "code": "IRGMQ",
+          "currentCanonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R-ER-Q",
+          "proposedAxisSignature": "SE=I|OE=R",
+          "claimSlotPreserved": true
+        }
+      ],
+      "removedAxisNeighborChecks": [
+        {
+          "axisRef": "ER",
+          "leftCode": "ENAKC",
+          "rightCode": "ENAKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "ENAMC",
+          "rightCode": "ENAMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "ENGKC",
+          "rightCode": "ENGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "ENGMC",
+          "rightCode": "ENGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "ERAKC",
+          "rightCode": "ERAKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "ERAMC",
+          "rightCode": "ERAMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "ERGKC",
+          "rightCode": "ERGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "ERGMC",
+          "rightCode": "ERGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "INAKC",
+          "rightCode": "INAKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "INAMC",
+          "rightCode": "INAMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "INGKC",
+          "rightCode": "INGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "INGMC",
+          "rightCode": "INGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "IRAKC",
+          "rightCode": "IRAKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "IRAMC",
+          "rightCode": "IRAMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "IRGKC",
+          "rightCode": "IRGKQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        },
+        {
+          "axisRef": "ER",
+          "leftCode": "IRGMC",
+          "rightCode": "IRGMQ",
+          "currentCanonicalRefsDiffer": true,
+          "proposedCanonicalSignatureMatches": true,
+          "state": "intended_claim_difference_removed"
+        }
+      ],
+      "unexpectedChanges": [],
+      "applicationState": "not_applied_pending_independent_review"
+    }
+  ],
+  "nextGate": {
+    "name": "SEVEN_ROLE_AXIS_AMENDMENT_REVIEW",
+    "actions": [
+      "성격심리·심리측정·연구방법 역할이 두 축 제거 근거를 독립 검토한다.",
+      "승인 시 두 claim의 canonical 문단을 8개에서 4개로 의미 보존 병합한다.",
+      "705개 원장과 32개 프로필 재조합을 다시 생성한다.",
+      "CAB-01 P0 수정 문장을 새 구조에서 작성한다."
+    ]
+  }
+}

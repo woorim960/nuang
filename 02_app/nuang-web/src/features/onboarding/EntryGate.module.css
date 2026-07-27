@@ -39,8 +39,8 @@
   place-items: center;
   border-radius: 1rem;
   color: var(--surface);
-  font-size: 1rem;
-  font-weight: 850;
+  font-size: var(--nu-text-body);
+  font-weight: var(--nu-weight-heavy);
   background: var(--primary);
   box-shadow: 0 0.8rem 1.8rem
     color-mix(in srgb, var(--primary) 25%, transparent);
@@ -49,16 +49,16 @@
 .wordmark {
   margin-top: 0.75rem;
   color: var(--primary-strong);
-  font-size: 0.82rem;
-  font-weight: 820;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-heavy);
   letter-spacing: 0.18em;
 }
 
 .status {
   margin-top: 0.65rem;
   color: var(--muted);
-  font-size: 0.76rem;
-  font-weight: 620;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
 }
 
 @keyframes entry-orbit {

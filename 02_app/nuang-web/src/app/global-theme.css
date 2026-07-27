@@ -1,0 +1,344 @@
+/*
+ * NUANG global theme
+ *
+ * 모든 실제 앱 화면이 공유하는 단일 디자인 토큰 파일입니다.
+ * 화면별 CSS에는 레이아웃만 두고, 글자·색상·선·모서리·그림자·동작은
+ * 이 파일의 의미 기반 변수를 사용합니다.
+ */
+
+:root {
+  /* Font family */
+  --nu-font-sans:
+    "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont,
+    "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+
+  /* Mobile-first type scale: iOS 17pt / Material body 16sp 기반 */
+  --nu-text-caption: 0.8125rem;
+  --nu-text-label: 0.875rem;
+  --nu-text-body-sm: 0.9375rem;
+  --nu-text-callout: 1rem;
+  --nu-text-body: 1.0625rem;
+  --nu-text-body-lg: 1.125rem;
+  --nu-text-title-sm: 1.1875rem;
+  --nu-text-title: 1.3125rem;
+  --nu-text-title-lg: 1.5625rem;
+  --nu-text-display-sm: 1.75rem;
+  --nu-text-display: 2.125rem;
+  --nu-text-display-lg: 2.5rem;
+  --nu-text-fluid-title-sm: clamp(1.25rem, 5.5vw, 1.5rem);
+  --nu-text-fluid-title: clamp(1.4rem, 6.2vw, 1.7rem);
+  --nu-text-fluid-title-lg: clamp(1.5rem, 6.5vw, 1.9rem);
+  --nu-text-fluid-display-sm: clamp(1.75rem, 7vw, 2.2rem);
+  --nu-text-fluid-display: clamp(1.9rem, 8vw, 2.5rem);
+  --nu-text-fluid-code: clamp(2.25rem, 10vw, 3rem);
+  --nu-text-code-block: clamp(1rem, 4.8vw, 1.1875rem);
+
+  --nu-leading-caption: 1.45;
+  --nu-leading-label: 1.5;
+  --nu-leading-body-sm: 1.58;
+  --nu-leading-callout: 1.58;
+  --nu-leading-body: 1.6;
+  --nu-leading-title: 1.4;
+  --nu-leading-display: 1.18;
+
+  --nu-weight-regular: 400;
+  --nu-weight-medium: 520;
+  --nu-weight-semibold: 650;
+  --nu-weight-bold: 760;
+  --nu-weight-heavy: 840;
+
+  /* Neutral palette */
+  --nu-neutral-0: #fff;
+  --nu-neutral-25: #fcfbfd;
+  --nu-neutral-50: #f9f8fa;
+  --nu-neutral-75: #f6f5f7;
+  --nu-neutral-100: #f2f1f4;
+  --nu-neutral-150: #ecebf0;
+  --nu-neutral-200: #e3e1e7;
+  --nu-neutral-300: #d2cfd8;
+  --nu-neutral-400: #aaa6b1;
+  --nu-neutral-500: #85818c;
+  --nu-neutral-600: #6f6b76;
+  --nu-neutral-700: #55515b;
+  --nu-neutral-800: #37343d;
+  --nu-neutral-900: #222028;
+  --nu-neutral-950: #17151c;
+
+  /* Brand palette */
+  --nu-brand-50: #faf9ff;
+  --nu-brand-100: #f0edff;
+  --nu-brand-200: #ded8ff;
+  --nu-brand-300: #c8bff5;
+  --nu-brand-400: #9f91e9;
+  --nu-brand-500: #7c6ddd;
+  --nu-brand-600: #6657d9;
+  --nu-brand-700: #5144b5;
+  --nu-brand-800: #3e338f;
+  --nu-brand-900: #2f276b;
+
+  /* Functional palettes */
+  --nu-reaction-50: #fff0f3;
+  --nu-reaction-100: #ffe2e8;
+  --nu-reaction-300: #eaa0ad;
+  --nu-reaction-500: #c94b61;
+  --nu-reaction-700: #963548;
+
+  --nu-play-50: #fff8e9;
+  --nu-play-100: #f8e8c8;
+  --nu-play-300: #ddb978;
+  --nu-play-500: #aa782c;
+  --nu-play-700: #7c571e;
+
+  --nu-community-50: #edf8f4;
+  --nu-community-100: #d7efe7;
+  --nu-community-300: #8bc8b6;
+  --nu-community-500: #438f7c;
+  --nu-community-700: #306e60;
+
+  --nu-info-50: #eef5ff;
+  --nu-info-100: #dceaff;
+  --nu-info-300: #90b9eb;
+  --nu-info-500: #4b89d0;
+  --nu-info-700: #2f6daf;
+
+  --nu-warm-50: #fff2ed;
+  --nu-warm-100: #ffddd3;
+  --nu-warm-300: #f39b7e;
+  --nu-warm-500: #df6236;
+  --nu-warm-700: #aa431f;
+
+  /* Semantic colors: 대부분의 테마 변경은 이 영역만 수정합니다. */
+  --nu-color-app-bg: var(--nu-neutral-75);
+  --nu-color-surface: var(--nu-neutral-0);
+  --nu-color-surface-raised: var(--nu-neutral-25);
+  --nu-color-surface-soft: var(--nu-neutral-50);
+  --nu-color-surface-muted: var(--nu-neutral-100);
+  --nu-color-overlay: rgb(var(--nu-rgb-neutral-950) / 44%);
+
+  --nu-color-text: var(--nu-neutral-900);
+  --nu-color-text-strong: var(--nu-neutral-950);
+  --nu-color-text-secondary: var(--nu-neutral-700);
+  --nu-color-text-muted: var(--nu-neutral-600);
+  --nu-color-text-subtle: var(--nu-neutral-500);
+  --nu-color-text-on-accent: var(--nu-neutral-0);
+
+  --nu-color-border-soft: var(--nu-neutral-100);
+  --nu-color-border: var(--nu-neutral-150);
+  --nu-color-border-strong: var(--nu-neutral-200);
+
+  --nu-color-brand-surface: var(--nu-brand-50);
+  --nu-color-brand-surface-strong: var(--nu-brand-100);
+  --nu-color-brand-border: var(--nu-brand-300);
+  --nu-color-brand-soft: var(--nu-brand-400);
+  --nu-color-brand-muted: var(--nu-brand-400);
+  --nu-color-brand-action: var(--nu-brand-600);
+  --nu-color-brand-strong: var(--nu-brand-700);
+
+  --nu-color-reaction: var(--nu-reaction-500);
+  --nu-color-reaction-soft: var(--nu-reaction-50);
+  --nu-color-play: var(--nu-play-700);
+  --nu-color-play-soft: var(--nu-play-50);
+  --nu-color-play-border: var(--nu-play-100);
+  --nu-color-community: var(--nu-community-700);
+  --nu-color-community-soft: var(--nu-community-50);
+  --nu-color-community-border: var(--nu-community-100);
+  --nu-color-info: var(--nu-info-700);
+  --nu-color-info-soft: var(--nu-info-50);
+  --nu-color-warm: var(--nu-warm-500);
+  --nu-color-warm-soft: var(--nu-warm-50);
+  --nu-color-danger: #d83a31;
+  --nu-color-danger-soft: var(--nu-reaction-50);
+  --nu-color-success: #218a5a;
+  --nu-color-success-soft: var(--nu-community-50);
+  --nu-color-warning: var(--nu-play-500);
+  --nu-color-warning-soft: var(--nu-play-50);
+  --nu-color-focus: var(--nu-brand-500);
+  --nu-color-selection: var(--nu-brand-200);
+  --nu-color-surface-translucent: rgb(var(--nu-rgb-neutral-0) / 88%);
+
+  /* Official sign-in provider colors */
+  --nu-provider-kakao-bg: #fee500;
+  --nu-provider-kakao-text: #191919;
+  --nu-provider-google-border: #dadce0;
+  --nu-provider-google-text: #1f1f1f;
+  --nu-provider-google-blue: #4285f4;
+  --nu-provider-google-green: #34a853;
+  --nu-provider-google-yellow: #fbbc05;
+  --nu-provider-google-red: #ea4335;
+  --nu-provider-naver-bg: #03c75a;
+  --nu-provider-naver-text: #fff;
+
+  /* RGB channels for transparent surfaces and shadows */
+  --nu-rgb-neutral-0: 255 255 255;
+  --nu-rgb-neutral-950: 23 21 28;
+  --nu-rgb-brand: 102 87 217;
+  --nu-rgb-reaction: 201 75 97;
+  --nu-rgb-play: 124 87 30;
+  --nu-rgb-community: 48 110 96;
+  --nu-rgb-info: 47 109 175;
+  --nu-rgb-warm: 223 98 54;
+
+  /* Layout, shape, elevation and motion */
+  --nu-space-1: 0.25rem;
+  --nu-space-2: 0.5rem;
+  --nu-space-3: 0.75rem;
+  --nu-space-4: 1rem;
+  --nu-space-5: 1.25rem;
+  --nu-space-6: 1.5rem;
+  --nu-space-8: 2rem;
+  --nu-page-gutter: 1rem;
+  --nu-content-width: 430px;
+  --nu-touch-min: 44px;
+  /*
+   * Bottom navigation
+   * - 콘텐츠 영역 64px와 기기 안전영역을 분리해 아이콘·라벨의 중심이 흔들리지 않게 합니다.
+   * - 전체 높이는 64px + 홈 인디케이터 영역이며, 안전영역이 없는 기기는 64px입니다.
+   */
+  --nu-bottom-nav-content-height: 64px;
+  --nu-bottom-nav-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --nu-bottom-nav-total-height: calc(
+    var(--nu-bottom-nav-content-height) + var(--nu-bottom-nav-safe-area-bottom)
+  );
+  --nu-bottom-nav-content-clearance: 18px;
+  --nu-page-bottom-with-nav: calc(
+    var(--nu-bottom-nav-total-height) + var(--nu-bottom-nav-content-clearance)
+  );
+  --nu-bottom-nav-item-gap: 3px;
+  --nu-bottom-nav-icon-size: 28px;
+  --nu-bottom-nav-primary-size: 58px;
+  --nu-bottom-nav-primary-label-gap: 7px;
+  --nu-bottom-nav-primary-active-bg: var(--nu-color-brand-surface-strong);
+  --nu-bottom-nav-primary-active-fg: var(--nu-color-brand-action);
+  --nu-bottom-nav-primary-idle-bg: var(--nu-neutral-75);
+  --nu-bottom-nav-primary-idle-fg: var(--nu-neutral-500);
+  --nu-radius-sm: 8px;
+  --nu-radius-md: 12px;
+  --nu-radius-lg: 16px;
+  --nu-radius-xl: 22px;
+  --nu-radius-pill: 999px;
+  --nu-shadow-soft: 0 0.75rem 2rem rgb(var(--nu-rgb-brand) / 9%);
+  --nu-shadow-raised: 0 1rem 2.5rem rgb(var(--nu-rgb-neutral-950) / 10%);
+  --nu-shadow-floating: 0 0.55rem 1.4rem rgb(var(--nu-rgb-brand) / 15%);
+  --nu-shadow-nav: 0 -0.5rem 1.5rem rgb(var(--nu-rgb-neutral-950) / 4%);
+  --nu-shadow-sheet: 0 1.5rem 4rem rgb(var(--nu-rgb-neutral-950) / 20%);
+  --nu-shadow-brand-button:
+    0 0.5rem 1.4rem rgb(var(--nu-rgb-brand) / 12%),
+    inset 0 0 0 1px var(--nu-brand-200);
+  --nu-shadow-community: 0 0.45rem 1.15rem rgb(var(--nu-rgb-community) / 14%);
+  --nu-shadow-admin-subtle: 0 1px 2px rgb(var(--nu-rgb-neutral-950) / 3%);
+  --nu-shadow-admin-menu: 0 1.125rem 2.25rem
+    rgb(var(--nu-rgb-neutral-950) / 12%);
+  --nu-shadow-admin-dialog: 0 1.5rem 4.375rem
+    rgb(var(--nu-rgb-neutral-950) / 24%);
+  --nu-shadow-admin-brand: 0 0.5rem 1.375rem rgb(var(--nu-rgb-brand) / 22%);
+  --nu-shadow-success-ring: 0 0 0 4px rgb(var(--nu-rgb-community) / 11%);
+  --nu-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nu-duration-fast: 160ms;
+  --nu-duration-normal: 240ms;
+
+  /* Character and axis colors */
+  --nu-color-flame: #e9511d;
+  --nu-color-sun: #f6ae24;
+  --nu-color-water: #2f7de1;
+  --nu-color-forest: #36a06f;
+
+  /* Backward-compatible aliases. New code should use --nu-* variables. */
+  --background: var(--nu-color-app-bg);
+  --foreground: var(--nu-color-text);
+  --muted: var(--nu-color-text-muted);
+  --surface: var(--nu-color-surface);
+  --surface-soft: var(--nu-color-brand-surface-strong);
+  --line: var(--nu-color-border-strong);
+  --primary: var(--nu-color-brand-action);
+  --primary-strong: var(--nu-color-brand-strong);
+  --reaction: var(--nu-color-reaction);
+  --reaction-soft: var(--nu-color-reaction-soft);
+  --play: var(--nu-color-play);
+  --play-strong: var(--nu-color-play);
+  --play-soft: var(--nu-color-play-soft);
+  --play-line: var(--nu-color-play-border);
+  --conversation: var(--nu-color-community);
+  --conversation-strong: var(--nu-color-community);
+  --conversation-soft: var(--nu-color-community-soft);
+  --conversation-line: var(--nu-color-community-border);
+  --flame: var(--nu-color-flame);
+  --sun: var(--nu-color-sun);
+  --water: var(--nu-color-water);
+  --forest: var(--nu-color-forest);
+  --danger: var(--nu-color-danger);
+  --success: var(--nu-color-success);
+  --shadow-soft: var(--nu-shadow-soft);
+}
+
+@theme inline {
+  --color-background: var(--nu-color-app-bg);
+  --color-foreground: var(--nu-color-text);
+  --color-muted: var(--nu-color-text-muted);
+  --color-surface: var(--nu-color-surface);
+  --color-surface-soft: var(--nu-color-brand-surface-strong);
+  --color-line: var(--nu-color-border-strong);
+  --color-primary: var(--nu-color-brand-action);
+  --color-primary-strong: var(--nu-color-brand-strong);
+  --color-reaction: var(--nu-color-reaction);
+  --color-reaction-soft: var(--nu-color-reaction-soft);
+  --color-play: var(--nu-color-play);
+  --color-play-strong: var(--nu-color-play);
+  --color-play-soft: var(--nu-color-play-soft);
+  --color-conversation: var(--nu-color-community);
+  --color-conversation-strong: var(--nu-color-community);
+  --color-conversation-soft: var(--nu-color-community-soft);
+  --color-danger: var(--nu-color-danger);
+  --color-success: var(--nu-color-success);
+  --color-flame: var(--nu-color-flame);
+  --color-sun: var(--nu-color-sun);
+  --color-water: var(--nu-color-water);
+  --color-forest: var(--nu-color-forest);
+  --color-white: var(--nu-color-surface);
+  --color-black: var(--nu-color-text-strong);
+
+  --font-sans: var(--nu-font-sans);
+  --text-xs: var(--nu-text-caption);
+  --text-xs--line-height: var(--nu-leading-caption);
+  --text-caption: var(--nu-text-caption);
+  --text-caption--line-height: var(--nu-leading-caption);
+  --text-label: var(--nu-text-label);
+  --text-label--line-height: var(--nu-leading-label);
+  --text-sm: var(--nu-text-body-sm);
+  --text-sm--line-height: var(--nu-leading-body-sm);
+  --text-callout: var(--nu-text-callout);
+  --text-callout--line-height: var(--nu-leading-callout);
+  --text-base: var(--nu-text-body);
+  --text-base--line-height: var(--nu-leading-body);
+  --text-lg: var(--nu-text-title-sm);
+  --text-lg--line-height: var(--nu-leading-title);
+  --text-xl: var(--nu-text-title);
+  --text-xl--line-height: var(--nu-leading-title);
+  --text-2xl: var(--nu-text-title-lg);
+  --text-2xl--line-height: var(--nu-leading-title);
+  --text-3xl: var(--nu-text-display-sm);
+  --text-3xl--line-height: var(--nu-leading-display);
+  --text-4xl: var(--nu-text-display);
+  --text-4xl--line-height: var(--nu-leading-display);
+  --text-display-lg: var(--nu-text-display-lg);
+  --text-display-lg--line-height: var(--nu-leading-display);
+
+  --radius-sm: var(--nu-radius-sm);
+  --radius-md: var(--nu-radius-md);
+  --radius-lg: var(--nu-radius-lg);
+  --radius-xl: var(--nu-radius-xl);
+  --shadow-sm: var(--nu-shadow-soft);
+  --shadow-md: var(--nu-shadow-raised);
+  --shadow-floating: var(--nu-shadow-floating);
+  --shadow-nav: var(--nu-shadow-nav);
+  --shadow-sheet: var(--nu-shadow-sheet);
+  --shadow-brand-button: var(--nu-shadow-brand-button);
+  --shadow-community: var(--nu-shadow-community);
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --nu-color-text-muted: var(--nu-neutral-700);
+    --nu-color-text-subtle: var(--nu-neutral-600);
+    --nu-color-border: var(--nu-neutral-300);
+  }
+}

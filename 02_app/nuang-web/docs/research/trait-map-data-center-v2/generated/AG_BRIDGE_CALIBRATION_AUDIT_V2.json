@@ -1,0 +1,105 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "AG-BRIDGE-CALIBRATION-AUDIT.0.1",
+  "status": "STRUCTURAL_CALIBRATION_PASSED_HUMAN_VALIDATION_REQUIRED",
+  "axis": "RO_relational_attention",
+  "pairs": [
+    {
+      "baseAnchor": "ENAKQ",
+      "derivedCode": "ENGKQ",
+      "changedLetters": "A/G",
+      "scenarioCount": 72,
+      "claimCount": 288,
+      "inheritedClaimCount": 248,
+      "axisOverrideClaimCount": 40,
+      "overrideScenarioIds": [
+        "SCN-GENERAL-6",
+        "SCN-PERSON-OF-INTEREST-7",
+        "SCN-WORK-6",
+        "SCN-GENERAL-7",
+        "SCN-FAMILY-6",
+        "SCN-FAMILY-7",
+        "SCN-FRIEND-6",
+        "SCN-FRIEND-7",
+        "SCN-PARTNER-6",
+        "SCN-PARTNER-7"
+      ],
+      "copyAudit": "288/288",
+      "longformCharacters": 72413,
+      "chapterCount": 16,
+      "neighborClaimCount": 20,
+      "customerVisibleClaims": 0
+    },
+    {
+      "baseAnchor": "IRGMC",
+      "derivedCode": "IRAMC",
+      "changedLetters": "G/A",
+      "scenarioCount": 72,
+      "claimCount": 288,
+      "inheritedClaimCount": 248,
+      "axisOverrideClaimCount": 40,
+      "overrideScenarioIds": [
+        "SCN-GENERAL-6",
+        "SCN-PERSON-OF-INTEREST-7",
+        "SCN-WORK-6",
+        "SCN-GENERAL-7",
+        "SCN-FAMILY-6",
+        "SCN-FAMILY-7",
+        "SCN-FRIEND-6",
+        "SCN-FRIEND-7",
+        "SCN-PARTNER-6",
+        "SCN-PARTNER-7"
+      ],
+      "copyAudit": "288/288",
+      "longformCharacters": 72732,
+      "chapterCount": 16,
+      "neighborClaimCount": 20,
+      "customerVisibleClaims": 0
+    }
+  ],
+  "checks": {
+    "sameTenDiscriminatingScenes": true,
+    "balancedInheritanceAndOverrides": true,
+    "fullProfileResearchStructure": true,
+    "directionalSceneChecks": [
+      {
+        "claimId": "ENGKQ.scenario.general.support_requested.attention",
+        "expectedPhrases": ["어떤 일이 있었고", "무엇을 바꾸면"],
+        "passed": true
+      },
+      {
+        "claimId": "IRAMC.scenario.general.support_requested.attention",
+        "expectedPhrases": ["느낀 마음", "필요한 반응"],
+        "passed": true
+      },
+      {
+        "claimId": "ENGKQ.scenario.partner.disagreement.process",
+        "expectedPhrases": ["핵심 원인", "행동을 바꾸면"],
+        "passed": true
+      },
+      {
+        "claimId": "IRAMC.scenario.partner.disagreement.process",
+        "expectedPhrases": ["어떤 마음", "안전하다고"],
+        "passed": true
+      },
+      {
+        "claimId": "ENGKQ.scenario.general.support_requested.response",
+        "expectedPhrases": ["원하는 지원", "방식을 고르는"],
+        "passed": true
+      },
+      {
+        "claimId": "IRAMC.scenario.general.support_requested.response",
+        "expectedPhrases": ["원하는 지원", "해결 행동"],
+        "passed": true
+      }
+    ],
+    "firstThoughtAndActualResponseSeparated": true
+  },
+  "customerApprovedProfiles": 0,
+  "nextGate": [
+    "코드 이름을 가린 A/G 양방향 인지 인터뷰",
+    "같은 갈등·지원 장면에서 마음·관계 영향과 원인·해결 중 처음 향한 주의를 각각 평정",
+    "처음 드는 생각과 실제 나타나는 반응을 별도 응답으로 수집",
+    "A/G 차이를 착함·차가움·논리성·공감 능력의 우열로 오해하지 않는지 확인"
+  ]
+}

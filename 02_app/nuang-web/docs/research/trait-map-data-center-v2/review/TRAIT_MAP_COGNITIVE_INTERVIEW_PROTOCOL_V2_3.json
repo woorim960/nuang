@@ -1,0 +1,266 @@
+{
+  "contractVersion": "nuang-trait-map-cognitive-interview-protocol.v2.3",
+  "reportId": "TRAIT-MAP-COGNITIVE-INTERVIEW-PROTOCOL.2.3",
+  "status": "COGNITIVE_INTERVIEW_PROTOCOL_READY_NOT_STARTED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "purpose": "고객 문장이 의도한 축·상황·생각·반응으로 자연스럽게 이해되는지 확인하고 오해 원인을 교정한다.",
+  "nonGoals": [
+    "인지 면담만으로 검사 점수의 타당도나 신뢰도를 입증하지 않는다.",
+    "참여자가 문장을 좋아한다는 이유만으로 구성개념 적합성을 승인하지 않는다.",
+    "모델 내부 판독을 참여자 또는 독립 전문가 결과로 대체하지 않는다."
+  ],
+  "sourceGuidance": [
+    {
+      "sourceRef": "SRC-TEST-STANDARDS-2014",
+      "url": "https://www.testingstandards.net/",
+      "use": "의도한 점수 해석과 사용에 맞는 타당성 근거를 누적하고, 검토·시행·해석을 문서화한다."
+    },
+    {
+      "sourceRef": "SRC-ITC-2017",
+      "url": "https://www.intestcom.org/files/guideline_test_adaptation_2ed.pdf",
+      "use": "한국어와 문화에서 자연스러운 기능적 동등성, 대상 집단의 이해, 질적·경험적 확인을 분리한다."
+    },
+    {
+      "sourceRef": "COSMIN-MANUAL-V2",
+      "url": "https://www.cosmin.nl/wp-content/uploads/COSMIN-manual-V2_final.pdf",
+      "use": "대상 표본의 인지 면담으로 이해 가능성을 확인하고, 수정된 최종 문구를 다시 시험한다."
+    }
+  ],
+  "participantContract": {
+    "identityCollection": {
+      "name": "do_not_collect",
+      "email": "do_not_collect",
+      "phone": "do_not_collect",
+      "participantRef": "server_generated_random_identifier_separate_from_account_id"
+    },
+    "requiredBackgroundFields": [
+      {
+        "field": "ageBand",
+        "values": ["14_18", "19_24", "25_34", "35_49", "50_64", "65_plus"]
+      },
+      {
+        "field": "koreanLanguageComfort",
+        "values": ["very_easy", "easy", "mixed", "difficult"]
+      },
+      {
+        "field": "educationReadingContext",
+        "values": [
+          "middle_school_or_below",
+          "high_school",
+          "college_or_training",
+          "graduate_or_professional",
+          "prefer_not_to_answer"
+        ]
+      },
+      {
+        "field": "personalityTestFamiliarity",
+        "values": ["none", "low", "medium", "high"]
+      }
+    ],
+    "optionalFields": [
+      {
+        "field": "genderBand",
+        "values": [
+          "woman",
+          "man",
+          "nonbinary_or_self_describe",
+          "prefer_not_to_answer"
+        ],
+        "purpose": "후속 집단별 문항 기능 연구의 층화 가능성만 확보하며 개인 결과에는 사용하지 않는다."
+      },
+      { "field": "accessibilityNeeds", "values": ["free_text_or_none"] }
+    ],
+    "consent": {
+      "required": true,
+      "withdrawalAllowedUntil": "analysis_lock",
+      "noEffectOnServiceResult": true,
+      "sensitiveInferenceProhibited": true
+    }
+  },
+  "samplingPlan": {
+    "stagedOrder": [
+      {
+        "stage": "CI-A",
+        "scope": "P0_162",
+        "reason": "내부 교정 또는 새 방향 문단이라 오해 위험이 가장 높다."
+      },
+      {
+        "stage": "CI-B",
+        "scope": "P1_131_claim_groups",
+        "reason": "두 원문 합성의 중복·의미 손실과 반대 방향 구별을 확인한다."
+      },
+      {
+        "stage": "CI-C",
+        "scope": "P2_stratified_sample_54",
+        "reason": "자동 경고 유지와 다중 축·모든 상황·주제·기호 층을 포함한다."
+      }
+    ],
+    "waveSizeGuidance": "문구 묶음별 첫 반복은 서로 다른 배경의 7~10명으로 시작하고, 새 오해가 계속 나오면 추가한다.",
+    "exposureRules": [
+      "일반 문구는 서로 다른 참여자 2명 이상에게 노출한다.",
+      "relationship_outcome·work_performance 문구는 서로 다른 참여자 3명 이상에게 노출한다.",
+      "한 회기에는 12~16개 문구만 보여 피로와 기계적 응답을 줄인다.",
+      "각 참여자는 최소 두 축의 양방향 문구와 생각·반응·말하기 역할을 모두 경험한다.",
+      "수정된 문구는 이전 응답자를 포함하지 않은 다음 반복에서 최종 형태로 다시 시험한다."
+    ],
+    "diversityTargets": [
+      "ageBand 각 주요 범주",
+      "한국어 이해 편안함 mixed 이상과 difficult 표본",
+      "성향검사 경험 none·low 표본",
+      "교육·읽기 배경의 다양성",
+      "10개 방향 기호와 일반·가족·친구·연인·관심 상대·업무 맥락"
+    ]
+  },
+  "interviewFlow": [
+    {
+      "step": 1,
+      "name": "silent_read",
+      "instruction": "문장을 천천히 읽고 이해됐다고 느끼는 시점에 다음으로 이동한다.",
+      "capture": ["readingTimeMs"]
+    },
+    {
+      "step": 2,
+      "name": "think_aloud",
+      "instruction": "읽으면서 어떤 뜻으로 받아들였는지 떠오른 순서대로 말한다.",
+      "capture": ["thinkAloudNote"]
+    },
+    {
+      "step": 3,
+      "name": "paraphrase",
+      "instruction": "친구에게 설명하듯 자신의 말로 이 문장의 뜻을 바꾸어 말한다.",
+      "capture": ["paraphraseText"]
+    },
+    {
+      "step": 4,
+      "name": "behavior_example",
+      "instruction": "이 성향의 사람이 이 상황에서 무엇을 먼저 보고, 생각하고, 실제로 할지 예를 든다.",
+      "capture": ["attentionExample", "thoughtExample", "responseExample"]
+    },
+    {
+      "step": 5,
+      "name": "direction_discrimination",
+      "instruction": "두 방향의 쉬운 뜻을 보고 이 문장에 더 가까운 방향과 그 이유를 고른다.",
+      "capture": ["selectedDirection", "directionReason", "directionConfidence"]
+    },
+    {
+      "step": 6,
+      "name": "wording_probe",
+      "instruction": "뜻이 어렵거나 낯설거나 번역한 것 같은 부분을 직접 표시한다.",
+      "capture": ["hardSpans", "naturalnessRating"]
+    },
+    {
+      "step": 7,
+      "name": "interpretation_risk_probe",
+      "instruction": "이 문장이 능력·도덕성·진단·관계 성공을 단정한다고 느껴지는지 확인한다.",
+      "capture": [
+        "determinismRisk",
+        "judgmentRisk",
+        "clinicalMisreadRisk",
+        "relationshipPredictionRisk"
+      ]
+    },
+    {
+      "step": 8,
+      "name": "opposite_pair_probe",
+      "instruction": "반대 방향 문장과 함께 보고 둘의 차이를 한 문장으로 설명한다.",
+      "capture": ["pairDifferenceText", "pairDistinguishable"]
+    }
+  ],
+  "responseRecordSchema": {
+    "required": [
+      "sessionRef",
+      "participantRef",
+      "canonicalVariantId",
+      "contentVersion",
+      "axisSignature",
+      "displayedTextHash",
+      "exposureOrder",
+      "readingTimeMs",
+      "paraphraseText",
+      "selectedDirection",
+      "directionReason",
+      "directionConfidence",
+      "hardSpans",
+      "naturalnessRating",
+      "determinismRisk",
+      "judgmentRisk",
+      "pairDistinguishable",
+      "capturedAt"
+    ],
+    "ratingScales": {
+      "directionConfidence": "1_not_sure_to_5_very_sure",
+      "naturalnessRating": "1_very_awkward_to_5_very_natural",
+      "determinismRisk": "none_low_medium_high",
+      "judgmentRisk": "none_low_medium_high"
+    },
+    "immutableFields": [
+      "canonicalVariantId",
+      "contentVersion",
+      "displayedTextHash",
+      "participantRef",
+      "capturedAt"
+    ]
+  },
+  "analysisContract": {
+    "independentCoders": 2,
+    "coderBlindness": "첫 판정에서는 서로의 코드와 내부 교정 결정을 보지 않는다.",
+    "codes": [
+      "meaning_aligned",
+      "meaning_partially_aligned",
+      "meaning_misaligned",
+      "axis_correct",
+      "axis_confused_with_neighbor",
+      "thought_action_confused",
+      "difficult_word",
+      "translation_tone",
+      "deterministic_misread",
+      "ability_or_morality_misread",
+      "clinical_misread",
+      "relationship_prediction_misread",
+      "scenario_not_recognizable"
+    ],
+    "adjudication": "두 코더가 다르면 근거 구절과 참여자 발화를 확인하고 제3 검토자와 합의한다.",
+    "noPercentageOnlyRule": "작은 질적 표본의 백분율 하나로 통과시키지 않고 오해 유형·반복·심각도·수정 후 재검사를 함께 본다."
+  },
+  "decisionRules": {
+    "revise": [
+      "의도한 축과 반대 축을 반복해서 혼동한다.",
+      "처음 드는 생각과 실제 반응을 같은 것으로 이해한다.",
+      "능력·도덕성·진단·관계 성공을 뜻한다고 읽힌다.",
+      "같은 어려운 단어 또는 번역투가 서로 다른 참여자에게 반복된다.",
+      "상황을 떠올릴 수 없거나 질문 없이 뜻을 설명하지 못한다."
+    ],
+    "retainCandidate": [
+      "최종 반복에서 핵심 뜻과 방향을 자신의 말로 정확히 설명한다.",
+      "반대 방향과의 차이를 우열 없이 설명한다.",
+      "중대한 단정·낙인·예측 오해가 없다.",
+      "수정된 문장이라면 수정 후 별도 표본 재시험을 마쳤다."
+    ],
+    "hold": "표본 다양성 또는 노출 수가 부족하거나 코더 합의가 끝나지 않은 문장은 보류한다.",
+    "approvalBoundary": "인지 면담 통과는 이해 가능성 후보 상태일 뿐 구성개념 타당도·점수 해석·고객 발행 승인이 아니다."
+  },
+  "privacyAndSecurity": {
+    "directIdentifiers": "prohibited",
+    "rawAudio": "별도 동의가 있을 때만 암호화 저장하고 전사 검수 후 정해진 기간에 삭제한다.",
+    "freeTextRedaction": "이름·연락처·회사·학교·건강 정보가 들어오면 분석 전에 가린다.",
+    "rowLevelAccess": "research_admin_and_assigned_coders_only",
+    "deletion": "participantRef 기준 철회·삭제가 가능해야 한다."
+  },
+  "implementationState": {
+    "protocolReady": true,
+    "databaseSchemaReady": false,
+    "participantUiReady": false,
+    "analystUiReady": false,
+    "collectionStarted": false,
+    "completedParticipants": 0
+  },
+  "nextGate": {
+    "name": "COGNITIVE_INTERVIEW_DB_AND_ANALYST_WORKBENCH",
+    "actions": [
+      "세션·노출·응답·코더 판정·합의·문장 수정 계보를 분리한 DB 계약을 만든다.",
+      "참여자에게 한 번에 12~16개만 보여주는 모바일 연구 화면을 만든다.",
+      "내부 코더가 원문·응답·반대 방향을 나란히 보는 분석 화면을 만든다."
+    ]
+  }
+}

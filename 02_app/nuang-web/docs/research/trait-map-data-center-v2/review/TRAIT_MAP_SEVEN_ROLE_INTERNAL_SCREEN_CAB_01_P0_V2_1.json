@@ -1,0 +1,1110 @@
+{
+  "contractVersion": "nuang-trait-map-seven-role-internal-screen.v2.1",
+  "reportId": "TRAIT-MAP-SEVEN-ROLE-INTERNAL-SCREEN-CAB-01-P0.0.2",
+  "sourceReviewQueueId": "TRAIT-MAP-SEVEN-ROLE-REVIEW-QUEUE-CAB-01.0.2",
+  "sourceWorkbookId": "TRAIT-MAP-SEVEN-ROLE-REVIEW-CAB-01.0.2",
+  "batchId": "CAB-01",
+  "scope": "P0",
+  "status": "P0_INTERNAL_SCREEN_COMPLETE_REVISIONS_AND_CONSTRUCT_HOLDS_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-23T00:00:00.000Z",
+  "interpretation": [
+    "이 파일은 독립 전문가 승인 원장이 아니라 7개 역할 검토 전 내부 다학제 사전검토다.",
+    "ready_for_role_review는 승인이라는 뜻이 아니며 7개 역할 판정은 모두 pending으로 유지한다.",
+    "hold_for_construct_resolution은 문장 교정보다 축·상황 연결을 먼저 다시 결정해야 한다는 뜻이다."
+  ],
+  "allowedDecisions": [
+    "ready_for_role_review",
+    "revise_before_role_review",
+    "hold_for_construct_resolution"
+  ],
+  "summary": {
+    "entries": 24,
+    "readyForRoleReview": 3,
+    "reviseBeforeRoleReview": 21,
+    "holdForConstructResolution": 0,
+    "expertReviewed": 0,
+    "customerApproved": 0,
+    "issueCounts": {
+      "KOR_ABSTRACT_OR_AMBIGUOUS": 2,
+      "KOR_MULTIPLE_IDEAS": 7,
+      "MET_AXIS_CONTAMINATION": 9,
+      "PROD_DUPLICATE_VALUE": 6,
+      "PROD_SUMMARY_DETAIL_MISMATCH": 1,
+      "PSY_AXIS_DIRECTION_AMBIGUOUS": 8
+    }
+  },
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-E-RO-A-ER-Q",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-attention-se-e-ro-a-er-q",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "axisSignature": "SE=E|RO=A|ER=Q",
+      "content": {
+        "summaryText": "부담스러운 일이 지나간 뒤에는 사람들에게 남은 영향과 다시 생길 가능성, 관계를 회복하고 계획을 되돌릴 방법을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 일이 지나간 뒤에는 사람들에게 남은 영향과 다시 생길 가능성, 관계를 회복하고 계획을 되돌릴 방법을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-E-RO-A-ER-Q:9baa16d13321"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-03", "changedAxis": "RO", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PSY_AXIS_DIRECTION_AMBIGUOUS", "KOR_MULTIPLE_IDEAS"],
+        "rationale": "사람에게 남은 영향은 A를 보여 주지만 재발 가능성·계획 복귀까지 한 문장에 넣어 G·K 의미가 함께 읽힌다.",
+        "requiredAction": "A의 핵심인 상대의 마음과 관계 변화에 초점을 두고, 재발 방지·계획 문구는 다른 claim으로 옮긴다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-E-RO-G-ER-Q",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-attention-se-e-ro-g-er-q",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "axisSignature": "SE=E|RO=G|ER=Q",
+      "content": {
+        "summaryText": "부담스러운 일이 지나간 뒤에는 관련된 사람들과 확인할 후속 행동, 다시 생길 가능성, 아직 남은 걱정과 몸의 긴장을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 일이 지나간 뒤에는 관련된 사람들과 확인할 후속 행동, 다시 생길 가능성, 아직 남은 걱정과 몸의 긴장을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-E-RO-G-ER-Q:c3288acf360a",
+          "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-E-RO-G-ER-Q:9baa16d13321"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-03", "changedAxis": "RO", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["MET_AXIS_CONTAMINATION", "KOR_MULTIPLE_IDEAS"],
+        "rationale": "후속 행동은 G를 보여 주지만 남은 걱정과 몸의 긴장은 C/Q 정서 활성 의미로 이동한다.",
+        "requiredAction": "원인·후속 조치·재발 방지처럼 G가 먼저 살피는 대상만 남기고 정서·신체 반응은 별도 claim으로 분리한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-I-RO-A-ER-C",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-attention-se-i-ro-a-er-c",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "axisSignature": "SE=I|RO=A|ER=C",
+      "content": {
+        "summaryText": "부담스러운 일이 지나간 직후에는 해결된 부분과 남은 후속 행동, 혼자 생각과 에너지를 정리할 시간, 나중에 다시 연결할 사람을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 일이 지나간 직후에는 해결된 부분과 남은 후속 행동, 혼자 생각과 에너지를 정리할 시간, 나중에 다시 연결할 사람을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-I-RO-A-ER-C:6b9e4341edea",
+          "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-I-RO-A-ER-C:e551da492b34"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-04", "changedAxis": "RO", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["MET_AXIS_CONTAMINATION", "KOR_MULTIPLE_IDEAS"],
+        "rationale": "혼자 정리할 시간과 다시 연결할 사람은 I·A를 보여 주지만 해결된 부분과 후속 행동은 G 의미가 강하다.",
+        "requiredAction": "혼자 마음을 정리한 뒤 상대의 상태와 관계 회복 필요를 살피는 문장으로 좁힌다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-I-RO-G-ER-C",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-attention-se-i-ro-g-er-c",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "axisSignature": "SE=I|RO=G|ER=C",
+      "content": {
+        "summaryText": "부담스러운 일이 지나간 뒤에는 혼자 쉬면서 실제 진행 순서와 놓친 단서, 다음에 바꿀 행동을 되짚는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 일이 지나간 뒤에는 혼자 쉬면서 실제 진행 순서와 놓친 단서, 다음에 바꿀 행동을 되짚는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-I-RO-G-ER-C:e551da492b34"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-04", "changedAxis": "RO", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PSY_AXIS_DIRECTION_AMBIGUOUS"],
+        "rationale": "I와 G는 보이지만 축 서명에 포함된 C의 정서 활성 속도는 문장에서 확인되지 않는다.",
+        "requiredAction": "C가 이 claim에 실제로 기여해야 하는지 재확인하고, 기여한다면 불편감이 뒤늦게 선명해지는 단서를 근거 범위 안에서 추가한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-E-RO-A-ER-Q",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-process-se-e-ro-a-er-q",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.process",
+      "axisSignature": "SE=E|RO=A|ER=Q",
+      "content": {
+        "summaryText": "“아직 불편한 사람이 있을까?”, “다음에는 무엇을 미리 준비하면 같은 걱정을 줄일 수 있을까?”를 되짚기 쉽다.",
+        "detailParagraphs": [
+          "“아직 불편한 사람이 있을까?”, “다음에는 무엇을 미리 준비하면 같은 걱정을 줄일 수 있을까?”를 되짚기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-E-RO-A-ER-Q:9dcb2acb5288"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-05", "changedAxis": "RO", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PSY_AXIS_DIRECTION_AMBIGUOUS"],
+        "rationale": "불편한 사람이 있는지 묻는 부분은 A지만 미리 준비할 방법은 G·K 의미로 읽히고 Q의 빠른 정서 활성도 분명하지 않다.",
+        "requiredAction": "상대가 어떻게 느꼈는지와 관계를 다시 편하게 만들기 위해 무엇을 확인할지에 집중한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-E-RO-G-ER-Q",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-process-se-e-ro-g-er-q",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.process",
+      "axisSignature": "SE=E|RO=G|ER=Q",
+      "content": {
+        "summaryText": "“사람들과 무엇을 바로 확인하면 다시 생길 위험을 줄이고, 남은 걱정을 실제 행동으로 바꿀 수 있을까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“사람들과 무엇을 바로 확인하면 다시 생길 위험을 줄이고, 남은 걱정을 실제 행동으로 바꿀 수 있을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-E-RO-G-ER-Q:f9546b0b9ce9",
+          "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-E-RO-G-ER-Q:9dcb2acb5288"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-05", "changedAxis": "RO", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": [
+          "MET_AXIS_CONTAMINATION",
+          "PSY_AXIS_DIRECTION_AMBIGUOUS"
+        ],
+        "rationale": "G의 원인·후속 행동은 보이지만 ‘남은 걱정을 실제 행동으로 바꾼다’는 표현은 Q의 빠른 정서 활성과 행동 시작 속도를 다시 섞는다.",
+        "requiredAction": "걱정과 감정이 빠르게 선명해지는 Q의 경험과, 그 뒤 원인·후속 조치를 확인하는 G의 생각을 순서대로 분리한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-I-RO-A-ER-C",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-process-se-i-ro-a-er-c",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.process",
+      "axisSignature": "SE=I|RO=A|ER=C",
+      "content": {
+        "summaryText": "“잠시 혼자 정리하면 남은 일과 내 마음을 더 분명히 알 수 있을 것 같아. 그다음 누구와 다시 이야기해야 할까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“잠시 혼자 정리하면 남은 일과 내 마음을 더 분명히 알 수 있을 것 같아. 그다음 누구와 다시 이야기해야 할까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-I-RO-A-ER-C:a0ff8e2a0295",
+          "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-I-RO-A-ER-C:df0e3baf6def"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-06", "changedAxis": "RO", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "ready_for_role_review",
+        "issueCodes": [],
+        "rationale": "혼자 정리한 뒤 자신의 마음과 다시 이야기할 사람을 살피는 과정이 I·A·C 순서로 비교적 명확하다.",
+        "requiredAction": "쉬운 한국어 검토에서 인용문 길이와 모바일 줄바꿈만 확인한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-I-RO-G-ER-C",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-process-se-i-ro-g-er-c",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.process",
+      "axisSignature": "SE=I|RO=G|ER=C",
+      "content": {
+        "summaryText": "“무엇이 문제를 키웠고 다음에는 어느 시점에 다르게 움직이면 될까?”를 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“무엇이 문제를 키웠고 다음에는 어느 시점에 다르게 움직이면 될까?”를 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-I-RO-G-ER-C:df0e3baf6def"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-06", "changedAxis": "RO", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PSY_AXIS_DIRECTION_AMBIGUOUS"],
+        "rationale": "원인과 다음 행동은 G를 보여 주지만 I와 C는 문장에 나타나지 않는다.",
+        "requiredAction": "혼자 되짚는 과정과 불편감이 뒤늦게 정리되는 C 단서가 이 claim에 필요한지 축 기여를 재검토한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-E-SM-K-ER-Q",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-response-se-e-sm-k-er-q",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.response",
+      "axisSignature": "SE=E|SM=K|ER=Q",
+      "content": {
+        "summaryText": "사람과 대화하며 일을 정리하고, 필요한 사과나 확인을 한 뒤 다음 계획을 세워 일상 흐름으로 돌아가려는 편이다.",
+        "detailParagraphs": [
+          "사람과 대화하며 일을 정리하고, 필요한 사과나 확인을 한 뒤 다음 계획을 세워 일상 흐름으로 돌아가려는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-E-SM-K-ER-Q:00abf083db19"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-07", "changedAxis": "SM", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PSY_AXIS_DIRECTION_AMBIGUOUS"],
+        "rationale": "E와 K의 행동 흐름은 보이지만 Q의 빠른 정서 활성은 문장에 나타나지 않는다.",
+        "requiredAction": "Q를 행동을 빨리 시작하는 뜻으로 쓰지 말고, 불편감이 빠르게 선명해져 확인 행동으로 이어지는 순서를 근거 범위에서 표현한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-E-SM-M-ER-Q",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-response-se-e-sm-m-er-q",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.response",
+      "axisSignature": "SE=E|SM=M|ER=Q",
+      "content": {
+        "summaryText": "필요한 사람과 상황과 후속 행동을 말로 맞추고 재발 방지 방법을 정한 뒤 다른 활동으로 옮기지만, 걱정과 피로가 줄어드는 데는 시간이 필요한 편이다.",
+        "detailParagraphs": [
+          "필요한 사람과 상황과 후속 행동을 말로 맞추고 재발 방지 방법을 정한 뒤 다른 활동으로 옮기지만, 걱정과 피로가 줄어드는 데는 시간이 필요한 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-E-SM-M-ER-Q:3bf83b3e71cf",
+          "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-E-SM-M-ER-Q:00abf083db19"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-07", "changedAxis": "SM", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["KOR_MULTIPLE_IDEAS", "MET_AXIS_CONTAMINATION"],
+        "rationale": "사람·상황·후속 행동·활동 전환·걱정·피로를 한 문장에 묶어 M과 Q의 차이를 읽기 어렵다.",
+        "requiredAction": "Q의 빠른 정서 반응과 M의 상황에 따른 행동 조정이라는 두 단계만 남겨 문장을 짧게 다시 쓴다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-I-SM-K-ER-C",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-response-se-i-sm-k-er-c",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.response",
+      "axisSignature": "SE=I|SM=K|ER=C",
+      "content": {
+        "summaryText": "먼저 혼자 쉬거나 기록하며 후속 행동을 정리하고, 시간이 지나 선명해진 감정·피로·몸의 긴장을 확인한 뒤 필요한 사람과 다시 대화하는 편이다.",
+        "detailParagraphs": [
+          "먼저 혼자 쉬거나 기록하며 후속 행동을 정리하고, 시간이 지나 선명해진 감정·피로·몸의 긴장을 확인한 뒤 필요한 사람과 다시 대화하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-I-SM-K-ER-C:1d766436fdd3",
+          "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-I-SM-K-ER-C:7fbbc43c5bda"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-08", "changedAxis": "SM", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["KOR_MULTIPLE_IDEAS"],
+        "rationale": "I·K·C에 필요한 단서는 있으나 쉬기·기록·행동 정리·감정·피로·긴장·대화를 한 문장에 모두 넣었다.",
+        "requiredAction": "혼자 회복하고 정리하는 1단계와 필요한 사람에게 다시 말하는 2단계로 나누되 요약에는 핵심 하나만 남긴다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-I-SM-M-ER-C",
+      "contentKey": "trait-map.v2.1.can-scn-general-aftermath-response-se-i-sm-m-er-c",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.aftermath.response",
+      "axisSignature": "SE=I|SM=M|ER=C",
+      "content": {
+        "summaryText": "사람들과 계속 이야기하기보다 혼자 에너지를 회복한 뒤, 필요하면 배운 점을 기록하거나 다음 행동에 반영하는 편이다.",
+        "detailParagraphs": [
+          "사람들과 계속 이야기하기보다 혼자 에너지를 회복한 뒤, 필요하면 배운 점을 기록하거나 다음 행동에 반영하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-I-SM-M-ER-C:7fbbc43c5bda"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-08", "changedAxis": "SM", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PSY_AXIS_DIRECTION_AMBIGUOUS"],
+        "rationale": "I와 M은 보이지만 C의 정서 활성 속도는 드러나지 않고, K와 비교한 M의 차이도 선택적 기록 외에는 약하다.",
+        "requiredAction": "현재 에너지와 상황에 따라 회복·정리 방식을 바꾸는 M을 선명하게 하고 C 단서의 필요성을 재검토한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N",
+      "contentKey": "trait-map.v2.1.can-scn-general-new-encounter-response-se-e-oe-n",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "axisSignature": "SE=E|OE=N",
+      "content": {
+        "summaryText": "낯선 상황에서도 공통점을 찾아 말을 걸거나 질문을 던져 분위기에 들어가는 편이다. 긴장이 생겨도 대화가 시작되면 참여가 빨라지는 경향이 있다.",
+        "detailParagraphs": [
+          "낯선 상황에서도 공통점을 찾아 말을 걸거나 질문을 던져 분위기에 들어가는 편이다. 긴장이 생겨도 대화가 시작되면 참여가 빨라지는 경향이 있다.",
+          "먼저 인사를 건네고 여러 주제의 질문으로 대화를 넓히다가 의미 있는 연결이 보이면 함께 탐색하거나 바로 시도할 활동을 제안하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N:101f055f3929",
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N:075847044b79"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-02",
+          "removedAxes": ["ER"],
+          "rationale": "ER은 불편한 상황에서 걱정과 감정이 커지는 상대적 속도다. 새 만남 원문의 차분·긴장·빠른 참여는 정서 활성 속도를 통제해 비교한 결과가 아니라 발화·참여 시작 방식과 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["MET_AXIS_CONTAMINATION", "PROD_DUPLICATE_VALUE"],
+        "rationale": "ER을 축에서 제거했지만 ‘긴장이 생겨도 참여가 빨라진다’는 이전 C/Q 해석이 남아 있고, 두 문단 모두 먼저 질문해 대화를 넓힌다는 정보를 반복한다.",
+        "requiredAction": "긴장과 참여 속도 문구를 제거하고, E의 대화 시작과 N의 가능성 확장을 한 문단으로 간결하게 정리한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R",
+      "contentKey": "trait-map.v2.1.can-scn-general-new-encounter-response-se-e-oe-r",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "axisSignature": "SE=E|OE=R",
+      "content": {
+        "summaryText": "가까운 사람에게 먼저 인사를 건네고 구체적인 질문으로 정보를 모으며, 할 일이 보이면 대화 중에 바로 참여 범위를 정해 움직이는 편이다.",
+        "detailParagraphs": [
+          "가까운 사람에게 먼저 인사를 건네고 구체적인 질문으로 정보를 모으며, 할 일이 보이면 대화 중에 바로 참여 범위를 정해 움직이는 편이다.",
+          "현재 장소나 상대가 실제로 말한 경험에서 대화를 열고, 반응을 확인하며 관계에 들어간 뒤 다음 약속을 구체적으로 정하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R:dc02424a07f3",
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R:fa98a76e8f47"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-02",
+          "removedAxes": ["ER"],
+          "rationale": "ER은 불편한 상황에서 걱정과 감정이 커지는 상대적 속도다. 새 만남 원문의 차분·긴장·빠른 참여는 정서 활성 속도를 통제해 비교한 결과가 아니라 발화·참여 시작 방식과 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["KOR_ABSTRACT_OR_AMBIGUOUS", "PROD_DUPLICATE_VALUE"],
+        "rationale": "새 만남에서 ‘가까운 사람’이 누구인지 불분명하고, 두 문단이 먼저 인사한 뒤 구체적인 정보에서 대화를 잇는 같은 흐름을 반복한다.",
+        "requiredAction": "‘먼저 마주친 사람’처럼 대상을 분명히 하고, E의 상호작용 시작과 R의 실제 정보 확인을 한 번씩만 설명한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N",
+      "contentKey": "trait-map.v2.1.can-scn-general-new-encounter-response-se-i-oe-n",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "axisSignature": "SE=I|OE=N",
+      "content": {
+        "summaryText": "처음에는 주변을 관찰하며 대화의 흐름을 익히고, 관심 있는 연결점이 생기면 준비한 질문이나 자신의 경험을 차분히 보태는 편이다.",
+        "detailParagraphs": [
+          "처음에는 주변을 관찰하며 대화의 흐름을 익히고, 관심 있는 연결점이 생기면 준비한 질문이나 자신의 경험을 차분히 보태는 편이다.",
+          "처음에는 분위기를 살피다가 의미 있는 연결점이 보이면 깊은 질문을 건네고, 대화 뒤에는 떠오른 생각을 정리해 다시 이어가는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N:d650dab1f300",
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N:ae0db578a2a1"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-02",
+          "removedAxes": ["ER"],
+          "rationale": "ER은 불편한 상황에서 걱정과 감정이 커지는 상대적 속도다. 새 만남 원문의 차분·긴장·빠른 참여는 정서 활성 속도를 통제해 비교한 결과가 아니라 발화·참여 시작 방식과 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PROD_DUPLICATE_VALUE"],
+        "rationale": "두 문단이 모두 처음에는 관찰하고 연결점이 보이면 깊은 질문을 보탠다는 같은 내용을 되풀이한다.",
+        "requiredAction": "요약은 I의 관찰 후 참여와 N의 연결 가능성 탐색만 남기고, 상세에는 대화 뒤 생각을 이어가는 추가 정보만 둔다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R",
+      "contentKey": "trait-map.v2.1.can-scn-general-new-encounter-response-se-i-oe-r",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "axisSignature": "SE=I|OE=R",
+      "content": {
+        "summaryText": "상황을 잠시 지켜본 뒤 필요한 정보가 모이면 자연스럽게 참여한다. 처음부터 넓게 말을 걸기보다 가까운 사람이나 분명한 할 일에서 시작하는 편이다.",
+        "detailParagraphs": [
+          "상황을 잠시 지켜본 뒤 필요한 정보가 모이면 자연스럽게 참여한다. 처음부터 넓게 말을 걸기보다 가까운 사람이나 분명한 할 일에서 시작하는 편이다.",
+          "처음에는 주변과 대화 흐름을 관찰하고, 상대가 실제로 말한 경험에서 연결점이 생기면 구체적인 질문이나 자신의 경험을 차분히 보태는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R:445a4c66f859",
+          "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R:7e60efe35e4c"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-02",
+          "removedAxes": ["ER"],
+          "rationale": "ER은 불편한 상황에서 걱정과 감정이 커지는 상대적 속도다. 새 만남 원문의 차분·긴장·빠른 참여는 정서 활성 속도를 통제해 비교한 결과가 아니라 발화·참여 시작 방식과 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PROD_DUPLICATE_VALUE"],
+        "rationale": "두 문단 모두 흐름을 관찰한 뒤 실제 정보에서 구체적인 질문을 시작한다는 같은 반응을 설명한다.",
+        "requiredAction": "I의 관찰 후 참여와 R의 확인된 경험 중심 질문을 한 문단으로 합치고 반복 문단은 제거한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-SM-K",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-attention-oe-n-sm-k",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "axisSignature": "OE=N|SM=K",
+      "content": {
+        "summaryText": "평범한 선택에서도 새롭게 해볼 만한 가능성과 그 선택이 함께하는 사람에게 어떤 경험이 될지, 이후 계획을 이어갈 수 있는지를 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "평범한 선택에서도 새롭게 해볼 만한 가능성과 그 선택이 함께하는 사람에게 어떤 경험이 될지, 이후 계획을 이어갈 수 있는지를 함께 살피는 경향이 있다.",
+          "평소 선택에서는 지금 방법 밖의 가능성과 앞으로 해결할 더 큰 문제를 넓혀 보면서, 이루려는 목표와 완료 기준·먼저 해야 할 순서를 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-SM-K:d8764aae08fe",
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-SM-K:f711aecbdfef"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-01",
+          "removedAxes": ["RO"],
+          "rationale": "RO는 관계 문제에서 원인·해결과 상대 마음·관계 변화 중 어디에 먼저 관심이 가는지를 구분한다. 일반 선택 원문의 문제·마음 단어는 통제된 G/A 차이가 아니며 OE·SM과 프로필별 서술 차이가 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["MET_AXIS_CONTAMINATION", "KOR_MULTIPLE_IDEAS"],
+        "rationale": "RO를 제거했지만 ‘함께하는 사람에게 어떤 경험인지’와 ‘해결할 더 큰 문제’가 A·G처럼 읽히며, N·K 외 의미가 한 문장에 너무 많이 남아 있다.",
+        "requiredAction": "새 가능성을 넓혀 보는 N과 목표·순서를 붙잡는 K만 남겨 두 축의 결합을 짧게 설명한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-SM-M",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-attention-oe-n-sm-m",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "axisSignature": "OE=N|SM=M",
+      "content": {
+        "summaryText": "평소 선택에서는 미리 정한 순서보다 지금 가장 마음이 가는 방향과 남은 시간, 에너지, 함께할 사람의 반응을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "평소 선택에서는 미리 정한 순서보다 지금 가장 마음이 가는 방향과 남은 시간, 에너지, 함께할 사람의 반응을 먼저 살피는 경향이 있다.",
+          "평소 선택에서는 지금 조건 하나에 머무르기보다 다른 방법과 앞으로 생길 가능성, 선택이 해결할 더 큰 문제를 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-SM-M:50a4927409d9",
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-SM-M:34c14ec77b3f"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-01",
+          "removedAxes": ["RO"],
+          "rationale": "RO는 관계 문제에서 원인·해결과 상대 마음·관계 변화 중 어디에 먼저 관심이 가는지를 구분한다. 일반 선택 원문의 문제·마음 단어는 통제된 G/A 차이가 아니며 OE·SM과 프로필별 서술 차이가 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["MET_AXIS_CONTAMINATION", "KOR_ABSTRACT_OR_AMBIGUOUS"],
+        "rationale": "‘마음이 가는 방향’, ‘함께할 사람의 반응’, ‘해결할 더 큰 문제’가 각각 모호하거나 제거한 A·G 의미로 읽힌다.",
+        "requiredAction": "여러 가능성을 살피는 N과 지금 시간·에너지에 따라 기준을 조정하는 M만 구체적으로 남긴다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-attention-oe-r-sm-k",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "axisSignature": "OE=R|SM=K",
+      "content": {
+        "summaryText": "평소 선택에서는 이미 확인한 조건과 직접 겪어 본 결과, 함께하는 사람에게 지금 실제로 필요한 것이 무엇인지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "평소 선택에서는 이미 확인한 조건과 직접 겪어 본 결과, 함께하는 사람에게 지금 실제로 필요한 것이 무엇인지 먼저 살피는 경향이 있다.",
+          "평소 선택에서는 순간의 흥미보다 이루려는 목표와 완료 기준, 먼저 해야 할 순서, 지켜야 할 약속을 우선 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K:1954ea7f5e66",
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K:b2a7d470581f"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-01",
+          "removedAxes": ["RO"],
+          "rationale": "RO는 관계 문제에서 원인·해결과 상대 마음·관계 변화 중 어디에 먼저 관심이 가는지를 구분한다. 일반 선택 원문의 문제·마음 단어는 통제된 G/A 차이가 아니며 OE·SM과 프로필별 서술 차이가 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["MET_AXIS_CONTAMINATION", "KOR_MULTIPLE_IDEAS"],
+        "rationale": "RO를 제거했지만 ‘함께하는 사람에게 실제로 필요한 것’이라는 A 단서가 남았고 두 문단에 조건·경험·목표·순서·약속이 과도하게 쌓여 있다.",
+        "requiredAction": "확인된 조건과 경험을 보는 R, 목표와 순서를 유지하는 K만 한 문단에서 분명히 대비한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-M",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-attention-oe-r-sm-m",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "axisSignature": "OE=R|SM=M",
+      "content": {
+        "summaryText": "평범한 선택에서는 이미 써본 방법과 확인된 정보, 지금 자신의 에너지와 시간에 맞는지를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "평범한 선택에서는 이미 써본 방법과 확인된 정보, 지금 자신의 에너지와 시간에 맞는지를 먼저 살피는 경향이 있다.",
+          "평소 선택에서는 이미 확인한 조건과 직접 겪어 본 결과를 살피면서, 지금 마음이 가는 방향과 남은 시간·에너지·함께할 사람의 반응도 같이 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-M:493b5ba6fbb3",
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-M:19af78fe9782"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [],
+        "axisAmendment": {
+          "amendmentId": "AX-AMEND-CAB-01-01",
+          "removedAxes": ["RO"],
+          "rationale": "RO는 관계 문제에서 원인·해결과 상대 마음·관계 변화 중 어디에 먼저 관심이 가는지를 구분한다. 일반 선택 원문의 문제·마음 단어는 통제된 G/A 차이가 아니며 OE·SM과 프로필별 서술 차이가 섞인 단서다.",
+          "decisionState": "propose_remove_axis_pending_independent_review"
+        }
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["MET_AXIS_CONTAMINATION", "PROD_DUPLICATE_VALUE"],
+        "rationale": "첫 문단은 R·M에 맞지만 두 번째 문단의 ‘마음이 가는 방향’과 ‘함께할 사람의 반응’은 제거한 A 의미를 다시 끌어오고 핵심을 반복한다.",
+        "requiredAction": "첫 문단을 핵심으로 다듬고, 제거한 축 의미가 남은 두 번째 문단은 고객 노출에서 제외해 계보에만 보존한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-N-SM-K",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-response-se-e-oe-n-sm-k",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=E|OE=N|SM=K",
+      "content": {
+        "summaryText": "여러 선택지를 사람들과 이야기해 넓힌 뒤 중요한 기준을 정하고, 결정하면 예약이나 준비처럼 다음 행동을 차례로 이어가는 편이다.",
+        "detailParagraphs": [
+          "여러 선택지를 사람들과 이야기해 넓힌 뒤 중요한 기준을 정하고, 결정하면 예약이나 준비처럼 다음 행동을 차례로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-N-SM-K:573c154d9889"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-02", "changedAxis": "SE", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "ready_for_role_review",
+        "issueCodes": [],
+        "rationale": "사람들과 가능성을 넓히고 기준을 정해 행동을 이어가는 E·N·K 차이가 문장 안에서 구체적으로 보인다.",
+        "requiredAction": "독립 검토에서 E를 사교 능력으로 읽히지 않는지만 확인한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-M",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-response-se-e-oe-r-sm-m",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=E|OE=R|SM=M",
+      "content": {
+        "summaryText": "확인된 조건과 이전 경험을 바탕으로 지금 가장 마음이 가는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 조정하는 편이다.",
+        "detailParagraphs": [
+          "확인된 조건과 이전 경험을 바탕으로 지금 가장 마음이 가는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 조정하는 편이다.",
+          "익숙하고 쓸모가 분명한 선택에서 시작하되, 상황이 바뀌면 그 안에서 방법과 순서를 유연하게 조정하는 편이다."
+        ],
+        "contentShape": "core_plus_directional_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-M:5256f86172ca",
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-M:f699fbd52ea1"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-01", "changedAxis": "SE", "side": "left" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PSY_AXIS_DIRECTION_AMBIGUOUS", "PROD_DUPLICATE_VALUE"],
+        "rationale": "사람들의 반응을 참고한다는 표현만으로 E를 설명하기 어렵고 두 번째 문단에는 E가 전혀 없다.",
+        "requiredAction": "사람과 대화하며 선택을 시작하는 E 행동을 선명하게 하고 공통 상세 문단의 제품 노출 필요성을 재검토한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-K",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-response-se-i-oe-n-sm-k",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=I|OE=N|SM=K",
+      "content": {
+        "summaryText": "여러 가능성을 혼자 비교한 뒤 시험할 한 가지와 완료 기준을 정하고, 작은 단계와 점검 시점으로 나누어 꾸준히 이어가는 편이다.",
+        "detailParagraphs": [
+          "여러 가능성을 혼자 비교한 뒤 시험할 한 가지와 완료 기준을 정하고, 작은 단계와 점검 시점으로 나누어 꾸준히 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-K:cf0c2a9e80bc",
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-K:573c154d9889"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS",
+        "authoredParagraph": null,
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-02", "changedAxis": "SE", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "ready_for_role_review",
+        "issueCodes": [],
+        "rationale": "혼자 가능성을 비교하고 완료 기준을 정해 작은 단계로 이어가는 I·N·K 차이가 구체적이다.",
+        "requiredAction": "독립 검토에서 계획성과 능력 우열로 읽히지 않는지만 확인한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-M",
+      "contentKey": "trait-map.v2.1.can-scn-general-ordinary-choice-response-se-i-oe-r-sm-m",
+      "contentVersion": 1,
+      "queuePriority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=I|OE=R|SM=M",
+      "content": {
+        "summaryText": "익숙하고 쓸모가 분명한 선택에서 시작하되, 상황이 바뀌면 그 안에서 방법과 순서를 유연하게 조정하는 편이다.",
+        "detailParagraphs": [
+          "익숙하고 쓸모가 분명한 선택에서 시작하되, 상황이 바뀌면 그 안에서 방법과 순서를 유연하게 조정하는 편이다.",
+          "익숙한 선택지를 혼자 비교해 지금 에너지와 시간에 맞는 한 가지를 정하고, 작게 시작한 뒤 결과를 보며 방법과 순서를 조정하는 편이다."
+        ],
+        "contentShape": "core_plus_directional_nuance",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "evidencePacket": {
+        "sourceUnitIds": [
+          "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-M:f699fbd52ea1"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "PRESERVE_SINGLE_SOURCE_UNIT",
+        "authoredParagraph": {
+          "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-M",
+          "axisDirection": "I",
+          "text": "익숙한 선택지를 혼자 비교해 지금 에너지와 시간에 맞는 한 가지를 정하고, 작게 시작한 뒤 결과를 보며 방법과 순서를 조정하는 편이다.",
+          "sourceCandidateRefs": [
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-M:aecd9e54d7dd",
+            "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-K:d04f576cd423"
+          ],
+          "evidenceFindingRefs": [
+            "FND-BFI2-HIERARCHICAL-FACETS",
+            "FND-OPENNESS-INTELLECT-DISTINCTION",
+            "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+            "FND-STATE-MEASUREMENT-DESIGN",
+            "FND-INTENTION-BEHAVIOR-SEPARATION",
+            "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+          ],
+          "independentSourceRefs": [
+            "SRC-BFI2-2017",
+            "SRC-OPENNESS-INTELLECT-2009",
+            "SRC-SITUATION-CONTINGENCY-2007",
+            "SRC-STATE-MEASUREMENT-2020",
+            "SRC-INTENTION-BEHAVIOR-2016",
+            "SRC-TRAIT-ENACTMENT-2015"
+          ],
+          "state": "evidence_bounded_internal_editorial_draft_seven_role_review_required"
+        },
+        "lineageExclusions": [],
+        "targetedAxisReviews": [
+          { "reviewId": "TAR-CAB-01-01", "changedAxis": "SE", "side": "right" }
+        ],
+        "axisAmendment": null
+      },
+      "internalScreening": {
+        "decision": "revise_before_role_review",
+        "issueCodes": ["PROD_SUMMARY_DETAIL_MISMATCH"],
+        "rationale": "새 상세 문단에는 I가 보이지만 결과 요약은 E 이웃과 공유 가능한 일반 문장이라 코드 차이를 전달하지 못한다.",
+        "requiredAction": "요약에도 혼자 비교해 정하는 I의 실제 반응을 포함하고 공통 문장은 상세 근거로만 유지할지 검토한다.",
+        "state": "completed_internal_precheck_not_expert_approval",
+        "reviewerType": "model_internal_multidisciplinary_screen",
+        "screenedAt": "2026-07-23T00:00:00.000Z"
+      },
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "CAB_01_P0_VERSION_2_1_REVISION",
+    "actions": [
+      "21개 revise 항목의 v2.1 교정 문장 후보를 작성한다.",
+      "축 수정 합성 8개에서 제거한 RO·ER 의미가 남지 않도록 교정한다.",
+      "3개 ready 항목부터 7개 역할 독립 검토 입력 형식을 준비한다.",
+      "수정 후 32개 코드와 한 글자 이웃 재조합 감사를 다시 실행한다."
+    ]
+  }
+}

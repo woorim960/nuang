@@ -1,0 +1,151 @@
+{
+  "contractVersion": "nuang-trait-map-review-import-contract.v2.3",
+  "reportId": "TRAIT-MAP-REVIEW-IMPORT-CONTRACT.2.3",
+  "status": "IMPORT_SCHEMA_READY_NO_DECISIONS_IMPORTED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3",
+  "sourceIndependentProtocolReportId": "TRAIT-MAP-INDEPENDENT-REVIEW-PROTOCOL.2.3",
+  "sourceCognitiveProtocolReportId": "TRAIT-MAP-COGNITIVE-INTERVIEW-PROTOCOL.2.3",
+  "canonicalRegistry": {
+    "canonicalVariantCount": 605,
+    "allowedCanonicalVariantIds": "런타임 validator는 P2 screened ledger의 정확한 ID 집합을 사용한다."
+  },
+  "identityAndIndependence": {
+    "reviewerRoles": [
+      "personality_psychologist",
+      "psychometrician",
+      "research_methodologist",
+      "korean_plain_language_editor",
+      "safety_privacy_reviewer",
+      "product_content_designer",
+      "data_quality_engineer"
+    ],
+    "reviewerRef": "이름 대신 연구 관리자만 역매핑할 수 있는 무작위 reviewer_ref를 import한다.",
+    "qualification": "역할별 최소 자격 확인 상태와 확인자를 별도 기록한다.",
+    "conflict": "직접 저자·제품 의사결정자·경제적 이해관계는 공개하고 해당 판정의 독립 승인 자격을 제한한다.",
+    "selfApprovalProhibited": true
+  },
+  "eventRules": [
+    {
+      "id": "E01_IMMUTABLE",
+      "description": "이미 수락한 decision_id·observation_id·proposal_id·adjudication_id는 수정하지 않고 정정 이벤트를 추가한다."
+    },
+    {
+      "id": "E02_KNOWN_CANONICAL",
+      "description": "모든 이벤트는 현재 ledger에 존재하는 canonical_variant_id와 content_version을 참조한다."
+    },
+    {
+      "id": "E03_ROLE_MATCH",
+      "description": "독립 판정의 reviewer_ref 역할은 decision.role과 일치해야 한다."
+    },
+    {
+      "id": "E04_CONFLICT",
+      "description": "미해결 이해충돌 또는 자격 미확인 reviewer의 approve는 7역할 승인 집계에 포함하지 않는다."
+    },
+    {
+      "id": "E05_NO_SYNTHETIC",
+      "description": "합성 fixture·AI dry run·작성자 자기검토는 독립 판정이나 실제 참여자 인지 면담으로 import할 수 없다."
+    },
+    {
+      "id": "E06_REVISION_INVALIDATES",
+      "description": "문구·축·surface·privacy scope 수정은 새 content_version을 만들고 이전 버전의 발행 승인을 새 버전으로 승계하지 않는다."
+    },
+    {
+      "id": "E07_RETEST",
+      "description": "이해도나 뜻에 영향을 주는 교정은 동일 문구 버전의 인지 재시험 완료 전 approve될 수 없다."
+    },
+    {
+      "id": "E08_RECOMPOSE",
+      "description": "축·방향·문구 교정은 32개 성향 참조와 한 글자 이웃을 다시 조합하고 예상하지 않은 변화를 차단한다."
+    },
+    {
+      "id": "E09_NO_MAJORITY_OVERRIDE",
+      "description": "구성개념·근거·안전 반대는 다수결로 덮지 않고 revise·hold·reject 또는 해당 역할 재검토로 보낸다."
+    },
+    {
+      "id": "E10_ATOMIC_IMPORT",
+      "description": "알 수 없는 ID·중복 이벤트·잘못된 시간·필수 근거 누락이 하나라도 있으면 batch 전체를 반영하지 않는다."
+    }
+  ],
+  "aggregationStateMachine": [
+    {
+      "from": "DRAFT",
+      "to": "UNDER_INDEPENDENT_REVIEW",
+      "trigger": "첫 유효 역할 판정"
+    },
+    {
+      "from": "UNDER_INDEPENDENT_REVIEW",
+      "to": "REVISION_REQUIRED",
+      "trigger": "한 역할이라도 revise"
+    },
+    {
+      "from": "UNDER_INDEPENDENT_REVIEW",
+      "to": "EVIDENCE_HOLD",
+      "trigger": "hold 또는 근거 독립성 미해결"
+    },
+    {
+      "from": "UNDER_INDEPENDENT_REVIEW",
+      "to": "REJECTED_RETAIN_LINEAGE",
+      "trigger": "reject 확정"
+    },
+    {
+      "from": "REVISION_REQUIRED",
+      "to": "RECOMPOSITION_REQUIRED",
+      "trigger": "새 문구 version 생성"
+    },
+    {
+      "from": "RECOMPOSITION_REQUIRED",
+      "to": "COGNITIVE_RETEST_REQUIRED",
+      "trigger": "재조합·이웃 검사 통과"
+    },
+    {
+      "from": "COGNITIVE_RETEST_REQUIRED",
+      "to": "UNDER_INDEPENDENT_REVIEW",
+      "trigger": "재면담 통과 뒤 수정 역할 재검토"
+    },
+    {
+      "from": "UNDER_INDEPENDENT_REVIEW",
+      "to": "ELIGIBLE_FOR_CUSTOMER_APPROVAL",
+      "trigger": "7역할 approve·미해결 issue 0·인지 기준 통과"
+    },
+    {
+      "from": "ELIGIBLE_FOR_CUSTOMER_APPROVAL",
+      "to": "PUBLICATION_ALLOWLIST_CANDIDATE",
+      "trigger": "고객 발행 승인과 surface별 privacy 확인"
+    }
+  ],
+  "importOrder": [
+    "schema 검증",
+    "event ID 중복·정정 계보 검증",
+    "reviewer 자격·역할·이해충돌 검증",
+    "canonical ID·content version 검증",
+    "독립 판정과 인지 관측 import",
+    "revision proposal와 adjudication 연결",
+    "영향 분석·32개 재조합 dry run",
+    "원자적 commit 또는 전체 rollback",
+    "발행 게이트 재생성"
+  ],
+  "currentState": {
+    "importedBatches": 0,
+    "importedReviewers": 0,
+    "importedIndependentDecisions": 0,
+    "importedCognitiveObservations": 0,
+    "importedRevisionProposals": 0,
+    "importedAdjudications": 0,
+    "independentApprovedCanonicalVariants": 0,
+    "customerApprovedCanonicalVariants": 0
+  },
+  "generatedAssets": [
+    "review/TRAIT_MAP_REVIEW_IMPORT_SCHEMA_V2_3.json",
+    "review/TRAIT_MAP_REVIEW_IMPORT_EMPTY_V2_3.json"
+  ],
+  "nextGate": {
+    "name": "REVISION_IMPACT_DRY_RUN_ENGINE",
+    "actions": [
+      "revision proposal이 영향을 주는 32개 성향·claim·이웃 edge·surface를 계산한다.",
+      "예상 변화 allowlist 밖의 문장 변경을 차단한다.",
+      "기존 승인 무효화와 재면담·재검토 작업을 자동 생성한다."
+    ]
+  }
+}

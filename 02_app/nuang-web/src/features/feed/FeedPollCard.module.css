@@ -1,7 +1,40 @@
+.questionRow {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.questionRow p {
+  min-width: 0;
+  margin: 0;
+}
+
+.closedBadge {
+  flex: 0 0 auto;
+  margin-top: 0.05rem;
+  padding: 0.22rem 0.5rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 999px;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-info-50);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-medium);
+  line-height: 1.35;
+}
+
+.closedNote {
+  margin: 0.65rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+}
+
 .perspective {
   margin-top: 1rem;
   padding-top: 1rem;
-  border-top: 1px solid #ebd8b6;
+  border-top: 1px solid var(--nu-warm-300);
   animation: perspective-reveal 280ms cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
@@ -20,9 +53,9 @@
 }
 
 .perspectiveToggle strong {
-  color: #20232a;
-  font-size: 0.8125rem;
-  font-weight: 700;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.015em;
 }
 
@@ -31,9 +64,9 @@
   flex: 0 0 auto;
   align-items: center;
   gap: 0.18rem;
-  color: #737887;
-  font-size: 0.65625rem;
-  font-weight: 550;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-medium);
 }
 
 .perspectiveChevron {
@@ -45,7 +78,7 @@
 }
 
 .perspectiveToggle:focus-visible {
-  outline: 2px solid #c99e55;
+  outline: 2px solid var(--nu-warm-500);
   outline-offset: 2px;
 }
 
@@ -70,12 +103,12 @@
   flex: 0 0 auto;
   min-height: 2.125rem;
   padding: 0 0.6875rem;
-  border: 1px solid #e6e7eb;
+  border: 1px solid var(--nu-color-border-strong);
   border-radius: 999px;
-  color: #737887;
-  background: #fff;
-  font-size: 0.65625rem;
-  font-weight: 700;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
   white-space: nowrap;
   transition:
     color 160ms ease,
@@ -89,14 +122,14 @@
 }
 
 .perspectiveTab[aria-pressed="true"] {
-  border-color: #20232a;
-  color: #fff;
-  background: #20232a;
+  border-color: var(--nu-color-text);
+  color: var(--nu-color-surface);
+  background: var(--nu-color-text);
 }
 
 .perspectiveTab:disabled {
-  color: #a2a4ab;
-  background: #f7f7f9;
+  color: var(--nu-neutral-400);
+  background: var(--nu-info-50);
   cursor: default;
 }
 
@@ -113,29 +146,29 @@
   min-width: 0;
   gap: 0.08rem;
   padding: 0.58rem 0.35rem;
-  border: 1px solid #ebeaf1;
+  border: 1px solid var(--nu-info-100);
   border-radius: 0.75rem;
-  color: #555861;
-  background: #fbfbfd;
+  color: var(--nu-neutral-700);
+  background: var(--nu-neutral-0);
   text-align: center;
 }
 
 .codeChoice strong {
   overflow: hidden;
-  font-size: 0.6875rem;
-  font-weight: 750;
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
   text-overflow: ellipsis;
 }
 
 .codeChoice span {
-  color: #9698a0;
-  font-size: 0.5625rem;
+  color: var(--nu-neutral-400);
+  font-size: var(--nu-text-caption);
 }
 
 .codeChoice[aria-pressed="true"] {
-  border-color: #9b90ef;
-  color: #6657d9;
-  background: #f5f3ff;
+  border-color: var(--nu-info-300);
+  color: var(--nu-color-brand-action);
+  background: var(--nu-brand-50);
 }
 
 .codePending {
@@ -143,10 +176,10 @@
   margin: 0;
   padding: 0.75rem;
   border-radius: 0.75rem;
-  color: #858791;
-  background: #f7f7fa;
-  font-size: 0.65625rem;
-  line-height: 1.5;
+  color: var(--nu-neutral-500);
+  background: var(--nu-info-50);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
   text-align: center;
 }
 
@@ -158,14 +191,14 @@
 }
 
 .perspectiveName strong {
-  color: #6657d9;
-  font-size: 0.75rem;
-  font-weight: 750;
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
 }
 
 .perspectiveName span {
-  color: #858791;
-  font-size: 0.625rem;
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-caption);
 }
 
 .perspectiveResults {
@@ -179,13 +212,13 @@
   justify-content: space-between;
   gap: 0.75rem;
   margin-bottom: 0.3125rem;
-  color: #737887;
-  font-size: 0.65625rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
 }
 
 .perspectiveLabel strong {
-  color: #20232a;
-  font-weight: 700;
+  color: var(--nu-color-text);
+  font-weight: var(--nu-weight-bold);
   font-variant-numeric: tabular-nums;
 }
 
@@ -193,27 +226,27 @@
   height: 0.4375rem;
   overflow: hidden;
   border-radius: 999px;
-  background: #e9e8ef;
+  background: var(--nu-info-100);
 }
 
 .perspectiveTrack span {
   display: block;
   height: 100%;
   border-radius: inherit;
-  background: #8b621f;
+  background: var(--nu-color-play);
   transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .perspectiveNote {
   margin: 0.875rem 0 0;
   padding: 0.75rem;
-  border-left: 2px solid #c99e55;
+  border-left: 2px solid var(--nu-warm-500);
   border-radius: 0 0.8125rem 0.8125rem 0;
-  color: #747782;
-  background: #fdf8ef;
-  font-size: 0.6875rem;
-  font-weight: 450;
-  line-height: 1.55;
+  color: var(--nu-neutral-500);
+  background: var(--nu-warm-50);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-regular);
+  line-height: var(--nu-leading-body-sm);
 }
 
 @keyframes perspective-reveal {

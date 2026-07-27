@@ -37,7 +37,9 @@ export function FreeTopicRunner({
   const [answers, setAnswers] = useState<Record<string, FreeTopicAnswer>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const currentQuestion = questions[currentIndex];
-  const currentAnswer = currentQuestion ? answers[currentQuestion.id] : undefined;
+  const currentAnswer = currentQuestion
+    ? answers[currentQuestion.id]
+    : undefined;
   const isLast = currentIndex === questions.length - 1;
   const progress = Math.round(((currentIndex + 1) / questions.length) * 100);
 
@@ -87,7 +89,9 @@ export function FreeTopicRunner({
       result,
     });
     void syncFreeTopicResult(stored);
-    router.push(`/assessments/topics/${assessment.slug}/result/${stored.localResultId}`);
+    router.push(
+      `/assessments/topics/${assessment.slug}/result/${stored.localResultId}`,
+    );
   }
 
   if (!currentQuestion) {
@@ -95,9 +99,9 @@ export function FreeTopicRunner({
       <main className="mx-auto min-h-dvh max-w-[520px] bg-white px-5 py-5">
         <BackLink />
         <section className="mt-6 border-y border-line py-8">
-          <h1 className="text-2xl font-black">곧 열릴 검사예요</h1>
+          <h1 className="text-2xl font-black">이 검사는 아직 준비 중이에요</h1>
           <p className="mt-2 text-sm leading-6 text-muted">
-            이 주제는 다음 업데이트에서 더 좋은 문항으로 공개할게요.
+            다른 검사를 골라 주세요.
           </p>
         </section>
       </main>
@@ -112,8 +116,12 @@ export function FreeTopicRunner({
         <p className="text-xs font-bold text-primary">
           {assessment.categoryLabel} · 무료
         </p>
-        <h1 className="mt-3 text-2xl font-black leading-8">{assessment.title}</h1>
-        <p className="mt-2 text-sm leading-6 text-muted">{assessment.caption}</p>
+        <h1 className="mt-3 text-2xl font-black leading-8">
+          {assessment.title}
+        </h1>
+        <p className="mt-2 text-sm leading-6 text-muted">
+          {assessment.caption}
+        </p>
       </section>
 
       <section className="py-6">
@@ -123,11 +131,16 @@ export function FreeTopicRunner({
           </span>
           <span>{progress}%</span>
         </div>
-        <div className="mt-3 h-1.5 overflow-hidden bg-[#efedf5]">
-          <div className="h-full bg-primary" style={{ width: `${progress}%` }} />
+        <div className="mt-3 h-1.5 overflow-hidden bg-[var(--nu-brand-100)]">
+          <div
+            className="h-full bg-primary"
+            style={{ width: `${progress}%` }}
+          />
         </div>
 
-        <h2 className="mt-8 text-xl font-black leading-8">{currentQuestion.text}</h2>
+        <h2 className="mt-8 text-xl font-black leading-8">
+          {currentQuestion.text}
+        </h2>
         <div className="mt-6 grid gap-2">
           {responseOptions.map((option) => {
             const selected = currentAnswer?.value === option.value;
@@ -167,10 +180,6 @@ export function FreeTopicRunner({
           {isLast ? "결과 보기" : "다음"}
         </Button>
       </div>
-
-      <p className="mt-5 text-center text-xs leading-5 text-muted">
-        결과는 먼저 안전하게 저장되고, 로그인 상태에서는 연결 가능할 때 동기화돼요.
-      </p>
     </main>
   );
 }

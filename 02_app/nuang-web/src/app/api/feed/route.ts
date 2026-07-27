@@ -12,6 +12,7 @@ import { requireAuthenticatedUser } from "@/features/auth/server-auth";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { readValidatedJson } from "@/lib/api/request";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
+import { isAllowedGateCRequest } from "@/features/research/gate-c/gate-c-server-security";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -22,6 +23,17 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!isAllowedGateCRequest(request)) {
+    return NextResponse.json(
+      {
+        error: "invalid_request_origin",
+        message: "요청 출처를 확인하지 못했어요.",
+        ok: false,
+      },
+      { status: 403 },
+    );
+  }
+
   const payload = await readFeedWriteRequest(request);
 
   if (!payload.ok) {

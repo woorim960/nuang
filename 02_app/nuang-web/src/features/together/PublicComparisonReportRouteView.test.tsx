@@ -82,7 +82,7 @@ describe("PublicComparisonReportRouteView", () => {
       }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "각자 편한 방식은 이만큼 달라요" }),
+      screen.getByRole("heading", { name: "5글자 비교" }),
     ).toBeInTheDocument();
   });
 
@@ -100,7 +100,7 @@ describe("PublicComparisonReportRouteView", () => {
       screen.getByRole("heading", { name: "비교 리포트를 다시 확인해야 해요" }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { name: "각자 편한 방식은 이만큼 달라요" }),
+      screen.queryByRole("heading", { name: "5글자 비교" }),
     ).not.toBeInTheDocument();
   });
 });

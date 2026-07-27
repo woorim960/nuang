@@ -35,12 +35,15 @@ const post: FeedItem = {
 };
 
 describe("CommunityFeed", () => {
-  it("switches to decal mode and explains how to connect a viewer code", () => {
+  it("switches to decal mode and offers the required code action", () => {
     render(<CommunityFeed posts={[post]} />);
 
     fireEvent.click(screen.getByRole("button", { name: "데칼코마니" }));
 
-    expect(screen.getByText("데칼코마니 피드")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "데칼코마니" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
     expect(
       screen.queryByRole("button", {
         name: "여러 성향을 골라 게시물 모아보기",
@@ -61,12 +64,12 @@ describe("CommunityFeed", () => {
     );
     fireEvent.click(
       screen.getByRole("button", {
-        name: "ERGKC, 답을 세우는 설계자",
+        name: "ERGKC, 차분히 답을 세우는 운영가",
       }),
     );
     fireEvent.click(
       screen.getByRole("button", {
-        name: "IRGMQ, 질문을 품은 탐구자",
+        name: "IRGMQ, 변화의 원인을 좇는 추적자",
       }),
     );
     fireEvent.click(screen.getByRole("button", { name: "2개 성향의 글 보기" }));
@@ -134,7 +137,7 @@ describe("CommunityFeed", () => {
             source: "character",
             src: "/images/nuang/character-purple.png",
           },
-          profileName: "질문을 품은 탐구자",
+          profileName: "변화의 원인을 좇는 추적자",
         },
         highlights: { domainHighlights: [], facetSummaryCount: 0 },
         privacy: {
@@ -327,9 +330,7 @@ describe("CommunityFeed", () => {
 
     render(<CommunityFeed posts={[targetedQuestion]} viewerCode="IRGMC" />);
 
-    expect(
-      screen.getByText("ENAKQ의 답변을 기다리는 질문이에요."),
-    ).toBeInTheDocument();
+    expect(screen.getByText("ENAKQ에게 질문")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "답변" }));
     expect(
       screen.getByText("답변 대상으로 지정된 성향만 답변을 남길 수 있어요."),

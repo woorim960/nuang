@@ -1,0 +1,57 @@
+{
+  "contractVersion": "nuang-trait-map-targeted-axis-rewrite-packet.v2",
+  "reportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-CAB-07.0.1",
+  "batchId": "CAB-07",
+  "status": "EVIDENCE_BOUNDED_TARGETED_REWRITE_PACKET_READY",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-23T00:00:00.000Z",
+  "officialSymbolLanguageContract": "src/features/nuang-code/candidate-profile-names.ts#candidateSymbolLanguageReleaseId",
+  "summary": {
+    "neighborPairs": 0,
+    "affectedVariants": 0,
+    "oneSidedDifferentiationPairs": 0,
+    "pairsMissingBothDirections": 0,
+    "pairsWithTraceableAlternativeCandidatesOnMissingSide": 0,
+    "completedRewrites": 0,
+    "customerApprovedPairs": 0
+  },
+  "rules": [
+    "같은 claimKey 안에서 현재 축 방향이 같은 기존 문장만 보강 후보로 사용한다.",
+    "다른 상황의 문장을 가져와 새 사실처럼 붙이지 않는다.",
+    "현재 조합과 다른 축이 적게 다른 후보를 먼저 검토한다.",
+    "보강 후보는 바로 복사하지 않고 현재 조합의 다른 축 의미와 충돌하지 않는지 확인한다.",
+    "양쪽 방향에 고유 문단이 생기고 5개 검토가 끝나기 전에는 승인하지 않는다."
+  ],
+  "axisLenses": {
+    "SE": {
+      "left": "E 외향형",
+      "right": "I 내향형",
+      "distinction": "사람과 상호작용하며 생각·에너지를 움직이는 방향과, 혼자 정리하며 생각·에너지를 회복하는 방향을 구분한다."
+    },
+    "OE": {
+      "left": "R 현실형",
+      "right": "N 가능성형",
+      "distinction": "이미 확인한 사실·경험·조건을 보는 방향과, 아직 열려 있는 가능성·연결·새 관점을 보는 방향을 구분한다."
+    },
+    "RO": {
+      "left": "G 해결형",
+      "right": "A 마음형",
+      "distinction": "문제의 원인·해결·다음 행동을 먼저 살피는 방향과, 사람의 마음·관계 영향·필요를 먼저 살피는 방향을 구분한다."
+    },
+    "SM": {
+      "left": "K 꾸준형",
+      "right": "M 상황형",
+      "distinction": "정한 흐름·약속·완료 기준을 이어가는 방향과, 현재 조건·반응·에너지에 맞춰 흐름을 바꾸는 방향을 구분한다."
+    },
+    "ER": {
+      "left": "C 차분반응형",
+      "right": "Q 빠른반응형",
+      "distinction": "반응 전 잠시 살피고 정리하는 방향과, 자극을 받으면 표정·말·행동이 비교적 빠르게 나타나는 방향을 구분한다."
+    }
+  },
+  "pairs": [],
+  "nextGate": {
+    "name": "EVIDENCE_BOUNDED_REWRITE_AUTHORING",
+    "completion": "12개 쌍의 양쪽 고유 문단을 작성하고 원문·근거 계보와 축 구분을 검수한다."
+  }
+}

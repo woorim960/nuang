@@ -82,15 +82,6 @@ export function CommunityQuestionComposer() {
   return (
     <CommunityScreenShell title="뉴앙에게 물어봐">
       <div className={styles.featureBody} data-tone="conversation">
-        <section className={styles.intro}>
-          <span className={styles.eyebrow}>ASK NUANG</span>
-          <h2>궁금한 성향에게 직접 물어보세요</h2>
-          <p>
-            답을 듣고 싶은 성향을 고르면 추천 피드에서 그 사람들에게 질문을 먼저
-            보여줘요.
-          </p>
-        </section>
-
         <section className={styles.fieldSection}>
           <label className={styles.fieldLabel} htmlFor="community-question">
             질문
@@ -119,7 +110,9 @@ export function CommunityQuestionComposer() {
             </button>
           ))}
         </nav>
-        <p className={styles.audienceCopy}>{currentAudience.description}</p>
+        {audience === "trait" || audience === "exact" ? (
+          <p className={styles.audienceCopy}>{currentAudience.description}</p>
+        ) : null}
 
         {audience === "trait" ? (
           <div className={styles.traitGroups}>
@@ -155,17 +148,19 @@ export function CommunityQuestionComposer() {
               placeholder="예: ENAKQ"
               value={exactCode}
             />
-            <small>
-              {exactProfileName
-                ? `${normalizedCode} · ${exactProfileName}에게 답변을 요청해요.`
-                : "정확한 5자리 코드를 입력하면 성향 이름도 함께 확인할 수 있어요."}
-            </small>
+            {exactProfileName || exactCode.length === 5 ? (
+              <small>
+                {exactProfileName
+                  ? `${normalizedCode} · ${exactProfileName}`
+                  : "뉴앙 코드를 확인해 주세요."}
+              </small>
+            ) : null}
           </label>
         ) : null}
 
         {question.trim() ? (
           <section aria-label="질문 미리보기" className={styles.preview}>
-            <span>피드에서 이렇게 보여요 · {getAudienceLabel()}</span>
+            <span>{getAudienceLabel()}</span>
             <p>{question.trim()}</p>
           </section>
         ) : null}
@@ -244,7 +239,7 @@ export function CommunityQuestionComposer() {
         method: "POST",
       });
       const payload = (await response.json().catch(() => null)) as {
-        feedWrite?: { id?: string };
+        feedWrite?: { id?: string; moderationStatus?: string | null };
         message?: string;
       } | null;
 
@@ -266,7 +261,11 @@ export function CommunityQuestionComposer() {
       }
 
       window.sessionStorage.removeItem(pendingQuestionKey);
-      router.push(`/feed?posted=${encodeURIComponent(payload.feedWrite.id)}`);
+      router.push(
+        payload.feedWrite.moderationStatus === "pending_review"
+          ? "/feed?review=pending"
+          : `/feed?posted=${encodeURIComponent(payload.feedWrite.id)}`,
+      );
       router.refresh();
     } catch {
       setStatus({

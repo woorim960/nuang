@@ -10,17 +10,17 @@
 .completionEyebrow {
   margin: 0;
   color: var(--primary);
-  font-size: 0.8125rem;
-  font-weight: 680;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
 }
 
 .completionTitle {
   max-width: 13ch;
   margin: 0.45rem 0 0;
-  font-size: clamp(1.75rem, 7vw, 2.15rem);
-  font-weight: 720;
+  font-size: var(--nu-text-fluid-display-sm);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.035em;
-  line-height: 1.3;
+  line-height: var(--nu-leading-title);
   text-wrap: balance;
 }
 
@@ -28,8 +28,8 @@
   max-width: 29rem;
   margin: 1rem 0 0;
   color: var(--muted);
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body);
   text-wrap: balance;
 }
 
@@ -41,8 +41,8 @@
   border-radius: 15px;
   background: var(--surface-soft);
   color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .completionActions {
@@ -63,8 +63,8 @@
   border: 0;
   border-radius: 13px;
   font: inherit;
-  font-size: 0.875rem;
-  font-weight: 680;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }

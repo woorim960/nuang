@@ -9,18 +9,18 @@
 .privateDetails,
 .scopeNote,
 .statePanel {
-  background: #fff;
+  background: var(--nu-color-surface);
 }
 
 .preview {
   padding: 20px 16px 18px;
-  border-bottom: 8px solid #f6f5f2;
+  border-bottom: 8px solid var(--nu-color-app-bg);
 }
 
 .previewEyebrow {
-  color: #737887;
-  font-size: 11px;
-  font-weight: 700;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
 }
 
 .previewIdentity {
@@ -37,10 +37,10 @@
   height: 46px;
   place-items: center;
   border-radius: 50%;
-  color: #5144b5;
-  background: linear-gradient(145deg, #e9e8ff, #def4ef);
-  font-size: 15px;
-  font-weight: 760;
+  color: var(--nu-color-brand-strong);
+  background: linear-gradient(145deg, var(--nu-info-50), var(--nu-info-100));
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
 }
 
 .previewIdentity > span:last-child {
@@ -51,16 +51,16 @@
 
 .previewIdentity strong {
   overflow: hidden;
-  color: #20232a;
-  font-size: 15px;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-callout);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
 .previewIdentity small {
   overflow: hidden;
-  color: #737887;
-  font-size: 12px;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -70,43 +70,13 @@
   min-height: 44px;
   align-items: center;
   margin-top: 10px;
-  color: #6657d9;
-  font-size: 12px;
-  font-weight: 750;
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
 }
 
 .group {
-  border-bottom: 8px solid #f6f5f2;
-}
-
-.groupIntro {
-  display: grid;
-  grid-template-columns: 22px minmax(0, 1fr);
-  gap: 10px;
-  padding: 18px 16px 14px;
-}
-
-.groupIntro > svg {
-  margin-top: 2px;
-  color: #6657d9;
-}
-
-.groupIntro h2,
-.groupIntro p {
-  margin: 0;
-}
-
-.groupIntro h2 {
-  color: #20232a;
-  font-size: 14px;
-  font-weight: 760;
-}
-
-.groupIntro p {
-  margin-top: 3px;
-  color: #737887;
-  font-size: 12px;
-  line-height: 1.55;
+  border-bottom: 8px solid var(--nu-color-app-bg);
 }
 
 .fixedRow,
@@ -117,7 +87,7 @@
   align-items: center;
   gap: 14px;
   margin: 0 16px;
-  border-top: 1px solid #ececf1;
+  border-top: 1px solid var(--nu-color-border);
 }
 
 .fixedRow > span:first-child,
@@ -129,23 +99,23 @@
 
 .fixedRow strong,
 .switchRow strong {
-  color: #20232a;
-  font-size: 13px;
-  font-weight: 720;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
 }
 
 .fixedRow small,
 .switchRow small {
-  color: #737887;
-  font-size: 11px;
-  line-height: 1.5;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
   word-break: keep-all;
 }
 
 .publicLabel {
-  color: #42856f;
-  font-size: 11px;
-  font-weight: 750;
+  color: var(--nu-community-700);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
 }
 
 .switch {
@@ -154,7 +124,7 @@
   height: 28px;
   flex: 0 0 auto;
   border-radius: 999px;
-  background: #dedfe5;
+  background: var(--nu-neutral-150);
   transition: background 160ms ease;
 }
 
@@ -165,13 +135,14 @@
   width: 22px;
   height: 22px;
   border-radius: 50%;
-  background: #fff;
-  box-shadow: 0 2px 5px rgb(32 35 42 / 18%);
+  background: var(--nu-color-surface);
+  box-shadow: 0 2px 5px
+    color-mix(in srgb, var(--nu-neutral-900) 18%, transparent);
   transition: transform 160ms ease;
 }
 
 .switch[aria-checked="true"] {
-  background: #7f72df;
+  background: var(--nu-info-300);
 }
 
 .switch[aria-checked="true"] span {
@@ -179,7 +150,7 @@
 }
 
 .switch:focus-visible {
-  outline: 3px solid rgb(102 87 217 / 20%);
+  outline: 3px solid color-mix(in srgb, var(--nu-info-500) 20%, transparent);
   outline-offset: 2px;
 }
 
@@ -188,19 +159,19 @@
   grid-template-columns: 20px minmax(0, 1fr);
   gap: 10px;
   padding: 15px 16px;
-  border-bottom: 8px solid #f6f5f2;
-  color: #737887;
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  color: var(--nu-color-text-muted);
 }
 
 .scopeNote p {
   margin: 0;
-  font-size: 11px;
-  line-height: 1.65;
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body);
   word-break: keep-all;
 }
 
 .privateDetails {
-  border-bottom: 1px solid #ececf1;
+  border-bottom: 1px solid var(--nu-color-border);
 }
 
 .privateDetails summary {
@@ -224,17 +195,12 @@
 }
 
 .privateDetails summary strong {
-  color: #20232a;
-  font-size: 13px;
-}
-
-.privateDetails summary small {
-  color: #737887;
-  font-size: 11px;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
 }
 
 .privateDetails summary > svg:last-child {
-  color: #9a9da7;
+  color: var(--nu-neutral-400);
   transition: transform 160ms ease;
 }
 
@@ -247,9 +213,9 @@
   gap: 8px;
   margin: 0;
   padding: 0 16px 18px 48px;
-  color: #737887;
-  font-size: 11px;
-  line-height: 1.5;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
 }
 
 .privateDetails li {
@@ -260,10 +226,10 @@
   margin: 4px 16px 0;
   padding: 10px 12px;
   border-radius: 12px;
-  color: #525761;
-  background: #f6f5f2;
-  font-size: 11px;
-  line-height: 1.5;
+  color: var(--nu-neutral-700);
+  background: var(--nu-color-app-bg);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
 }
 
 .saveDock {
@@ -271,8 +237,8 @@
   z-index: 10;
   bottom: 0;
   padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-  border-top: 1px solid #ececf1;
-  background: rgb(255 255 255 / 94%);
+  border-top: 1px solid var(--nu-color-border);
+  background: color-mix(in srgb, var(--nu-neutral-0) 94%, transparent);
   backdrop-filter: blur(14px);
 }
 
@@ -284,10 +250,10 @@
   justify-content: center;
   gap: 7px;
   border-radius: 14px;
-  color: #fff;
-  background: #6657d9;
-  font-size: 13px;
-  font-weight: 760;
+  color: var(--nu-color-surface);
+  background: var(--nu-color-brand-action);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
 }
 
 .saveDock button {
@@ -305,20 +271,20 @@
   align-content: center;
   gap: 8px;
   padding: 36px 24px;
-  color: #737887;
+  color: var(--nu-color-text-muted);
   text-align: center;
 }
 
 .statePanel strong {
-  color: #20232a;
-  font-size: 14px;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
 }
 
 .statePanel p {
   max-width: 280px;
   margin: 0;
-  font-size: 12px;
-  line-height: 1.6;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .statePanel button {
@@ -330,8 +296,8 @@
 .loader {
   width: 25px;
   height: 25px;
-  border: 2px solid #dedaf8;
-  border-top-color: #6657d9;
+  border: 2px solid var(--nu-info-100);
+  border-top-color: var(--nu-color-brand-action);
   border-radius: 50%;
   animation: spin 800ms linear infinite;
 }

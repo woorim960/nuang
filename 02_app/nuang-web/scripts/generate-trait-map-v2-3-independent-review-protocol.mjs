@@ -1,0 +1,309 @@
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import prettier from "prettier";
+
+const scriptDirectory = path.dirname(fileURLToPath(import.meta.url));
+const projectRoot = path.resolve(scriptDirectory, "..");
+const docsDirectory = path.join(
+  projectRoot,
+  "docs/research/trait-map-data-center-v2",
+);
+const reviewDirectory = path.join(docsDirectory, "review");
+const outputPath = path.join(
+  reviewDirectory,
+  "TRAIT_MAP_INDEPENDENT_REVIEW_PROTOCOL_V2_3.json",
+);
+const reportPath = path.join(
+  docsDirectory,
+  "122_INDEPENDENT_REVIEW_PROTOCOL_V2_3.md",
+);
+const checkOnly = process.argv.includes("--check");
+const protocol = {
+  contractVersion:
+    "nuang-trait-map-independent-review-protocol.v2.3",
+  reportId: "TRAIT-MAP-INDEPENDENT-REVIEW-PROTOCOL.2.3",
+  status: "INDEPENDENT_REVIEW_PROTOCOL_READY_REVIEWERS_NOT_ASSIGNED",
+  publicationState: "research_only",
+  generatedAt: "2026-07-24T00:00:00.000Z",
+  independenceRule:
+    "문장을 생성·교정·패킷화한 사람 또는 모델의 판단은 독립 승인으로 기록하지 않는다.",
+  roles: [
+    {
+      role: "personality_psychologist",
+      minimumQualification:
+        "성격심리 또는 개인차 연구 박사급 훈련과 관련 연구·교육 경험",
+      primaryQuestions: [
+        "공식 축 뜻과 현재 문장이 같은 구성개념을 설명하는가?",
+        "다른 성격 특성·상태·능력·가치를 축에 섞지 않았는가?",
+        "반대 방향을 결함이나 우월성으로 묘사하지 않는가?",
+      ],
+    },
+    {
+      role: "psychometrician",
+      minimumQualification:
+        "심리측정·검사 개발·타당도 연구의 대학원급 훈련과 분석 경험",
+      primaryQuestions: [
+        "문장이 현재 점수 해석이 허용하는 범위를 넘는가?",
+        "축·세부 반응·상황 효과를 서로 다른 근거로 구분했는가?",
+        "구조 검사 결과를 경험적 타당도로 잘못 표현하지 않는가?",
+      ],
+    },
+    {
+      role: "research_methodologist",
+      minimumQualification:
+        "질적·양적 연구 설계, 편향, 인과·일반화 경계 검토 경험",
+      primaryQuestions: [
+        "finding과 문장 사이의 추론 단계가 재현 가능한가?",
+        "두 출처가 같은 데이터·표본·연구팀에 의존하지 않는가?",
+        "상관·집단 평균을 개인의 확정 행동이나 결과 예측으로 바꾸지 않았는가?",
+      ],
+    },
+    {
+      role: "korean_plain_language_editor",
+      minimumQualification:
+        "한국어 문장 편집·국어·스피치 또는 쉬운 공공언어 검토 경험",
+      primaryQuestions: [
+        "어린이·고령 사용자도 한 번에 뜻을 이해할 수 있는가?",
+        "번역투·추상 명사·겹문장·낯선 연구 용어가 남아 있는가?",
+        "같은 뜻이 반복되거나 말끝이 기계적으로 이어지지 않는가?",
+      ],
+    },
+    {
+      role: "safety_privacy_reviewer",
+      minimumQualification:
+        "정신건강 안전·연구윤리·개인정보 또는 신뢰안전 정책 검토 경험",
+      primaryQuestions: [
+        "진단·낙인·능력·도덕성·관계 성공 오해를 만들 수 있는가?",
+        "타인 프로필·비교·공유에서 민감한 추론이 늘어나는가?",
+        "현재 privacyScope와 허용·금지 화면이 충분히 제한적인가?",
+      ],
+    },
+    {
+      role: "product_content_designer",
+      minimumQualification:
+        "모바일 앱 정보 구조·콘텐츠 디자인·사용성 연구 경험",
+      primaryQuestions: [
+        "고객의 현재 질문에 답하며 행동 가능한 다음 정보로 이어지는가?",
+        "한 화면에서 중복되거나 인지 부담을 높이는 문장은 없는가?",
+        "결과·지도·비교·프로필에 맞는 깊이와 공개 범위인가?",
+      ],
+    },
+    {
+      role: "data_quality_engineer",
+      minimumQualification:
+        "버전·계보·데이터 품질·재현성·자동 검증 설계 경험",
+      primaryQuestions: [
+        "canonical ID·문장 버전·출처·교정 전후가 완전하게 연결되는가?",
+        "같은 claim의 축 서명과 32개 재조합에서 예상한 변화만 생기는가?",
+        "승인·철회·롤백을 자동으로 재현할 수 있는가?",
+      ],
+    },
+  ],
+  reviewerIdentityContract: {
+    requiredFields: [
+      "reviewerRef",
+      "role",
+      "qualificationSummary",
+      "relevantExperienceYearsBand",
+      "conflictOfInterestDeclaration",
+      "confidentialityAgreementVersion",
+      "assignedAt",
+    ],
+    prohibitedPublicFields: [
+      "personalEmail",
+      "phone",
+      "homeAddress",
+      "unnecessaryIdentityDocuments",
+    ],
+    onePersonRoleLimit:
+      "한 사람이 최대 두 역할까지 맡을 수 있으나 같은 항목의 최초 판정에서는 한 역할로만 기록한다.",
+    distinctJudgmentRule:
+      "각 항목은 역할별로 서로 분리된 7개 판정 행을 가져야 한다.",
+  },
+  conflictsOfInterest: {
+    disqualifying: [
+      "해당 문장을 직접 생성하거나 교정했다.",
+      "검토 결과에 따라 직접적인 금전 보상을 받는다.",
+      "자신의 논문·도구·서비스를 승인해야 하는 위치다.",
+      "독립 판정 전에 다른 역할의 결정과 근거를 보았다.",
+    ],
+    manageableWithDisclosure: [
+      "뉴앙의 다른 화면 자문에 참여했다.",
+      "인용된 연구 분야에서 활동하지만 해당 연구의 저자는 아니다.",
+    ],
+  },
+  reviewPhases: [
+    {
+      phase: "R1_BLIND_INDIVIDUAL",
+      visibility: [
+        "현재 문장",
+        "공식 축 뜻",
+        "상황·문장 역할",
+        "필요한 역할별 질문",
+      ],
+      hidden: [
+        "다른 검토자 판정",
+        "내부 모델의 최종 유지·교정 선호",
+      ],
+      output: ["approve", "revise", "hold", "reject"],
+    },
+    {
+      phase: "R2_EVIDENCE_AND_NEIGHBOR",
+      visibility: [
+        "두 원문과 finding·sourceRef",
+        "같은 claim의 반대·복합 방향",
+        "32개 재조합·이웃 검사 결과",
+      ],
+      output: ["approve", "revise", "hold", "reject"],
+    },
+    {
+      phase: "R3_CONSENSUS",
+      visibility: [
+        "7개 역할의 제출 완료 판정과 근거",
+        "불일치 issue code",
+      ],
+      output: [
+        "consensus_approve",
+        "revision_required",
+        "evidence_hold",
+        "reject_and_retire",
+      ],
+    },
+    {
+      phase: "R4_RETEST",
+      visibility: [
+        "교정 전후",
+        "원 issue code",
+        "인지 면담 결과",
+        "새 재조합 감사",
+      ],
+      output: [
+        "independent_review_complete",
+        "additional_revision_required",
+      ],
+    },
+  ],
+  decisionContract: {
+    issueCodes: [
+      "CONSTRUCT_MISMATCH",
+      "AXIS_DIRECTION_AMBIGUOUS",
+      "NEIGHBOR_NOT_DISTINGUISHABLE",
+      "SOURCE_SCOPE_EXCEEDED",
+      "SOURCE_DEPENDENCE_UNRESOLVED",
+      "INDIVIDUAL_OVERGENERALIZATION",
+      "DETERMINISTIC_OR_PREDICTIVE",
+      "CLINICAL_OR_STIGMATIZING",
+      "ABILITY_MORALITY_LEAK",
+      "KOREAN_HARD_TO_UNDERSTAND",
+      "TRANSLATION_TONE",
+      "DUPLICATE_INFORMATION",
+      "SURFACE_SCOPE_MISMATCH",
+      "PRIVACY_SCOPE_TOO_BROAD",
+      "LINEAGE_OR_VERSION_GAP",
+    ],
+    unanimousRule:
+      "고객 발행 후보가 되려면 7개 역할 모두 최종 approve이고 미해결 issue code가 없어야 한다.",
+    revisionRule:
+      "한 역할이라도 revise이면 교정·재조합·해당 역할 재검토·인지 재시험을 수행한다.",
+    holdRule:
+      "근거 범위·독립성·표본 이해도가 부족하면 문장을 유지하지 않고 hold로 격리한다.",
+    rejectRule:
+      "구성개념 밖이거나 안전하게 교정할 수 없는 문장은 canonical 계보만 남기고 운영 후보에서 퇴역한다.",
+    noMajorityOverride:
+      "안전·구성개념·근거 범위의 반대는 단순 다수결로 덮지 않는다.",
+  },
+  workloadPlan: {
+    P0: {
+      entries: 162,
+      packets: 11,
+      order: 1,
+    },
+    P1: {
+      entries: 298,
+      claimGroups: 131,
+      packets: 14,
+      order: 2,
+    },
+    P2: {
+      population: 84,
+      stratifiedSample: 54,
+      expansionRule:
+        "표본에서 같은 층의 중대한 반복 결함이 두 건 이상이면 해당 층 전체를 검토한다.",
+      order: 3,
+    },
+    COMMON: {
+      entries: 61,
+      purpose: "개인화 금지·연구 계보 보관 정책만 감사",
+      order: 4,
+    },
+  },
+  auditRequirements: [
+    "모든 판정에는 reviewerRef·역할·버전·시간·근거·issue code를 저장한다.",
+    "최초 블라인드 판정은 제출 뒤 수정하지 않고 후속 단계에서 새 판정을 추가한다.",
+    "패킷 생성 모델과 내부 교정 모델은 reviewerRef를 받을 수 없다.",
+    "합의 전에 각 역할의 제출 완료 여부를 자동 검사한다.",
+    "교정 뒤 canonical version을 올리고 이전 버전을 삭제하지 않는다.",
+    "발행·철회·롤백 allowlist는 승인 원장으로부터만 생성한다.",
+  ],
+  implementationState: {
+    protocolReady: true,
+    reviewersAssigned: 0,
+    independentRoleDecisionsRecorded: 0,
+    consensusApprovedEntries: 0,
+    customerApprovedEntries: 0,
+  },
+  nextGate: {
+    name: "VALIDITY_ARGUMENT_AND_EVIDENCE_MAP",
+    actions: [
+      "검사 점수, 성향지도 문장, 관계 비교, 역할형 이름의 주장 범위를 분리한다.",
+      "각 제품 주장이 어떤 근거를 통과해야 하는지와 현재 부족한 근거를 연결한다.",
+      "성향지도 문장 검토가 검사 점수 타당도나 관계 궁합 예측을 대신하지 못하게 한다.",
+    ],
+  },
+};
+
+const output = await prettier.format(JSON.stringify(protocol), {
+  parser: "json",
+});
+const markdown = await prettier.format(buildMarkdown(protocol), {
+  parser: "markdown",
+});
+if (checkOnly) {
+  const stale =
+    !fs.existsSync(outputPath) ||
+    !fs.existsSync(reportPath) ||
+    fs.readFileSync(outputPath, "utf8") !== output ||
+    fs.readFileSync(reportPath, "utf8") !== markdown;
+  if (stale) {
+    console.error("v2.3 independent review protocol is stale.");
+    process.exit(1);
+  }
+} else {
+  fs.writeFileSync(outputPath, output);
+  fs.writeFileSync(reportPath, markdown);
+}
+console.log(
+  `Independent review protocol v2.3: ${protocol.roles.length} roles, ${protocol.reviewPhases.length} phases, reviewers assigned ${protocol.implementationState.reviewersAssigned}.`,
+);
+
+function buildMarkdown(result) {
+  return `# v2.3 독립 7역할 검토 프로토콜
+
+- 역할: ${result.roles.length}개
+- 단계: ${result.reviewPhases.length}개
+- 배정 검토자: ${result.implementationState.reviewersAssigned}
+- 독립 역할 판정: ${result.implementationState.independentRoleDecisionsRecorded}
+- 합의 승인: ${result.implementationState.consensusApprovedEntries}
+
+문장을 생성·교정·패킷화한 사람이나 모델의 판단은 독립 승인으로 기록하지
+않는다. 성격심리·심리측정·연구방법·쉬운 한국어·안전과 개인정보·제품
+콘텐츠·데이터 품질의 7개 역할이 블라인드 최초 판정, 근거·이웃 대조,
+합의, 수정 후 재검토를 순서대로 수행한다.
+
+한 역할이라도 수정이면 교정과 재검사를 하고, 근거 범위나 독립성이
+부족하면 보류한다. 안전·구성개념·근거 범위의 반대는 다수결로 덮지
+않는다. 고객 발행 후보는 7개 역할이 모두 승인하고 미해결 issue가 없는
+문장뿐이다.
+`;
+}

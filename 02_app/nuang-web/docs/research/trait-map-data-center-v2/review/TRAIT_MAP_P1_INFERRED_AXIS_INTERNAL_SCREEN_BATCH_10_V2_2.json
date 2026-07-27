@@ -1,0 +1,481 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-10.0.1",
+  "batchId": "P1-IAS-10",
+  "status": "P1_INFERRED_AXIS_BATCH_10_SCOPE_AMENDMENT_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 6,
+    "variants": 12,
+    "retainCandidates": 0,
+    "revisionCandidates": 0,
+    "scopeRemovalClaimAxes": 6,
+    "scopeRemovalVariants": 12,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-RO-WORK-BOUNDARY-ATTENTION",
+      "claimKey": ".scenario.work.boundary.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "remove_inferred_ro_axis_from_claim"
+    },
+    {
+      "reviewId": "P1-IAS-RO-WORK-NEED_EXPRESSION-ATTENTION",
+      "claimKey": ".scenario.work.need_expression.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "remove_inferred_ro_axis_from_claim"
+    },
+    {
+      "reviewId": "P1-IAS-RO-WORK-SUPPORT_REQUESTED-ATTENTION",
+      "claimKey": ".scenario.work.support_requested.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "remove_inferred_ro_axis_from_claim"
+    },
+    {
+      "reviewId": "P1-IAS-RO-WORK-SUPPORT_REQUESTED-COMMUNICATION",
+      "claimKey": ".scenario.work.support_requested.communication",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "internalDecision": "remove_inferred_ro_axis_from_claim"
+    },
+    {
+      "reviewId": "P1-IAS-RO-WORK-SUPPORT_REQUESTED-PROCESS",
+      "claimKey": ".scenario.work.support_requested.process",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "internalDecision": "remove_inferred_ro_axis_from_claim"
+    },
+    {
+      "reviewId": "P1-IAS-RO-WORK-SUPPORT_REQUESTED-RESPONSE",
+      "claimKey": ".scenario.work.support_requested.response",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "internalDecision": "remove_inferred_ro_axis_from_claim"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.work.boundary.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "업무 범위·시간·책임이 계속 넘어오면 불만을 크게 드러내기보다 어떤 요청이 기존 역할과 충돌하고 결과에 어떤 영향을 주는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "업무 범위·시간·책임이 계속 넘어오면 불만을 크게 드러내기보다 어떤 요청이 기존 역할과 충돌하고 결과에 어떤 영향을 주는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-BOUNDARY-ATTENTION-RO-A",
+      "claimKey": ".scenario.work.boundary.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "업무 범위와 시간이 계속 침범되면 관계가 어색해질 걱정과 팀에 미칠 영향, 목표를 지키기 위해 조정할 기준을 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "업무 범위와 시간이 계속 침범되면 관계가 어색해질 걱정과 팀에 미칠 영향, 목표를 지키기 위해 조정할 기준을 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.work.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "업무 도움이 필요할 때 막연히 힘들다고 말하기보다 막힌 지점과 필요한 정보·권한·시간을 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "업무 도움이 필요할 때 막연히 힘들다고 말하기보다 막힌 지점과 필요한 정보·권한·시간을 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-ATTENTION-RO-A",
+      "claimKey": ".scenario.work.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "업무에서 필요한 자원·시간·도움을 말해야 할 때 요청이 다른 사람에게 줄 부담과 요청하지 않았을 때 결과에 생길 위험을 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "업무에서 필요한 자원·시간·도움을 말해야 할 때 요청이 다른 사람에게 줄 부담과 요청하지 않았을 때 결과에 생길 위험을 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "claimKey": ".scenario.work.support_requested.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "동료가 업무 도움을 요청하면 문제의 원인과 현재까지 한 일, 마감, 자신이 맡아야 할 정확한 범위를 먼저 확인하려는 경향이 있다.",
+        "detailParagraphs": [
+          "동료가 업무 도움을 요청하면 문제의 원인과 현재까지 한 일, 마감, 자신이 맡아야 할 정확한 범위를 먼저 확인하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "claimKey": ".scenario.work.support_requested.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "동료가 도움을 요청하면 동료가 가장 부담스러워하는 지점과 팀에 미칠 영향, 함께 시도할 수 있는 여러 해결 방법을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "동료가 도움을 요청하면 동료가 가장 부담스러워하는 지점과 팀에 미칠 영향, 함께 시도할 수 있는 여러 해결 방법을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.work.support_requested.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“지금 막힌 지점이 여기라면 나는 이 자료를 정리할게요. 나머지는 이 순서로 확인해 보세요”처럼 역할과 방법을 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금 막힌 지점이 여기라면 나는 이 자료를 정리할게요. 나머지는 이 순서로 확인해 보세요”처럼 역할과 방법을 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.work.support_requested.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“어느 부분이 가장 막혔는지 알려주세요. 제가 맡을 일과 같이 확인할 방법을 정해보겠습니다”처럼 경험 확인과 실행을 연결하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“어느 부분이 가장 막혔는지 알려주세요. 제가 맡을 일과 같이 확인할 방법을 정해보겠습니다”처럼 경험 확인과 실행을 연결하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "claimKey": ".scenario.work.support_requested.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“어느 단계가 막혔고, 내가 알려주는 것이 나은지 직접 맡는 것이 나은지”를 구분하려 하기 쉽다.",
+        "detailParagraphs": [
+          "“어느 단계가 막혔고, 내가 알려주는 것이 나은지 직접 맡는 것이 나은지”를 구분하려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "claimKey": ".scenario.work.support_requested.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“이 사람이 혼자 감당하지 않게 하려면 내가 무엇을 맡고, 어떤 다른 방법도 열어둘 수 있을까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“이 사람이 혼자 감당하지 않게 하려면 내가 무엇을 맡고, 어떤 다른 방법도 열어둘 수 있을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "claimKey": ".scenario.work.support_requested.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "상황을 들은 뒤 필요한 자료나 해결 순서를 정리하고, 자신이 할 수 있는 구체적인 부분을 맡는 편이다.",
+        "detailParagraphs": [
+          "상황을 들은 뒤 필요한 자료나 해결 순서를 정리하고, 자신이 할 수 있는 구체적인 부분을 맡는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "claimKey": ".scenario.work.support_requested.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "동료의 상황과 원하는 도움을 듣고, 가능한 해결책을 함께 정리한 뒤 역할과 점검 시점을 정해 지원을 이어가는 편이다.",
+        "detailParagraphs": [
+          "동료의 상황과 원하는 도움을 듣고, 가능한 해결책을 함께 정리한 뒤 역할과 점검 시점을 정해 지원을 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "remove_inferred_axis_from_claim",
+        "rationale": "이 문장은 업무 과제 해결·자원 요청·동료 지원을 설명한다. 공식 G/A는 관계 문제에서 원인·해결을 보는 G와 마음·관계 영향·필요를 보는 A의 상대적 방향이며, 일반 업무 해결과 사람의 등장만으로 G/A를 붙이는 것을 명시적으로 금지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "proposedAxisAmendment": {
+        "axisRef": "RO",
+        "action": "remove_from_claim",
+        "state": "internal_scope_amendment_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "COMPLETE_REMAINING_P1_SCOPE_SCREEN_BEFORE_REBUILD",
+    "actions": [
+      "이 6개 claim의 RO 제거 수정안을 축 수정 대기열에 보존한다.",
+      "P1-IAS-11~17의 범위 오류를 먼저 판독해 수정 범위를 한 번에 확정한다.",
+      "범위 감사 완료 전에는 v2.2 원장을 고객 화면에 발행하지 않는다."
+    ]
+  }
+}

@@ -109,7 +109,7 @@ export function TraitRadarChart({
               />
               <circle cx={end.x} cy={end.y} fill={color} r="3.5" />
               <text
-                className="fill-foreground text-[10px] font-black"
+                className="fill-foreground text-caption font-black"
                 dominantBaseline="middle"
                 textAnchor={anchor}
                 x={labelPoint.x}
@@ -118,7 +118,7 @@ export function TraitRadarChart({
                 {axis.shortLabel ?? axis.label}
               </text>
               <text
-                className="fill-muted text-[8px] font-bold"
+                className="fill-muted text-caption font-bold"
                 dominantBaseline="middle"
                 textAnchor={anchor}
                 x={labelPoint.x}
@@ -146,7 +146,7 @@ export function TraitRadarChart({
           strokeWidth="1"
         />
         <text
-          className="fill-primary text-[10px] font-black"
+          className="fill-primary text-caption font-black"
           dominantBaseline="middle"
           textAnchor="middle"
           x={center}

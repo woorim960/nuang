@@ -1,14 +1,10 @@
-import {
-  ArrowLeft,
-  ArrowRight,
-  BadgeCheck,
-  LockKeyhole,
-  MessageCircle,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, BadgeCheck, MessageCircle } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
+import { FeedMoreMenu } from "@/features/feed/FeedMoreMenu";
+import { SafeLinkedText } from "@/features/feed/SafeLinkedText";
 import type { FeedItem, FeedReplyPreview } from "@/features/feed/feed-seed";
 import {
   createServerFeedPostDetailPayload,
@@ -89,7 +85,11 @@ function PostCard({ post }: { post: FeedItem }) {
           ))}
         </div>
       ) : null}
-      <p className={styles.postBody}>{post.body}</p>
+      <SafeLinkedText
+        className={styles.postBody}
+        links={post.links}
+        text={post.body}
+      />
 
       {post.reportShare ? (
         <Link className={styles.reportLink} href={post.reportShare.href}>
@@ -142,6 +142,8 @@ function CommentSection({
   payload: FeedPostDetailPayload;
   returnTo: string;
 }) {
+  const responsesClosed = payload.post.responseStatus === "closed";
+
   return (
     <section className={styles.commentSection}>
       <div className={styles.sectionHeading}>
@@ -153,11 +155,6 @@ function CommentSection({
         </div>
         <span>{payload.comments.length.toLocaleString("ko-KR")}개</span>
       </div>
-
-      <aside className={styles.communityNote}>
-        <LockKeyhole aria-hidden="true" size={16} strokeWidth={1.9} />
-        <p>검사 답변이나 점수 대신, 이 이야기에 대한 생각만 나눠요.</p>
-      </aside>
 
       {payload.comments.length > 0 ? (
         <div aria-label="댓글 목록" className={styles.commentList}>
@@ -171,23 +168,21 @@ function CommentSection({
             <MessageCircle size={19} strokeWidth={1.8} />
           </span>
           <strong>아직 댓글이 없어요</strong>
-          <p>이 이야기를 보고 든 생각을 가장 먼저 남겨보세요.</p>
         </div>
       )}
 
       <div className={styles.composer}>
-        <FeedActionButtons
-          commentComposer
-          commentPlaceholder="생각을 이어서 남겨보세요."
-          postId={payload.post.id}
-          returnTo={returnTo}
-          targetType="feed_post"
-        />
-        <p>
-          {payload.viewer.isAuthenticated
-            ? "등록한 댓글은 바로 확인할 수 있고, 운영 기준에 따라 공개돼요."
-            : "작성한 내용은 로그인 후에도 사라지지 않고 그대로 이어져요."}
-        </p>
+        {responsesClosed ? (
+          <p>응답이 마감됐어요. 기존 댓글은 계속 볼 수 있어요.</p>
+        ) : (
+          <FeedActionButtons
+            commentComposer
+            commentPlaceholder="생각을 이어서 남겨보세요."
+            postId={payload.post.id}
+            returnTo={returnTo}
+            targetType="feed_post"
+          />
+        )}
       </div>
     </section>
   );
@@ -204,8 +199,15 @@ function Comment({ comment }: { comment: FeedReplyPreview }) {
           <strong>{comment.authorName}</strong>
           {comment.timeLabel ? <time>{comment.timeLabel}</time> : null}
           {comment.statusLabel ? <small>{comment.statusLabel}</small> : null}
+          {comment.reportable ? (
+            <FeedMoreMenu
+              compact
+              postId={comment.id}
+              targetType="feed_comment"
+            />
+          ) : null}
         </div>
-        <p>{comment.body}</p>
+        <SafeLinkedText links={comment.links} text={comment.body} />
       </div>
     </article>
   );

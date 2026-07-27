@@ -10,7 +10,6 @@ import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import styles from "./AssessmentHomeCoreSection.module.css";
 
 type CoreJourneyState = {
-  caption: string;
   cta: string;
   eyebrow: string;
   href: string;
@@ -60,7 +59,6 @@ export function AssessmentHomeCoreSection() {
         <div className={styles.copy}>
           <p className={styles.eyebrow}>{journey.eyebrow}</p>
           <h3>{journey.title}</h3>
-          <p className={styles.caption}>{journey.caption}</p>
         </div>
         <div className={styles.characterStage}>
           <span />
@@ -156,7 +154,6 @@ function buildJourneyState(
         : "내 정밀 성향 결과";
 
     return {
-      caption: "성향지도와 사람 비교에서 사용할 자세한 결과가 준비됐어요.",
       cta: "내 성향 결과 보기",
       eyebrow: "정밀 성향 검사 완료",
       href: `/results/local/${fullCompleted.id}`,
@@ -167,7 +164,6 @@ function buildJourneyState(
 
   if (fullInProgress) {
     return {
-      caption: "지금까지 답한 내용은 그대로 남아 있어요.",
       cta: "정밀 검사 이어하기",
       eyebrow: "답하던 검사",
       href: buildPrecisionIntroHref({
@@ -183,7 +179,6 @@ function buildJourneyState(
 
   if (quickCompleted) {
     return {
-      caption: "더 다양한 상황에 답하면 성향지도와 비교 기준이 완성돼요.",
       cta: "정밀 성향 검사 시작하기",
       eyebrow: "첫 성향 검사 완료",
       href: buildPrecisionIntroHref({
@@ -198,7 +193,6 @@ function buildJourneyState(
 
   if (quickInProgress) {
     return {
-      caption: "지금까지 답한 내용은 그대로 남아 있어요.",
       cta: "첫 성향 검사 이어하기",
       eyebrow: "답하던 검사",
       href: "/assessments/nu-core-quick?returnTo=%2Fassessments",
@@ -209,7 +203,6 @@ function buildJourneyState(
   }
 
   return {
-    caption: "약 3분 동안 평소 모습을 답하면 첫 뉴앙 코드를 만날 수 있어요.",
     cta: "첫 성향 검사 시작하기",
     eyebrow: "뉴앙이 처음이라면",
     href: "/assessments/nu-core-quick?returnTo=%2Fassessments",

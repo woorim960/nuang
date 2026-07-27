@@ -68,16 +68,6 @@ export function AssessmentHub() {
         </Link>
       </header>
 
-      <section className={styles.intro}>
-        <p className={styles.eyebrow}>나를 이해하는 작은 발견</p>
-        <h2>어떤 나를 알아보고 싶나요?</h2>
-        <p>
-          관계와 감정, 일상 속 내 모습을
-          <br />
-          지금 궁금한 것부터 골라보세요.
-        </p>
-      </section>
-
       <nav
         aria-label="검사 주제"
         className={styles.categoryDock}
@@ -121,27 +111,23 @@ export function AssessmentHub() {
 
       <section className={styles.coreSection}>
         <div className={styles.sectionHeading}>
-          <div>
-            <p className={styles.sectionEyebrow}>내 기본 코드</p>
-            <h2>뉴앙 코드 여정</h2>
-          </div>
-          <p>다섯 글자는 나를 설명하는 출발점이에요.</p>
+          <h2>뉴앙 코드 여정</h2>
         </div>
         <AssessmentHomeCoreSection />
       </section>
 
       <section className={styles.utilitySection}>
         <Link
-          aria-label="뉴앙 검사 질문 다듬기에 참여하기, 익명 참여 약 4분"
+          aria-label="뉴앙 검사 질문 리뷰에 참여하기, 약 4분, 리뷰 이벤트 진행"
           className={styles.utilityRow}
-          href="/research/gate-c?from=assessments"
+          href="/research?from=assessments"
         >
           <span className={styles.utilityIcon} data-tone="teal">
             <MessageCircle aria-hidden="true" size={18} strokeWidth={1.7} />
           </span>
           <span className={styles.utilityCopy}>
-            <strong>뉴앙 검사 함께 다듬기</strong>
-            <small>질문을 더 이해하기 쉽게 만드는 익명 참여 · 약 4분</small>
+            <strong>검사 질문 리뷰하기</strong>
+            <small>약 4분 · 리뷰 참여자 중 10명 커피 쿠폰 추첨</small>
           </span>
           <ChevronRight aria-hidden="true" size={18} strokeWidth={1.7} />
         </Link>
@@ -170,23 +156,17 @@ function RecommendedDiscovery() {
     <>
       <section className={styles.featuredSection}>
         <div className={styles.sectionHeading}>
-          <div>
-            <p className={styles.sectionEyebrow}>오늘의 추천</p>
-            <h2>지금 알아보면 재밌는 나</h2>
-          </div>
-          <p>짧게 답하고 바로 결과를 확인해요.</p>
+          <h2>지금 알아보면 재밌는 나</h2>
         </div>
         <FeaturedRail items={recommendedAssessmentCatalog} />
       </section>
 
       <AssessmentSection
-        description="가까운 사람과 자주 마주치는 순간에서 내 모습을 알아봐요."
         items={selectItems(relationshipRecommendationIds)}
         title="관계 속 내 모습"
       />
 
       <AssessmentSection
-        description="코드 다섯 글자에 다 담기 어려운 생활 속 모습을 살펴봐요."
         items={selectItems(selfRecommendationIds)}
         title="혼자일 때의 나"
       />
@@ -208,29 +188,12 @@ function FilteredDiscovery({
   }
 
   if (filter === "together") {
-    return (
-      <section className={styles.filteredSection}>
-        <div className={styles.sectionHeading}>
-          <div>
-            <p className={styles.sectionEyebrow}>둘이 함께</p>
-            <h2>서로를 얼마나 알고 있을까요?</h2>
-          </div>
-          <p>내가 먼저 답한 뒤 친구를 초대해 함께 비교해요.</p>
-        </div>
-        <TogetherSpotlight item={togetherAssessmentCatalog[0]} compact />
-      </section>
-    );
+    return <TogetherSpotlight item={togetherAssessmentCatalog[0]} compact />;
   }
 
   const copy = getFilterCopy(filter);
 
-  return (
-    <AssessmentSection
-      description={copy.description}
-      items={items}
-      title={copy.title}
-    />
-  );
+  return <AssessmentSection items={items} title={copy.title} />;
 }
 
 function FeaturedRail({ items }: { items: AssessmentCatalogItem[] }) {
@@ -245,9 +208,6 @@ function FeaturedRail({ items }: { items: AssessmentCatalogItem[] }) {
           key={item.id}
         >
           <div className={styles.featuredCopy}>
-            <span>
-              {index === 0 ? "관계에서 자주 궁금한 모습" : "오늘의 작은 발견"}
-            </span>
             <h3>{item.title}</h3>
             <p>{item.caption}</p>
             <div className={styles.featuredMeta}>
@@ -282,21 +242,16 @@ function FeaturedRail({ items }: { items: AssessmentCatalogItem[] }) {
 }
 
 function AssessmentSection({
-  description,
   items,
   title,
 }: {
-  description: string;
   items: AssessmentCatalogItem[];
   title: string;
 }) {
   return (
     <section className={styles.listSection}>
       <div className={styles.sectionHeading}>
-        <div>
-          <h2>{title}</h2>
-        </div>
-        <p>{description}</p>
+        <h2>{title}</h2>
       </div>
       <div className={styles.assessmentList}>
         {items.map((item) => (
@@ -338,10 +293,7 @@ function TogetherSpotlight({
     >
       {!compact ? (
         <div className={styles.sectionHeading}>
-          <div>
-            <p className={styles.sectionEyebrow}>친구와 함께</p>
-            <h2>내가 보는 친구와 실제 모습은 얼마나 닮았을까요?</h2>
-          </div>
+          <h2>친구 성향 맞히기</h2>
         </div>
       ) : null}
       <Link className={styles.togetherRow} href={item.href}>
@@ -363,16 +315,7 @@ function LabDiscovery({ items }: { items: AssessmentCatalogItem[] }) {
   return (
     <section className={styles.labSection}>
       <div className={styles.sectionHeading}>
-        <div>
-          <p className={styles.sectionEyebrow} data-tone="sand">
-            가볍게 즐기기
-          </p>
-          <h2>별난 성향 연구소</h2>
-        </div>
-        <p>
-          일상 속 작은 취향과 습관을 2분 선택 놀이로 살펴봐요. 결과는 내 기본
-          코드와 따로 보여드려요.
-        </p>
+        <h2>별난 성향 연구소</h2>
       </div>
       <div className={styles.labRail}>
         {items.map((item) => (
@@ -401,21 +344,17 @@ function selectItems(ids: string[]) {
 function getFilterCopy(filter: AssessmentHubFilter) {
   if (filter === "relationship") {
     return {
-      description:
-        "가까운 사람과 이야기하고, 서운해하고, 다시 맞추는 순간의 나를 알아봐요.",
       title: "관계 속 내 모습",
     };
   }
 
   if (filter === "emotion") {
     return {
-      description: "마음이 흔들리거나 힘들 때 내가 편해지는 방식을 알아봐요.",
       title: "감정과 회복의 방식",
     };
   }
 
   return {
-    description: "생각하고 쉬고 움직이는 일상 속 내 모습을 하나씩 알아봐요.",
     title: "나를 더 자세히 알아보기",
   };
 }

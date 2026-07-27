@@ -19,14 +19,6 @@ export default function AccountSettingsPage() {
         <span aria-hidden="true" />
       </header>
 
-      <section className={styles.intro}>
-        <h1>내 활동을 이어갈 계정을 관리해요</h1>
-        <p>
-          로그인하면 검사 결과와 게시물, 팔로우 기록을 같은 계정에서 이어볼 수
-          있어요.
-        </p>
-      </section>
-
       <section className={styles.accountSection}>
         <AccountConnectPanel />
       </section>

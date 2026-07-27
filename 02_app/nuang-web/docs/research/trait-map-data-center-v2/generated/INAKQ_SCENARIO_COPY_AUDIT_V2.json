@@ -1,0 +1,2903 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "INAKQ-SCENARIO-COPY-AUDIT.0.1",
+  "status": "AUTOMATIC_RULES_PASSED_HUMAN_REVIEW_REQUIRED",
+  "code": "INAKQ",
+  "auditedClaims": 288,
+  "automaticPasses": 288,
+  "rewriteRequired": 0,
+  "exactDuplicateAssertions": 0,
+  "prohibitedPhrases": [
+    "그럴 수도",
+    "아닐 수도",
+    "단정할 수 없",
+    "무조건 그런",
+    "알 수 없",
+    "상황에 따라 다르",
+    "사람마다 다르"
+  ],
+  "characterCounts": { "minimum": 50, "maximum": 96, "average": 71 },
+  "nextGate": "자동 통과는 쉬운 한국어 승인이나 성향 판별력 승인이 아니다. 인지 인터뷰와 기준 성향 blind 비교를 계속 요구한다.",
+  "rows": [
+    {
+      "claimId": "INAKQ.scenario.general.new_encounter.attention",
+      "scenarioId": "SCN-GENERAL-2",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.new_encounter.process",
+      "scenarioId": "SCN-GENERAL-2",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.new_encounter.response",
+      "scenarioId": "SCN-GENERAL-2",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.new_encounter.communication",
+      "scenarioId": "SCN-GENERAL-2",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.group_participation.attention",
+      "scenarioId": "SCN-GENERAL-3",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.group_participation.process",
+      "scenarioId": "SCN-GENERAL-3",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.group_participation.response",
+      "scenarioId": "SCN-GENERAL-3",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.group_participation.communication",
+      "scenarioId": "SCN-GENERAL-3",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 86,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.disagreement.attention",
+      "scenarioId": "SCN-GENERAL-6",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.disagreement.process",
+      "scenarioId": "SCN-GENERAL-6",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.disagreement.response",
+      "scenarioId": "SCN-GENERAL-6",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 83,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.disagreement.communication",
+      "scenarioId": "SCN-GENERAL-6",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 91,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.success.attention",
+      "scenarioId": "SCN-GENERAL-10",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 58,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.success.process",
+      "scenarioId": "SCN-GENERAL-10",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.success.response",
+      "scenarioId": "SCN-GENERAL-10",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.success.communication",
+      "scenarioId": "SCN-GENERAL-10",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.new_encounter.attention",
+      "scenarioId": "SCN-PARTNER-2",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.new_encounter.process",
+      "scenarioId": "SCN-PARTNER-2",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.new_encounter.response",
+      "scenarioId": "SCN-PARTNER-2",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.new_encounter.communication",
+      "scenarioId": "SCN-PARTNER-2",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.group_participation.attention",
+      "scenarioId": "SCN-PARTNER-3",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.group_participation.process",
+      "scenarioId": "SCN-PARTNER-3",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.group_participation.response",
+      "scenarioId": "SCN-PARTNER-3",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 77,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.group_participation.communication",
+      "scenarioId": "SCN-PARTNER-3",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.plan_change.attention",
+      "scenarioId": "SCN-PARTNER-4",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.plan_change.process",
+      "scenarioId": "SCN-PARTNER-4",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 57,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.plan_change.response",
+      "scenarioId": "SCN-PARTNER-4",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.plan_change.communication",
+      "scenarioId": "SCN-PARTNER-4",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.success.attention",
+      "scenarioId": "SCN-PARTNER-10",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.success.process",
+      "scenarioId": "SCN-PARTNER-10",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.success.response",
+      "scenarioId": "SCN-PARTNER-10",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.success.communication",
+      "scenarioId": "SCN-PARTNER-10",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.setback.attention",
+      "scenarioId": "SCN-PARTNER-11",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.setback.process",
+      "scenarioId": "SCN-PARTNER-11",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.setback.response",
+      "scenarioId": "SCN-PARTNER-11",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.setback.communication",
+      "scenarioId": "SCN-PARTNER-11",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.aftermath.attention",
+      "scenarioId": "SCN-PARTNER-12",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.aftermath.process",
+      "scenarioId": "SCN-PARTNER-12",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.aftermath.response",
+      "scenarioId": "SCN-PARTNER-12",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 72,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.aftermath.communication",
+      "scenarioId": "SCN-PARTNER-12",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.new_encounter.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.new_encounter.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.new_encounter.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.new_encounter.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.group_participation.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 92,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.group_participation.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.group_participation.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.group_participation.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.plan_change.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.plan_change.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.plan_change.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.plan_change.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.disagreement.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.disagreement.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 60,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.disagreement.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.disagreement.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.support_requested.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.support_requested.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.support_requested.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.support_requested.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.success.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 85,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.success.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.success.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.success.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.setback.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 87,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.setback.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 57,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.setback.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.setback.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 88,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.aftermath.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.aftermath.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 72,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.aftermath.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.aftermath.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.new_encounter.attention",
+      "scenarioId": "SCN-FAMILY-2",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 83,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.new_encounter.process",
+      "scenarioId": "SCN-FAMILY-2",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 58,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.new_encounter.response",
+      "scenarioId": "SCN-FAMILY-2",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.new_encounter.communication",
+      "scenarioId": "SCN-FAMILY-2",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.group_participation.attention",
+      "scenarioId": "SCN-FAMILY-3",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.group_participation.process",
+      "scenarioId": "SCN-FAMILY-3",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.group_participation.response",
+      "scenarioId": "SCN-FAMILY-3",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 60,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.group_participation.communication",
+      "scenarioId": "SCN-FAMILY-3",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 77,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.plan_change.attention",
+      "scenarioId": "SCN-FAMILY-4",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.plan_change.process",
+      "scenarioId": "SCN-FAMILY-4",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.plan_change.response",
+      "scenarioId": "SCN-FAMILY-4",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.plan_change.communication",
+      "scenarioId": "SCN-FAMILY-4",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.uncertainty.attention",
+      "scenarioId": "SCN-FAMILY-5",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.uncertainty.process",
+      "scenarioId": "SCN-FAMILY-5",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 59,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.uncertainty.response",
+      "scenarioId": "SCN-FAMILY-5",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.uncertainty.communication",
+      "scenarioId": "SCN-FAMILY-5",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 61,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.boundary.attention",
+      "scenarioId": "SCN-FAMILY-9",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.boundary.process",
+      "scenarioId": "SCN-FAMILY-9",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 55,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.boundary.response",
+      "scenarioId": "SCN-FAMILY-9",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.boundary.communication",
+      "scenarioId": "SCN-FAMILY-9",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.success.attention",
+      "scenarioId": "SCN-FAMILY-10",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.success.process",
+      "scenarioId": "SCN-FAMILY-10",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 54,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.success.response",
+      "scenarioId": "SCN-FAMILY-10",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 72,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.success.communication",
+      "scenarioId": "SCN-FAMILY-10",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.setback.attention",
+      "scenarioId": "SCN-FAMILY-11",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.setback.process",
+      "scenarioId": "SCN-FAMILY-11",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.setback.response",
+      "scenarioId": "SCN-FAMILY-11",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.setback.communication",
+      "scenarioId": "SCN-FAMILY-11",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.aftermath.attention",
+      "scenarioId": "SCN-FAMILY-12",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.aftermath.process",
+      "scenarioId": "SCN-FAMILY-12",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.aftermath.response",
+      "scenarioId": "SCN-FAMILY-12",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 60,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.aftermath.communication",
+      "scenarioId": "SCN-FAMILY-12",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.group_participation.attention",
+      "scenarioId": "SCN-FRIEND-3",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.group_participation.process",
+      "scenarioId": "SCN-FRIEND-3",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.group_participation.response",
+      "scenarioId": "SCN-FRIEND-3",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.group_participation.communication",
+      "scenarioId": "SCN-FRIEND-3",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.plan_change.attention",
+      "scenarioId": "SCN-FRIEND-4",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.plan_change.process",
+      "scenarioId": "SCN-FRIEND-4",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 59,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.plan_change.response",
+      "scenarioId": "SCN-FRIEND-4",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.plan_change.communication",
+      "scenarioId": "SCN-FRIEND-4",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.uncertainty.attention",
+      "scenarioId": "SCN-FRIEND-5",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.uncertainty.process",
+      "scenarioId": "SCN-FRIEND-5",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 56,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.uncertainty.response",
+      "scenarioId": "SCN-FRIEND-5",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.uncertainty.communication",
+      "scenarioId": "SCN-FRIEND-5",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 77,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.need_expression.attention",
+      "scenarioId": "SCN-FRIEND-8",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 77,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.need_expression.process",
+      "scenarioId": "SCN-FRIEND-8",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.need_expression.response",
+      "scenarioId": "SCN-FRIEND-8",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 61,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.need_expression.communication",
+      "scenarioId": "SCN-FRIEND-8",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.success.attention",
+      "scenarioId": "SCN-FRIEND-10",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.success.process",
+      "scenarioId": "SCN-FRIEND-10",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 56,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.success.response",
+      "scenarioId": "SCN-FRIEND-10",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.success.communication",
+      "scenarioId": "SCN-FRIEND-10",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 58,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.setback.attention",
+      "scenarioId": "SCN-FRIEND-11",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.setback.process",
+      "scenarioId": "SCN-FRIEND-11",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.setback.response",
+      "scenarioId": "SCN-FRIEND-11",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.setback.communication",
+      "scenarioId": "SCN-FRIEND-11",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.aftermath.attention",
+      "scenarioId": "SCN-FRIEND-12",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.aftermath.process",
+      "scenarioId": "SCN-FRIEND-12",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 60,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.aftermath.response",
+      "scenarioId": "SCN-FRIEND-12",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.aftermath.communication",
+      "scenarioId": "SCN-FRIEND-12",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.new_encounter.attention",
+      "scenarioId": "SCN-WORK-2",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.new_encounter.process",
+      "scenarioId": "SCN-WORK-2",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.new_encounter.response",
+      "scenarioId": "SCN-WORK-2",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 56,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.new_encounter.communication",
+      "scenarioId": "SCN-WORK-2",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.group_participation.attention",
+      "scenarioId": "SCN-WORK-3",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.group_participation.process",
+      "scenarioId": "SCN-WORK-3",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.group_participation.response",
+      "scenarioId": "SCN-WORK-3",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.group_participation.communication",
+      "scenarioId": "SCN-WORK-3",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.plan_change.attention",
+      "scenarioId": "SCN-WORK-4",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.plan_change.process",
+      "scenarioId": "SCN-WORK-4",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.plan_change.response",
+      "scenarioId": "SCN-WORK-4",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 58,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.plan_change.communication",
+      "scenarioId": "SCN-WORK-4",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.uncertainty.attention",
+      "scenarioId": "SCN-WORK-5",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.uncertainty.process",
+      "scenarioId": "SCN-WORK-5",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.uncertainty.response",
+      "scenarioId": "SCN-WORK-5",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 55,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.uncertainty.communication",
+      "scenarioId": "SCN-WORK-5",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 61,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.disagreement.attention",
+      "scenarioId": "SCN-WORK-6",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.disagreement.process",
+      "scenarioId": "SCN-WORK-6",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 58,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.disagreement.response",
+      "scenarioId": "SCN-WORK-6",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.disagreement.communication",
+      "scenarioId": "SCN-WORK-6",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.need_expression.attention",
+      "scenarioId": "SCN-WORK-8",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.need_expression.process",
+      "scenarioId": "SCN-WORK-8",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 61,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.need_expression.response",
+      "scenarioId": "SCN-WORK-8",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 59,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.need_expression.communication",
+      "scenarioId": "SCN-WORK-8",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.success.attention",
+      "scenarioId": "SCN-WORK-10",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.success.process",
+      "scenarioId": "SCN-WORK-10",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 54,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.success.response",
+      "scenarioId": "SCN-WORK-10",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 55,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.success.communication",
+      "scenarioId": "SCN-WORK-10",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 72,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.setback.attention",
+      "scenarioId": "SCN-WORK-11",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.setback.process",
+      "scenarioId": "SCN-WORK-11",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.setback.response",
+      "scenarioId": "SCN-WORK-11",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.setback.communication",
+      "scenarioId": "SCN-WORK-11",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.aftermath.attention",
+      "scenarioId": "SCN-WORK-12",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.aftermath.process",
+      "scenarioId": "SCN-WORK-12",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 55,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.aftermath.response",
+      "scenarioId": "SCN-WORK-12",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 59,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.aftermath.communication",
+      "scenarioId": "SCN-WORK-12",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 59,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.ordinary_choice.attention",
+      "scenarioId": "SCN-GENERAL-1",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.ordinary_choice.process",
+      "scenarioId": "SCN-GENERAL-1",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.ordinary_choice.response",
+      "scenarioId": "SCN-GENERAL-1",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.ordinary_choice.communication",
+      "scenarioId": "SCN-GENERAL-1",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.plan_change.attention",
+      "scenarioId": "SCN-GENERAL-4",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.plan_change.process",
+      "scenarioId": "SCN-GENERAL-4",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.plan_change.response",
+      "scenarioId": "SCN-GENERAL-4",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.plan_change.communication",
+      "scenarioId": "SCN-GENERAL-4",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.uncertainty.attention",
+      "scenarioId": "SCN-GENERAL-5",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.uncertainty.process",
+      "scenarioId": "SCN-GENERAL-5",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.uncertainty.response",
+      "scenarioId": "SCN-GENERAL-5",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 58,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.uncertainty.communication",
+      "scenarioId": "SCN-GENERAL-5",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.support_requested.attention",
+      "scenarioId": "SCN-GENERAL-7",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 83,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.support_requested.process",
+      "scenarioId": "SCN-GENERAL-7",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.support_requested.response",
+      "scenarioId": "SCN-GENERAL-7",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.support_requested.communication",
+      "scenarioId": "SCN-GENERAL-7",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 85,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.need_expression.attention",
+      "scenarioId": "SCN-GENERAL-8",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 77,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.need_expression.process",
+      "scenarioId": "SCN-GENERAL-8",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.need_expression.response",
+      "scenarioId": "SCN-GENERAL-8",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.need_expression.communication",
+      "scenarioId": "SCN-GENERAL-8",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.boundary.attention",
+      "scenarioId": "SCN-GENERAL-9",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.boundary.process",
+      "scenarioId": "SCN-GENERAL-9",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.boundary.response",
+      "scenarioId": "SCN-GENERAL-9",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.boundary.communication",
+      "scenarioId": "SCN-GENERAL-9",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.setback.attention",
+      "scenarioId": "SCN-GENERAL-11",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.setback.process",
+      "scenarioId": "SCN-GENERAL-11",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.setback.response",
+      "scenarioId": "SCN-GENERAL-11",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.setback.communication",
+      "scenarioId": "SCN-GENERAL-11",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.aftermath.attention",
+      "scenarioId": "SCN-GENERAL-12",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.aftermath.process",
+      "scenarioId": "SCN-GENERAL-12",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.aftermath.response",
+      "scenarioId": "SCN-GENERAL-12",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.general.aftermath.communication",
+      "scenarioId": "SCN-GENERAL-12",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 92,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.ordinary_choice.attention",
+      "scenarioId": "SCN-FAMILY-1",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.ordinary_choice.process",
+      "scenarioId": "SCN-FAMILY-1",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 60,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.ordinary_choice.response",
+      "scenarioId": "SCN-FAMILY-1",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 58,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.ordinary_choice.communication",
+      "scenarioId": "SCN-FAMILY-1",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.disagreement.attention",
+      "scenarioId": "SCN-FAMILY-6",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.disagreement.process",
+      "scenarioId": "SCN-FAMILY-6",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 61,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.disagreement.response",
+      "scenarioId": "SCN-FAMILY-6",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.disagreement.communication",
+      "scenarioId": "SCN-FAMILY-6",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.support_requested.attention",
+      "scenarioId": "SCN-FAMILY-7",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.support_requested.process",
+      "scenarioId": "SCN-FAMILY-7",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 70,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.support_requested.response",
+      "scenarioId": "SCN-FAMILY-7",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.support_requested.communication",
+      "scenarioId": "SCN-FAMILY-7",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.need_expression.attention",
+      "scenarioId": "SCN-FAMILY-8",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.need_expression.process",
+      "scenarioId": "SCN-FAMILY-8",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.need_expression.response",
+      "scenarioId": "SCN-FAMILY-8",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.family.need_expression.communication",
+      "scenarioId": "SCN-FAMILY-8",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.ordinary_choice.attention",
+      "scenarioId": "SCN-FRIEND-1",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.ordinary_choice.process",
+      "scenarioId": "SCN-FRIEND-1",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.ordinary_choice.response",
+      "scenarioId": "SCN-FRIEND-1",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 57,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.ordinary_choice.communication",
+      "scenarioId": "SCN-FRIEND-1",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.new_encounter.attention",
+      "scenarioId": "SCN-FRIEND-2",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.new_encounter.process",
+      "scenarioId": "SCN-FRIEND-2",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.new_encounter.response",
+      "scenarioId": "SCN-FRIEND-2",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.new_encounter.communication",
+      "scenarioId": "SCN-FRIEND-2",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.disagreement.attention",
+      "scenarioId": "SCN-FRIEND-6",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.disagreement.process",
+      "scenarioId": "SCN-FRIEND-6",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.disagreement.response",
+      "scenarioId": "SCN-FRIEND-6",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.disagreement.communication",
+      "scenarioId": "SCN-FRIEND-6",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 85,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.support_requested.attention",
+      "scenarioId": "SCN-FRIEND-7",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.support_requested.process",
+      "scenarioId": "SCN-FRIEND-7",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.support_requested.response",
+      "scenarioId": "SCN-FRIEND-7",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.support_requested.communication",
+      "scenarioId": "SCN-FRIEND-7",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 85,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.boundary.attention",
+      "scenarioId": "SCN-FRIEND-9",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 72,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.boundary.process",
+      "scenarioId": "SCN-FRIEND-9",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.boundary.response",
+      "scenarioId": "SCN-FRIEND-9",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.friend.boundary.communication",
+      "scenarioId": "SCN-FRIEND-9",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.ordinary_choice.attention",
+      "scenarioId": "SCN-PARTNER-1",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.ordinary_choice.process",
+      "scenarioId": "SCN-PARTNER-1",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.ordinary_choice.response",
+      "scenarioId": "SCN-PARTNER-1",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 61,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.ordinary_choice.communication",
+      "scenarioId": "SCN-PARTNER-1",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.uncertainty.attention",
+      "scenarioId": "SCN-PARTNER-5",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 87,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.uncertainty.process",
+      "scenarioId": "SCN-PARTNER-5",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 59,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.uncertainty.response",
+      "scenarioId": "SCN-PARTNER-5",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 72,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.uncertainty.communication",
+      "scenarioId": "SCN-PARTNER-5",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.disagreement.attention",
+      "scenarioId": "SCN-PARTNER-6",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.disagreement.process",
+      "scenarioId": "SCN-PARTNER-6",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.disagreement.response",
+      "scenarioId": "SCN-PARTNER-6",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.disagreement.communication",
+      "scenarioId": "SCN-PARTNER-6",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.support_requested.attention",
+      "scenarioId": "SCN-PARTNER-7",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 73,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.support_requested.process",
+      "scenarioId": "SCN-PARTNER-7",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.support_requested.response",
+      "scenarioId": "SCN-PARTNER-7",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 60,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.support_requested.communication",
+      "scenarioId": "SCN-PARTNER-7",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.need_expression.attention",
+      "scenarioId": "SCN-PARTNER-8",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 69,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.need_expression.process",
+      "scenarioId": "SCN-PARTNER-8",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.need_expression.response",
+      "scenarioId": "SCN-PARTNER-8",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.need_expression.communication",
+      "scenarioId": "SCN-PARTNER-8",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 82,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.boundary.attention",
+      "scenarioId": "SCN-PARTNER-9",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.boundary.process",
+      "scenarioId": "SCN-PARTNER-9",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 72,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.boundary.response",
+      "scenarioId": "SCN-PARTNER-9",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 68,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.partner.boundary.communication",
+      "scenarioId": "SCN-PARTNER-9",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 85,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.ordinary_choice.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-1",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.ordinary_choice.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-1",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.ordinary_choice.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-1",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.ordinary_choice.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-1",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.uncertainty.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-5",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.uncertainty.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-5",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 60,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.uncertainty.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-5",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.uncertainty.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-5",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 67,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.need_expression.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "attention",
+      "derivationMode": "axis_override",
+      "characterCount": 81,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.need_expression.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "first_thought",
+      "derivationMode": "axis_override",
+      "characterCount": 76,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.need_expression.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "actual_response",
+      "derivationMode": "axis_override",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.need_expression.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "communication",
+      "derivationMode": "axis_override",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.boundary.attention",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-9",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.boundary.process",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-9",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 50,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.boundary.response",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-9",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 66,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.person_of_interest.boundary.communication",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-9",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 79,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.ordinary_choice.attention",
+      "scenarioId": "SCN-WORK-1",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 74,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.ordinary_choice.process",
+      "scenarioId": "SCN-WORK-1",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.ordinary_choice.response",
+      "scenarioId": "SCN-WORK-1",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 62,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.ordinary_choice.communication",
+      "scenarioId": "SCN-WORK-1",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 84,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.support_requested.attention",
+      "scenarioId": "SCN-WORK-7",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 78,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.support_requested.process",
+      "scenarioId": "SCN-WORK-7",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 64,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.support_requested.response",
+      "scenarioId": "SCN-WORK-7",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 65,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.support_requested.communication",
+      "scenarioId": "SCN-WORK-7",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 80,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.boundary.attention",
+      "scenarioId": "SCN-WORK-9",
+      "claimKind": "attention",
+      "derivationMode": "inherited",
+      "characterCount": 75,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.boundary.process",
+      "scenarioId": "SCN-WORK-9",
+      "claimKind": "first_thought",
+      "derivationMode": "inherited",
+      "characterCount": 71,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.boundary.response",
+      "scenarioId": "SCN-WORK-9",
+      "claimKind": "actual_response",
+      "derivationMode": "inherited",
+      "characterCount": 63,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    },
+    {
+      "claimId": "INAKQ.scenario.work.boundary.communication",
+      "scenarioId": "SCN-WORK-9",
+      "claimKind": "communication",
+      "derivationMode": "inherited",
+      "characterCount": 96,
+      "issueCount": 0,
+      "issues": [],
+      "status": "automatic_pass"
+    }
+  ]
+}

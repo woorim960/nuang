@@ -1,0 +1,356 @@
+.section {
+  padding: 1.25rem 1rem 0.35rem;
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  background: var(--nu-color-surface);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 1.1rem;
+}
+
+.heading strong {
+  display: block;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
+  letter-spacing: -0.018em;
+}
+
+.heading span {
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+}
+
+.loading {
+  min-height: 88px;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-body-sm);
+}
+
+.fields {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.fieldBlock {
+  min-width: 0;
+}
+
+.fieldHeading {
+  display: block;
+  min-height: 24px;
+  margin-bottom: 0.4rem;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.contactRow {
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0 0.55rem 0 0.85rem;
+  border: 1px solid var(--nu-neutral-150);
+  border-radius: 13px;
+  background: var(--nu-color-surface);
+}
+
+.contactRow strong {
+  font-size: var(--nu-text-callout);
+  font-variant-numeric: tabular-nums;
+}
+
+.contactRow button {
+  min-height: 40px;
+  padding: 0 0.45rem;
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.verificationStatus {
+  display: flex;
+  min-height: 38px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.7rem;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.verificationStatus[data-verified="true"] {
+  justify-content: flex-start;
+  color: var(--nu-color-success);
+}
+
+.verificationStatus button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.verificationStatus button:disabled {
+  color: var(--nu-color-text-subtle);
+}
+
+.verificationPanel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.5rem;
+  padding: 0.8rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 16px;
+  background: var(--nu-color-app-bg);
+}
+
+.verificationPanel label {
+  min-width: 0;
+}
+
+.verificationPanel label > span {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.verificationPanel input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: 1px solid var(--nu-neutral-150);
+  border-radius: 12px;
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-callout);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.12em;
+  outline: 0;
+}
+
+.verificationPanel input:focus {
+  border-color: var(--nu-info-300);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--nu-info-500) 9%, transparent);
+}
+
+.confirmButton {
+  align-self: end;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  border-radius: 12px;
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-brand-action);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.confirmButton:disabled {
+  color: var(--nu-neutral-400);
+  background: var(--nu-neutral-100);
+}
+
+.resendButton {
+  grid-column: 1 / -1;
+  justify-self: start;
+  min-height: 36px;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.resendButton:disabled {
+  color: var(--nu-color-text-subtle);
+}
+
+.verificationMessage {
+  margin: 0.3rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
+}
+
+.verificationMessage[data-error="true"] {
+  color: var(--nu-color-reaction);
+}
+
+.contactHelp {
+  margin: 0.85rem 0 0;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
+  word-break: keep-all;
+}
+
+.editor input[type="email"],
+.editor input[type="tel"] {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 0.85rem;
+  border: 1px solid var(--nu-neutral-150);
+  border-radius: 13px;
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-callout);
+  font-variant-numeric: tabular-nums;
+  outline: 0;
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.editor input[type="email"]:focus,
+.editor input[type="tel"]:focus {
+  border-color: var(--nu-info-300);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--nu-info-500) 9%, transparent);
+}
+
+.marketing {
+  display: grid;
+  min-height: 48px;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.75rem;
+  border-top: 1px solid var(--nu-color-border);
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-body-sm);
+}
+
+.marketing input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--nu-color-brand-action);
+}
+
+.marketing span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.marketing small {
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+}
+
+.deleteLink {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 0.3rem;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.55rem;
+}
+
+.primaryButton,
+.secondaryButton {
+  min-height: 44px;
+  padding: 0 0.9rem;
+  border-radius: 13px;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.primaryButton {
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-brand-action);
+}
+
+.primaryButton:disabled {
+  color: var(--nu-neutral-400);
+  background: var(--nu-neutral-100);
+}
+
+.secondaryButton {
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-app-bg);
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin: 0.2rem 0 0.85rem;
+  color: var(--nu-color-success);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.message[data-error="true"] {
+  color: var(--nu-color-reaction);
+}
+
+.backdrop {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  display: grid;
+  place-items: end center;
+  padding: 1rem;
+  background: var(--nu-color-overlay);
+}
+
+.dialog {
+  width: min(100%, 398px);
+  padding: 1.15rem;
+  border-radius: 22px;
+  background: var(--nu-color-surface);
+  box-shadow: var(--nu-shadow-lg);
+}
+
+.dialog > strong {
+  display: block;
+  font-size: var(--nu-text-callout);
+}
+
+.dialog > p {
+  margin: 0.45rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body);
+}
+
+.dialog > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.dialog button {
+  min-height: 46px;
+  border-radius: 14px;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.dialog button:first-child {
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-app-bg);
+}
+
+.dialog button:last-child {
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-reaction);
+}

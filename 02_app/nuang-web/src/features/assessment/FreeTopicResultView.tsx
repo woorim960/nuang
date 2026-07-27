@@ -38,19 +38,21 @@ export function FreeTopicResultView({
   useEffect(() => {
     let isMounted = true;
 
-    void Promise.resolve().then(() => {
-      const nextResult = loadFreeTopicResultLocalFirst(localResultId);
-      return nextResult;
-    }).then((nextResult) => {
-      if (!isMounted) return;
-      setResult(nextResult);
+    void Promise.resolve()
+      .then(() => {
+        const nextResult = loadFreeTopicResultLocalFirst(localResultId);
+        return nextResult;
+      })
+      .then((nextResult) => {
+        if (!isMounted) return;
+        setResult(nextResult);
 
-      if (nextResult && nextResult.sync.status !== "synced") {
-        void syncFreeTopicResult(nextResult).then((syncedResult) => {
-          if (isMounted) setResult(syncedResult);
-        });
-      }
-    });
+        if (nextResult && nextResult.sync.status !== "synced") {
+          void syncFreeTopicResult(nextResult).then((syncedResult) => {
+            if (isMounted) setResult(syncedResult);
+          });
+        }
+      });
 
     return () => {
       isMounted = false;
@@ -79,10 +81,11 @@ export function FreeTopicResultView({
   const currentResultPath = `/assessments/topics/${activeAssessment.slug}/result/${localResultId}`;
 
   async function handleShareToFeed() {
-    const body = `${activeAssessment.title} 검사 결과를 공유했어요. ${report.headline}`.slice(
-      0,
-      800,
-    );
+    const body =
+      `${activeAssessment.title} 검사 결과를 공유했어요. ${report.headline}`.slice(
+        0,
+        800,
+      );
 
     try {
       setFeedShareState({ status: "posting" });
@@ -140,10 +143,14 @@ export function FreeTopicResultView({
 
       <section className="mt-5 border-b border-line pb-6">
         <p className="text-xs font-bold text-primary">
-          {assessment.categoryLabel} · {getSyncLabel(result.sync.status)}
+          {assessment.categoryLabel}
         </p>
-        <h1 className="mt-4 text-2xl font-black leading-8">{assessment.title} 결과</h1>
-        <p className="mt-3 text-[15px] leading-7 text-ink">{report.headline}</p>
+        <h1 className="mt-4 text-2xl font-black leading-8">
+          {assessment.title} 결과
+        </h1>
+        <p className="mt-3 text-callout leading-7 text-ink">
+          {report.headline}
+        </p>
       </section>
 
       <section className="border-b border-line py-6">
@@ -155,8 +162,10 @@ export function FreeTopicResultView({
             </p>
           </div>
           <div className="text-right">
-            <p className="text-xs font-bold text-muted">{report.confidenceLabel}</p>
-            <p className="mt-2 text-[42px] font-black leading-none tabular-nums">
+            <p className="text-xs font-bold text-muted">
+              {report.confidenceLabel}
+            </p>
+            <p className="mt-2 text-display-lg font-black leading-none tabular-nums">
               {report.averageScore ?? "-"}
             </p>
           </div>
@@ -180,13 +189,15 @@ export function FreeTopicResultView({
                   </p>
                 </div>
                 <div className="shrink-0 text-right">
-                  <p className="text-lg font-black tabular-nums">{signal.score}</p>
+                  <p className="text-lg font-black tabular-nums">
+                    {signal.score}
+                  </p>
                   <p className="mt-1 text-xs font-bold text-primary">
                     {signal.levelLabel}
                   </p>
                 </div>
               </div>
-              <div className="mt-3 h-2 overflow-hidden bg-[#efedf5]">
+              <div className="mt-3 h-2 overflow-hidden bg-[var(--nu-brand-100)]">
                 <div
                   className="h-full bg-primary"
                   style={{ width: `${signal.score}%` }}
@@ -202,15 +213,10 @@ export function FreeTopicResultView({
 
       <section className="border-b border-line py-6">
         <h2 className="text-base font-bold">결과를 읽는 기준</h2>
-        <div className="mt-4 grid gap-4 text-sm leading-6 text-muted">
+        <div className="mt-4 text-sm leading-6 text-muted">
           <p>
-            이 리포트는 짧은 주제 검사에서 드러난 방향을 정리한 결과예요. 한 번의
-            결과만으로 사람을 단정하지 않고, 코어 검사와 여러 주제 검사에서 같은
-            흐름이 반복될 때 신뢰도가 높아져요.
-          </p>
-          <p>
-            대표 성향이 바뀌는 경우에도 즉시 바뀌지 않아요. 충분한 누적 데이터가
-            같은 방향을 보여줄 때만 현재 대표 성향이 조심스럽게 업데이트됩니다.
+            이번 주제에서 나타난 방향이에요. 여러 검사에서 같은 흐름이
+            반복될수록 내 대표 성향에도 안정적으로 반영돼요.
           </p>
         </div>
       </section>
@@ -228,12 +234,14 @@ export function FreeTopicResultView({
         <div className="grid gap-3">
           <button
             aria-busy={feedShareState.status === "posting"}
-            className="inline-flex min-h-12 items-center justify-center bg-[#111111] px-4 text-sm font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
+            className="inline-flex min-h-12 items-center justify-center bg-[var(--nu-color-text-strong)] px-4 text-sm font-bold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-40"
             disabled={feedShareState.status === "posting"}
             onClick={() => void handleShareToFeed()}
             type="button"
           >
-            {feedShareState.status === "posting" ? "피드에 공유 중" : "피드에 공유"}
+            {feedShareState.status === "posting"
+              ? "피드에 공유 중"
+              : "피드에 공유"}
           </button>
           <Link
             className="inline-flex min-h-12 items-center justify-center border border-line px-4 text-sm font-bold"
@@ -274,10 +282,4 @@ function BackLink() {
       검사
     </Link>
   );
-}
-
-function getSyncLabel(status: StoredFreeTopicResult["sync"]["status"]) {
-  if (status === "synced") return "동기화 완료";
-  if (status === "failed") return "동기화 대기";
-  return "저장 완료";
 }

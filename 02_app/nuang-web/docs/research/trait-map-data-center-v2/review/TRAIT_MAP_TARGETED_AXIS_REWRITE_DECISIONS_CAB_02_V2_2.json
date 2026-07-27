@@ -1,0 +1,92 @@
+{
+  "contractVersion": "nuang-trait-map-targeted-axis-rewrite-decisions.v2.2",
+  "reportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-DECISIONS-CAB-02.0.3",
+  "batchId": "CAB-02",
+  "status": "TRACEABLE_V2_1_DECISIONS_MIGRATED_WITH_EXACT_PAIR_AND_SOURCE_MATCH",
+  "publicationState": "research_only",
+  "reviewedAt": "2026-07-24T00:00:00.000Z",
+  "sourcePacketReportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-CAB-02.0.3",
+  "sourceDecisionReportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-DECISIONS-CAB-02.0.2",
+  "rules": [
+    "canonical 왼쪽·오른쪽 ID와 changedAxis가 모두 일치하는 결정만 이전한다.",
+    "새 문단이 인용한 sourceCandidateRef가 v2.2 같은 claim·같은 방향 후보에 실제로 남아 있어야 한다.",
+    "v2.2에서 사라진 교정 쌍의 결정과 새 문단은 새 원장에 적용하지 않는다.",
+    "이전한 결정도 7개 역할 검토 전까지 내부 편집 초안으로 유지한다."
+  ],
+  "summary": {
+    "targetPairs": 2,
+    "migratedDecisions": 2,
+    "retiredV21Decisions": 4,
+    "authoredParagraphs": 1,
+    "exactSourceReferenceMatches": 1,
+    "customerApprovedDecisions": 0
+  },
+  "decisions": [
+    {
+      "reviewId": "TAR-CAB-02-01",
+      "decision": "ADD_MISSING_DIRECTION_PARAGRAPH",
+      "removeSharedFrom": null,
+      "replaceAllOn": null,
+      "authoredSide": "right",
+      "authoredDirection": "I",
+      "authoredParagraph": "확인된 사실과 가능한 원인을 혼자 정리한 뒤, 위험을 줄이기 위해 지금 작게 확인할 질문이나 행동 하나를 골라 차분히 시작하는 편이다.",
+      "sourceCandidateRefs": [
+        "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-I-OE-N-ER-C:b60830d0a0a9",
+        "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-I-OE-R-ER-Q:565ae49015f2"
+      ],
+      "rationale": "공유 문장은 작게 확인하고 조정하는 R의 공통 행동이다. I 방향의 혼자 원인과 질문을 정리하는 과정을 기존 I 후보에서 보강한다.",
+      "migratedFromReviewId": "TAR-CAB-02-05",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID, changedAxis, 인용 sourceCandidateRef가 v2.1 결정과 모두 정확히 일치한다.",
+      "migratedFromDecisionReportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-DECISIONS-CAB-02.0.2"
+    },
+    {
+      "reviewId": "TAR-CAB-02-02",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 사람들과 정보를 나누는 E 방향이다. I 쪽에는 여러 가설과 위험을 혼자 정리하는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-02-06",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID, changedAxis, 인용 sourceCandidateRef가 v2.1 결정과 모두 정확히 일치한다.",
+      "migratedFromDecisionReportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-DECISIONS-CAB-02.0.2"
+    }
+  ],
+  "retiredV21Decisions": [
+    {
+      "reviewId": "TAR-CAB-02-01",
+      "claimKey": ".scenario.general.plan_change.attention",
+      "changedAxis": "OE",
+      "reason": "v2.2 추론 축 범위 정리 뒤 canonical ID 또는 표적 교정 쌍이 달라져 이전 결정을 적용하지 않는다.",
+      "preservedInAuditTrail": true
+    },
+    {
+      "reviewId": "TAR-CAB-02-02",
+      "claimKey": ".scenario.general.plan_change.attention",
+      "changedAxis": "OE",
+      "reason": "v2.2 추론 축 범위 정리 뒤 canonical ID 또는 표적 교정 쌍이 달라져 이전 결정을 적용하지 않는다.",
+      "preservedInAuditTrail": true
+    },
+    {
+      "reviewId": "TAR-CAB-02-03",
+      "claimKey": ".scenario.general.plan_change.response",
+      "changedAxis": "RO",
+      "reason": "v2.2 추론 축 범위 정리 뒤 canonical ID 또는 표적 교정 쌍이 달라져 이전 결정을 적용하지 않는다.",
+      "preservedInAuditTrail": true
+    },
+    {
+      "reviewId": "TAR-CAB-02-04",
+      "claimKey": ".scenario.general.plan_change.response",
+      "changedAxis": "RO",
+      "reason": "v2.2 추론 축 범위 정리 뒤 canonical ID 또는 표적 교정 쌍이 달라져 이전 결정을 적용하지 않는다.",
+      "preservedInAuditTrail": true
+    }
+  ],
+  "approval": {
+    "internalEditorialDecisionComplete": true,
+    "sevenRoleReviewComplete": false,
+    "customerPublicationApproved": false
+  }
+}

@@ -1,0 +1,55 @@
+# CAB-01 canonical 자동 사전검수 v2
+
+- 상태: `AUTOMATED_INTEGRITY_AND_SAFETY_PASSED_SEMANTIC_REWRITE_REQUIRED`
+- 자동 hard failure: 0
+- 고객 승인: 0개
+
+## 판정
+
+첫 묶음은 출처 추적, 원문 포함·제외 계산, 선택 방향, 비공개 범위와
+금지 표현 자동 검사를 통과했다. 이 통과는 전문 검토 승인이 아니다.
+
+두 원문을 따로 보존한 47개
+조합은 의미를 잃지 않는 한 문장으로 편집해야 한다. 또한 한 글자만 다른데
+같은 문장 블록을 일부 공유하는
+12개 쌍은 해당 축의 실제
+차이가 드러나도록 다시 써야 한다. 전체 출력이 완전히 같은 쌍은
+0개다.
+
+## 자동 검사
+
+| 항목                          | 현재 | 완료 기준 | 상태      |
+| ----------------------------- | ---: | --------- | --------- |
+| 자동 hard failure             |    0 | 0         | 통과      |
+| 정보 보존 합성                |   47 | 전문 편집 | 교정 대기 |
+| 한 글자 이웃의 동일 문장 블록 |   12 | 0         | 교정 대기 |
+| 과장·단정 표현                |    0 | 0         | 통과      |
+| 진단·낙인 표현                |    0 | 0         | 통과      |
+| 설명 없는 회피 표현           |    0 | 0         | 통과      |
+
+## 한 글자 이웃의 동일 문장 블록
+
+| claim                                       | 바뀐 축 | 왼쪽 | 오른쪽 |
+| ------------------------------------------- | ------- | ---- | ------ |
+| .scenario.general.ordinary_choice.attention | RO      | OE=R | RO=G   | SM=M | OE=R | RO=A | SM=M |
+| .scenario.general.ordinary_choice.attention | RO      | OE=N | RO=G   | SM=K | OE=N | RO=A | SM=K |
+| .scenario.general.ordinary_choice.response  | SE      | SE=E | OE=R   | SM=M | SE=I | OE=R | SM=M |
+| .scenario.general.ordinary_choice.response  | SE      | SE=E | OE=N   | SM=K | SE=I | OE=N | SM=K |
+| .scenario.general.aftermath.attention       | RO      | SE=E | RO=G   | ER=Q | SE=E | RO=A | ER=Q |
+| .scenario.general.aftermath.attention       | RO      | SE=I | RO=G   | ER=C | SE=I | RO=A | ER=C |
+| .scenario.general.aftermath.process         | RO      | SE=E | RO=G   | ER=Q | SE=E | RO=A | ER=Q |
+| .scenario.general.aftermath.process         | RO      | SE=I | RO=G   | ER=C | SE=I | RO=A | ER=C |
+| .scenario.general.aftermath.response        | SM      | SE=E | SM=K   | ER=Q | SE=E | SM=M | ER=Q |
+| .scenario.general.aftermath.response        | SM      | SE=I | SM=K   | ER=C | SE=I | SM=M | ER=C |
+| .scenario.general.new_encounter.response    | ER      | SE=E | OE=N   | ER=C | SE=E | OE=N | ER=Q |
+| .scenario.general.new_encounter.response    | ER      | SE=I | OE=R   | ER=C | SE=I | OE=R | ER=Q |
+
+## 다음 단계
+
+1. 47개 정보 보존 합성 문장을 의미 손실 없이 하나의 쉬운 설명으로 다듬는다.
+2. 12개 한 글자 이웃의 동일 문장 블록에서 실제 축 차이를 분명하게 만든다.
+3. 7개 역할 검토를 완료하고 승인 상태와 수정 이유를 문장 단위로 기록한다.
+4. CAB-01로 32개 코드와 80개 한 글자 이웃을 다시 조합해 모순과 중복을 검사한다.
+
+전문 검토와 재조합 전까지 이 묶음은 연구용이며 앱 고객 콘텐츠로 발행하지
+않는다.

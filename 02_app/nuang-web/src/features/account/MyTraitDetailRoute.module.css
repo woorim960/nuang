@@ -1,6 +1,6 @@
 .page {
   min-height: 100dvh;
-  background: #fff;
+  background: var(--nu-color-surface);
 }
 
 .header {
@@ -12,8 +12,8 @@
   align-items: center;
   height: 3.5rem;
   padding: 0 1rem;
-  border-bottom: 1px solid var(--line, #ececf0);
-  background: rgb(255 255 255 / 95%);
+  border-bottom: 1px solid var(--line, var(--nu-neutral-75));
+  background: color-mix(in srgb, var(--nu-neutral-0) 95%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -22,14 +22,14 @@
   width: 2.5rem;
   height: 2.5rem;
   place-items: center;
-  color: var(--ink, #22242a);
+  color: var(--ink, var(--nu-neutral-900));
 }
 
 .header p {
   margin: 0;
-  color: var(--ink, #22242a);
-  font-size: 0.875rem;
-  font-weight: 700;
+  color: var(--ink, var(--nu-neutral-900));
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   text-align: center;
 }
 
@@ -38,6 +38,6 @@
   min-height: 50dvh;
   place-items: center;
   margin: 0;
-  color: var(--muted, #757780);
-  font-size: 0.875rem;
+  color: var(--muted, var(--nu-neutral-500));
+  font-size: var(--nu-text-callout);
 }

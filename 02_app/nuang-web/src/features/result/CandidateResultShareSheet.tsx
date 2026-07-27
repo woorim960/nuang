@@ -53,12 +53,7 @@ type CandidateResultShareSheetProps = {
 };
 
 type LocalShareState =
-  | "downloaded"
-  | "error"
-  | "idle"
-  | "shared"
-  | "sharing_apps"
-  | "working";
+  "downloaded" | "error" | "idle" | "shared" | "sharing_apps" | "working";
 
 const subscribeToClient = () => () => undefined;
 const getClientSnapshot = () => true;
@@ -83,8 +78,7 @@ export function CandidateResultShareSheet({
     getClientSnapshot,
     getServerSnapshot,
   );
-  const canUseNativeShare =
-    isClient && typeof navigator.share === "function";
+  const canUseNativeShare = isClient && typeof navigator.share === "function";
 
   useEffect(() => {
     if (!isOpen) return;
@@ -96,7 +90,9 @@ export function CandidateResultShareSheet({
     const returnFocusElement = returnFocusRef.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const focusFrame = requestAnimationFrame(() => closeButtonRef.current?.focus());
+    const focusFrame = requestAnimationFrame(() =>
+      closeButtonRef.current?.focus(),
+    );
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -217,7 +213,6 @@ export function CandidateResultShareSheet({
         <div aria-hidden="true" className={styles.handle} />
         <header className={styles.header}>
           <div>
-            <p className={styles.eyebrow}>결과 공유</p>
             <h2 id="candidate-share-title">내 뉴앙 코드를 나눠볼까요?</h2>
           </div>
           <button
@@ -249,7 +244,6 @@ export function CandidateResultShareSheet({
         </section>
 
         <section className={styles.actionGroup}>
-          <p className={styles.groupLabel}>바로 공유하기</p>
           <button
             aria-busy={localShareState === "working"}
             className={styles.primaryAction}
@@ -268,7 +262,6 @@ export function CandidateResultShareSheet({
             )}
             <span>
               <strong>결과 이미지 저장·공유</strong>
-              <small>기기에서 바로 보내거나 이미지로 보관해요</small>
             </span>
           </button>
         </section>
@@ -303,7 +296,11 @@ export function CandidateResultShareSheet({
                   onClick={() => void handleAppShare()}
                   type="button"
                 >
-                  <ExternalLink aria-hidden="true" size={18} strokeWidth={1.9} />
+                  <ExternalLink
+                    aria-hidden="true"
+                    size={18}
+                    strokeWidth={1.9}
+                  />
                   다른 앱으로 보내기
                 </button>
               ) : null}
@@ -331,10 +328,6 @@ export function CandidateResultShareSheet({
 
         {account.claimState === "saved" ? (
           <section className={styles.feedGroup}>
-            <div>
-              <p className={styles.groupLabel}>뉴앙 안에서 나누기</p>
-              <span>내 코드를 피드에서 대화의 시작점으로 써보세요.</span>
-            </div>
             <button
               aria-busy={isFeedWorking}
               disabled={isFeedWorking}
@@ -355,10 +348,7 @@ export function CandidateResultShareSheet({
           </section>
         ) : null}
 
-        <ShareStatus
-          account={account}
-          localShareState={localShareState}
-        />
+        <ShareStatus account={account} localShareState={localShareState} />
       </div>
     </div>,
     document.body,

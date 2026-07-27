@@ -58,7 +58,7 @@ describe("LocalResultManager", () => {
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "관계 비교" })).toBeVisible();
     expect(screen.getByRole("heading", { name: "주제 검사" })).toBeVisible();
-    expect(screen.getByText("아직 결과가 없어요")).toBeInTheDocument();
+    expect(screen.queryByText("아직 결과가 없어요")).not.toBeInTheDocument();
     expect(screen.queryByText(/기기|계정 저장|로컬/)).not.toBeInTheDocument();
   });
 
@@ -70,7 +70,7 @@ describe("LocalResultManager", () => {
     expect(
       await screen.findByText("첫 성향 리포트를 만들어보세요"),
     ).toBeInTheDocument();
-    expect(screen.getByText("아직 결과가 없어요")).toBeInTheDocument();
+    expect(screen.queryByText("아직 결과가 없어요")).not.toBeInTheDocument();
   });
 
   it("keeps report access and delete rights visible for stored local results", async () => {
@@ -194,7 +194,7 @@ describe("LocalResultManager", () => {
             createAccountResult({
               kind: "quick",
               localResultId: "local_other_device",
-              profileName: "새 길을 찾는 탐구자",
+              profileName: "새 가능성을 찾는 탐험가",
               resultReportId: "33333333-3333-4333-8333-333333333333",
             }),
           ],
@@ -248,7 +248,7 @@ describe("LocalResultManager", () => {
                     targetDisplayName: "상대",
                     targetProfileName: "관계를 여는 지휘자",
                     viewerCode: "INGMC",
-                    viewerProfileName: "새 길을 찾는 탐구자",
+                    viewerProfileName: "새 가능성을 찾는 탐험가",
                   },
                 ],
                 ok: true,
@@ -414,7 +414,7 @@ function createAccountResult(
     kind: overrides.kind ?? "full",
     localResultId: overrides.localResultId ?? "local_test_1",
     profileCode: "INGMC",
-    profileName: overrides.profileName ?? "새 길을 찾는 탐구자",
+    profileName: overrides.profileName ?? "새 가능성을 찾는 탐험가",
     resultLabel: "현재 대표 성향",
     resultReportId:
       overrides.resultReportId ?? "22222222-2222-4222-8222-222222222222",

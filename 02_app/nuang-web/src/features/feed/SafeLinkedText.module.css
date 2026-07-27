@@ -1,0 +1,41 @@
+.link {
+  color: var(--nu-color-brand-strong);
+  text-decoration: underline;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--nu-color-brand-action) 34%,
+    transparent
+  );
+  text-underline-offset: 0.17em;
+  overflow-wrap: anywhere;
+}
+
+.pending,
+.blocked {
+  color: var(--nu-color-text-muted);
+  overflow-wrap: anywhere;
+}
+
+.pending small,
+.blocked small {
+  display: inline-flex;
+  margin-left: 0.32rem;
+  padding: 0.08rem 0.32rem;
+  align-items: center;
+  border-radius: 999px;
+  background: var(--nu-color-surface-soft);
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-medium);
+  line-height: 1.35;
+  vertical-align: 0.08em;
+}
+
+.blocked {
+  text-decoration: line-through;
+  text-decoration-color: color-mix(
+    in srgb,
+    var(--nu-color-text-subtle) 45%,
+    transparent
+  );
+}

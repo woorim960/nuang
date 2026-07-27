@@ -15,6 +15,11 @@ import type {
   FeedWriteSuccessInput,
 } from "@/features/feed/feed-write-contract";
 import {
+  persistExternalLinks,
+  prepareExternalLinks,
+} from "@/features/feed/server-link-safety";
+import { checkCommunityWriteGuard } from "@/features/feed/server-write-guard";
+import {
   getCurrentNuangProfileName,
   isCurrentNuangCode,
 } from "@/features/nuang-code/profile-name-resolution";
@@ -115,6 +120,14 @@ export async function writeFeedRequestForAccount({
     });
   }
 
+  if (payload.action === "report_content") {
+    return writeFeedContentReport({
+      accountId: account.accountId,
+      client,
+      payload,
+    });
+  }
+
   return writePollVote({ accountId: account.accountId, client, payload });
 }
 
@@ -141,11 +154,43 @@ async function writeFeedPost({
     return { code: "feed_target_invalid", ok: false };
   }
 
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "create_post",
+    body: payload.body,
+    client,
+  });
+  if (guardFailure) {
+    return {
+      code:
+        guardFailure === "duplicate_content"
+          ? "feed_duplicate_content"
+          : guardFailure === "rate_limited"
+            ? "feed_rate_limited"
+            : "account_link_missing",
+      ok: false,
+    };
+  }
+
+  const externalLinks = await prepareExternalLinks({
+    client,
+    text: payload.body,
+  });
+  if (externalLinks.some((link) => link.status === "blocked")) {
+    return { code: "feed_external_link_blocked", ok: false };
+  }
+  const moderationStatus = externalLinks.some(
+    (link) => link.status === "pending",
+  )
+    ? "pending_review"
+    : "published";
+  const publishedAt = new Date().toISOString();
   const sharedRow = {
     attachment_payload: payload.attachments ?? [],
     author_account_id: accountId,
     body: payload.body,
-    moderation_status: "pending_review",
+    moderation_status: moderationStatus,
+    published_at: moderationStatus === "published" ? publishedAt : null,
     public_projection_payload: publicProjection,
     source: payload.source,
     source_id: payload.sourceId ?? null,
@@ -186,6 +231,12 @@ async function writeFeedPost({
     id: string;
     moderation_status: FeedWriteSuccessInput["moderationStatus"];
   };
+
+  await persistExternalLinks({
+    client,
+    links: externalLinks,
+    postId: row.id,
+  });
 
   if (payload.source === "balance_game") {
     const pollResult = await writeBalanceGamePoll({
@@ -308,6 +359,7 @@ async function writeBalanceGamePoll({
   const voteResult = await insertPollVote({
     accountId,
     client,
+    enforceOpen: false,
     optionId: selectedCreatedOption.id,
     pollId: poll.id,
   });
@@ -343,14 +395,55 @@ async function writeFeedComment({
     return { code: "feed_target_not_supported", ok: false };
   }
 
+  if (
+    target.data.postId &&
+    (await isOfficialPostResponseClosed({
+      client,
+      postId: target.data.postId,
+    }))
+  ) {
+    return { code: "feed_response_closed", ok: false };
+  }
+
+  const externalLinks = await prepareExternalLinks({
+    client,
+    text: payload.body,
+  });
+  if (externalLinks.some((link) => link.status === "blocked")) {
+    return { code: "feed_external_link_blocked", ok: false };
+  }
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "create_comment",
+    body: payload.body,
+    client,
+  });
+  if (guardFailure) {
+    return {
+      code:
+        guardFailure === "duplicate_content"
+          ? "feed_duplicate_content"
+          : guardFailure === "rate_limited"
+            ? "feed_rate_limited"
+            : "account_link_missing",
+      ok: false,
+    };
+  }
+  const moderationStatus = externalLinks.some(
+    (link) => link.status === "pending",
+  )
+    ? "pending_review"
+    : "published";
   const response = await client
     .schema("feed")
     .from("feed_comment")
     .insert({
       author_account_id: accountId,
       body: payload.body,
-      moderation_status: "pending_review",
+      moderation_status: moderationStatus,
       post_id: target.data.postId,
+      published_at:
+        moderationStatus === "published" ? new Date().toISOString() : null,
       target_key: target.data.key,
       target_type: target.data.dbTargetType,
     })
@@ -369,6 +462,12 @@ async function writeFeedComment({
     moderation_status: FeedWriteSuccessInput["moderationStatus"];
   };
 
+  await persistExternalLinks({
+    client,
+    commentId: row.id,
+    links: externalLinks,
+  });
+
   return {
     data: {
       action: payload.action,
@@ -378,6 +477,106 @@ async function writeFeedComment({
     },
     ok: true,
   };
+}
+
+async function writeFeedContentReport({
+  accountId,
+  client,
+  payload,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  payload: Extract<FeedWriteRequest, { action: "report_content" }>;
+}): Promise<ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>> {
+  const table =
+    payload.target.type === "feed_post" ? "feed_post" : "feed_comment";
+  const targetResponse = await client
+    .schema("feed")
+    .from(table)
+    .select("id,author_account_id,moderation_status")
+    .eq("id", payload.target.id)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (
+    targetResponse.error ||
+    !targetResponse.data ||
+    !["published", "limited"].includes(targetResponse.data.moderation_status)
+  ) {
+    return { code: "feed_target_invalid", ok: false };
+  }
+
+  if (targetResponse.data.author_account_id === accountId) {
+    return { code: "feed_target_invalid", ok: false };
+  }
+
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "report_content",
+    client,
+  });
+  if (guardFailure) {
+    return {
+      code:
+        guardFailure === "rate_limited"
+          ? "feed_rate_limited"
+          : "account_link_missing",
+      ok: false,
+    };
+  }
+
+  const response = await client
+    .schema("feed")
+    .from("content_report")
+    .insert({
+      comment_id:
+        payload.target.type === "feed_comment" ? payload.target.id : null,
+      details: payload.details?.trim() || null,
+      post_id: payload.target.type === "feed_post" ? payload.target.id : null,
+      reason: payload.reason,
+      reporter_account_id: accountId,
+      severity: getContentReportSeverity(payload.reason),
+      status: "queued",
+      target_author_account_id: targetResponse.data.author_account_id,
+    })
+    .select("id")
+    .single();
+
+  if (response.error || !response.data) {
+    return {
+      code:
+        response.error?.code === "23505"
+          ? "feed_already_reported"
+          : getFeedDbFailureCode(response.error, "feed_report_write_failed"),
+      ok: false,
+    };
+  }
+
+  return {
+    data: {
+      action: payload.action,
+      id: response.data.id,
+      targetType: payload.target.type,
+    },
+    ok: true,
+  };
+}
+
+function getContentReportSeverity(
+  reason: Extract<
+    FeedWriteRequest,
+    { action: "report_content" }
+  >["reason"],
+) {
+  if (
+    ["hate", "sexual_content", "violence", "privacy", "self_harm"].includes(
+      reason,
+    )
+  ) {
+    return "high";
+  }
+  if (["harassment", "fraud"].includes(reason)) return "medium";
+  return "low";
 }
 
 async function writeFeedReaction({
@@ -652,14 +851,27 @@ async function writePollVote({
 async function insertPollVote({
   accountId,
   client,
+  enforceOpen = true,
   optionId,
   pollId,
 }: {
   accountId: string;
   client: ServiceClient;
+  enforceOpen?: boolean;
   optionId: string;
   pollId: string;
 }): Promise<ServerWriteResult<{ id: string }, FeedWriteFailureCode>> {
+  if (
+    enforceOpen &&
+    !(await isPollOptionOpen({
+      client,
+      optionId,
+      pollId,
+    }))
+  ) {
+    return { code: "feed_response_closed", ok: false };
+  }
+
   const profile = await readCurrentNuangCodeSnapshot({ accountId, client });
   const response = await client
     .schema("feed")
@@ -730,6 +942,100 @@ async function insertPollVote({
     data: updated.data as { id: string },
     ok: true,
   };
+}
+
+async function isOfficialPostResponseClosed({
+  client,
+  postId,
+}: {
+  client: ServiceClient;
+  postId: string;
+}) {
+  const response = await client
+    .schema("feed")
+    .from("official_community_content")
+    .select("lifecycle_status,response_closes_at")
+    .eq("post_id", postId)
+    .maybeSingle();
+
+  if (!response.error && response.data) {
+    const row = response.data as {
+      lifecycle_status?: string | null;
+      response_closes_at?: string | null;
+    };
+    const closesAt = row.response_closes_at
+      ? new Date(row.response_closes_at).getTime()
+      : Number.NaN;
+
+    return (
+      row.lifecycle_status === "closed" ||
+      row.lifecycle_status === "archived" ||
+      (Number.isFinite(closesAt) && closesAt <= Date.now())
+    );
+  }
+
+  const legacyResponse = await client
+    .schema("feed")
+    .from("official_community_content")
+    .select("lifecycle_status")
+    .eq("post_id", postId)
+    .maybeSingle();
+  const legacyStatus = (
+    legacyResponse.data as { lifecycle_status?: string | null } | null
+  )?.lifecycle_status;
+
+  return legacyStatus === "closed" || legacyStatus === "archived";
+}
+
+async function isPollOptionOpen({
+  client,
+  optionId,
+  pollId,
+}: {
+  client: ServiceClient;
+  optionId: string;
+  pollId: string;
+}) {
+  const [pollResponse, optionResponse] = await Promise.all([
+    client
+      .schema("feed")
+      .from("feed_poll")
+      .select("id,status,post_id")
+      .eq("id", pollId)
+      .is("deleted_at", null)
+      .maybeSingle(),
+    client
+      .schema("feed")
+      .from("feed_poll_option")
+      .select("id,poll_id")
+      .eq("id", optionId)
+      .eq("poll_id", pollId)
+      .maybeSingle(),
+  ]);
+
+  if (pollResponse.error || optionResponse.error) return false;
+  const poll = pollResponse.data as {
+    id?: string;
+    post_id?: string;
+    status?: string;
+  } | null;
+  const option = optionResponse.data as {
+    id?: string;
+    poll_id?: string;
+  } | null;
+
+  const baseOpen =
+    poll?.id === pollId &&
+    poll.status === "active" &&
+    option?.id === optionId &&
+    option.poll_id === pollId;
+  if (!baseOpen) return false;
+  if (!poll.post_id) return true;
+
+  return !(await isOfficialPostResponseClosed({
+    client,
+    postId: poll.post_id,
+  }));
 }
 
 async function readCurrentNuangCodeSnapshot({

@@ -1,0 +1,201 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-12.0.1",
+  "batchId": "P1-IAS-12",
+  "status": "P1_INFERRED_AXIS_BATCH_12_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 2,
+    "variants": 4,
+    "retainCandidates": 0,
+    "revisionCandidates": 4,
+    "scopeRemovalClaimAxes": 0,
+    "scopeRemovalVariants": 0,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-SE-FRIEND-AFTERMATH-RESPONSE",
+      "claimKey": ".scenario.friend.aftermath.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SE-FRIEND-SUCCESS-RESPONSE",
+      "claimKey": ".scenario.friend.success.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-AFTERMATH-RESPONSE-SE-E",
+      "claimKey": ".scenario.friend.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "감정이 가라앉은 뒤 대화를 다시 열고, 필요한 사과나 설명을 전한 다음 실제 행동으로 관계를 회복하려는 편이다.",
+        "detailParagraphs": [
+          "감정이 가라앉은 뒤 대화를 다시 열고, 필요한 사과나 설명을 전한 다음 실제 행동으로 관계를 회복하려는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "표현의 크기·말의 길이·축하 방식이 E/I를 대신하지 않도록 E는 상호작용 중 생각과 에너지가 커지는 방향, I는 혼자 정리한 뒤 일대일로 나누는 방향을 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "친구와 다시 대화를 주고받는 동안 자신의 생각도 더 분명해지고, 서로의 설명을 연결하며 관계를 풀어 가는 편이다.",
+        "detailParagraphs": [
+          "친구와 다시 대화를 주고받는 동안 자신의 생각도 더 분명해지고, 서로의 설명을 연결하며 관계를 풀어 가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "감정이 가라앉은 뒤 대화를 다시 열고, 필요한 사과나 설명을 전한 다음 실제 행동으로 관계를 회복하려는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-AFTERMATH-RESPONSE-SE-I",
+      "claimKey": ".scenario.friend.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "감정이 정리된 뒤 친구에게 필요한 말만 전하고, 다음에는 어떻게 다르게 할지 구체적으로 제안하는 편이다.",
+        "detailParagraphs": [
+          "감정이 정리된 뒤 친구에게 필요한 말만 전하고, 다음에는 어떻게 다르게 할지 구체적으로 제안하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "표현의 크기·말의 길이·축하 방식이 E/I를 대신하지 않도록 E는 상호작용 중 생각과 에너지가 커지는 방향, I는 혼자 정리한 뒤 일대일로 나누는 방향을 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "먼저 혼자 있었던 일을 되짚고 감정과 할 말을 정리한 뒤, 친구와 차분히 일대일로 대화를 나누는 편이다.",
+        "detailParagraphs": [
+          "먼저 혼자 있었던 일을 되짚고 감정과 할 말을 정리한 뒤, 친구와 차분히 일대일로 대화를 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "감정이 정리된 뒤 친구에게 필요한 말만 전하고, 다음에는 어떻게 다르게 할지 구체적으로 제안하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-RESPONSE-SE-E",
+      "claimKey": ".scenario.friend.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "기쁜 마음을 적극적으로 표현하고 성취의 구체적인 부분을 알아봐 주며, 친구가 원하는 방식으로 축하를 이어가는 편이다.",
+        "detailParagraphs": [
+          "기쁜 마음을 적극적으로 표현하고 성취의 구체적인 부분을 알아봐 주며, 친구가 원하는 방식으로 축하를 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "표현의 크기·말의 길이·축하 방식이 E/I를 대신하지 않도록 E는 상호작용 중 생각과 에너지가 커지는 방향, I는 혼자 정리한 뒤 일대일로 나누는 방향을 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "친구와 기쁨을 바로 주고받고 주변 사람들과 축하 이야기를 나누는 동안 즐거움과 에너지가 더 커지는 편이다.",
+        "detailParagraphs": [
+          "친구와 기쁨을 바로 주고받고 주변 사람들과 축하 이야기를 나누는 동안 즐거움과 에너지가 더 커지는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "기쁜 마음을 적극적으로 표현하고 성취의 구체적인 부분을 알아봐 주며, 친구가 원하는 방식으로 축하를 이어가는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-RESPONSE-SE-I",
+      "claimKey": ".scenario.friend.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "친구의 노력을 짚어 축하하고, 가까운 관계라면 둘이 좋아하는 활동이나 작은 선물처럼 익숙하고 실질적인 방식으로 기쁨을 나누는 편이다.",
+        "detailParagraphs": [
+          "친구의 노력을 짚어 축하하고, 가까운 관계라면 둘이 좋아하는 활동이나 작은 선물처럼 익숙하고 실질적인 방식으로 기쁨을 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "표현의 크기·말의 길이·축하 방식이 E/I를 대신하지 않도록 E는 상호작용 중 생각과 에너지가 커지는 방향, I는 혼자 정리한 뒤 일대일로 나누는 방향을 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "친구의 성취가 지닌 뜻을 혼자 충분히 생각한 뒤, 둘이 편하게 이야기하거나 익숙한 방식으로 조용히 기쁨을 나누는 편이다.",
+        "detailParagraphs": [
+          "친구의 성취가 지닌 뜻을 혼자 충분히 생각한 뒤, 둘이 편하게 이야기하거나 익숙한 방식으로 조용히 기쁨을 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "친구의 노력을 짚어 축하하고, 가까운 관계라면 둘이 좋아하는 활동이나 작은 선물처럼 익숙하고 실질적인 방식으로 기쁨을 나누는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_12_RECOMPOSITION_AND_BATCH_13_SCREEN",
+    "actions": [
+      "4개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "SE·partner 맥락의 P1-IAS-13을 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

@@ -31,7 +31,7 @@ export function PublicProfileButton({
       <button
         aria-label={ariaLabel}
         className={cn(
-          "min-w-0 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#111111]",
+          "min-w-0 text-left focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--nu-color-text-strong)]",
           className,
         )}
         onClick={() => setOpen(true)}
@@ -152,12 +152,12 @@ export function PublicProfileModal({
         onClick={onClose}
         type="button"
       />
-      <section className="relative w-full max-w-[430px] overflow-hidden rounded-[28px] bg-white shadow-[0_24px_80px_rgba(0,0,0,0.22)]">
-        <header className="flex items-center justify-between border-b border-[#efefef] px-5 py-4">
-          <p className="text-[15px] font-extrabold text-[#111111]">프로필</p>
+      <section className="relative w-full max-w-[430px] overflow-hidden rounded-[28px] bg-white shadow-sheet">
+        <header className="flex items-center justify-between border-b border-[var(--nu-neutral-75)] px-5 py-4">
+          <p className="text-callout font-extrabold text-[var(--nu-color-text-strong)]">프로필</p>
           <button
             aria-label="닫기"
-            className="-mr-2 grid h-9 w-9 place-items-center rounded-full text-[#111111] hover:bg-[#f5f5f5]"
+            className="-mr-2 grid h-9 w-9 place-items-center rounded-full text-[var(--nu-color-text-strong)] hover:bg-[var(--nu-neutral-25)]"
             onClick={onClose}
             type="button"
           >
@@ -174,22 +174,22 @@ export function PublicProfileModal({
             />
             <div className="min-w-0 flex-1 pt-1">
               <h2
-                className="truncate text-[22px] font-black leading-7 tracking-normal text-[#111111]"
+                className="truncate text-2xl font-black leading-7 tracking-normal text-[var(--nu-color-text-strong)]"
                 id="public-profile-title"
               >
                 {profile.display.displayName}
               </h2>
-              <p className="mt-1 text-sm font-bold text-[#777777]">
+              <p className="mt-1 text-sm font-bold text-[var(--nu-neutral-600)]">
                 {profile.display.code}
               </p>
-              <p className="mt-3 text-[17px] font-extrabold leading-6 text-[#111111]">
+              <p className="mt-3 text-lg font-extrabold leading-6 text-[var(--nu-color-text-strong)]">
                 {profile.display.profileName}
               </p>
             </div>
           </div>
 
-          <div className="mt-6 border-y border-[#eeeeee] py-4">
-            <p className="text-sm leading-6 text-[#4a4a4a]">
+          <div className="mt-6 border-y border-[var(--nu-neutral-75)] py-4">
+            <p className="text-sm leading-6 text-[var(--nu-neutral-700)]">
               공개된 성향 정보를 기준으로 상대의 리듬을 간단히 확인할 수
               있어요.
             </p>
@@ -200,13 +200,13 @@ export function PublicProfileModal({
           </div>
 
           {message ? (
-            <p className="mt-4 rounded-lg bg-[#f7f7f7] px-4 py-3 text-sm font-semibold leading-5 text-[#555555]">
+            <p className="mt-4 rounded-lg bg-[var(--nu-neutral-25)] px-4 py-3 text-sm font-semibold leading-5 text-[var(--nu-neutral-700)]">
               {message}
             </p>
           ) : null}
 
           <button
-            className="mt-5 flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-[#111111] text-[15px] font-extrabold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
+            className="mt-5 flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-[var(--nu-color-text-strong)] text-callout font-extrabold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
             disabled={submitting}
             onClick={compareWithMe}
             type="button"
@@ -214,7 +214,7 @@ export function PublicProfileModal({
             {submitting ? "준비 중" : "나와 비교하기"}
             <ChevronRight aria-hidden="true" size={18} strokeWidth={2.2} />
           </button>
-          <p className="mt-3 text-center text-xs font-medium leading-5 text-[#8a8a8a]">
+          <p className="mt-3 text-center text-xs font-medium leading-5 text-[var(--nu-neutral-500)]">
             비공개 항목은 비교에 사용하지 않아요.
           </p>
         </div>
@@ -233,16 +233,16 @@ function AxisLine({
   return (
     <div>
       <div className="mb-1.5 flex items-center justify-between gap-3">
-        <span className="truncate text-sm font-bold text-[#111111]">
+        <span className="truncate text-sm font-bold text-[var(--nu-color-text-strong)]">
           {axis.label}
         </span>
-        <span className="shrink-0 text-xs font-bold text-[#777777]">
+        <span className="shrink-0 text-xs font-bold text-[var(--nu-neutral-600)]">
           {axis.score === null ? "분석 중" : `${score}점`}
         </span>
       </div>
-      <div className="h-1.5 overflow-hidden rounded-full bg-[#ededed]">
+      <div className="h-1.5 overflow-hidden rounded-full bg-[var(--nu-neutral-150)]">
         <div
-          className="h-full rounded-full bg-[#111111]"
+          className="h-full rounded-full bg-[var(--nu-color-text-strong)]"
           style={{ width: `${Math.max(6, Math.min(100, score))}%` }}
         />
       </div>
@@ -265,4 +265,3 @@ function toFriendlyComparisonMessage(message: string) {
 
   return message;
 }
-

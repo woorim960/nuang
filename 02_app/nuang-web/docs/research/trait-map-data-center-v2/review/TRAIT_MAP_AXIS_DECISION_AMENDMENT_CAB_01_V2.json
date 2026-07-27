@@ -1,0 +1,37 @@
+{
+  "contractVersion": "nuang-trait-map-axis-decision-amendment.v2",
+  "amendmentManifestId": "TRAIT-MAP-AXIS-DECISION-AMENDMENT-CAB-01.0.1",
+  "sourceFinalAxisManifestId": "TRAIT-MAP-FINAL-AXIS-DECISIONS.0.1",
+  "sourceInternalScreenReportId": "TRAIT-MAP-SEVEN-ROLE-INTERNAL-SCREEN-CAB-01-P0.0.1",
+  "status": "PROPOSED_PENDING_SEVEN_ROLE_REVIEW_NOT_APPLIED",
+  "publicationState": "research_only",
+  "decidedAt": "2026-07-23T00:00:00.000Z",
+  "decisionBoundary": [
+    "이 amendment는 기존 원장을 아직 변경하지 않는다.",
+    "단어 출현만으로 새 축을 채택하지 않고 구성개념 정의와 통제 비교를 우선한다.",
+    "제거한 축의 차이는 해당 claim에서만 사라지며 성향 코드나 축 자체를 제거하지 않는다."
+  ],
+  "amendments": [
+    {
+      "amendmentId": "AX-AMEND-CAB-01-01",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "removeAxes": ["RO"],
+      "screeningIssueCodes": ["PSY_CONTEXT_OVERGENERALIZATION"],
+      "decision": "propose_remove_axis_pending_independent_review",
+      "rationale": "RO는 관계 문제에서 원인·해결과 상대 마음·관계 변화 중 어디에 먼저 관심이 가는지를 구분한다. 일반 선택 원문의 문제·마음 단어는 통제된 G/A 차이가 아니며 OE·SM과 프로필별 서술 차이가 섞인 단서다.",
+      "requiredFollowUp": "함께하는 사람에게 영향이 있는 선택을 별도 관계 시나리오로 설계하고, 이 일반 선택 attention claim은 OE·SM만 사용한다."
+    },
+    {
+      "amendmentId": "AX-AMEND-CAB-01-02",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "removeAxes": ["ER"],
+      "screeningIssueCodes": [
+        "MET_ITEM_CLAIM_MISMATCH",
+        "MET_AXIS_CONTAMINATION"
+      ],
+      "decision": "propose_remove_axis_pending_independent_review",
+      "rationale": "ER은 불편한 상황에서 걱정과 감정이 커지는 상대적 속도다. 새 만남 원문의 차분·긴장·빠른 참여는 정서 활성 속도를 통제해 비교한 결과가 아니라 발화·참여 시작 방식과 섞인 단서다.",
+      "requiredFollowUp": "새 만남에서 실제 정서 활성 속도를 묻는 별도 문항·claim을 설계하기 전까지 response claim은 SE·OE만 사용한다."
+    }
+  ]
+}

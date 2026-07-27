@@ -223,7 +223,7 @@ export function OnboardingGuideCarousel() {
           ) : (
             <p className={styles.swipeHint}>
               <ArrowLeftRight aria-hidden="true" size={16} strokeWidth={1.8} />
-              좌우로 넘겨 다음 이야기를 확인해요
+              좌우로 넘겨보세요
             </p>
           )}
         </div>

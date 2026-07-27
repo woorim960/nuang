@@ -1,0 +1,119 @@
+.wrap {
+  margin-top: 0.8rem;
+  border-top: 1px solid var(--nu-color-border);
+}
+
+.wrap summary {
+  display: flex;
+  min-height: 44px;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.wrap summary::-webkit-details-marker {
+  display: none;
+}
+
+.wrap summary em {
+  padding: 0.26rem 0.5rem;
+  border-radius: 999px;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface-muted);
+  font-style: normal;
+}
+
+.wrap summary em[data-state="keep"] {
+  color: var(--nu-color-success-strong);
+  background: var(--nu-color-success-soft);
+}
+
+.wrap summary em[data-state="revise"],
+.wrap summary em[data-state="exclude"] {
+  color: var(--nu-color-danger);
+  background: var(--nu-color-danger-soft);
+}
+
+.body {
+  display: grid;
+  gap: 0.65rem;
+  padding-bottom: 0.85rem;
+}
+
+.body label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.body label > span,
+.unavailable {
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+}
+
+.body textarea {
+  width: 100%;
+  resize: vertical;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 10px;
+  outline: none;
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface-muted);
+  font: inherit;
+  font-size: var(--nu-text-caption);
+  line-height: 1.5;
+}
+
+.body textarea:focus {
+  border-color: var(--nu-color-brand-action);
+  background: var(--nu-color-surface);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.actions button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0 0.65rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 8px;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.actions button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.actions .danger {
+  color: var(--nu-color-danger);
+}
+
+.body > p {
+  margin: 0;
+  color: var(--nu-color-danger);
+  font-size: var(--nu-text-caption);
+}
+
+.unavailable {
+  margin: 0.75rem 0 0;
+  padding-top: 0.7rem;
+  border-top: 1px solid var(--nu-color-border);
+  line-height: 1.5;
+}

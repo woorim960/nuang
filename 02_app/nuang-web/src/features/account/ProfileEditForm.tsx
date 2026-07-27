@@ -18,6 +18,7 @@ import {
 } from "@/components/character/nuang-character-assets";
 import { readJsonResponse } from "@/features/account/response-json";
 import type { PublicProfileImage } from "@/features/public-profile/profile-image";
+import { PrivateContactEditor } from "@/features/account/PrivateContactEditor";
 import styles from "./ProfileEditForm.module.css";
 
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
@@ -348,18 +349,13 @@ export function ProfileEditForm() {
                 기본 캐릭터 사용
               </button>
             ) : (
-              <>
-                <button
-                  className={styles.defaultPhotoButton}
-                  onClick={useDefaultAvatar}
-                  type="button"
-                >
-                  기본 캐릭터 바꾸기
-                </button>
-                <p className={styles.photoHint}>
-                  원하는 뉴앙 캐릭터를 프로필로 사용해 보세요.
-                </p>
-              </>
+              <button
+                className={styles.defaultPhotoButton}
+                onClick={useDefaultAvatar}
+                type="button"
+              >
+                기본 캐릭터 바꾸기
+              </button>
             )}
             {characterPickerOpen ? (
               <div
@@ -408,7 +404,6 @@ export function ProfileEditForm() {
           <section className={styles.fieldsSection}>
             <div className={styles.sectionHeading}>
               <strong>기본 정보</strong>
-              <p>프로필과 내가 쓴 게시물에 함께 보여요.</p>
             </div>
 
             <ProfileField
@@ -481,16 +476,15 @@ export function ProfileEditForm() {
             </ProfileField>
           </section>
 
+          <PrivateContactEditor />
+
           <section className={styles.traitSection}>
             <div>
               <span>내 뉴앙 코드</span>
               <strong>{profile.code ?? "검사 결과 없음"}</strong>
               {profile.profileName ? <p>{profile.profileName}</p> : null}
             </div>
-            <p>
-              성향 정보는 프로필 편집이 아닌 검사 결과에서 관리해요. 공개 여부는
-              설정의 공개 정보에서 바꿀 수 있어요.
-            </p>
+            <p>공개 여부는 설정의 공개 정보에서 바꿀 수 있어요.</p>
           </section>
 
           {notice ? (

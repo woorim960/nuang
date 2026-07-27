@@ -1,0 +1,190 @@
+{
+  "contractVersion": "nuang-trait-map-data-center-definition-of-done.v2.3",
+  "reportId": "TRAIT-MAP-DATA-CENTER-DEFINITION-OF-DONE.2.3",
+  "status": "RESEARCH_MASTER_V2_3_COMPLETE",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "target": {
+    "targetId": "RESEARCH_MASTER_V2_3_COMPLETE",
+    "meaning": "사용자 참여 검증 전에 완성할 수 있는 구조·내용·근거 범위·재현성·발행 차단을 모두 갖춘 연구 원장",
+    "goalCompletionRule": "RM-01~RM-10이 모두 passed이고 blocking requirement가 0일 때만 현재 목표를 완료로 판정한다.",
+    "excludedFromCompletionClaim": "실제 참여자 타당화, 독립 외부 검토, 고객 화면 발행 승인은 CUSTOMER_PUBLICATION_VALIDATED 별도 release이며 완료했다고 표현하지 않는다."
+  },
+  "summary": {
+    "researchMasterRequirements": 10,
+    "researchMasterPassed": 10,
+    "researchMasterBlocking": 0,
+    "customerPublicationRequirements": 5,
+    "customerPublicationPassed": 0,
+    "goalComplete": true
+  },
+  "researchMasterRequirements": [
+    {
+      "requirementId": "RM-01",
+      "title": "705 canonical 계보의 완전한 재구축",
+      "state": "passed",
+      "expected": "v2.1 705 → v2.2 611 → v2.3 605의 병합·제외 계보와 구조 오류 0",
+      "actual": "705 → 611 → 605; 구조 오류 0",
+      "proofRefs": [null, null, null],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-02",
+      "title": "CAB-01~12 문장 교정 원장 완결",
+      "state": "passed",
+      "expected": "12/12 CAB, 72개 상황, 288개 슬롯, 605개 canonical, hard failure 0",
+      "actual": "12/12 CAB; 72 상황; 288 슬롯; 605 canonical",
+      "proofRefs": [
+        "TRAIT-MAP-CANONICAL-ALL-BATCH-AUDIT.0.4",
+        "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-03",
+      "title": "32개 성향 재조합과 한 글자 이웃 완결",
+      "state": "passed",
+      "expected": "9,216/9,216 참조, unresolved·중복·위험·COMMON 위반 0, 전체 이웃 80/80, CAB 이웃 960/960",
+      "actual": "9216 참조; unresolved 0; 이웃 80/80; CAB 960/960",
+      "proofRefs": [
+        "TRAIT-MAP-P2-SCREENED-RECOMPOSITION-AUDIT.2.3",
+        "TRAIT-MAP-CANONICAL-ALL-BATCH-AUDIT.0.4"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-04",
+      "title": "32개 장문 원고 구조와 최소 분량",
+      "state": "passed",
+      "expected": "32/32 원고 5만 자 이상, 코드마다 canonical 288개, 모든 참조 해결",
+      "actual": "32/32 원고 5만 자; 32/32 288개 참조; 32/32 해결",
+      "proofRefs": [
+        "TRAIT-MAP-V2-3-COMPLETENESS-GAP-REGISTER.2.3",
+        "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-05",
+      "title": "32개 장문 원고 실질 품질 gate",
+      "state": "passed",
+      "expected": "32/32 내용 4만 자 이상, 핵심 편집문 5천 자 이상, 장별 최소 깊이, 긴 문장 반복 비율 ≤3%, 보수 대기 0",
+      "actual": "32/32 통과; 이웃 80/80; 0개 보수 필요",
+      "proofRefs": [
+        "TRAIT-MAP-32-CONTENT-QUALITY-AUDIT.0.1",
+        "TRAIT-MAP-32-MASTER-COMPLETENESS-REAUDIT.2.3"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-06",
+      "title": "근거·맥락 범위의 완전한 등록",
+      "state": "passed",
+      "expected": "605개 canonical과 모든 finding 연결을 exact/미확립 전이로 분류하고, 동일 맥락 근거 없음도 누락 없이 별도 등록",
+      "actual": "605 canonical; 2939 연결; exact 1618; 전이 미확립 1321; 동일 맥락 없음 101",
+      "proofRefs": [
+        "TRAIT-MAP-ALL-CANONICAL-CONTEXT-APPLICABILITY-AUDIT.2.3",
+        "TRAIT-MAP-V2-3-COMPLETENESS-GAP-REGISTER.2.3"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-07",
+      "title": "공식 10글자 언어와 32개 별칭 내부 계약",
+      "state": "passed",
+      "expected": "32/32 공식 글자 언어, 짧은·긴 별칭 중복 0, 자동 명칭 계약 전부 통과",
+      "actual": "32/32 공식 언어; 짧은 32/32; 긴 32/32; 명칭 검사 9/9",
+      "proofRefs": [
+        "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4",
+        "TRAIT-MAP-32-PROFILE-NAME-FINAL-AUDIT.2.1"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-08",
+      "title": "COMMON·미승인 문장 발행 차단",
+      "state": "passed",
+      "expected": "COMMON 61개 개인화 차단, 운영 allowlist 0, 9,216개 연구 참조 fail-closed resolver 검증, 앱 연결 0",
+      "actual": "COMMON 위반 0; allowlist 0; 합성 참조 9216; route 0",
+      "proofRefs": [
+        "TRAIT-MAP-COMMON-ISOLATION-AUDIT.2.3",
+        "TRAIT-MAP-PUBLICATION-GATE.2.3",
+        "TRAIT-MAP-RUNTIME-RESOLVER-HARNESS.2.3"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-09",
+      "title": "최종 기준선 전체 재현 검사",
+      "state": "passed",
+      "expected": "모든 생성기·감사·fixture·manifest를 포함한 current check가 최종 수정 뒤 한 번에 exit 0",
+      "actual": "156개 current check 통과, exit 0",
+      "proofRefs": [
+        "TRAIT-MAP-DATA-CENTER-FINAL-COMPLETION-AUDIT.2.3",
+        "npm run research:trait-map:v2:v2-3-current:check"
+      ],
+      "blockingForResearchMaster": true
+    },
+    {
+      "requirementId": "RM-10",
+      "title": "요구사항별 최종 완료 감사",
+      "state": "passed",
+      "expected": "RM-01~09의 최신 증거 해시를 다시 확인하고 미완료 0을 기록한 final completion audit",
+      "actual": "10/10 통과; 차단 0; 증거 해시 19개",
+      "proofRefs": ["TRAIT-MAP-DATA-CENTER-FINAL-COMPLETION-AUDIT.2.3"],
+      "blockingForResearchMaster": true
+    }
+  ],
+  "customerPublicationRelease": {
+    "releaseId": "CUSTOMER_PUBLICATION_VALIDATED",
+    "partOfCurrentGoalCompletion": false,
+    "reason": "사용자가 실제 사용자 검사를 별도로 진행하기로 했으므로 연구 원장 완성과 고객 발행 검증을 섞지 않는다.",
+    "requirements": [
+      {
+        "id": "CP-01",
+        "title": "독립 7역할 검토",
+        "expected": "개인화 canonical 544개 필수 역할 승인",
+        "actual": 0,
+        "state": "not_started"
+      },
+      {
+        "id": "CP-02",
+        "title": "인지 면담과 이해도",
+        "expected": "잠긴 표본·세그먼트·수용 기준 통과",
+        "actual": 0,
+        "state": "not_started"
+      },
+      {
+        "id": "CP-03",
+        "title": "상황 직접 검증과 정량 타당도",
+        "expected": "실제 독립 discovery/confirmation, 구조·신뢰도·DIF 통과",
+        "actual": 0,
+        "state": "not_started"
+      },
+      {
+        "id": "CP-04",
+        "title": "32개 별칭 사용자 검증",
+        "expected": "이해·회상·오해 기준 통과",
+        "actual": 0,
+        "state": "not_started"
+      },
+      {
+        "id": "CP-05",
+        "title": "고객 화면별 명시적 발행 승인",
+        "expected": "승인된 canonical ID·version·surface allowlist와 runtime 연결",
+        "actual": 0,
+        "state": "not_started"
+      }
+    ]
+  },
+  "stopRules": [
+    "RM-01~10이 모두 통과하면 새로운 내부 문서를 임의로 늘리지 않고 최종 완료 감사를 실행한다.",
+    "새 작업은 미통과 RM 항목을 직접 닫는 경우에만 추가한다.",
+    "CP 항목은 실제 외부 데이터나 승인이 없으면 0을 유지하며 합성·내부 AI로 대체하지 않는다.",
+    "연구 원장 완료를 고객 타당도 완료나 운영 발행 완료로 표현하지 않는다."
+  ],
+  "currentNextWork": [
+    "연구 원장 v2.3은 완료 상태로 고정하고 새 내부 문서를 임의로 늘리지 않는다.",
+    "사용자가 실제 참여자 자료를 확보하면 CUSTOMER_PUBLICATION_VALIDATED의 외부 검증 게이트만 별도 재개한다."
+  ]
+}

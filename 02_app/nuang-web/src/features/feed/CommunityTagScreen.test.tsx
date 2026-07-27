@@ -26,7 +26,7 @@ describe("CommunityTagScreen", () => {
     render(<CommunityTagScreen posts={[post]} tag="카페" />);
 
     expect(
-      screen.getByRole("heading", { level: 2, name: "#카페" }),
+      screen.getByRole("heading", { level: 1, name: "#카페" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "#카페" })).toHaveAttribute(
       "href",

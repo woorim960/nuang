@@ -13,6 +13,13 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
   ]),
+  {
+    files: ["scripts/**/*.mjs"],
+    rules: {
+      // 독립 실행 ESM 연구 스크립트에는 Next.js의 CommonJS module 보호 규칙이 적용되지 않습니다.
+      "@next/next/no-assign-module-variable": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

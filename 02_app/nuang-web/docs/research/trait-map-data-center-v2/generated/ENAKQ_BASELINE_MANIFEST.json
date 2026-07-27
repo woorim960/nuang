@@ -1,0 +1,263 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "packageId": "ENAKQ.map.v2-migration-baseline",
+  "code": "ENAKQ",
+  "profileName": "관계를 여는 지휘자",
+  "sourceMapVersion": "ENAKQ.map.v0.1-draft",
+  "migrationStatus": "MIGRATION_REQUIRED_NOT_FOR_PRODUCTION",
+  "sourceInventory": {
+    "draftFiles": [
+      "ENAKQ_MAP_DRAFT_PART1_V0_1.md",
+      "ENAKQ_MAP_DRAFT_PART2_V0_1.md",
+      "ENAKQ_MAP_DRAFT_PART3_V0_1.md",
+      "ENAKQ_MAP_DRAFT_PART4_V0_1.md",
+      "ENAKQ_MAP_DRAFT_PART5_V0_1.md"
+    ],
+    "evidenceLedgerFiles": [
+      "ENAKQ_EVIDENCE_LEDGER_PART1_V0_1.md",
+      "ENAKQ_EVIDENCE_LEDGER_PART2_V0_1.md",
+      "ENAKQ_EVIDENCE_LEDGER_PART3_V0_1.md",
+      "ENAKQ_EVIDENCE_LEDGER_PART4_V0_1.md",
+      "ENAKQ_EVIDENCE_LEDGER_PART5_V0_1.md"
+    ],
+    "registryFile": "src/features/nuang-code/fixtures/enakq-claim-registry.generated.json"
+  },
+  "currentMetrics": {
+    "totalNonWhitespaceCharacters": 55513,
+    "chapterCount": 15,
+    "claimCount": 158,
+    "uniqueContentKeyCount": 158,
+    "evidenceSourceCount": 42,
+    "structuredScenarioCount": 0,
+    "structuredNeighborContrastCount": 0,
+    "approvedClaimCount": 0
+  },
+  "chapters": [
+    {
+      "chapterNumber": 1,
+      "chapterId": "overview",
+      "title": "ENAKQ를 한눈에 이해하기",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART1_V0_1.md",
+      "nonWhitespaceCharacters": 2519
+    },
+    {
+      "chapterNumber": 2,
+      "chapterId": "role_name_and_values",
+      "title": "‘관계를 여는 지휘자’라는 이름",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART1_V0_1.md",
+      "nonWhitespaceCharacters": 2142
+    },
+    {
+      "chapterNumber": 3,
+      "chapterId": "five_code_positions",
+      "title": "다섯 코드 자리 깊이 보기",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART1_V0_1.md",
+      "nonWhitespaceCharacters": 6835
+    },
+    {
+      "chapterNumber": 4,
+      "chapterId": "code_interactions",
+      "title": "다섯 경향이 함께 나타날 때",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART2_V0_1.md",
+      "nonWhitespaceCharacters": 3802
+    },
+    {
+      "chapterNumber": 5,
+      "chapterId": "first_thought_and_actual_response",
+      "title": "처음 드는 생각과 실제 나타나는 반응",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART2_V0_1.md",
+      "nonWhitespaceCharacters": 3329
+    },
+    {
+      "chapterNumber": 6,
+      "chapterId": "daily_choice_and_change",
+      "title": "일상의 선택과 회복",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART2_V0_1.md",
+      "nonWhitespaceCharacters": 3556
+    },
+    {
+      "chapterNumber": 7,
+      "chapterId": "family",
+      "title": "가족과 함께 있을 때",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART3_V0_1.md",
+      "nonWhitespaceCharacters": 3056
+    },
+    {
+      "chapterNumber": 8,
+      "chapterId": "friend",
+      "title": "친구와 가까워지는 방식",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART3_V0_1.md",
+      "nonWhitespaceCharacters": 2903
+    },
+    {
+      "chapterNumber": 9,
+      "chapterId": "partner",
+      "title": "연인과 마음을 나눌 때",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART3_V0_1.md",
+      "nonWhitespaceCharacters": 4597
+    },
+    {
+      "chapterNumber": 10,
+      "chapterId": "person_of_interest",
+      "title": "마음 가는 사람을 알아갈 때",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART4_V0_1.md",
+      "nonWhitespaceCharacters": 3625
+    },
+    {
+      "chapterNumber": 11,
+      "chapterId": "work_and_study",
+      "title": "일하고 공부할 때",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART4_V0_1.md",
+      "nonWhitespaceCharacters": 3941
+    },
+    {
+      "chapterNumber": 12,
+      "chapterId": "conflict_stress_and_recovery",
+      "title": "부담이 커질 때와 회복",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART4_V0_1.md",
+      "nonWhitespaceCharacters": 3419
+    },
+    {
+      "chapterNumber": 13,
+      "chapterId": "strength_overuse_and_growth",
+      "title": "강점, 과하게 쓸 때, 작은 실험",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART5_V0_1.md",
+      "nonWhitespaceCharacters": 4032
+    },
+    {
+      "chapterNumber": 14,
+      "chapterId": "misunderstanding_and_communication",
+      "title": "자주 생기는 오해와 대화법",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART5_V0_1.md",
+      "nonWhitespaceCharacters": 3273
+    },
+    {
+      "chapterNumber": 15,
+      "chapterId": "evidence_and_method",
+      "title": "근거와 아직 모르는 것",
+      "sourceFile": "ENAKQ_MAP_DRAFT_PART5_V0_1.md",
+      "nonWhitespaceCharacters": 2957
+    }
+  ],
+  "evidenceSourceIds": [
+    "SRC-BERKELEY-BFI",
+    "SRC-BFAS-2007",
+    "SRC-BFI2-2017",
+    "SRC-CONTENT-VALIDITY-2018",
+    "SRC-CREATIVITY-DISTINCTION-2014",
+    "SRC-CURVILINEAR-PERFORMANCE-2011",
+    "SRC-DAILY-STRESS-STATES-2024",
+    "SRC-DIGITAL-CHANGE-2021",
+    "SRC-DYAD-2010",
+    "SRC-EMOTION-PROCESS-1998",
+    "SRC-EXTRAVERSION-PA-2015",
+    "SRC-FRIEND-DAILY-2015",
+    "SRC-FRIEND-DYAD-2023",
+    "SRC-FRIEND-SIMILARITY-2026",
+    "SRC-INITIAL-ATTRACTION-2023",
+    "SRC-INTENTION-BEHAVIOR-2016",
+    "SRC-INTERVENTION-META-2017",
+    "SRC-IPC-2013",
+    "SRC-ITC-2017",
+    "SRC-JOB-META-1991",
+    "SRC-KOREA-SITUATION-2024",
+    "SRC-OPENNESS-INTELLECT-2009",
+    "SRC-PERSON-SITUATION-WORK-2015",
+    "SRC-PERSONAL-VALIDATION-1949",
+    "SRC-REACTIVITY-RECOVERY-2023",
+    "SRC-REALTIME-PERSON-SITUATION-2015",
+    "SRC-RELATIONAL-UNCERTAINTY-2011",
+    "SRC-RESPONSIVENESS-2017",
+    "SRC-RESPONSIVENESS-STRESS-2021",
+    "SRC-ROMANTIC-SIMILARITY-2023",
+    "SRC-SELF-KNOWLEDGE-2010",
+    "SRC-SITUATION-CONTINGENCY-2007",
+    "SRC-SOKA-2010",
+    "SRC-STATE-DISTRIBUTION-2001",
+    "SRC-STATE-MEASUREMENT-2020",
+    "SRC-STRESS-STATE-2026",
+    "SRC-SUPPORT-MATCHING-2007",
+    "SRC-TEST-ADAPTATION-ITC",
+    "SRC-TEST-STANDARDS-2014",
+    "SRC-TRAIT-ACTIVATION-2003",
+    "SRC-TRAIT-ENACTMENT-2015",
+    "SRC-WHOLE-TRAIT-2015"
+  ],
+  "evidenceStatusCounts": {
+    "COGNITIVE_REVIEW_REQUIRED": 36,
+    "DESIGN_APPROVED_NOT_EXECUTED": 4,
+    "EVIDENCE_DOCUMENTED": 2,
+    "EXTERNAL_SUPPORTED": 4,
+    "EXTERNAL_SUPPORTED_BOUNDARY": 13,
+    "EXTERNAL_SUPPORTED_METHOD": 2,
+    "HOLD": 65,
+    "NUANG_MAPPED_PROVISIONAL": 13,
+    "QUANT_VALIDATION_REQUIRED": 8,
+    "SAFETY_POLICY": 11
+  },
+  "publicationStateCounts": { "research_only": 126, "review_candidate": 32 },
+  "v2GateAudit": [
+    {
+      "gate": "longform_characters",
+      "required": "50,000~60,000 non-whitespace characters",
+      "actual": 55513,
+      "status": "PASS"
+    },
+    {
+      "gate": "required_chapters",
+      "required": "16 exact chapter IDs",
+      "actual": 15,
+      "status": "NEEDS_REVISION",
+      "missing": ["neighbor_contrasts"]
+    },
+    {
+      "gate": "canonical_claims",
+      "required": "at least 100 claims",
+      "actual": 158,
+      "status": "PASS"
+    },
+    {
+      "gate": "evidence_sources",
+      "required": "at least 30 traceable sources",
+      "actual": 42,
+      "status": "PASS"
+    },
+    {
+      "gate": "scenario_coverage",
+      "required": "72 structured canonical scenarios",
+      "actual": 0,
+      "status": "NEEDS_MIGRATION"
+    },
+    {
+      "gate": "neighbor_contrasts",
+      "required": "five one-letter neighbor comparisons",
+      "actual": 0,
+      "status": "NEEDS_MIGRATION"
+    },
+    {
+      "gate": "external_expert_review",
+      "required": "independent qualified reviewers",
+      "actual": 0,
+      "status": "NOT_STARTED"
+    },
+    {
+      "gate": "cognitive_content_validity",
+      "required": "target-user comprehension evidence",
+      "actual": 0,
+      "status": "NOT_STARTED"
+    },
+    {
+      "gate": "quantitative_validation",
+      "required": "preregistered measurement and claim validation",
+      "actual": 0,
+      "status": "NOT_STARTED"
+    }
+  ],
+  "nextMigrationTasks": [
+    "Map the 158 v0.1 claims to the v2 entity, scope, risk, and required-signal fields.",
+    "Link current context claims to the 72 canonical scenario IDs.",
+    "Add the missing neighbor_contrasts chapter and five one-letter comparison packets.",
+    "Convert the 42 source headings into normalized source and finding records.",
+    "Run external expert, cognitive, quantitative, and product release gates."
+  ]
+}

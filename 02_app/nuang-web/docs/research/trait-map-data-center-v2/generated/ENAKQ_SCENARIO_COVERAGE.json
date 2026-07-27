@@ -1,0 +1,561 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "ENAKQ-SCENARIO-COVERAGE.0.1",
+  "code": "ENAKQ",
+  "status": "RESEARCH_GAP_AUDIT_NOT_FOR_PRODUCTION",
+  "totalCanonicalScenarios": 72,
+  "candidateCoveredScenarios": 30,
+  "gapScenarios": 42,
+  "coveragePercent": 41.7,
+  "rows": [
+    {
+      "scenarioId": "SCN-GENERAL-1",
+      "relationshipContext": "general",
+      "moment": "ordinary_choice",
+      "claimRefs": [
+        "ENAKQ.daily.context",
+        "ENAKQ.daily.decision",
+        "ENAKQ.daily.self_check"
+      ],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-2",
+      "relationshipContext": "general",
+      "moment": "new_encounter",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-3",
+      "relationshipContext": "general",
+      "moment": "group_participation",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-4",
+      "relationshipContext": "general",
+      "moment": "plan_change",
+      "claimRefs": ["ENAKQ.daily.change", "ENAKQ.daily.schedule"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-5",
+      "relationshipContext": "general",
+      "moment": "uncertainty",
+      "claimRefs": ["ENAKQ.stress.worry"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-6",
+      "relationshipContext": "general",
+      "moment": "disagreement",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-7",
+      "relationshipContext": "general",
+      "moment": "support_requested",
+      "claimRefs": ["ENAKQ.stress.support_preference"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-8",
+      "relationshipContext": "general",
+      "moment": "need_expression",
+      "claimRefs": ["ENAKQ.daily.conversation"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-9",
+      "relationshipContext": "general",
+      "moment": "boundary",
+      "claimRefs": [
+        "ENAKQ.stress.clinical_boundary",
+        "ENAKQ.stress.reactivity_recovery_boundary",
+        "ENAKQ.stress.state_boundary"
+      ],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-10",
+      "relationshipContext": "general",
+      "moment": "success",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-11",
+      "relationshipContext": "general",
+      "moment": "setback",
+      "claimRefs": [
+        "ENAKQ.stress.activation",
+        "ENAKQ.stress.communication",
+        "ENAKQ.stress.crossload",
+        "ENAKQ.stress.environment",
+        "ENAKQ.stress.recovery",
+        "ENAKQ.stress.safety",
+        "ENAKQ.stress.self_check"
+      ],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-GENERAL-12",
+      "relationshipContext": "general",
+      "moment": "aftermath",
+      "claimRefs": ["ENAKQ.daily.rest"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-1",
+      "relationshipContext": "family",
+      "moment": "ordinary_choice",
+      "claimRefs": ["ENAKQ.family.context", "ENAKQ.family.role"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-2",
+      "relationshipContext": "family",
+      "moment": "new_encounter",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-3",
+      "relationshipContext": "family",
+      "moment": "group_participation",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-4",
+      "relationshipContext": "family",
+      "moment": "plan_change",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-5",
+      "relationshipContext": "family",
+      "moment": "uncertainty",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-6",
+      "relationshipContext": "family",
+      "moment": "disagreement",
+      "claimRefs": ["ENAKQ.family.conflict", "ENAKQ.family.friction"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-7",
+      "relationshipContext": "family",
+      "moment": "support_requested",
+      "claimRefs": ["ENAKQ.family.care", "ENAKQ.family.support_prompt"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-8",
+      "relationshipContext": "family",
+      "moment": "need_expression",
+      "claimRefs": ["ENAKQ.family.contact"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-9",
+      "relationshipContext": "family",
+      "moment": "boundary",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-10",
+      "relationshipContext": "family",
+      "moment": "success",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-11",
+      "relationshipContext": "family",
+      "moment": "setback",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FAMILY-12",
+      "relationshipContext": "family",
+      "moment": "aftermath",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-1",
+      "relationshipContext": "friend",
+      "moment": "ordinary_choice",
+      "claimRefs": [
+        "ENAKQ.friend.context",
+        "ENAKQ.friend.distance",
+        "ENAKQ.friend.novelty",
+        "ENAKQ.friend.similarity"
+      ],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-2",
+      "relationshipContext": "friend",
+      "moment": "new_encounter",
+      "claimRefs": ["ENAKQ.friend.initiation"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-3",
+      "relationshipContext": "friend",
+      "moment": "group_participation",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-4",
+      "relationshipContext": "friend",
+      "moment": "plan_change",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-5",
+      "relationshipContext": "friend",
+      "moment": "uncertainty",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-6",
+      "relationshipContext": "friend",
+      "moment": "disagreement",
+      "claimRefs": ["ENAKQ.friend.repair"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-7",
+      "relationshipContext": "friend",
+      "moment": "support_requested",
+      "claimRefs": ["ENAKQ.friend.support"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-8",
+      "relationshipContext": "friend",
+      "moment": "need_expression",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-9",
+      "relationshipContext": "friend",
+      "moment": "boundary",
+      "claimRefs": ["ENAKQ.friend.reciprocity"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-10",
+      "relationshipContext": "friend",
+      "moment": "success",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-11",
+      "relationshipContext": "friend",
+      "moment": "setback",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-FRIEND-12",
+      "relationshipContext": "friend",
+      "moment": "aftermath",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-1",
+      "relationshipContext": "partner",
+      "moment": "ordinary_choice",
+      "claimRefs": [
+        "ENAKQ.partner.autonomy",
+        "ENAKQ.partner.comparison",
+        "ENAKQ.partner.context",
+        "ENAKQ.partner.plan",
+        "ENAKQ.partner.self_check",
+        "ENAKQ.partner.similarity"
+      ],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-2",
+      "relationshipContext": "partner",
+      "moment": "new_encounter",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-3",
+      "relationshipContext": "partner",
+      "moment": "group_participation",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-4",
+      "relationshipContext": "partner",
+      "moment": "plan_change",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-5",
+      "relationshipContext": "partner",
+      "moment": "uncertainty",
+      "claimRefs": ["ENAKQ.partner.ambiguity"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-6",
+      "relationshipContext": "partner",
+      "moment": "disagreement",
+      "claimRefs": ["ENAKQ.partner.conflict", "ENAKQ.partner.repair"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-7",
+      "relationshipContext": "partner",
+      "moment": "support_requested",
+      "claimRefs": ["ENAKQ.partner.support"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-8",
+      "relationshipContext": "partner",
+      "moment": "need_expression",
+      "claimRefs": ["ENAKQ.partner.contact", "ENAKQ.partner.expression"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-9",
+      "relationshipContext": "partner",
+      "moment": "boundary",
+      "claimRefs": ["ENAKQ.partner.boundary"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-10",
+      "relationshipContext": "partner",
+      "moment": "success",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-11",
+      "relationshipContext": "partner",
+      "moment": "setback",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PARTNER-12",
+      "relationshipContext": "partner",
+      "moment": "aftermath",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-1",
+      "relationshipContext": "person_of_interest",
+      "moment": "ordinary_choice",
+      "claimRefs": [
+        "ENAKQ.crush.attention",
+        "ENAKQ.crush.context",
+        "ENAKQ.crush.fact_check",
+        "ENAKQ.crush.prompt",
+        "ENAKQ.crush.self_check",
+        "ENAKQ.crush.similarity"
+      ],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "relationshipContext": "person_of_interest",
+      "moment": "new_encounter",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "relationshipContext": "person_of_interest",
+      "moment": "group_participation",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "relationshipContext": "person_of_interest",
+      "moment": "plan_change",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-5",
+      "relationshipContext": "person_of_interest",
+      "moment": "uncertainty",
+      "claimRefs": ["ENAKQ.crush.ambiguity", "ENAKQ.crush.uncertainty"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "relationshipContext": "person_of_interest",
+      "moment": "disagreement",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "relationshipContext": "person_of_interest",
+      "moment": "support_requested",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-8",
+      "relationshipContext": "person_of_interest",
+      "moment": "need_expression",
+      "claimRefs": ["ENAKQ.crush.contact", "ENAKQ.crush.expression"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-9",
+      "relationshipContext": "person_of_interest",
+      "moment": "boundary",
+      "claimRefs": ["ENAKQ.crush.boundary", "ENAKQ.crush.reciprocity"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "relationshipContext": "person_of_interest",
+      "moment": "success",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "relationshipContext": "person_of_interest",
+      "moment": "setback",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "relationshipContext": "person_of_interest",
+      "moment": "aftermath",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-1",
+      "relationshipContext": "work",
+      "moment": "ordinary_choice",
+      "claimRefs": [
+        "ENAKQ.study.pattern",
+        "ENAKQ.work.collaboration",
+        "ENAKQ.work.context",
+        "ENAKQ.work.evaluation",
+        "ENAKQ.work.followthrough",
+        "ENAKQ.work.ideation",
+        "ENAKQ.work.learning",
+        "ENAKQ.work.self_check",
+        "ENAKQ.work.voice"
+      ],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-WORK-2",
+      "relationshipContext": "work",
+      "moment": "new_encounter",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-3",
+      "relationshipContext": "work",
+      "moment": "group_participation",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-4",
+      "relationshipContext": "work",
+      "moment": "plan_change",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-5",
+      "relationshipContext": "work",
+      "moment": "uncertainty",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-6",
+      "relationshipContext": "work",
+      "moment": "disagreement",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-7",
+      "relationshipContext": "work",
+      "moment": "support_requested",
+      "claimRefs": ["ENAKQ.study.support", "ENAKQ.work.support"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-WORK-8",
+      "relationshipContext": "work",
+      "moment": "need_expression",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-9",
+      "relationshipContext": "work",
+      "moment": "boundary",
+      "claimRefs": ["ENAKQ.work.boundary", "ENAKQ.work.performance_boundary"],
+      "status": "candidate_linked_needs_review"
+    },
+    {
+      "scenarioId": "SCN-WORK-10",
+      "relationshipContext": "work",
+      "moment": "success",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-11",
+      "relationshipContext": "work",
+      "moment": "setback",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    },
+    {
+      "scenarioId": "SCN-WORK-12",
+      "relationshipContext": "work",
+      "moment": "aftermath",
+      "claimRefs": [],
+      "status": "gap_needs_claim"
+    }
+  ]
+}

@@ -134,13 +134,10 @@ export function MyTraitDetailView() {
           </div>
         </div>
         <p className={styles.heroDescription}>
-          현재 검사에서 가장 가까운 대표 성향이에요. 점수는 고정된 등급이
-          아니라, 평소 어느 방향을 더 자주 사용하는지 보여줘요.
+          평소 어느 방향을 더 자주 사용하는지 보여줘요.
         </p>
         <div className={styles.heroMeta}>
           <span>{formatLongDate(detail.completedAt)} 검사</span>
-          <span aria-hidden="true" />
-          <span>최신 결과</span>
         </div>
         <div className={styles.heroActions}>
           <Link href={detail.resultHref}>전체 리포트 보기</Link>
@@ -153,7 +150,6 @@ export function MyTraitDetailView() {
       <section className={styles.section}>
         <SectionHeading
           description="다섯 영역을 한눈에 볼 수 있어요. 중심에서 멀수록 해당 방향의 점수가 높아요."
-          eyebrow="전체 모습"
           title="코드 지도"
         />
         <div className={styles.radarWrap}>
@@ -171,11 +167,7 @@ export function MyTraitDetailView() {
       />
 
       <section className={styles.section}>
-        <SectionHeading
-          description="선택된 문자를 강조하고, 반대 방향과의 비율도 함께 보여드려요."
-          eyebrow="5개 축"
-          title="코드 한 자리씩 보기"
-        />
+        <SectionHeading title="코드 한 자리씩 보기" />
         <div className={styles.axisList}>
           {axisRows.map(({ position, domain, symbol }) => (
             <AxisRow
@@ -190,8 +182,7 @@ export function MyTraitDetailView() {
 
       <section className={styles.section}>
         <SectionHeading
-          description="세부 문항 응답을 0~100으로 환산했어요. 50은 어느 한쪽으로 치우치지 않은 값이에요."
-          eyebrow="자세히 보기"
+          description="50에 가까울수록 두 방향이 비슷하게 나타나요."
           title="세부 반응"
         />
         {detail.facets.length > 0 ? (
@@ -212,8 +203,6 @@ export function MyTraitDetailView() {
         <SectionHeading
           actionHref="/assessments"
           actionLabel="검사 둘러보기"
-          description="최근 완료한 주제 검사와 점수를 다시 확인할 수 있어요."
-          eyebrow="나의 기록"
           title="최근 검사 기록"
         />
         {topicResults.length > 0 ? (
@@ -257,19 +246,16 @@ function SectionHeading({
   actionHref,
   actionLabel,
   description,
-  eyebrow,
   title,
 }: {
   actionHref?: string;
   actionLabel?: string;
-  description: string;
-  eyebrow: string;
+  description?: string;
   title: string;
 }) {
   return (
     <div className={styles.sectionHeading}>
       <div>
-        <p>{eyebrow}</p>
         <h2>{title}</h2>
       </div>
       {actionHref && actionLabel ? (
@@ -278,7 +264,7 @@ function SectionHeading({
           <ChevronRight aria-hidden="true" size={14} strokeWidth={1.7} />
         </Link>
       ) : null}
-      <span>{description}</span>
+      {description ? <span>{description}</span> : null}
     </div>
   );
 }
@@ -315,7 +301,9 @@ function AxisRow({
         )}
       </div>
       <p className={styles.axisSummary}>
-        {directionCopy?.description ?? "이 영역은 응답이 조금 더 필요해요."}
+        {directionCopy
+          ? `${selectedSymbol} · ${directionCopy.publicTypeName} — ${directionCopy.description}`
+          : "이 영역은 응답이 조금 더 필요해요."}
       </p>
       {highScore !== null && lowScore !== null ? (
         <div
@@ -388,7 +376,6 @@ function TraitDetailLoading() {
         <NuangCharacter motif="purple" size="sm" />
       </div>
       <strong>내 성향을 정리하고 있어요</strong>
-      <span>가장 최근 검사 결과를 불러오는 중이에요.</span>
       <i aria-hidden="true" />
     </div>
   );
@@ -400,7 +387,6 @@ function TraitDetailEmpty() {
       <div className={styles.characterWrap}>
         <NuangCharacter motif="forest" size="md" />
       </div>
-      <p>아직 결과가 없어요</p>
       <h1>코어 검사로 내 성향의 기준을 만들어보세요</h1>
       <span>
         검사를 완료하면 대표 코드, 5개 축의 비율과 세부 반응을 이 화면에서

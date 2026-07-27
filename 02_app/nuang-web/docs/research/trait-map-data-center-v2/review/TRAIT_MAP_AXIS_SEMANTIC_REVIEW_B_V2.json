@@ -1,0 +1,466 @@
+{
+  "contractVersion": "nuang-trait-map-axis-semantic-review.v2",
+  "reviewId": "TRAIT-MAP-AXIS-SEMANTIC-REVIEW-B.0.1",
+  "sourceManifestId": "TRAIT-MAP-AXIS-CONTRIBUTION.0.1",
+  "scope": "NEW_AXIS_AND_COMPLEX_CANDIDATES",
+  "status": "PROVISIONAL_INTERNAL_SEMANTIC_REVIEW_COMPLETE",
+  "publicationState": "research_only",
+  "reviewedAt": "2026-07-23T00:00:00.000Z",
+  "reviewRules": [
+    "자동 단어 단서는 승인 근거가 아니라 검토 대상을 찾는 신호로만 사용한다.",
+    "실제 원문 변형 수가 식별할 수 있는 이진 축 수보다 많은 축을 채택하지 않는다.",
+    "상황 자체에 늘 등장하는 마음·계획·사람 같은 단어는 별도 행동 대비가 없으면 제거한다.",
+    "자동 제안보다 더 직접적인 축 대비가 보이면 제안 축을 거절하고 대체 축을 기록한다.",
+    "이 판독은 연구용 재합성 후보이며 고객 발행 승인이 아니다."
+  ],
+  "rationaleCatalog": {
+    "ACCEPT_DIRECT_CONTRAST": "서로 다른 원문 변형에서 해당 축의 양쪽 행동 방향이 직접 대비되어 채택한다.",
+    "REJECT_CONTEXT_WORD": "상황 설명에 축 관련 단어가 들어갔지만 행동 방향의 독립적인 차이를 만들지 않아 제거한다.",
+    "REJECT_ALREADY_EXPLAINED": "문장 차이가 이미 확정된 축 조합으로 충분히 설명되어 새 축을 추가하지 않는다.",
+    "CHOOSE_IDENTIFIABLE_PRIMARY": "여러 후보 중 원문 변형 수가 식별할 수 있고 행동 차이를 가장 직접 설명하는 한 축만 채택한다.",
+    "REPLACE_WITH_MORE_DIRECT_AXIS": "자동 제안 축보다 실제 원문 대비를 더 직접 설명하는 다른 축으로 교체한다."
+  },
+  "decisions": {
+    ".scenario.family.aftermath.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.family.aftermath.process": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.family.boundary.process": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.family.need_expression.communication": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.family.ordinary_choice.process": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.family.plan_change.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "REJECT_CONTEXT_WORD"
+    },
+    ".scenario.family.uncertainty.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.friend.group_participation.attention": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.friend.group_participation.response": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.friend.new_encounter.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "REJECT_ALREADY_EXPLAINED"
+    },
+    ".scenario.friend.ordinary_choice.communication": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "REJECT_CONTEXT_WORD"
+    },
+    ".scenario.friend.plan_change.process": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.friend.success.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.friend.support_requested.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.friend.uncertainty.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.aftermath.attention": {
+      "proposedAdditionalAxes": ["OE", "RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": ["OE"],
+      "replacementAxes": [],
+      "rationale": "CHOOSE_IDENTIFIABLE_PRIMARY"
+    },
+    ".scenario.general.aftermath.process": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.aftermath.response": {
+      "proposedAdditionalAxes": ["RO", "SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "CHOOSE_IDENTIFIABLE_PRIMARY"
+    },
+    ".scenario.general.boundary.communication": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.disagreement.response": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.group_participation.communication": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.need_expression.process": {
+      "proposedAdditionalAxes": ["OE", "RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": ["OE"],
+      "replacementAxes": [],
+      "rationale": "CHOOSE_IDENTIFIABLE_PRIMARY"
+    },
+    ".scenario.general.need_expression.response": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.new_encounter.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "REJECT_ALREADY_EXPLAINED"
+    },
+    ".scenario.general.new_encounter.response": {
+      "proposedAdditionalAxes": ["ER"],
+      "acceptedSuggestedAxes": ["ER"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.ordinary_choice.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.ordinary_choice.response": {
+      "proposedAdditionalAxes": ["SE"],
+      "acceptedSuggestedAxes": ["SE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.plan_change.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.plan_change.response": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.setback.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.setback.communication": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.success.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.success.response": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": ["SE"],
+      "rationale": "REPLACE_WITH_MORE_DIRECT_AXIS"
+    },
+    ".scenario.general.support_requested.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.general.uncertainty.communication": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "REJECT_ALREADY_EXPLAINED"
+    },
+    ".scenario.general.uncertainty.response": {
+      "proposedAdditionalAxes": ["SE", "RO", "SM"],
+      "acceptedSuggestedAxes": ["SE"],
+      "rejectedSuggestedAxes": ["RO", "SM"],
+      "replacementAxes": [],
+      "rationale": "CHOOSE_IDENTIFIABLE_PRIMARY"
+    },
+    ".scenario.partner.aftermath.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.boundary.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.disagreement.process": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.disagreement.response": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.new_encounter.attention": {
+      "proposedAdditionalAxes": ["RO", "SM"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": ["SM"],
+      "replacementAxes": [],
+      "rationale": "CHOOSE_IDENTIFIABLE_PRIMARY"
+    },
+    ".scenario.partner.ordinary_choice.response": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "REJECT_CONTEXT_WORD"
+    },
+    ".scenario.partner.plan_change.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.plan_change.communication": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.setback.attention": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.setback.process": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.setback.response": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.support_requested.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.uncertainty.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.partner.uncertainty.process": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.person_of_interest.boundary.process": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": [],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "REJECT_ALREADY_EXPLAINED"
+    },
+    ".scenario.person_of_interest.need_expression.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.person_of_interest.need_expression.process": {
+      "proposedAdditionalAxes": ["RO", "ER"],
+      "acceptedSuggestedAxes": ["ER"],
+      "rejectedSuggestedAxes": ["RO"],
+      "replacementAxes": [],
+      "rationale": "CHOOSE_IDENTIFIABLE_PRIMARY"
+    },
+    ".scenario.person_of_interest.need_expression.response": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.person_of_interest.setback.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.person_of_interest.setback.process": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.person_of_interest.setback.response": {
+      "proposedAdditionalAxes": ["RO"],
+      "acceptedSuggestedAxes": ["RO"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.work.disagreement.process": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.work.disagreement.response": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.work.group_participation.response": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.work.setback.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.work.success.attention": {
+      "proposedAdditionalAxes": ["OE"],
+      "acceptedSuggestedAxes": ["OE"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    },
+    ".scenario.work.uncertainty.response": {
+      "proposedAdditionalAxes": ["SM"],
+      "acceptedSuggestedAxes": ["SM"],
+      "rejectedSuggestedAxes": [],
+      "replacementAxes": [],
+      "rationale": "ACCEPT_DIRECT_CONTRAST"
+    }
+  }
+}

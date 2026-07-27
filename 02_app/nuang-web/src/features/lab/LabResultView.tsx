@@ -88,7 +88,7 @@ export function LabResultView({ assessment }: { assessment: LabAssessment }) {
           검사일 {formatCompletedDate(storedResult.completedAt)} · 응답 {answeredCount}개
         </p>
         {hasTie && (
-          <p className="mt-3 rounded-lg bg-[#fff7e8] p-3 text-sm leading-6 text-muted">
+          <p className="mt-3 rounded-lg bg-[var(--nu-warm-50)] p-3 text-sm leading-6 text-muted">
             가까운 결과가 두 개 이상 나왔어요. 이런 경우에는 제목보다 아래
             설명 중 지금 더 와닿는 문장을 기준으로 봐주세요.
           </p>
@@ -213,7 +213,7 @@ function DistributionBar({
         <span className="font-medium">{label}</span>
         <span className="tabular-nums text-muted">{value}</span>
       </div>
-      <div className="h-2.5 overflow-hidden rounded-full bg-[#eceaf4]">
+      <div className="h-2.5 overflow-hidden rounded-full bg-[var(--nu-brand-100)]">
         <div
           aria-hidden="true"
           className="h-full rounded-full bg-primary"

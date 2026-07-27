@@ -1,0 +1,1958 @@
+{
+  "contractVersion": "nuang-trait-map-inferred-axis-scope-internal-screen.v2.1",
+  "reportId": "TRAIT-MAP-INFERRED-AXIS-SCOPE-INTERNAL-SCREEN-P0.0.1",
+  "status": "P0_INTERNAL_CONSTRUCT_SCREEN_COMPLETE_AXIS_AMENDMENT_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceQueueId": "TRAIT-MAP-INFERRED-AXIS-SCOPE-REVIEW-QUEUE.0.1",
+  "scope": "P0",
+  "interpretation": [
+    "이 판정은 독립 전문가 승인이나 심리측정 타당성 검증이 아니라 내부 구성개념 사전검토다.",
+    "retain은 양방향 문장이 공식 축 뜻과 직접 대비된다는 내부 판단이며 고객 발행 승인이 아니다.",
+    "remove는 다른 축이나 상황 차이를 해당 축으로 잘못 읽은 경우다.",
+    "hold는 상황 자체가 관계 문제인지 명확하지 않아 새 기준선에서 우선 제외하고 상황 정의와 근거를 다시 확인한다는 뜻이다."
+  ],
+  "summary": {
+    "entries": 48,
+    "retainCandidates": 19,
+    "removeProposals": 25,
+    "constructHolds": 4,
+    "byAxis": {
+      "SE": { "entries": 19, "retain": 15, "remove": 4, "hold": 0 },
+      "OE": { "entries": 0, "retain": 0, "remove": 0, "hold": 0 },
+      "RO": { "entries": 25, "retain": 4, "remove": 17, "hold": 4 },
+      "SM": { "entries": 3, "retain": 0, "remove": 3, "hold": 0 },
+      "ER": { "entries": 1, "retain": 0, "remove": 1, "hold": 0 }
+    },
+    "expertReviewed": 0,
+    "customerApproved": 0
+  },
+  "entries": [
+    {
+      "reviewId": "IAS-SCN-FAMILY-3-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.family.group_participation.attention",
+      "scenarioRef": "SCN-FAMILY-3",
+      "context": "family",
+      "scene": "group_participation",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "가족 모임에서는 분위기를 계속 이끌기보다 필요한 준비가 잘 되어 있는지, 실제로 해결해야 할 일과 자신의 역할이 무엇인지 먼저 살피는 경향이 있다."
+        ],
+        "A": [
+          "가족 모임에서는 대화에서 빠진 사람이 없는지, 어색해진 지점은 없는지, 모두가 함께 즐길 화제가 무엇인지 살피는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-3-communication-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.family.group_participation.communication",
+      "scenarioRef": "SCN-FAMILY-3",
+      "context": "family",
+      "scene": "group_participation",
+      "claimKind": "communication",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "한 사람에게 답을 강요하지 않고 모두가 참여할 수 있는 질문을 건네며, 민감한 주제는 당사자의 선택을 확인한 뒤 다루는 방식이 잘 맞는다."
+        ],
+        "I": [
+          "여러 사람 앞에서 길게 말하기보다 필요한 내용을 짧게 알리고, 민감한 이야기는 당사자와 따로 확인하는 방식이 자연스럽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-3-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.family.group_participation.process",
+      "scenarioRef": "SCN-FAMILY-3",
+      "context": "family",
+      "scene": "group_participation",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“내가 지금 보탤 수 있는 일은 무엇이고, 굳이 꺼내지 않아도 되는 이야기는 무엇일까?”를 생각하기 쉽다."
+        ],
+        "A": [
+          "“분위기를 자연스럽게 이어가려면 무엇을 말하면 좋을까?”와 “누가 지금 불편하거나 소외됐을까?”를 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-3-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.family.group_participation.response",
+      "scenarioRef": "SCN-FAMILY-3",
+      "context": "family",
+      "scene": "group_participation",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "대화를 먼저 열고 서로의 근황을 연결하며, 필요한 준비나 다음 일정을 정리해 모임의 흐름을 이어가는 편이다."
+        ],
+        "I": [
+          "대화의 중심에 오래 있기보다 익숙한 사람과 이야기하거나 준비·정리처럼 구체적인 역할을 맡아 모임에 참여하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-8-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.family.need_expression.response",
+      "scenarioRef": "SCN-FAMILY-8",
+      "context": "family",
+      "scene": "need_expression",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "대화를 먼저 열고 자신의 감정과 필요한 행동을 설명한 뒤, 가족이 가능한 범위를 들으며 함께 기준을 정하는 편이다."
+        ],
+        "I": [
+          "생각을 혼자 정리한 뒤 시간·공간·역할처럼 확인 가능한 요청으로 바꾸어 말하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-1-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.family.ordinary_choice.process",
+      "scenarioRef": "SCN-FAMILY-1",
+      "context": "family",
+      "scene": "ordinary_choice",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SM"],
+      "proposedFinalAxes": ["RO", "SM"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“가족이 편하게 움직이려면 어떤 순서와 역할을 미리 정해야 하고, 언제까지 끝내야 할까?”를 생각하기 쉽다.",
+          "“누가 실제로 할 수 있고, 가장 적게 복잡한 방법은 무엇이지?”를 생각하며 현실적인 배분을 찾기 쉽다."
+        ],
+        "A": [
+          "“누구도 소외되지 않으면서 모두가 기대할 수 있는 선택은 무엇일까?”를 떠올리고 실행 순서를 생각하기 쉽다.",
+          "“오늘 가족들이 어떤 상태이고, 지금 모두가 가장 편하게 시작할 수 있는 방법은 무엇일까?”를 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-10-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.family.success.attention",
+      "scenarioRef": "SCN-FAMILY-10",
+      "context": "family",
+      "scene": "success",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "가족에게 좋은 일이 생기면 큰 축하 표현보다 그 사람이 실제로 애쓴 과정과 앞으로 달라질 생활을 먼저 살피는 경향이 있다."
+        ],
+        "A": [
+          "가족에게 좋은 일이 생기면 결과와 함께 그동안의 노력, 함께 도운 사람, 모두가 기쁨을 나눌 방법이 먼저 눈에 들어오는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-10-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.family.success.process",
+      "scenarioRef": "SCN-FAMILY-10",
+      "context": "family",
+      "scene": "success",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“어떤 노력이 결과를 만들었고, 지금 가족에게 실질적으로 필요한 축하는 무엇일까?”를 생각하기 쉽다."
+        ],
+        "A": [
+          "“얼마나 기다렸던 일인지 알아봐 주고 싶다”와 “어떻게 함께 축하하면 좋을까?”를 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FAMILY-10-actual_response-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.family.success.response",
+      "scenarioRef": "SCN-FAMILY-10",
+      "context": "family",
+      "scene": "success",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "구체적인 노력을 알아봐 주고 식사 준비나 필요한 물건처럼 바로 도움이 되는 방식으로 축하를 보태는 편이다."
+        ],
+        "A": [
+          "기쁜 감정을 적극적으로 표현하고 구체적인 노력을 칭찬하며, 가족이 원하는 방식으로 축하 자리를 만들거나 다음 준비를 돕는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FRIEND-12-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.friend.aftermath.response",
+      "scenarioRef": "SCN-FRIEND-12",
+      "context": "friend",
+      "scene": "aftermath",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "감정이 가라앉은 뒤 대화를 다시 열고, 필요한 사과나 설명을 전한 다음 실제 행동으로 관계를 회복하려는 편이다."
+        ],
+        "I": [
+          "감정이 정리된 뒤 친구에게 필요한 말만 전하고, 다음에는 어떻게 다르게 할지 구체적으로 제안하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FRIEND-9-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.friend.boundary.response",
+      "scenarioRef": "SCN-FRIEND-9",
+      "context": "friend",
+      "scene": "boundary",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "표현을 고른 뒤 먼저 대화를 열어 불편했던 행동과 원하는 변화를 말하고, 친구의 반응을 들으며 경계를 유지하는 편이다."
+        ],
+        "I": [
+          "감정이 크게 쌓이기 전에 구체적인 행동 기준을 말하고, 친구 반응을 보며 이후의 거리와 연락 방식을 조정하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_SE_BEHAVIOR_ENERGY_CONFLATION",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "양방향 모두 타인에게 말하거나 행동하며, 먼저 말했는지 또는 표현 방식만 달라 사람을 통한 에너지·혼자 정리의 차이가 직접 대비되지 않는다.",
+        "requiredAction": "SE를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FRIEND-3-attention-SM",
+      "priority": "P0",
+      "claimKey": ".scenario.friend.group_participation.attention",
+      "scenarioRef": "SCN-FRIEND-3",
+      "context": "friend",
+      "scene": "group_participation",
+      "claimKind": "attention",
+      "axisRef": "SM",
+      "currentControlledAxes": ["SE"],
+      "proposedFinalAxes": ["SE", "SM"],
+      "scopeFlags": ["SM_ATTENTION_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "K": [
+          "친구 모임에서는 함께 즐길 주제와 활동, 대화에 덜 참여하는 친구, 다음에 이어갈 약속을 빠르게 살피는 경향이 있다.",
+          "친구 모임에서는 모두의 화제를 빠르게 넓히기보다 자신이 편하게 참여할 수 있는 대화와 조용히 지내는 친구의 반응을 먼저 살피는 경향이 있다."
+        ],
+        "M": [
+          "친구 모임에서는 사람들이 실제로 무엇을 하고 싶은지와 대화가 행동으로 이어질 지점, 자신이 바로 맡아 움직일 수 있는 역할을 살피는 경향이 있다.",
+          "친구 모임에서는 모두와 계속 대화하기보다 익숙한 친구, 구체적으로 흥미로운 화제, 자신이 자연스럽게 맡을 수 있는 역할을 먼저 찾는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_SM_ATTENTION_ACTION_CONFLATION",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "문장 차이는 다른 축의 원인·마음 또는 참여 대상 차이이며, 정한 흐름 유지 대 상황별 조정이 직접 대비되지 않는다.",
+        "requiredAction": "SM를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FRIEND-4-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.friend.plan_change.process",
+      "scenarioRef": "SCN-FRIEND-4",
+      "context": "friend",
+      "scene": "plan_change",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SM"],
+      "proposedFinalAxes": ["RO", "SM"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“모두가 혼란스럽지 않게 무엇을 먼저 확정하고, 바뀐 일정을 어떤 순서로 알려야 할까?”를 생각하기 쉽다.",
+          "“이유가 무엇이고 지금 가능한 대안은 무엇이지?”를 생각하며 친구의 의도를 추측하기보다 후속 행동을 보려 하기 쉽다."
+        ],
+        "A": [
+          "서운함이나 걱정이 생겨도 “어떤 사정이 있었고 다음에는 어떻게 맞출 수 있을까?”를 빠르게 생각하기 쉽다.",
+          "“지금 모일 수 있는 조건에서 무엇을 하면 좋고, 누구에게 어떤 선택권을 주면 편할까?”를 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-FRIEND-10-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.friend.success.response",
+      "scenarioRef": "SCN-FRIEND-10",
+      "context": "friend",
+      "scene": "success",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "기쁜 마음을 적극적으로 표현하고 성취의 구체적인 부분을 알아봐 주며, 친구가 원하는 방식으로 축하를 이어가는 편이다."
+        ],
+        "I": [
+          "친구의 노력을 짚어 축하하고, 가까운 관계라면 둘이 좋아하는 활동이나 작은 선물처럼 익숙하고 실질적인 방식으로 기쁨을 나누는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-12-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "scenarioRef": "SCN-GENERAL-12",
+      "context": "general",
+      "scene": "aftermath",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SE", "ER"],
+      "proposedFinalAxes": ["SE", "RO", "ER"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "부담스러운 일이 지나간 뒤에는 관련된 사람들과 무엇이 실제로 있었는지 맞춰 보고, 다음에 바꿀 행동을 함께 정할 지점을 먼저 살피는 경향이 있다.",
+          "부담스러운 일이 지나간 뒤에는 관련된 사람들과 확인할 후속 행동, 다시 생길 가능성, 아직 남은 걱정과 몸의 긴장을 먼저 살피는 경향이 있다.",
+          "부담스러운 일이 지나간 뒤에는 혼자 쉬면서 실제 진행 순서와 놓친 단서, 다음에 바꿀 행동을 되짚는 경향이 있다.",
+          "부담스러운 일이 지나간 뒤에도 놓친 장면과 다시 생길 가능성, 아직 정리되지 않은 감정과 몸의 긴장이 눈에 들어오는 경향이 있다."
+        ],
+        "A": [
+          "부담스러운 일이 지나간 직후에는 감정보다 해결된 부분과 남은 후속 행동, 사람들과 다시 맞출 내용을 먼저 살피는 경향이 있다.",
+          "부담스러운 일이 지나간 뒤에는 사람들에게 남은 영향과 다시 생길 가능성, 관계를 회복하고 계획을 되돌릴 방법을 살피는 경향이 있다.",
+          "부담스러운 일이 지나간 직후에는 해결된 부분과 남은 후속 행동, 혼자 생각과 에너지를 정리할 시간, 나중에 다시 연결할 사람을 먼저 살피는 경향이 있다.",
+          "부담스러운 일이 지나간 뒤에는 사람들에게 남은 영향과 함께 자신의 생각이 정리됐는지, 혼자 회복할 시간이 얼마나 필요한지를 살피는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "hold_for_construct_evidence",
+        "issueCodes": [
+          "PSY_CONTEXT_BOUNDARY_UNCLEAR",
+          "MET_INFERRED_AXIS_NOT_DIRECTLY_CONTROLLED"
+        ],
+        "rationale": "일반 상황 설명만으로는 해당 사건이 관계 문제인지 확정할 수 없는데 문장은 사람과 관계를 전제로 G/A를 구성했다.",
+        "requiredAction": "상황 전제를 관계 문제로 명시할지 결정하고, 명시하지 않으면 해당 축을 제거한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "exclude_from_next_internal_axis_manifest_until_resolved",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-12-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.aftermath.process",
+      "scenarioRef": "SCN-GENERAL-12",
+      "context": "general",
+      "scene": "aftermath",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SE", "ER"],
+      "proposedFinalAxes": ["SE", "RO", "ER"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“서로 기억하는 내용이 같은지 확인하고, 지금 이야기하면 다음에는 무엇을 바로 바꿀 수 있을까?”를 떠올리기 쉽다.",
+          "“사람들과 무엇을 바로 확인하면 다시 생길 위험을 줄이고, 남은 걱정을 실제 행동으로 바꿀 수 있을까?”를 생각하기 쉽다.",
+          "“무엇이 문제를 키웠고 다음에는 어느 시점에 다르게 움직이면 될까?”를 정리하기 쉽다.",
+          "“정말 끝난 게 맞는지, 다시 생길 위험과 내가 놓친 부분은 없는지”를 되짚기 쉽다."
+        ],
+        "A": [
+          "“문제는 어디까지 정리됐고, 남은 행동과 다시 연결할 사람은 누구일까?”를 생각하기 쉽다.",
+          "“아직 불편한 사람이 있을까?”, “다음에는 무엇을 미리 준비하면 같은 걱정을 줄일 수 있을까?”를 되짚기 쉽다.",
+          "“잠시 혼자 정리하면 남은 일과 내 마음을 더 분명히 알 수 있을 것 같아. 그다음 누구와 다시 이야기해야 할까?”를 생각하기 쉽다.",
+          "“잠시 혼자 정리하면 무엇이 가장 마음에 남았는지 알 수 있을 것 같아. 그다음 누구와 어떤 이야기를 해야 할까?”를 떠올리기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "hold_for_construct_evidence",
+        "issueCodes": [
+          "PSY_CONTEXT_BOUNDARY_UNCLEAR",
+          "MET_INFERRED_AXIS_NOT_DIRECTLY_CONTROLLED"
+        ],
+        "rationale": "일반 상황 설명만으로는 해당 사건이 관계 문제인지 확정할 수 없는데 문장은 사람과 관계를 전제로 G/A를 구성했다.",
+        "requiredAction": "상황 전제를 관계 문제로 명시할지 결정하고, 명시하지 않으면 해당 축을 제거한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "exclude_from_next_internal_axis_manifest_until_resolved",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-9-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.boundary.attention",
+      "scenarioRef": "SCN-GENERAL-9",
+      "context": "general",
+      "scene": "boundary",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "자신의 시간·공간·역할이 침범됐다고 느끼면 불쾌함 자체보다 어떤 행동이 문제였고 앞으로 무엇이 달라져야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "A": [
+          "선을 정해야 할 때 자신이 불편한 지점과 함께 상대가 상처받거나 관계가 멀어질 가능성, 이후에도 지켜야 할 기준을 살피는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "상황이 상대와의 경계 또는 필요 표현을 명시하며, G는 원인·행동 기준을, A는 상대 마음·관계 영향을 직접 살핀다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-9-communication-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.boundary.communication",
+      "scenarioRef": "SCN-GENERAL-9",
+      "context": "general",
+      "scene": "boundary",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“이 시간에는 연락을 받기 어렵습니다. 급한 일이면 문자로 먼저 알려주세요”처럼 행동 기준과 대안을 함께 말하는 방식이 잘 맞는다."
+        ],
+        "A": [
+          "“도와주고 싶은 마음은 있지만 이번에는 어렵습니다. 다음 주라면 이 범위까지 가능해요”처럼 관계 존중과 경계를 함께 말하는 방식이 잘 맞는다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "상황이 상대와의 경계 또는 필요 표현을 명시하며, G는 원인·행동 기준을, A는 상대 마음·관계 영향을 직접 살핀다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-8-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.need_expression.process",
+      "scenarioRef": "SCN-GENERAL-8",
+      "context": "general",
+      "scene": "need_expression",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SE"],
+      "proposedFinalAxes": ["SE", "RO"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“이 문제를 누구에게 설명하면 내가 놓친 사실을 빨리 확인하고, 지금 필요한 도움을 함께 정할 수 있을까?”라고 생각하기 쉽다.",
+          "“내가 직접 해결할 부분과 다른 사람에게 부탁해야 할 부분은 무엇이지?”를 혼자 구분하기 쉽다."
+        ],
+        "A": [
+          "“내 마음을 솔직히 말하면서도 상대가 부담받지 않게 하려면 어떻게 표현하지?”라는 생각과 거절될 가능성에 대한 걱정이 함께 들기 쉽다.",
+          "“내가 원하는 것이 정확히 무엇인지 먼저 정리한 뒤, 상대가 오해하지 않게 어떤 말부터 해야 할까?”라고 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "상황이 상대와의 경계 또는 필요 표현을 명시하며, G는 원인·행동 기준을, A는 상대 마음·관계 영향을 직접 살핀다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-8-actual_response-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.need_expression.response",
+      "scenarioRef": "SCN-GENERAL-8",
+      "context": "general",
+      "scene": "need_expression",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SE"],
+      "proposedFinalAxes": ["SE", "RO"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "문제가 생긴 초기에 가까운 사람에게 대화를 요청하고, 질문과 답을 주고받으며 자신이 할 일과 부탁할 일을 바로 나누는 편이다.",
+          "필요가 구체적으로 정리되면 믿을 만한 사람에게 시간·정보·행동처럼 분명한 형태로 도움을 요청하는 편이다."
+        ],
+        "A": [
+          "말할 내용을 정리한 뒤 먼저 대화를 열고, 자신의 감정과 바라는 행동을 설명하며 상대의 생각도 듣는 편이다.",
+          "충분히 생각할 시간을 가진 뒤 대화를 요청하고, 준비한 핵심 내용을 차분히 설명하면서 상대의 답을 바로 재촉하지 않는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "상황이 상대와의 경계 또는 필요 표현을 명시하며, G는 원인·행동 기준을, A는 상대 마음·관계 영향을 직접 살핀다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-1-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "scenarioRef": "SCN-GENERAL-1",
+      "context": "general",
+      "scene": "ordinary_choice",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": ["OE", "SM"],
+      "proposedFinalAxes": ["SE", "OE", "SM"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "확인된 조건과 이전 경험을 비교해 실행할 한 가지를 고르고, 함께할 사람이 편한지 확인한 뒤 일정과 순서로 옮기는 편이다.",
+          "확인된 조건과 이전 경험을 바탕으로 지금 가장 마음이 가는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 조정하는 편이다.",
+          "여러 선택지를 사람들과 이야기해 넓힌 뒤 중요한 기준을 정하고, 결정하면 예약이나 준비처럼 다음 행동을 차례로 이어가는 편이다.",
+          "현재 흥미와 자원에 맞는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 바꾸는 편이다."
+        ],
+        "I": [
+          "목표를 작은 단계로 나누고 시작·중간 확인·완료 시점을 정한 뒤, 에너지가 달라져도 정한 흐름으로 돌아가 이어가는 편이다.",
+          "익숙하고 쓸모가 분명한 선택에서 시작하되, 상황이 바뀌면 그 안에서 방법과 순서를 유연하게 조정하는 편이다.",
+          "여러 가능성을 혼자 비교한 뒤 시험할 한 가지와 완료 기준을 정하고, 작은 단계와 점검 시점으로 나누어 꾸준히 이어가는 편이다.",
+          "여러 가능성을 비교한 뒤 현재 흥미와 자원에 맞는 한 가지를 작게 시험하고, 결과에 따라 다음 방법을 바꾸는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-4-actual_response-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.plan_change.response",
+      "scenarioRef": "SCN-GENERAL-4",
+      "context": "general",
+      "scene": "plan_change",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SM", "ER"],
+      "proposedFinalAxes": ["RO", "SM", "ER"],
+      "scopeFlags": [
+        "RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM",
+        "RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"
+      ],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "변경된 조건을 확인해 새 순서와 완료 기준을 정하고, 영향을 받는 사람과 합의한 뒤 계획한 흐름으로 돌아가는 편이다.",
+          "걱정되는 항목을 확인 목록으로 바꾸고 변경된 조건에 맞는 새 순서와 완료 기준을 정한 뒤, 영향을 받는 사람과 계획을 다시 맞추는 편이다.",
+          "감정이 크게 올라오기 전 필요한 정보를 모으고, 마감과 중요도에 맞춰 방법이나 순서를 바꾸어 움직이는 편이다.",
+          "걱정이 올라온 상태에서도 바뀐 조건과 해결 순서를 정리하고, 필요한 확인과 대비 행동을 시작하는 편이다."
+        ],
+        "A": [
+          "감정이 크게 올라오기 전 사람들과 상황을 맞추고 새 계획을 정한 뒤 움직이며, 이후에 남은 피로와 감정을 따로 확인하는 편이다.",
+          "처음에는 걱정과 불편함이 올라와도 사람들에게 변경 내용을 알리고, 가능한 대안을 모아 새 순서와 약속을 다시 정하는 편이다.",
+          "감정이 크게 올라오기 전 목표에 필요한 핵심만 남기고 방법과 순서를 유연하게 바꿔 움직이며, 이후에 남은 피로와 감정을 따로 확인하는 편이다.",
+          "목표에 필요한 핵심을 남기고 방법과 순서를 유연하게 바꾸며, 사람들에게 미칠 영향을 확인한 뒤 새 흐름으로 움직이는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-11-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.setback.attention",
+      "scenarioRef": "SCN-GENERAL-11",
+      "context": "general",
+      "scene": "setback",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": ["ER"],
+      "proposedFinalAxes": ["RO", "ER"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "실수하거나 기대한 결과를 얻지 못하면 자기비판을 크게 드러내기 전에 실제 원인과 고칠 수 있는 부분을 먼저 살피는 경향이 있다.",
+          "실수하거나 기대한 결과가 나오지 않으면 놓친 부분과 자신의 책임, 앞으로 더 나빠질 수 있는 영향이 빠르게 눈에 들어오는 경향이 있다."
+        ],
+        "A": [
+          "실수하거나 기대한 결과가 나오지 않으면 감정이 크게 올라오기 전 무엇이 달라졌고 누구에게 어떤 영향이 생겼는지 먼저 살피는 경향이 있다.",
+          "실수하거나 기대한 결과가 나오지 않으면 사람들에게 미친 영향과 좋지 않은 다음 결과, 다시 세워야 할 계획을 빠르게 살피는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "hold_for_construct_evidence",
+        "issueCodes": [
+          "PSY_CONTEXT_BOUNDARY_UNCLEAR",
+          "MET_INFERRED_AXIS_NOT_DIRECTLY_CONTROLLED"
+        ],
+        "rationale": "일반 상황 설명만으로는 해당 사건이 관계 문제인지 확정할 수 없는데 문장은 사람과 관계를 전제로 G/A를 구성했다.",
+        "requiredAction": "상황 전제를 관계 문제로 명시할지 결정하고, 명시하지 않으면 해당 축을 제거한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "exclude_from_next_internal_axis_manifest_until_resolved",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-11-communication-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.general.setback.communication",
+      "scenarioRef": "SCN-GENERAL-11",
+      "context": "general",
+      "scene": "setback",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "currentControlledAxes": ["ER"],
+      "proposedFinalAxes": ["RO", "ER"],
+      "scopeFlags": ["RO_GENERAL_CONTEXT_REQUIRES_EXPLICIT_RELATION_BOUNDARY"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“이 지점에서 문제가 생겼고 지금 이 부분부터 고치고 있어”처럼 사실과 대응을 중심으로 말하는 방식이 자연스럽다.",
+          "“이 부분을 놓쳐서 걱정돼. 영향과 수정 순서를 확인하고 필요한 행동부터 하겠다”처럼 감정과 책임 행동을 함께 말한다."
+        ],
+        "A": [
+          "“먼저 영향과 고칠 일을 확인하자. 지금은 차분하지만 나중에 마음이 올라올 수 있어 그때 다시 이야기할게”처럼 대응과 감정 시점을 나누어 말한다.",
+          "“이 일로 불편을 줘서 미안해. 지금 이 부분을 수정하고 있고 다음 확인은 이때 공유할게”처럼 영향·책임·행동을 연결해 말하는 방식이 자연스럽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "hold_for_construct_evidence",
+        "issueCodes": [
+          "PSY_CONTEXT_BOUNDARY_UNCLEAR",
+          "MET_INFERRED_AXIS_NOT_DIRECTLY_CONTROLLED"
+        ],
+        "rationale": "일반 상황 설명만으로는 해당 사건이 관계 문제인지 확정할 수 없는데 문장은 사람과 관계를 전제로 G/A를 구성했다.",
+        "requiredAction": "상황 전제를 관계 문제로 명시할지 결정하고, 명시하지 않으면 해당 축을 제거한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "exclude_from_next_internal_axis_manifest_until_resolved",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-10-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.general.success.response",
+      "scenarioRef": "SCN-GENERAL-10",
+      "context": "general",
+      "scene": "success",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "기쁜 마음을 비교적 분명히 드러내고 주변 사람을 축하에 끌어들이며, 성취를 다음 계획이나 새로운 시도로 이어가는 편이다."
+        ],
+        "I": [
+          "기쁨을 혼자 정리한 뒤 가까운 사람과 나누거나, 잘된 방법을 기록해 다음 행동으로 이어가는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-GENERAL-5-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "scenarioRef": "SCN-GENERAL-5",
+      "context": "general",
+      "scene": "uncertainty",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": ["OE", "ER"],
+      "proposedFinalAxes": ["SE", "OE", "ER"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "확인 가능한 정보를 사람들과 모아 선택지를 좁히고 가장 현실적인 계획부터 실행한 뒤, 시간이 지나 감정과 피로가 남았는지 따로 확인하는 편이다.",
+          "확인 가능한 정보를 모아 선택지를 좁히고, 사람에게 미칠 영향을 살핀 뒤 가장 현실적인 계획부터 실행하는 편이다.",
+          "가능한 방향을 정리해 사람들과 확인하고 현재 할 수 있는 행동을 시작한 뒤, 시간이 지나 감정과 피로가 남았는지 확인하는 편이다.",
+          "사람들과 정보를 나누어 가능성을 확인하고, 걱정되는 항목을 준비 목록으로 바꾸어 하나씩 점검하는 편이다."
+        ],
+        "I": [
+          "작게 확인할 수 있는 행동부터 시작하고, 새 정보가 들어오면 판단과 실행 방식을 그때그때 조정하는 편이다.",
+          "걱정이 올라와도 확인된 사실과 가능한 원인을 정리하고, 위험을 줄일 질문과 작은 대비 행동을 고르는 편이다.",
+          "여러 가설과 해결 방향을 혼자 정리한 뒤 현재 조건에서 시험할 수 있는 방법을 골라 작게 움직이는 편이다.",
+          "여러 가설과 위험을 혼자 정리한 뒤 현재 확인할 수 있는 질문과 작은 대비 행동을 골라 가능성을 하나씩 좁히는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-12-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.aftermath.response",
+      "scenarioRef": "SCN-PARTNER-12",
+      "context": "partner",
+      "scene": "aftermath",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "그 일을 다시 이야기할 계기를 만들고 서로 남은 감정을 확인한 뒤, 필요한 사과·수정·새 약속을 실제 행동으로 이어가려는 편이다."
+        ],
+        "I": [
+          "바로 긴 대화를 이어가기보다 혼자 생각을 정리한 뒤, 필요한 내용과 다시 정할 약속을 추려 후속 대화를 요청하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-9-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.boundary.response",
+      "scenarioRef": "SCN-PARTNER-9",
+      "context": "partner",
+      "scene": "boundary",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "말을 고른 뒤 대화를 먼저 열어 불편했던 행동과 원하는 경계를 설명하고, 연인의 반응을 들으며 이후 기준을 지키는 편이다."
+        ],
+        "I": [
+          "감정이 크게 쌓이기 전에 구체적인 경계를 말하고, 이후 상대가 기준을 존중하는지를 실제 행동으로 확인하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_SE_BEHAVIOR_ENERGY_CONFLATION",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "양방향 모두 타인에게 말하거나 행동하며, 먼저 말했는지 또는 표현 방식만 달라 사람을 통한 에너지·혼자 정리의 차이가 직접 대비되지 않는다.",
+        "requiredAction": "SE를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-6-first_thought-SM",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.disagreement.process",
+      "scenarioRef": "SCN-PARTNER-6",
+      "context": "partner",
+      "scene": "disagreement",
+      "claimKind": "first_thought",
+      "axisRef": "SM",
+      "currentControlledAxes": ["RO"],
+      "proposedFinalAxes": ["RO", "SM"],
+      "scopeFlags": ["SM_ATTENTION_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "K": [
+          "“이 갈등이 생긴 핵심 원인은 무엇이고, 둘이 어떤 행동을 바꾸면 같은 문제가 줄어들까?”를 생각하기 쉽다.",
+          "“내 말이 어떻게 들렸고, 이 갈등이 관계를 더 나쁘게 만들지 않을까?”를 걱정하면서도 함께 풀 방법을 찾기 쉽다."
+        ],
+        "M": [
+          "“어디서부터 서로 다르게 이해했고, 해결하려면 어떤 기준을 다시 맞춰야 하지?”가 먼저 떠오르기 쉽다.",
+          "“연인은 어떤 마음이었고, 지금 서로가 관계 안에서 안전하다고 느끼려면 무엇을 먼저 확인해야 할까?”가 떠오르기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_SM_ATTENTION_ACTION_CONFLATION",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "문장 차이는 다른 축의 원인·마음 또는 참여 대상 차이이며, 정한 흐름 유지 대 상황별 조정이 직접 대비되지 않는다.",
+        "requiredAction": "SM를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-8-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "scenarioRef": "SCN-PARTNER-8",
+      "context": "partner",
+      "scene": "need_expression",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "대화를 먼저 요청해 자신의 감정과 필요를 설명하고, 연인의 입장도 들은 뒤 둘이 지킬 수 있는 행동을 정하는 편이다."
+        ],
+        "I": [
+          "혼자 생각을 정리한 뒤 비교적 차분한 때에 구체적인 상황과 요청을 말하고, 연인의 입장도 듣는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-2-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.new_encounter.attention",
+      "scenarioRef": "SCN-PARTNER-2",
+      "context": "partner",
+      "scene": "new_encounter",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": ["OE"],
+      "proposedFinalAxes": ["OE", "RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "연인과 새로운 장소나 활동을 시작하면 멋진 가능성을 넓게 떠올리기보다 이동 방법, 운영 시간, 연인이 실제로 편해 보이는지 같은 구체적인 단서를 먼저 살피는 경향이 있다.",
+          "연인과 새로운 장소나 활동을 시작하면 현재 일정뿐 아니라 둘이 새롭게 발견할 경험과 관계에 더해질 이야기, 다른 방식의 가능성을 살피는 경향이 있다."
+        ],
+        "A": [
+          "연인과 새로운 장소나 활동을 시작하면 실제 이동·시간·비용과 연인이 직접 표현한 편안함, 바로 조정할 조건을 먼저 살피는 경향이 있다.",
+          "연인과 새로운 장소나 활동을 시작하면 둘이 함께 즐길 지점과 연인이 낯선 상황을 편하게 느끼는지를 먼저 살피는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-4-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.plan_change.attention",
+      "scenarioRef": "SCN-PARTNER-4",
+      "context": "partner",
+      "scene": "plan_change",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SM"],
+      "proposedFinalAxes": ["RO", "SM"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "연인과의 계획이 바뀌면 지금 가능한 즉흥 대안보다 둘이 중요하게 정한 약속과 새로 맞출 시간, 준비와 순서를 먼저 살피는 경향이 있다.",
+          "함께 정한 계획이 갑자기 바뀌면 서운함을 크게 드러내기 전에 무엇이 바뀌었고 이유가 무엇인지, 지금 가능한 선택지가 무엇인지 먼저 확인하는 경향이 있다."
+        ],
+        "A": [
+          "함께 정한 계획이 갑자기 바뀌면 바뀐 이유와 연인에게 생긴 부담, 다시 맞춰야 할 일정이 먼저 눈에 들어오는 경향이 있다.",
+          "연인과의 계획이 바뀌면 원래 순서를 지키는 것보다 둘의 현재 상태와 남은 시간, 새롭게 가능한 경험을 먼저 살피는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-4-communication-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.plan_change.communication",
+      "scenarioRef": "SCN-PARTNER-4",
+      "context": "partner",
+      "scene": "plan_change",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "currentControlledAxes": ["SM"],
+      "proposedFinalAxes": ["RO", "SM"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“오늘은 이 부분이 어려우니 약속의 핵심은 남기고 시간을 이렇게 다시 잡자. 너에게도 괜찮은지 확인하고 싶어”처럼 재계획을 제안한다.",
+          "“오늘은 이 방법이 가능해. 다음에는 바뀌는 시점을 조금 더 일찍 알려주면 좋겠어”처럼 현재 대안과 다음 기준을 나눠 말하는 방식이 잘 맞는다."
+        ],
+        "A": [
+          "“갑자기 바뀌어서 나는 조금 당황했어. 이유를 듣고 가능한 날짜를 다시 정하고 싶어”처럼 감정·확인·다음 행동을 나눠 말하는 방식이 잘 맞는다.",
+          "“오늘은 시간이 줄었으니 이 부분만 즐기고 나머지는 다음에 이어가자. 너는 어떤 게 더 중요해?”처럼 조정안을 함께 정한다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-10-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.success.process",
+      "scenarioRef": "SCN-PARTNER-10",
+      "context": "partner",
+      "scene": "success",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“어떤 과정이 좋은 결과로 이어졌고, 상대는 지금 어떻게 축하받고 싶을까?”를 구체적으로 생각하기 쉽다."
+        ],
+        "A": [
+          "“얼마나 기쁠까, 어떤 노력이 드디어 인정받은 걸까?”를 떠올리고 둘이 함께 축하할 새로운 방법까지 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PARTNER-10-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.partner.success.response",
+      "scenarioRef": "SCN-PARTNER-10",
+      "context": "partner",
+      "scene": "success",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "연인의 성취를 적극적으로 반기고 구체적인 노력을 알아봐 주며, 상대가 원하는 방식으로 축하를 함께 만드는 편이다."
+        ],
+        "I": [
+          "연인의 노력을 알아봐 주고, 조용히 쉬기·맛있는 것을 먹기처럼 바로 실행할 수 있는 축하 방법을 물어 함께 정하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PERSON-OF-INTEREST-9-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.person_of_interest.boundary.response",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "context": "person_of_interest",
+      "scene": "boundary",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "표현을 고른 뒤 먼저 대화를 열어 불편했던 행동과 원하는 거리를 말하고, 이후 상대가 기준을 존중하는지 살피는 편이다."
+        ],
+        "I": [
+          "상대를 몰아세우기보다 불편했던 행동과 원하는 기준을 구체적으로 말하고, 이후 존중 여부를 실제 행동으로 확인하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_SE_BEHAVIOR_ENERGY_CONFLATION",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "양방향 모두 타인에게 말하거나 행동하며, 먼저 말했는지 또는 표현 방식만 달라 사람을 통한 에너지·혼자 정리의 차이가 직접 대비되지 않는다.",
+        "requiredAction": "SE를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PERSON-OF-INTEREST-3-first_thought-ER",
+      "priority": "P0",
+      "claimKey": ".scenario.person_of_interest.group_participation.process",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "context": "person_of_interest",
+      "scene": "group_participation",
+      "claimKind": "first_thought",
+      "axisRef": "ER",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["ER"],
+      "scopeFlags": ["ER_DISCOMFORT_CONTEXT_NOT_EXPLICIT"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "C": [
+          "“둘만 이야기할 수 있는 구체적인 화제가 나왔나?”, “지금 다가가도 흐름을 깨지 않을까?”를 생각하기 쉽다."
+        ],
+        "Q": [
+          "“같이 이야기할 자연스러운 계기가 있을까?”를 떠올리면서, 지나치게 티를 내면 상대나 모임이 불편해지지 않을지 함께 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_ER_ACTIVATION_SPEED_MISMATCH",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "두 방향 모두 참여 계기와 상대 반응을 생각할 뿐, 걱정과 감정이 천천히 대 빠르게 선명해지는 차이가 직접 나타나지 않는다.",
+        "requiredAction": "ER를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PERSON-OF-INTEREST-3-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.person_of_interest.group_participation.response",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "context": "person_of_interest",
+      "scene": "group_participation",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "모임 전체에 기여하는 방식으로 화제를 열고 상대에게도 말할 기회를 건네며, 단둘만의 흐름을 억지로 만들기보다 자연스러운 접점을 쌓는 편이다."
+        ],
+        "I": [
+          "억지로 주목을 끌기보다 공통 주제나 맡은 역할을 이용해 가까이 대화하고, 반응이 편안할 때 대화를 조금씩 늘리는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PERSON-OF-INTEREST-4-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.person_of_interest.plan_change.response",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "context": "person_of_interest",
+      "scene": "plan_change",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "서운함이 생겨도 한 번의 변경으로 마음을 결론 내리기보다 이유를 묻고, 관계를 이어가고 싶다면 구체적인 다른 시간을 제안하는 편이다."
+        ],
+        "I": [
+          "처음에는 혼자 상황을 정리한 뒤 가능한 다른 시간을 짧게 제안하고, 상대의 후속 행동을 보며 다음 움직임을 정하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PERSON-OF-INTEREST-10-attention-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.person_of_interest.success.attention",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "context": "person_of_interest",
+      "scene": "success",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "마음에 드는 사람에게 좋은 일이 생기면 과장된 반응보다 그 사람이 실제로 노력한 부분과 결과가 가지는 구체적인 의미를 먼저 살피는 경향이 있다."
+        ],
+        "A": [
+          "마음에 드는 사람에게 좋은 일이 생기면 그 사람이 기뻐하는 방식과 노력한 과정, 함께 축하할 수 있는 자연스러운 계기가 먼저 눈에 들어오는 경향이 있다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PERSON-OF-INTEREST-10-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.person_of_interest.success.process",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "context": "person_of_interest",
+      "scene": "success",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“어떤 노력이 가장 크게 작용했고, 이 사람이 특히 기뻐하는 지점은 무엇일까?”를 떠올리기 쉽다."
+        ],
+        "A": [
+          "“진심으로 축하해 주고 싶다”는 마음과 함께, “이 기회에 대화를 더 이어가도 상대가 편할까?”를 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-PERSON-OF-INTEREST-10-actual_response-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.person_of_interest.success.response",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "context": "person_of_interest",
+      "scene": "success",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "짧더라도 구체적으로 축하하고, 상대가 말하고 싶어 하는 과정에 질문을 더하며 관심을 보여주는 편이다."
+        ],
+        "A": [
+          "성과를 구체적으로 축하하고 더 듣고 싶다는 관심을 보이되, 축하를 관계 진전의 수단으로 밀어붙이지 않고 상대 반응에 맞추는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-WORK-9-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.work.boundary.response",
+      "scenarioRef": "SCN-WORK-9",
+      "context": "work",
+      "scene": "boundary",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "상대와 대화를 열어 현재 업무의 영향과 가능한 대안을 설명하고, 결정된 우선순위와 마감을 기록해 이어가는 편이다."
+        ],
+        "I": [
+          "감정적으로 거절하기보다 현재 업무와 영향, 가능한 대안을 구체적으로 제시해 우선순위 결정을 요청하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_SE_BEHAVIOR_ENERGY_CONFLATION",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "양방향 모두 타인에게 말하거나 행동하며, 먼저 말했는지 또는 표현 방식만 달라 사람을 통한 에너지·혼자 정리의 차이가 직접 대비되지 않는다.",
+        "requiredAction": "SE를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-WORK-6-first_thought-SM",
+      "priority": "P0",
+      "claimKey": ".scenario.work.disagreement.process",
+      "scenarioRef": "SCN-WORK-6",
+      "context": "work",
+      "scene": "disagreement",
+      "claimKind": "first_thought",
+      "axisRef": "SM",
+      "currentControlledAxes": ["RO"],
+      "proposedFinalAxes": ["RO", "SM"],
+      "scopeFlags": ["SM_ATTENTION_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "K": [
+          "“어떤 전제와 기준이 달라서 결론이 갈렸고, 무엇을 확인하면 선택지를 좁힐 수 있을까?”를 생각하기 쉽다.",
+          "“근거를 따져 해결책을 찾고 싶다”면서도, “강하게 말하면 협업이 어려워지지 않을까?”를 걱정하기 쉽다."
+        ],
+        "M": [
+          "“서로 다른 사실을 보고 있는지, 같은 사실에서 우선순위를 다르게 둔 것인지”를 구분하고 싶어 하기 쉽다.",
+          "“누가 어떤 점을 걱정하고 있으며, 각 의견이 사람과 협업 관계에 어떤 영향을 줄까?”를 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": [
+          "PSY_SM_ATTENTION_ACTION_CONFLATION",
+          "MET_AXIS_CONTAMINATION"
+        ],
+        "rationale": "문장 차이는 다른 축의 원인·마음 또는 참여 대상 차이이며, 정한 흐름 유지 대 상황별 조정이 직접 대비되지 않는다.",
+        "requiredAction": "SM를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-WORK-8-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.work.need_expression.response",
+      "scenarioRef": "SCN-WORK-8",
+      "context": "work",
+      "scene": "need_expression",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "현재까지 한 일과 막힌 지점, 필요한 지원, 지원을 받았을 때 가능한 다음 행동을 정리해 요청하는 편이다."
+        ],
+        "I": [
+          "혼자 해결을 시도한 내용을 정리한 뒤 담당자에게 구체적인 질문이나 자원 요청을 하는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-WORK-10-communication-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.work.success.communication",
+      "scenarioRef": "SCN-WORK-10",
+      "context": "work",
+      "scene": "success",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“이 단계에서 확인을 빨리한 것이 효과가 있었습니다. 다음에도 이 점검을 유지하겠습니다”처럼 성공 요인과 다음 행동을 연결해 말하는 방식이 자연스럽다."
+        ],
+        "A": [
+          "결과만 과장하기보다 기여·배운 점·다음 실험을 나눠 공유하고, 팀원의 역할을 당사자가 납득할 수 있게 인정하는 방식이 잘 맞는다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-WORK-10-first_thought-RO",
+      "priority": "P0",
+      "claimKey": ".scenario.work.success.process",
+      "scenarioRef": "SCN-WORK-10",
+      "context": "work",
+      "scene": "success",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["RO"],
+      "scopeFlags": ["RO_SCENARIO_NOT_CLEARLY_A_RELATIONSHIP_PROBLEM"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "G": [
+          "“어떤 준비와 선택이 결과를 만들었고, 다음에도 유지해야 할 것은 무엇이지?”를 차분히 분석하기 쉽다."
+        ],
+        "A": [
+          "“누구의 어떤 기여가 결과를 만들었고, 여기서 무엇을 더 발전시킬 수 있을까?”를 생각하기 쉽다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "remove_scope_mismatch",
+        "issueCodes": ["PSY_RO_SCOPE_MISMATCH", "MET_AXIS_CONTAMINATION"],
+        "rationale": "성공·일반 선택·모임 참여·계획 변경의 실무 또는 표현 차이를 관계 문제의 원인·해결 대 마음·관계 변화로 넓혀 읽었다.",
+        "requiredAction": "RO를 다음 내부 축 manifest에서 제거하고 남은 축의 같은 서명끼리 원문 계보를 합친다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "remove_in_next_internal_axis_manifest",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    },
+    {
+      "reviewId": "IAS-SCN-WORK-10-actual_response-SE",
+      "priority": "P0",
+      "claimKey": ".scenario.work.success.response",
+      "scenarioRef": "SCN-WORK-10",
+      "context": "work",
+      "scene": "success",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "currentControlledAxes": [],
+      "proposedFinalAxes": ["SE"],
+      "scopeFlags": ["SE_OUTWARD_BEHAVIOR_CONFLATION_RISK"],
+      "evidenceFlags": ["LOW_SOURCE_PURITY_PRESENT"],
+      "directionSummary": {
+        "E": [
+          "성과를 함께 축하하고 기여를 구체적으로 알리며, 잘된 과정을 정리해 다음 계획으로 이어가는 편이다."
+        ],
+        "I": [
+          "결과를 혼자 정리한 뒤 도움이 된 자료와 방법을 기록하고, 함께한 사람에게 구체적으로 공을 돌리는 편이다."
+        ]
+      },
+      "internalScreening": {
+        "state": "completed_internal_construct_precheck_not_expert_approval",
+        "decision": "retain_with_direct_contrast",
+        "issueCodes": [],
+        "rationale": "양방향이 단순한 말하기 속도가 아니라 사람들과 바로 풀어 가는 흐름과 혼자 정리한 뒤 연결하는 흐름으로 직접 대비된다.",
+        "requiredAction": "독립 역할 검토에서 능력·행동 속도·고정 유형으로 오해되지 않는지 확인한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedContraryEvidence": true,
+        "reviewerType": "model_internal_construct_scope_screen",
+        "screenedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "nextBaselineAction": "retain_pending_independent_review",
+      "independentRoleReviewState": "pending",
+      "expertReviewed": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "P1_P2_INFERRED_AXIS_REVIEW_THEN_V2_2_MANIFEST",
+    "actions": [
+      "P1·P2 85개 추론 축을 같은 계약으로 검토한다.",
+      "P0 제거 25개와 보류 4개는 다음 내부 manifest에서 제외한다.",
+      "모든 추론 축 검토 뒤 canonical 수와 32개 재조합 영향을 계산한다.",
+      "독립 성격심리·심리측정 검토 전까지 새 manifest도 research_only로 유지한다."
+    ]
+  }
+}

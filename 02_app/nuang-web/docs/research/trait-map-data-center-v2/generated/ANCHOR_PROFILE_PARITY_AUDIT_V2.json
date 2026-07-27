@@ -1,0 +1,83 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "auditId": "ANCHOR-PROFILE-PARITY.0.1",
+  "status": "ANCHORS_STRUCTURALLY_ALIGNED_REVIEW_REQUIRED",
+  "anchors": ["ENAKQ", "IRGMC"],
+  "profiles": {
+    "ENAKQ": {
+      "longformCharacters": 77861,
+      "chapterCount": 16,
+      "normalizedLongformManifest": true,
+      "structuredScenarioCount": 72,
+      "structuredScenarioClaims": 288,
+      "automaticCopyPasses": 288,
+      "structuredNeighborClaims": 20,
+      "neighborCount": 5,
+      "normalizedEvidenceSourceCount": 32,
+      "customerApprovedClaims": 0
+    },
+    "IRGMC": {
+      "longformCharacters": 77955,
+      "chapterCount": 16,
+      "normalizedLongformManifest": true,
+      "structuredScenarioCount": 72,
+      "structuredScenarioClaims": 288,
+      "automaticCopyPasses": 288,
+      "structuredNeighborClaims": 20,
+      "neighborCount": 5,
+      "normalizedEvidenceSourceCount": 33,
+      "customerApprovedClaims": 0
+    }
+  },
+  "gates": [
+    {
+      "gateId": "scenario_inventory",
+      "required": "각 기준 성향 72개",
+      "enakq": 72,
+      "irgmc": 72,
+      "status": "PASS"
+    },
+    {
+      "gateId": "four_channel_claims",
+      "required": "각 기준 성향 288개",
+      "enakq": 288,
+      "irgmc": 288,
+      "status": "PASS"
+    },
+    {
+      "gateId": "automatic_copy_audit",
+      "required": "각 기준 성향 288/288",
+      "enakq": 288,
+      "irgmc": 288,
+      "status": "PASS"
+    },
+    {
+      "gateId": "longform_character_range",
+      "required": "각 기준 성향 공백 제외 50,000자 이상",
+      "enakq": 77861,
+      "irgmc": 77955,
+      "status": "PASS"
+    },
+    {
+      "gateId": "normalized_16_chapter_manifest",
+      "required": "각 기준 성향 16개 장과 v2 manifest",
+      "enakq": { "chapterCount": 16, "manifest": true },
+      "irgmc": { "chapterCount": 16, "manifest": true },
+      "status": "PASS"
+    },
+    {
+      "gateId": "structured_neighbor_contrasts",
+      "required": "각 기준 성향 5개 이웃·20개 claim",
+      "enakq": 20,
+      "irgmc": 20,
+      "status": "PASS"
+    }
+  ],
+  "passedGates": 6,
+  "blockedGates": 0,
+  "nextWork": [
+    "두 기준점의 중복·모순·가치 편향을 교차 감사",
+    "E/I부터 두 방향의 bridge pair 제작 시작"
+  ],
+  "publicationRule": "구조 정렬은 고객 공개 승인이 아니다. 인지 인터뷰, 정량 검증, 전문 검토가 별도로 필요하다."
+}

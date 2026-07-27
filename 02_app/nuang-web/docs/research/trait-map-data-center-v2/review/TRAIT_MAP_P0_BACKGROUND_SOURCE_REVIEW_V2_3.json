@@ -1,0 +1,50 @@
+{
+  "contractVersion": "nuang-trait-map-p0-background-source-review.v2.3",
+  "registryId": "TRAIT-MAP-P0-BACKGROUND-SOURCE-REVIEW.2.3",
+  "status": "BACKGROUND_ONLY_REVIEW_DECISIONS_RECORDED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceReportId": "TRAIT-MAP-P0-BACKGROUND-SOURCE-EXTRACTION.2.3",
+  "decisions": [
+    {
+      "candidateSourceId": "SRC-CANDIDATE-FAMILY-ADL-SUPPORT-2023",
+      "extractionState": "primary_full_text_key_sections_extracted",
+      "backgroundEvidenceDecision": "ACCEPT_FOR_CONTEXT_BACKGROUND_ONLY",
+      "directNuangAxisEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "directCanonicalWordingEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "requiresIndependentMethodReview": true,
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "candidateSourceId": "SRC-CANDIDATE-EMOTIONAL-INSTRUMENTAL-SUPPORT-2015",
+      "extractionState": "primary_full_text_key_sections_extracted",
+      "backgroundEvidenceDecision": "ACCEPT_FOR_CONTEXT_BACKGROUND_ONLY",
+      "directNuangAxisEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "directCanonicalWordingEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "requiresIndependentMethodReview": true,
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "candidateSourceId": "SRC-CANDIDATE-ZERO-ACQUAINTANCE-DISCLOSURE-2022",
+      "extractionState": "publisher_abstract_extracted_full_text_pending",
+      "backgroundEvidenceDecision": "ACCEPT_FOR_CONTEXT_BACKGROUND_ONLY",
+      "directNuangAxisEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "directCanonicalWordingEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "requiresIndependentMethodReview": true,
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "candidateSourceId": "SRC-CANDIDATE-ROMANTIC-NEEDS-DIARY-2021",
+      "extractionState": "primary_full_text_key_sections_extracted",
+      "backgroundEvidenceDecision": "ACCEPT_FOR_CONTEXT_BACKGROUND_ONLY",
+      "directNuangAxisEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "directCanonicalWordingEvidenceDecision": "REJECT_AS_DIRECT_EVIDENCE",
+      "requiresIndependentMethodReview": true,
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    }
+  ]
+}

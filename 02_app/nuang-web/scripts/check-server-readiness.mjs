@@ -59,6 +59,7 @@ await checkServicePreflight();
 await checkServiceTables([
   ["identity", "account", "id"],
   ["identity", "auth_identity", "id, account_id"],
+  ["identity", "contact_profile", "account_id, email_status"],
   ["consent", "age_and_consent_status", "account_id"],
   ["assessment", "assessment_attempt", "id, account_id"],
   ["assessment", "free_topic_result", "id, local_result_id"],
@@ -76,11 +77,37 @@ await checkServiceTables([
   ["feed", "feed_poll", "id, status"],
   ["feed", "feed_poll_option", "id, poll_id"],
   ["feed", "feed_poll_vote", "id, poll_id"],
+  ["feed", "official_community_content", "id, content_type, lifecycle_status"],
+  ["feed", "profile_report", "id, reporter_account_id, status"],
+  ["feed", "content_report", "id, reporter_account_id, status"],
+  ["feed", "link_domain_policy", "id, domain, status"],
+  ["feed", "feed_external_link", "id, review_status"],
+  ["feed", "community_write_bucket", "account_id, action, bucket_start"],
   ["audit", "visibility_audit_event", "id, event_type"],
+  ["audit", "admin_audit_log", "id, admin_account_id, action"],
+  ["public", "research_gate_c_session", "id, status, quality_status"],
+  [
+    "public",
+    "research_gate_c_item_decision",
+    "id, decision_state, updated_at",
+  ],
+  [
+    "public",
+    "research_trait_map_section_feedback",
+    "id, profile_code, fit_rating",
+  ],
+  [
+    "public",
+    "research_trait_map_section_decision",
+    "id, decision_state, updated_at",
+  ],
+  ["public", "research_gate_c_reward_entry", "id, campaign_id, status"],
 ]);
 
 await checkLegacyTableRemoved();
 await checkServiceDeleteRpcNoop();
+await checkCommunityWriteGuardRpc();
+await checkAdminAtomicRpcs();
 await checkAnonSensitiveReads();
 await checkAnonFeedReads();
 await checkAnonDeleteRpcBlocked();
@@ -178,6 +205,8 @@ async function checkAnonSensitiveReads() {
     ["sharing", "share_link", "id, token_hash"],
     ["profile", "profile_public_snapshot", "id, snapshot_payload"],
     ["comparison", "public_comparison_report", "id, report_payload"],
+    ["feed", "content_report", "id, reporter_account_id, details"],
+    ["feed", "community_write_bucket", "account_id, request_count"],
     ["audit", "visibility_audit_event", "id, metadata"],
   ];
 
@@ -236,6 +265,77 @@ async function checkAnonDeleteRpcBlocked() {
     detail: error ? `blocked (${error.code ?? "unknown"})` : "rpc executed",
     name: "anon cannot execute report.delete_result_for_account",
     ok: Boolean(error),
+  });
+}
+
+async function checkCommunityWriteGuardRpc() {
+  const { data, error } = await serviceClient
+    .schema("feed")
+    .rpc("check_community_write_guard", {
+      p_account_id: null,
+      p_action: "create_post",
+      p_body: null,
+    });
+
+  pushCheck({
+    detail: error ? describeError(error) : `result=${String(data)}`,
+    name: "service can execute feed.check_community_write_guard",
+    ok: !error && data === "account_link_missing",
+  });
+}
+
+async function checkAdminAtomicRpcs() {
+  await checkRpcExists(
+    "admin_apply_community_moderation",
+    {
+      target_action: "readiness_check",
+      target_admin_account_id: null,
+      target_id: null,
+    },
+    "admin community moderation is atomic",
+  );
+  await checkRpcExists(
+    "admin_review_external_link",
+    {
+      target_action: "readiness_check",
+      target_admin_account_id: null,
+      target_link_id: null,
+    },
+    "admin external-link review is atomic",
+  );
+  await checkRpcExists(
+    "admin_apply_member_action",
+    {
+      target_account_id: null,
+      target_action: "readiness_check",
+      target_admin_account_id: null,
+    },
+    "admin member action is atomic",
+  );
+  await checkRpcExists(
+    "admin_manage_research_decision",
+    {
+      target_action: "start_review",
+      target_admin_account_id: null,
+      target_identity: {},
+      target_note: null,
+      target_scope: "gate_c_item",
+    },
+    "admin research decision is atomic",
+  );
+}
+
+async function checkRpcExists(rpcName, args, label) {
+  const { error } = await serviceClient.rpc(rpcName, args);
+  const missing = ["42883", "PGRST202"].includes(error?.code ?? "");
+  pushCheck({
+    detail: missing
+      ? describeError(error)
+      : error
+        ? `available (${error.code ?? "expected guard"})`
+        : "available",
+    name: label,
+    ok: !missing,
   });
 }
 

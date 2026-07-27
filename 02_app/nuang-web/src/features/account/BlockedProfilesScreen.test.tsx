@@ -69,8 +69,11 @@ describe("BlockedProfilesScreen", () => {
       await screen.findByText("차단한 프로필이 없어요"),
     ).toBeInTheDocument();
     expect(
+      screen.getByText("상대 프로필의 더보기 메뉴에서 차단할 수 있어요."),
+    ).toBeInTheDocument();
+    expect(
       screen.getByText(
-        "필요할 때 상대 프로필의 더보기 메뉴에서 차단할 수 있어요.",
+        "차단한 사람과는 서로의 프로필과 게시물이 보이지 않으며, 상대에게 알리지 않아요.",
       ),
     ).toBeInTheDocument();
   });

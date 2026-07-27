@@ -230,7 +230,7 @@ export function PublicComparisonReportView({
     <section className={styles.page}>
       <header className={styles.hero}>
         <div className={styles.eyebrowRow}>
-          <p>나와 비교하기</p>
+          <span aria-hidden="true" />
           <button
             aria-label="비교 리포트 공유"
             className={styles.iconButton}
@@ -248,10 +248,6 @@ export function PublicComparisonReportView({
           {targetName}
           {andParticle(targetName)} 나는 어디가 닮고 다를까요?
         </h1>
-        <p className={styles.heroDescription}>
-          두 사람이 정밀 코어 검사에서 공개한 성향을 나란히 살펴봤어요.
-        </p>
-
         <div aria-label="비교 대상" className={styles.profilePair}>
           <Profile profile={comparison.viewer} relationLabel="나" />
           <div aria-hidden="true" className={styles.pairConnector}>
@@ -274,8 +270,7 @@ export function PublicComparisonReportView({
       <section className={styles.section}>
         <div className={styles.sectionHeading}>
           <div>
-            <p className={styles.sectionEyebrow}>한눈에 보기</p>
-            <h2>둘의 성향을 먼저 짚어봤어요</h2>
+            <h2>둘의 성향 요약</h2>
           </div>
         </div>
         <div className={styles.summaryList}>
@@ -319,17 +314,13 @@ export function PublicComparisonReportView({
           <strong>{relationshipLabel}</strong>
           <ChevronDown aria-hidden="true" size={17} />
         </button>
-        <p>
-          성향 수치는 그대로 두고, 이 관계에서 자주 마주칠 상황과 질문을 먼저
-          보여드려요.
-        </p>
+        <p>관계를 바꾸면 상황별 안내만 달라져요.</p>
       </section>
 
       <section className={styles.section}>
         <div className={styles.sectionHeading}>
           <div>
-            <p className={styles.sectionEyebrow}>5개 코드 자리</p>
-            <h2>각자 편한 방식은 이만큼 달라요</h2>
+            <h2>5글자 비교</h2>
           </div>
           <button
             className={styles.textButton}
@@ -339,10 +330,6 @@ export function PublicComparisonReportView({
             {allOpen ? "모두 접기" : "모두 펼치기"}
           </button>
         </div>
-        <p className={styles.sectionDescription}>
-          각 %는 전체 사용자 중 순위가 아니라, 내 응답에서 어느 방향이 더 자주
-          나타났는지 보여주는 값이에요.
-        </p>
         <div className={styles.axisList}>
           {axisComparisons.map((axis) => (
             <AxisComparison
@@ -360,9 +347,8 @@ export function PublicComparisonReportView({
         <div className={styles.scoreGuide}>
           <Info aria-hidden="true" size={15} />
           <p>
-            50%에 가까울수록 두 모습이 비슷하게 나타날 수 있어요. 두 사람의
-            수치는 서로 합쳐 100%가 아니며, 차이가 관계의 좋고 나쁨이나 잘 맞을
-            확률을 뜻하지 않아요.
+            50%에 가까울수록 두 방향이 비슷하게 나타나요. 각 수치는 개인의 응답
+            방향이며 궁합 점수가 아니에요.
           </p>
         </div>
       </section>
@@ -370,15 +356,10 @@ export function PublicComparisonReportView({
       <section className={styles.section}>
         <div className={styles.sectionHeading}>
           <div>
-            <p className={styles.sectionEyebrow}>
-              {relationship === "general"
-                ? "관계 전반에서"
-                : `${relationshipLabel} 관계에서`}
-            </p>
             <h2>
               {relationshipDifferences.length > 0
-                ? "함께 있을 때 이런 차이가 보일 수 있어요"
-                : "비슷해도 한 번 확인하면 좋은 순간이에요"}
+                ? "함께 있을 때 보이는 차이"
+                : "서로 확인하면 좋은 순간"}
             </h2>
           </div>
         </div>
@@ -519,9 +500,7 @@ function AxisComparison({
             />
           ) : (
             <>
-              <p className={styles.axisInterpretation}>
-                {axis.interpretation}
-              </p>
+              <p className={styles.axisInterpretation}>{axis.interpretation}</p>
               <div className={styles.patternGrid}>
                 <Pattern label="나" text={axis.viewerPattern} />
                 <Pattern label={targetName} text={axis.targetPattern} />
@@ -721,7 +700,6 @@ function RelationshipSheet({
       >
         <header>
           <div>
-            <p>관계에 맞춰 보기</p>
             <h2>어떤 관계에서 살펴볼까요?</h2>
           </div>
           <button aria-label="닫기" onClick={onClose} type="button">
@@ -729,8 +707,7 @@ function RelationshipSheet({
           </button>
         </header>
         <p className={styles.sheetGuide}>
-          점수와 코드는 바뀌지 않고, 자주 마주칠 상황만 달라져요. 선택한 관계는
-          상대에게 알려지지 않아요.
+          상황별 안내만 달라지며, 선택한 관계는 상대에게 알려지지 않아요.
         </p>
         <div className={styles.contextOptions}>
           {relationshipContexts.map((item) => (
@@ -792,7 +769,7 @@ function buildFallbackPattern(
     : null;
 
   return insight
-    ? `${insight.detailTitle}. ${insight.description}`
+    ? `${symbol} ${insight.publicTypeName}. ${insight.description}`
     : `${subject}의 공개된 뉴앙 코드 정보를 더 확인해야 해요.`;
 }
 
@@ -813,9 +790,7 @@ function clampScore(score: number) {
   return Math.max(2, Math.min(98, score));
 }
 
-function isMeaningfulRelationshipDifference(
-  axis: PublicComparisonAxisInsight,
-) {
+function isMeaningfulRelationshipDifference(axis: PublicComparisonAxisInsight) {
   return (
     axis.viewerSymbol !== axis.targetSymbol ||
     axis.difference > 16 ||

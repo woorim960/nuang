@@ -1,0 +1,87 @@
+{
+  "queueVersion": "nuang-trait-map-wave1-longform-remediation-work-queue.v2.3",
+  "sourceReportId": "TRAIT-MAP-WAVE1-LONGFORM-REMEDIATION-PACKETS.2.3",
+  "state": "automated_content_remediation_complete",
+  "entries": [
+    {
+      "packetId": "LONGFORM-REMEDIATION-INGKQ-V2.3",
+      "code": "INGKQ",
+      "manuscriptPath": "docs/trait-maps/INGKQ/INGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-INAMC-V2.3",
+      "code": "INAMC",
+      "manuscriptPath": "docs/trait-maps/INAMC/INAMC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-IRAMQ-V2.3",
+      "code": "IRAMQ",
+      "manuscriptPath": "docs/trait-maps/IRAMQ/IRAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-IRAKC-V2.3",
+      "code": "IRAKC",
+      "manuscriptPath": "docs/trait-maps/IRAKC/IRAKC_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-INAMQ-V2.3",
+      "code": "INAMQ",
+      "manuscriptPath": "docs/trait-maps/INAMQ/INAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-IRGKQ-V2.3",
+      "code": "IRGKQ",
+      "manuscriptPath": "docs/trait-maps/IRGKQ/IRGKQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-ERAMQ-V2.3",
+      "code": "ERAMQ",
+      "manuscriptPath": "docs/trait-maps/ERAMQ/ERAMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    },
+    {
+      "packetId": "LONGFORM-REMEDIATION-INGMQ-V2.3",
+      "code": "INGMQ",
+      "manuscriptPath": "docs/trait-maps/INGMQ/INGMQ_DATA_CENTER_V2_RESEARCH_DRAFT.md",
+      "automatedContentRepair": "passed",
+      "canonicalV23Rebase": "passed",
+      "externalIndependentReview": "not_started",
+      "participantValidation": "not_started",
+      "customerPublicationApproval": "not_started"
+    }
+  ]
+}

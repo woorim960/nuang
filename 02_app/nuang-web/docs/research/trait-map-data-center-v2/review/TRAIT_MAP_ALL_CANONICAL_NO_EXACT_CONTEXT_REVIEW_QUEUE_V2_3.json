@@ -1,0 +1,2524 @@
+{
+  "contractVersion": "nuang-trait-map-all-canonical-no-exact-context-review-queue.v2.3",
+  "queueId": "TRAIT-MAP-ALL-CANONICAL-NO-EXACT-CONTEXT-REVIEW-QUEUE.2.3",
+  "status": "P0_101_CONTEXT_SCOPE_REVIEW_READY",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceReportId": "TRAIT-MAP-ALL-CANONICAL-CONTEXT-APPLICABILITY-AUDIT.2.3",
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-ATTENTION-COMMON",
+      "scenarioRef": "SCN-FAMILY-11",
+      "targetContext": "family",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "가족이 실수하거나 어려움을 겪으면 무슨 일이 있었고 당장 해결해야 할 문제가 무엇인지, 가족이 원하는 도움이 무엇인지 먼저 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 실수하거나 어려움을 겪으면 무슨 일이 있었고 당장 해결해야 할 문제가 무엇인지, 가족이 원하는 도움이 무엇인지 먼저 구분하려는 경향이 있다.",
+          "가족이 실패하거나 힘든 일을 겪으면 상한 마음과 현실적으로 막힌 원인, 지금 필요한 도움이 무엇인지 함께 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-DAILY-STRESS-SHIFTS-TRAIT-STATES",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
+      "scenarioRef": "SCN-FAMILY-11",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-A",
+      "scenarioRef": "SCN-FAMILY-11",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“가족은 지금 어떤 마음이고 무엇이 가장 필요할까? 내가 어떤 태도로 곁에 있어야 부담이 덜할까?”가 먼저 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“가족은 지금 어떤 마음이고 무엇이 가장 필요할까? 내가 어떤 태도로 곁에 있어야 부담이 덜할까?”가 먼저 떠오르기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-DAILY-STRESS-SHIFTS-TRAIT-STATES",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-RESPONSE-COMMON",
+      "scenarioRef": "SCN-FAMILY-11",
+      "targetContext": "family",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "상대의 이야기를 듣고 원하는 도움을 물은 뒤, 동의가 있으면 정보 찾기·일정 정리·실제 지원으로 이어가는 편이다.",
+        "detailParagraphs": [
+          "상대의 이야기를 듣고 원하는 도움을 물은 뒤, 동의가 있으면 정보 찾기·일정 정리·실제 지원으로 이어가는 편이다.",
+          "상황을 들은 뒤 필요한 지원을 물어보고, 요청받은 범위에서 연락·정리·실행처럼 구체적인 도움을 제공하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-DAILY-STRESS-SHIFTS-TRAIT-STATES",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-COMMUNICATION-COMMON",
+      "scenarioRef": "SCN-FAMILY-11",
+      "targetContext": "family",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“지금은 내 이야기를 들어주길 원하는지, 같이 방법을 찾길 원하는지 알려줘”처럼 지원 종류를 선택할 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금은 내 이야기를 들어주길 원하는지, 같이 방법을 찾길 원하는지 알려줘”처럼 지원 종류를 선택할 수 있게 묻는 방식이 잘 맞는다.",
+          "“지금은 이야기를 들어주는 게 좋을까, 같이 처리할 일이 있을까?”처럼 도움 방식을 가족이 고르게 하는 말이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-DAILY-STRESS-SHIFTS-TRAIT-STATES",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-A",
+      "scenarioRef": "SCN-FAMILY-12",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-PROCESS-RO-A",
+      "scenarioRef": "SCN-FAMILY-12",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“그 일로 가족들은 어떤 마음이 남았고, 우리 관계에서 지금 서로에게 필요한 것은 무엇일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“그 일로 가족들은 어떤 마음이 남았고, 우리 관계에서 지금 서로에게 필요한 것은 무엇일까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-COMMUNICATION-RO-A",
+      "scenarioRef": "SCN-FAMILY-12",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“그때 많이 서운했을 것 같아. 아직 마음에 남은 게 있는지, 지금 서로에게 필요한 게 무엇인지 듣고 싶어”처럼 감정과 관계의 필요를 확인하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“그때 많이 서운했을 것 같아. 아직 마음에 남은 게 있는지, 지금 서로에게 필요한 게 무엇인지 듣고 싶어”처럼 감정과 관계의 필요를 확인하는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-RESPONSE-SE-I",
+      "scenarioRef": "SCN-FAMILY-3",
+      "targetContext": "family",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "처음에는 모임의 흐름을 지켜보며 생각을 정리하고, 익숙한 한두 사람과 대화하거나 잠시 혼자 쉬면서 에너지를 조절하는 편이다.",
+        "detailParagraphs": [
+          "처음에는 모임의 흐름을 지켜보며 생각을 정리하고, 익숙한 한두 사람과 대화하거나 잠시 혼자 쉬면서 에너지를 조절하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-COMMUNICATION-SE-I",
+      "scenarioRef": "SCN-FAMILY-3",
+      "targetContext": "family",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "모임에서 바로 길게 말하기보다 먼저 혼자 생각을 정리하고, 필요한 내용은 한 사람과 차분히 나누는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "모임에서 바로 길게 말하기보다 먼저 혼자 생각을 정리하고, 필요한 내용은 한 사람과 차분히 나누는 방식이 자연스럽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-C",
+      "scenarioRef": "SCN-FAMILY-5",
+      "targetContext": "family",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 걱정과 감정이 커지기 전에, 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 걱정과 감정이 커지기 전에, 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-SELF-KNOWLEDGE-PARTIAL",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "가족이 도움을 요청하면 어떤 일이 있었고 실제로 필요한 지원이 무엇인지, 자신이 책임질 범위가 어디까지인지 먼저 확인하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 도움을 요청하면 어떤 일이 있었고 실제로 필요한 지원이 무엇인지, 자신이 책임질 범위가 어디까지인지 먼저 확인하려는 경향이 있다.",
+          "가족이 힘든 일을 말하면 구체적으로 무슨 일이 있었고 무엇이 부담을 키웠는지, 지금 줄일 수 있는 문제를 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "가족이 힘든 일을 말하면 가장 힘든 마음과 가족 생활에 생길 영향, 함께 마련할 수 있는 도움 방법을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 힘든 일을 말하면 가장 힘든 마음과 가족 생활에 생길 영향, 함께 마련할 수 있는 도움 방법을 먼저 살피는 경향이 있다.",
+          "가족이 힘든 일을 말하면 그 사람이 겪은 마음과 가족에게 바라는 이해, 혼자 감당해 온 부담을 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“무엇을 해결해야 하고, 내가 맡는 것이 가장 효과적인 부분은 어디지?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“무엇을 해결해야 하고, 내가 맡는 것이 가장 효과적인 부분은 어디지?”를 생각하기 쉽다.",
+          "“가장 힘든 원인이 무엇이고, 내가 실제로 맡거나 바꿀 수 있는 일은 무엇이지?”라는 생각이 먼저 들기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“지금 이 사람이 혼자라고 느끼지 않으려면 무엇을 해야 하고, 우리 가족이 함께할 수 있는 일은 무엇일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“지금 이 사람이 혼자라고 느끼지 않으려면 무엇을 해야 하고, 우리 가족이 함께할 수 있는 일은 무엇일까?”를 생각하기 쉽다.",
+          "“어떤 마음을 가장 알아주길 바라고, 가족으로서 지금 어떻게 곁에 있어야 할까?”라는 생각이 먼저 들기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "요청을 들은 뒤 필요한 행동을 구체화하고, 가능한 범위 안에서 연락·동행·정리 같은 실질적인 도움을 제공하는 편이다.",
+        "detailParagraphs": [
+          "요청을 들은 뒤 필요한 행동을 구체화하고, 가능한 범위 안에서 연락·동행·정리 같은 실질적인 도움을 제공하는 편이다.",
+          "가족의 마음과 원하는 지원을 확인한 뒤 일정·이동·연락·역할 분담처럼 실질적인 도움을 계획으로 이어가는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "가족의 이야기를 듣고 원하는 도움을 확인한 뒤, 역할을 나누어 실제 지원과 다음 확인을 꾸준히 이어가는 편이다.",
+        "detailParagraphs": [
+          "가족의 이야기를 듣고 원하는 도움을 확인한 뒤, 역할을 나누어 실제 지원과 다음 확인을 꾸준히 이어가는 편이다.",
+          "마음을 충분히 들은 뒤 원하는 도움을 물어보고, 그날 가능한 범위에서 역할을 나누거나 실질적인 지원을 이어가는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“내가 오늘 할 수 있는 건 이 두 가지야. 무엇이 더 필요해?”처럼 가능 범위와 추가 필요를 함께 확인하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“내가 오늘 할 수 있는 건 이 두 가지야. 무엇이 더 필요해?”처럼 가능 범위와 추가 필요를 함께 확인하는 방식이 잘 맞는다.",
+          "“그 일이 계속 겹쳐서 힘들었겠어. 지금 내가 대신할 일과 같이 해결할 일을 나눠보자”처럼 마음 확인과 행동을 연결해 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "scenarioRef": "SCN-FAMILY-7",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“지금 가장 힘든 부분이 무엇인지 말해줘. 우리가 같이 할 수 있는 일을 하나씩 정해보자”처럼 경험 확인과 실행을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“지금 가장 힘든 부분이 무엇인지 말해줘. 우리가 같이 할 수 있는 일을 하나씩 정해보자”처럼 경험 확인과 실행을 연결해 말하는 방식이 자연스럽다.",
+          "“그 상황에서 정말 외롭고 힘들었겠어. 오늘은 내가 무엇을 같이 하면 가장 도움이 될까?”처럼 마음과 행동을 연결한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
+      "scenarioRef": "SCN-FAMILY-9",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
+      "scenarioRef": "SCN-FAMILY-9",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-RESPONSE-RO-G",
+      "scenarioRef": "SCN-FAMILY-9",
+      "targetContext": "family",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "넘어선 행동과 바꿔야 할 지점을 구체적으로 말하고, 같은 일이 반복될 때 따를 대응 기준을 실행하는 편이다.",
+        "detailParagraphs": [
+          "넘어선 행동과 바꿔야 할 지점을 구체적으로 말하고, 같은 일이 반복될 때 따를 대응 기준을 실행하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-ATTENTION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람에게 좋은 일이 생기면 그 사람이 기뻐하는 방식과 노력한 과정, 함께 축하할 수 있는 자연스러운 계기가 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 좋은 일이 생기면 그 사람이 기뻐하는 방식과 노력한 과정, 함께 축하할 수 있는 자연스러운 계기가 먼저 눈에 들어오는 경향이 있다.",
+          "마음에 드는 사람에게 좋은 일이 생기면 과장된 반응보다 그 사람이 실제로 노력한 부분과 결과가 가지는 구체적인 의미를 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-PROCESS-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“진심으로 축하해 주고 싶다”는 마음과 함께, “이 기회에 대화를 더 이어가도 상대가 편할까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“진심으로 축하해 주고 싶다”는 마음과 함께, “이 기회에 대화를 더 이어가도 상대가 편할까?”를 생각하기 쉽다.",
+          "“어떤 노력이 가장 크게 작용했고, 이 사람이 특히 기뻐하는 지점은 무엇일까?”를 떠올리기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-RESPONSE-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "성과를 구체적으로 축하하고 더 듣고 싶다는 관심을 보이되, 축하를 관계 진전의 수단으로 밀어붙이지 않고 상대 반응에 맞추는 편이다.",
+        "detailParagraphs": [
+          "성과를 구체적으로 축하하고 더 듣고 싶다는 관심을 보이되, 축하를 관계 진전의 수단으로 밀어붙이지 않고 상대 반응에 맞추는 편이다.",
+          "짧더라도 구체적으로 축하하고, 상대가 말하고 싶어 하는 과정에 질문을 더하며 관심을 보여주는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-COMMUNICATION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "잘된 점을 구체적으로 알아봐 주고 “어떻게 축하하고 싶어?”처럼 상대가 원하는 방식과 대화 길이를 고를 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "잘된 점을 구체적으로 알아봐 주고 “어떻게 축하하고 싶어?”처럼 상대가 원하는 방식과 대화 길이를 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "“그동안 그 부분을 계속 준비한 걸 봤어. 원하는 결과가 나와서 정말 좋겠다”처럼 관찰한 노력과 축하를 함께 전하는 방식이 자연스럽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 감정이 커지기 전, 실제로 벌어진 일과 상대가 직접 보인 반응, 아직 확인하지 않은 부분을 차분히 나누어 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 감정이 커지기 전, 실제로 벌어진 일과 상대가 직접 보인 반응, 아직 확인하지 않은 부분을 차분히 나누어 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 실제로 벌어진 실수와 상대가 직접 보인 반응이 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 실제로 벌어진 실수와 상대가 직접 보인 반응이 먼저 눈에 들어오는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람과 기대한 흐름이 어긋나면 감정이 크게 올라오기 전, 이 일이 여러 방식으로 해석될 수 있는 점과 관계가 다시 이어질 가능성을 차분히 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 기대한 흐름이 어긋나면 감정이 크게 올라오기 전, 이 일이 여러 방식으로 해석될 수 있는 점과 관계가 다시 이어질 가능성을 차분히 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 상대가 어떻게 받아들였을지와 관계가 앞으로 달라질 여러 가능성이 한꺼번에 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 상대가 어떻게 받아들였을지와 관계가 앞으로 달라질 여러 가능성이 한꺼번에 떠오르기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“내가 실제로 무엇을 잘못했고, 상대가 직접 보인 반응은 무엇이지?”를 빠르게 되짚으며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 실제로 무엇을 잘못했고, 상대가 직접 보인 반응은 무엇이지?”를 빠르게 되짚으며 걱정하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-N-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“아직 한 가지 뜻으로 정해진 것은 아니니, 상대가 받아들였을 여러 가능성과 다음 만남에서 새롭게 이어질 방향을 차분히 생각해 보자”라고 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“아직 한 가지 뜻으로 정해진 것은 아니니, 상대가 받아들였을 여러 가능성과 다음 만남에서 새롭게 이어질 방향을 차분히 생각해 보자”라고 정리하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-N-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“상대가 어떻게 받아들였을까, 관계가 어떤 방향으로 달라질까, 다시 기회가 있을까?”처럼 여러 가능성이 빠르게 이어지며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 어떻게 받아들였을까, 관계가 어떤 방향으로 달라질까, 다시 기회가 있을까?”처럼 여러 가능성이 빠르게 이어지며 걱정하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-RESPONSE-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "확인되는 실수는 짧게 인정하고 고칠 행동을 말하되, 상대 뜻을 반복해서 캐묻기보다 이후의 실제 반응을 지켜보는 편이다.",
+        "detailParagraphs": [
+          "확인되는 실수는 짧게 인정하고 고칠 행동을 말하되, 상대 뜻을 반복해서 캐묻기보다 이후의 실제 반응을 지켜보는 편이다.",
+          "상대 답을 실제 경계로 받아들이고 필요한 연락과 행동을 정리한 뒤, 혼자 있을 때 올라오는 실망과 피로를 늦게 확인하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-RESPONSE-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "생각과 감정이 빠르게 올라와도 확인되는 실수는 짧게 인정하고 고칠 행동을 제안하며, 상대의 답과 경계를 존중해 행동을 정리하는 편이다.",
+        "detailParagraphs": [
+          "생각과 감정이 빠르게 올라와도 확인되는 실수는 짧게 인정하고 고칠 행동을 제안하며, 상대의 답과 경계를 존중해 행동을 정리하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-COMMUNICATION-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“아까 그 말은 내가 잘못 전달했어. 다음에는 이렇게 할게”처럼 사실·책임·다음 행동을 간결하게 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“아까 그 말은 내가 잘못 전달했어. 다음에는 이렇게 할게”처럼 사실·책임·다음 행동을 간결하게 말하는 방식이 잘 맞는다.",
+          "“네 뜻을 존중하고 여기까지 정리할게. 지금은 차분하지만 내 마음은 시간을 두고 살펴보려 해”처럼 경계와 회복을 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-COMMUNICATION-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“아까 내가 한 말은 적절하지 않았어. 미안해. 다음에는 이렇게 하려고 해”처럼 설명을 길게 늘이지 않고 책임과 다음 행동을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“아까 내가 한 말은 적절하지 않았어. 미안해. 다음에는 이렇게 하려고 해”처럼 설명을 길게 늘이지 않고 책임과 다음 행동을 분명히 말하는 방식이 잘 맞는다.",
+          "“네 뜻을 존중할게. 지금은 마음이 많이 올라와 있어서 거리를 두고 정리할 시간이 필요해”처럼 경계와 회복 상태를 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-R",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=R",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-N",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=N",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람과 중요한 대화를 마친 뒤에는 그 말이 가질 수 있는 여러 뜻과 관계가 앞으로 이어질 수 있는 방향, 다음 대화에서 새롭게 연결할 지점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 중요한 대화를 마친 뒤에는 그 말이 가질 수 있는 여러 뜻과 관계가 앞으로 이어질 수 있는 방향, 다음 대화에서 새롭게 연결할 지점을 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-PROCESS-OE-R",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=R",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“상대가 실제로 말한 내용은 무엇이고, 내가 의미를 더해 해석한 부분은 무엇이지?”를 구분한 뒤 다음에 확인할 한 가지를 찾기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 실제로 말한 내용은 무엇이고, 내가 의미를 더해 해석한 부분은 무엇이지?”를 구분한 뒤 다음에 확인할 한 가지를 찾기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-PROCESS-OE-N",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=N",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“그 말은 어떤 뜻일 수 있고, 우리 관계는 앞으로 어떤 방향으로 이어질까?”처럼 여러 해석과 가능성을 떠올리기 쉽다.",
+        "detailParagraphs": [
+          "“그 말은 어떤 뜻일 수 있고, 우리 관계는 앞으로 어떤 방향으로 이어질까?”처럼 여러 해석과 가능성을 떠올리기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-RESPONSE-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "감정이 가라앉을 시간을 가진 뒤 필요한 말만 짧게 후속 연락으로 전하고, 답이 오기 전에는 추가 추측보다 자신의 일상으로 돌아가려는 편이다.",
+        "detailParagraphs": [
+          "감정이 가라앉을 시간을 가진 뒤 필요한 말만 짧게 후속 연락으로 전하고, 답이 오기 전에는 추가 추측보다 자신의 일상으로 돌아가려는 편이다.",
+          "바로 여러 번 연락하기보다 생각이 정리될 시간을 가진 뒤, 꼭 필요한 경우에만 짧고 구체적인 후속 연락을 보내는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-COMMUNICATION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“아까 대화에서 내 뜻이 잘 전해졌는지 궁금했어. 편할 때 네 생각을 알려줘”처럼 확인할 한 가지와 답할 선택권을 함께 담는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“아까 대화에서 내 뜻이 잘 전해졌는지 궁금했어. 편할 때 네 생각을 알려줘”처럼 확인할 한 가지와 답할 선택권을 함께 담는 방식이 잘 맞는다.",
+          "“아까 이야기한 것 중 이 부분을 내가 제대로 이해했는지 궁금해. 편할 때 알려줘”처럼 확인할 내용을 하나로 좁혀 말하는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-REACTIVITY-RECOVERY-DISTINCTION"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-ATTENTION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람과 같은 모임에 있으면 전체 대화에 참여하면서도 그 사람이 어떤 주제에서 편하게 말하고 누구와 자연스럽게 어울리는지 자주 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 같은 모임에 있으면 전체 대화에 참여하면서도 그 사람이 어떤 주제에서 편하게 말하고 누구와 자연스럽게 어울리는지 자주 눈에 들어오는 경향이 있다.",
+          "마음에 드는 사람과 같은 모임에 있으면 그 사람만 계속 바라보기보다 전체 대화 속에서 실제로 보이는 태도와 자신이 자연스럽게 참여할 수 있는 순간을 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-PROCESS-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“같이 이야기할 자연스러운 계기가 있을까?”를 떠올리면서, 지나치게 티를 내면 상대나 모임이 불편해지지 않을지 함께 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“같이 이야기할 자연스러운 계기가 있을까?”를 떠올리면서, 지나치게 티를 내면 상대나 모임이 불편해지지 않을지 함께 생각하기 쉽다.",
+          "“둘만 이야기할 수 있는 구체적인 화제가 나왔나?”, “지금 다가가도 흐름을 깨지 않을까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=E",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "모임에서 여러 사람과 이야기를 주고받는 동안 생각과 에너지가 살아나며, 마음에 드는 사람과도 자연스럽게 대화를 이어 가는 편이다.",
+        "detailParagraphs": [
+          "모임에서 여러 사람과 이야기를 주고받는 동안 생각과 에너지가 살아나며, 마음에 드는 사람과도 자연스럽게 대화를 이어 가는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-RESPONSE-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "모임의 흐름을 먼저 지켜보며 혼자 생각을 정리하고, 마음에 드는 사람과 편안한 일대일 대화를 나누거나 잠시 쉬며 에너지를 조절하는 편이다.",
+        "detailParagraphs": [
+          "모임의 흐름을 먼저 지켜보며 혼자 생각을 정리하고, 마음에 드는 사람과 편안한 일대일 대화를 나누거나 잠시 쉬며 에너지를 조절하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-COMMUNICATION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "여럿 앞에서 과하게 친밀한 표현을 하기보다 현재 화제에 맞는 질문을 건네고, 더 이야기하고 싶다면 나중에 이어갈 구체적인 계기를 제안한다.",
+        "detailParagraphs": [
+          "여럿 앞에서 과하게 친밀한 표현을 하기보다 현재 화제에 맞는 질문을 건네고, 더 이야기하고 싶다면 나중에 이어갈 구체적인 계기를 제안한다.",
+          "상대만 반복해서 지목하기보다 모두가 답할 수 있는 질문으로 대화를 열고, 공통점이 생기면 이후 대화를 가볍게 제안하는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-PERSON-SITUATION-INDEPENDENT-REALTIME",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-ATTENTION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람과의 약속이 바뀌면 거절의 뜻이라고 바로 단정하기보다 전달된 이유와 새 일정 제안이 있는지 같은 확인 가능한 단서를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과의 약속이 바뀌면 거절의 뜻이라고 바로 단정하기보다 전달된 이유와 새 일정 제안이 있는지 같은 확인 가능한 단서를 먼저 살피는 경향이 있다.",
+          "약속이나 연락 계획이 바뀌면 실제 변경 이유와 함께 그 변화가 상대의 관심을 뜻하는지 아닌지가 먼저 신경 쓰이는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-R",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=R",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다.",
+        "detailParagraphs": [
+          "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-N",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=N",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "일정이 바뀌면 관심 변화뿐 아니라 바쁨·건강·다른 일정처럼 여러 설명 가능성을 떠올리고, 앞으로 관계가 이어질 방향을 확인하고 싶다고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "일정이 바뀌면 관심 변화뿐 아니라 바쁨·건강·다른 일정처럼 여러 설명 가능성을 떠올리고, 앞으로 관계가 이어질 방향을 확인하고 싶다고 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-RESPONSE-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=E",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "상대와 이유와 가능한 시간을 바로 주고받는 동안 자신의 생각도 더 분명해지고, 관계를 이어 갈 다음 약속을 함께 정하는 편이다.",
+        "detailParagraphs": [
+          "상대와 이유와 가능한 시간을 바로 주고받는 동안 자신의 생각도 더 분명해지고, 관계를 이어 갈 다음 약속을 함께 정하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-RESPONSE-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "처음에는 혼자 상황을 정리한 뒤 가능한 다른 시간을 짧게 제안하고, 상대의 후속 행동을 보며 다음 움직임을 정하는 편이다.",
+        "detailParagraphs": [
+          "처음에는 혼자 상황을 정리한 뒤 가능한 다른 시간을 짧게 제안하고, 상대의 후속 행동을 보며 다음 움직임을 정하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-COMMUNICATION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“알겠어. 나는 목요일이나 주말이 가능해. 편한 시간이 생기면 알려줘”처럼 부담을 키우지 않고 선택 가능한 정보를 분명히 전하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“알겠어. 나는 목요일이나 주말이 가능해. 편한 시간이 생기면 알려줘”처럼 부담을 키우지 않고 선택 가능한 정보를 분명히 전하는 방식이 잘 맞는다.",
+          "“변경된 건 이해했어. 다시 만날 생각이 있다면 가능한 날을 알려줘”처럼 감정과 다음 선택을 짧고 분명하게 말하는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람의 뜻이 분명하지 않으면 좋은 가능성과 나쁜 가능성을 늘리기보다 실제로 반복된 말과 행동, 아직 확인하지 못한 부분을 먼저 나누는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람의 뜻이 분명하지 않으면 좋은 가능성과 나쁜 가능성을 늘리기보다 실제로 반복된 말과 행동, 아직 확인하지 못한 부분을 먼저 나누는 경향이 있다.",
+          "마음에 드는 사람의 뜻이 분명하지 않아도 걱정이 크게 올라오기 전 실제로 한 말과 반복된 행동, 직접 확인할 수 있는 한 가지 질문을 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람의 뜻이 분명하지 않을 때는 실제로 한 말과 행동, 반복된 반응, 직접 물어 확인할 수 있는 내용을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람의 뜻이 분명하지 않을 때는 실제로 한 말과 행동, 반복된 반응, 직접 물어 확인할 수 있는 내용을 먼저 살피는 경향이 있다.",
+          "마음에 드는 사람의 뜻이 분명하지 않으면 거절이나 거리감으로 이어질 가능성과 답장·표정의 작은 변화가 빠르게 눈에 들어오는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-N-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람의 뜻이 분명하지 않아도 걱정이 크게 올라오기 전 실제 말과 반복 행동, 한 번 직접 확인할 질문을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람의 뜻이 분명하지 않아도 걱정이 크게 올라오기 전 실제 말과 반복 행동, 한 번 직접 확인할 질문을 먼저 살피는 경향이 있다.",
+          "마음에 드는 사람의 뜻이 분명하지 않을 때는 한 가지 신호보다 가능한 여러 이유와 관계가 이어질 다양한 방향을 먼저 떠올리는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-N-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람의 뜻이 분명하지 않으면 상대가 느낄 여러 마음과 관계가 이어질 가능성, 거절되거나 멀어질 가능성을 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람의 뜻이 분명하지 않으면 상대가 느낄 여러 마음과 관계가 이어질 가능성, 거절되거나 멀어질 가능성을 함께 살피는 경향이 있다.",
+          "마음에 드는 사람의 뜻이 분명하지 않으면 가능한 여러 이유와 관계가 이어질 방향을 떠올리면서, 거절이나 거리감으로 이어질 신호도 빠르게 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-R-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“호감이라고 볼 수 있는 확인된 행동이 있는가, 아니면 내가 의미를 더한 것인가?”를 스스로 점검하기 쉽다.",
+        "detailParagraphs": [
+          "“호감이라고 볼 수 있는 확인된 행동이 있는가, 아니면 내가 의미를 더한 것인가?”를 스스로 점검하기 쉽다.",
+          "“내가 실제로 확인한 반응은 무엇이고, 혼자 뜻을 정하지 않으려면 지금 무엇을 물어보는 게 좋을까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-R-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“내가 확인한 사실과 혼자 걱정하며 붙인 의미는 무엇이고, 지금 한 가지를 묻는다면 무엇이 좋을까?”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 확인한 사실과 혼자 걱정하며 붙인 의미는 무엇이고, 지금 한 가지를 묻는다면 무엇이 좋을까?”라고 생각하기 쉽다.",
+          "“상대가 부담스러운 것은 아닌지, 내가 놓친 신호와 좋지 않은 결과는 무엇일까?”가 먼저 떠오르기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-N-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“바쁜 것일 수도 있고 조심스러운 것일 수도 있어. 어떤 질문을 해야 혼자 만든 이야기에서 벗어날 수 있을까?”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“바쁜 것일 수도 있고 조심스러운 것일 수도 있어. 어떤 질문을 해야 혼자 만든 이야기에서 벗어날 수 있을까?”라고 생각하기 쉽다.",
+          "“내가 실제로 확인한 것은 무엇이고, 혼자 결론 내리지 않으려면 무엇을 묻는 게 좋을까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-PROCESS-OE-N-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“상대도 나를 궁금해할까, 아니면 부담스러울까?”라는 여러 해석이 떠오르며 좋지 않은 결과를 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“상대도 나를 궁금해할까, 아니면 부담스러울까?”라는 여러 해석이 떠오르며 좋지 않은 결과를 걱정하기 쉽다.",
+          "“바쁘거나 조심스러운 것일 수도 있지만 마음이 달라진 건 아닐까? 혼자 만든 이야기에서 벗어나려면 무엇을 물어야 할까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-R-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "급하게 결론 내리기보다 자연스러운 대화를 이어가며 반응을 확인하고, 관계가 충분히 쌓이면 필요한 질문을 직접 하는 편이다.",
+        "detailParagraphs": [
+          "급하게 결론 내리기보다 자연스러운 대화를 이어가며 반응을 확인하고, 관계가 충분히 쌓이면 필요한 질문을 직접 하는 편이다.",
+          "한 번의 답장이나 표정만으로 결론 내리지 않고 반복되는 행동을 본 뒤 중요한 한 가지를 직접 묻고, 답에 맞춰 관계의 다음 속도를 정하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-R-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "걱정이 올라와도 한 번의 반응으로 결론 내리지 않고 반복 행동을 보며, 중요한 경우 상대 뜻을 직접 묻고 답에 맞춰 속도를 조정하는 편이다.",
+        "detailParagraphs": [
+          "걱정이 올라와도 한 번의 반응으로 결론 내리지 않고 반복 행동을 보며, 중요한 경우 상대 뜻을 직접 묻고 답에 맞춰 속도를 조정하는 편이다.",
+          "한 번의 답장이나 표정으로 결론 내리기보다 반복되는 행동을 보고, 중요한 부분은 직접 질문해 관계의 다음 행동을 정하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-N-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "여러 가능성을 혼자 정리한 뒤 가장 중요한 한 가지를 직접 물어보고, 상대의 실제 답에 맞춰 관계의 속도와 다음 행동을 조정하는 편이다.",
+        "detailParagraphs": [
+          "여러 가능성을 혼자 정리한 뒤 가장 중요한 한 가지를 직접 물어보고, 상대의 실제 답에 맞춰 관계의 속도와 다음 행동을 조정하는 편이다.",
+          "상대 반응을 보고 중요한 한 가지를 질문한 뒤 답에 맞춰 속도를 조정하며, 시간이 지나 자신의 감정이 달라지는지 확인하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-RESPONSE-OE-N-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "대화를 계속 열어 상대 반응을 확인하고, 관계가 충분히 쌓이면 자신의 관심을 말한 뒤 상대의 뜻을 직접 묻는 편이다.",
+        "detailParagraphs": [
+          "대화를 계속 열어 상대 반응을 확인하고, 관계가 충분히 쌓이면 자신의 관심을 말한 뒤 상대의 뜻을 직접 묻는 편이다.",
+          "여러 가능성과 걱정을 혼자 정리한 뒤 가장 중요한 한 가지를 직접 묻고, 상대의 실제 답에 맞춰 관계의 속도와 다음 행동을 조정하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-R-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“나는 너를 더 알아가고 싶은데, 너는 어떻게 생각해?”처럼 추측을 사실처럼 말하지 않고 자신의 뜻과 질문을 나누는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 너를 더 알아가고 싶은데, 너는 어떻게 생각해?”처럼 추측을 사실처럼 말하지 않고 자신의 뜻과 질문을 나누는 방식이 잘 맞는다.",
+          "“지난번에는 다음에 보자고 했는데 이번 주도 같은 마음인지 궁금해. 네 생각을 듣고 나도 천천히 마음을 살펴볼게”처럼 관찰한 내용·질문·자기 점검을 함께 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-R-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“지난번에는 다음에 보자고 했는데 이번 주도 같은 마음인지 궁금해”처럼 관찰한 내용과 확인할 질문을 구체적으로 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지난번에는 다음에 보자고 했는데 이번 주도 같은 마음인지 궁금해”처럼 관찰한 내용과 확인할 질문을 구체적으로 말하는 방식이 잘 맞는다.",
+          "“내가 혼자 걱정하고 싶지 않아. 다음에도 만나고 싶은지 네 생각을 듣고 싶어”처럼 걱정과 질문을 분리해 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-N-ER-C",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“여러 이유가 있을 것 같아 혼자 정하지 않으려 해. 다음에도 만나고 싶은지 네 생각을 듣고 싶어”처럼 추측과 질문을 나누는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“여러 이유가 있을 것 같아 혼자 정하지 않으려 해. 다음에도 만나고 싶은지 네 생각을 듣고 싶어”처럼 추측과 질문을 나누는 방식이 잘 맞는다.",
+          "“혼자 뜻을 정하지 않으려 해. 다음에도 만나고 싶은지 네 생각을 듣고, 나도 마음을 다시 살펴볼게”처럼 질문과 자기 점검을 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-COMMUNICATION-OE-N-ER-Q",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“나는 너를 더 알아가고 싶은데 너는 어떻게 느끼는지 궁금해”처럼 자신의 마음과 질문을 분리해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“나는 너를 더 알아가고 싶은데 너는 어떻게 느끼는지 궁금해”처럼 자신의 마음과 질문을 분리해 말하는 방식이 자연스럽다.",
+          "“여러 이유가 떠올라 혼자 걱정하고 싶지 않아. 다음에도 만나고 싶은지 네 생각을 직접 듣고 싶어”처럼 추측·걱정·질문을 나누어 말한다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-OPENNESS-INTELLECT-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SELF-OTHER-KNOWLEDGE-ASYMMETRY",
+        "FND-SITUATION-CONTINGENCY-MEANINGFUL-VARIABILITY",
+        "FND-STATE-MEASUREMENT-DESIGN",
+        "FND-STRESS-CHANGES-MOMENTARY-PERSONALITY",
+        "FND-TRAIT-ENACTMENT-STABILITY-AND-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-ATTENTION-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람과 의견이 다르면 차이가 생긴 원인과 풀어야 할 오해, 다음 대화에서 바꿀 수 있는 지점을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 의견이 다르면 차이가 생긴 원인과 풀어야 할 오해, 다음 대화에서 바꿀 수 있는 지점을 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-ATTENTION-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람과 의견이 다르면 상대가 어떤 마음일지, 이 차이가 관계에 어떤 영향을 줄지, 서로에게 필요한 존중이 무엇인지 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 의견이 다르면 상대가 어떤 마음일지, 이 차이가 관계에 어떤 영향을 줄지, 서로에게 필요한 존중이 무엇인지 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-R",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=R",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-N",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["OE"],
+      "axisSignature": "OE=N",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“서로 다른 관점은 어디에서 이어질 수 있고, 이 차이로 어떤 새로운 대화가 가능할까?”를 떠올리기 쉽다.",
+        "detailParagraphs": [
+          "“서로 다른 관점은 어디에서 이어질 수 있고, 이 차이로 어떤 새로운 대화가 가능할까?”를 떠올리기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-RESPONSE-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "의견 차이가 생긴 원인을 묻고 서로 다르게 이해한 부분을 정리한 뒤, 다음 대화에서 적용할 방법을 함께 찾는 편이다.",
+        "detailParagraphs": [
+          "의견 차이가 생긴 원인을 묻고 서로 다르게 이해한 부분을 정리한 뒤, 다음 대화에서 적용할 방법을 함께 찾는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-RESPONSE-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "상대가 어떤 마음으로 그 의견을 말했는지 먼저 듣고, 이 차이가 관계에 남긴 느낌과 서로에게 필요한 존중을 나누는 편이다.",
+        "detailParagraphs": [
+          "상대가 어떤 마음으로 그 의견을 말했는지 먼저 듣고, 이 차이가 관계에 남긴 느낌과 서로에게 필요한 존중을 나누는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-COMMUNICATION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“나는 이런 경험 때문에 이렇게 생각했어. 너는 어떤 일이 있어서 그렇게 보게 됐어?”처럼 차이의 원인을 묻는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“나는 이런 경험 때문에 이렇게 생각했어. 너는 어떤 일이 있어서 그렇게 보게 됐어?”처럼 차이의 원인을 묻는 방식이 자연스럽다.",
+          "“나는 이 부분을 다르게 봐. 네가 그렇게 생각한 이유도 듣고 싶어”처럼 차이와 관심을 함께 드러내는 말하기가 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람이 힘든 일을 말하면 막연한 위로를 서둘러 건네기보다 무슨 일이 있었고 지금 어떤 도움을 요청하는지 구체적으로 파악하려는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람이 힘든 일을 말하면 막연한 위로를 서둘러 건네기보다 무슨 일이 있었고 지금 어떤 도움을 요청하는지 구체적으로 파악하려는 경향이 있다.",
+          "마음에 드는 사람이 고민을 말하면 그 문제의 원인과 가능한 해결 방향, 자신이 도와도 되는 범위를 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람이 힘든 일을 말하면 감정이 상한 지점과 문제의 원인, 지금 자신에게 기대하는 도움이 무엇인지 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람이 힘든 일을 말하면 감정이 상한 지점과 문제의 원인, 지금 자신에게 기대하는 도움이 무엇인지 함께 살피는 경향이 있다.",
+          "마음에 드는 사람이 고민을 말하면 그 사람이 어떤 마음으로 자신에게 이야기했는지와 부담 없이 받을 수 있는 반응을 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“당장 해결할 수 있는 부분은 무엇이고, 지금은 해결보다 들어주는 것이 필요한가?”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“당장 해결할 수 있는 부분은 무엇이고, 지금은 해결보다 들어주는 것이 필요한가?”를 구분하고 싶어 하기 쉽다.",
+          "“어떤 부분이 가장 막혀 있고, 내가 의견을 말하거나 행동으로 도우면 실제 도움이 될까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“무슨 일이고 어떻게 해결할까?”가 궁금해도, “아직 가까워지는 중이라 조언이 부담이 되지 않을까?”라는 생각이 빠르게 따라오기 쉽다.",
+        "detailParagraphs": [
+          "“무슨 일이고 어떻게 해결할까?”가 궁금해도, “아직 가까워지는 중이라 조언이 부담이 되지 않을까?”라는 생각이 빠르게 따라오기 쉽다.",
+          "“이 사람이 지금 어떤 마음을 알아주길 바라고, 내가 어디까지 다가가야 편안할까?”라는 생각이 먼저 들기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "상황을 차분히 듣고 필요한 도움의 종류를 물은 뒤, 부탁받은 범위 안에서 실제로 할 수 있는 행동을 제안하는 편이다.",
+        "detailParagraphs": [
+          "상황을 차분히 듣고 필요한 도움의 종류를 물은 뒤, 부탁받은 범위 안에서 실제로 할 수 있는 행동을 제안하는 편이다.",
+          "호감을 얻기 위해 해결을 서두르지 않고 상대가 원하는 반응을 물은 뒤, 동의한 범위 안에서만 의견이나 도움을 제안하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "바로 답을 정해 주기보다 이야기를 듣고 원하는 지원을 물은 뒤, 상대가 동의할 때에만 함께 방법을 찾거나 실제 도움을 제안하는 편이다.",
+        "detailParagraphs": [
+          "바로 답을 정해 주기보다 이야기를 듣고 원하는 지원을 물은 뒤, 상대가 동의할 때에만 함께 방법을 찾거나 실제 도움을 제안하는 편이다.",
+          "경험과 마음을 들어준 뒤 원하는 지원을 묻고, 호감을 얻기 위해 과하게 돕지 않도록 동의한 범위에서만 행동하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“지금 내가 들어주면 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움을 고를 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금 내가 들어주면 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움을 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "“내가 방법을 같이 생각해도 괜찮을까, 아니면 지금은 이야기를 들어주는 게 더 좋아?”처럼 도움의 허락을 먼저 묻는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“지금은 그냥 들어주는 게 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움의 종류를 고를 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금은 그냥 들어주는 게 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움의 종류를 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "“이 이야기를 해줘서 고마워. 내가 그냥 들어주는 게 좋은지, 함께 방법을 찾아도 괜찮은지 알려줘”처럼 허락을 묻는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-SUPPORT-MATCHING-CONTEXT"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE", "OE"],
+      "axisSignature": "SE=E|OE=R",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-N",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE", "OE"],
+      "axisSignature": "SE=E|OE=N",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 주고받으며, 그 말이 관계에 열 수 있는 새로운 방향과 서로의 바람을 연결할 방법을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 주고받으며, 그 말이 관계에 열 수 있는 새로운 방향과 서로의 바람을 연결할 방법을 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-R",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE", "OE"],
+      "axisSignature": "SE=I|OE=R",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말하기 전, 원하는 만남·연락·답변과 지금까지 확인한 상대 반응을 혼자 구체적으로 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말하기 전, 원하는 만남·연락·답변과 지금까지 확인한 상대 반응을 혼자 구체적으로 정리하려는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE", "OE"],
+      "axisSignature": "SE=I|OE=N",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말하기 전, 관계가 이어질 수 있는 여러 방향과 서로의 바람을 연결할 표현을 혼자 떠올려 보는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말하기 전, 관계가 이어질 수 있는 여러 방향과 서로의 바람을 연결할 표현을 혼자 떠올려 보는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=E",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“내가 바라는 것을 먼저 말하고 상대의 답을 들으면, 서로 가능한 방법을 더 분명하게 정할 수 있겠다”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 바라는 것을 먼저 말하고 상대의 답을 들으면, 서로 가능한 방법을 더 분명하게 정할 수 있겠다”라고 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“내 마음을 먼저 정확히 정리한 뒤, 상대에게 부담을 덜 주면서 어떻게 표현할까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내 마음을 먼저 정확히 정리한 뒤, 상대에게 부담을 덜 주면서 어떻게 표현할까?”를 생각하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=E",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "적절한 때에 먼저 대화를 열어 자신의 바람을 말하고, 상대의 답을 들으면서 만남이나 연락 방식을 함께 조정하는 편이다.",
+        "detailParagraphs": [
+          "적절한 때에 먼저 대화를 열어 자신의 바람을 말하고, 상대의 답을 들으면서 만남이나 연락 방식을 함께 조정하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음이 정리될 때까지 서두르지 않다가 적절한 순간에 대화를 요청하고, 자신이 바라는 것과 상대가 선택할 수 있는 여지를 차분히 설명하는 편이다.",
+        "detailParagraphs": [
+          "마음이 정리될 때까지 서두르지 않다가 적절한 순간에 대화를 요청하고, 자신이 바라는 것과 상대가 선택할 수 있는 여지를 차분히 설명하는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-E",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=E",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“나는 다음 주에도 만나고 싶어. 너도 같은 마음인지 편하게 알려줘”처럼 자신의 뜻과 상대 선택을 분명히 나누는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 다음 주에도 만나고 싶어. 너도 같은 마음인지 편하게 알려줘”처럼 자신의 뜻과 상대 선택을 분명히 나누는 방식이 잘 맞는다.",
+          "“나는 이번 주에 한 번 더 만나고 싶어. 너는 언제가 편해?”처럼 바람과 구체적인 질문을 함께 꺼내 대화 안에서 맞추는 방식이 자연스럽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-I",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“이번 주에 한 번 더 만나고 싶은데, 너도 괜찮은지 알려줘”처럼 자신의 뜻과 상대 선택을 동시에 분명히 하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“이번 주에 한 번 더 만나고 싶은데, 너도 괜찮은지 알려줘”처럼 자신의 뜻과 상대 선택을 동시에 분명히 하는 방식이 자연스럽다.",
+          "“나는 더 알아가고 싶은 마음이 있어. 바로 답하지 않아도 괜찮으니 네 생각이 정리되면 들려줘”처럼 뜻과 기다릴 시간을 함께 전하는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-EMOTION-EXPERIENCE-EXPRESSION-DISTINCTION",
+        "FND-EXTRAVERSION-NOT-SIMPLE-HAPPINESS",
+        "FND-INTENTION-BEHAVIOR-SEPARATION",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS",
+        "FND-STATE-DISTRIBUTION-STABILITY-VARIABILITY"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-ATTENTION-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "마음에 드는 사람이라도 자신의 선을 넘으면 상대가 상처받을 가능성과 관계가 끊길 걱정, 꼭 지켜야 할 행동 기준을 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람이라도 자신의 선을 넘으면 상대가 상처받을 가능성과 관계가 끊길 걱정, 꼭 지켜야 할 행동 기준을 함께 살피는 경향이 있다.",
+          "마음에 드는 사람이라도 연락·질문·신체적 거리에서 불편함이 생기면 어떤 행동이 자신의 기준을 넘었는지 먼저 살피는 경향이 있다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-PROCESS-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“좋아하는 마음을 잃지 않으면서 불편한 행동은 어떻게 분명히 거절하지?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“좋아하는 마음을 잃지 않으면서 불편한 행동은 어떻게 분명히 거절하지?”를 생각하기 쉽다.",
+          "“호감과 별개로 지켜야 할 기준은 무엇이고, 오해 없이 어떻게 말하지?”를 정리하기 쉽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-RESPONSE-COMMON",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "targetContext": "person_of_interest",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "상대를 몰아세우기보다 불편했던 행동과 원하는 기준을 구체적으로 말하고, 이후 존중 여부를 실제 행동으로 확인하는 편이다.",
+        "detailParagraphs": [
+          "상대를 몰아세우기보다 불편했던 행동과 원하는 기준을 구체적으로 말하고, 이후 존중 여부를 실제 행동으로 확인하는 편이다.",
+          "표현을 고른 뒤 먼저 대화를 열어 불편했던 행동과 원하는 거리를 말하고, 이후 상대가 기준을 존중하는지 살피는 편이다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-G",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-A",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "targetContext": "person_of_interest",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "riskDomains": ["relationship_outcome"],
+      "canonicalWording": {
+        "summaryText": "“너와 계속 알아가는 관계가 중요해서 내 마음을 솔직히 말하고 싶어. 늦은 밤 반복 연락은 부담스러우니 다음 날 이야기했으면 좋겠어”처럼 관계의 의미와 경계를 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“너와 계속 알아가는 관계가 중요해서 내 마음을 솔직히 말하고 싶어. 늦은 밤 반복 연락은 부담스러우니 다음 날 이야기했으면 좋겠어”처럼 관계의 의미와 경계를 함께 전하는 방식이 자연스럽다."
+        ]
+      },
+      "transferredFindingRefs": [
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+        "FND-RELATIONAL-UNCERTAINTY-TALK-DYNAMICS"
+      ],
+      "issueCode": "NO_EXACT_REGISTERED_CONTEXT_FINDING",
+      "requestedDecision": "GROUP_GAP_THEN_MAP_BACKGROUND_DIRECT_AND_UNSUPPORTED_CLAUSES",
+      "reviewerDecision": null,
+      "publicationState": "research_only"
+    }
+  ]
+}

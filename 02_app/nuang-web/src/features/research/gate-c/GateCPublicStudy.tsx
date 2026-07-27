@@ -1,12 +1,22 @@
 "use client";
 
-import { ArrowRight, Check, Copy, ShieldCheck, Trash2 } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  Copy,
+  Gift,
+  ShieldCheck,
+  Trash2,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  type PrivateContactPayload,
+  privateContactConsentVersion,
+} from "@/features/account/private-contact-contract";
 import {
   AssessmentBottomSheet,
   AssessmentQuestionDock,
-  AssessmentQuestionGuideButton,
   AssessmentQuestionHeader,
   AssessmentScaleResponseOptions,
   AssessmentUnsureControl,
@@ -22,20 +32,20 @@ import {
   gateCLifeContextLabels,
   gateCLifeContexts,
   gateCPublicConsentVersion,
+  gateCReviewRewardCampaign,
+  type GateCReviewRewardCampaign,
   type GateCAgeBand,
   type GateCAssessmentExperience,
   type GateCLifeContext,
   type GateCPublicResponseRecord,
   type GateCPublicSessionStart,
 } from "@/features/research/gate-c/gate-c-public-contract";
+import { gateCRewardEntryConsentVersion } from "@/features/research/gate-c/gate-c-reward-entry-contract";
 import {
   isGateCFormId,
   type GateCResponseChoice,
 } from "@/features/research/gate-c/gate-c-study-contract";
-import {
-  gateCParticipantDefinitions,
-  getGateCParticipantDefinition,
-} from "@/features/research/gate-c/gate-c-study-fixture";
+import { gateCParticipantDefinitions } from "@/features/research/gate-c/gate-c-study-fixture";
 import { cn } from "@/lib/utils/cn";
 import styles from "./GateCPublicStudy.module.css";
 
@@ -61,7 +71,11 @@ type CompletionReceipt = {
   qualityStatus: "excluded" | "included";
 };
 
-export function GateCPublicStudy() {
+export function GateCPublicStudy({
+  rewardCampaign = gateCReviewRewardCampaign,
+}: {
+  rewardCampaign?: GateCReviewRewardCampaign;
+}) {
   const router = useRouter();
   const questionShownAtRef = useRef(0);
   const studyStartedAtRef = useRef(0);
@@ -81,18 +95,20 @@ export function GateCPublicStudy() {
   >({});
   const [feedback, setFeedback] = useState<Record<string, ItemFeedback>>({});
   const [unsureOpen, setUnsureOpen] = useState(false);
-  const [helpOpen, setHelpOpen] = useState(false);
   const [exitOpen, setExitOpen] = useState(false);
   const [starting, setStarting] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [receipt, setReceipt] = useState<CompletionReceipt | null>(null);
+  const [restoredWithdrawalCode, setRestoredWithdrawalCode] = useState<
+    string | null
+  >(null);
   const [deleteState, setDeleteState] = useState<DeleteState>("idle");
   const [copied, setCopied] = useState(false);
 
   const definition =
-    session && isGateCFormId(session.formId)
-      ? getGateCParticipantDefinition(session.formId)
+    session?.items.length === 12
+      ? { items: session.items }
       : gateCParticipantDefinitions.FORM_A;
   const currentQuestion = definition.items[currentQuestionIndex];
   const currentResponse = currentQuestion
@@ -113,6 +129,40 @@ export function GateCPublicStudy() {
   useAssessmentQuestionScroll(
     surface === "questions" ? currentQuestion.studyItemId : null,
   );
+
+  useEffect(() => {
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("reward") !== "resume") return;
+
+    let restoreTimer: number | undefined;
+    try {
+      const value = window.sessionStorage.getItem(gateCRewardResumeStorageKey);
+      const restored = value
+        ? (JSON.parse(value) as {
+            receipt?: CompletionReceipt;
+            withdrawalCode?: string;
+          })
+        : null;
+      if (
+        !restored?.receipt?.participantCode ||
+        !restored.receipt.publicReceiptId ||
+        !restored.withdrawalCode
+      ) {
+        return;
+      }
+      restoreTimer = window.setTimeout(() => {
+        setReceipt(restored.receipt ?? null);
+        setRestoredWithdrawalCode(restored.withdrawalCode ?? null);
+        setSurface("complete");
+      }, 0);
+    } catch {
+      window.sessionStorage.removeItem(gateCRewardResumeStorageKey);
+    }
+
+    return () => {
+      if (restoreTimer !== undefined) window.clearTimeout(restoreTimer);
+    };
+  }, []);
 
   async function startStudy() {
     if (!canStart || starting) return;
@@ -135,7 +185,12 @@ export function GateCPublicStudy() {
       });
       const body = (await response.json().catch(() => null)) as
         (GateCPublicSessionStart & { ok: true }) | null;
-      if (!response.ok || !body?.ok || !isGateCFormId(body.formId)) {
+      if (
+        !response.ok ||
+        !body?.ok ||
+        !isGateCFormId(body.formId) ||
+        body.items.length !== 12
+      ) {
         throw new Error("start_failed");
       }
 
@@ -232,6 +287,7 @@ export function GateCPublicStudy() {
         `/api/research/gate-c/sessions/${session.sessionId}/complete`,
         {
           body: JSON.stringify({
+            assignmentProof: session.assignmentProof,
             clientDurationMs,
             responses,
             sessionToken: session.sessionToken,
@@ -245,6 +301,7 @@ export function GateCPublicStudy() {
       if (!response.ok || !body?.ok) throw new Error("submit_failed");
 
       setReceipt(body);
+      setRestoredWithdrawalCode(session.withdrawalCode);
       setSurface("complete");
     } catch {
       setErrorMessage(
@@ -284,23 +341,25 @@ export function GateCPublicStudy() {
   }
 
   async function copyDeletionInfo() {
-    if (!session || !receipt) return;
+    const withdrawalCode = session?.withdrawalCode ?? restoredWithdrawalCode;
+    if (!withdrawalCode || !receipt) return;
     const text = [
       `뉴앙 문항 확인 참여번호: ${receipt.participantCode}`,
       `보관 번호: ${receipt.publicReceiptId}`,
-      `삭제 코드: ${session.withdrawalCode}`,
+      `삭제 코드: ${withdrawalCode}`,
     ].join("\n");
     await navigator.clipboard.writeText(text);
     setCopied(true);
   }
 
   async function deleteSubmission() {
-    if (!session || !receipt || deleteState === "deleting") return;
+    const withdrawalCode = session?.withdrawalCode ?? restoredWithdrawalCode;
+    if (!withdrawalCode || !receipt || deleteState === "deleting") return;
     setDeleteState("deleting");
     const response = await fetch("/api/research/gate-c/submissions", {
       body: JSON.stringify({
         publicReceiptId: receipt.publicReceiptId,
-        withdrawalCode: session.withdrawalCode,
+        withdrawalCode,
       }),
       headers: { "content-type": "application/json" },
       method: "DELETE",
@@ -313,7 +372,6 @@ export function GateCPublicStudy() {
       <main className={styles.publicPage}>
         <section className={styles.intro}>
           <div className={styles.brandRow}>
-            <span>NUANG RESEARCH</span>
             <span>약 4분 · 12개 질문</span>
           </div>
           <h1>뉴앙의 질문을 더 분명하게 만드는 데 함께해 주세요</h1>
@@ -325,11 +383,23 @@ export function GateCPublicStudy() {
           <div className={styles.privacyPanel}>
             <ShieldCheck aria-hidden="true" size={21} strokeWidth={1.7} />
             <div>
-              <strong>이름과 연락처는 받지 않아요</strong>
+              <strong>검사 참여에는 이름과 연락처가 필요 없어요</strong>
               <p>
-                참여번호는 자동으로 만들어집니다. 아래 정보는 질문이 다양한 생활
-                모습에서도 자연스럽게 읽히는지 통계로 확인할 때만 사용해요.
+                이벤트 응모는 참여 완료 후 뉴앙 회원의 비공개 프로필 연락처로
+                진행해요.
               </p>
+            </div>
+          </div>
+
+          <div className={styles.rewardPanel}>
+            <Gift aria-hidden="true" size={21} strokeWidth={1.65} />
+            <div>
+              <strong>리뷰 이벤트</strong>
+              <p>
+                참여 후 리뷰를 남긴 분 중 {rewardCampaign.winnerCount}명을
+                추첨해 {rewardCampaign.prize}을 드려요.
+              </p>
+              <RewardCampaignStatus campaign={rewardCampaign} />
             </div>
           </div>
 
@@ -424,23 +494,39 @@ export function GateCPublicStudy() {
     );
   }
 
-  if (surface === "complete" && receipt && session) {
+  if (surface === "complete" && receipt) {
     return (
       <main className={runnerStyles.runner}>
         <section className={styles.completeStage}>
           <span aria-hidden="true" className={styles.successMark}>
             <Check size={27} strokeWidth={1.8} />
           </span>
-          <p className={styles.completeEyebrow}>참여 완료</p>
-          <h1>뉴앙의 질문이 한층 더 분명해졌어요</h1>
-          <p className={styles.completeCopy}>
-            응답은 문항별 혼란, 답 변경, 소요 시간 통계에 자동 반영됐어요.
-            충분한 기록과 검수를 거친 개선안만 실제 검사에 반영합니다.
+          <h1>참여가 완료됐어요</h1>
+          <p className={styles.impactCopy}>
+            남겨주신 답변과 리뷰는 문항을 더 분명하게 다듬고, 앞으로 뉴앙코드
+            성향 분석의 정밀도와 정확도를 높이는 데 반영됩니다.
           </p>
           <div className={styles.participantCode}>
             <span>내 참여번호</span>
             <strong>{receipt.participantCode}</strong>
           </div>
+
+          <RewardEntryPanel
+            campaign={rewardCampaign}
+            onLogin={() => {
+              const withdrawalCode =
+                session?.withdrawalCode ?? restoredWithdrawalCode;
+              if (!withdrawalCode) return;
+              window.sessionStorage.setItem(
+                gateCRewardResumeStorageKey,
+                JSON.stringify({ receipt, withdrawalCode }),
+              );
+              router.push(
+                `/login?next=${encodeURIComponent("/research?reward=resume")}&reason=event`,
+              );
+            }}
+            receipt={receipt}
+          />
 
           <button
             className={styles.homeButton}
@@ -521,9 +607,6 @@ export function GateCPublicStudy() {
       />
 
       <section className={runnerStyles.mainContent}>
-        <AssessmentQuestionGuideButton onClick={() => setHelpOpen(true)}>
-          답하는 기준 · 최근 6개월의 평소 모습
-        </AssessmentQuestionGuideButton>
         <div
           className={runnerStyles.questionRegion}
           key={currentQuestion.studyItemId}
@@ -575,7 +658,7 @@ export function GateCPublicStudy() {
           </button>
           {currentFeedback.confusionFlag ? (
             <label>
-              <span>어떤 부분이 헷갈렸나요? · 선택</span>
+              <span>헷갈린 부분 (선택)</span>
               <textarea
                 maxLength={300}
                 onChange={(event) =>
@@ -610,28 +693,6 @@ export function GateCPublicStudy() {
         previousDisabled={currentQuestionIndex === 0 || submitting}
       />
 
-      {helpOpen ? (
-        <AssessmentBottomSheet
-          copy="특별했던 한 번보다 최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 문장 속 모습이 얼마나 자주 나타나는지 답해 주세요."
-          onClose={() => setHelpOpen(false)}
-          title="어떤 모습을 떠올리면 될까요?"
-        >
-          <p className={runnerStyles.sheetNote}>
-            비슷한 경험이 거의 없다면 ‘이 상황은 답하기 어려워요’를 선택해도
-            괜찮아요.
-          </p>
-          <div className={runnerStyles.sheetActions}>
-            <button
-              className={runnerStyles.sheetAction}
-              onClick={() => setHelpOpen(false)}
-              type="button"
-            >
-              이해했어요
-            </button>
-          </div>
-        </AssessmentBottomSheet>
-      ) : null}
-
       {unsureOpen ? (
         <AssessmentUnsureSheet
           onClose={() => setUnsureOpen(false)}
@@ -649,7 +710,7 @@ export function GateCPublicStudy() {
 
       {exitOpen ? (
         <AssessmentBottomSheet
-          copy="지금 나가면 이번 참여는 제출되지 않고 뉴앙 앱 홈으로 이동해요. 현재 뉴앙은 개발 중이라 홈에서 아직 완성되지 않은 화면과 기능을 만날 수 있어요."
+          copy="지금 나가면 이번 참여는 제출되지 않고 뉴앙 홈으로 이동해요."
           onClose={() => setExitOpen(false)}
           title="참여를 그만둘까요?"
         >
@@ -676,6 +737,380 @@ export function GateCPublicStudy() {
       ) : null}
     </main>
   );
+}
+
+function RewardCampaignStatus({
+  campaign,
+}: {
+  campaign: GateCReviewRewardCampaign;
+}) {
+  if (campaign.status === "details_pending") {
+    return (
+      <small>
+        응모 기간과 당첨 안내 방법은 운영 확정 후 이 화면에서 안내합니다.
+      </small>
+    );
+  }
+
+  if (campaign.status === "upcoming") {
+    return <small>{campaign.periodLabel}에 진행합니다.</small>;
+  }
+
+  if (campaign.status === "closed") {
+    return (
+      <small>
+        응모가 마감되었습니다. 당첨 안내일은 {campaign.announcementLabel}입니다.
+      </small>
+    );
+  }
+
+  return (
+    <small>
+      {campaign.periodLabel} · 참여를 마친 뒤 별도로 응모할 수 있습니다.
+    </small>
+  );
+}
+
+function RewardEntryPanel({
+  campaign,
+  onLogin,
+  receipt,
+}: {
+  campaign: GateCReviewRewardCampaign;
+  onLogin: () => void;
+  receipt: CompletionReceipt;
+}) {
+  const [contact, setContact] = useState("");
+  const [state, setState] = useState<
+    | "editing"
+    | "entering"
+    | "error"
+    | "idle"
+    | "loading"
+    | "saving_contact"
+    | "success"
+    | "unauthenticated"
+    | "withdrawing"
+    | "withdrawn"
+  >("loading");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [profileContact, setProfileContact] =
+    useState<PrivateContactPayload | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    void fetch("/api/research/gate-c/reward-entries", {
+      cache: "no-store",
+    })
+      .then(async (response) => ({
+        body: (await response.json().catch(() => null)) as {
+          contact?: PrivateContactPayload;
+          entry?: { status?: string } | null;
+        } | null,
+        response,
+      }))
+      .then(({ body, response }) => {
+        if (!active) return;
+        if (response.status === 401) {
+          setState("unauthenticated");
+          return;
+        }
+        if (!response.ok || !body?.contact) {
+          setErrorMessage(
+            "이벤트 응모 정보를 불러오지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+          );
+          setState("error");
+          return;
+        }
+        setProfileContact(body.contact);
+        setState(
+          body.entry &&
+            ["contacted", "entered", "winner"].includes(
+              body.entry.status ?? "",
+            )
+            ? "success"
+            : "idle",
+        );
+      })
+      .catch(() => {
+        if (!active) return;
+        setErrorMessage(
+          "이벤트 응모 정보를 불러오지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+        );
+        setState("error");
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  if (!campaign.entryEnabled || campaign.contactMethod !== "mobile_phone") {
+    return null;
+  }
+
+  const mobileDigits = contact.replace(/\D/g, "");
+  const canEnter =
+    (profileContact?.hasMobilePhone ||
+      mobileDigits.length === 11) &&
+    state !== "entering" &&
+    state !== "saving_contact";
+
+  async function enterCampaign() {
+    if (!canEnter) return;
+    setState("entering");
+    setErrorMessage("");
+
+    let currentContact = profileContact;
+    if (!currentContact?.hasMobilePhone || state === "editing") {
+      setState("saving_contact");
+      const contactResponse = await fetch("/api/me/contact", {
+      body: JSON.stringify({
+          consentVersion: privateContactConsentVersion,
+          mobilePhone: contact,
+          source: "event_entry",
+        }),
+        headers: { "content-type": "application/json" },
+        method: "PATCH",
+      });
+      const contactBody = (await contactResponse.json().catch(() => null)) as {
+        contact?: PrivateContactPayload;
+        code?: string;
+        message?: string;
+        ok?: boolean;
+      } | null;
+      if (!contactResponse.ok || !contactBody?.contact) {
+        setErrorMessage(
+          contactBody?.message ??
+            "휴대전화번호를 저장하지 못했어요. 다시 확인해 주세요.",
+        );
+        setState("error");
+        return;
+      }
+      currentContact = contactBody.contact;
+      setProfileContact(currentContact);
+      setState("entering");
+    }
+
+    const response = await fetch("/api/research/gate-c/reward-entries", {
+      body: JSON.stringify({
+        consentAccepted: true,
+        consentVersion: gateCRewardEntryConsentVersion,
+        participantCode: receipt.participantCode,
+        publicReceiptId: receipt.publicReceiptId,
+        website: "",
+      }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+    const body = (await response.json().catch(() => null)) as {
+      contact?: PrivateContactPayload;
+      entryId?: string;
+      error?: string;
+    } | null;
+
+    if (response.ok && body?.entryId) {
+      if (body.contact) setProfileContact(body.contact);
+      window.sessionStorage.removeItem(gateCRewardResumeStorageKey);
+      setState("success");
+      return;
+    }
+
+    setErrorMessage(
+      body?.error === "reward_entry_duplicate"
+        ? "이미 이 계정이나 휴대전화번호로 응모했어요."
+        : body?.error === "profile_mobile_phone_required"
+          ? "응모 안내를 받을 휴대전화번호를 등록해 주세요."
+          : "지금은 응모를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    );
+    setState("error");
+  }
+
+  async function withdrawEntry() {
+    if (state === "withdrawing") return;
+    setState("withdrawing");
+
+    const response = await fetch("/api/research/gate-c/reward-entries", {
+      headers: { "content-type": "application/json" },
+      method: "DELETE",
+    });
+
+    if (response.ok) {
+      setState("withdrawn");
+      return;
+    }
+
+    setErrorMessage("응모를 취소하지 못했어요. 잠시 뒤 다시 시도해 주세요.");
+    setState("error");
+  }
+
+  if (state === "loading") {
+    return (
+      <section aria-live="polite" className={styles.rewardEntryPanel}>
+        <p className={styles.rewardEntryLoading}>응모 정보를 확인하고 있어요.</p>
+      </section>
+    );
+  }
+
+  if (state === "unauthenticated") {
+    return (
+      <section className={styles.rewardEntryPanel}>
+        <div className={styles.rewardEntryHeading}>
+          <Gift aria-hidden="true" size={19} strokeWidth={1.65} />
+          <div>
+            <strong>리뷰 이벤트 응모</strong>
+            <span>로그인하면 응모 내역과 안내 번호를 관리할 수 있어요.</span>
+          </div>
+        </div>
+        <button
+          className={styles.rewardEntryButton}
+          onClick={onLogin}
+          type="button"
+        >
+          로그인하고 응모하기
+        </button>
+      </section>
+    );
+  }
+
+  if (state === "success" || state === "withdrawing") {
+    return (
+      <section aria-live="polite" className={styles.rewardEntrySuccess}>
+        <Check aria-hidden="true" size={21} strokeWidth={1.8} />
+        <div>
+          <strong>이벤트 응모가 완료됐어요</strong>
+          <p>
+            {campaign.announcementLabel} 당첨자에게{" "}
+            {profileContact?.mobilePhoneMasked ?? "프로필 연락처"}로
+            안내할게요.
+          </p>
+          <button
+            disabled={state === "withdrawing"}
+            onClick={() => {
+              setContact("");
+              setState("editing");
+            }}
+            type="button"
+          >
+            번호 변경
+          </button>
+          <button
+            disabled={state === "withdrawing"}
+            onClick={withdrawEntry}
+            type="button"
+          >
+            {state === "withdrawing" ? "취소하고 있어요" : "응모 취소"}
+          </button>
+        </div>
+      </section>
+    );
+  }
+
+  if (state === "withdrawn") {
+    return (
+      <section aria-live="polite" className={styles.rewardEntryWithdrawn}>
+        <p>이벤트 응모를 취소했어요. 프로필 연락처는 그대로 유지됩니다.</p>
+        <button onClick={() => setState("idle")} type="button">
+          다시 응모하기
+        </button>
+      </section>
+    );
+  }
+
+  const needsContact = !profileContact?.hasMobilePhone || state === "editing";
+
+  return (
+    <section className={styles.rewardEntryPanel}>
+      <div className={styles.rewardEntryHeading}>
+        <Gift aria-hidden="true" size={19} strokeWidth={1.65} />
+        <div>
+          <strong>리뷰 이벤트 응모</strong>
+          <span>
+            {campaign.periodLabel} · {campaign.announcementLabel} 발표
+          </span>
+        </div>
+      </div>
+      {needsContact ? (
+        <>
+          <label className={styles.rewardContactField}>
+            <span>
+              {profileContact?.hasMobilePhone
+                ? "새 휴대전화번호"
+                : "당첨 안내를 받을 휴대전화번호"}
+            </span>
+            <input
+              autoComplete="tel"
+              inputMode="tel"
+              maxLength={13}
+              onChange={(event) =>
+                setContact(formatKoreanMobile(event.target.value))
+              }
+              placeholder="010-0000-0000"
+              type="tel"
+              value={contact}
+            />
+          </label>
+          {!profileContact?.hasMobilePhone ? (
+            <p className={styles.rewardConsent}>
+              번호는 다른 사람에게 공개되지 않으며, 이벤트 당첨과 계정에 꼭
+              필요한 안내에 사용합니다.
+            </p>
+          ) : null}
+        </>
+      ) : (
+        <div className={styles.rewardSavedContact}>
+          <span>안내받을 번호</span>
+          <strong>{profileContact.mobilePhoneMasked}</strong>
+          <button
+            onClick={() => {
+              setContact("");
+              setState("editing");
+            }}
+            type="button"
+          >
+            변경
+          </button>
+        </div>
+      )}
+      {errorMessage ? (
+        <p aria-live="polite" className={styles.rewardEntryError}>
+          {errorMessage}
+        </p>
+      ) : null}
+      <button
+        className={styles.rewardEntryButton}
+        disabled={!canEnter}
+        onClick={enterCampaign}
+        type="button"
+      >
+        {state === "entering" || state === "saving_contact"
+          ? "응모하고 있어요"
+          : profileContact?.hasMobilePhone && state !== "editing"
+            ? "이 번호로 응모하기"
+            : "번호 저장하고 응모하기"}
+      </button>
+      {state === "editing" ? (
+        <button
+          className={styles.rewardEntryCancel}
+          onClick={() => {
+            setContact("");
+            setState("idle");
+          }}
+          type="button"
+        >
+          변경 취소
+        </button>
+      ) : null}
+    </section>
+  );
+}
+
+const gateCRewardResumeStorageKey = "nuang-gate-c-reward-resume-v1";
+
+function formatKoreanMobile(value: string) {
+  const digits = value.replace(/\D/g, "").slice(0, 11);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 7)}-${digits.slice(7)}`;
 }
 
 function StudySelect({

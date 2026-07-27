@@ -86,7 +86,7 @@ function createRecord(
       codePerspectives: [
         {
           code: "INGMC",
-          name: "새 길을 찾는 탐구자",
+          name: "새 가능성을 찾는 탐험가",
           options: [
             { label: "먼저 이야기한다", ratio: 100, voteCount: 1 },
             { label: "조금 기다린다", ratio: 0, voteCount: 0 },
@@ -125,7 +125,7 @@ function createRecord(
     question,
     selectedCode: "INGMC",
     selectedOptionLabel: "먼저 이야기한다",
-    selectedProfileName: "새 길을 찾는 탐구자",
+    selectedProfileName: "새 가능성을 찾는 탐험가",
     status: "active",
     topicLabel: "관계",
     voteId: "vote-relationship",

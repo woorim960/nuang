@@ -1,0 +1,168 @@
+{
+  "contractVersion": "nuang-trait-map-targeted-axis-rewrite-decisions.v2",
+  "reportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-DECISIONS-CAB-01.0.1",
+  "batchId": "CAB-01",
+  "status": "INTERNAL_EVIDENCE_BOUNDED_EDITORIAL_DECISIONS_COMPLETE",
+  "publicationState": "research_only",
+  "reviewedAt": "2026-07-23T00:00:00.000Z",
+  "rules": [
+    "공유 문장이 한쪽 축 방향을 분명히 설명하면 그 방향에는 남기고 반대 방향에서는 제외한다.",
+    "공유 문장이 바뀐 축과 무관한 공통 정보면 양쪽에 남기되 양쪽 모두 고유 문단을 갖춘다.",
+    "새 고유 문단은 같은 claimKey와 같은 축 방향의 추적 가능한 후보만 사용한다.",
+    "C/Q는 사교성이나 말의 양이 아니라 반응이 나타나기 전 정리 시간과 반응이 드러나는 속도로 쓴다.",
+    "내부 편집 완료는 심리측정·사용자 이해도·고객 발행 승인을 뜻하지 않는다."
+  ],
+  "decisions": [
+    {
+      "reviewId": "TAR-CAB-01-01",
+      "decision": "ADD_MISSING_DIRECTION_PARAGRAPH",
+      "removeSharedFrom": null,
+      "replaceAllOn": null,
+      "authoredSide": "left",
+      "authoredDirection": "G",
+      "authoredParagraph": "평소 선택에서는 이미 잘됐던 방법을 바탕으로, 지금 해결할 문제와 바로 해볼 행동을 먼저 정한 뒤 진행 결과에 맞춰 방법을 조정하는 경향이 있다.",
+      "sourceCandidateRefs": [
+        "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-N-RO-G-SM-M:34c14ec77b3f",
+        "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-RO-G-SM-K:b2a7d470581f"
+      ],
+      "rationale": "공유 문장은 R·M의 공통 조건만 설명한다. G 방향의 문제·해결·다음 행동을 기존 G 후보에서 보강한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-02",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "left",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 함께할 사람의 경험과 반응을 살피는 A 방향이다. G 쪽에는 이미 해결 목표와 완료 기준을 보는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-03",
+      "decision": "ADD_MISSING_DIRECTION_PARAGRAPH",
+      "removeSharedFrom": null,
+      "replaceAllOn": null,
+      "authoredSide": "right",
+      "authoredDirection": "I",
+      "authoredParagraph": "익숙한 선택지를 혼자 비교해 지금 에너지와 시간에 맞는 한 가지를 정하고, 작게 시작한 뒤 결과를 보며 방법과 순서를 조정하는 편이다.",
+      "sourceCandidateRefs": [
+        "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-M:aecd9e54d7dd",
+        "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-K:d04f576cd423"
+      ],
+      "rationale": "공유 문장은 R·M의 행동만 설명한다. I 방향의 혼자 비교하고 정리하는 과정을 기존 I 후보에서 보강한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-04",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 사람들과 가능성을 넓히는 E 방향이다. I 쪽에는 혼자 비교해 기준과 단계를 정하는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-05",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "left",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 사람에게 남은 영향과 관계 회복을 보는 A 방향이다. G 쪽에는 후속 행동과 재발 가능성을 보는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-06",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 진행 순서·놓친 단서·다음 행동을 보는 G 방향이다. A 쪽에는 혼자 회복한 뒤 다시 연결할 사람을 보는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-07",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "left",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 아직 불편한 사람을 떠올리는 A 방향이다. G 쪽에는 위험을 줄일 확인 행동을 찾는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-08",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 문제 원인과 바꿀 행동을 찾는 G 방향이다. A 쪽에는 자신의 마음을 정리한 뒤 다시 이야기할 사람을 찾는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-09",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 확인·사과·다음 계획을 순서대로 이어 일상 흐름으로 돌아가는 K 방향이다. M 쪽에는 현재 걱정과 피로가 줄어드는 속도에 맞추는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-10",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "left",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 에너지 상태에 따라 기록·대화·다음 행동을 선택하는 M 방향이다. K 쪽에는 회복·정리·재연결의 순서를 이어가는 고유 문단이 있다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-11",
+      "decision": "REPLACE_MISALIGNED_DIRECTION_AND_KEEP_SHARED_ON_OPPOSITE",
+      "removeSharedFrom": null,
+      "replaceAllOn": "left",
+      "authoredSide": "left",
+      "authoredDirection": "C",
+      "authoredParagraph": "새로운 사람을 만나면 바로 여러 반응을 내놓기보다 분위기와 공통점을 잠시 살핀 뒤, 이어갈 만한 주제 하나를 골라 차분히 말을 건네는 편이다.",
+      "sourceCandidateRefs": [
+        "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-C:dc02424a07f3",
+        "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N-ER-C:ae0db578a2a1"
+      ],
+      "rationale": "기존 C 문단은 먼저 말을 걸고 바로 활동을 제안해 Q처럼 읽혔다. C를 반응 전 잠시 살피고 정리하는 방향으로 다시 쓴다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-12",
+      "decision": "REPLACE_MISALIGNED_DIRECTION_AND_KEEP_SHARED_ON_OPPOSITE",
+      "removeSharedFrom": null,
+      "replaceAllOn": "right",
+      "authoredSide": "right",
+      "authoredDirection": "Q",
+      "authoredParagraph": "처음에는 조용히 상황을 보더라도 구체적인 연결점이나 할 일이 눈에 들어오면, 가까운 사람에게 바로 질문하거나 자신의 경험을 보태며 반응하는 편이다.",
+      "sourceCandidateRefs": [
+        "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R-ER-Q:fa98a76e8f47",
+        "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N-ER-Q:101f055f3929"
+      ],
+      "rationale": "기존 Q 문단은 오래 관찰하고 차분히 보태는 C처럼 읽혔다. I의 조용한 시작은 유지하되 연결점이 생긴 뒤 반응이 빠르게 드러나는 방향으로 다시 쓴다."
+    }
+  ],
+  "approval": {
+    "internalEditorialDecision": "complete",
+    "personalityPsychology": "pending",
+    "psychometrics": "pending",
+    "plainKoreanUserValidation": "pending",
+    "customerPublication": "blocked"
+  }
+}

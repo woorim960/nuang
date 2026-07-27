@@ -1,0 +1,759 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-06.0.1",
+  "batchId": "P1-IAS-06",
+  "status": "P1_INFERRED_AXIS_BATCH_06_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 10,
+    "variants": 20,
+    "retainCandidates": 12,
+    "revisionCandidates": 8,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-AFTERMATH-ATTENTION",
+      "claimKey": ".scenario.family.aftermath.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-AFTERMATH-COMMUNICATION",
+      "claimKey": ".scenario.family.aftermath.communication",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-AFTERMATH-PROCESS",
+      "claimKey": ".scenario.family.aftermath.process",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-BOUNDARY-ATTENTION",
+      "claimKey": ".scenario.family.boundary.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-BOUNDARY-PROCESS",
+      "claimKey": ".scenario.family.boundary.process",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-BOUNDARY-RESPONSE",
+      "claimKey": ".scenario.family.boundary.response",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-NEED_EXPRESSION-ATTENTION",
+      "claimKey": ".scenario.family.need_expression.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-NEED_EXPRESSION-COMMUNICATION",
+      "claimKey": ".scenario.family.need_expression.communication",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-NEED_EXPRESSION-PROCESS",
+      "claimKey": ".scenario.family.need_expression.process",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-FAMILY-SETBACK-PROCESS",
+      "claimKey": ".scenario.family.setback.process",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "가족 갈등이나 큰일이 지나간 뒤에는 혼자 있을 때 실제로 일어난 순서와 풀리지 않은 문제, 다음에 달라져야 할 기준을 되짚는 경향이 있다.",
+        "detailParagraphs": [
+          "가족 갈등이나 큰일이 지나간 뒤에는 혼자 있을 때 실제로 일어난 순서와 풀리지 않은 문제, 다음에 달라져야 할 기준을 되짚는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.aftermath.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“그때 우리가 다르게 알고 있던 부분은 이거였어. 다음에는 이 시점에 먼저 알려주자”처럼 원인과 새 기준을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“그때 우리가 다르게 알고 있던 부분은 이거였어. 다음에는 이 시점에 먼저 알려주자”처럼 원인과 새 기준을 연결해 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.family.aftermath.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "누가 옳았는지를 반복하기보다 남아 있는 어려움과 다음에 바꿀 한 가지를 가족 구성원별로 확인하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "누가 옳았는지를 반복하기보다 남아 있는 어려움과 다음에 바꿀 한 가지를 가족 구성원별로 확인하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“그때 많이 서운했을 것 같아. 아직 마음에 남은 게 있는지, 지금 서로에게 필요한 게 무엇인지 듣고 싶어”처럼 감정과 관계의 필요를 확인하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“그때 많이 서운했을 것 같아. 아직 마음에 남은 게 있는지, 지금 서로에게 필요한 게 무엇인지 듣고 싶어”처럼 감정과 관계의 필요를 확인하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "누가 옳았는지를 반복하기보다 남아 있는 어려움과 다음에 바꿀 한 가지를 가족 구성원별로 확인하는 방식이 잘 맞는다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-PROCESS-RO-G",
+      "claimKey": ".scenario.family.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“문제가 시작된 지점과 반복된 원인은 무엇이며, 다음에는 무엇을 먼저 말해야 할까?”를 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“문제가 시작된 지점과 반복된 원인은 무엇이며, 다음에는 무엇을 먼저 말해야 할까?”를 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-PROCESS-RO-A",
+      "claimKey": ".scenario.family.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“다시 같은 일이 생기지 않으려면 무엇을 바꿔야 할까?”와 “아직 말하지 못한 마음이 남았을까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“다시 같은 일이 생기지 않으려면 무엇을 바꿔야 할까?”와 “아직 말하지 못한 마음이 남았을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“그 일로 가족들은 어떤 마음이 남았고, 우리 관계에서 지금 서로에게 필요한 것은 무엇일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“그 일로 가족들은 어떤 마음이 남았고, 우리 관계에서 지금 서로에게 필요한 것은 무엇일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“다시 같은 일이 생기지 않으려면 무엇을 바꿔야 할까?”와 “아직 말하지 못한 마음이 남았을까?”를 생각하기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.boundary.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.boundary.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "가족의 부탁을 거절하거나 선을 정해야 할 때 상대가 서운해할 지점과 자신이 감당할 수 있는 시간·에너지를 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족의 부탁을 거절하거나 선을 정해야 할 때 상대가 서운해할 지점과 자신이 감당할 수 있는 시간·에너지를 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
+      "claimKey": ".scenario.family.boundary.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-A",
+      "claimKey": ".scenario.family.boundary.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“도와주고 싶지만 계속 맡으면 내가 버티기 어렵다”는 두 마음이 함께 떠올라 결정이 늦어지기 쉽다.",
+        "detailParagraphs": [
+          "“도와주고 싶지만 계속 맡으면 내가 버티기 어렵다”는 두 마음이 함께 떠올라 결정이 늦어지기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“가족은 왜 이 도움을 기대하는지, 내가 계속 맡으면 어떤 마음이 쌓일지, 서로에게 필요한 선은 어디일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“가족은 왜 이 도움을 기대하는지, 내가 계속 맡으면 어떤 마음이 쌓일지, 서로에게 필요한 선은 어디일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“도와주고 싶지만 계속 맡으면 내가 버티기 어렵다”는 두 마음이 함께 떠올라 결정이 늦어지기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-RESPONSE-RO-G",
+      "claimKey": ".scenario.family.boundary.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "감정이 크게 폭발하기 전에 구체적인 행동 기준을 말하고, 이후에도 같은 일이 생기면 약속한 대응을 실행하는 편이다.",
+        "detailParagraphs": [
+          "감정이 크게 폭발하기 전에 구체적인 행동 기준을 말하고, 이후에도 같은 일이 생기면 약속한 대응을 실행하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "넘어선 행동과 바꿔야 할 지점을 구체적으로 말하고, 같은 일이 반복될 때 따를 대응 기준을 실행하는 편이다.",
+        "detailParagraphs": [
+          "넘어선 행동과 바꿔야 할 지점을 구체적으로 말하고, 같은 일이 반복될 때 따를 대응 기준을 실행하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "감정이 크게 폭발하기 전에 구체적인 행동 기준을 말하고, 이후에도 같은 일이 생기면 약속한 대응을 실행하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-RESPONSE-RO-A",
+      "claimKey": ".scenario.family.boundary.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "처음에는 미안함을 느껴도 가능한 범위를 정리한 뒤, 할 수 없는 부분과 대신 가능한 도움을 구체적으로 말하는 편이다.",
+        "detailParagraphs": [
+          "처음에는 미안함을 느껴도 가능한 범위를 정리한 뒤, 할 수 없는 부분과 대신 가능한 도움을 구체적으로 말하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "상대의 부탁을 거절해야 할 때도 그 마음과 필요를 먼저 확인하고, 관계를 해치지 않으면서 자신이 감당할 수 있는 범위를 설명하는 편이다.",
+        "detailParagraphs": [
+          "상대의 부탁을 거절해야 할 때도 그 마음과 필요를 먼저 확인하고, 관계를 해치지 않으면서 자신이 감당할 수 있는 범위를 설명하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "처음에는 미안함을 느껴도 가능한 범위를 정리한 뒤, 할 수 없는 부분과 대신 가능한 도움을 구체적으로 말하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "가족에게 자신의 필요를 말할 때 가족이 어떻게 느낄지와 생활 관계가 달라질 가능성, 이후에도 지킬 수 있는 요청을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족에게 자신의 필요를 말할 때 가족이 어떻게 느낄지와 생활 관계가 달라질 가능성, 이후에도 지킬 수 있는 요청을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "가족에게 자신의 필요를 말할 때 상대가 어떻게 느낄지, 이 요청이 관계에 어떤 영향을 줄지, 서로에게 필요한 배려가 무엇인지 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족에게 자신의 필요를 말할 때 상대가 어떻게 느낄지, 이 요청이 관계에 어떤 영향을 줄지, 서로에게 필요한 배려가 무엇인지 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "가족에게 자신의 필요를 말할 때 가족이 어떻게 느낄지와 생활 관계가 달라질 가능성, 이후에도 지킬 수 있는 요청을 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.need_expression.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.family.need_expression.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“요즘 혼자 쉴 시간이 부족해 힘들었어. 저녁 한 시간은 방해받지 않고 쉬고 싶어”처럼 감정·이유·요청을 구체적으로 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“요즘 혼자 쉴 시간이 부족해 힘들었어. 저녁 한 시간은 방해받지 않고 쉬고 싶어”처럼 감정·이유·요청을 구체적으로 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-PROCESS-RO-G",
+      "claimKey": ".scenario.family.need_expression.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-PROCESS-RO-A",
+      "claimKey": ".scenario.family.need_expression.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“내가 원하는 것을 말하면 서운해하지 않을까?”라는 걱정이 생겨도 오래 참지 않으려면 무엇을 말해야 하는지 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 것을 말하면 서운해하지 않을까?”라는 걱정이 생겨도 오래 참지 않으려면 무엇을 말해야 하는지 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“가족은 이 말을 어떻게 느낄까, 내 마음과 상대의 필요를 함께 전하려면 무엇을 말해야 할까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“가족은 이 말을 어떻게 느낄까, 내 마음과 상대의 필요를 함께 전하려면 무엇을 말해야 할까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“내가 원하는 것을 말하면 서운해하지 않을까?”라는 걱정이 생겨도 오래 참지 않으려면 무엇을 말해야 하는지 생각하기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
+      "claimKey": ".scenario.family.setback.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G/A의 가족 관계 문제 범위 안에서 G는 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-A",
+      "claimKey": ".scenario.family.setback.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“어떻게 해결하지?”가 먼저 떠올라도, “가족이 비난받는다고 느끼지 않게 감정을 먼저 확인해야겠다”는 생각이 뒤따르기 쉽다.",
+        "detailParagraphs": [
+          "“어떻게 해결하지?”가 먼저 떠올라도, “가족이 비난받는다고 느끼지 않게 감정을 먼저 확인해야겠다”는 생각이 뒤따르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast",
+        "rationale": "G는 가족 관계 문제의 원인·바꿀 행동·다음 기준, A는 가족의 마음·관계 영향·필요를 직접 나타내고 OE·ER가 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“가족은 지금 어떤 마음이고 무엇이 가장 필요할까? 내가 어떤 태도로 곁에 있어야 부담이 덜할까?”가 먼저 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“가족은 지금 어떤 마음이고 무엇이 가장 필요할까? 내가 어떤 태도로 곁에 있어야 부담이 덜할까?”가 먼저 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“어떻게 해결하지?”가 먼저 떠올라도, “가족이 비난받는다고 느끼지 않게 감정을 먼저 확인해야겠다”는 생각이 뒤따르기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_06_RECOMPOSITION_AND_BATCH_07_SCREEN",
+    "actions": [
+      "8개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "RO·friend 맥락의 P1-IAS-07을 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

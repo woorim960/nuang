@@ -1,0 +1,91 @@
+{
+  "checklistVersion": "nuang-trait-map-p0-participant-rights-implementation-checklist.v2.3",
+  "sourceReportId": "TRAIT-MAP-P0-PARTICIPANT-RIGHTS-LIFECYCLE.2.3",
+  "state": "not_implemented",
+  "items": [
+    {
+      "checklistId": "RIGHTS-01",
+      "item": "동의 화면 문구 검토",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-02",
+      "item": "성인 자격 확인",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-03",
+      "item": "연구 참여와 앱 계정 분리",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-04",
+      "item": "일시정지·건너뛰기·중단 동작",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-05",
+      "item": "철회 요청 접수 화면",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-06",
+      "item": "삭제 worker와 verification event",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-07",
+      "item": "분석 view fail-closed query",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-08",
+      "item": "연구 번호 회수 화면",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-09",
+      "item": "접근권한·export manifest",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-10",
+      "item": "보존 기간 법적·윤리적 확정",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-11",
+      "item": "사고 대응 연습",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    },
+    {
+      "checklistId": "RIGHTS-12",
+      "item": "외부 윤리·법률 검토",
+      "state": "not_started",
+      "evidenceRef": null,
+      "approvedBy": null
+    }
+  ]
+}

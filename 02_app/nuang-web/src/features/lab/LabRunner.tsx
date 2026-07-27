@@ -95,7 +95,7 @@ export function LabRunner({ assessment }: { assessment: LabAssessment }) {
           </span>
         </div>
 
-        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[#eceaf4]">
+        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[var(--nu-brand-100)]">
           <div
             className="h-full rounded-full bg-primary transition-[width]"
             style={{ width: `${progress}%` }}

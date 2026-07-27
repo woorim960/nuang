@@ -850,7 +850,7 @@ export function AssessmentRunner({
             <AssessmentQuestionGuideButton onClick={() => setIsHelpOpen(true)}>
               {isAdaptiveQuestion
                 ? "비슷하게 나온 코드만 다시 확인해요"
-                : "답하는 기준 · 최근 6개월의 평소 모습"}
+                : "최근 6개월을 기준으로"}
             </AssessmentQuestionGuideButton>
 
             <div
@@ -899,18 +899,13 @@ export function AssessmentRunner({
               }
             />
 
-            {isAdaptiveQuestion ? (
-              <p className={styles.inlineNotice}>
-                앞선 답이 같게 나온 자리만 확인하는 질문이에요. 정답은 없으며,
-                두 방향 중 평소 내 모습에 조금이라도 더 가까운 쪽을 골라주세요.
-              </p>
-            ) : (
+            {!isAdaptiveQuestion ? (
               <AssessmentUnsureControl
                 disabled={isChoiceDisabled}
                 onOpen={() => setIsUnsureOpen(true)}
                 selectedReason={selectedUnsureReason?.id}
               />
-            )}
+            ) : null}
 
             {hasPendingAnswerElsewhere ? (
               <p className={styles.inlineNotice}>

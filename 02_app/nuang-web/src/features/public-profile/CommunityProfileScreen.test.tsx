@@ -67,6 +67,45 @@ describe("CommunityProfileScreen", () => {
     );
   });
 
+  it("shows the operation center only on an authorized self profile", () => {
+    const { rerender } = render(
+      <CommunityProfileScreen
+        initialSocialState={{
+          followerCount: 12,
+          following: false,
+          followingCount: 8,
+          isOwnProfile: true,
+        }}
+        mode="self"
+        posts={[post]}
+        profile={profile}
+      />,
+    );
+
+    expect(
+      screen.queryByRole("link", { name: "관리자 운영 센터" }),
+    ).not.toBeInTheDocument();
+
+    rerender(
+      <CommunityProfileScreen
+        initialSocialState={{
+          followerCount: 12,
+          following: false,
+          followingCount: 8,
+          isOwnProfile: true,
+        }}
+        mode="self"
+        posts={[post]}
+        profile={profile}
+        showAdminEntry
+      />,
+    );
+
+    expect(
+      screen.getByRole("link", { name: "관리자 운영 센터" }),
+    ).toHaveAttribute("href", "/admin");
+  });
+
   it("unfollows without leaving the profile and keeps the prior state on failure", async () => {
     const fetchMock = vi
       .fn()

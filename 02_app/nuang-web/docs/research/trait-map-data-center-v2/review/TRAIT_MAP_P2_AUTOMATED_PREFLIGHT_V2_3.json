@@ -1,0 +1,2816 @@
+{
+  "contractVersion": "nuang-trait-map-p2-automated-preflight.v2.3",
+  "reportId": "TRAIT-MAP-P2-AUTOMATED-PREFLIGHT.2.3",
+  "status": "P2_AUTOMATED_PREFLIGHT_COMPLETE_MANUAL_REVIEW_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceQueueReportId": "TRAIT-MAP-INDEPENDENT-REVIEW-QUEUE.2.3",
+  "summary": {
+    "p2Entries": 98,
+    "passedWithoutFlags": 55,
+    "flaggedEntries": 43,
+    "unsafeFlags": 0,
+    "vagueFlags": 0,
+    "translationToneFlags": 0,
+    "manualAxisCueChecks": 51,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "limitations": [
+    "어휘 단서 일치는 축 타당성의 증거가 아니다.",
+    "자동 검사는 문장의 의미·근거 적합성·사용자 이해도를 승인하지 않는다.",
+    "무표시 통과 항목도 독립 표본 검토와 인지 면담 전에는 발행하지 않는다."
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.aftermath.attention",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["감정"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.aftermath.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "가족 갈등이나 큰일이 지나간 뒤에는 혼자 있을 때 실제로 일어난 순서와 풀리지 않은 문제, 다음에 달라져야 할 기준을 되짚는 경향이 있다.",
+        "detailParagraphs": [
+          "가족 갈등이나 큰일이 지나간 뒤에는 혼자 있을 때 실제로 일어난 순서와 풀리지 않은 문제, 다음에 달라져야 할 기준을 되짚는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.aftermath.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“그때 우리가 다르게 알고 있던 부분은 이거였어. 다음에는 이 시점에 먼저 알려주자”처럼 원인과 새 기준을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“그때 우리가 다르게 알고 있던 부분은 이거였어. 다음에는 이 시점에 먼저 알려주자”처럼 원인과 새 기준을 연결해 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["원인"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-PROCESS-RO-G",
+      "claimKey": ".scenario.family.aftermath.process",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“문제가 시작된 지점과 반복된 원인은 무엇이며, 다음에는 무엇을 먼저 말해야 할까?”를 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“문제가 시작된 지점과 반복된 원인은 무엇이며, 다음에는 무엇을 먼저 말해야 할까?”를 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["원인", "문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.boundary.attention",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "가족의 부탁을 거절하거나 선을 정해야 할 때 상대가 서운해할 지점과 자신이 감당할 수 있는 시간·에너지를 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족의 부탁을 거절하거나 선을 정해야 할 때 상대가 서운해할 지점과 자신이 감당할 수 있는 시간·에너지를 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["서운"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.boundary.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
+      "claimKey": ".scenario.family.boundary.process",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "claimKey": ".scenario.family.group_participation.response",
+      "axisSignature": "SE=E",
+      "content": {
+        "summaryText": "대화를 먼저 열고 서로의 근황을 연결하며, 필요한 준비나 다음 일정을 정리해 모임의 흐름을 이어가는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 열고 서로의 근황을 연결하며, 필요한 준비나 다음 일정을 정리해 모임의 흐름을 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["대화"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.need_expression.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.family.need_expression.communication",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "“요즘 혼자 쉴 시간이 부족해 힘들었어. 저녁 한 시간은 방해받지 않고 쉬고 싶어”처럼 감정·이유·요청을 구체적으로 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“요즘 혼자 쉴 시간이 부족해 힘들었어. 저녁 한 시간은 방해받지 않고 쉬고 싶어”처럼 감정·이유·요청을 구체적으로 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["감정"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.need_expression.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-PROCESS-RO-G",
+      "claimKey": ".scenario.family.need_expression.process",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-RESPONSE-SE-E",
+      "claimKey": ".scenario.family.need_expression.response",
+      "axisSignature": "SE=E",
+      "content": {
+        "summaryText": "대화를 먼저 열고 자신의 감정과 필요한 행동을 설명한 뒤, 가족이 가능한 범위를 들으며 함께 기준을 정하는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 열고 자신의 감정과 필요한 행동을 설명한 뒤, 가족이 가능한 범위를 들으며 함께 기준을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["함께", "대화"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.family.need_expression.response",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "생각을 혼자 정리한 뒤 시간·공간·역할처럼 확인 가능한 요청으로 바꾸어 말하는 편이다.",
+        "detailParagraphs": [
+          "생각을 혼자 정리한 뒤 시간·공간·역할처럼 확인 가능한 요청으로 바꾸어 말하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
+      "claimKey": ".scenario.family.setback.process",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["원인"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-C",
+      "claimKey": ".scenario.family.uncertainty.attention",
+      "axisSignature": "OE=R|ER=C",
+      "content": {
+        "summaryText": "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_ER_C_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인", "사실"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "C",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-AFTERMATH-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.aftermath.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "친구와 불편한 일이 지나간 뒤에는 혼자서 오간 말과 행동을 되짚고, 오해가 시작된 지점과 다시 확인할 내용을 정리하는 경향이 있다.",
+        "detailParagraphs": [
+          "친구와 불편한 일이 지나간 뒤에는 혼자서 오간 말과 행동을 되짚고, 오해가 시작된 지점과 다시 확인할 내용을 정리하는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.boundary.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "친구가 연락 빈도·농담·부탁에서 자신의 선을 넘으면 어떤 행동이 불편했고 관계를 유지하려면 무엇이 달라져야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "친구가 연락 빈도·농담·부탁에서 자신의 선을 넘으면 어떤 행동이 불편했고 관계를 유지하려면 무엇이 달라져야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.friend.boundary.communication",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "“우리 사이가 중요해서 말하고 싶어. 그 농담은 불편했고 앞으로는 하지 않았으면 해”처럼 관계의 뜻과 경계를 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“우리 사이가 중요해서 말하고 싶어. 그 농담은 불편했고 앞으로는 하지 않았으면 해”처럼 관계의 뜻과 경계를 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["관계"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.boundary.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“그 농담은 나는 불편해. 앞으로는 그 주제로 놀리지 않았으면 좋겠어”처럼 대상 행동과 바라는 변화를 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“그 농담은 나는 불편해. 앞으로는 그 주제로 놀리지 않았으면 좋겠어”처럼 대상 행동과 바라는 변화를 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.need_expression.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "친구에게 도움이 필요할 때 감정을 넓게 설명하기보다 어떤 상황이고 무엇을 부탁하면 실제로 도움이 되는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "친구에게 도움이 필요할 때 감정을 넓게 설명하기보다 어떤 상황이고 무엇을 부탁하면 실제로 도움이 되는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.friend.need_expression.communication",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "“나는 약속이 바뀔 때 미리 알려주면 마음이 놓여”처럼 비난보다 자신의 경험과 요청을 한 가지씩 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 약속이 바뀔 때 미리 알려주면 마음이 놓여”처럼 비난보다 자신의 경험과 요청을 한 가지씩 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["마음"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.need_expression.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“오늘 10분만 내 이야기를 들어줄 수 있어?” 또는 “이 자료를 한 번 봐줄 수 있어?”처럼 필요한 지원을 구체적으로 요청하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“오늘 10분만 내 이야기를 들어줄 수 있어?” 또는 “이 자료를 한 번 봐줄 수 있어?”처럼 필요한 지원을 구체적으로 요청하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-RESPONSE-RO-G",
+      "claimKey": ".scenario.friend.need_expression.response",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "요청할 내용을 구체적으로 만든 뒤 믿는 친구에게 연락하고, 필요한 시간이나 행동을 분명히 말하는 편이다.",
+        "detailParagraphs": [
+          "요청할 내용을 구체적으로 만든 뒤 믿는 친구에게 연락하고, 필요한 시간이나 행동을 분명히 말하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SETBACK-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.setback.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "친구가 실수하거나 힘든 일을 겪으면 실제로 무슨 일이 있었고 지금 필요한 것이 위로인지 해결인지 먼저 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "친구가 실수하거나 힘든 일을 겪으면 실제로 무슨 일이 있었고 지금 필요한 것이 위로인지 해결인지 먼저 구분하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["해결"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SETBACK-PROCESS-RO-G",
+      "claimKey": ".scenario.friend.setback.process",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“어디서 문제가 생겼고 내가 할 수 있는 현실적인 도움은 무엇이지?”가 떠오르면서도 조언을 원하는지는 확인해야 한다고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“어디서 문제가 생겼고 내가 할 수 있는 현실적인 도움은 무엇이지?”가 떠오르면서도 조언을 원하는지는 확인해야 한다고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-PROCESS-OE-R",
+      "claimKey": ".scenario.friend.success.process",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "“어떤 과정이 가장 힘들었고, 이 결과가 친구에게 실제로 무엇을 바꿔줄까?”를 구체적으로 궁금해하기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 과정이 가장 힘들었고, 이 결과가 친구에게 실제로 무엇을 바꿔줄까?”를 구체적으로 궁금해하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["실제", "구체"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-N",
+      "claimKey": ".scenario.friend.uncertainty.process",
+      "axisSignature": "OE=N",
+      "content": {
+        "summaryText": "“내가 놓친 일이 있나?”라는 걱정과 함께 바쁨·생활 변화·다른 고민처럼 여러 설명을 떠올리기 쉽다.",
+        "detailParagraphs": [
+          "“내가 놓친 일이 있나?”라는 걱정과 함께 바쁨·생활 변화·다른 고민처럼 여러 설명을 떠올리기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["여러"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-R",
+      "claimKey": ".scenario.friend.uncertainty.process",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "“내가 아는 사실은 답장이 늦었다는 것뿐인지, 다른 변화도 반복됐는지”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 아는 사실은 답장이 늦었다는 것뿐인지, 다른 변화도 반복됐는지”를 구분하고 싶어 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["사실"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-ATTENTION-RO-A",
+      "claimKey": ".scenario.general.boundary.attention",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "선을 정해야 할 때 자신이 불편한 지점과 함께 상대가 상처받거나 관계가 멀어질 가능성, 이후에도 지켜야 할 기준을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "선을 정해야 할 때 자신이 불편한 지점과 함께 상대가 상처받거나 관계가 멀어질 가능성, 이후에도 지켜야 할 기준을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["관계"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.general.boundary.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "자신의 시간·공간·역할이 침범됐다고 느끼면 불쾌함 자체보다 어떤 행동이 문제였고 앞으로 무엇이 달라져야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "자신의 시간·공간·역할이 침범됐다고 느끼면 불쾌함 자체보다 어떤 행동이 문제였고 앞으로 무엇이 달라져야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.general.boundary.communication",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "“도와주고 싶은 마음은 있지만 이번에는 어렵습니다. 다음 주라면 이 범위까지 가능해요”처럼 관계 존중과 경계를 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“도와주고 싶은 마음은 있지만 이번에는 어렵습니다. 다음 주라면 이 범위까지 가능해요”처럼 관계 존중과 경계를 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["마음", "관계"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.general.boundary.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“이 시간에는 연락을 받기 어렵습니다. 급한 일이면 문자로 먼저 알려주세요”처럼 행동 기준과 대안을 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“이 시간에는 연락을 받기 어렵습니다. 급한 일이면 문자로 먼저 알려주세요”처럼 행동 기준과 대안을 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-E-RO-A",
+      "claimKey": ".scenario.general.need_expression.process",
+      "axisSignature": "SE=E|RO=A",
+      "content": {
+        "summaryText": "“내 마음을 솔직히 말하면서도 상대가 부담받지 않게 하려면 어떻게 표현하지?”라는 생각과 거절될 가능성에 대한 걱정이 함께 들기 쉽다.",
+        "detailParagraphs": [
+          "“내 마음을 솔직히 말하면서도 상대가 부담받지 않게 하려면 어떻게 표현하지?”라는 생각과 거절될 가능성에 대한 걱정이 함께 들기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["함께"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["마음"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-E-RO-G",
+      "claimKey": ".scenario.general.need_expression.process",
+      "axisSignature": "SE=E|RO=G",
+      "content": {
+        "summaryText": "“이 문제를 누구에게 설명하면 내가 놓친 사실을 빨리 확인하고, 지금 필요한 도움을 함께 정할 수 있을까?”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“이 문제를 누구에게 설명하면 내가 놓친 사실을 빨리 확인하고, 지금 필요한 도움을 함께 정할 수 있을까?”라고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["함께"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-I-RO-A",
+      "claimKey": ".scenario.general.need_expression.process",
+      "axisSignature": "SE=I|RO=A",
+      "content": {
+        "summaryText": "“내가 원하는 것이 정확히 무엇인지 먼저 정리한 뒤, 상대가 오해하지 않게 어떤 말부터 해야 할까?”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 것이 정확히 무엇인지 먼저 정리한 뒤, 상대가 오해하지 않게 어떤 말부터 해야 할까?”라고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-I-RO-G",
+      "claimKey": ".scenario.general.need_expression.process",
+      "axisSignature": "SE=I|RO=G",
+      "content": {
+        "summaryText": "“내가 직접 해결할 부분과 다른 사람에게 부탁해야 할 부분은 무엇이지?”를 혼자 구분하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 직접 해결할 부분과 다른 사람에게 부탁해야 할 부분은 무엇이지?”를 혼자 구분하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["해결"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-E-RO-A",
+      "claimKey": ".scenario.general.need_expression.response",
+      "axisSignature": "SE=E|RO=A",
+      "content": {
+        "summaryText": "말할 내용을 정리한 뒤 먼저 대화를 열고, 자신의 감정과 바라는 행동을 설명하며 상대의 생각도 듣는 편이다.",
+        "detailParagraphs": [
+          "말할 내용을 정리한 뒤 먼저 대화를 열고, 자신의 감정과 바라는 행동을 설명하며 상대의 생각도 듣는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["대화"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["감정"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-E-RO-G",
+      "claimKey": ".scenario.general.need_expression.response",
+      "axisSignature": "SE=E|RO=G",
+      "content": {
+        "summaryText": "문제가 생긴 초기에 가까운 사람에게 대화를 요청하고, 질문과 답을 주고받으며 자신이 할 일과 부탁할 일을 바로 나누는 편이다.",
+        "detailParagraphs": [
+          "문제가 생긴 초기에 가까운 사람에게 대화를 요청하고, 질문과 답을 주고받으며 자신이 할 일과 부탁할 일을 바로 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["대화", "주고받"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-I-RO-A",
+      "claimKey": ".scenario.general.need_expression.response",
+      "axisSignature": "SE=I|RO=A",
+      "content": {
+        "summaryText": "충분히 생각할 시간을 가진 뒤 대화를 요청하고, 준비한 핵심 내용을 차분히 설명하면서 상대의 답을 바로 재촉하지 않는 편이다.",
+        "detailParagraphs": [
+          "충분히 생각할 시간을 가진 뒤 대화를 요청하고, 준비한 핵심 내용을 차분히 설명하면서 상대의 답을 바로 재촉하지 않는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-I-RO-G",
+      "claimKey": ".scenario.general.need_expression.response",
+      "axisSignature": "SE=I|RO=G",
+      "content": {
+        "summaryText": "필요가 구체적으로 정리되면 믿을 만한 사람에게 시간·정보·행동처럼 분명한 형태로 도움을 요청하는 편이다.",
+        "detailParagraphs": [
+          "필요가 구체적으로 정리되면 믿을 만한 사람에게 시간·정보·행동처럼 분명한 형태로 도움을 요청하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-N-SM-K",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=E|OE=N|SM=K",
+      "content": {
+        "summaryText": "여러 선택지를 사람들과 이야기해 넓힌 뒤 중요한 기준을 정하고, 결정하면 예약이나 준비처럼 다음 행동을 차례로 이어가는 편이다.",
+        "detailParagraphs": [
+          "여러 선택지를 사람들과 이야기해 넓힌 뒤 중요한 기준을 정하고, 결정하면 예약이나 준비처럼 다음 행동을 차례로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["사람들과"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["여러"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": ["기준", "이어"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-N-SM-M",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=E|OE=N|SM=M",
+      "content": {
+        "summaryText": "현재 흥미와 자원에 맞는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 바꾸는 편이다.",
+        "detailParagraphs": [
+          "현재 흥미와 자원에 맞는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": ["바꾸", "현재", "반응"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-K",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=E|OE=R|SM=K",
+      "content": {
+        "summaryText": "확인된 조건과 이전 경험을 비교해 실행할 한 가지를 고르고, 함께할 사람이 편한지 확인한 뒤 일정과 순서로 옮기는 편이다.",
+        "detailParagraphs": [
+          "확인된 조건과 이전 경험을 비교해 실행할 한 가지를 고르고, 함께할 사람이 편한지 확인한 뒤 일정과 순서로 옮기는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["함께"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인", "경험", "조건"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": ["순서"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-M",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=I|OE=N|SM=M",
+      "content": {
+        "summaryText": "여러 가능성을 비교한 뒤 현재 흥미와 자원에 맞는 한 가지를 작게 시험하고, 결과에 따라 다음 방법을 바꾸는 편이다.",
+        "detailParagraphs": [
+          "여러 가능성을 비교한 뒤 현재 흥미와 자원에 맞는 한 가지를 작게 시험하고, 결과에 따라 다음 방법을 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["가능성", "여러"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": ["바꾸", "현재"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-K",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=I|OE=R|SM=K",
+      "content": {
+        "summaryText": "목표를 작은 단계로 나누고 시작·중간 확인·완료 시점을 정한 뒤, 에너지가 달라져도 정한 흐름으로 돌아가 이어가는 편이다.",
+        "detailParagraphs": [
+          "목표를 작은 단계로 나누고 시작·중간 확인·완료 시점을 정한 뒤, 에너지가 달라져도 정한 흐름으로 돌아가 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": ["정한", "완료", "이어"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-ATTENTION-OE-N",
+      "claimKey": ".scenario.general.success.attention",
+      "axisSignature": "OE=N",
+      "content": {
+        "summaryText": "좋은 결과가 생기면 누가 함께 기여했는지와 이 결과에서 다음에 펼쳐 볼 가능성을 먼저 찾는 경향이 있다.",
+        "detailParagraphs": [
+          "좋은 결과가 생기면 누가 함께 기여했는지와 이 결과에서 다음에 펼쳐 볼 가능성을 먼저 찾는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["가능성"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-ATTENTION-OE-R",
+      "claimKey": ".scenario.general.success.attention",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "좋은 결과가 생기면 기쁨을 크게 드러내기 전에 무엇이 실제로 효과가 있었고 다음에도 다시 쓸 수 있는 방법이 무엇인지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "좋은 결과가 생기면 기쁨을 크게 드러내기 전에 무엇이 실제로 효과가 있었고 다음에도 다시 쓸 수 있는 방법이 무엇인지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["실제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-N",
+      "claimKey": ".scenario.general.success.process",
+      "axisSignature": "OE=N",
+      "content": {
+        "summaryText": "“누구와 이 기쁨을 나누고 싶지?”, “여기서 다음에는 무엇을 더 해볼 수 있을까?”라는 생각이 빠르게 이어지기 쉽다.",
+        "detailParagraphs": [
+          "“누구와 이 기쁨을 나누고 싶지?”, “여기서 다음에는 무엇을 더 해볼 수 있을까?”라는 생각이 빠르게 이어지기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-R",
+      "claimKey": ".scenario.general.success.process",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "“어떤 선택이 결과를 만들었지?”, “다음에도 같은 방식이 통할까?”를 차분하게 되짚으며 성취의 이유를 찾기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 선택이 결과를 만들었지?”, “다음에도 같은 방식이 통할까?”를 차분하게 되짚으며 성취의 이유를 찾기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_OE_R_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-RESPONSE-SE-E",
+      "claimKey": ".scenario.general.success.response",
+      "axisSignature": "SE=E",
+      "content": {
+        "summaryText": "기쁜 마음을 비교적 분명히 드러내고 주변 사람을 축하에 끌어들이며, 성취를 다음 계획이나 새로운 시도로 이어가는 편이다.",
+        "detailParagraphs": [
+          "기쁜 마음을 비교적 분명히 드러내고 주변 사람을 축하에 끌어들이며, 성취를 다음 계획이나 새로운 시도로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-RESPONSE-SE-I",
+      "claimKey": ".scenario.general.success.response",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "기쁨을 혼자 정리한 뒤 가까운 사람과 나누거나, 잘된 방법을 기록해 다음 행동으로 이어가는 편이다.",
+        "detailParagraphs": [
+          "기쁨을 혼자 정리한 뒤 가까운 사람과 나누거나, 잘된 방법을 기록해 다음 행동으로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-C",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=E|OE=N|ER=C",
+      "content": {
+        "summaryText": "가능한 방향을 정리해 사람들과 확인하고 현재 할 수 있는 행동을 시작한 뒤, 시간이 지나 감정과 피로가 남았는지 확인하는 편이다.",
+        "detailParagraphs": [
+          "가능한 방향을 정리해 사람들과 확인하고 현재 할 수 있는 행동을 시작한 뒤, 시간이 지나 감정과 피로가 남았는지 확인하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["사람들과"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "C",
+          "matchedCues": ["시간이 지나"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-Q",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=E|OE=N|ER=Q",
+      "content": {
+        "summaryText": "사람들과 정보를 나누어 가능성을 확인하고, 걱정되는 항목을 준비 목록으로 바꾸어 하나씩 점검하는 편이다.",
+        "detailParagraphs": [
+          "사람들과 정보를 나누어 가능성을 확인하고, 걱정되는 항목을 준비 목록으로 바꾸어 하나씩 점검하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_ER_Q_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["사람들과"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["가능성"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "Q",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-R-ER-Q",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=E|OE=R|ER=Q",
+      "content": {
+        "summaryText": "확인 가능한 정보를 모아 선택지를 좁히고, 사람에게 미칠 영향을 살핀 뒤 가장 현실적인 계획부터 실행하는 편이다.",
+        "detailParagraphs": [
+          "확인 가능한 정보를 모아 선택지를 좁히고, 사람에게 미칠 영향을 살핀 뒤 가장 현실적인 계획부터 실행하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_ER_Q_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "Q",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-I-OE-N-ER-C",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=I|OE=N|ER=C",
+      "content": {
+        "summaryText": "여러 가설과 해결 방향을 혼자 정리한 뒤 현재 조건에서 시험할 수 있는 방법을 골라 작게 움직이는 편이다.",
+        "detailParagraphs": [
+          "여러 가설과 해결 방향을 혼자 정리한 뒤 현재 조건에서 시험할 수 있는 방법을 골라 작게 움직이는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_ER_C_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["여러"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "C",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-I-OE-R-ER-Q",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=I|OE=R|ER=Q",
+      "content": {
+        "summaryText": "걱정이 올라와도 확인된 사실과 가능한 원인을 정리하고, 위험을 줄일 질문과 작은 대비 행동을 고르는 편이다.",
+        "detailParagraphs": [
+          "걱정이 올라와도 확인된 사실과 가능한 원인을 정리하고, 위험을 줄일 질문과 작은 대비 행동을 고르는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_ER_Q_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인", "사실"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "Q",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.aftermath.attention",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "부담스러운 일이 지나간 뒤에는 연인과의 분위기가 실제로 풀렸는지, 남은 감정이나 다시 맞춰야 할 약속이 있는지를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 일이 지나간 뒤에는 연인과의 분위기가 실제로 풀렸는지, 남은 감정이나 다시 맞춰야 할 약속이 있는지를 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["감정"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.aftermath.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "연인과 부담스러운 일이 지나간 뒤에는 혼자 있을 때 실제로 오간 말과 행동을 다시 정리하고, 아직 풀리지 않은 원인과 다음에 바꿀 점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인과 부담스러운 일이 지나간 뒤에는 혼자 있을 때 실제로 오간 말과 행동을 다시 정리하고, 아직 풀리지 않은 원인과 다음에 바꿀 점을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["원인", "바꿀"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.aftermath.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-PROCESS-RO-G",
+      "claimKey": ".scenario.partner.aftermath.process",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“문제가 시작된 지점은 어디였고, 다음에는 어떤 신호를 더 일찍 확인해야 할까?”를 차근차근 되짚기 쉽다.",
+        "detailParagraphs": [
+          "“문제가 시작된 지점은 어디였고, 다음에는 어떤 신호를 더 일찍 확인해야 할까?”를 차근차근 되짚기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-RESPONSE-SE-I",
+      "claimKey": ".scenario.partner.aftermath.response",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "바로 긴 대화를 이어가기보다 혼자 생각을 정리한 뒤, 필요한 내용과 다시 정할 약속을 추려 후속 대화를 요청하는 편이다.",
+        "detailParagraphs": [
+          "바로 긴 대화를 이어가기보다 혼자 생각을 정리한 뒤, 필요한 내용과 다시 정할 약속을 추려 후속 대화를 요청하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자", "생각을 정리"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.boundary.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "연인이 자신의 시간·사생활·선택을 넘어서면 어떤 행동이 문제였고 관계를 지키면서 바꿔야 할 기준이 무엇인지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 자신의 시간·사생활·선택을 넘어서면 어떤 행동이 문제였고 관계를 지키면서 바꿔야 할 기준이 무엇인지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": ["문제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "“우리 관계가 중요하지만 내 휴대전화를 허락 없이 보는 건 원하지 않아. 궁금한 점은 직접 물어봐 줘”처럼 관계와 경계를 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“우리 관계가 중요하지만 내 휴대전화를 허락 없이 보는 건 원하지 않아. 궁금한 점은 직접 물어봐 줘”처럼 관계와 경계를 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["관계"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "axisSignature": "RO=A|SM=K",
+      "content": {
+        "summaryText": "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["마음", "감정"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": ["약속"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "axisSignature": "RO=A|SM=M",
+      "content": {
+        "summaryText": "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["마음", "영향"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": ["상황에 맞"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "axisSignature": "RO=G|SM=K",
+      "content": {
+        "summaryText": "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": ["약속"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 상대 마음과 관계에 생길 변화, 서로 받아들일 수 있는 새 약속을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 상대 마음과 관계에 생길 변화, 서로 받아들일 수 있는 새 약속을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["마음", "관계", "필요"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "“요즘 함께 보내는 시간이 줄어 서운했어. 이번 주에는 둘만의 시간을 정하고 싶은데 너는 어때?”처럼 감정·요청·질문을 연결하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“요즘 함께 보내는 시간이 줄어 서운했어. 이번 주에는 둘만의 시간을 정하고 싶은데 너는 어때?”처럼 감정·요청·질문을 연결하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": ["감정", "서운"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-E",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "axisSignature": "SE=E",
+      "content": {
+        "summaryText": "대화를 먼저 요청해 자신의 감정과 필요를 설명하고, 연인의 입장도 들은 뒤 둘이 지킬 수 있는 행동을 정하는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 요청해 자신의 감정과 필요를 설명하고, 연인의 입장도 들은 뒤 둘이 지킬 수 있는 행동을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["대화"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "혼자 생각을 정리한 뒤 비교적 차분한 때에 구체적인 상황과 요청을 말하고, 연인의 입장도 듣는 편이다.",
+        "detailParagraphs": [
+          "혼자 생각을 정리한 뒤 비교적 차분한 때에 구체적인 상황과 요청을 말하고, 연인의 입장도 듣는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자", "생각을 정리"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-C",
+      "claimKey": ".scenario.partner.setback.response",
+      "axisSignature": "RO=G|ER=C",
+      "content": {
+        "summaryText": "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다.",
+        "detailParagraphs": [
+          "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "C",
+          "matchedCues": ["차분"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-Q",
+      "claimKey": ".scenario.partner.setback.response",
+      "axisSignature": "RO=G|ER=Q",
+      "content": {
+        "summaryText": "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다.",
+        "detailParagraphs": [
+          "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "Q",
+          "matchedCues": ["감정이 올라"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-R",
+      "claimKey": ".scenario.person_of_interest.aftermath.attention",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인", "사실"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.aftermath.process",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "“상대가 실제로 말한 내용은 무엇이고, 내가 의미를 더해 해석한 부분은 무엇이지?”를 구분한 뒤 다음에 확인할 한 가지를 찾기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 실제로 말한 내용은 무엇이고, 내가 의미를 더해 해석한 부분은 무엇이지?”를 구분한 뒤 다음에 확인할 한 가지를 찾기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인", "실제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "axisSignature": "RO=A",
+      "content": {
+        "summaryText": "“너와 계속 알아가고 싶지만 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 관심과 경계를 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“너와 계속 알아가고 싶지만 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 관심과 경계를 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "axisSignature": "RO=G",
+      "content": {
+        "summaryText": "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.disagreement.process",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["사실"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "axisSignature": "SE=E|OE=R",
+      "content": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": ["대화"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["구체"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-N",
+      "claimKey": ".scenario.person_of_interest.plan_change.process",
+      "axisSignature": "OE=N",
+      "content": {
+        "summaryText": "“관심이 줄어든 걸까?”를 걱정하면서도 바쁨·건강·다른 일정 같은 이유를 떠올리고, “무엇이 사실인지 확인하고 싶다”고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“관심이 줄어든 걸까?”를 걱정하면서도 바쁨·건강·다른 일정 같은 이유를 떠올리고, “무엇이 사실인지 확인하고 싶다”고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.plan_change.process",
+      "axisSignature": "OE=R",
+      "content": {
+        "summaryText": "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다.",
+        "detailParagraphs": [
+          "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인", "실제", "사실"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-RESPONSE-SE-I",
+      "claimKey": ".scenario.person_of_interest.plan_change.response",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "처음에는 혼자 상황을 정리한 뒤 가능한 다른 시간을 짧게 제안하고, 상대의 후속 행동을 보며 다음 움직임을 정하는 편이다.",
+        "detailParagraphs": [
+          "처음에는 혼자 상황을 정리한 뒤 가능한 다른 시간을 짧게 제안하고, 상대의 후속 행동을 보며 다음 움직임을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-C",
+      "claimKey": ".scenario.person_of_interest.setback.process",
+      "axisSignature": "OE=R|ER=C",
+      "content": {
+        "summaryText": "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인", "실제"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "ER",
+          "symbol": "C",
+          "matchedCues": ["차분"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-ATTENTION-SE-I",
+      "claimKey": ".scenario.work.aftermath.attention",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "부담스러운 업무가 지나간 뒤에는 혼자서 실제 진행 순서와 놓친 단서, 다음에 바꿀 작업 조건을 되짚는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 업무가 지나간 뒤에는 혼자서 실제 진행 순서와 놓친 단서, 다음에 바꿀 작업 조건을 되짚는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-RESPONSE-SM-M",
+      "claimKey": ".scenario.work.aftermath.response",
+      "axisSignature": "SM=M",
+      "content": {
+        "summaryText": "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다.",
+        "detailParagraphs": [
+          "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_SM_M_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.work.disagreement.response",
+      "axisSignature": "RO=A|SM=M",
+      "content": {
+        "summaryText": "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다.",
+        "detailParagraphs": [
+          "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_SM_M_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "A",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.work.disagreement.response",
+      "axisSignature": "RO=G|SM=K",
+      "content": {
+        "summaryText": "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다.",
+        "detailParagraphs": [
+          "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "RO",
+          "symbol": "G",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": ["기준"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-K",
+      "claimKey": ".scenario.work.group_participation.response",
+      "axisSignature": "SE=E|SM=K",
+      "content": {
+        "summaryText": "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다.",
+        "detailParagraphs": [
+          "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [
+        "AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_SM_K_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-M",
+      "claimKey": ".scenario.work.group_participation.response",
+      "axisSignature": "SE=E|SM=M",
+      "content": {
+        "summaryText": "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다.",
+        "detailParagraphs": [
+          "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "E",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": ["바꾸", "반응"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.work.need_expression.response",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "혼자 해결을 시도한 내용을 정리한 뒤 담당자에게 구체적인 질문이나 자원 요청을 하는 편이다.",
+        "detailParagraphs": [
+          "혼자 해결을 시도한 내용을 정리한 뒤 담당자에게 구체적인 질문이나 자원 요청을 하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-RESPONSE-SE-I",
+      "claimKey": ".scenario.work.success.response",
+      "axisSignature": "SE=I",
+      "content": {
+        "summaryText": "결과를 혼자 정리한 뒤 도움이 된 자료와 방법을 기록하고, 함께한 사람에게 구체적으로 공을 돌리는 편이다.",
+        "detailParagraphs": [
+          "결과를 혼자 정리한 뒤 도움이 된 자료와 방법을 기록하고, 함께한 사람에게 구체적으로 공을 돌리는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "SE",
+          "symbol": "I",
+          "matchedCues": ["혼자"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-K",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "axisSignature": "OE=N|SM=K",
+      "content": {
+        "summaryText": "가능성을 넓게 검토한 뒤 확인할 질문과 임시 기준을 세우고, 작은 실행으로 정보를 더 얻는 편이다.",
+        "detailParagraphs": [
+          "가능성을 넓게 검토한 뒤 확인할 질문과 임시 기준을 세우고, 작은 실행으로 정보를 더 얻는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["가능성"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": ["기준"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-M",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "axisSignature": "OE=N|SM=M",
+      "content": {
+        "summaryText": "여러 가설을 혼자 구조화한 뒤 현재 자원으로 시험할 수 있는 방법을 고르고, 결과를 보며 다음 접근을 유연하게 바꾸는 편이다.",
+        "detailParagraphs": [
+          "여러 가설을 혼자 구조화한 뒤 현재 자원으로 시험할 수 있는 방법을 고르고, 결과를 보며 다음 접근을 유연하게 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "N",
+          "matchedCues": ["여러"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": ["바꾸", "현재"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-K",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "axisSignature": "OE=R|SM=K",
+      "content": {
+        "summaryText": "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다.",
+        "detailParagraphs": [
+          "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": ["AXIS_SM_K_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "K",
+          "matchedCues": [],
+          "automatedLexicalCueFound": false,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "manual_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-M",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "axisSignature": "OE=R|SM=M",
+      "content": {
+        "summaryText": "작은 예시나 초안을 만들어 반응을 확인하고, 얻은 정보에 따라 다음 방식과 속도를 조정하는 편이다.",
+        "detailParagraphs": [
+          "작은 예시나 초안을 만들어 반응을 확인하고, 얻은 정보에 따라 다음 방식과 속도를 조정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "flags": [],
+      "axisCueChecks": [
+        {
+          "axisRef": "OE",
+          "symbol": "R",
+          "matchedCues": ["확인"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        },
+        {
+          "axisRef": "SM",
+          "symbol": "M",
+          "matchedCues": ["조정", "반응"],
+          "automatedLexicalCueFound": true,
+          "note": "어휘 단서 검사는 구성개념 판정을 대신하지 않으며 누락 시 수동 판독으로 보낸다."
+        }
+      ],
+      "automatedState": "passed_automated_preflight_manual_sample_review_required",
+      "independentRoleReviewState": "pending",
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "P2_FLAGGED_MANUAL_SCREEN_AND_SAMPLE_REVIEW",
+    "actions": [
+      "표시된 항목을 양방향 문장과 함께 수동 판독한다.",
+      "무표시 항목은 축·맥락별 층화 표본으로 독립 검토한다.",
+      "사용자 인지 면담에서 이해도와 단정성 오해를 확인한다."
+    ]
+  }
+}

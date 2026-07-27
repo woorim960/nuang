@@ -11,11 +11,7 @@ const loadingMessages = [
   "곧 첫 질문을 보여드릴게요",
 ] as const;
 
-export function AssessmentLoadingState({
-  mode,
-}: {
-  mode: AssessmentMode;
-}) {
+export function AssessmentLoadingState({ mode }: { mode: AssessmentMode }) {
   const [messageIndex, setMessageIndex] = useState(0);
 
   useEffect(() => {
@@ -32,7 +28,6 @@ export function AssessmentLoadingState({
         <span aria-hidden="true" />
         <div className={styles.headerCopy}>
           <p>{mode === "quick" ? "빠른 코어" : "정밀 코어"}</p>
-          <span>검사를 준비하는 중</span>
         </div>
         <span aria-label="문항 수를 확인하는 중" className={styles.count}>
           — / —
@@ -84,17 +79,12 @@ export function AssessmentLoadingState({
 
         <div className={styles.copy}>
           <h1>검사를 준비하고 있어요</h1>
-          <p>답하기 편한 화면을 준비하고 있어요.</p>
           <p aria-live="polite" className={styles.liveStatus} role="status">
             <span aria-hidden="true" className={styles.liveDot} />
             {loadingMessages[messageIndex]}
           </p>
         </div>
       </section>
-
-      <footer className={styles.actionSlot}>
-        <p className={styles.statusNote}>준비가 끝나면 바로 시작할게요.</p>
-      </footer>
     </main>
   );
 }

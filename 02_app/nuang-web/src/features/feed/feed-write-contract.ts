@@ -8,6 +8,7 @@ export type FeedWriteStepId =
   | "insert_feed_reaction"
   | "insert_feed_bookmark"
   | "insert_feed_preference"
+  | "insert_feed_report"
   | "insert_feed_poll"
   | "insert_feed_poll_vote"
   | "upload_feed_media"
@@ -20,11 +21,17 @@ export type FeedWriteFailureCode =
   | "feed_schema_not_available"
   | "feed_target_invalid"
   | "feed_target_not_supported"
+  | "feed_response_closed"
+  | "feed_rate_limited"
+  | "feed_duplicate_content"
+  | "feed_external_link_blocked"
+  | "feed_already_reported"
   | "feed_post_insert_failed"
   | "feed_comment_insert_failed"
   | "feed_reaction_write_failed"
   | "feed_bookmark_write_failed"
   | "feed_preference_write_failed"
+  | "feed_report_write_failed"
   | "feed_poll_write_failed"
   | "feed_poll_vote_write_failed"
   | "feed_media_upload_failed"
@@ -41,7 +48,7 @@ export type FeedWriteSuccessInput = {
 export const feedWriteFailures: Record<
   FeedWriteFailureCode,
   {
-    httpStatus: 400 | 403 | 500;
+    httpStatus: 400 | 403 | 409 | 429 | 500;
     message: string;
     retryable: boolean;
     step: FeedWriteStepId;
@@ -77,6 +84,36 @@ export const feedWriteFailures: Record<
     retryable: false,
     step: "validate_target",
   },
+  feed_response_closed: {
+    httpStatus: 400,
+    message: "응답이 마감된 콘텐츠예요. 기존 결과와 답변은 계속 볼 수 있어요.",
+    retryable: false,
+    step: "validate_target",
+  },
+  feed_rate_limited: {
+    httpStatus: 429,
+    message: "짧은 시간에 요청이 많았어요. 잠시 쉬었다가 다시 시도해 주세요.",
+    retryable: true,
+    step: "validate_target",
+  },
+  feed_duplicate_content: {
+    httpStatus: 409,
+    message: "같은 내용을 방금 등록했어요. 이미 올라간 내용을 확인해 주세요.",
+    retryable: false,
+    step: "validate_target",
+  },
+  feed_external_link_blocked: {
+    httpStatus: 400,
+    message: "안전이 확인되지 않은 링크가 포함되어 있어 등록할 수 없어요.",
+    retryable: false,
+    step: "validate_target",
+  },
+  feed_already_reported: {
+    httpStatus: 409,
+    message: "이미 신고한 내용이에요. 운영팀에서 확인하고 있어요.",
+    retryable: false,
+    step: "insert_feed_report",
+  },
   feed_post_insert_failed: {
     httpStatus: 500,
     message: "피드 글을 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
@@ -106,6 +143,12 @@ export const feedWriteFailures: Record<
     message: "피드 선호를 반영하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "insert_feed_preference",
+  },
+  feed_report_write_failed: {
+    httpStatus: 500,
+    message: "신고를 접수하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    retryable: true,
+    step: "insert_feed_report",
   },
   feed_poll_write_failed: {
     httpStatus: 500,

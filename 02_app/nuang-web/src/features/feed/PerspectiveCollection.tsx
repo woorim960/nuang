@@ -35,16 +35,6 @@ export function PerspectiveCollection({
   return (
     <CommunityScreenShell backHref={backHref} title="성향 놀이터 기록">
       <div className={styles.body}>
-        <section className={styles.intro}>
-          <span>MY PLAYGROUND</span>
-          <h2>내가 참여한 질문을 다시 볼 수 있어요</h2>
-          <p>
-            그때 고른 답과 지금의 투표 결과를 한곳에 모았어요. 선택이 달라졌다면
-            진행 중인 질문에서 바로 바꿀 수 있어요.
-          </p>
-          <small>이 기록은 나에게만 보여요.</small>
-        </section>
-
         {payload.state === "unauthenticated" ? (
           <RecordState
             actionHref={`/login?next=${encodeURIComponent("/feed/perspectives")}&reason=community`}
@@ -99,11 +89,6 @@ export function PerspectiveCollection({
                 <PlaygroundRecordItem key={record.voteId} record={record} />
               ))}
             </section>
-
-            <p className={styles.trustNote}>
-              놀이터 선택은 커뮤니티에서 가볍게 나눈 기록이에요. 공식 뉴앙
-              코드와 성향 리포트는 검사 응답으로만 만들어집니다.
-            </p>
           </>
         )}
       </div>
@@ -154,18 +139,13 @@ function PlaygroundRecordItem({ record }: { record: FeedPlaygroundRecord }) {
         )}
       </div>
 
-      <footer className={styles.recordFooter}>
-        <span>
-          {record.canRevote
-            ? "다른 답을 누르면 선택이 바로 바뀌어요."
-            : "질문이 끝나 당시 선택만 볼 수 있어요."}
-        </span>
-        {record.postId ? (
+      {record.postId ? (
+        <footer className={styles.recordFooter}>
           <Link href={`/feed#community-post-${record.postId}`}>
             원래 질문 보기
           </Link>
-        ) : null}
-      </footer>
+        </footer>
+      ) : null}
     </article>
   );
 }

@@ -31,7 +31,7 @@ export function ScoreBar({ label, value, tone = "primary" }: ScoreBarProps) {
         <span className="font-medium text-foreground">{label}</span>
         <span className="tabular-nums text-muted">{boundedValue}</span>
       </div>
-      <div className="h-2.5 overflow-hidden rounded-full bg-[#eceaf4]">
+      <div className="h-2.5 overflow-hidden rounded-full bg-[var(--nu-brand-100)]">
         <div
           aria-hidden="true"
           className={cn("h-full rounded-full", toneClass[tone])}

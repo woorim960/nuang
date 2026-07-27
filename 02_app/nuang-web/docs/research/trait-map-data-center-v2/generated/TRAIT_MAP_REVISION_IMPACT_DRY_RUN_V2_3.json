@@ -1,0 +1,142 @@
+{
+  "contractVersion": "nuang-trait-map-revision-impact-dry-run.v2.3",
+  "reportId": "TRAIT-MAP-REVISION-IMPACT-DRY-RUN.2.3",
+  "status": "DRY_RUN_COMPLETE_NO_COMMIT",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3",
+  "sourceProfileReportId": "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4",
+  "sourceRecompositionReportId": "TRAIT-MAP-P2-SCREENED-RECOMPOSITION-AUDIT.2.3",
+  "sourceBatchId": "EMPTY-NOT-FOR-IMPORT",
+  "customInput": false,
+  "summary": {
+    "proposalsReceived": 0,
+    "proposalsAnalyzed": 0,
+    "blockingErrors": 0,
+    "commitPerformed": false,
+    "canonicalVariantsChanged": 0,
+    "profileReferencesChanged": 0,
+    "publicationApprovalsChanged": 0
+  },
+  "blockingErrors": [],
+  "proposalImpacts": [],
+  "impactRules": [
+    {
+      "changeKind": "WORDING",
+      "scope": "해당 canonical variant를 참조하는 profile과 surface를 다시 렌더링하고 승인·인지 상태를 새 version에서 초기화한다."
+    },
+    {
+      "changeKind": "AXIS_OR_DIRECTION",
+      "scope": "같은 claim의 모든 variant, 32개 profile 매핑, 다섯 축 중 해당 이웃 edge를 전수 재조합한다."
+    },
+    {
+      "changeKind": "EVIDENCE_SCOPE",
+      "scope": "같은 canonical 문구·근거 패킷·독립 연구방법 판정을 다시 검토한다."
+    },
+    {
+      "changeKind": "SURFACE_OR_PRIVACY_SCOPE",
+      "scope": "결과·지도·비교·프로필·공유 allowlist를 전부 재계산한다."
+    },
+    {
+      "changeKind": "RETIRE",
+      "scope": "모든 profile 참조를 차단하고 승인된 fallback이 없으면 해당 claim surface를 숨긴다."
+    }
+  ],
+  "selfTest": {
+    "syntheticOnly": true,
+    "imported": false,
+    "proposal": {
+      "proposalId": "SYNTHETIC-ENGINE-SELF-TEST-NOT-IMPORTABLE",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K",
+      "contentVersion": 2,
+      "proposedContentVersion": 3,
+      "changeKinds": ["WORDING"],
+      "replacementText": "합성 영향 계산용 문구이며 원장에 반영하지 않는다.",
+      "basisEventIds": ["SYNTHETIC-SELF-TEST"]
+    },
+    "impact": {
+      "proposalId": "SYNTHETIC-ENGINE-SELF-TEST-NOT-IMPORTABLE",
+      "changeKinds": ["WORDING"],
+      "sourceCanonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K",
+      "sourceClaimKey": ".scenario.general.ordinary_choice.attention",
+      "sourceBatchId": "CAB-01",
+      "claimWideRecompositionRequired": false,
+      "affectedCanonicalVariantIds": [
+        "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K"
+      ],
+      "affectedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERGKC",
+        "ERGKQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRGKC",
+        "IRGKQ"
+      ],
+      "affectedProfileReferenceCount": 8,
+      "impactedNeighborEdges": [
+        { "leftCode": "ERAKC", "rightCode": "IRAKC", "axisRef": "SE" },
+        { "leftCode": "ERAKC", "rightCode": "ENAKC", "axisRef": "OE" },
+        { "leftCode": "ERAKC", "rightCode": "ERAMC", "axisRef": "SM" },
+        { "leftCode": "ERAKC", "rightCode": "ERAKQ", "axisRef": "ER" },
+        { "leftCode": "ERAKQ", "rightCode": "IRAKQ", "axisRef": "SE" },
+        { "leftCode": "ERAKQ", "rightCode": "ENAKQ", "axisRef": "OE" },
+        { "leftCode": "ERAKQ", "rightCode": "ERAMQ", "axisRef": "SM" },
+        { "leftCode": "ERGKC", "rightCode": "IRGKC", "axisRef": "SE" },
+        { "leftCode": "ERGKC", "rightCode": "ENGKC", "axisRef": "OE" },
+        { "leftCode": "ERGKC", "rightCode": "ERAKC", "axisRef": "RO" },
+        { "leftCode": "ERGKC", "rightCode": "ERGMC", "axisRef": "SM" },
+        { "leftCode": "ERGKC", "rightCode": "ERGKQ", "axisRef": "ER" },
+        { "leftCode": "ERGKQ", "rightCode": "IRGKQ", "axisRef": "SE" },
+        { "leftCode": "ERGKQ", "rightCode": "ENGKQ", "axisRef": "OE" },
+        { "leftCode": "ERGKQ", "rightCode": "ERAKQ", "axisRef": "RO" },
+        { "leftCode": "ERGKQ", "rightCode": "ERGMQ", "axisRef": "SM" },
+        { "leftCode": "IRAKC", "rightCode": "INAKC", "axisRef": "OE" },
+        { "leftCode": "IRAKC", "rightCode": "IRAMC", "axisRef": "SM" },
+        { "leftCode": "IRAKC", "rightCode": "IRAKQ", "axisRef": "ER" },
+        { "leftCode": "IRAKQ", "rightCode": "INAKQ", "axisRef": "OE" },
+        { "leftCode": "IRAKQ", "rightCode": "IRAMQ", "axisRef": "SM" },
+        { "leftCode": "IRGKC", "rightCode": "INGKC", "axisRef": "OE" },
+        { "leftCode": "IRGKC", "rightCode": "IRAKC", "axisRef": "RO" },
+        { "leftCode": "IRGKC", "rightCode": "IRGMC", "axisRef": "SM" },
+        { "leftCode": "IRGKC", "rightCode": "IRGKQ", "axisRef": "ER" },
+        { "leftCode": "IRGKQ", "rightCode": "INGKQ", "axisRef": "OE" },
+        { "leftCode": "IRGKQ", "rightCode": "IRAKQ", "axisRef": "RO" },
+        { "leftCode": "IRGKQ", "rightCode": "IRGMQ", "axisRef": "SM" }
+      ],
+      "affectedSurfaces": [
+        "comparison_report",
+        "public_profile",
+        "result_summary",
+        "share_card",
+        "trait_map_detail"
+      ],
+      "invalidatedRoleApprovals": 0,
+      "requiredJobs": [
+        "CREATE_NEW_CONTENT_VERSION",
+        "RESET_NEW_VERSION_APPROVALS",
+        "RECOMPOSE_32_PROFILES",
+        "RERUN_NEIGHBOR_DUPLICATE_SAFETY_GATES",
+        "CREATE_COGNITIVE_RETEST_TASK",
+        "CREATE_ROLE_REREVIEW_TASK",
+        "REBUILD_PUBLICATION_GATE"
+      ]
+    },
+    "passed": true
+  },
+  "currentState": {
+    "realRevisionProposalsImported": 0,
+    "dryRunOnly": true,
+    "ledgerMutationPerformed": false
+  },
+  "nextGate": {
+    "name": "IMPORT_VALIDATOR_AND_ATOMIC_APPLY_PIPELINE",
+    "actions": [
+      "review import JSON schema와 canonical registry를 런타임에서 검증한다.",
+      "dry-run의 blocking error가 0일 때만 새 ledger 후보를 만든다.",
+      "재조합·이웃·중복·안전 검사를 모두 통과해야 commit 후보가 된다.",
+      "실제 commit은 독립 판정·인지 결과가 들어오기 전에는 실행하지 않는다."
+    ]
+  }
+}

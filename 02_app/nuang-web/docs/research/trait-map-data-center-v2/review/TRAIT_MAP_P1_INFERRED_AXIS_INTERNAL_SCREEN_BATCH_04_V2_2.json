@@ -1,0 +1,788 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-04.0.1",
+  "batchId": "P1-IAS-04",
+  "status": "P1_INFERRED_AXIS_BATCH_04_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 7,
+    "variants": 20,
+    "retainCandidates": 7,
+    "revisionCandidates": 13,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-OE-PERSON_OF_INTEREST-AFTERMATH-ATTENTION",
+      "claimKey": ".scenario.person_of_interest.aftermath.attention",
+      "claimKind": "attention",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-PERSON_OF_INTEREST-AFTERMATH-PROCESS",
+      "claimKey": ".scenario.person_of_interest.aftermath.process",
+      "claimKind": "first_thought",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-PERSON_OF_INTEREST-DISAGREEMENT-PROCESS",
+      "claimKey": ".scenario.person_of_interest.disagreement.process",
+      "claimKind": "first_thought",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-PERSON_OF_INTEREST-NEED_EXPRESSION-ATTENTION",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "claimKind": "attention",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-PERSON_OF_INTEREST-PLAN_CHANGE-PROCESS",
+      "claimKey": ".scenario.person_of_interest.plan_change.process",
+      "claimKind": "first_thought",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-PERSON_OF_INTEREST-SETBACK-ATTENTION",
+      "claimKey": ".scenario.person_of_interest.setback.attention",
+      "claimKind": "attention",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-PERSON_OF_INTEREST-SETBACK-PROCESS",
+      "claimKey": ".scenario.person_of_interest.setback.process",
+      "claimKind": "first_thought",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-R",
+      "claimKey": ".scenario.person_of_interest.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인한 사실·조건, N은 여러 가능성·관점을 직접 보여 주며 다른 축의 우열이나 관계 불안을 R/N으로 대신 설명하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-N",
+      "claimKey": ".scenario.person_of_interest.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "부담스러운 만남이나 대화가 지나간 뒤에는 상대의 말과 자신의 표현을 다시 떠올리며, 관계가 어떻게 이어질지와 확인하지 못한 부분을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 만남이나 대화가 지나간 뒤에는 상대의 말과 자신의 표현을 다시 떠올리며, 관계가 어떻게 이어질지와 확인하지 못한 부분을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람과 중요한 대화를 마친 뒤에는 그 말이 가질 수 있는 여러 뜻과 관계가 앞으로 이어질 수 있는 방향, 다음 대화에서 새롭게 연결할 지점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 중요한 대화를 마친 뒤에는 그 말이 가질 수 있는 여러 뜻과 관계가 앞으로 이어질 수 있는 방향, 다음 대화에서 새롭게 연결할 지점을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "부담스러운 만남이나 대화가 지나간 뒤에는 상대의 말과 자신의 표현을 다시 떠올리며, 관계가 어떻게 이어질지와 확인하지 못한 부분을 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“상대가 실제로 말한 내용은 무엇이고, 내가 의미를 더해 해석한 부분은 무엇이지?”를 구분한 뒤 다음에 확인할 한 가지를 찾기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 실제로 말한 내용은 무엇이고, 내가 의미를 더해 해석한 부분은 무엇이지?”를 구분한 뒤 다음에 확인할 한 가지를 찾기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인한 사실·조건, N은 여러 가능성·관점을 직접 보여 주며 다른 축의 우열이나 관계 불안을 R/N으로 대신 설명하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-PROCESS-OE-N",
+      "claimKey": ".scenario.person_of_interest.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“그 말은 어떤 뜻이었을까?”를 되짚고 좋지 않은 결과를 걱정하면서도, “다음 연락에서 무엇을 확인할까?”를 정리하려 하기 쉽다.",
+        "detailParagraphs": [
+          "“그 말은 어떤 뜻이었을까?”를 되짚고 좋지 않은 결과를 걱정하면서도, “다음 연락에서 무엇을 확인할까?”를 정리하려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“그 말은 어떤 뜻일 수 있고, 우리 관계는 앞으로 어떤 방향으로 이어질까?”처럼 여러 해석과 가능성을 떠올리기 쉽다.",
+        "detailParagraphs": [
+          "“그 말은 어떤 뜻일 수 있고, 우리 관계는 앞으로 어떤 방향으로 이어질까?”처럼 여러 해석과 가능성을 떠올리기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“그 말은 어떤 뜻이었을까?”를 되짚고 좋지 않은 결과를 걱정하면서도, “다음 연락에서 무엇을 확인할까?”를 정리하려 하기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.disagreement.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인한 사실·조건, N은 여러 가능성·관점을 직접 보여 주며 다른 축의 우열이나 관계 불안을 R/N으로 대신 설명하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-N",
+      "claimKey": ".scenario.person_of_interest.disagreement.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“왜 다르게 생각하지?”라는 탐색과 “내 의견을 말하면 멀어지지 않을까?”라는 걱정이 동시에 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“왜 다르게 생각하지?”라는 탐색과 “내 의견을 말하면 멀어지지 않을까?”라는 걱정이 동시에 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“서로 다른 관점은 어디에서 이어질 수 있고, 이 차이로 어떤 새로운 대화가 가능할까?”를 떠올리기 쉽다.",
+        "detailParagraphs": [
+          "“서로 다른 관점은 어디에서 이어질 수 있고, 이 차이로 어떤 새로운 대화가 가능할까?”를 떠올리기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“왜 다르게 생각하지?”라는 탐색과 “내 의견을 말하면 멀어지지 않을까?”라는 걱정이 동시에 떠오르기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "SE=E|OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인한 사실·조건, N은 여러 가능성·관점을 직접 보여 주며 다른 축의 우열이나 관계 불안을 R/N으로 대신 설명하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-R",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "SE=I|OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때 감정을 크게 드러내기보다 어떤 행동이나 답을 원하는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때 감정을 크게 드러내기보다 어떤 행동이나 답을 원하는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말하기 전, 원하는 만남·연락·답변과 지금까지 확인한 상대 반응을 혼자 구체적으로 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말하기 전, 원하는 만남·연락·답변과 지금까지 확인한 상대 반응을 혼자 구체적으로 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때 감정을 크게 드러내기보다 어떤 행동이나 답을 원하는지 먼저 정리하려는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-N",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "SE=E|OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때 상대 마음과 관계가 달라질 가능성, 거절될 걱정, 다음 관계를 이어갈 표현을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때 상대 마음과 관계가 달라질 가능성, 거절될 걱정, 다음 관계를 이어갈 표현을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 주고받으며, 그 말이 관계에 열 수 있는 새로운 방향과 서로의 바람을 연결할 방법을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 주고받으며, 그 말이 관계에 열 수 있는 새로운 방향과 서로의 바람을 연결할 방법을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때 상대 마음과 관계가 달라질 가능성, 거절될 걱정, 다음 관계를 이어갈 표현을 먼저 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "SE=I|OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 먼저 혼자 감정과 바람을 정리하고, 둘이 방해받지 않고 이야기할 수 있는 때를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 먼저 혼자 감정과 바람을 정리하고, 둘이 방해받지 않고 이야기할 수 있는 때를 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말하기 전, 관계가 이어질 수 있는 여러 방향과 서로의 바람을 연결할 표현을 혼자 떠올려 보는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말하기 전, 관계가 이어질 수 있는 여러 방향과 서로의 바람을 연결할 표현을 혼자 떠올려 보는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 먼저 혼자 감정과 바람을 정리하고, 둘이 방해받지 않고 이야기할 수 있는 때를 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.plan_change.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다.",
+        "detailParagraphs": [
+          "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인한 사실·조건, N은 여러 가능성·관점을 직접 보여 주며 다른 축의 우열이나 관계 불안을 R/N으로 대신 설명하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-N",
+      "claimKey": ".scenario.person_of_interest.plan_change.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“관심이 줄어든 걸까?”를 걱정하면서도 바쁨·건강·다른 일정 같은 이유를 떠올리고, “무엇이 사실인지 확인하고 싶다”고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“관심이 줄어든 걸까?”를 걱정하면서도 바쁨·건강·다른 일정 같은 이유를 떠올리고, “무엇이 사실인지 확인하고 싶다”고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인한 사실·조건, N은 여러 가능성·관점을 직접 보여 주며 다른 축의 우열이나 관계 불안을 R/N으로 대신 설명하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-C",
+      "claimKey": ".scenario.person_of_interest.setback.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=R|ER=C",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 실제로 벌어진 일과 자신이 덧붙인 해석, 바로잡을 수 있는 부분을 나누어 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 실제로 벌어진 일과 자신이 덧붙인 해석, 바로잡을 수 있는 부분을 나누어 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 감정이 커지기 전, 실제로 벌어진 일과 상대가 직접 보인 반응, 아직 확인하지 않은 부분을 차분히 나누어 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 감정이 커지기 전, 실제로 벌어진 일과 상대가 직접 보인 반응, 아직 확인하지 않은 부분을 차분히 나누어 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 실제로 벌어진 일과 자신이 덧붙인 해석, 바로잡을 수 있는 부분을 나누어 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-Q",
+      "claimKey": ".scenario.person_of_interest.setback.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=R|ER=Q",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람과 기대한 흐름이 어긋나면 거절의 의미와 자신이 놓친 행동, 관계가 완전히 끝날 가능성이 빠르게 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 기대한 흐름이 어긋나면 거절의 의미와 자신이 놓친 행동, 관계가 완전히 끝날 가능성이 빠르게 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 실제로 벌어진 실수와 상대가 직접 보인 반응이 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 실제로 벌어진 실수와 상대가 직접 보인 반응이 먼저 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람과 기대한 흐름이 어긋나면 거절의 의미와 자신이 놓친 행동, 관계가 완전히 끝날 가능성이 빠르게 눈에 들어오는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-C",
+      "claimKey": ".scenario.person_of_interest.setback.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=N|ER=C",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람과 기대한 흐름이 어긋나면 감정이 크게 올라오기 전 실제로 무슨 일이 있었고 서로의 경계와 다음 행동이 무엇인지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 기대한 흐름이 어긋나면 감정이 크게 올라오기 전 실제로 무슨 일이 있었고 서로의 경계와 다음 행동이 무엇인지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람과 기대한 흐름이 어긋나면 감정이 크게 올라오기 전, 이 일이 여러 방식으로 해석될 수 있는 점과 관계가 다시 이어질 가능성을 차분히 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 기대한 흐름이 어긋나면 감정이 크게 올라오기 전, 이 일이 여러 방식으로 해석될 수 있는 점과 관계가 다시 이어질 가능성을 차분히 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람과 기대한 흐름이 어긋나면 감정이 크게 올라오기 전 실제로 무슨 일이 있었고 서로의 경계와 다음 행동이 무엇인지 먼저 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-Q",
+      "claimKey": ".scenario.person_of_interest.setback.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=N|ER=Q",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면, 실수의 원인과 함께 상대에게 남긴 인상과 관계의 다음 흐름이 크게 신경 쓰이는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면, 실수의 원인과 함께 상대에게 남긴 인상과 관계의 다음 흐름이 크게 신경 쓰이는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 상대가 어떻게 받아들였을지와 관계가 앞으로 달라질 여러 가능성이 한꺼번에 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면 걱정이 빠르게 커지면서, 상대가 어떻게 받아들였을지와 관계가 앞으로 달라질 여러 가능성이 한꺼번에 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "마음에 드는 사람 앞에서 실수하거나 기대와 다른 반응을 받으면, 실수의 원인과 함께 상대에게 남긴 인상과 관계의 다음 흐름이 크게 신경 쓰이는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-C",
+      "claimKey": ".scenario.person_of_interest.setback.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R|ER=C",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인한 사실·조건, N은 여러 가능성·관점을 직접 보여 주며 다른 축의 우열이나 관계 불안을 R/N으로 대신 설명하지 않는다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-Q",
+      "claimKey": ".scenario.person_of_interest.setback.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R|ER=Q",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“내가 무엇을 잘못했고, 이 답이 앞으로의 관계에 어떤 뜻이며, 다시 확인할 것은 없는지”를 되짚기 쉽다.",
+        "detailParagraphs": [
+          "“내가 무엇을 잘못했고, 이 답이 앞으로의 관계에 어떤 뜻이며, 다시 확인할 것은 없는지”를 되짚기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“내가 실제로 무엇을 잘못했고, 상대가 직접 보인 반응은 무엇이지?”를 빠르게 되짚으며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 실제로 무엇을 잘못했고, 상대가 직접 보인 반응은 무엇이지?”를 빠르게 되짚으며 걱정하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“내가 무엇을 잘못했고, 이 답이 앞으로의 관계에 어떤 뜻이며, 다시 확인할 것은 없는지”를 되짚기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-N-ER-C",
+      "claimKey": ".scenario.person_of_interest.setback.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N|ER=C",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“상대가 실제로 말한 뜻은 무엇이고, 지금 내가 존중해야 할 경계와 정리할 행동은 무엇일까?”가 먼저 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 실제로 말한 뜻은 무엇이고, 지금 내가 존중해야 할 경계와 정리할 행동은 무엇일까?”가 먼저 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“아직 한 가지 뜻으로 정해진 것은 아니니, 상대가 받아들였을 여러 가능성과 다음 만남에서 새롭게 이어질 방향을 차분히 생각해 보자”라고 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“아직 한 가지 뜻으로 정해진 것은 아니니, 상대가 받아들였을 여러 가능성과 다음 만남에서 새롭게 이어질 방향을 차분히 생각해 보자”라고 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“상대가 실제로 말한 뜻은 무엇이고, 지금 내가 존중해야 할 경계와 정리할 행동은 무엇일까?”가 먼저 떠오르기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-N-ER-Q",
+      "claimKey": ".scenario.person_of_interest.setback.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N|ER=Q",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“어디서 잘못됐고 어떻게 바로잡지?”와 “이 일로 나를 다르게 보지 않을까?”가 빠르게 이어지기 쉽다.",
+        "detailParagraphs": [
+          "“어디서 잘못됐고 어떻게 바로잡지?”와 “이 일로 나를 다르게 보지 않을까?”가 빠르게 이어지기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast_and_secondary_axis_separation",
+        "rationale": "R은 확인한 사실·경험, N은 열린 가능성·연결이 직접 드러나게 하고 SE·ER·RO가 R/N을 대신 설명하지 않도록 교정한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“상대가 어떻게 받아들였을까, 관계가 어떤 방향으로 달라질까, 다시 기회가 있을까?”처럼 여러 가능성이 빠르게 이어지며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 어떻게 받아들였을까, 관계가 어떤 방향으로 달라질까, 다시 기회가 있을까?”처럼 여러 가능성이 빠르게 이어지며 걱정하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“어디서 잘못됐고 어떻게 바로잡지?”와 “이 일로 나를 다르게 보지 않을까?”가 빠르게 이어지기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_04_RECOMPOSITION_AND_BATCH_05_SCREEN",
+    "actions": [
+      "13개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "OE·work 맥락의 P1-IAS-05를 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

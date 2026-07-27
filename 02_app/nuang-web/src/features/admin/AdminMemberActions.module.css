@@ -1,0 +1,78 @@
+.actions {
+  overflow: hidden;
+}
+
+.actionList {
+  padding: 0 1rem 0.4rem;
+}
+
+.actionList button {
+  display: grid;
+  width: 100%;
+  min-height: 70px;
+  grid-template-columns: 34px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+  border-bottom: 1px solid var(--nu-color-border);
+  color: var(--nu-color-brand-strong);
+  text-align: left;
+}
+
+.actionList button:last-child {
+  border-bottom: 0;
+}
+
+.actionList button:disabled {
+  opacity: 0.48;
+}
+
+.actionList button > svg {
+  justify-self: center;
+}
+
+.actionList strong,
+.actionList small {
+  display: block;
+}
+
+.actionList strong {
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+}
+
+.actionList small {
+  margin-top: 0.18rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+}
+
+.actionList .danger {
+  color: var(--nu-color-danger);
+}
+
+.message {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface-soft);
+  font-size: var(--nu-text-caption);
+}
+
+@media (min-width: 900px) {
+  .actionList {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .actionList button {
+    padding: 0.7rem;
+    border: 1px solid var(--admin-border, var(--nu-color-border));
+    border-radius: 10px;
+  }
+
+  .actionList button:last-child {
+    border-bottom: 1px solid var(--admin-border, var(--nu-color-border));
+  }
+}

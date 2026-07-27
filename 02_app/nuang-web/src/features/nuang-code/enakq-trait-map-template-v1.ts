@@ -33,6 +33,7 @@ export const enakqTraitMapTemplateV1 = {
       guardrail: axis.guardrail,
       label: axis.label,
       position: axis.position,
+      publicTypeName: direction.publicTypeName,
       shortToken: direction.shortToken,
       symbol: symbol as CandidateCodeSymbol,
     };

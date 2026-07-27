@@ -18,6 +18,7 @@ export const feedWriteActions = [
   "remove_reaction",
   "remove_bookmark",
   "not_interested",
+  "report_content",
   "vote_poll",
 ] as const;
 
@@ -55,6 +56,18 @@ export const feedTargetTypes = [
   "feed_post",
   "feed_comment",
   "feed_seed_card",
+] as const;
+
+export const feedContentReportReasons = [
+  "spam",
+  "harassment",
+  "hate",
+  "sexual_content",
+  "violence",
+  "privacy",
+  "fraud",
+  "self_harm",
+  "other",
 ] as const;
 
 export const feedAttachmentTypes = [
@@ -147,6 +160,16 @@ export const createFeedPreferenceRequestSchema = z.object({
   target: feedTargetSchema,
 });
 
+export const createFeedContentReportRequestSchema = z.object({
+  action: z.literal("report_content"),
+  details: z.string().trim().max(500).optional(),
+  reason: z.enum(feedContentReportReasons),
+  target: z.object({
+    id: z.string().uuid(),
+    type: z.enum(["feed_post", "feed_comment"]),
+  }),
+});
+
 export const createFeedPollVoteRequestSchema = z.object({
   action: z.literal("vote_poll"),
   clientRequestId: z.string().trim().min(8).max(128).optional(),
@@ -162,6 +185,7 @@ export const feedWriteRequestSchema = z.discriminatedUnion("action", [
   removeFeedReactionRequestSchema,
   removeFeedBookmarkRequestSchema,
   createFeedPreferenceRequestSchema,
+  createFeedContentReportRequestSchema,
   createFeedPollVoteRequestSchema,
 ]);
 

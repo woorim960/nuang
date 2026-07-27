@@ -53,7 +53,7 @@ const targetResult: CoreScoreResult = {
       symbol: "Q",
     },
   ],
-  profileName: "질문을 품은 탐구자",
+  profileName: "변화의 원인을 좇는 추적자",
 };
 
 describe("PublicComparisonReportView", () => {
@@ -91,10 +91,12 @@ describe("PublicComparisonReportView", () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("관계를 여는 지휘자")).toBeInTheDocument();
-    expect(screen.getByText("질문을 품은 탐구자")).toBeInTheDocument();
-    expect(screen.getByText("한눈에 보기")).toBeInTheDocument();
+    expect(screen.getByText("변화의 원인을 좇는 추적자")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "각자 편한 방식은 이만큼 달라요" }),
+      screen.getByRole("heading", { name: "둘의 성향 요약" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "5글자 비교" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /사람 사이 에너지/ }),
@@ -105,17 +107,16 @@ describe("PublicComparisonReportView", () => {
     expect(document.body).not.toHaveTextContent("나:");
     expect(document.body).not.toHaveTextContent("상대:");
     expect(
-      screen.getAllByText(/함께할 때 활력이 올라요/).length,
-    ).toBeGreaterThan(0);
-    expect(
-      screen.getAllByText(/혼자 정리하며 회복해요/).length,
+      screen.getAllByText(/나는 함께, 상대는 혼자/).length,
     ).toBeGreaterThan(0);
     expect(
       screen.getByRole("heading", {
-        name: "함께 있을 때 이런 차이가 보일 수 있어요",
+        name: "함께 있을 때 보이는 차이",
       }),
     ).toBeInTheDocument();
-    expect(screen.queryByText("오늘 한 가지 물어본다면")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("오늘 한 가지 물어본다면"),
+    ).not.toBeInTheDocument();
     expect(
       screen.getAllByText(
         "지금 바로 이야기할까, 생각을 정리한 뒤 다시 이야기할까?",
@@ -127,6 +128,9 @@ describe("PublicComparisonReportView", () => {
     expect(
       screen.getByText(/직접 응답, 원점수, 민감 항목/),
     ).toBeInTheDocument();
+    expect(screen.getByText(/궁합 점수가 아니에요/)).toBeInTheDocument();
+    expect(screen.getAllByText("관계를 여는 지휘자")).toHaveLength(1);
+    expect(screen.getAllByText("변화의 원인을 좇는 추적자")).toHaveLength(1);
     fireEvent.click(screen.getByRole("button", { name: /관계에 맞춰 보기/ }));
     expect(
       screen.getByRole("heading", { name: "어떤 관계에서 살펴볼까요?" }),
@@ -171,10 +175,10 @@ describe("PublicComparisonReportView", () => {
     expect(
       screen.getByText("두 사람에게 공통으로 나타난 방향"),
     ).toBeInTheDocument();
-    expect(screen.getAllByText("함께할 때 활력이 올라요")).toHaveLength(1);
+    expect(screen.getAllByText("E 외향형")).toHaveLength(1);
     expect(
       screen.getByRole("heading", {
-        name: "비슷해도 한 번 확인하면 좋은 순간이에요",
+        name: "서로 확인하면 좋은 순간",
       }),
     ).toBeInTheDocument();
     expect(

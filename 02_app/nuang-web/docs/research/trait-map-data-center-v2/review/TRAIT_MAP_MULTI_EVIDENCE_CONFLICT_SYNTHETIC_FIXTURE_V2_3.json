@@ -1,0 +1,211 @@
+{
+  "fixtureVersion": "nuang-trait-map-multi-evidence-conflict-synthetic-fixture.v2.3",
+  "sourceReportId": "TRAIT-MAP-MULTI-EVIDENCE-CONFLICT-CONTRACT.2.3",
+  "synthetic": true,
+  "cases": [
+    {
+      "caseId": "CF-01",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "fail",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "withdraw_or_rewrite",
+      "actualResult": "withdraw_or_rewrite",
+      "passed": true
+    },
+    {
+      "caseId": "CF-02",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "fail",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "blocked_trace",
+      "actualResult": "blocked_trace",
+      "passed": true
+    },
+    {
+      "caseId": "CF-03",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "fail",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "blocked_scope_or_context",
+      "actualResult": "blocked_scope_or_context",
+      "passed": true
+    },
+    {
+      "caseId": "CF-04",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "transfer_unestablished",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "blocked_scope_or_context",
+      "actualResult": "blocked_scope_or_context",
+      "passed": true
+    },
+    {
+      "caseId": "CF-05",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "no_signal",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "narrow_rewrite_or_archive",
+      "actualResult": "narrow_rewrite_or_archive",
+      "passed": true
+    },
+    {
+      "caseId": "CF-06",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "direction_conflict",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "narrow_rewrite_or_archive",
+      "actualResult": "narrow_rewrite_or_archive",
+      "passed": true
+    },
+    {
+      "caseId": "CF-07",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "split",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "adjudicate_without_release",
+      "actualResult": "adjudicate_without_release",
+      "passed": true
+    },
+    {
+      "caseId": "CF-08",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "fail",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "revise_and_retest",
+      "actualResult": "revise_and_retest",
+      "passed": true
+    },
+    {
+      "caseId": "CF-09",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "missing"
+      },
+      "expectedResult": "eligible_research_candidate_not_public",
+      "actualResult": "eligible_research_candidate_not_public",
+      "passed": true
+    },
+    {
+      "caseId": "CF-10",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "eligible_for_explicit_surface_allowlist",
+      "actualResult": "eligible_for_explicit_surface_allowlist",
+      "passed": true
+    },
+    {
+      "caseId": "CF-11",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "independent_discovery_confirmation_pass",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "fail",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "withdraw_or_rewrite",
+      "actualResult": "withdraw_or_rewrite",
+      "passed": true
+    },
+    {
+      "caseId": "CF-12",
+      "synthetic": true,
+      "states": {
+        "structural_trace": "pass",
+        "semantic_scope": "direct_or_explicitly_limited",
+        "context_applicability": "exact_or_directly_validated",
+        "scenario_direct_validation": "technical_positive_synthetic_only",
+        "independent_seven_role_review": "required_roles_pass",
+        "cognitive_comprehension": "meaning_and_discrimination_pass",
+        "safety_and_stigma": "pass",
+        "customer_publication_approval": "pass"
+      },
+      "expectedResult": "blocked_direct_validation",
+      "actualResult": "blocked_direct_validation",
+      "passed": true
+    }
+  ]
+}

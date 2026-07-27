@@ -7,7 +7,6 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import Link from "next/link";
-import { StatusPill } from "@/components/ui/StatusPill";
 import {
   helpBoundaries,
   helpPrivacyNotice,
@@ -20,11 +19,11 @@ import {
 import { cn } from "@/lib/utils/cn";
 
 const toneClass: Record<HelpResource["tone"], string> = {
-  danger: "border-danger/25 bg-[#fff1ef] text-danger",
+  danger: "border-danger/25 bg-[var(--nu-reaction-50)] text-danger",
   primary: "border-primary/20 bg-surface-soft text-primary",
-  water: "border-water/20 bg-[#edf5ff] text-water",
-  forest: "border-forest/20 bg-[#edf8f3] text-forest",
-  sun: "border-sun/25 bg-[#fff7e8] text-[#936300]",
+  water: "border-water/20 bg-[var(--nu-info-50)] text-water",
+  forest: "border-forest/20 bg-[var(--nu-community-50)] text-forest",
+  sun: "border-sun/25 bg-[var(--nu-warm-50)] text-[var(--nu-warm-700)]",
   neutral: "border-line bg-white text-muted",
 };
 
@@ -40,19 +39,17 @@ export default function HelpPage() {
       </Link>
 
       <header className="mt-5">
-        <StatusPill tone="caution">도움 연결 허브</StatusPill>
-        <h1 className="mt-3 text-2xl font-black leading-8">
-          혼자 견디기 어려운 순간
+        <h1 className="text-2xl font-black leading-8">
+          지금 도움이 필요하다면
         </h1>
         <p className="mt-2 text-sm leading-6 text-muted">
-          이곳은 검사가 아니라 도움 정보입니다. 위기와 치료가 필요한 주제는
-          점수화하지 않고, 안전한 연결을 먼저 보여줍니다.
+          위기와 치료가 필요한 상황은 검사하지 않고 도움받을 곳을 안내합니다.
         </p>
       </header>
 
       <section
         aria-labelledby="urgent-help-title"
-        className="mt-5 rounded-lg border border-danger/25 bg-[#fff1ef] p-4"
+        className="mt-5 rounded-lg border border-danger/25 bg-[var(--nu-reaction-50)] p-4"
       >
         <div className="flex items-start gap-3">
           <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-danger">
@@ -119,7 +116,7 @@ export default function HelpPage() {
 
       <section className="mt-5 rounded-lg border border-line bg-white p-4">
         <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[#eff0f6] text-muted">
+          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[var(--nu-info-50)] text-muted">
             <Info aria-hidden="true" size={20} />
           </div>
           <div>
@@ -155,7 +152,9 @@ function ResourceCard({ resource }: { resource: HelpResource }) {
     <article className="rounded-lg border border-line bg-white p-4 shadow-[var(--shadow-soft)]">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-muted">{resource.availability}</p>
+          <p className="text-sm font-semibold text-muted">
+            {resource.availability}
+          </p>
           <h3 className="mt-1 text-lg font-bold">{resource.title}</h3>
         </div>
         {resource.phone && (
@@ -173,7 +172,7 @@ function ResourceCard({ resource }: { resource: HelpResource }) {
       <div className="mt-3 flex flex-wrap gap-2">
         {resource.fit.map((item) => (
           <span
-            className="rounded-full bg-[#eff0f6] px-3 py-1 text-xs font-semibold text-muted"
+            className="rounded-full bg-[var(--nu-info-50)] px-3 py-1 text-xs font-semibold text-muted"
             key={item}
           >
             {item}

@@ -1,0 +1,68 @@
+{
+  "registerVersion": "nuang-trait-map-p0-preregistration-lock-register.v2.3",
+  "sourceReportId": "TRAIT-MAP-P0-PREREGISTRATION-DECISION-TABLE.2.3",
+  "state": "awaiting_external_registration_and_sample_size_lock",
+  "locks": [
+    {
+      "lockId": "PREREG-DVM-P0-01",
+      "moduleId": "DVM-P0-01",
+      "stimulusHash": "3eb452971f9be7400b2f9a6b2bfd6c100126c3d16cd158d6906f7fb9935b862d",
+      "responseSequenceHash": "e2589e227d5f4d51fb3304045ea46828647e2c0ac89963e0bb0f8fc2386ec815",
+      "sampleSizeState": "pending_blinded_feasibility_and_power_simulation",
+      "externalRegistryUrl": null,
+      "registeredAt": null,
+      "executionAuthorized": false
+    },
+    {
+      "lockId": "PREREG-DVM-P0-02",
+      "moduleId": "DVM-P0-02",
+      "stimulusHash": "2119816cb5ceb01779101f9d1cbc3dca56815b4ce95ee5a07daef638e00d4f35",
+      "responseSequenceHash": "e2589e227d5f4d51fb3304045ea46828647e2c0ac89963e0bb0f8fc2386ec815",
+      "sampleSizeState": "pending_blinded_feasibility_and_power_simulation",
+      "externalRegistryUrl": null,
+      "registeredAt": null,
+      "executionAuthorized": false
+    },
+    {
+      "lockId": "PREREG-DVM-P0-03",
+      "moduleId": "DVM-P0-03",
+      "stimulusHash": "b429c7b2f48a5dddbfed42760e3ac15359f2c330b2bc6437a4e9bcdb73c4fe55",
+      "responseSequenceHash": "e2589e227d5f4d51fb3304045ea46828647e2c0ac89963e0bb0f8fc2386ec815",
+      "sampleSizeState": "pending_blinded_feasibility_and_power_simulation",
+      "externalRegistryUrl": null,
+      "registeredAt": null,
+      "executionAuthorized": false
+    },
+    {
+      "lockId": "PREREG-DVM-P0-04",
+      "moduleId": "DVM-P0-04",
+      "stimulusHash": "444694adcddd3bb0b0404a5b80e56e5fbd894f264c5d7b530ea6e09168709229",
+      "responseSequenceHash": "e2589e227d5f4d51fb3304045ea46828647e2c0ac89963e0bb0f8fc2386ec815",
+      "sampleSizeState": "pending_blinded_feasibility_and_power_simulation",
+      "externalRegistryUrl": null,
+      "registeredAt": null,
+      "executionAuthorized": false
+    },
+    {
+      "lockId": "PREREG-DVM-P0-05",
+      "moduleId": "DVM-P0-05",
+      "stimulusHash": "1bfb1134cfa786e0f4cf54075a82367ea6c565ebc69db8282e2c99b445dd7f79",
+      "responseSequenceHash": "e2589e227d5f4d51fb3304045ea46828647e2c0ac89963e0bb0f8fc2386ec815",
+      "sampleSizeState": "pending_blinded_feasibility_and_power_simulation",
+      "externalRegistryUrl": null,
+      "registeredAt": null,
+      "executionAuthorized": false
+    },
+    {
+      "lockId": "PREREG-DVM-P0-06",
+      "moduleId": "DVM-P0-06",
+      "stimulusHash": "6c1cfe96d4675e5d16e28e1660ff089a9837fbf2a53856d0c3dfe1e285213f25",
+      "responseSequenceHash": "e2589e227d5f4d51fb3304045ea46828647e2c0ac89963e0bb0f8fc2386ec815",
+      "sampleSizeState": "pending_blinded_feasibility_and_power_simulation",
+      "externalRegistryUrl": null,
+      "registeredAt": null,
+      "executionAuthorized": false
+    }
+  ],
+  "approvals": []
+}

@@ -28,7 +28,7 @@ export function PublicProfileImageView({
   return (
     <span
       className={cn(
-        "relative block shrink-0 overflow-hidden rounded-full bg-[#f4f4f4]",
+        "relative block shrink-0 overflow-hidden rounded-full bg-[var(--nu-neutral-75)]",
         sizeClass[size],
         className,
       )}

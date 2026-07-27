@@ -1,0 +1,2684 @@
+{
+  "contractVersion": "nuang-trait-map-common-surface-contract-audit.v2.2",
+  "reportId": "TRAIT-MAP-COMMON-SURFACE-AUDIT.0.1",
+  "status": "COMMON_CONTENT_PERSONALIZATION_BLOCK_CONTRACT_PASSED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P0-REVISED.0.1",
+  "sourceProfileRebaseReportId": "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.3",
+  "summary": {
+    "commonEntries": 55,
+    "expectedCommonEntries": 55,
+    "referencesAcrossProfiles": 1760,
+    "entriesReferencedByAll32Codes": 55,
+    "entriesBlockedFromAllPersonalizedSurfaces": 55,
+    "violations": 0,
+    "independentlyApprovedNeutralContextCopies": 0,
+    "customerApprovedEntries": 0
+  },
+  "productContract": {
+    "meaning": "COMMON은 코드 차이를 설명하는 성향 결과가 아니라 모든 코드가 공유하는 상황 계보다.",
+    "currentUse": "연구 계보와 데이터 완전성 감사에만 사용한다.",
+    "prohibitedUse": "내 결과, 성향지도 상세, 나와 비교, 공개 프로필, 공유 카드에서 개인 특성처럼 노출하지 않는다.",
+    "futureNeutralRewrite": "상황 안내가 필요하면 ‘이 상황에서 무엇을 떠올렸는지 살펴봅니다’처럼 개인 경향을 단정하지 않는 별도 UI 문구로 작성하고 canonical 성향 문장과 분리한다."
+  },
+  "prohibitedPersonalizedSurfaces": [
+    "result_summary",
+    "trait_map_detail",
+    "comparison_report",
+    "public_profile",
+    "share_card"
+  ],
+  "violations": [],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-general-success-communication-common",
+      "batchId": "CAB-01",
+      "scenarioRef": "SCN-GENERAL-10",
+      "claimKey": ".scenario.general.success.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "막연하게 운이 좋았다고 넘기기보다 잘된 과정과 도움을 준 사람을 구체적으로 말하고, 다음에 이어갈 한 가지를 덧붙이는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "막연하게 운이 좋았다고 넘기기보다 잘된 과정과 도움을 준 사람을 구체적으로 말하고, 다음에 이어갈 한 가지를 덧붙이는 방식이 자연스럽다.",
+          "도움을 준 사람과 잘된 지점을 구체적으로 말하고, 기쁨을 함께 나눈 뒤 다음 목표를 제안하는 표현이 자연스럽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-general-boundary-process-common",
+      "batchId": "CAB-02",
+      "scenarioRef": "SCN-GENERAL-9",
+      "claimKey": ".scenario.general.boundary.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“거절하면 상대가 어떻게 느낄까?”라는 걱정이 먼저 올라와도 “계속 지킬 수 있는 기준을 분명히 말해야 한다”는 생각이 뒤따르기 쉽다.",
+        "detailParagraphs": [
+          "“거절하면 상대가 어떻게 느낄까?”라는 걱정이 먼저 올라와도 “계속 지킬 수 있는 기준을 분명히 말해야 한다”는 생각이 뒤따르기 쉽다.",
+          "“내가 지키고 싶은 정확한 기준은 무엇이고, 상대가 이해할 수 있게 어떻게 말하지?”를 정리하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-general-boundary-response-common",
+      "batchId": "CAB-02",
+      "scenarioRef": "SCN-GENERAL-9",
+      "claimKey": ".scenario.general.boundary.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "말을 고르는 시간이 필요하지만, 기준이 정리되면 상대를 존중하는 표현으로 거절하고 이후에도 같은 선을 유지하려는 편이다.",
+        "detailParagraphs": [
+          "말을 고르는 시간이 필요하지만, 기준이 정리되면 상대를 존중하는 표현으로 거절하고 이후에도 같은 선을 유지하려는 편이다.",
+          "즉시 크게 반응하기보다 적절한 때에 구체적인 기준을 말하고, 반복되면 예고한 대응을 실행하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUCCESS-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-success-attention-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-10",
+      "claimKey": ".scenario.family.success.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "가족에게 좋은 일이 생기면 결과와 함께 그동안의 노력, 함께 도운 사람, 모두가 기쁨을 나눌 방법이 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "가족에게 좋은 일이 생기면 결과와 함께 그동안의 노력, 함께 도운 사람, 모두가 기쁨을 나눌 방법이 먼저 눈에 들어오는 경향이 있다.",
+          "가족에게 좋은 일이 생기면 큰 축하 표현보다 그 사람이 실제로 애쓴 과정과 앞으로 달라질 생활을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUCCESS-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-success-process-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-10",
+      "claimKey": ".scenario.family.success.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“어떤 노력이 결과를 만들었고, 지금 가족에게 실질적으로 필요한 축하는 무엇일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 노력이 결과를 만들었고, 지금 가족에게 실질적으로 필요한 축하는 무엇일까?”를 생각하기 쉽다.",
+          "“얼마나 기다렸던 일인지 알아봐 주고 싶다”와 “어떻게 함께 축하하면 좋을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUCCESS-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-success-response-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-10",
+      "claimKey": ".scenario.family.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "기쁜 감정을 적극적으로 표현하고 구체적인 노력을 칭찬하며, 가족이 원하는 방식으로 축하 자리를 만들거나 다음 준비를 돕는 편이다.",
+        "detailParagraphs": [
+          "기쁜 감정을 적극적으로 표현하고 구체적인 노력을 칭찬하며, 가족이 원하는 방식으로 축하 자리를 만들거나 다음 준비를 돕는 편이다.",
+          "구체적인 노력을 알아봐 주고 식사 준비나 필요한 물건처럼 바로 도움이 되는 방식으로 축하를 보태는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUCCESS-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-success-communication-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-10",
+      "claimKey": ".scenario.family.success.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“그동안 매일 준비한 게 결국 결과로 이어졌네. 오늘은 무엇을 하고 싶어?”처럼 관찰한 노력과 선택권을 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“그동안 매일 준비한 게 결국 결과로 이어졌네. 오늘은 무엇을 하고 싶어?”처럼 관찰한 노력과 선택권을 함께 말하는 방식이 자연스럽다.",
+          "성공을 가족 전체의 기대나 다음 목표로 곧바로 바꾸지 않고 당사자가 느끼는 의미와 원하는 축하 방식을 묻는 말하기가 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-setback-attention-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-11",
+      "claimKey": ".scenario.family.setback.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "가족이 실수하거나 어려움을 겪으면 무슨 일이 있었고 당장 해결해야 할 문제가 무엇인지, 가족이 원하는 도움이 무엇인지 먼저 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 실수하거나 어려움을 겪으면 무슨 일이 있었고 당장 해결해야 할 문제가 무엇인지, 가족이 원하는 도움이 무엇인지 먼저 구분하려는 경향이 있다.",
+          "가족이 실패하거나 힘든 일을 겪으면 상한 마음과 현실적으로 막힌 원인, 지금 필요한 도움이 무엇인지 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-setback-response-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-11",
+      "claimKey": ".scenario.family.setback.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "상대의 이야기를 듣고 원하는 도움을 물은 뒤, 동의가 있으면 정보 찾기·일정 정리·실제 지원으로 이어가는 편이다.",
+        "detailParagraphs": [
+          "상대의 이야기를 듣고 원하는 도움을 물은 뒤, 동의가 있으면 정보 찾기·일정 정리·실제 지원으로 이어가는 편이다.",
+          "상황을 들은 뒤 필요한 지원을 물어보고, 요청받은 범위에서 연락·정리·실행처럼 구체적인 도움을 제공하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-setback-communication-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-11",
+      "claimKey": ".scenario.family.setback.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“지금은 내 이야기를 들어주길 원하는지, 같이 방법을 찾길 원하는지 알려줘”처럼 지원 종류를 선택할 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금은 내 이야기를 들어주길 원하는지, 같이 방법을 찾길 원하는지 알려줘”처럼 지원 종류를 선택할 수 있게 묻는 방식이 잘 맞는다.",
+          "“지금은 이야기를 들어주는 게 좋을까, 같이 처리할 일이 있을까?”처럼 도움 방식을 가족이 고르게 하는 말이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-aftermath-response-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-12",
+      "claimKey": ".scenario.family.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "바로 감정을 길게 나누기보다 생각이 정리된 뒤 필요한 가족에게 다시 말을 걸고, 다음에 지킬 구체적인 약속을 제안하는 편이다.",
+        "detailParagraphs": [
+          "바로 감정을 길게 나누기보다 생각이 정리된 뒤 필요한 가족에게 다시 말을 걸고, 다음에 지킬 구체적인 약속을 제안하는 편이다.",
+          "상태를 다시 확인하고 필요한 일을 정리하며, 말로 끝낸 약속을 실제 분담이나 일정 변화로 이어가려는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-group-participation-attention-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-3",
+      "claimKey": ".scenario.family.group_participation.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "가족 모임에서는 분위기를 계속 이끌기보다 필요한 준비가 잘 되어 있는지, 실제로 해결해야 할 일과 자신의 역할이 무엇인지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족 모임에서는 분위기를 계속 이끌기보다 필요한 준비가 잘 되어 있는지, 실제로 해결해야 할 일과 자신의 역할이 무엇인지 먼저 살피는 경향이 있다.",
+          "가족 모임에서는 대화에서 빠진 사람이 없는지, 어색해진 지점은 없는지, 모두가 함께 즐길 화제가 무엇인지 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-group-participation-process-common",
+      "batchId": "CAB-03",
+      "scenarioRef": "SCN-FAMILY-3",
+      "claimKey": ".scenario.family.group_participation.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“분위기를 자연스럽게 이어가려면 무엇을 말하면 좋을까?”와 “누가 지금 불편하거나 소외됐을까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“분위기를 자연스럽게 이어가려면 무엇을 말하면 좋을까?”와 “누가 지금 불편하거나 소외됐을까?”를 생각하기 쉽다.",
+          "“내가 지금 보탤 수 있는 일은 무엇이고, 굳이 꺼내지 않아도 되는 이야기는 무엇일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-family-boundary-communication-common",
+      "batchId": "CAB-04",
+      "scenarioRef": "SCN-FAMILY-9",
+      "claimKey": ".scenario.family.boundary.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“내 방에 들어오기 전에는 먼저 물어봐 줘. 오늘부터는 이 기준을 지키고 싶어”처럼 대상 행동과 원하는 기준을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“내 방에 들어오기 전에는 먼저 물어봐 줘. 오늘부터는 이 기준을 지키고 싶어”처럼 대상 행동과 원하는 기준을 분명히 말하는 방식이 잘 맞는다.",
+          "“이번에는 맡기 어려워. 대신 여기까지는 도울 수 있어”처럼 거절·이유·가능한 범위를 짧게 나눠 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-success-communication-common",
+      "batchId": "CAB-05",
+      "scenarioRef": "SCN-FRIEND-10",
+      "claimKey": ".scenario.friend.success.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“네가 그 부분을 오래 준비한 걸 알아. 정말 잘됐다”처럼 알고 있는 과정과 축하를 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“네가 그 부분을 오래 준비한 걸 알아. 정말 잘됐다”처럼 알고 있는 과정과 축하를 함께 말하는 방식이 자연스럽다.",
+          "비교하거나 조언으로 넘어가기보다 친구가 가장 기뻤던 순간과 원하는 축하 방식을 묻는 말하기가 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SETBACK-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-setback-response-common",
+      "batchId": "CAB-05",
+      "scenarioRef": "SCN-FRIEND-11",
+      "claimKey": ".scenario.friend.setback.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "친구의 말을 차분히 듣고 원하는 지원을 물은 뒤, 필요하면 일정 정리·정보 찾기·동행처럼 구체적인 행동을 제안하는 편이다.",
+        "detailParagraphs": [
+          "친구의 말을 차분히 듣고 원하는 지원을 물은 뒤, 필요하면 일정 정리·정보 찾기·동행처럼 구체적인 행동을 제안하는 편이다.",
+          "친구의 말을 듣고 원하는 도움을 확인한 뒤, 함께 방법을 찾거나 실제로 할 수 있는 지원을 구체적으로 제안하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SETBACK-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-setback-communication-common",
+      "batchId": "CAB-05",
+      "scenarioRef": "SCN-FRIEND-11",
+      "claimKey": ".scenario.friend.setback.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“지금은 들어줄까, 방법을 같이 찾을까, 아니면 실제로 도울 일이 있을까?”처럼 도움의 종류를 선택하게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금은 들어줄까, 방법을 같이 찾을까, 아니면 실제로 도울 일이 있을까?”처럼 도움의 종류를 선택하게 묻는 방식이 잘 맞는다.",
+          "“지금은 그냥 들어줄까, 아니면 같이 방법을 찾아볼까?”처럼 친구가 도움 방식을 선택하도록 묻는 말이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-AFTERMATH-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-aftermath-process-common",
+      "batchId": "CAB-05",
+      "scenarioRef": "SCN-FRIEND-12",
+      "claimKey": ".scenario.friend.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“내가 실제로 잘못 전달한 부분은 무엇이고, 친구에게 직접 물어야 할 부분은 무엇이지?”를 나누어 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 실제로 잘못 전달한 부분은 무엇이고, 친구에게 직접 물어야 할 부분은 무엇이지?”를 나누어 생각하기 쉽다.",
+          "대화의 앞뒤를 다시 떠올리며 “무엇을 더 확인해야 하고 다음에는 어떻게 다르게 행동할까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-AFTERMATH-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-aftermath-communication-common",
+      "batchId": "CAB-05",
+      "scenarioRef": "SCN-FRIEND-12",
+      "claimKey": ".scenario.friend.aftermath.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“그때 내 말이 이렇게 들렸을 수 있겠더라. 내 뜻은 이거였고, 다음에는 먼저 확인할게”처럼 사실·책임·다음 행동을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“그때 내 말이 이렇게 들렸을 수 있겠더라. 내 뜻은 이거였고, 다음에는 먼저 확인할게”처럼 사실·책임·다음 행동을 연결해 말하는 방식이 자연스럽다.",
+          "“지난 일에서 내가 놓친 게 있는지 듣고 싶어. 다음에는 이 부분을 바꾸려고 해”처럼 확인과 후속 행동을 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-uncertainty-attention-common",
+      "batchId": "CAB-06",
+      "scenarioRef": "SCN-FRIEND-5",
+      "claimKey": ".scenario.friend.uncertainty.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "친구의 답장이 늦거나 태도가 달라 보이면 바로 관계 문제로 단정하기보다 실제로 달라진 행동과 마지막 대화, 확인 가능한 상황을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "친구의 답장이 늦거나 태도가 달라 보이면 바로 관계 문제로 단정하기보다 실제로 달라진 행동과 마지막 대화, 확인 가능한 상황을 먼저 살피는 경향이 있다.",
+          "친구의 연락이 줄거나 관계의 분위기가 분명하지 않으면 최근 상호 행동과 가능한 이유, 관계에 남은 관심을 함께 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-uncertainty-response-common",
+      "batchId": "CAB-06",
+      "scenarioRef": "SCN-FRIEND-5",
+      "claimKey": ".scenario.friend.uncertainty.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "한 번의 답장이나 침묵으로 우정을 결론 내리기보다 최근 행동을 돌아보고, 필요한 경우 부담이 적은 안부로 직접 확인하는 편이다.",
+        "detailParagraphs": [
+          "한 번의 답장이나 침묵으로 우정을 결론 내리기보다 최근 행동을 돌아보고, 필요한 경우 부담이 적은 안부로 직접 확인하는 편이다.",
+          "혼자 생각을 정리한 뒤 필요한 경우 안부를 짧게 묻고, 답을 재촉하기보다 친구의 실제 반응을 기다리는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-uncertainty-communication-common",
+      "batchId": "CAB-06",
+      "scenarioRef": "SCN-FRIEND-5",
+      "claimKey": ".scenario.friend.uncertainty.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“요즘 연락이 뜸해서 잘 지내는지 궁금했어. 여유 있을 때 알려줘”처럼 관찰한 변화와 관심을 말하되 답할 시간을 남기는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“요즘 연락이 뜸해서 잘 지내는지 궁금했어. 여유 있을 때 알려줘”처럼 관찰한 변화와 관심을 말하되 답할 시간을 남기는 방식이 잘 맞는다.",
+          "“요즘 답이 늦어서 바쁜가 했어. 괜찮을 때 근황 알려줘”처럼 관찰한 변화와 답할 여유를 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-need-expression-process-common",
+      "batchId": "CAB-06",
+      "scenarioRef": "SCN-FRIEND-8",
+      "claimKey": ".scenario.friend.need_expression.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“내가 너무 많이 바라는 건 아닐까?”를 걱정하면서도 말을 하지 않으면 관계가 더 불분명해질 수 있다고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 너무 많이 바라는 건 아닐까?”를 걱정하면서도 말을 하지 않으면 관계가 더 불분명해질 수 있다고 생각하기 쉽다.",
+          "“내가 혼자 해결할 수 없는 부분은 무엇이고, 이 친구에게 어느 정도까지 부탁해도 될까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-boundary-process-common",
+      "batchId": "CAB-06",
+      "scenarioRef": "SCN-FRIEND-9",
+      "claimKey": ".scenario.friend.boundary.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“이 말을 하면 친구가 멀어지지 않을까?”라는 걱정과 “계속 편하게 지내려면 지금 알려야 한다”는 생각이 함께 들기 쉽다.",
+        "detailParagraphs": [
+          "“이 말을 하면 친구가 멀어지지 않을까?”라는 걱정과 “계속 편하게 지내려면 지금 알려야 한다”는 생각이 함께 들기 쉽다.",
+          "“친구를 거절하는 것이 아니라 어떤 행동을 바꿔달라고 말해야 하지?”를 혼자 정리하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-friend-boundary-response-common",
+      "batchId": "CAB-06",
+      "scenarioRef": "SCN-FRIEND-9",
+      "claimKey": ".scenario.friend.boundary.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "표현을 고른 뒤 먼저 대화를 열어 불편했던 행동과 원하는 변화를 말하고, 친구의 반응을 들으며 경계를 유지하는 편이다.",
+        "detailParagraphs": [
+          "표현을 고른 뒤 먼저 대화를 열어 불편했던 행동과 원하는 변화를 말하고, 친구의 반응을 들으며 경계를 유지하는 편이다.",
+          "감정이 크게 쌓이기 전에 구체적인 행동 기준을 말하고, 친구 반응을 보며 이후의 거리와 연락 방식을 조정하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUCCESS-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-partner-success-attention-common",
+      "batchId": "CAB-07",
+      "scenarioRef": "SCN-PARTNER-10",
+      "claimKey": ".scenario.partner.success.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "연인에게 좋은 일이 생기면 결과 자체뿐 아니라 그 과정에서 연인이 애쓴 점과 지금 어떤 방식으로 기쁨을 나누고 싶은지를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 좋은 일이 생기면 결과 자체뿐 아니라 그 과정에서 연인이 애쓴 점과 지금 어떤 방식으로 기쁨을 나누고 싶은지를 먼저 살피는 경향이 있다.",
+          "연인에게 좋은 일이 생기면 결과만 크게 축하하기보다 그동안 실제로 들인 노력과 잘된 이유, 연인이 원하는 축하 방식을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUCCESS-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-partner-success-process-common",
+      "batchId": "CAB-07",
+      "scenarioRef": "SCN-PARTNER-10",
+      "claimKey": ".scenario.partner.success.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“얼마나 기쁠까, 어떤 노력이 드디어 인정받은 걸까?”를 떠올리고 둘이 함께 축하할 새로운 방법까지 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“얼마나 기쁠까, 어떤 노력이 드디어 인정받은 걸까?”를 떠올리고 둘이 함께 축하할 새로운 방법까지 생각하기 쉽다.",
+          "“어떤 과정이 좋은 결과로 이어졌고, 상대는 지금 어떻게 축하받고 싶을까?”를 구체적으로 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUCCESS-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-partner-success-communication-common",
+      "batchId": "CAB-07",
+      "scenarioRef": "SCN-PARTNER-10",
+      "claimKey": ".scenario.partner.success.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“지난주에 그 부분을 계속 고친 게 결국 통했네. 오늘은 어떻게 축하하고 싶어?”처럼 관찰한 노력과 선택권을 함께 전하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지난주에 그 부분을 계속 고친 게 결국 통했네. 오늘은 어떻게 축하하고 싶어?”처럼 관찰한 노력과 선택권을 함께 전하는 방식이 잘 맞는다.",
+          "“정말 잘했어”에서 끝내기보다 잘된 과정과 의미를 구체적으로 묻고, 축하 방식은 상대가 고를 수 있게 제안하는 말하기가 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-partner-need-expression-process-common",
+      "batchId": "CAB-08",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKey": ".scenario.partner.need_expression.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“내가 원하는 걸 말하면 부담스러워할까?”라는 걱정과 “관계를 위해 솔직히 말해야 한다”는 생각이 함께 들기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 걸 말하면 부담스러워할까?”라는 걱정과 “관계를 위해 솔직히 말해야 한다”는 생각이 함께 들기 쉽다.",
+          "“내가 원하는 것은 정확히 무엇이고, 상대가 실행할 수 있게 어떻게 말해야 하지?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-partner-boundary-process-common",
+      "batchId": "CAB-08",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKey": ".scenario.partner.boundary.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“이 말을 하면 관계가 흔들리지 않을까?”라는 걱정이 생겨도 “존중받는 관계를 위해 기준을 알려야 한다”는 생각이 뒤따르기 쉽다.",
+        "detailParagraphs": [
+          "“이 말을 하면 관계가 흔들리지 않을까?”라는 걱정이 생겨도 “존중받는 관계를 위해 기준을 알려야 한다”는 생각이 뒤따르기 쉽다.",
+          "“상대를 거절하는 것과 이 행동을 거절하는 것을 어떻게 분명히 나누어 말하지?”를 정리하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-partner-boundary-response-common",
+      "batchId": "CAB-08",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKey": ".scenario.partner.boundary.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "말을 고른 뒤 대화를 먼저 열어 불편했던 행동과 원하는 경계를 설명하고, 연인의 반응을 들으며 이후 기준을 지키는 편이다.",
+        "detailParagraphs": [
+          "말을 고른 뒤 대화를 먼저 열어 불편했던 행동과 원하는 경계를 설명하고, 연인의 반응을 들으며 이후 기준을 지키는 편이다.",
+          "감정이 크게 쌓이기 전에 구체적인 경계를 말하고, 이후 상대가 기준을 존중하는지를 실제 행동으로 확인하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-success-attention-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "claimKey": ".scenario.person_of_interest.success.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "마음에 드는 사람에게 좋은 일이 생기면 그 사람이 기뻐하는 방식과 노력한 과정, 함께 축하할 수 있는 자연스러운 계기가 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 좋은 일이 생기면 그 사람이 기뻐하는 방식과 노력한 과정, 함께 축하할 수 있는 자연스러운 계기가 먼저 눈에 들어오는 경향이 있다.",
+          "마음에 드는 사람에게 좋은 일이 생기면 과장된 반응보다 그 사람이 실제로 노력한 부분과 결과가 가지는 구체적인 의미를 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-success-process-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "claimKey": ".scenario.person_of_interest.success.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“진심으로 축하해 주고 싶다”는 마음과 함께, “이 기회에 대화를 더 이어가도 상대가 편할까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“진심으로 축하해 주고 싶다”는 마음과 함께, “이 기회에 대화를 더 이어가도 상대가 편할까?”를 생각하기 쉽다.",
+          "“어떤 노력이 가장 크게 작용했고, 이 사람이 특히 기뻐하는 지점은 무엇일까?”를 떠올리기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-success-response-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "claimKey": ".scenario.person_of_interest.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "성과를 구체적으로 축하하고 더 듣고 싶다는 관심을 보이되, 축하를 관계 진전의 수단으로 밀어붙이지 않고 상대 반응에 맞추는 편이다.",
+        "detailParagraphs": [
+          "성과를 구체적으로 축하하고 더 듣고 싶다는 관심을 보이되, 축하를 관계 진전의 수단으로 밀어붙이지 않고 상대 반응에 맞추는 편이다.",
+          "짧더라도 구체적으로 축하하고, 상대가 말하고 싶어 하는 과정에 질문을 더하며 관심을 보여주는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUCCESS-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-success-communication-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "claimKey": ".scenario.person_of_interest.success.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "잘된 점을 구체적으로 알아봐 주고 “어떻게 축하하고 싶어?”처럼 상대가 원하는 방식과 대화 길이를 고를 수 있게 묻는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "잘된 점을 구체적으로 알아봐 주고 “어떻게 축하하고 싶어?”처럼 상대가 원하는 방식과 대화 길이를 고를 수 있게 묻는 방식이 잘 맞는다.",
+          "“그동안 그 부분을 계속 준비한 걸 봤어. 원하는 결과가 나와서 정말 좋겠다”처럼 관찰한 노력과 축하를 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-aftermath-response-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "claimKey": ".scenario.person_of_interest.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "감정이 가라앉을 시간을 가진 뒤 필요한 말만 짧게 후속 연락으로 전하고, 답이 오기 전에는 추가 추측보다 자신의 일상으로 돌아가려는 편이다.",
+        "detailParagraphs": [
+          "감정이 가라앉을 시간을 가진 뒤 필요한 말만 짧게 후속 연락으로 전하고, 답이 오기 전에는 추가 추측보다 자신의 일상으로 돌아가려는 편이다.",
+          "바로 여러 번 연락하기보다 생각이 정리될 시간을 가진 뒤, 꼭 필요한 경우에만 짧고 구체적인 후속 연락을 보내는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-aftermath-communication-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "claimKey": ".scenario.person_of_interest.aftermath.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“아까 대화에서 내 뜻이 잘 전해졌는지 궁금했어. 편할 때 네 생각을 알려줘”처럼 확인할 한 가지와 답할 선택권을 함께 담는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“아까 대화에서 내 뜻이 잘 전해졌는지 궁금했어. 편할 때 네 생각을 알려줘”처럼 확인할 한 가지와 답할 선택권을 함께 담는 방식이 잘 맞는다.",
+          "“아까 이야기한 것 중 이 부분을 내가 제대로 이해했는지 궁금해. 편할 때 알려줘”처럼 확인할 내용을 하나로 좁혀 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-group-participation-attention-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "claimKey": ".scenario.person_of_interest.group_participation.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "마음에 드는 사람과 같은 모임에 있으면 전체 대화에 참여하면서도 그 사람이 어떤 주제에서 편하게 말하고 누구와 자연스럽게 어울리는지 자주 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 같은 모임에 있으면 전체 대화에 참여하면서도 그 사람이 어떤 주제에서 편하게 말하고 누구와 자연스럽게 어울리는지 자주 눈에 들어오는 경향이 있다.",
+          "마음에 드는 사람과 같은 모임에 있으면 그 사람만 계속 바라보기보다 전체 대화 속에서 실제로 보이는 태도와 자신이 자연스럽게 참여할 수 있는 순간을 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-group-participation-process-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "claimKey": ".scenario.person_of_interest.group_participation.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“같이 이야기할 자연스러운 계기가 있을까?”를 떠올리면서, 지나치게 티를 내면 상대나 모임이 불편해지지 않을지 함께 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“같이 이야기할 자연스러운 계기가 있을까?”를 떠올리면서, 지나치게 티를 내면 상대나 모임이 불편해지지 않을지 함께 생각하기 쉽다.",
+          "“둘만 이야기할 수 있는 구체적인 화제가 나왔나?”, “지금 다가가도 흐름을 깨지 않을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-GROUP-PARTICIPATION-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-group-participation-communication-common",
+      "batchId": "CAB-09",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "claimKey": ".scenario.person_of_interest.group_participation.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "여럿 앞에서 과하게 친밀한 표현을 하기보다 현재 화제에 맞는 질문을 건네고, 더 이야기하고 싶다면 나중에 이어갈 구체적인 계기를 제안한다.",
+        "detailParagraphs": [
+          "여럿 앞에서 과하게 친밀한 표현을 하기보다 현재 화제에 맞는 질문을 건네고, 더 이야기하고 싶다면 나중에 이어갈 구체적인 계기를 제안한다.",
+          "상대만 반복해서 지목하기보다 모두가 답할 수 있는 질문으로 대화를 열고, 공통점이 생기면 이후 대화를 가볍게 제안하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-plan-change-attention-common",
+      "batchId": "CAB-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "claimKey": ".scenario.person_of_interest.plan_change.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "마음에 드는 사람과의 약속이 바뀌면 거절의 뜻이라고 바로 단정하기보다 전달된 이유와 새 일정 제안이 있는지 같은 확인 가능한 단서를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과의 약속이 바뀌면 거절의 뜻이라고 바로 단정하기보다 전달된 이유와 새 일정 제안이 있는지 같은 확인 가능한 단서를 먼저 살피는 경향이 있다.",
+          "약속이나 연락 계획이 바뀌면 실제 변경 이유와 함께 그 변화가 상대의 관심을 뜻하는지 아닌지가 먼저 신경 쓰이는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-plan-change-communication-common",
+      "batchId": "CAB-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "claimKey": ".scenario.person_of_interest.plan_change.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“알겠어. 나는 목요일이나 주말이 가능해. 편한 시간이 생기면 알려줘”처럼 부담을 키우지 않고 선택 가능한 정보를 분명히 전하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“알겠어. 나는 목요일이나 주말이 가능해. 편한 시간이 생기면 알려줘”처럼 부담을 키우지 않고 선택 가능한 정보를 분명히 전하는 방식이 잘 맞는다.",
+          "“변경된 건 이해했어. 다시 만날 생각이 있다면 가능한 날을 알려줘”처럼 감정과 다음 선택을 짧고 분명하게 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-disagreement-communication-common",
+      "batchId": "CAB-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "claimKey": ".scenario.person_of_interest.disagreement.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“나는 이런 경험 때문에 이렇게 생각했어. 너는 어떤 일이 있어서 그렇게 보게 됐어?”처럼 차이의 원인을 묻는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“나는 이런 경험 때문에 이렇게 생각했어. 너는 어떤 일이 있어서 그렇게 보게 됐어?”처럼 차이의 원인을 묻는 방식이 자연스럽다.",
+          "“나는 이 부분을 다르게 봐. 네가 그렇게 생각한 이유도 듣고 싶어”처럼 차이와 관심을 함께 드러내는 말하기가 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-ATTENTION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-boundary-attention-common",
+      "batchId": "CAB-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "claimKey": ".scenario.person_of_interest.boundary.attention",
+      "claimKind": "attention",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "마음에 드는 사람이라도 자신의 선을 넘으면 상대가 상처받을 가능성과 관계가 끊길 걱정, 꼭 지켜야 할 행동 기준을 함께 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람이라도 자신의 선을 넘으면 상대가 상처받을 가능성과 관계가 끊길 걱정, 꼭 지켜야 할 행동 기준을 함께 살피는 경향이 있다.",
+          "마음에 드는 사람이라도 연락·질문·신체적 거리에서 불편함이 생기면 어떤 행동이 자신의 기준을 넘었는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-boundary-process-common",
+      "batchId": "CAB-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "claimKey": ".scenario.person_of_interest.boundary.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“좋아하는 마음을 잃지 않으면서 불편한 행동은 어떻게 분명히 거절하지?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“좋아하는 마음을 잃지 않으면서 불편한 행동은 어떻게 분명히 거절하지?”를 생각하기 쉽다.",
+          "“호감과 별개로 지켜야 할 기준은 무엇이고, 오해 없이 어떻게 말하지?”를 정리하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-person-of-interest-boundary-response-common",
+      "batchId": "CAB-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "claimKey": ".scenario.person_of_interest.boundary.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "상대를 몰아세우기보다 불편했던 행동과 원하는 기준을 구체적으로 말하고, 이후 존중 여부를 실제 행동으로 확인하는 편이다.",
+        "detailParagraphs": [
+          "상대를 몰아세우기보다 불편했던 행동과 원하는 기준을 구체적으로 말하고, 이후 존중 여부를 실제 행동으로 확인하는 편이다.",
+          "표현을 고른 뒤 먼저 대화를 열어 불편했던 행동과 원하는 거리를 말하고, 이후 상대가 기준을 존중하는지 살피는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-success-process-common",
+      "batchId": "CAB-11",
+      "scenarioRef": "SCN-WORK-10",
+      "claimKey": ".scenario.work.success.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“어떤 준비와 선택이 결과를 만들었고, 다음에도 유지해야 할 것은 무엇이지?”를 차분히 분석하기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 준비와 선택이 결과를 만들었고, 다음에도 유지해야 할 것은 무엇이지?”를 차분히 분석하기 쉽다.",
+          "“누구의 어떤 기여가 결과를 만들었고, 여기서 무엇을 더 발전시킬 수 있을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-success-communication-common",
+      "batchId": "CAB-11",
+      "scenarioRef": "SCN-WORK-10",
+      "claimKey": ".scenario.work.success.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“이 단계에서 확인을 빨리한 것이 효과가 있었습니다. 다음에도 이 점검을 유지하겠습니다”처럼 성공 요인과 다음 행동을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“이 단계에서 확인을 빨리한 것이 효과가 있었습니다. 다음에도 이 점검을 유지하겠습니다”처럼 성공 요인과 다음 행동을 연결해 말하는 방식이 자연스럽다.",
+          "결과만 과장하기보다 기여·배운 점·다음 실험을 나눠 공유하고, 팀원의 역할을 당사자가 납득할 수 있게 인정하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-aftermath-process-common",
+      "batchId": "CAB-11",
+      "scenarioRef": "SCN-WORK-12",
+      "claimKey": ".scenario.work.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“무엇이 원인이었고, 다음에는 어느 단계에서 먼저 확인하면 같은 일을 줄일 수 있을까?”를 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“무엇이 원인이었고, 다음에는 어느 단계에서 먼저 확인하면 같은 일을 줄일 수 있을까?”를 정리하기 쉽다.",
+          "일을 다시 검토하며 “어디서부터 달라졌고 다음에는 무엇을 미리 준비하면 좋을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-aftermath-communication-common",
+      "batchId": "CAB-11",
+      "scenarioRef": "SCN-WORK-12",
+      "claimKey": ".scenario.work.aftermath.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“이번에는 이 확인이 늦었습니다. 다음부터는 시작 전에 이 항목을 점검하겠습니다”처럼 배운 점과 바꿀 행동을 구체적으로 공유하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“이번에는 이 확인이 늦었습니다. 다음부터는 시작 전에 이 항목을 점검하겠습니다”처럼 배운 점과 바꿀 행동을 구체적으로 공유하는 방식이 자연스럽다.",
+          "개인의 탓을 찾기보다 사실과 과정, 필요한 지원, 다음 점검 시점을 구분해 말하는 회고 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-need-expression-process-common",
+      "batchId": "CAB-12",
+      "scenarioRef": "SCN-WORK-8",
+      "claimKey": ".scenario.work.need_expression.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“내가 더 확인할 수 있는 것은 무엇이고, 다른 사람의 결정이나 지원이 꼭 필요한 부분은 어디지?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 더 확인할 수 있는 것은 무엇이고, 다른 사람의 결정이나 지원이 꼭 필요한 부분은 어디지?”를 생각하기 쉽다.",
+          "“혼자 더 해볼까?”를 고민하면서도 필요한 조건을 말하지 않으면 약속한 결과를 지키기 어렵다고 판단하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-need-expression-communication-common",
+      "batchId": "CAB-12",
+      "scenarioRef": "SCN-WORK-8",
+      "claimKey": ".scenario.work.need_expression.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“A까지 확인했지만 B 결정이 없어 진행이 멈췄습니다. 오늘 중 이 기준을 정해주실 수 있을까요?”처럼 상태·막힘·요청을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“A까지 확인했지만 B 결정이 없어 진행이 멈췄습니다. 오늘 중 이 기준을 정해주실 수 있을까요?”처럼 상태·막힘·요청을 분명히 말하는 방식이 잘 맞는다.",
+          "“현재 여기까지 진행했고 이 자료가 없으면 일정이 늦어집니다. 오늘까지 확인이 필요합니다”처럼 사실·영향·요청 시점을 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-BOUNDARY-PROCESS-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-boundary-process-common",
+      "batchId": "CAB-12",
+      "scenarioRef": "SCN-WORK-9",
+      "claimKey": ".scenario.work.boundary.process",
+      "claimKind": "first_thought",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“거절하면 실망시키지 않을까?”라는 걱정이 생겨도 “현재 계획을 지키려면 우선순위를 분명히 해야 한다”는 생각이 뒤따르기 쉽다.",
+        "detailParagraphs": [
+          "“거절하면 실망시키지 않을까?”라는 걱정이 생겨도 “현재 계획을 지키려면 우선순위를 분명히 해야 한다”는 생각이 뒤따르기 쉽다.",
+          "“현재 자원으로 가능한 범위는 어디까지고, 무엇을 조정해야 새 요청을 받을 수 있지?”를 정리하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-BOUNDARY-RESPONSE-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-boundary-response-common",
+      "batchId": "CAB-12",
+      "scenarioRef": "SCN-WORK-9",
+      "claimKey": ".scenario.work.boundary.response",
+      "claimKind": "actual_response",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "상대와 대화를 열어 현재 업무의 영향과 가능한 대안을 설명하고, 결정된 우선순위와 마감을 기록해 이어가는 편이다.",
+        "detailParagraphs": [
+          "상대와 대화를 열어 현재 업무의 영향과 가능한 대안을 설명하고, 결정된 우선순위와 마감을 기록해 이어가는 편이다.",
+          "감정적으로 거절하기보다 현재 업무와 영향, 가능한 대안을 구체적으로 제시해 우선순위 결정을 요청하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-BOUNDARY-COMMUNICATION-COMMON",
+      "contentKey": "trait-map.v2.2.can-scn-work-boundary-communication-common",
+      "batchId": "CAB-12",
+      "scenarioRef": "SCN-WORK-9",
+      "claimKey": ".scenario.work.boundary.communication",
+      "claimKind": "communication",
+      "axisSignature": "COMMON",
+      "referenceCount": 32,
+      "content": {
+        "summaryText": "“이 요청을 맡으면 기존 마감에 영향이 있습니다. 무엇을 우선할지 정해주시면 그 계획으로 진행하겠습니다”처럼 관계를 해치지 않으면서 기준을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“이 요청을 맡으면 기존 마감에 영향이 있습니다. 무엇을 우선할지 정해주시면 그 계획으로 진행하겠습니다”처럼 관계를 해치지 않으면서 기준을 분명히 말하는 방식이 잘 맞는다.",
+          "“이 일을 맡으면 기존 A의 마감이 늦어집니다. 무엇을 우선할지 정해주시면 그 기준에 맞추겠습니다”처럼 영향과 선택을 분명히 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "core_plus_nuance"
+      },
+      "surfacePolicy": {
+        "mode": "context_scaffolding_only",
+        "reason": "32개 코드 모두에 같은 문장으로 연결되어 개인 성향 차이를 설명하지 않으므로 연구 계보와 상황 안내에만 사용한다.",
+        "allowedSurfaces": ["internal_research"],
+        "prohibitedSurfaces": [
+          "result_summary",
+          "trait_map_detail",
+          "comparison_report",
+          "public_profile",
+          "share_card"
+        ]
+      },
+      "release": {
+        "publicationState": "research_only",
+        "eligibleSurfaces": [],
+        "prohibitedSurfaces": [
+          "public_profile",
+          "share_card",
+          "comparison_report",
+          "result_summary",
+          "trait_map_detail"
+        ],
+        "approvedAt": null,
+        "retiredAt": null,
+        "rollbackToVersion": null
+      },
+      "missingProhibitedSurfaces": [],
+      "violations": [],
+      "internalDecision": "preserve_research_lineage_block_personalized_surfaces",
+      "customerPublicationApproved": false
+    }
+  ],
+  "nextGate": {
+    "name": "POST_P0_REVIEW_QUEUE_AND_UNFLAGGED_P0_READTHROUGH",
+    "actions": [
+      "23개 교정 version과 25개 COMMON 노출 제한을 반영한 새 검토 큐를 만든다.",
+      "자동 flag가 없던 P0 claim을 축 서명 묶음으로 나눠 내부 판독한다.",
+      "P0 내부 판독이 끝나면 독립 7개 역할 검토용 증거 패킷을 고정한다.",
+      "그다음 P1·P2를 같은 방식으로 순차 검토한다."
+    ]
+  }
+}

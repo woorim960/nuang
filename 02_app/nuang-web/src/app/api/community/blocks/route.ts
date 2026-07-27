@@ -8,6 +8,7 @@ import {
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { readValidatedJson } from "@/lib/api/request";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
+import { isAllowedGateCRequest } from "@/features/research/gate-c/gate-c-server-security";
 
 const unblockRequestSchema = z.object({
   blockedAccountId: z.string().uuid(),
@@ -42,6 +43,13 @@ export async function GET() {
 }
 
 export async function DELETE(request: Request) {
+  if (!isAllowedGateCRequest(request)) {
+    return NextResponse.json(
+      { message: "요청 출처를 확인하지 못했어요.", ok: false },
+      { status: 403 },
+    );
+  }
+
   const payload = await readValidatedJson(request, unblockRequestSchema);
   if (!payload.ok) return payload.response;
 

@@ -1,0 +1,1966 @@
+{
+  "contractVersion": "nuang-trait-map-canonical-semantic-resolution.v2.3",
+  "reportId": "TRAIT-MAP-CANONICAL-SEMANTIC-RESOLUTION-CAB-08.0.4",
+  "batchId": "CAB-08",
+  "sourceDraftReportId": "TRAIT-MAP-CANONICAL-RESEARCH-DRAFT-CAB-08.0.4",
+  "sourcePreflightReportId": "TRAIT-MAP-CANONICAL-PREFLIGHT-CAB-08.0.4",
+  "status": "SOURCE_MEANING_STRUCTURED_TARGETED_AXIS_REWRITE_AND_SEVEN_ROLE_REVIEW_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "summary": {
+    "canonicalVariants": 51,
+    "singleCoreVariants": 22,
+    "corePlusNuanceVariants": 29,
+    "maximumCoreNuanceSimilarity": 0.4583333333333333,
+    "averageCoreNuanceSimilarity": 0.16389485526689623,
+    "variantsRequiringAxisDifferentiationReview": 0,
+    "variantsReadyForSevenRoleReview": 51,
+    "pendingSevenRoleReviews": 51,
+    "customerApprovedVariants": 0
+  },
+  "resolutionRules": [
+    "두 원문을 조사만 바꿔 한 문장으로 잇지 않는다.",
+    "선택 방향의 첫 원문은 결과 요약용 core로 유지한다.",
+    "서로 다른 정보가 있는 둘째 원문은 성향지도 상세용 nuance로 보존한다.",
+    "같은 canonical ID 안의 core와 nuance는 같은 화면에서 같은 뜻을 반복하지 않는지 7개 역할 검토를 받는다.",
+    "한 글자 이웃이 같은 문장 블록을 공유하면 자동 삭제하지 않고 해당 축의 반대 방향 설명이 모두 갖춰졌는지 표적 검토한다.",
+    "표적 교정과 7개 검토 전에는 고객 화면이나 운영 DB에 발행하지 않는다."
+  ],
+  "surfaceContract": {
+    "resultSummary": "summaryText만 사용",
+    "traitMapDetail": "detailParagraphs 전체 사용",
+    "comparisonReport": "두 사람 모두 공개한 정보이고 비교에 필요한 경우에만 summaryText를 사용",
+    "publicProfile": "이 데이터 묶음은 self_only이므로 사용 금지",
+    "shareCard": "이 데이터 묶음은 self_only이므로 사용 금지"
+  },
+  "targetedRewriteQueue": [],
+  "variants": [
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-ATTENTION-SM-K",
+      "claimKey": ".scenario.partner.plan_change.attention",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=K",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-ATTENTION-SM-K:27a38c286276",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-ATTENTION-SM-K:f4178ed55fc3"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "함께 정한 계획이 갑자기 바뀌면 바뀐 이유와 연인에게 생긴 부담, 다시 맞춰야 할 일정이 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "함께 정한 계획이 갑자기 바뀌면 바뀐 이유와 연인에게 생긴 부담, 다시 맞춰야 할 일정이 먼저 눈에 들어오는 경향이 있다.",
+          "연인과의 계획이 바뀌면 지금 가능한 즉흥 대안보다 둘이 중요하게 정한 약속과 새로 맞출 시간, 준비와 순서를 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.14285714285714285
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-ATTENTION-SM-M",
+      "claimKey": ".scenario.partner.plan_change.attention",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=M",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-ATTENTION-SM-M:153784910184",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-ATTENTION-SM-M:8a87a094e34e"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "함께 정한 계획이 갑자기 바뀌면 서운함을 크게 드러내기 전에 무엇이 바뀌었고 이유가 무엇인지, 지금 가능한 선택지가 무엇인지 먼저 확인하는 경향이 있다.",
+        "detailParagraphs": [
+          "함께 정한 계획이 갑자기 바뀌면 서운함을 크게 드러내기 전에 무엇이 바뀌었고 이유가 무엇인지, 지금 가능한 선택지가 무엇인지 먼저 확인하는 경향이 있다.",
+          "연인과의 계획이 바뀌면 원래 순서를 지키는 것보다 둘의 현재 상태와 남은 시간, 새롭게 가능한 경험을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.14583333333333334
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-PROCESS-SM-K",
+      "claimKey": ".scenario.partner.plan_change.process",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=K",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-PROCESS-SM-K:b757044cda0c",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-PROCESS-SM-K:9c047973e242"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "예상 밖의 변화가 생기면 “둘 다 받아들일 수 있는 다른 방법을 어떻게 만들지?”를 곧바로 찾기 쉽다.",
+        "detailParagraphs": [
+          "예상 밖의 변화가 생기면 “둘 다 받아들일 수 있는 다른 방법을 어떻게 만들지?”를 곧바로 찾기 쉽다.",
+          "“무엇은 그대로 지켜야 하고, 둘 다 납득할 수 있게 계획을 어떻게 다시 세우면 좋을까?”가 떠오르기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.11842105263157894
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-PROCESS-SM-M",
+      "claimKey": ".scenario.partner.plan_change.process",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=M",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-PROCESS-SM-M:3573eee8f203",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-PROCESS-SM-M:078052bb20dd"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“변경된 조건 안에서 가장 현실적인 대안은 무엇이지?”를 생각하고, 반복되는 문제라면 원인도 함께 확인하려 하기 쉽다.",
+        "detailParagraphs": [
+          "“변경된 조건 안에서 가장 현실적인 대안은 무엇이지?”를 생각하고, 반복되는 문제라면 원인도 함께 확인하려 하기 쉽다.",
+          "“지금 조건에서 둘이 편하게 이어갈 방법은 무엇이고, 어떤 부분은 다음으로 미뤄도 괜찮을까?”가 떠오르기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.11235955056179775
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-RESPONSE-SM-K",
+      "claimKey": ".scenario.partner.plan_change.response",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=K",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-RESPONSE-SM-K:3dd11e0e45cc",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-RESPONSE-SM-K:5932f411930a"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "처음에는 감정이 흔들려도 변경 이유를 확인하고 가능한 대안을 펼친 뒤, 다시 실행할 수 있는 새 약속을 정하는 쪽으로 움직이는 편이다.",
+        "detailParagraphs": [
+          "처음에는 감정이 흔들려도 변경 이유를 확인하고 가능한 대안을 펼친 뒤, 다시 실행할 수 있는 새 약속을 정하는 쪽으로 움직이는 편이다.",
+          "변경 이유와 연인에게 미칠 영향을 확인한 뒤 새 일정과 순서를 합의하고, 다시 정한 흐름에 따라 움직이는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.16091954022988506
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-RESPONSE-SM-M",
+      "claimKey": ".scenario.partner.plan_change.response",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=M",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-RESPONSE-SM-M:7e89d809eada",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-RESPONSE-SM-M:afeb0b8e568d"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "급한 상황에서는 바로 가능한 대안으로 옮기고, 시간 여유가 있으면 변경 이유를 들은 뒤 일정과 방법을 다시 맞추는 편이다.",
+        "detailParagraphs": [
+          "급한 상황에서는 바로 가능한 대안으로 옮기고, 시간 여유가 있으면 변경 이유를 들은 뒤 일정과 방법을 다시 맞추는 편이다.",
+          "연인에게 영향을 확인한 뒤 목표는 남기고 장소·시간·활동 순서를 유연하게 바꾸며, 필요하면 다음 약속으로 나누는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.07368421052631578
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-COMMUNICATION-SM-K",
+      "claimKey": ".scenario.partner.plan_change.communication",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=K",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-COMMUNICATION-SM-K:6c38f4fd11c5",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-COMMUNICATION-SM-K:19108a920051"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“갑자기 바뀌어서 나는 조금 당황했어. 이유를 듣고 가능한 날짜를 다시 정하고 싶어”처럼 감정·확인·다음 행동을 나눠 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“갑자기 바뀌어서 나는 조금 당황했어. 이유를 듣고 가능한 날짜를 다시 정하고 싶어”처럼 감정·확인·다음 행동을 나눠 말하는 방식이 잘 맞는다.",
+          "“오늘은 이 부분이 어려우니 약속의 핵심은 남기고 시간을 이렇게 다시 잡자. 너에게도 괜찮은지 확인하고 싶어”처럼 재계획을 제안한다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.08256880733944955
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-PLAN-CHANGE-COMMUNICATION-SM-M",
+      "claimKey": ".scenario.partner.plan_change.communication",
+      "scenarioRef": "SCN-PARTNER-4",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SM"],
+      "axisSignature": "SM=M",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-PLAN-CHANGE-COMMUNICATION-SM-M:a4beaa5b9a23",
+          "CAN-SCN-PARTNER-PLAN-CHANGE-COMMUNICATION-SM-M:ff5ee61ffba0"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“오늘은 이 방법이 가능해. 다음에는 바뀌는 시점을 조금 더 일찍 알려주면 좋겠어”처럼 현재 대안과 다음 기준을 나눠 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“오늘은 이 방법이 가능해. 다음에는 바뀌는 시점을 조금 더 일찍 알려주면 좋겠어”처럼 현재 대안과 다음 기준을 나눠 말하는 방식이 잘 맞는다.",
+          "“오늘은 시간이 줄었으니 이 부분만 즐기고 나머지는 다음에 이어가자. 너는 어떤 게 더 중요해?”처럼 조정안을 함께 정한다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.0891089108910891
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-R-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-R-ER-C:c8b16395e64e"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않으면 추측을 넓히기보다 실제로 달라진 말과 행동, 아직 확인하지 않은 부분을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 추측을 넓히기보다 실제로 달라진 말과 행동, 아직 확인하지 않은 부분을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-R-ER-Q:314d5a710579"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인 관계의 앞일이 분명하지 않으면 관계가 멀어질 가능성과 말투·연락에서 달라진 신호, 놓친 대화가 빠르게 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "연인 관계의 앞일이 분명하지 않으면 관계가 멀어질 가능성과 말투·연락에서 달라진 신호, 놓친 대화가 빠르게 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-N-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-N-ER-C:5389c2885d1d"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인 관계의 앞일이 분명하지 않을 때 걱정이 크게 올라오기 전 실제로 나눈 말과 행동, 서로 확인할 질문과 다음 대화를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인 관계의 앞일이 분명하지 않을 때 걱정이 크게 올라오기 전 실제로 나눈 말과 행동, 서로 확인할 질문과 다음 대화를 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-N-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-N-ER-Q:24c2f8bcde63"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않으면 상대 마음에 생긴 변화와 좋지 않은 가능성, 관계를 이어가기 위해 확인할 대화를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 상대 마음에 생긴 변화와 좋지 않은 가능성, 관계를 이어가기 위해 확인할 대화를 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-R-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=C",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-R-ER-C:b26657d9c349"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“내가 확인한 변화는 무엇이고, 상대에게 직접 물어야 할 한 가지는 무엇이지?”를 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 확인한 변화는 무엇이고, 상대에게 직접 물어야 할 한 가지는 무엇이지?”를 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-R-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=R|ER=Q",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-R-ER-Q:985b3db6452d"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“연인의 마음이 달라진 것은 아닌지, 내가 놓친 신호와 확인해야 할 말은 무엇일까?”가 먼저 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“연인의 마음이 달라진 것은 아닌지, 내가 놓친 신호와 확인해야 할 말은 무엇일까?”가 먼저 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-N-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=C",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-N-ER-C:a7e1a10a9dd6"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“지금 둘이 실제로 아는 것은 무엇이고, 어떤 대화를 하면 관계의 방향을 분명히 할 수 있을까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“지금 둘이 실제로 아는 것은 무엇이고, 어떤 대화를 하면 관계의 방향을 분명히 할 수 있을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-N-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["OE", "ER"],
+      "axisSignature": "OE=N|ER=Q",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-N-ER-Q:0c057ce839c9"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“상대가 힘든 건지 마음이 달라진 건지, 내가 놓친 신호가 있는지” 여러 가능성을 떠올리며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 힘든 건지 마음이 달라진 건지, 내가 놓친 신호가 있는지” 여러 가능성을 떠올리며 걱정하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-RESPONSE-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.response",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=C",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-RESPONSE-ER-C:e7e53f769c8d",
+          "CAN-SCN-PARTNER-UNCERTAINTY-RESPONSE-ER-C:388af1d39b47"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "혼자 생각을 정리한 뒤 적절한 때에 구체적인 변화를 말하고, 연인의 설명을 들으며 다음 행동을 함께 정하는 편이다.",
+        "detailParagraphs": [
+          "혼자 생각을 정리한 뒤 적절한 때에 구체적인 변화를 말하고, 연인의 설명을 들으며 다음 행동을 함께 정하는 편이다.",
+          "연인의 경험과 뜻을 묻고 현재 합의할 행동을 정한 뒤, 대화가 끝난 후 자신의 감정이 늦게 올라오는지 확인하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.13095238095238096
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-RESPONSE-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.response",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=Q",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-RESPONSE-ER-Q:1f11f907d785",
+          "CAN-SCN-PARTNER-UNCERTAINTY-RESPONSE-ER-Q:7cc27fd77955"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "혼자 추측만 이어가기보다 적절한 때에 대화를 먼저 열고, 관찰한 변화와 자신의 마음을 말한 뒤 함께 다음 방향을 정하려는 편이다.",
+        "detailParagraphs": [
+          "혼자 추측만 이어가기보다 적절한 때에 대화를 먼저 열고, 관찰한 변화와 자신의 마음을 말한 뒤 함께 다음 방향을 정하려는 편이다.",
+          "걱정이 올라와도 관찰한 변화와 자신의 해석을 나누고, 연인의 실제 경험과 뜻을 질문해 다음 행동을 정하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.19047619047619047
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-COMMUNICATION-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.communication",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=C",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-COMMUNICATION-ER-C:84f980190c42",
+          "CAN-SCN-PARTNER-UNCERTAINTY-COMMUNICATION-ER-C:9960bdd2b7d9"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“최근 연락 시간이 달라져서 이유가 궁금했어. 요즘 어떤 상태인지 이야기해줄래?”처럼 관찰과 질문을 나누어 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“최근 연락 시간이 달라져서 이유가 궁금했어. 요즘 어떤 상태인지 이야기해줄래?”처럼 관찰과 질문을 나누어 말하는 방식이 잘 맞는다.",
+          "“지금은 차분하게 이야기할 수 있어. 우리가 확인할 것부터 맞추고, 이후 마음에 남는 부분도 다시 보자”처럼 대화와 회복을 나눈다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.06666666666666667
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-COMMUNICATION-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.communication",
+      "scenarioRef": "SCN-PARTNER-5",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["ER"],
+      "axisSignature": "ER=Q",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-UNCERTAINTY-COMMUNICATION-ER-Q:612048d09139",
+          "CAN-SCN-PARTNER-UNCERTAINTY-COMMUNICATION-ER-Q:ff0207deca00"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“최근 우리가 대화하는 시간이 줄어 걱정됐어. 너는 요즘 우리 관계를 어떻게 느끼는지 듣고 싶어”처럼 관찰·감정·질문을 나눠 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“최근 우리가 대화하는 시간이 줄어 걱정됐어. 너는 요즘 우리 관계를 어떻게 느끼는지 듣고 싶어”처럼 관찰·감정·질문을 나눠 말하는 방식이 자연스럽다.",
+          "“연락이 달라 보여 관계가 걱정돼. 내가 본 변화와 네 실제 마음을 차분히 맞춰보고 싶어”처럼 관찰과 감정을 나누어 말한다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.11764705882352941
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.disagreement.attention",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-G:9d187442c956",
+          "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-G:eb04e15535bc"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인과 의견이 부딪히면 감정의 크기보다 실제로 무엇을 다르게 알고 있고 반복되는 원인이 무엇인지 먼저 파악하려는 경향이 있다.",
+        "detailParagraphs": [
+          "연인과 의견이 부딪히면 감정의 크기보다 실제로 무엇을 다르게 알고 있고 반복되는 원인이 무엇인지 먼저 파악하려는 경향이 있다.",
+          "연인과 갈등이 생기면 관계가 잘못됐다는 결론보다 반복되는 원인과 서로 다르게 이해한 지점, 다시 맞춰야 할 행동을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.18478260869565216
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.disagreement.attention",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-A:20fd61257dfd",
+          "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-A:9f324f319d15"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인과 의견이 부딪히면 연인이 가장 불편했던 마음과 관계에 남을 영향, 둘의 뜻을 함께 살릴 해결 방법을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인과 의견이 부딪히면 연인이 가장 불편했던 마음과 관계에 남을 영향, 둘의 뜻을 함께 살릴 해결 방법을 먼저 살피는 경향이 있다.",
+          "연인과 갈등이 생기면 상대가 상처받거나 이해받지 못했다고 느낀 지점과 관계의 안전감, 말이 남길 영향을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.17777777777777778
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-G",
+      "claimKey": ".scenario.partner.disagreement.process",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-G:40140c0656ff",
+          "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-G:4a6a0523cd0f"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“어디서부터 서로 다르게 이해했고, 해결하려면 어떤 기준을 다시 맞춰야 하지?”가 먼저 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“어디서부터 서로 다르게 이해했고, 해결하려면 어떤 기준을 다시 맞춰야 하지?”가 먼저 떠오르기 쉽다.",
+          "“이 갈등이 생긴 핵심 원인은 무엇이고, 둘이 어떤 행동을 바꾸면 같은 문제가 줄어들까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.07228915662650602
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-A",
+      "claimKey": ".scenario.partner.disagreement.process",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-A:19ffd89cce84",
+          "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-A:283c5f4a9848"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“내 말이 어떻게 들렸고, 이 갈등이 관계를 더 나쁘게 만들지 않을까?”를 걱정하면서도 함께 풀 방법을 찾기 쉽다.",
+        "detailParagraphs": [
+          "“내 말이 어떻게 들렸고, 이 갈등이 관계를 더 나쁘게 만들지 않을까?”를 걱정하면서도 함께 풀 방법을 찾기 쉽다.",
+          "“연인은 어떤 마음이었고, 지금 서로가 관계 안에서 안전하다고 느끼려면 무엇을 먼저 확인해야 할까?”가 떠오르기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.07692307692307693
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO", "SM"],
+      "axisSignature": "RO=G|SM=K",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-K:5d7c9285d236"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-M",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO", "SM"],
+      "axisSignature": "RO=G|SM=M",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-M:9797bc3f73dc"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "목소리를 높이기보다 연인의 설명을 듣고 사실과 요구를 정리한 뒤, 둘이 지킬 수 있는 구체적인 방법을 찾는 편이다.",
+        "detailParagraphs": [
+          "목소리를 높이기보다 연인의 설명을 듣고 사실과 요구를 정리한 뒤, 둘이 지킬 수 있는 구체적인 방법을 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO", "SM"],
+      "axisSignature": "RO=A|SM=K",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-K:4fb49c73c1bb"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO", "SM"],
+      "axisSignature": "RO=A|SM=M",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-M:4caf694e69d3"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.disagreement.communication",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-G:b7f8d13cb91f",
+          "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-G:00c97d5ae9bc"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“나는 이 상황을 이렇게 이해했어. 네가 불편했던 지점도 듣고 다음 방법을 같이 정하고 싶어”처럼 확인과 해결 순서를 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“나는 이 상황을 이렇게 이해했어. 네가 불편했던 지점도 듣고 다음 방법을 같이 정하고 싶어”처럼 확인과 해결 순서를 말하는 방식이 자연스럽다.",
+          "“네가 상처받은 부분을 먼저 듣고 싶어. 그다음 같은 일이 반복되지 않도록 원인과 바꿀 행동을 같이 정하자”처럼 순서를 분명히 말한다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.16
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.disagreement.communication",
+      "scenarioRef": "SCN-PARTNER-6",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-A:b3596a1f3b76",
+          "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-A:c9b36e22d150"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“네가 불편했던 이유를 먼저 듣고 싶어. 내 마음도 설명한 뒤 우리가 바꿀 행동을 같이 정하자”처럼 관계 확인과 해결을 연결하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“네가 불편했던 이유를 먼저 듣고 싶어. 내 마음도 설명한 뒤 우리가 바꿀 행동을 같이 정하자”처럼 관계 확인과 해결을 연결하는 방식이 잘 맞는다.",
+          "“내 행동이 너에게 어떻게 느껴졌는지 먼저 듣고 싶어. 내 마음도 말한 뒤 다음에는 어떻게 할지 같이 정하자”처럼 순서를 말한다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.2222222222222222
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.support_requested.attention",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-G:39a528db1e28",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-G:a1696d8bc4b4"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인이 도움을 요청하면 문제의 원인과 필요한 지원의 종류, 자신이 실제로 할 수 있는 일을 먼저 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 도움을 요청하면 문제의 원인과 필요한 지원의 종류, 자신이 실제로 할 수 있는 일을 먼저 구분하려는 경향이 있다.",
+          "연인이 힘든 일을 말하면 상황을 만든 원인과 지금 줄일 수 있는 부담, 실제로 필요한 도움을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.2972972972972973
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.support_requested.attention",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-A:68c2d25097fc",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-A:440e7869ed01"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인이 힘든 일을 말하면 가장 상한 마음과 혼자 감당한 부분, 앞으로 관계 안에서 함께할 수 있는 지원을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 힘든 일을 말하면 가장 상한 마음과 혼자 감당한 부분, 앞으로 관계 안에서 함께할 수 있는 지원을 먼저 살피는 경향이 있다.",
+          "연인이 힘든 일을 말하면 그 사람이 가장 힘들게 느낀 마음과 관계 안에서 바라는 위로, 혼자 감당한 부분을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.4583333333333333
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "claimKey": ".scenario.partner.support_requested.process",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-G:6e63a52bfe07",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-G:6587b0c54904"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“지금 해결할 일은 무엇이고, 연인은 듣기와 행동 중 무엇을 원하는가?”를 확인하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“지금 해결할 일은 무엇이고, 연인은 듣기와 행동 중 무엇을 원하는가?”를 확인하고 싶어 하기 쉽다.",
+          "“무엇이 가장 큰 문제였고, 내가 지금 해주면 상황이 달라질 행동은 무엇일까?”가 먼저 떠오르기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.1527777777777778
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "claimKey": ".scenario.partner.support_requested.process",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-A:b9043eb99c99",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-A:675b91c182d2"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“얼마나 힘들었을까, 내가 어떤 방식으로 곁에 있어야 도움이 될까?”를 떠올리고 여러 지원 방법을 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“얼마나 힘들었을까, 내가 어떤 방식으로 곁에 있어야 도움이 될까?”를 떠올리고 여러 지원 방법을 생각하기 쉽다.",
+          "“연인은 어떤 마음을 알아주길 바라고, 지금 어떤 방식으로 곁에 있어야 편할까?”라는 생각이 먼저 들기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.2077922077922078
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "claimKey": ".scenario.partner.support_requested.response",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-G:a5926e2c1a1c",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-G:5b067deee5df"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인의 이야기를 차분히 듣고 원하는 도움을 물은 뒤, 필요한 경우 함께 처리할 구체적인 행동을 맡는 편이다.",
+        "detailParagraphs": [
+          "연인의 이야기를 차분히 듣고 원하는 도움을 물은 뒤, 필요한 경우 함께 처리할 구체적인 행동을 맡는 편이다.",
+          "연인의 경험과 마음을 들은 뒤 원하는 지원을 확인하고, 필요하면 정보·행동·일정 조정 중 맞는 도움을 이어가는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.189873417721519
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "claimKey": ".scenario.partner.support_requested.response",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-A:7cb17fb367ee",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-A:ca3b8332dfeb"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인의 경험을 충분히 듣고 원하는 도움을 물은 뒤, 함께할 행동과 다음에 다시 확인할 약속을 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 경험을 충분히 듣고 원하는 도움을 물은 뒤, 함께할 행동과 다음에 다시 확인할 약속을 정하는 편이다.",
+          "경험과 감정을 먼저 확인한 뒤 연인이 원하는 지원을 묻고, 필요하면 그날 조건에 맞춰 행동이나 일정 조정을 함께하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.13580246913580246
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.support_requested.communication",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-G:5d1cad601b88",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-G:02b443be3a91"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“지금은 내가 들어주는 게 좋을까, 같이 해결할 일을 정할까?”처럼 지원 방식을 직접 묻는 말이 잘 맞는다.",
+        "detailParagraphs": [
+          "“지금은 내가 들어주는 게 좋을까, 같이 해결할 일을 정할까?”처럼 지원 방식을 직접 묻는 말이 잘 맞는다.",
+          "“정말 힘들었겠다. 지금은 내가 들어주는 게 좋은지, 같이 방법을 찾거나 일을 나누는 게 좋은지 말해줘”처럼 지원 선택을 묻는다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.273972602739726
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.support_requested.communication",
+      "scenarioRef": "SCN-PARTNER-7",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-A:434617b2ab2b",
+          "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-A:47b4f61bda71"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“많이 힘들었겠다. 지금은 내가 들어주는 게 좋은지, 같이 방법을 찾는 게 좋은지 말해줘”처럼 마음 확인과 지원 선택을 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“많이 힘들었겠다. 지금은 내가 들어주는 게 좋은지, 같이 방법을 찾는 게 좋은지 말해줘”처럼 마음 확인과 지원 선택을 함께 전하는 방식이 자연스럽다.",
+          "“많이 힘들었겠다. 지금은 말없이 같이 있는 게 좋은지, 이야기하거나 방법을 찾는 게 좋은지 알려줘”처럼 지원 선택을 건넨다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.358974358974359
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-G:8614e78cf7d3"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-A:aecd5c64ac90"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 상대 마음과 관계에 생길 변화, 서로 받아들일 수 있는 새 약속을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 상대 마음과 관계에 생길 변화, 서로 받아들일 수 있는 새 약속을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-PROCESS-COMMON",
+      "claimKey": ".scenario.partner.need_expression.process",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-PROCESS-COMMON:958547be5790",
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-PROCESS-COMMON:a2f956a43ab2"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“내가 원하는 걸 말하면 부담스러워할까?”라는 걱정과 “관계를 위해 솔직히 말해야 한다”는 생각이 함께 들기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 걸 말하면 부담스러워할까?”라는 걱정과 “관계를 위해 솔직히 말해야 한다”는 생각이 함께 들기 쉽다.",
+          "“내가 원하는 것은 정확히 무엇이고, 상대가 실행할 수 있게 어떻게 말해야 하지?”를 생각하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.1518987341772152
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-E",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=E",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-E:7460d36d1605"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "대화를 먼저 요청해 자신의 감정과 필요를 설명하고, 연인의 입장도 들은 뒤 둘이 지킬 수 있는 행동을 정하는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 요청해 자신의 감정과 필요를 설명하고, 연인의 입장도 들은 뒤 둘이 지킬 수 있는 행동을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": ["SE"],
+      "axisSignature": "SE=I",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-I:f2f4e694977b"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "혼자 생각을 정리한 뒤 비교적 차분한 때에 구체적인 상황과 요청을 말하고, 연인의 입장도 듣는 편이다.",
+        "detailParagraphs": [
+          "혼자 생각을 정리한 뒤 비교적 차분한 때에 구체적인 상황과 요청을 말하고, 연인의 입장도 듣는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-G:2d30180b32a2"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "scenarioRef": "SCN-PARTNER-8",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-A:a8efe2606d35"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“요즘 함께 보내는 시간이 줄어 서운했어. 이번 주에는 둘만의 시간을 정하고 싶은데 너는 어때?”처럼 감정·요청·질문을 연결하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“요즘 함께 보내는 시간이 줄어 서운했어. 이번 주에는 둘만의 시간을 정하고 싶은데 너는 어때?”처럼 감정·요청·질문을 연결하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.boundary.attention",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-BOUNDARY-ATTENTION-RO-G:fb296a1641ba"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인이 자신의 시간·사생활·선택을 넘어서면 어떤 행동이 문제였고 관계를 지키면서 바꿔야 할 기준이 무엇인지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 자신의 시간·사생활·선택을 넘어서면 어떤 행동이 문제였고 관계를 지키면서 바꿔야 할 기준이 무엇인지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.boundary.attention",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKind": "attention",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-BOUNDARY-ATTENTION-RO-A:1968fb65ee4d"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "연인이 자신의 선을 넘으면 관계를 잃을 걱정과 상대가 받을 상처, 둘이 안전하게 지내기 위해 꼭 바꿔야 할 행동을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 자신의 선을 넘으면 관계를 잃을 걱정과 상대가 받을 상처, 둘이 안전하게 지내기 위해 꼭 바꿔야 할 행동을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-PROCESS-COMMON",
+      "claimKey": ".scenario.partner.boundary.process",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKind": "first_thought",
+      "privacyScope": "self_only",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-BOUNDARY-PROCESS-COMMON:4fa0acf4ab9f",
+          "CAN-SCN-PARTNER-BOUNDARY-PROCESS-COMMON:1f830dccd1ae"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“이 말을 하면 관계가 흔들리지 않을까?”라는 걱정이 생겨도 “존중받는 관계를 위해 기준을 알려야 한다”는 생각이 뒤따르기 쉽다.",
+        "detailParagraphs": [
+          "“이 말을 하면 관계가 흔들리지 않을까?”라는 걱정이 생겨도 “존중받는 관계를 위해 기준을 알려야 한다”는 생각이 뒤따르기 쉽다.",
+          "“상대를 거절하는 것과 이 행동을 거절하는 것을 어떻게 분명히 나누어 말하지?”를 정리하기 쉽다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.04597701149425287
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-RESPONSE-COMMON",
+      "claimKey": ".scenario.partner.boundary.response",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKind": "actual_response",
+      "privacyScope": "self_only",
+      "semanticAxes": [],
+      "axisSignature": "COMMON",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-BOUNDARY-RESPONSE-COMMON:87c1b607ee1f",
+          "CAN-SCN-PARTNER-BOUNDARY-RESPONSE-COMMON:5378c54a12e1"
+        ],
+        "sourceBlockCount": 2,
+        "semanticDecision": "PRESERVE_BOTH_DISTINCT_SOURCE_UNITS"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "말을 고른 뒤 대화를 먼저 열어 불편했던 행동과 원하는 경계를 설명하고, 연인의 반응을 들으며 이후 기준을 지키는 편이다.",
+        "detailParagraphs": [
+          "말을 고른 뒤 대화를 먼저 열어 불편했던 행동과 원하는 경계를 설명하고, 연인의 반응을 들으며 이후 기준을 지키는 편이다.",
+          "감정이 크게 쌓이기 전에 구체적인 경계를 말하고, 이후 상대가 기준을 존중하는지를 실제 행동으로 확인하는 편이다."
+        ],
+        "contentShape": "core_plus_nuance",
+        "renderingRule": "결과 요약은 core 한 문단만, 성향지도 상세는 core와 nuance 두 문단을 순서대로 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "PRESERVE_AS_CORE_PLUS_NUANCE",
+        "rationale": "두 원문의 2-gram 유사도가 낮아 한 문장으로 억지로 합치면 고유 정보가 사라질 수 있으므로 핵심과 추가 설명으로 분리한다.",
+        "similarity": 0.15476190476190477
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=G",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-G:76c4b2dee5bc"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "scenarioRef": "SCN-PARTNER-9",
+      "claimKind": "communication",
+      "privacyScope": "self_only",
+      "semanticAxes": ["RO"],
+      "axisSignature": "RO=A",
+      "provenance": {
+        "sourceUnitIds": [
+          "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-A:ba87d9b12c1f"
+        ],
+        "sourceBlockCount": 1,
+        "semanticDecision": "USE_DIRECTION_SELECTED_LINEAGE_AS_PRIMARY"
+      },
+      "canonicalDisplayDraft": {
+        "summaryText": "“우리 관계가 중요하지만 내 휴대전화를 허락 없이 보는 건 원하지 않아. 궁금한 점은 직접 물어봐 줘”처럼 관계와 경계를 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“우리 관계가 중요하지만 내 휴대전화를 허락 없이 보는 건 원하지 않아. 궁금한 점은 직접 물어봐 줘”처럼 관계와 경계를 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "renderingRule": "결과 요약과 성향지도 상세에서 같은 한 문단을 사용한다."
+      },
+      "semanticResolution": {
+        "decision": "KEEP_SINGLE_TRACEABLE_CORE",
+        "rationale": "하나의 출처 문장만 있어 새 심리 주장을 만들지 않고 핵심 문단으로 유지한다."
+      },
+      "axisDifferentiationReview": {
+        "required": false,
+        "overlaps": [],
+        "decision": "not_required"
+      },
+      "sevenRoleReviewState": "pending",
+      "resolutionState": "structured_draft_ready_for_seven_role_review",
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "TARGETED_AXIS_REWRITE",
+    "completion": "0개 표적 변형에서 반대 방향의 고유 설명을 모두 갖추고 0개 이웃 쌍의 의미 대칭을 통과한다."
+  }
+}

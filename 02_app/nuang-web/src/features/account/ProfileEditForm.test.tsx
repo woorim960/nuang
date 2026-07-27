@@ -12,6 +12,10 @@ vi.mock("next/navigation", () => ({
   useRouter: () => navigationMock,
 }));
 
+vi.mock("@/features/account/PrivateContactEditor", () => ({
+  PrivateContactEditor: () => <section>비공개 정보</section>,
+}));
+
 const profile = {
   avatar: {
     alt: "여름 프로필",

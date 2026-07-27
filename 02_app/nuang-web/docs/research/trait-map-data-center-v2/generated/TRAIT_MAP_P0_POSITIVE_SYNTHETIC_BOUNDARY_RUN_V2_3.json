@@ -1,0 +1,51 @@
+{
+  "contractVersion": "nuang-trait-map-p0-positive-synthetic-boundary-run.v2.3",
+  "reportId": "TRAIT-MAP-P0-POSITIVE-SYNTHETIC-BOUNDARY-RUN.2.3",
+  "status": "TECHNICAL_POSITIVE_STOPPED_AT_SYNTHETIC_BOUNDARY",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceContractId": "TRAIT-MAP-P0-MODEL-OUTPUT-CONTRACT.2.3",
+  "fixtureId": "TRAIT-MAP-P0-POSITIVE-SYNTHETIC-MODEL-FIXTURE.2.3",
+  "summary": {
+    "modelOutputs": 80,
+    "discoveryConfirmationPairs": 40,
+    "technicalPairsPassing": 40,
+    "technicalPositiveSyntheticOnlyDecisions": 80,
+    "outputsEligibleForIndependentCopyReview": 0,
+    "canonicalSupportDecisions": 0,
+    "canonicalRevisions": 0,
+    "publicationApprovalsGranted": 0,
+    "realParticipants": 0,
+    "inferentialModelsRun": 0
+  },
+  "boundaryAssertions": [
+    {
+      "assertion": "40개 discovery-confirmation 조합이 기술 임계값을 통과한다.",
+      "passed": true
+    },
+    {
+      "assertion": "80개 출력 모두 synthetic 전용 정지 상태에 머문다.",
+      "passed": true
+    },
+    {
+      "assertion": "문장 검토 자격, canonical 지지, 수정, 공개 승인은 모두 0이다.",
+      "passed": true
+    }
+  ],
+  "releaseBoundary": {
+    "stoppedAt": "real_independent_sample_required",
+    "unavailableRequirements": [
+      "실제 참여자 표본",
+      "독립 discovery 표본",
+      "독립 confirmation 표본",
+      "사전등록 실행 기록",
+      "실제 품질·결측·불변성·민감도 분석",
+      "독립 문장 검토",
+      "고객 이해도 검토"
+    ]
+  },
+  "nextGate": {
+    "name": "PUBLICATION_GATE_AND_MANIFEST_INTEGRATION",
+    "action": "134~151 산출물을 공개 gate와 현재 manifest에 연결하고 전체 재현성 검사를 수행한다."
+  }
+}

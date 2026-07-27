@@ -1,11 +1,11 @@
 .page {
-  --ink: #20232a;
-  --subtle: #737887;
-  --line: #e6e7eb;
-  --surface: #fff;
-  --canvas: #f6f5f2;
-  --brand: #6657d9;
-  --brand-soft: #efedff;
+  --ink: var(--nu-color-text);
+  --subtle: var(--nu-color-text-muted);
+  --line: var(--nu-color-border-strong);
+  --surface: var(--nu-color-surface);
+  --canvas: var(--nu-color-app-bg);
+  --brand: var(--nu-color-brand-action);
+  --brand-soft: var(--nu-color-brand-surface-strong);
   width: 100%;
   max-width: 430px;
   min-height: 100dvh;
@@ -26,14 +26,14 @@
   align-items: center;
   padding: 0 0.5rem;
   border-bottom: 1px solid var(--line);
-  background: rgb(255 255 255 / 94%);
+  background: color-mix(in srgb, var(--nu-neutral-0) 94%, transparent);
   backdrop-filter: blur(16px);
 }
 
 .header h1 {
   margin: 0;
-  font-size: 0.9375rem;
-  font-weight: 750;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.02em;
   text-align: center;
 }
@@ -69,23 +69,23 @@
   border-radius: 999px;
   color: var(--brand);
   background: var(--brand-soft);
-  font-size: 0.65625rem;
-  font-weight: 800;
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-heavy);
 }
 
 .codePerspectiveIntro h2 {
   margin: 0.5rem 0 0.3125rem;
-  font-size: 1.1875rem;
-  font-weight: 750;
+  font-size: var(--nu-text-title);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.03em;
-  line-height: 1.4;
+  line-height: var(--nu-leading-title);
 }
 
 .codePerspectiveIntro p {
   margin: 0;
   color: var(--subtle);
-  font-size: 0.6875rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
   word-break: keep-all;
 }
 
@@ -112,8 +112,8 @@
 
 .codeResultButton strong {
   display: block;
-  font-size: 0.71875rem;
-  font-weight: 800;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-heavy);
   letter-spacing: 0.02em;
 }
 
@@ -121,7 +121,7 @@
   display: block;
   margin-top: 0.1875rem;
   color: var(--subtle);
-  font-size: 0.59375rem;
+  font-size: var(--nu-text-caption);
 }
 
 .codeResultButton[aria-pressed="true"] {
@@ -131,7 +131,7 @@
 }
 
 .codeResultButton[aria-pressed="true"] span {
-  color: #7669c9;
+  color: var(--nu-info-500);
 }
 
 .codeResultDetail {
@@ -153,14 +153,14 @@
 }
 
 .codeDetailHead strong {
-  font-size: 0.9375rem;
-  font-weight: 750;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
 }
 
 .codeDetailHead span,
 .voteLabel {
   color: var(--subtle);
-  font-size: 0.65625rem;
+  font-size: var(--nu-text-caption);
 }
 
 .voteList {
@@ -174,14 +174,14 @@
 
 .voteLabel strong {
   color: var(--ink);
-  font-weight: 750;
+  font-weight: var(--nu-weight-bold);
 }
 
 .voteTrack {
   height: 7px;
   overflow: hidden;
   border-radius: 999px;
-  background: #e9e8ef;
+  background: var(--nu-info-100);
 }
 
 .voteTrack span {
@@ -197,12 +197,12 @@
 .perspectiveNote {
   margin: 0.875rem 0 0;
   padding: 0.75rem;
-  border-left: 2px solid #9b90ef;
+  border-left: 2px solid var(--nu-info-300);
   border-radius: 0 13px 13px 0;
   color: var(--subtle);
-  background: #f7f5ff;
-  font-size: 0.6875rem;
-  line-height: 1.55;
+  background: var(--nu-brand-50);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
   word-break: keep-all;
 }
 
@@ -212,8 +212,8 @@
   gap: 0.4375rem;
   margin: 0.8125rem 0 0;
   color: var(--subtle);
-  font-size: 0.625rem;
-  line-height: 1.5;
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
 }
 
 .privacyThreshold svg {
@@ -243,15 +243,15 @@
 
 .codeLocked strong {
   display: block;
-  font-size: 0.75rem;
-  font-weight: 750;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
 }
 
 .codeLocked p {
   margin: 0.2rem 0 0;
   color: var(--subtle);
-  font-size: 0.65625rem;
-  line-height: 1.5;
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
 }
 
 .gateCard {
@@ -273,16 +273,16 @@
 
 .gateCard h2 {
   margin: 0.875rem 0 0;
-  font-size: 1rem;
-  font-weight: 750;
+  font-size: var(--nu-text-body);
+  font-weight: var(--nu-weight-bold);
 }
 
 .gateCard p {
   max-width: 30ch;
   margin: 0.4rem 0 0;
   color: var(--subtle);
-  font-size: 0.75rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .primaryAction {
@@ -293,10 +293,10 @@
   margin-top: 1rem;
   padding: 0 1rem;
   border-radius: 13px;
-  color: #fff;
+  color: var(--nu-color-surface);
   background: var(--ink);
-  font-size: 0.75rem;
-  font-weight: 750;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
 }
 
 @media (prefers-reduced-motion: reduce) {

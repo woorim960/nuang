@@ -44,7 +44,10 @@ describe("CommunityQuestionComposer", () => {
       target: { value: "친구가 고민을 말할 때 어떤 반응이 가장 편한가요?" },
     });
 
-    expect(screen.getByText(/관계를 여는 지휘자에게/)).toBeInTheDocument();
+    expect(screen.getByText("ENAKQ · 관계를 여는 지휘자")).toBeInTheDocument();
+    expect(screen.getByLabelText("질문 미리보기")).toHaveTextContent(
+      "ENAKQ친구가 고민을 말할 때 어떤 반응이 가장 편한가요?",
+    );
     fireEvent.click(screen.getByRole("button", { name: "질문 업로드" }));
 
     await waitFor(() => {

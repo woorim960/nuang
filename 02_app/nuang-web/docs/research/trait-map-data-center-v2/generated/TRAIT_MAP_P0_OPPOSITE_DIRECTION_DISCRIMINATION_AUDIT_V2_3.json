@@ -1,0 +1,297 @@
+{
+  "contractVersion": "nuang-trait-map-p0-opposite-direction-discrimination-audit.v2.3",
+  "reportId": "TRAIT-MAP-P0-OPPOSITE-DIRECTION-DISCRIMINATION-AUDIT.2.3",
+  "status": "ONE_NEAR_DUPLICATE_PAIR_FLAGGED_REWRITE_REVIEW_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceGapRegisterId": "TRAIT-MAP-P0-CONTEXT-EVIDENCE-GAP-REGISTER.2.3",
+  "reviewerIdentity": {
+    "type": "internal_automated_similarity_screen",
+    "isIndependentExternalReviewer": false,
+    "mayApprovePublication": false
+  },
+  "thresholds": {
+    "characterSimilarityFlagAtOrAbove": 0.75,
+    "tokenJaccardFlagAtOrAbove": 0.7,
+    "interpretation": "수치가 높으면 반대 방향 문장이 거의 같은 표현일 가능성을 표시할 뿐 의미 타당성을 판정하지 않는다."
+  },
+  "summary": {
+    "p0CanonicalEntries": 24,
+    "oppositeDirectionPairs": 12,
+    "automatedDifferentiationScreenPassedPairs": 11,
+    "potentialNearDuplicatePairs": 1,
+    "internalRewriteProposals": 1,
+    "canonicalRevisionsApplied": 0,
+    "publicationApprovalsGranted": 0
+  },
+  "pairs": [
+    {
+      "pairKey": "SCN-FAMILY-7|actual_response",
+      "scenarioRef": "SCN-FAMILY-7",
+      "claimKind": "actual_response",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "가족의 이야기를 듣고 원하는 도움을 확인한 뒤, 역할을 나누어 실제 지원과 다음 확인을 꾸준히 이어가는 편이다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "요청을 들은 뒤 필요한 행동을 구체화하고, 가능한 범위 안에서 연락·동행·정리 같은 실질적인 도움을 제공하는 편이다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.106, "tokenJaccard": 0.1 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-FAMILY-7|attention",
+      "scenarioRef": "SCN-FAMILY-7",
+      "claimKind": "attention",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "가족이 힘든 일을 말하면 가장 힘든 마음과 가족 생활에 생길 영향, 함께 마련할 수 있는 도움 방법을 먼저 살피는 경향이 있다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "가족이 도움을 요청하면 어떤 일이 있었고 실제로 필요한 지원이 무엇인지, 자신이 책임질 범위가 어디까지인지 먼저 확인하려는 경향이 있다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.228, "tokenJaccard": 0.118 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-FAMILY-7|communication",
+      "scenarioRef": "SCN-FAMILY-7",
+      "claimKind": "communication",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "“지금 가장 힘든 부분이 무엇인지 말해줘. 우리가 같이 할 수 있는 일을 하나씩 정해보자”처럼 경험 확인과 실행을 연결해 말하는 방식이 자연스럽다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "“내가 오늘 할 수 있는 건 이 두 가지야. 무엇이 더 필요해?”처럼 가능 범위와 추가 필요를 함께 확인하는 방식이 잘 맞는다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.155, "tokenJaccard": 0.128 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-FAMILY-7|first_thought",
+      "scenarioRef": "SCN-FAMILY-7",
+      "claimKind": "first_thought",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "“지금 이 사람이 혼자라고 느끼지 않으려면 무엇을 해야 하고, 우리 가족이 함께할 수 있는 일은 무엇일까?”를 생각하기 쉽다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "“무엇을 해결해야 하고, 내가 맡는 것이 가장 효과적인 부분은 어디지?”를 생각하기 쉽다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.25, "tokenJaccard": 0.185 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-7|actual_response",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "actual_response",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "바로 답을 정해 주기보다 이야기를 듣고 원하는 지원을 물은 뒤, 상대가 동의할 때에만 함께 방법을 찾거나 실제 도움을 제안하는 편이다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "상황을 차분히 듣고 필요한 도움의 종류를 물은 뒤, 부탁받은 범위 안에서 실제로 할 수 있는 행동을 제안하는 편이다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.241, "tokenJaccard": 0.152 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-7|attention",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "attention",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "마음에 드는 사람이 힘든 일을 말하면 감정이 상한 지점과 문제의 원인, 지금 자신에게 기대하는 도움이 무엇인지 함께 살피는 경향이 있다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "마음에 드는 사람이 힘든 일을 말하면 막연한 위로를 서둘러 건네기보다 무슨 일이 있었고 지금 어떤 도움을 요청하는지 구체적으로 파악하려는 경향이 있다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.381, "tokenJaccard": 0.281 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-7|communication",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "communication",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "“지금은 그냥 들어주는 게 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움의 종류를 고를 수 있게 묻는 방식이 잘 맞는다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "“지금 내가 들어주면 좋을까, 같이 방법을 찾아볼까?”처럼 상대가 원하는 도움을 고를 수 있게 묻는 방식이 잘 맞는다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.82, "tokenJaccard": 0.583 },
+      "screenState": "POTENTIAL_OPPOSITE_DIRECTION_NEAR_DUPLICATE",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-7|first_thought",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "claimKind": "first_thought",
+      "semanticAxes": ["RO"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-A",
+          "axisSignature": "RO=A",
+          "summaryText": "“무슨 일이고 어떻게 해결할까?”가 궁금해도, “아직 가까워지는 중이라 조언이 부담이 되지 않을까?”라는 생각이 빠르게 따라오기 쉽다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-G",
+          "axisSignature": "RO=G",
+          "summaryText": "“당장 해결할 수 있는 부분은 무엇이고, 지금은 해결보다 들어주는 것이 필요한가?”를 구분하고 싶어 하기 쉽다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.135, "tokenJaccard": 0.03 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-8|actual_response",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "actual_response",
+      "semanticAxes": ["SE"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-E",
+          "axisSignature": "SE=E",
+          "summaryText": "적절한 때에 먼저 대화를 열어 자신의 바람을 말하고, 상대의 답을 들으면서 만남이나 연락 방식을 함께 조정하는 편이다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-I",
+          "axisSignature": "SE=I",
+          "summaryText": "마음이 정리될 때까지 서두르지 않다가 적절한 순간에 대화를 요청하고, 자신이 바라는 것과 상대가 선택할 수 있는 여지를 차분히 설명하는 편이다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.153, "tokenJaccard": 0.088 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-8|attention",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "attention",
+      "semanticAxes": ["SE", "OE"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+          "axisSignature": "SE=E|OE=R",
+          "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
+          "axisSignature": "SE=I|OE=N",
+          "summaryText": "마음에 드는 사람에게 자신의 필요를 말하기 전, 관계가 이어질 수 있는 여러 방향과 서로의 바람을 연결할 표현을 혼자 떠올려 보는 경향이 있다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.371, "tokenJaccard": 0.184 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-8|communication",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "communication",
+      "semanticAxes": ["SE"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-E",
+          "axisSignature": "SE=E",
+          "summaryText": "“나는 다음 주에도 만나고 싶어. 너도 같은 마음인지 편하게 알려줘”처럼 자신의 뜻과 상대 선택을 분명히 나누는 방식이 잘 맞는다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-I",
+          "axisSignature": "SE=I",
+          "summaryText": "“이번 주에 한 번 더 만나고 싶은데, 너도 괜찮은지 알려줘”처럼 자신의 뜻과 상대 선택을 동시에 분명히 하는 방식이 자연스럽다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.49, "tokenJaccard": 0.333 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    },
+    {
+      "pairKey": "SCN-PERSON-OF-INTEREST-8|first_thought",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "claimKind": "first_thought",
+      "semanticAxes": ["SE"],
+      "variants": [
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
+          "axisSignature": "SE=E",
+          "summaryText": "“내가 바라는 것을 먼저 말하고 상대의 답을 들으면, 서로 가능한 방법을 더 분명하게 정할 수 있겠다”라고 생각하기 쉽다."
+        },
+        {
+          "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-I",
+          "axisSignature": "SE=I",
+          "summaryText": "“내 마음을 먼저 정확히 정리한 뒤, 상대에게 부담을 덜 주면서 어떻게 표현할까?”를 생각하기 쉽다."
+        }
+      ],
+      "metrics": { "characterSimilarity": 0.234, "tokenJaccard": 0.097 },
+      "screenState": "AUTOMATED_DIFFERENTIATION_SCREEN_PASSED",
+      "automatedScreenMayApproveSemantics": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "INDEPENDENT_SEMANTIC_AND_COGNITIVE_REVIEW_OF_FLAGGED_PAIR",
+    "action": "제안된 G/A 문구가 실제로 서로 다른 방향을 이해시키는지 독립 역할 검토와 인지 면담으로 확인한 뒤에만 canonical 원장 반영을 결정한다."
+  }
+}

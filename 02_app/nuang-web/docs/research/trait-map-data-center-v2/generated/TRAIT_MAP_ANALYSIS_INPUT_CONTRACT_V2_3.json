@@ -1,0 +1,590 @@
+{
+  "contractVersion": "nuang-trait-map-analysis-input.v2.3",
+  "reportId": "TRAIT-MAP-ANALYSIS-INPUT-CONTRACT.2.3",
+  "status": "SCHEMA_READY_DATABASE_NOT_MIGRATED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "lockedMeasurementAssets": {
+    "itemBankReleaseId": "NUANG-CORE-BETA-1.0",
+    "codeSchemeVersion": "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+    "itemCount": 60,
+    "itemRevisionIds": [
+      "NX-051",
+      "NX-074",
+      "NX-098",
+      "NX-027",
+      "NX-102",
+      "NX-128",
+      "NX-038",
+      "NX-079",
+      "NX-075",
+      "NX-023",
+      "NX-063",
+      "NX-136",
+      "NX-047",
+      "NX-056",
+      "NX-037",
+      "NX-055",
+      "NX-070",
+      "NX-001",
+      "NX-053",
+      "NX-109",
+      "NX-125",
+      "NX-022",
+      "NX-005",
+      "NX-134",
+      "NX-043",
+      "NX-021",
+      "NX-009",
+      "NX-122",
+      "NX-039",
+      "NX-133",
+      "NX-139",
+      "NX-042",
+      "NX-142",
+      "NX-071",
+      "NX-116",
+      "NX-131",
+      "NX-140",
+      "NX-004",
+      "NX-015",
+      "NX-072",
+      "NX-120",
+      "NX-048",
+      "NX-089",
+      "NX-111",
+      "NX-049",
+      "NX-050",
+      "NX-132",
+      "NX-143",
+      "NX-060",
+      "NX-068",
+      "NX-067",
+      "NX-095",
+      "NX-031",
+      "NX-126",
+      "NX-100",
+      "NX-086",
+      "NX-057",
+      "NX-150",
+      "NX-110",
+      "NX-130"
+    ],
+    "itemIds": [
+      "NU-B1-001",
+      "NU-B1-002",
+      "NU-B1-003",
+      "NU-B1-004",
+      "NU-B1-005",
+      "NU-B1-006",
+      "NU-B1-007",
+      "NU-B1-008",
+      "NU-B1-009",
+      "NU-B1-010",
+      "NU-B1-011",
+      "NU-B1-012",
+      "NU-B1-013",
+      "NU-B1-014",
+      "NU-B1-015",
+      "NU-B1-016",
+      "NU-B1-017",
+      "NU-B1-018",
+      "NU-B1-019",
+      "NU-B1-020",
+      "NU-B1-021",
+      "NU-B1-022",
+      "NU-B1-023",
+      "NU-B1-024",
+      "NU-B1-025",
+      "NU-B1-026",
+      "NU-B1-027",
+      "NU-B1-028",
+      "NU-B1-029",
+      "NU-B1-030",
+      "NU-B1-031",
+      "NU-B1-032",
+      "NU-B1-033",
+      "NU-B1-034",
+      "NU-B1-035",
+      "NU-B1-036",
+      "NU-B1-037",
+      "NU-B1-038",
+      "NU-B1-039",
+      "NU-B1-040",
+      "NU-B1-041",
+      "NU-B1-042",
+      "NU-B1-043",
+      "NU-B1-044",
+      "NU-B1-045",
+      "NU-B1-046",
+      "NU-B1-047",
+      "NU-B1-048",
+      "NU-B1-049",
+      "NU-B1-050",
+      "NU-B1-051",
+      "NU-B1-052",
+      "NU-B1-053",
+      "NU-B1-054",
+      "NU-B1-055",
+      "NU-B1-056",
+      "NU-B1-057",
+      "NU-B1-058",
+      "NU-B1-059",
+      "NU-B1-060"
+    ],
+    "itemManifestHashInput": "release_id + ordered(item_revision_id,item_id,domain_id,facet_id,keyed_direction,scoring_key)",
+    "mutationRule": "문구·채점·응답 형식이 바뀌면 기존 행을 수정하지 않고 새 revision과 release를 만든다."
+  },
+  "privacyBoundary": {
+    "directIdentifiersProhibited": [
+      "이름",
+      "이메일",
+      "전화번호",
+      "주소",
+      "소셜 계정",
+      "자유 서술형 신원 정보",
+      "원본 IP 주소",
+      "정밀 위치"
+    ],
+    "participantKey": "연구 서버가 생성한 무작위 participant_ref. 운영 account_id와 분석 export 사이에는 별도 접근 통제된 일회성 매핑만 허용한다.",
+    "minimumParticipantStrata": [
+      "age_band",
+      "korean_comfort_band",
+      "education_or_reading_context",
+      "assessment_familiarity_band"
+    ],
+    "optionalParticipantStrata": [
+      "gender_band",
+      "accessibility_support_band",
+      "device_form_factor"
+    ],
+    "smallCellRule": "교차표에서 작은 셀은 외부 보고·운영 대시보드에 노출하지 않고 상위 범주로 합치거나 보고를 보류한다."
+  },
+  "datasets": [
+    {
+      "name": "participant",
+      "grain": "한 연구 참여자당 1행",
+      "primaryKey": ["study_version", "participant_ref"],
+      "fields": [
+        {
+          "name": "study_version",
+          "type": "string",
+          "nullable": false,
+          "description": "잠긴 연구 계획 버전"
+        },
+        {
+          "name": "participant_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "무작위 연구 식별자"
+        },
+        {
+          "name": "consent_version",
+          "type": "string",
+          "nullable": false,
+          "description": "동의문 버전"
+        },
+        {
+          "name": "consent_status",
+          "type": "enum",
+          "nullable": false,
+          "description": "GRANTED | WITHDRAWN"
+        },
+        {
+          "name": "age_band",
+          "type": "enum",
+          "nullable": false,
+          "description": "사전 고정 연령 범주"
+        },
+        {
+          "name": "korean_comfort_band",
+          "type": "enum",
+          "nullable": false,
+          "description": "한국어 문장 이해 편안함 범주"
+        },
+        {
+          "name": "education_or_reading_context",
+          "type": "enum",
+          "nullable": false,
+          "description": "교육 수준의 우열이 아닌 읽기 맥락 범주"
+        },
+        {
+          "name": "assessment_familiarity_band",
+          "type": "enum",
+          "nullable": false,
+          "description": "성향 검사 경험 범주"
+        },
+        {
+          "name": "gender_band",
+          "type": "enum",
+          "nullable": true,
+          "description": "선택 응답"
+        },
+        {
+          "name": "accessibility_support_band",
+          "type": "enum",
+          "nullable": true,
+          "description": "선택 응답; 지원 필요 여부를 넓은 범주로 기록"
+        },
+        {
+          "name": "device_form_factor",
+          "type": "enum",
+          "nullable": true,
+          "description": "PHONE | TABLET | DESKTOP"
+        },
+        {
+          "name": "withdrawn_at",
+          "type": "timestamp",
+          "nullable": true,
+          "description": "철회 시각"
+        }
+      ]
+    },
+    {
+      "name": "attempt",
+      "grain": "한 검사 시도당 1행",
+      "primaryKey": ["attempt_ref"],
+      "foreignKeys": ["study_version + participant_ref -> participant"],
+      "fields": [
+        {
+          "name": "attempt_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "무작위 시도 식별자"
+        },
+        {
+          "name": "study_version",
+          "type": "string",
+          "nullable": false,
+          "description": "잠긴 연구 계획 버전"
+        },
+        {
+          "name": "participant_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "연구 참여자 식별자"
+        },
+        {
+          "name": "measurement_release_id",
+          "type": "string",
+          "nullable": false,
+          "description": "문항 release"
+        },
+        {
+          "name": "code_scheme_version",
+          "type": "string",
+          "nullable": false,
+          "description": "5축 코드 버전"
+        },
+        {
+          "name": "scoring_release_id",
+          "type": "string",
+          "nullable": false,
+          "description": "채점 release"
+        },
+        {
+          "name": "attempt_role",
+          "type": "enum",
+          "nullable": false,
+          "description": "DEVELOPMENT | CONFIRMATION | RETEST | FAIRNESS_HOLDOUT"
+        },
+        {
+          "name": "started_at",
+          "type": "timestamp",
+          "nullable": false,
+          "description": "시작 시각"
+        },
+        {
+          "name": "completed_at",
+          "type": "timestamp",
+          "nullable": true,
+          "description": "완료 시각"
+        },
+        {
+          "name": "completion_status",
+          "type": "enum",
+          "nullable": false,
+          "description": "STARTED | COMPLETED | WITHDRAWN | INVALIDATED"
+        },
+        {
+          "name": "resume_count",
+          "type": "integer",
+          "nullable": false,
+          "description": "재개 횟수"
+        },
+        {
+          "name": "client_quality_version",
+          "type": "string",
+          "nullable": false,
+          "description": "응답 수집 클라이언트 버전"
+        }
+      ]
+    },
+    {
+      "name": "item_response",
+      "grain": "한 시도에서 한 문항의 최종 응답당 1행",
+      "primaryKey": ["attempt_ref", "item_revision_id"],
+      "foreignKeys": ["attempt_ref -> attempt"],
+      "fields": [
+        {
+          "name": "attempt_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "시도 식별자"
+        },
+        {
+          "name": "measurement_release_id",
+          "type": "string",
+          "nullable": false,
+          "description": "문항 release"
+        },
+        {
+          "name": "item_revision_id",
+          "type": "string",
+          "nullable": false,
+          "description": "문항 revision"
+        },
+        {
+          "name": "item_id",
+          "type": "string",
+          "nullable": false,
+          "description": "안정 문항 ID"
+        },
+        {
+          "name": "order_index",
+          "type": "integer",
+          "nullable": false,
+          "description": "제시 순서"
+        },
+        {
+          "name": "response_status",
+          "type": "enum",
+          "nullable": false,
+          "description": "VALID | UNSURE | NOT_REACHED | TECHNICAL_MISSING"
+        },
+        {
+          "name": "response_value",
+          "type": "integer",
+          "nullable": true,
+          "description": "VALID일 때 1–5"
+        },
+        {
+          "name": "unsure_reason",
+          "type": "enum",
+          "nullable": true,
+          "description": "NO_EXPERIENCE | CONTEXT_VARIES | WORDING_UNCLEAR | PREFER_NOT_TO_ANSWER"
+        },
+        {
+          "name": "response_latency_ms_capped",
+          "type": "integer",
+          "nullable": true,
+          "description": "사전 고정 상한을 적용한 문항 체류 시간"
+        },
+        {
+          "name": "response_changed",
+          "type": "boolean",
+          "nullable": false,
+          "description": "최종 확정 전 응답 변경 여부"
+        },
+        {
+          "name": "presentation_variant",
+          "type": "string",
+          "nullable": false,
+          "description": "문항·응답 UI 버전"
+        },
+        {
+          "name": "answered_at",
+          "type": "timestamp",
+          "nullable": true,
+          "description": "최종 확정 시각"
+        }
+      ]
+    },
+    {
+      "name": "attempt_quality_flag",
+      "grain": "한 시도에 감지된 한 품질 신호당 1행",
+      "primaryKey": ["attempt_ref", "flag_rule_id"],
+      "foreignKeys": ["attempt_ref -> attempt"],
+      "fields": [
+        {
+          "name": "attempt_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "시도 식별자"
+        },
+        {
+          "name": "flag_rule_id",
+          "type": "string",
+          "nullable": false,
+          "description": "사전 등록된 규칙 ID"
+        },
+        {
+          "name": "flag_kind",
+          "type": "enum",
+          "nullable": false,
+          "description": "SPEED | LONGSTRING | INCONSISTENCY | UNSURE_RATE | DUPLICATE | AUTOMATION | TECHNICAL"
+        },
+        {
+          "name": "flag_value",
+          "type": "number",
+          "nullable": false,
+          "description": "관측값"
+        },
+        {
+          "name": "threshold_version",
+          "type": "string",
+          "nullable": false,
+          "description": "기준 버전"
+        },
+        {
+          "name": "exclusion_decision",
+          "type": "enum",
+          "nullable": false,
+          "description": "RETAIN | EXCLUDE_PRIMARY | REVIEW"
+        },
+        {
+          "name": "decision_basis",
+          "type": "string",
+          "nullable": false,
+          "description": "단일 신호가 아닌 사전 조합 규칙 또는 수동 검토 근거"
+        }
+      ]
+    },
+    {
+      "name": "retest_link",
+      "grain": "검사-재검사 쌍당 1행",
+      "primaryKey": [
+        "participant_ref",
+        "first_attempt_ref",
+        "retest_attempt_ref"
+      ],
+      "fields": [
+        {
+          "name": "participant_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "연구 참여자 식별자"
+        },
+        {
+          "name": "first_attempt_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "첫 검사"
+        },
+        {
+          "name": "retest_attempt_ref",
+          "type": "uuid",
+          "nullable": false,
+          "description": "재검사"
+        },
+        {
+          "name": "interval_days",
+          "type": "integer",
+          "nullable": false,
+          "description": "두 시도 간 일수"
+        },
+        {
+          "name": "major_change_flag",
+          "type": "enum",
+          "nullable": true,
+          "description": "NONE_REPORTED | REPORTED | PREFER_NOT_TO_ANSWER"
+        }
+      ]
+    }
+  ],
+  "rowValidationRules": [
+    {
+      "id": "R01_RELEASE",
+      "description": "모든 item_response.measurement_release_id는 attempt와 일치한다."
+    },
+    {
+      "id": "R02_MANIFEST",
+      "description": "완료 시도는 잠긴 release의 60개 item_revision_id를 중복 없이 정확히 가진다."
+    },
+    {
+      "id": "R03_VALID",
+      "description": "response_status=VALID이면 response_value는 1–5이고 unsure_reason은 null이다."
+    },
+    {
+      "id": "R04_UNSURE",
+      "description": "response_status=UNSURE이면 response_value는 null이고 unsure_reason은 필수다."
+    },
+    {
+      "id": "R05_MISSING",
+      "description": "NOT_REACHED 또는 TECHNICAL_MISSING이면 값과 unsure_reason은 null이다."
+    },
+    {
+      "id": "R06_TIME",
+      "description": "응답 시간은 음수가 아니고 사전 정의한 상한보다 큰 원값은 상한값으로 저장한다."
+    },
+    {
+      "id": "R07_ORDER",
+      "description": "order_index는 release manifest의 제시 순서 또는 사전 승인된 무작위화 블록을 따른다."
+    },
+    {
+      "id": "R08_WITHDRAWAL",
+      "description": "철회한 참여자의 분석 export 행은 다음 생성 시 제외된다."
+    },
+    {
+      "id": "R09_RETEST",
+      "description": "retest_link의 두 attempt는 같은 participant_ref와 measurement_release_id를 가진다."
+    },
+    {
+      "id": "R10_NO_AUTO_EXCLUSION",
+      "description": "품질 신호 하나만으로 exclusion_decision=EXCLUDE_PRIMARY를 만들 수 없다."
+    }
+  ],
+  "analysisViews": [
+    {
+      "name": "analysis_item_long",
+      "purpose": "순서형 요인·IRT·DIF 분석",
+      "columns": "attempt_ref, attempt_role, strata, item_revision_id, item metadata, response_status, response_value, latency, quality decision"
+    },
+    {
+      "name": "analysis_attempt_wide",
+      "purpose": "60문항 응답 행렬과 결측 패턴",
+      "columns": "attempt_ref + NX item columns + strata + quality decision"
+    },
+    {
+      "name": "analysis_retest_pair",
+      "purpose": "검사-재검사 안정성",
+      "columns": "paired attempt refs, interval, item/facet/axis scores"
+    },
+    {
+      "name": "analysis_audit_counts",
+      "purpose": "export 재현성·철회·결측·제외 흐름",
+      "columns": "raw, consented, completed, flagged, retained, excluded counts"
+    }
+  ],
+  "exportPolicy": {
+    "preferredFormats": ["parquet", "csv_with_schema_json"],
+    "immutableSnapshotFields": [
+      "export_id",
+      "generated_at",
+      "study_version",
+      "measurement_release_id",
+      "manifest_hash",
+      "row_counts",
+      "query_or_job_version",
+      "analysis_plan_version"
+    ],
+    "access": "원시 응답 export는 제한된 연구 저장소에서만 사용하며 앱 로그·분석 SaaS·공개 프로필로 보내지 않는다.",
+    "retention": "보관 기간과 삭제 절차는 동의문·개인정보 검토에서 확정하기 전까지 운영 수집을 시작하지 않는다."
+  },
+  "currentImplementation": {
+    "databaseMigrationApplied": false,
+    "productionCollectionStarted": false,
+    "analysisExportImplemented": false,
+    "liveParticipantCount": 0,
+    "knownSchemaGap": "현재 assessment_response는 value와 skipped 중심이므로 item revision, 판단 어려움 이유, 응답 시간, 품질 신호를 이 계약대로 보존하지 못한다."
+  },
+  "nextGate": {
+    "name": "LOCKED_MONTE_CARLO_SIMULATION_HARNESS",
+    "actions": [
+      "고정 seed와 시나리오 manifest를 만든다.",
+      "60개 5범주 응답을 생성하고 결측·판단 어려움·정역 문항 방법 효과를 주입한다.",
+      "표본 크기별 회수율·축 점수 오차·경계 추가 문항의 오분류를 비교한다.",
+      "실제 데이터 수집 전에 시뮬레이션 코드와 결과 형식을 잠근다."
+    ]
+  }
+}

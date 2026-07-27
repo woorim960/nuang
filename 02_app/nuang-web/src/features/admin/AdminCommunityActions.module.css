@@ -1,0 +1,40 @@
+.wrap {
+  padding-top: 0.75rem;
+}
+
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.buttons button {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.28rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 8px;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.buttons button:disabled {
+  opacity: 0.45;
+}
+
+.buttons .danger {
+  color: var(--nu-color-danger);
+  border-color: color-mix(in srgb, var(--nu-color-danger) 13%, white);
+  background: color-mix(in srgb, var(--nu-color-danger) 5%, white);
+}
+
+.wrap > p {
+  margin: 0.55rem 0 0;
+  color: var(--nu-color-danger);
+  font-size: var(--nu-text-caption);
+}

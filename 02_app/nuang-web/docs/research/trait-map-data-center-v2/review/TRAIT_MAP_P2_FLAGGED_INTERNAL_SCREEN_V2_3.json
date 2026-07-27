@@ -1,0 +1,957 @@
+{
+  "contractVersion": "nuang-trait-map-p2-flagged-internal-screen.v2.3",
+  "reportId": "TRAIT-MAP-P2-FLAGGED-INTERNAL-SCREEN.2.3",
+  "status": "P2_FLAGGED_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_REQUIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourcePreflightReportId": "TRAIT-MAP-P2-AUTOMATED-PREFLIGHT.2.3",
+  "summary": {
+    "flaggedEntries": 43,
+    "retainLexicalFalsePositives": 29,
+    "revisionCandidates": 14,
+    "scopeRemovalCandidates": 0,
+    "unresolvedInternalDecisions": 0,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "decisionRules": [
+    "어휘 목록에 없는 표현이라도 축의 주의 대상·처리 방식·실제 반응이 의미상 분명하면 유지한다.",
+    "축을 유추해야 하거나 다른 축 설명으로도 읽히면 문장을 직접 교정한다.",
+    "내부 판독과 교정은 독립 심리측정 검증 또는 고객 발행 승인이 아니다."
+  ],
+  "decisions": [
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.boundary.attention",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "반복 행동과 실제로 바꿀 점을 분리해 살피므로 G의 원인·해결 초점이 의미상 선명하다.",
+      "previousContent": {
+        "summaryText": "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
+      "claimKey": ".scenario.family.boundary.process",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "불편한 정확한 지점과 지킬 행동 기준을 정리하므로 G의 문제 지점·대응 초점이 드러난다.",
+      "previousContent": {
+        "summaryText": "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.need_expression.attention",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "생활에서 달라져야 할 구체 행동을 먼저 정리하므로 G의 해결 행동 초점이 드러난다.",
+      "previousContent": {
+        "summaryText": "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.need_expression.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "필요와 실행 가능한 행동 기준을 함께 요청해 G의 구체적 해결 방식이 선명하다.",
+      "previousContent": {
+        "summaryText": "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-PROCESS-RO-G",
+      "claimKey": ".scenario.family.need_expression.process",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "원하는 행동과 실행 가능한 수준을 구분해 G의 해결 가능성 검토가 드러난다.",
+      "previousContent": {
+        "summaryText": "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-C",
+      "claimKey": ".scenario.family.uncertainty.attention",
+      "axisSignature": "OE=R|ER=C",
+      "automatedFlags": ["AXIS_ER_C_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "R의 사실 확인은 선명하지만 C의 감정이 천천히 정리되는 과정이 원문에 직접 드러나지 않았다.",
+      "previousContent": {
+        "summaryText": "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 걱정과 감정이 커지기 전에, 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족의 건강·진로·경제처럼 결과를 알기 어려운 일이 생기면 걱정과 감정이 커지기 전에, 확인된 사실과 아직 모르는 부분, 당장 준비할 수 있는 행동을 구분하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-AFTERMATH-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.aftermath.attention",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "오해가 시작된 지점과 다시 확인할 내용을 찾아 G의 원인·해결 초점이 드러난다.",
+      "previousContent": {
+        "summaryText": "친구와 불편한 일이 지나간 뒤에는 혼자서 오간 말과 행동을 되짚고, 오해가 시작된 지점과 다시 확인할 내용을 정리하는 경향이 있다.",
+        "detailParagraphs": [
+          "친구와 불편한 일이 지나간 뒤에는 혼자서 오간 말과 행동을 되짚고, 오해가 시작된 지점과 다시 확인할 내용을 정리하는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.boundary.attention",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "불편한 행동과 관계 유지를 위해 달라질 점을 구분해 G의 문제·변화 초점이 선명하다.",
+      "previousContent": {
+        "summaryText": "친구가 연락 빈도·농담·부탁에서 자신의 선을 넘으면 어떤 행동이 불편했고 관계를 유지하려면 무엇이 달라져야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "친구가 연락 빈도·농담·부탁에서 자신의 선을 넘으면 어떤 행동이 불편했고 관계를 유지하려면 무엇이 달라져야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.boundary.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "문제가 된 행동과 원하는 변화를 직접 연결해 G의 해결 지향을 보여준다.",
+      "previousContent": {
+        "summaryText": "“그 농담은 나는 불편해. 앞으로는 그 주제로 놀리지 않았으면 좋겠어”처럼 대상 행동과 바라는 변화를 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“그 농담은 나는 불편해. 앞으로는 그 주제로 놀리지 않았으면 좋겠어”처럼 대상 행동과 바라는 변화를 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.need_expression.attention",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "도움이 필요한 상황과 실제로 도움이 되는 부탁을 구체화해 G의 실행 초점이 드러난다.",
+      "previousContent": {
+        "summaryText": "친구에게 도움이 필요할 때 감정을 넓게 설명하기보다 어떤 상황이고 무엇을 부탁하면 실제로 도움이 되는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "친구에게 도움이 필요할 때 감정을 넓게 설명하기보다 어떤 상황이고 무엇을 부탁하면 실제로 도움이 되는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.need_expression.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "시간·자료처럼 필요한 지원을 구체 행동으로 요청해 G의 해결 방식이 드러난다.",
+      "previousContent": {
+        "summaryText": "“오늘 10분만 내 이야기를 들어줄 수 있어?” 또는 “이 자료를 한 번 봐줄 수 있어?”처럼 필요한 지원을 구체적으로 요청하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“오늘 10분만 내 이야기를 들어줄 수 있어?” 또는 “이 자료를 한 번 봐줄 수 있어?”처럼 필요한 지원을 구체적으로 요청하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-RESPONSE-RO-G",
+      "claimKey": ".scenario.friend.need_expression.response",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "필요한 시간과 행동을 분명히 요청해 G의 구체적 해결 반응이 선명하다.",
+      "previousContent": {
+        "summaryText": "요청할 내용을 구체적으로 만든 뒤 믿는 친구에게 연락하고, 필요한 시간이나 행동을 분명히 말하는 편이다.",
+        "detailParagraphs": [
+          "요청할 내용을 구체적으로 만든 뒤 믿는 친구에게 연락하고, 필요한 시간이나 행동을 분명히 말하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.general.boundary.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "행동 기준과 가능한 대안을 함께 제시해 G의 해결 지향이 선명하다.",
+      "previousContent": {
+        "summaryText": "“이 시간에는 연락을 받기 어렵습니다. 급한 일이면 문자로 먼저 알려주세요”처럼 행동 기준과 대안을 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“이 시간에는 연락을 받기 어렵습니다. 급한 일이면 문자로 먼저 알려주세요”처럼 행동 기준과 대안을 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-I-RO-A",
+      "claimKey": ".scenario.general.need_expression.process",
+      "axisSignature": "SE=I|RO=A",
+      "automatedFlags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "I의 혼자 정리하는 과정과 A의 상대 마음·관계 영향이 모두 간접적으로만 표현됐다.",
+      "previousContent": {
+        "summaryText": "“내가 원하는 것이 정확히 무엇인지 먼저 정리한 뒤, 상대가 오해하지 않게 어떤 말부터 해야 할까?”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 것이 정확히 무엇인지 먼저 정리한 뒤, 상대가 오해하지 않게 어떤 말부터 해야 할까?”라고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "먼저 혼자 원하는 것과 자신의 마음을 정리한 뒤, 상대가 어떻게 느낄지와 관계에 필요한 배려를 담아 어떤 말부터 할지 생각하기 쉽다.",
+        "detailParagraphs": [
+          "먼저 혼자 원하는 것과 자신의 마음을 정리한 뒤, 상대가 어떻게 느낄지와 관계에 필요한 배려를 담아 어떤 말부터 할지 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-I-RO-A",
+      "claimKey": ".scenario.general.need_expression.response",
+      "axisSignature": "SE=I|RO=A",
+      "automatedFlags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "I는 어느 정도 보이지만 A의 관계와 마음을 살피는 실제 반응이 선명하지 않았다.",
+      "previousContent": {
+        "summaryText": "충분히 생각할 시간을 가진 뒤 대화를 요청하고, 준비한 핵심 내용을 차분히 설명하면서 상대의 답을 바로 재촉하지 않는 편이다.",
+        "detailParagraphs": [
+          "충분히 생각할 시간을 가진 뒤 대화를 요청하고, 준비한 핵심 내용을 차분히 설명하면서 상대의 답을 바로 재촉하지 않는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "혼자 충분히 생각하며 자신의 마음과 관계에 필요한 점을 정리한 뒤, 차분한 때 대화를 요청해 상대의 마음도 듣는 편이다.",
+        "detailParagraphs": [
+          "혼자 충분히 생각하며 자신의 마음과 관계에 필요한 점을 정리한 뒤, 차분한 때 대화를 요청해 상대의 마음도 듣는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-I-RO-G",
+      "claimKey": ".scenario.general.need_expression.response",
+      "axisSignature": "SE=I|RO=G",
+      "automatedFlags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "구체적 요청은 보이지만 I의 혼자 정리와 G의 문제 지점·해결 행동이 충분히 연결되지 않았다.",
+      "previousContent": {
+        "summaryText": "필요가 구체적으로 정리되면 믿을 만한 사람에게 시간·정보·행동처럼 분명한 형태로 도움을 요청하는 편이다.",
+        "detailParagraphs": [
+          "필요가 구체적으로 정리되면 믿을 만한 사람에게 시간·정보·행동처럼 분명한 형태로 도움을 요청하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "혼자 상황과 필요한 도움을 정리한 뒤, 믿을 만한 사람에게 문제 지점과 원하는 시간·정보·행동을 구체적으로 요청하는 편이다.",
+        "detailParagraphs": [
+          "혼자 상황과 필요한 도움을 정리한 뒤, 믿을 만한 사람에게 문제 지점과 원하는 시간·정보·행동을 구체적으로 요청하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-N-SM-M",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=E|OE=N|SM=M",
+      "automatedFlags": [
+        "AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "사람들의 반응은 E의 상호작용을 뜻하지 않으며, 흥미만으로는 N의 가능성 탐색이 선명하지 않았다.",
+      "previousContent": {
+        "summaryText": "현재 흥미와 자원에 맞는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 바꾸는 편이다.",
+        "detailParagraphs": [
+          "현재 흥미와 자원에 맞는 선택을 작게 시작하고, 사람들의 반응과 진행 상태에 따라 방법과 순서를 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "사람들과 선택 가능성을 이야기하는 동안 새 아이디어를 얻고, 현재의 흥미·자원·주변 반응에 맞춰 작은 시도를 시작한 뒤 방법과 순서를 바꾸는 편이다.",
+        "detailParagraphs": [
+          "사람들과 선택 가능성을 이야기하는 동안 새 아이디어를 얻고, 현재의 흥미·자원·주변 반응에 맞춰 작은 시도를 시작한 뒤 방법과 순서를 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-M",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=I|OE=N|SM=M",
+      "automatedFlags": ["AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "N과 M은 보이지만 I의 혼자 생각하고 결정하는 과정이 빠져 있었다.",
+      "previousContent": {
+        "summaryText": "여러 가능성을 비교한 뒤 현재 흥미와 자원에 맞는 한 가지를 작게 시험하고, 결과에 따라 다음 방법을 바꾸는 편이다.",
+        "detailParagraphs": [
+          "여러 가능성을 비교한 뒤 현재 흥미와 자원에 맞는 한 가지를 작게 시험하고, 결과에 따라 다음 방법을 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "혼자 여러 가능성을 비교한 뒤 현재 흥미와 자원에 맞는 한 가지를 작게 시험하고, 결과에 따라 다음 방법과 순서를 바꾸는 편이다.",
+        "detailParagraphs": [
+          "혼자 여러 가능성을 비교한 뒤 현재 흥미와 자원에 맞는 한 가지를 작게 시험하고, 결과에 따라 다음 방법과 순서를 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-K",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "axisSignature": "SE=I|OE=R|SM=K",
+      "automatedFlags": ["AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "R과 K는 보이지만 I의 혼자 검토하는 과정이 빠져 있었다.",
+      "previousContent": {
+        "summaryText": "목표를 작은 단계로 나누고 시작·중간 확인·완료 시점을 정한 뒤, 에너지가 달라져도 정한 흐름으로 돌아가 이어가는 편이다.",
+        "detailParagraphs": [
+          "목표를 작은 단계로 나누고 시작·중간 확인·완료 시점을 정한 뒤, 에너지가 달라져도 정한 흐름으로 돌아가 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "혼자 확인된 조건과 지난 경험을 살핀 뒤 목표를 작은 단계로 나누고 시작·중간 확인·완료 시점을 정해, 에너지가 달라져도 정한 흐름으로 돌아가 이어가는 편이다.",
+        "detailParagraphs": [
+          "혼자 확인된 조건과 지난 경험을 살핀 뒤 목표를 작은 단계로 나누고 시작·중간 확인·완료 시점을 정해, 에너지가 달라져도 정한 흐름으로 돌아가 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-N",
+      "claimKey": ".scenario.general.success.process",
+      "axisSignature": "OE=N",
+      "automatedFlags": ["AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "현재 성취에서 다음에 더 해볼 가능성으로 생각이 확장되어 N의 방향이 드러난다.",
+      "previousContent": {
+        "summaryText": "“누구와 이 기쁨을 나누고 싶지?”, “여기서 다음에는 무엇을 더 해볼 수 있을까?”라는 생각이 빠르게 이어지기 쉽다.",
+        "detailParagraphs": [
+          "“누구와 이 기쁨을 나누고 싶지?”, “여기서 다음에는 무엇을 더 해볼 수 있을까?”라는 생각이 빠르게 이어지기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-R",
+      "claimKey": ".scenario.general.success.process",
+      "axisSignature": "OE=R",
+      "automatedFlags": ["AXIS_OE_R_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "결과를 만든 선택과 같은 방식의 재현 가능성을 되짚어 R의 경험·사실 초점이 드러난다.",
+      "previousContent": {
+        "summaryText": "“어떤 선택이 결과를 만들었지?”, “다음에도 같은 방식이 통할까?”를 차분하게 되짚으며 성취의 이유를 찾기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 선택이 결과를 만들었지?”, “다음에도 같은 방식이 통할까?”를 차분하게 되짚으며 성취의 이유를 찾기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-RESPONSE-SE-E",
+      "claimKey": ".scenario.general.success.response",
+      "axisSignature": "SE=E",
+      "automatedFlags": ["AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "감정 표현과 주변 사람 언급만으로는 E의 상호작용에서 에너지를 얻는 방향이 충분히 선명하지 않았다.",
+      "previousContent": {
+        "summaryText": "기쁜 마음을 비교적 분명히 드러내고 주변 사람을 축하에 끌어들이며, 성취를 다음 계획이나 새로운 시도로 이어가는 편이다.",
+        "detailParagraphs": [
+          "기쁜 마음을 비교적 분명히 드러내고 주변 사람을 축하에 끌어들이며, 성취를 다음 계획이나 새로운 시도로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "성취한 일을 사람들과 이야기하고 축하를 주고받는 동안 기쁨과 에너지가 커지며, 그 흐름을 다음 계획이나 새로운 시도로 이어가는 편이다.",
+        "detailParagraphs": [
+          "성취한 일을 사람들과 이야기하고 축하를 주고받는 동안 기쁨과 에너지가 커지며, 그 흐름을 다음 계획이나 새로운 시도로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-C",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=E|OE=N|ER=C",
+      "automatedFlags": ["AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "가능한 방향을 사람들과 확인하고 시간이 지난 뒤 감정을 점검해 E·N·C가 모두 드러난다.",
+      "previousContent": {
+        "summaryText": "가능한 방향을 정리해 사람들과 확인하고 현재 할 수 있는 행동을 시작한 뒤, 시간이 지나 감정과 피로가 남았는지 확인하는 편이다.",
+        "detailParagraphs": [
+          "가능한 방향을 정리해 사람들과 확인하고 현재 할 수 있는 행동을 시작한 뒤, 시간이 지나 감정과 피로가 남았는지 확인하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-Q",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=E|OE=N|ER=Q",
+      "automatedFlags": ["AXIS_ER_Q_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "사람들과 가능성을 확인하고 올라온 걱정을 즉시 준비 목록으로 바꾸어 E·N·Q가 드러난다.",
+      "previousContent": {
+        "summaryText": "사람들과 정보를 나누어 가능성을 확인하고, 걱정되는 항목을 준비 목록으로 바꾸어 하나씩 점검하는 편이다.",
+        "detailParagraphs": [
+          "사람들과 정보를 나누어 가능성을 확인하고, 걱정되는 항목을 준비 목록으로 바꾸어 하나씩 점검하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-R-ER-Q",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=E|OE=R|ER=Q",
+      "automatedFlags": [
+        "AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_ER_Q_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "R은 보이지만 E의 상호작용과 Q의 빠른 정서 반응이 원문에 직접 나타나지 않았다.",
+      "previousContent": {
+        "summaryText": "확인 가능한 정보를 모아 선택지를 좁히고, 사람에게 미칠 영향을 살핀 뒤 가장 현실적인 계획부터 실행하는 편이다.",
+        "detailParagraphs": [
+          "확인 가능한 정보를 모아 선택지를 좁히고, 사람에게 미칠 영향을 살핀 뒤 가장 현실적인 계획부터 실행하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "걱정이 빠르게 올라오면 사람들과 정보를 주고받으며 생각을 정리하고, 확인된 사실을 바탕으로 선택지를 좁혀 가장 현실적인 계획부터 실행하는 편이다.",
+        "detailParagraphs": [
+          "걱정이 빠르게 올라오면 사람들과 정보를 주고받으며 생각을 정리하고, 확인된 사실을 바탕으로 선택지를 좁혀 가장 현실적인 계획부터 실행하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-I-OE-N-ER-C",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=I|OE=N|ER=C",
+      "automatedFlags": ["AXIS_ER_C_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "I와 N은 보이지만 C의 감정이 크게 번지기 전 정리하는 과정이 빠져 있었다.",
+      "previousContent": {
+        "summaryText": "여러 가설과 해결 방향을 혼자 정리한 뒤 현재 조건에서 시험할 수 있는 방법을 골라 작게 움직이는 편이다.",
+        "detailParagraphs": [
+          "여러 가설과 해결 방향을 혼자 정리한 뒤 현재 조건에서 시험할 수 있는 방법을 골라 작게 움직이는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "걱정과 감정이 커지기 전에 혼자 여러 가설과 가능한 방향을 정리한 뒤, 현재 조건에서 시험할 수 있는 방법을 골라 작게 움직이는 편이다.",
+        "detailParagraphs": [
+          "걱정과 감정이 커지기 전에 혼자 여러 가설과 가능한 방향을 정리한 뒤, 현재 조건에서 시험할 수 있는 방법을 골라 작게 움직이는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-I-OE-R-ER-Q",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "axisSignature": "SE=I|OE=R|ER=Q",
+      "automatedFlags": [
+        "AXIS_SE_I_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_ER_Q_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "R은 보이지만 I의 혼자 정리와 Q의 빠른 정서 반응이 충분히 직접적이지 않았다.",
+      "previousContent": {
+        "summaryText": "걱정이 올라와도 확인된 사실과 가능한 원인을 정리하고, 위험을 줄일 질문과 작은 대비 행동을 고르는 편이다.",
+        "detailParagraphs": [
+          "걱정이 올라와도 확인된 사실과 가능한 원인을 정리하고, 위험을 줄일 질문과 작은 대비 행동을 고르는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "걱정이 빠르게 올라와도 혼자 확인된 사실과 가능한 원인을 정리하고, 위험을 줄일 질문과 작은 대비 행동을 고르는 편이다.",
+        "detailParagraphs": [
+          "걱정이 빠르게 올라와도 혼자 확인된 사실과 가능한 원인을 정리하고, 위험을 줄일 질문과 작은 대비 행동을 고르는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.aftermath.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "다르게 이해한 지점과 다음 행동 제안을 연결해 G의 원인·해결 초점이 선명하다.",
+      "previousContent": {
+        "summaryText": "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "금지 행동과 직접 물어보는 대안을 함께 제시해 G의 해결 지향이 선명하다.",
+      "previousContent": {
+        "summaryText": "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "axisSignature": "RO=G|SM=K",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "K의 약속과 확인 시점은 선명하지만 G의 원인과 해결 방향이 간접적으로만 표현됐다.",
+      "previousContent": {
+        "summaryText": "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 감정과 자신의 영향을 확인한 뒤 사건의 흐름을 함께 정리하고, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "연인과 의견이 부딪힌 원인과 풀어야 할 문제를 함께 정리한 뒤, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "연인과 의견이 부딪힌 원인과 풀어야 할 문제를 함께 정리한 뒤, 다음에 지킬 구체적인 약속과 확인 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "달라지길 바라는 행동과 대화 시점을 정리해 G의 실행 초점이 드러난다.",
+      "previousContent": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "바라는 행동과 그 이유를 직접 연결해 G의 구체적 해결 방식이 드러난다.",
+      "previousContent": {
+        "summaryText": "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-C",
+      "claimKey": ".scenario.partner.setback.response",
+      "axisSignature": "RO=G|ER=C",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "차분히 들은 뒤 함께 찾을 방법을 묻고 대안을 정해 G·C가 모두 드러난다.",
+      "previousContent": {
+        "summaryText": "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다.",
+        "detailParagraphs": [
+          "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-Q",
+      "claimKey": ".scenario.partner.setback.response",
+      "axisSignature": "RO=G|ER=Q",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "빠르게 올라온 걱정 속에서도 사과와 수정 행동을 정해 G·Q가 모두 드러난다.",
+      "previousContent": {
+        "summaryText": "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다.",
+        "detailParagraphs": [
+          "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "axisSignature": "RO=A",
+      "automatedFlags": ["AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "관심이라는 말만으로는 A의 마음과 관계 영향을 살피는 방향이 충분히 구별되지 않았다.",
+      "previousContent": {
+        "summaryText": "“너와 계속 알아가고 싶지만 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 관심과 경계를 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“너와 계속 알아가고 싶지만 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 관심과 경계를 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "“너와 계속 알아가는 관계가 중요해서 내 마음을 솔직히 말하고 싶어. 늦은 밤 반복 연락은 부담스러우니 다음 날 이야기했으면 좋겠어”처럼 관계의 의미와 경계를 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“너와 계속 알아가는 관계가 중요해서 내 마음을 솔직히 말하고 싶어. 늦은 밤 반복 연락은 부담스러우니 다음 날 이야기했으면 좋겠어”처럼 관계의 의미와 경계를 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "axisSignature": "RO=G",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "부담이 되는 행동과 다음 날 대화라는 대안을 분명히 연결해 G의 해결 방식이 드러난다.",
+      "previousContent": {
+        "summaryText": "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-N",
+      "claimKey": ".scenario.person_of_interest.plan_change.process",
+      "axisSignature": "OE=N",
+      "automatedFlags": ["AXIS_OE_N_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "revise_for_axis_clarity",
+      "rationale": "여러 이유는 보이지만 N의 가능성과 앞으로의 방향을 탐색하는 뜻을 더 직접적으로 보여줄 필요가 있었다.",
+      "previousContent": {
+        "summaryText": "“관심이 줄어든 걸까?”를 걱정하면서도 바쁨·건강·다른 일정 같은 이유를 떠올리고, “무엇이 사실인지 확인하고 싶다”고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“관심이 줄어든 걸까?”를 걱정하면서도 바쁨·건강·다른 일정 같은 이유를 떠올리고, “무엇이 사실인지 확인하고 싶다”고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": {
+        "summaryText": "일정이 바뀌면 관심 변화뿐 아니라 바쁨·건강·다른 일정처럼 여러 설명 가능성을 떠올리고, 앞으로 관계가 이어질 방향을 확인하고 싶다고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "일정이 바뀌면 관심 변화뿐 아니라 바쁨·건강·다른 일정처럼 여러 설명 가능성을 떠올리고, 앞으로 관계가 이어질 방향을 확인하고 싶다고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-RESPONSE-SM-M",
+      "claimKey": ".scenario.work.aftermath.response",
+      "axisSignature": "SM=M",
+      "automatedFlags": ["AXIS_SM_M_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "회복 뒤 자신의 현재 흐름에 맞게 작업 방식을 고쳐 M의 상황 조정이 드러난다.",
+      "previousContent": {
+        "summaryText": "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다.",
+        "detailParagraphs": [
+          "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.work.disagreement.response",
+      "axisSignature": "RO=A|SM=M",
+      "automatedFlags": [
+        "AXIS_RO_A_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_SM_M_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "구성원의 부담을 살피고 실행안을 유연하게 조정해 A·M이 모두 드러난다.",
+      "previousContent": {
+        "summaryText": "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다.",
+        "detailParagraphs": [
+          "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.work.disagreement.response",
+      "axisSignature": "RO=G|SM=K",
+      "automatedFlags": ["AXIS_RO_G_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "근거와 시험 기준, 결정 시점을 정해 G의 해결 검증과 K의 유지 기준이 드러난다.",
+      "previousContent": {
+        "summaryText": "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다.",
+        "detailParagraphs": [
+          "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-K",
+      "claimKey": ".scenario.work.group_participation.response",
+      "axisSignature": "SE=E|SM=K",
+      "automatedFlags": [
+        "AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW",
+        "AXIS_SM_K_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"
+      ],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "질문과 의견 교환으로 논의를 열고 합의를 일정으로 고정해 E·K가 드러난다.",
+      "previousContent": {
+        "summaryText": "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다.",
+        "detailParagraphs": [
+          "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-M",
+      "claimKey": ".scenario.work.group_participation.response",
+      "axisSignature": "SE=E|SM=M",
+      "automatedFlags": ["AXIS_SE_E_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "논의를 주고받으며 작은 실험을 제안하고 반응에 맞춰 바꾸어 E·M이 드러난다.",
+      "previousContent": {
+        "summaryText": "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다.",
+        "detailParagraphs": [
+          "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-K",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "axisSignature": "OE=R|SM=K",
+      "automatedFlags": ["AXIS_SM_K_LEXICAL_CUE_NOT_FOUND_MANUAL_REVIEW"],
+      "decision": "retain_lexical_false_positive",
+      "rationale": "자료·담당자·일정을 확인해 한 실행안으로 좁히므로 R·K가 모두 드러난다.",
+      "previousContent": {
+        "summaryText": "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다.",
+        "detailParagraphs": [
+          "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "revisedContent": null,
+      "independentRoleReviewState": "pending",
+      "customerApprovalState": "pending",
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "APPLY_P2_REVISIONS_AND_RECOMPOSE_32_PROFILES",
+    "actions": [
+      "14개 교정을 canonical 원장에 적용한다.",
+      "32개 성향의 한 글자 이웃 80쌍과 중복·위험 표현을 다시 검사한다.",
+      "교정 문장을 P0 독립 검토 큐로 승격한다."
+    ]
+  }
+}

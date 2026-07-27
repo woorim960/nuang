@@ -93,6 +93,52 @@ describe("FeedMoreMenu", () => {
       },
     });
   });
+
+  it("collects a report reason and submits a post report", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        return new Response(
+          JSON.stringify({
+            feedWrite: {
+              action: "report_content",
+              id: "33333333-3333-4333-8333-333333333333",
+              targetType: "feed_post",
+            },
+            ok: true,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        );
+      }),
+    );
+
+    render(
+      <FeedMoreMenu
+        postId="22222222-2222-4222-8222-222222222222"
+        targetType="feed_post"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "더 보기" }));
+    fireEvent.click(screen.getByRole("button", { name: "신고하기" }));
+    fireEvent.click(screen.getByRole("radio", { name: "스팸 또는 반복 게시" }));
+    fireEvent.click(screen.getByRole("button", { name: "신고 접수" }));
+
+    expect(
+      await screen.findByText("신고를 접수했어요. 운영팀이 확인할게요."),
+    ).toBeInTheDocument();
+    expect(getLastRequestBody()).toEqual({
+      action: "report_content",
+      reason: "spam",
+      target: {
+        id: "22222222-2222-4222-8222-222222222222",
+        type: "feed_post",
+      },
+    });
+  });
 });
 
 function getLastRequestBody() {

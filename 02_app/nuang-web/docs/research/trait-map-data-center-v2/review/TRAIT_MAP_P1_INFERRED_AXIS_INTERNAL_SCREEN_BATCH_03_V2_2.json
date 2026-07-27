@@ -1,0 +1,355 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-03.0.1",
+  "batchId": "P1-IAS-03",
+  "status": "P1_INFERRED_AXIS_BATCH_03_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 2,
+    "variants": 8,
+    "retainCandidates": 0,
+    "revisionCandidates": 8,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-OE-PARTNER-UNCERTAINTY-ATTENTION",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "claimKind": "attention",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_oe_er_separation_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-PARTNER-UNCERTAINTY-PROCESS",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_oe_er_separation_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-R-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=R|ER=C",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않으면 추측을 넓히기보다 실제로 달라진 말과 행동, 아직 확인하지 않은 부분을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 추측을 넓히기보다 실제로 달라진 말과 행동, 아직 확인하지 않은 부분을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않을 때 걱정이 커지기 전, 실제로 달라진 말과 행동과 아직 확인하지 않은 사실을 차분히 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않을 때 걱정이 커지기 전, 실제로 달라진 말과 행동과 아직 확인하지 않은 사실을 차분히 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 추측을 넓히기보다 실제로 달라진 말과 행동, 아직 확인하지 않은 부분을 먼저 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=R|ER=Q",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "연인 관계의 앞일이 분명하지 않으면 관계가 멀어질 가능성과 말투·연락에서 달라진 신호, 놓친 대화가 빠르게 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "연인 관계의 앞일이 분명하지 않으면 관계가 멀어질 가능성과 말투·연락에서 달라진 신호, 놓친 대화가 빠르게 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않으면 걱정이 빠르게 커지면서, 연락과 말투처럼 실제로 달라진 신호와 확인해야 할 사실이 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 걱정이 빠르게 커지면서, 연락과 말투처럼 실제로 달라진 신호와 확인해야 할 사실이 먼저 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인 관계의 앞일이 분명하지 않으면 관계가 멀어질 가능성과 말투·연락에서 달라진 신호, 놓친 대화가 빠르게 눈에 들어오는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-N-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=N|ER=C",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "연인 관계의 앞일이 분명하지 않을 때 걱정이 크게 올라오기 전 실제로 나눈 말과 행동, 서로 확인할 질문과 다음 대화를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인 관계의 앞일이 분명하지 않을 때 걱정이 크게 올라오기 전 실제로 나눈 말과 행동, 서로 확인할 질문과 다음 대화를 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않을 때 걱정이 커지기 전, 지금 상황이 이어질 수 있는 여러 방향과 새롭게 풀어 갈 가능성을 차분히 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않을 때 걱정이 커지기 전, 지금 상황이 이어질 수 있는 여러 방향과 새롭게 풀어 갈 가능성을 차분히 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인 관계의 앞일이 분명하지 않을 때 걱정이 크게 올라오기 전 실제로 나눈 말과 행동, 서로 확인할 질문과 다음 대화를 먼저 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-N-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=N|ER=Q",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않으면 상대 마음에 생긴 변화와 좋지 않은 가능성, 관계를 이어가기 위해 확인할 대화를 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 상대 마음에 생긴 변화와 좋지 않은 가능성, 관계를 이어가기 위해 확인할 대화를 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인의 태도나 관계의 다음 단계가 분명하지 않으면 걱정이 빠르게 커지면서, 상대 마음이 달라졌을 가능성과 앞으로 생길 수 있는 여러 상황이 한꺼번에 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 걱정이 빠르게 커지면서, 상대 마음이 달라졌을 가능성과 앞으로 생길 수 있는 여러 상황이 한꺼번에 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인의 태도나 관계의 다음 단계가 분명하지 않으면 상대 마음에 생긴 변화와 좋지 않은 가능성, 관계를 이어가기 위해 확인할 대화를 먼저 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-R-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R|ER=C",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“내가 확인한 변화는 무엇이고, 상대에게 직접 물어야 할 한 가지는 무엇이지?”를 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 확인한 변화는 무엇이고, 상대에게 직접 물어야 할 한 가지는 무엇이지?”를 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“걱정을 키우기 전에, 내가 직접 확인한 변화와 아직 물어보지 않은 사실부터 정리해 보자”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“걱정을 키우기 전에, 내가 직접 확인한 변화와 아직 물어보지 않은 사실부터 정리해 보자”라고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“내가 확인한 변화는 무엇이고, 상대에게 직접 물어야 할 한 가지는 무엇이지?”를 정리하기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-R-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R|ER=Q",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“연인의 마음이 달라진 것은 아닌지, 내가 놓친 신호와 확인해야 할 말은 무엇일까?”가 먼저 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“연인의 마음이 달라진 것은 아닌지, 내가 놓친 신호와 확인해야 할 말은 무엇일까?”가 먼저 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“무엇이 실제로 달라졌지? 지금 확인해야 할 말과 행동은 무엇이지?”를 빠르게 떠올리며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“무엇이 실제로 달라졌지? 지금 확인해야 할 말과 행동은 무엇이지?”를 빠르게 떠올리며 걱정하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“연인의 마음이 달라진 것은 아닌지, 내가 놓친 신호와 확인해야 할 말은 무엇일까?”가 먼저 떠오르기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-N-ER-C",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N|ER=C",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“지금 둘이 실제로 아는 것은 무엇이고, 어떤 대화를 하면 관계의 방향을 분명히 할 수 있을까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“지금 둘이 실제로 아는 것은 무엇이고, 어떤 대화를 하면 관계의 방향을 분명히 할 수 있을까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“아직 정해진 것은 없으니, 둘의 관계가 이어질 수 있는 여러 방향과 새롭게 풀 방법을 차분히 생각해 보자”라고 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“아직 정해진 것은 없으니, 둘의 관계가 이어질 수 있는 여러 방향과 새롭게 풀 방법을 차분히 생각해 보자”라고 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“지금 둘이 실제로 아는 것은 무엇이고, 어떤 대화를 하면 관계의 방향을 분명히 할 수 있을까?”를 생각하기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-UNCERTAINTY-PROCESS-OE-N-ER-Q",
+      "claimKey": ".scenario.partner.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N|ER=Q",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“상대가 힘든 건지 마음이 달라진 건지, 내가 놓친 신호가 있는지” 여러 가능성을 떠올리며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“상대가 힘든 건지 마음이 달라진 건지, 내가 놓친 신호가 있는지” 여러 가능성을 떠올리며 걱정하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_and_er_contrast",
+        "rationale": "R/N과 C/Q가 함께 있는 문장이므로 R은 확인한 사실·경험, N은 열린 가능성·연결을 직접 보여 주고, C/Q는 걱정과 감정이 선명해지는 상대적 시점으로 별도 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“상대 마음이 달라진 걸까, 힘든 일이 생긴 걸까, 앞으로 관계가 어떻게 될까?”처럼 여러 가능성이 빠르게 이어지며 걱정하기 쉽다.",
+        "detailParagraphs": [
+          "“상대 마음이 달라진 걸까, 힘든 일이 생긴 걸까, 앞으로 관계가 어떻게 될까?”처럼 여러 가능성이 빠르게 이어지며 걱정하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“상대가 힘든 건지 마음이 달라진 건지, 내가 놓친 신호가 있는지” 여러 가능성을 떠올리며 걱정하기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_03_RECOMPOSITION_AND_BATCH_04_SCREEN",
+    "actions": [
+      "8개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "OE·work 맥락의 P1-IAS-04를 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

@@ -1,0 +1,373 @@
+{
+  "contractVersion": "nuang-trait-map-multi-evidence-conflict-contract.v2.3",
+  "reportId": "TRAIT-MAP-MULTI-EVIDENCE-CONFLICT-CONTRACT.2.3",
+  "status": "FAIL_CLOSED_CONFLICT_RULES_READY_NO_REAL_DECISIONS",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceReviewImportReportId": "TRAIT-MAP-REVIEW-IMPORT-CONTRACT.2.3",
+  "sourceRevisionImpactReportId": "TRAIT-MAP-REVISION-IMPACT-DRY-RUN.2.3",
+  "sourceContextApplicabilityReportId": "TRAIT-MAP-ALL-CANONICAL-CONTEXT-APPLICABILITY-AUDIT.2.3",
+  "sourcePreregistrationReportId": "TRAIT-MAP-P0-PREREGISTRATION-DECISION-TABLE.2.3",
+  "sourcePublicationGateReportId": "TRAIT-MAP-PUBLICATION-GATE.2.3",
+  "summary": {
+    "decisionDimensions": 8,
+    "resolutionRules": 8,
+    "syntheticConflictCases": 12,
+    "syntheticCasesPassed": 12,
+    "realImportedDecisions": 0,
+    "canonicalRevisionsCommitted": 0,
+    "canonicalWithdrawalsCommitted": 0,
+    "productionAllowlistEntries": 0,
+    "publicationApprovalsGranted": 0
+  },
+  "principles": [
+    "서로 다른 근거를 단순 합산하거나 다수결로 승인하지 않는다.",
+    "문장과 가까운 근거·상황·응답 층을 구분한다.",
+    "안전 실패는 다른 통과 결과보다 우선한다.",
+    "합성·내부 AI 판정은 독립 검토나 실제 타당도 근거를 대신하지 않는다.",
+    "문장을 수정하면 이전 결과를 자동 승계하지 않고 영향받은 gate를 다시 연다.",
+    "승인되지 않은 상태나 누락값은 기본 차단한다."
+  ],
+  "dimensions": [
+    {
+      "dimension": "structural_trace",
+      "requiredState": "pass",
+      "failureEffect": "blocked_trace"
+    },
+    {
+      "dimension": "semantic_scope",
+      "requiredState": "direct_or_explicitly_limited",
+      "failureEffect": "blocked_scope"
+    },
+    {
+      "dimension": "context_applicability",
+      "requiredState": "exact_or_directly_validated",
+      "failureEffect": "blocked_context"
+    },
+    {
+      "dimension": "scenario_direct_validation",
+      "requiredState": "independent_discovery_confirmation_pass",
+      "failureEffect": "blocked_direct_validation"
+    },
+    {
+      "dimension": "independent_seven_role_review",
+      "requiredState": "required_roles_pass",
+      "failureEffect": "blocked_independent_review"
+    },
+    {
+      "dimension": "cognitive_comprehension",
+      "requiredState": "meaning_and_discrimination_pass",
+      "failureEffect": "revise_and_retest"
+    },
+    {
+      "dimension": "safety_and_stigma",
+      "requiredState": "pass",
+      "failureEffect": "withdraw_or_rewrite"
+    },
+    {
+      "dimension": "customer_publication_approval",
+      "requiredState": "explicit_surface_approval",
+      "failureEffect": "research_only"
+    }
+  ],
+  "resolutionRules": [
+    {
+      "priority": 1,
+      "ruleId": "RESOLVE-SAFETY",
+      "when": "safety_and_stigma=fail",
+      "result": "withdraw_or_rewrite",
+      "rationale": "유해·낙인·단정 표현은 다른 근거가 좋아도 공개하지 않는다."
+    },
+    {
+      "priority": 2,
+      "ruleId": "RESOLVE-TRACE",
+      "when": "structural_trace=fail",
+      "result": "blocked_trace",
+      "rationale": "출처와 canonical 계보를 재현할 수 없으면 평가 자체를 진행하지 않는다."
+    },
+    {
+      "priority": 3,
+      "ruleId": "RESOLVE-SCOPE",
+      "when": "semantic_scope=fail or context_applicability=transfer_unestablished",
+      "result": "blocked_scope_or_context",
+      "rationale": "다른 구성개념·상황의 결과를 현재 문장 직접 근거로 바꾸지 않는다."
+    },
+    {
+      "priority": 4,
+      "ruleId": "RESOLVE-DIRECT-NULL",
+      "when": "scenario_direct_validation=no_signal_or_direction_conflict",
+      "result": "narrow_rewrite_or_archive",
+      "rationale": "문장과 가장 가까운 직접 검증이 지지하지 않으면 넓은 문장을 유지하지 않는다."
+    },
+    {
+      "priority": 5,
+      "ruleId": "RESOLVE-REVIEW-SPLIT",
+      "when": "independent_seven_role_review=split_or_fail",
+      "result": "adjudicate_without_release",
+      "rationale": "역할 간 이견을 평균내어 승인하지 않고 쟁점 구절별로 다시 판정한다."
+    },
+    {
+      "priority": 6,
+      "ruleId": "RESOLVE-COMPREHENSION",
+      "when": "cognitive_comprehension=fail",
+      "result": "revise_and_retest",
+      "rationale": "연구자가 이해해도 사용자가 다른 뜻으로 읽으면 공개 문장으로 사용할 수 없다."
+    },
+    {
+      "priority": 7,
+      "ruleId": "RESOLVE-ALL-TECHNICAL-PASS",
+      "when": "all_research_gates=pass and customer_approval=missing",
+      "result": "eligible_research_candidate_not_public",
+      "rationale": "연구 gate 통과와 고객 화면 발행은 분리한다."
+    },
+    {
+      "priority": 8,
+      "ruleId": "RESOLVE-SURFACE-APPROVAL",
+      "when": "all_required_gates=pass",
+      "result": "eligible_for_explicit_surface_allowlist",
+      "rationale": "승인된 canonical ID와 화면만 명시적 allowlist에 넣는다."
+    }
+  ],
+  "conflictRecordSchema": {
+    "requiredFields": [
+      "conflict_ref",
+      "canonical_variant_id",
+      "canonical_version",
+      "dimension_states",
+      "source_decision_refs",
+      "conflicting_claim_spans",
+      "resolved_state",
+      "resolution_rule_id",
+      "adjudicator_refs",
+      "resolved_at",
+      "impact_dry_run_ref"
+    ],
+    "appendOnly": true,
+    "originalDecisionsImmutable": true
+  },
+  "revisionEffects": {
+    "wordingOnly": "인지 면담·독립 문장 검토·중복·안전·32개 재조합을 다시 실행한다.",
+    "semanticNarrowing": "근거 범위·직접 검증·인지 면담·독립 검토·32개 재조합을 다시 실행한다.",
+    "axisOrDirectionChange": "canonical 계보, 모든 관련 근거, 직접 검증, 32개 재조합, 비교·리포트 영향을 전부 다시 연다.",
+    "withdrawal": "모든 화면 allowlist에서 즉시 제거하고 영향받는 32개 성향 참조에 fallback을 요구한다."
+  },
+  "syntheticFixture": {
+    "fixtureId": "TRAIT-MAP-MULTI-EVIDENCE-CONFLICT-SYNTHETIC-FIXTURE.2.3",
+    "cases": [
+      {
+        "caseId": "CF-01",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "fail",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "withdraw_or_rewrite",
+        "actualResult": "withdraw_or_rewrite",
+        "passed": true
+      },
+      {
+        "caseId": "CF-02",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "fail",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "blocked_trace",
+        "actualResult": "blocked_trace",
+        "passed": true
+      },
+      {
+        "caseId": "CF-03",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "fail",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "blocked_scope_or_context",
+        "actualResult": "blocked_scope_or_context",
+        "passed": true
+      },
+      {
+        "caseId": "CF-04",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "transfer_unestablished",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "blocked_scope_or_context",
+        "actualResult": "blocked_scope_or_context",
+        "passed": true
+      },
+      {
+        "caseId": "CF-05",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "no_signal",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "narrow_rewrite_or_archive",
+        "actualResult": "narrow_rewrite_or_archive",
+        "passed": true
+      },
+      {
+        "caseId": "CF-06",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "direction_conflict",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "narrow_rewrite_or_archive",
+        "actualResult": "narrow_rewrite_or_archive",
+        "passed": true
+      },
+      {
+        "caseId": "CF-07",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "split",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "adjudicate_without_release",
+        "actualResult": "adjudicate_without_release",
+        "passed": true
+      },
+      {
+        "caseId": "CF-08",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "fail",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "revise_and_retest",
+        "actualResult": "revise_and_retest",
+        "passed": true
+      },
+      {
+        "caseId": "CF-09",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "missing"
+        },
+        "expectedResult": "eligible_research_candidate_not_public",
+        "actualResult": "eligible_research_candidate_not_public",
+        "passed": true
+      },
+      {
+        "caseId": "CF-10",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "eligible_for_explicit_surface_allowlist",
+        "actualResult": "eligible_for_explicit_surface_allowlist",
+        "passed": true
+      },
+      {
+        "caseId": "CF-11",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "independent_discovery_confirmation_pass",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "fail",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "withdraw_or_rewrite",
+        "actualResult": "withdraw_or_rewrite",
+        "passed": true
+      },
+      {
+        "caseId": "CF-12",
+        "synthetic": true,
+        "states": {
+          "structural_trace": "pass",
+          "semantic_scope": "direct_or_explicitly_limited",
+          "context_applicability": "exact_or_directly_validated",
+          "scenario_direct_validation": "technical_positive_synthetic_only",
+          "independent_seven_role_review": "required_roles_pass",
+          "cognitive_comprehension": "meaning_and_discrimination_pass",
+          "safety_and_stigma": "pass",
+          "customer_publication_approval": "pass"
+        },
+        "expectedResult": "blocked_direct_validation",
+        "actualResult": "blocked_direct_validation",
+        "passed": true
+      }
+    ]
+  },
+  "currentState": {
+    "realImportedDecisions": 0,
+    "unresolvedConflicts": 0,
+    "commitPerformed": false,
+    "publicationChanged": false
+  },
+  "nextGate": {
+    "name": "REVISION_GATE_REOPEN_MATRIX_AND_SYNTHETIC_IMPACT_TEST",
+    "action": "문장 수정 유형별로 다시 열어야 할 검증 gate와 32개 성향 재조합 영향을 자동 판정하는 fixture를 구축한다."
+  }
+}

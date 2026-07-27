@@ -32,6 +32,10 @@ const analysisRouteSource = fs.readFileSync(
   ),
   "utf8",
 );
+const adminResearchRouteSource = fs.readFileSync(
+  path.join(process.cwd(), "src/app/admin/research/page.tsx"),
+  "utf8",
+);
 
 describe("Gate C research runner isolation", () => {
   it("does not call production storage, scoring, or assessment seeds", () => {
@@ -57,11 +61,11 @@ describe("Gate C research runner isolation", () => {
     expect(publicRouteSource).not.toContain("gateCFormIds");
   });
 
-  it("keeps aggregate research analysis internal and development-only", () => {
+  it("keeps aggregate research analysis internal and admin-only", () => {
     expect(analysisRouteSource).toContain(
-      'process.env.NODE_ENV !== "development"',
+      'redirect("/admin/research?section=items")',
     );
-    expect(analysisRouteSource).toContain("notFound()");
+    expect(adminResearchRouteSource).toContain("resolveAdminContext");
     expect(analysisRouteSource).not.toMatch(
       /participant_code|age_band|life_context/,
     );

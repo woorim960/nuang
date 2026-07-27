@@ -48,11 +48,6 @@ export function FriendTraitMatch() {
                   ? "같은 상황에서 나는 어떻게 반응할까요?"
                   : "친구라면 어떤 답을 고를까요?"}
               </h2>
-              <p>
-                {step === 0
-                  ? "최근 6개월의 평소 모습을 떠올리며 더 가까운 답을 골라주세요."
-                  : "정답을 맞히는 검사가 아니에요. 내가 친구를 어떻게 이해하고 있는지 가볍게 확인해요."}
-              </p>
             </section>
 
             <p className={styles.question}>
@@ -80,10 +75,6 @@ export function FriendTraitMatch() {
             <section className={styles.stepCopy}>
               <small>초대할 준비 완료</small>
               <h2>이제 친구의 실제 선택을 확인해 보세요</h2>
-              <p>
-                친구가 같은 질문에 답하면 두 사람이 같게 본 부분과 다르게 본
-                이유를 나란히 보여드려요.
-              </p>
             </section>
 
             <div className={styles.summary}>
@@ -96,10 +87,6 @@ export function FriendTraitMatch() {
                 <strong>{getChoiceLabel(friendChoice)}</strong>
               </article>
             </div>
-            <p className={styles.guide}>
-              같은 답이어도 이유는 다를 수 있어요. 결과에서는 궁합 점수 대신
-              서로의 선택과 이유를 이해하기 쉽게 비교합니다.
-            </p>
             {shareStatus ? (
               <p className={styles.status} role="status">
                 {shareStatus}

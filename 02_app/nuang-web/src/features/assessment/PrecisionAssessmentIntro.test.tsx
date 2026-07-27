@@ -192,7 +192,7 @@ describe("PrecisionAssessmentIntro", () => {
     ).toBeInTheDocument();
     expect(screen.getByLabelText("방금 확인한 코드 ENAKQ")).toBeInTheDocument();
     expect(
-      screen.getByText(/처음 드는 생각·실제 나타나는 반응/),
+      screen.getByText("내 생활 속 모습을 더 자세히 알려드려요"),
     ).toBeInTheDocument();
     expect(
       screen.getByText("원하는 사람과 성향을 비교할 수 있어요"),

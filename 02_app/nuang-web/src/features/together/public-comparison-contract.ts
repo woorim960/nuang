@@ -790,7 +790,7 @@ function buildPatternText(
     return `${subject}의 공개된 뉴앙 코드 정보를 더 확인해야 해요.`;
   }
 
-  return `${insight.detailTitle}. ${insight.description}${boundary}`;
+  return `${symbol} ${insight.publicTypeName}. ${insight.description}${boundary}`;
 }
 
 function buildConversationStarters(

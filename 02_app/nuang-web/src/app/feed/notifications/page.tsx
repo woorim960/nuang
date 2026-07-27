@@ -36,7 +36,6 @@ export default async function CommunityNotificationsPage() {
               <Bell size={22} strokeWidth={1.7} />
             </span>
             <strong>로그인하면 소식을 모아볼 수 있어요</strong>
-            <p>팔로우와 댓글처럼 나와 연결된 활동을 놓치지 않게 알려드려요.</p>
             <Link
               className={styles.stateAction}
               href="/login?next=%2Ffeed%2Fnotifications&reason=community"
@@ -73,10 +72,6 @@ export default async function CommunityNotificationsPage() {
               <Bell size={22} />
             </span>
             <strong>새로운 활동이 아직 없어요</strong>
-            <p>
-              팔로우와 댓글, 답글, 언급처럼 커뮤니티 안에서 생긴 소식을 이곳에서
-              확인할 수 있어요.
-            </p>
           </div>
         </section>
       )}

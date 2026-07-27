@@ -1,0 +1,199 @@
+{
+  "contractVersion": "nuang-trait-map-data-center-final-completion-audit.v2.3",
+  "reportId": "TRAIT-MAP-DATA-CENTER-FINAL-COMPLETION-AUDIT.2.3",
+  "status": "RESEARCH_MASTER_V2_3_COMPLETE",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "targetId": "RESEARCH_MASTER_V2_3_COMPLETE",
+  "summary": {
+    "requirements": 10,
+    "passed": 10,
+    "blocked": 0,
+    "proofFilesHashed": 19,
+    "customerPublicationValidated": false,
+    "customerPublicationAllowlistedEntries": 0
+  },
+  "reproducibility": {
+    "command": "node scripts/check-trait-map-v2-3-current.mjs --skip-final-audit",
+    "exitCode": 0,
+    "checksPassed": 156,
+    "includesCanonicalBatches": 12,
+    "includesLongformSuites": 7,
+    "checkedAt": "2026-07-24T00:00:00.000Z"
+  },
+  "requirements": [
+    {
+      "requirementId": "RM-01",
+      "title": "705 canonical 계보의 완전한 재구축",
+      "state": "passed",
+      "checks": [true, true, true, true, true, true, true, true],
+      "actual": "v2.1 705 → v2.2 611 → v2.3 605, 구조 오류 0"
+    },
+    {
+      "requirementId": "RM-02",
+      "title": "CAB-01~12 문장 교정 원장 완결",
+      "state": "passed",
+      "checks": [true, true, true, true, true, true, true],
+      "actual": "CAB 12/12, 72개 상황, 288개 슬롯, canonical 605개"
+    },
+    {
+      "requirementId": "RM-03",
+      "title": "32개 성향 재조합과 한 글자 이웃 완결",
+      "state": "passed",
+      "checks": [true, true, true, true, true, true, true, true, true],
+      "actual": "9,216개 참조, 전체 이웃 80/80, CAB 이웃 960/960"
+    },
+    {
+      "requirementId": "RM-04",
+      "title": "32개 장문 원고 구조와 최소 분량",
+      "state": "passed",
+      "checks": [true, true, true, true, true],
+      "actual": "32/32 5만 자 이상, 총 2,352,502자"
+    },
+    {
+      "requirementId": "RM-05",
+      "title": "32개 장문 원고 실질 품질 gate",
+      "state": "passed",
+      "checks": [true, true, true, true, true, true],
+      "actual": "32/32 내용 gate 통과, 열린 내용 보수 0"
+    },
+    {
+      "requirementId": "RM-06",
+      "title": "근거·맥락 범위의 완전한 등록",
+      "state": "passed",
+      "checks": [true, true, true, true],
+      "actual": "605 canonical과 2,939개 finding 연결의 맥락 범위 등록"
+    },
+    {
+      "requirementId": "RM-07",
+      "title": "공식 10글자 언어와 32개 별칭 내부 계약",
+      "state": "passed",
+      "checks": [true, true, true, true],
+      "actual": "공식 10글자 언어 32/32, 짧은·긴 별칭 중복 0"
+    },
+    {
+      "requirementId": "RM-08",
+      "title": "COMMON·미승인 문장 발행 차단",
+      "state": "passed",
+      "checks": [true, true, true, true, true, true],
+      "actual": "COMMON 61개 개인화 차단, 운영 allowlist 0, route 연결 0"
+    },
+    {
+      "requirementId": "RM-09",
+      "title": "최종 기준선 전체 재현 검사",
+      "state": "passed",
+      "checks": [true, true, true],
+      "actual": "156개 current check 통과"
+    },
+    {
+      "requirementId": "RM-10",
+      "title": "요구사항별 최종 완료 감사",
+      "state": "passed",
+      "checks": [true, true, true, true],
+      "actual": "RM-01~09 개별 판정과 19개 증거 파일 해시 고정"
+    }
+  ],
+  "proofFiles": [
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_FINAL_AXIS_DECISIONS_V2_1.json",
+      "bytes": 393301,
+      "sha256": "b16a2373c24efe656a3a840620445a8e22e9875e6b08664c6f72e32324ce38e2"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_FINAL_AXIS_DECISIONS_V2_2.json",
+      "bytes": 658285,
+      "sha256": "8a8ddcc6055b1c35550be843eb565b28faffba22d1a92dccca1c0255b30880ed"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_FINAL_AXIS_DECISIONS_V2_3.json",
+      "bytes": 688799,
+      "sha256": "f027c7200580e1e1be2ebfbfe5dbbcfbce6368ca87f9df7b5b2fcca58ff9e3ae"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_ALL_BATCH_AUDIT_V2_3.json",
+      "bytes": 10022,
+      "sha256": "4f25c0a34b57ecc896ac072685bf910d6e6906c9ecd2662c70c68dd73a55c876"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_CANONICAL_CONTENT_LEDGER_P2_SCREENED_V2_3.json",
+      "bytes": 2627353,
+      "sha256": "8c38fc73a71617651fbf1bc1d1356b72ae485a77a3688f66bd7e6332a3533412"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_P2_SCREENED_RECOMPOSITION_AUDIT_V2_3.json",
+      "bytes": 20104,
+      "sha256": "40fb38a04d3dc34faf50e6324fefc26f19978d287bd7058187a0d9afa6e906d4"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_32_PROFILE_CANONICAL_REBASE_V2_3.json",
+      "bytes": 3644474,
+      "sha256": "2fb9b1dac8b8b02d8663039bba4a7ea18e1bf24c25290e6b195055c8acd2ced7"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_32_PROFILE_COMPLETENESS_AUDIT_V2.json",
+      "bytes": 27376,
+      "sha256": "b479e6bfc2136a18c1378235edce56601cfb9eec5340c0e36029651cb09ab5fc"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_32_CONTENT_QUALITY_AUDIT_V2.json",
+      "bytes": 80218,
+      "sha256": "960beeea3d59d8cc5c556714cfc5dfcce7900981a0dd207142b1f29f7558c354"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_32_MASTER_COMPLETENESS_REAUDIT_V2.json",
+      "bytes": 51067,
+      "sha256": "5fa774c34d718a96c21d5bae71c5d963d3fe344aac89d0eff02ea982d65c5f93"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_V2_3_COMPLETENESS_GAP_REGISTER.json",
+      "bytes": 54114,
+      "sha256": "8187d2d1b70dbef708f0eb13dd317cb945580753a6937f87ac740a2891c4be43"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_ALL_CANONICAL_CONTEXT_APPLICABILITY_AUDIT_V2_3.json",
+      "bytes": 2144435,
+      "sha256": "f4b1736f88dd268d1d7b0492c3b7ac8bfa9947909df616b93e31bd67aa8c8fc4"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_32_PROFILE_NAME_FINAL_AUDIT_V2_1.json",
+      "bytes": 67713,
+      "sha256": "451f5655f9578000d0bcb495c72a1709d654782c3738e404d2e5eb764356264d"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_COMMON_ISOLATION_AUDIT_V2_3.json",
+      "bytes": 8342,
+      "sha256": "d4c03e7fa5c6d4b2f2f2ccb02b977573e056e2d31aed2c5240624d1bcdd82cd2"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_PUBLICATION_GATE_V2_3.json",
+      "bytes": 11075,
+      "sha256": "5eb7af45d751d7fd448b0c888e7db95dc3bb3397d1495ccbf528b61c5ae4bb0a"
+    },
+    {
+      "path": "docs/research/trait-map-data-center-v2/generated/TRAIT_MAP_RUNTIME_RESOLVER_HARNESS_V2_3.json",
+      "bytes": 2011,
+      "sha256": "c50da0b3ccf932ad1b8aae833c82212766329d091819219f77c242a1964f85d0"
+    },
+    {
+      "path": "scripts/check-trait-map-v2-3-current.mjs",
+      "bytes": 6763,
+      "sha256": "d4bedaa759a52234a89d9f2ab652a4dee4f7cc2ed8b7fa5a9e266ac110f029c6"
+    },
+    {
+      "path": "scripts/lib/generate-derived-longform-research-draft.mjs",
+      "bytes": 25733,
+      "sha256": "d2e768c612e2885fe1911b71f1efa35b359b0ecce1ecf39b3e4c519ecbb64e6c"
+    },
+    {
+      "path": "scripts/generate-trait-map-32-content-quality-audit.mjs",
+      "bytes": 22988,
+      "sha256": "0b0544000a67ff8ca10a741c234b4b66c883f0f059f8a086d17329d99bcca5de"
+    }
+  ],
+  "scopeBoundary": {
+    "achieved": "사용자 참여 검증 전에 완성할 수 있는 canonical 계보·문장 원장·32개 재조합·장문 내용·근거 범위 등록·발행 차단·재현성",
+    "notClaimed": "독립 외부 검토, 실제 참여자 타당화, 고객 발행 승인, 운영 서비스 효능",
+    "reason": "실제 사용자 검사는 사용자가 별도로 진행하며, 합성 자료와 내부 검토를 외부 검증으로 바꾸어 말하지 않는다."
+  },
+  "nextRelease": "CUSTOMER_PUBLICATION_VALIDATED는 실제 독립 검토·인지 면담·정량 검증·별칭 사용자 검증·화면별 allowlist가 모두 통과한 뒤 별도로 판정한다."
+}

@@ -153,11 +153,7 @@ export function CandidateCoreResultView({
             <span className={styles.statusTag}>
               {isQuickResult ? "첫 성향 결과" : "정밀 성향 결과"}
             </span>
-            <p className={styles.kicker}>
-              {isQuickResult
-                ? "빠른 코어에서 가까웠던 뉴앙 코드"
-                : "이번 응답에서 가까운 뉴앙 코드"}
-            </p>
+            <p className={styles.kicker}>내 뉴앙 코드</p>
             <p aria-label={`뉴앙 코드 ${result.code}`} className={styles.code}>
               {result.code.split("").map((letter, index) => (
                 <span
@@ -186,16 +182,9 @@ export function CandidateCoreResultView({
           </p>
         </section>
 
-        <nav aria-label="결과 리포트 바로가기" className={styles.resultNav}>
-          <a href="#result-overview">한눈에 보기</a>
-          <a href="#result-map">성향지도</a>
-          <a href="#result-code">5글자 분석</a>
-        </nav>
-
         <section
           aria-labelledby="candidate-profile-overview"
           className={`${styles.section} ${styles.overviewSection}`}
-          id="result-overview"
         >
           <div className={styles.sectionHeading}>
             <div>
@@ -222,24 +211,18 @@ export function CandidateCoreResultView({
           </div>
         </section>
 
-        <div id="result-map">
-          <TraitMapResultBridge
-            code={result.code}
-            profileName={profile.displayName}
-          />
-        </div>
+        <TraitMapResultBridge
+          code={result.code}
+          profileName={profile.displayName}
+        />
 
         <section
           aria-labelledby="candidate-code-explorer"
           className={styles.section}
-          id="result-code"
         >
           <div className={styles.sectionHeading}>
             <div>
-              <p className={styles.sectionEyebrow}>내 코드 자세히 보기</p>
-              <h2 id="candidate-code-explorer">
-                궁금한 글자를 눌러 뜻을 확인해요
-              </h2>
+              <h2 id="candidate-code-explorer">5글자 코드</h2>
             </div>
             <span>{selectedPosition + 1} / 5</span>
           </div>
@@ -248,9 +231,8 @@ export function CandidateCoreResultView({
             <div className={styles.boundaryNotice}>
               <p className={styles.boundaryTitle}>두 글자가 함께 보이는 이유</p>
               <p className={styles.boundaryDescription}>
-                {boundaryPairLabels[0]}처럼 두 글자가 함께 보이는 자리는, 두
-                글자에 해당하는 답의 점수 차이가 작았다는 뜻이에요. 눌러서
-                각각의 뜻을 확인해 보세요.
+                {boundaryPairLabels[0]}처럼 두 글자가 함께 보이면 두 방향의 점수
+                차이가 작다는 뜻이에요.
               </p>
             </div>
           ) : null}
@@ -359,8 +341,8 @@ export function CandidateCoreResultView({
                   {isDisplayedTie
                     ? "두 글자의 점수가 같게 나왔어요"
                     : selectedDomain.isBoundary
-                      ? `${selectedSymbol} 쪽에 조금 더 가까웠어요`
-                      : selectedDirection.detailTitle}
+                      ? `${selectedSymbol} ${selectedDirection.publicTypeName} 쪽에 조금 더 가까웠어요`
+                      : `${selectedSymbol} · ${selectedDirection.publicTypeName}`}
                 </h3>
               </div>
             </div>
@@ -370,9 +352,6 @@ export function CandidateCoreResultView({
               className={styles.scoreComparison}
               role="img"
             >
-              <p aria-hidden="true" className={styles.scoreEyebrow}>
-                이번 응답의 방향 비교
-              </p>
               <div aria-hidden="true" className={styles.scoreDirections}>
                 <div
                   className={`${styles.scoreDirection} ${closerSymbol === selectedLeftSymbol ? styles.closerDirection : ""}`}
@@ -381,7 +360,10 @@ export function CandidateCoreResultView({
                     <strong>{selectedLeftSymbol}</strong>
                     <b>{selectedLeftPercentage}%</b>
                   </div>
-                  <p>{selectedLeftDirection.preciseToken}</p>
+                  <p>
+                    {selectedLeftDirection.publicTypeName} ·{" "}
+                    {selectedLeftDirection.preciseToken}
+                  </p>
                   {closerSymbol === selectedLeftSymbol ? (
                     <span>
                       {selectedDomain.isBoundary
@@ -397,7 +379,10 @@ export function CandidateCoreResultView({
                     <strong>{selectedRightSymbol}</strong>
                     <b>{selectedRightPercentage}%</b>
                   </div>
-                  <p>{selectedRightDirection.preciseToken}</p>
+                  <p>
+                    {selectedRightDirection.publicTypeName} ·{" "}
+                    {selectedRightDirection.preciseToken}
+                  </p>
                   {closerSymbol === selectedRightSymbol ? (
                     <span>
                       {selectedDomain.isBoundary
@@ -426,18 +411,15 @@ export function CandidateCoreResultView({
                     : `이번 응답에서는 ${closerSymbol} 쪽 답이 더 많이 나타났어요.`}
               </p>
               <p aria-hidden="true" className={styles.scoreMethod}>
-                문항 답을 0~100 기준으로 계산한 비교값이에요. 두 수치는 합계
-                100%이며, 성향일 확률이나 검사 정확도를 뜻하지 않아요.
+                두 수치는 문항 답을 비교한 값이며, 성향일 확률이 아니에요.
               </p>
             </div>
 
-            <p className={styles.detailDescription}>
-              {isDisplayedTie
-                ? `이번 응답에서는 ${selectedLeftSymbol}와 ${selectedRightSymbol}에 해당하는 답이 같은 점수로 계산됐어요. 현재 결과만으로 어느 한쪽이 더 가깝다고 보기는 어려워요.`
-                : selectedDomain.isBoundary
-                  ? `이번 응답에서는 ${selectedDirection.symbol} 방향의 답이 조금 더 많았지만, ${selectedDirection.oppositeSymbol} 방향과 차이가 크지 않았어요. 현재 결과만으로 어느 한쪽이 뚜렷하다고 보기는 어려워요.`
-                  : selectedDirection.description}
-            </p>
+            {!isDisplayedTie && !selectedDomain.isBoundary ? (
+              <p className={styles.detailDescription}>
+                {selectedDirection.description}
+              </p>
+            ) : null}
             <p className={styles.guardrail}>{selectedAxis.guardrail}</p>
             <button
               className={styles.nextAxisButton}
@@ -482,20 +464,10 @@ export function CandidateCoreResultView({
             <div>
               <p>
                 {isQuickResult
-                  ? "빠른 코어에서 답한 생활 상황을 다섯 영역으로 나눠, 지금 나와 더 가까웠던 방향을 정리한 첫 결과예요."
-                  : "여러 생활 상황에서 답한 내용을 다섯 영역으로 나눠, 각 영역에서 나와 더 가까웠던 방향을 정리한 결과예요."}
+                  ? "빠른 코어 답변을 다섯 영역으로 나눠 더 가까운 방향을 정리했어요."
+                  : "생활 상황에 대한 답변을 다섯 영역으로 나눠 더 가까운 방향을 정리했어요."}
               </p>
-              <p>
-                능력이나 좋고 나쁨, 정신건강을 판단하지 않아요. 상황과 경험이
-                달라지면 답과 결과도 달라질 수 있으니, 나를 이해하는 참고 자료로
-                봐 주세요.
-              </p>
-              {isQuickResult ? (
-                <p>
-                  정밀 검사에서는 더 다양한 상황을 살펴보고, 각 코드가 내
-                  생활에서 어떻게 나타나는지 더 구체적으로 알려드려요.
-                </p>
-              ) : null}
+              <p>능력, 좋고 나쁨, 정신건강을 판단하는 결과는 아니에요.</p>
               <Link
                 className={styles.codeIntroLink}
                 href="/map?view=code-guide"
@@ -508,19 +480,11 @@ export function CandidateCoreResultView({
         </section>
 
         <section className={styles.nextStepSection}>
-          <p className={styles.nextStepEyebrow}>
-            {isQuickResult ? "첫 결과를 확인했다면" : "결과를 모두 살펴봤다면"}
-          </p>
           <h2>
             {isQuickResult
               ? "정밀 검사에서 내 모습을 더 자세히 알아봐요"
               : "뉴앙에서 내 성향을 더 알아가요"}
           </h2>
-          <p className={styles.nextStepDescription}>
-            {isQuickResult
-              ? "더 다양한 생활 상황에 답하면 다섯 글자의 의미와 내 관계·일상에서 보이는 모습을 더 구체적으로 알려드려요."
-              : "홈에서 성향 콘텐츠를 둘러보고, 다른 검사도 이어서 만나보세요."}
-          </p>
           {precisionHref ? (
             <>
               <Link className={styles.homeAction} href={precisionHref}>
@@ -533,12 +497,12 @@ export function CandidateCoreResultView({
             </>
           ) : (
             <>
-              <Link className={styles.homeAction} href={`/map/${result.code}`}>
-                성향지도에서 자세히 보기
+              <Link className={styles.homeAction} href="/feed">
+                커뮤니티 둘러보기
                 <ArrowRight aria-hidden="true" size={18} strokeWidth={1.9} />
               </Link>
-              <Link className={styles.secondaryAction} href="/feed">
-                커뮤니티 둘러보기
+              <Link className={styles.secondaryAction} href="/assessments">
+                다른 검사 만나보기
               </Link>
             </>
           )}
@@ -687,7 +651,6 @@ export function CandidateResultLoadingState() {
         </div>
         <div className={styles.loadingCopy}>
           <h1>결과를 이어서 불러오고 있어요</h1>
-          <p>준비가 끝나는 대로 바로 보여드릴게요.</p>
           <p aria-live="polite" className={styles.loadingStatus} role="status">
             <span aria-hidden="true" />
             결과 확인 중

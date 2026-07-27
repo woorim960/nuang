@@ -7,16 +7,28 @@ describe("Gate C analysis dashboard read model", () => {
     const client = createClient({
       queue: [
         {
-          metrics: { unsureRate: 0 },
+          candidate_set_id: "CANDIDATE-BANK",
+          metrics: {
+            publicationState: "review_only",
+            sourceKind: "quick_current",
+            unsureRate: 0,
+          },
           observation_count: 8,
+          protocol_version: "GATE-C-TEST",
           reason_codes: [],
           recommendation_status: "monitor",
           study_item_id: "ITEM-B",
           updated_at: "2026-07-21T00:00:00.000Z",
         },
         {
-          metrics: { wordingUnclearRate: 0.25 },
+          candidate_set_id: "CANDIDATE-BANK",
+          metrics: {
+            publicationState: "review_only",
+            sourceKind: "candidate",
+            wordingUnclearRate: 0.25,
+          },
           observation_count: 8,
+          protocol_version: "GATE-C-TEST",
           reason_codes: ["WORDING_REVIEW"],
           recommendation_status: "review_required",
           study_item_id: "ITEM-A",
@@ -50,9 +62,52 @@ describe("Gate C analysis dashboard read model", () => {
       monitor: 1,
       reviewRequired: 1,
     });
+    expect(data.sourceItemCounts).toEqual({
+      candidate: 1,
+      full_current: 0,
+      legacy_fixed: 0,
+      quick_current: 1,
+    });
+    expect(data.queue[0]).toMatchObject({
+      publicationState: "review_only",
+      sourceKind: "candidate",
+    });
+    expect(data.queue[0].promotionGate.state).toBe("blocked");
     expect(JSON.stringify(data)).not.toMatch(
       /participant|age_band|life_context/,
     );
+  });
+
+  it("connects current assessment IDs to a question people can read", async () => {
+    const client = createClient({
+      queue: [
+        {
+          candidate_set_id: "NUANG-CORE-CANDIDATE-BANK-M03-150",
+          metrics: {
+            publicationState: "review_only",
+            sourceKind: "full_current",
+          },
+          observation_count: 9,
+          protocol_version: "GATE-C-UNIFIED",
+          reason_codes: [],
+          recommendation_status: "monitor",
+          study_item_id: "NU-B1-001",
+          updated_at: "2026-07-28T00:00:00.000Z",
+        },
+      ],
+      sessions: [],
+      snapshot: { generated_at: "2026-07-28T00:00:00.000Z" },
+    });
+
+    const data = await readGateCAnalysisDashboard(client);
+
+    expect(data.queue[0]).toMatchObject({
+      contextLabel: "익숙한 사람들과 대화가 이어질 때",
+      domainId: "SE",
+      facetId: "SE-RE",
+      promptText: "기운이 점점 살아난다.",
+      studyItemId: "NU-B1-001",
+    });
   });
 });
 

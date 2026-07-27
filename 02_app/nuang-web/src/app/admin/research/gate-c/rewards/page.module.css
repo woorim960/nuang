@@ -1,0 +1,38 @@
+.page {
+  width: 100%;
+  max-width: 520px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  color: var(--nu-color-text);
+  background: var(--nu-color-app-bg);
+}
+
+.header {
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  display: grid;
+  min-height: calc(56px + env(safe-area-inset-top));
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  padding: env(safe-area-inset-top) 0.875rem 0;
+  border-bottom: 1px solid var(--nu-color-border);
+  background: color-mix(in srgb, var(--nu-color-surface) 96%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.header a {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-color-text-secondary);
+}
+
+.header p {
+  margin: 0;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
+  text-align: center;
+}

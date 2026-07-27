@@ -54,7 +54,7 @@ describe("MyOverview", () => {
     render(<MyOverview />);
 
     expect(await screen.findByText("INGMC")).toBeInTheDocument();
-    expect(screen.getByText("새 길을 찾는 탐구자")).toBeInTheDocument();
+    expect(screen.getByText("새 가능성을 찾는 탐험가")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "내 성향 보기" })).toHaveAttribute(
       "href",
       "/my/profile",
@@ -64,15 +64,12 @@ describe("MyOverview", () => {
       "/results/account/4292e0e7-0353-43f0-9132-f90149badee5",
     );
     expect(
-      screen.getByRole("link", {
-        name: /성향 놀이터 기록.*내가 참여한 질문과 선택을 다시 봐요/,
-      }),
+      screen.getByRole("link", { name: "성향 놀이터 기록" }),
     ).toHaveAttribute("href", "/feed/perspectives?from=my");
-    expect(
-      screen.getByRole("link", {
-        name: /내 게시물.*내 커뮤니티 프로필과 게시물을 확인해요/,
-      }),
-    ).toHaveAttribute("href", "/feed/me");
+    expect(screen.getByRole("link", { name: "내 게시물" })).toHaveAttribute(
+      "href",
+      "/feed/me",
+    );
   });
 
   it("gives a first-time viewer one clear assessment action", async () => {
@@ -99,10 +96,32 @@ describe("MyOverview", () => {
     await waitFor(() => {
       expect(
         screen.getByRole("link", {
-          name: /로그인 또는 가입.*커뮤니티와 계정 기능을 이용해요/,
+          name: "로그인 또는 가입",
         }),
       ).toHaveAttribute("href", "/login?next=/my");
     });
+  });
+
+  it("shows the operation center only when the server marks the account as admin", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () =>
+          new Response(JSON.stringify({ ok: true, results: [] }), {
+            status: 200,
+          }),
+      ),
+    );
+
+    const { rerender } = render(<MyOverview />);
+    expect(
+      screen.queryByRole("link", { name: "관리자 운영 센터" }),
+    ).not.toBeInTheDocument();
+
+    rerender(<MyOverview showAdminEntry />);
+    expect(
+      screen.getByRole("link", { name: "관리자 운영 센터" }),
+    ).toHaveAttribute("href", "/admin");
   });
 });
 
@@ -116,7 +135,7 @@ function createAccountResult(): AccountResultSummary {
     kind: "full",
     localResultId: null,
     profileCode: "INGMC",
-    profileName: "새 길을 찾는 탐구자",
+    profileName: "새 가능성을 찾는 탐험가",
     resultLabel: "현재 가장 가까운 대표 성향",
     resultReportId: "4292e0e7-0353-43f0-9132-f90149badee5",
   };

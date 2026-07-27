@@ -2,6 +2,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { POST as startSession } from "@/app/api/research/gate-c/sessions/route";
 import { POST as completeSession } from "@/app/api/research/gate-c/sessions/[sessionId]/complete/route";
 import { gateCPublicConsentVersion } from "@/features/research/gate-c/gate-c-public-contract";
+import { createGateCAssignmentProof } from "@/features/research/gate-c/gate-c-server-security";
 import { gateCParticipantDefinitions } from "@/features/research/gate-c/gate-c-study-fixture";
 
 const routeMocks = vi.hoisted(() => ({
@@ -52,6 +53,7 @@ describe("Gate C public research API", () => {
 
     expect(response.status).toBe(200);
     expect(body).toMatchObject({
+      assignmentProof: expect.any(String),
       ok: true,
       formId: expect.stringMatching(/^FORM_[A-E]$/),
       participantCode: expect.stringMatching(/^GC-[A-F0-9]{8}$/),
@@ -149,6 +151,52 @@ describe("Gate C public research API", () => {
 
     expect(response.status).toBe(422);
     expect(captured.rpc).toBeNull();
+  });
+
+  it("accepts the signed mixed assignment when legacy DB columns are absent", async () => {
+    const captured: { rpc: null | Record<string, unknown> } = { rpc: null };
+    routeMocks.serviceClient = createCompletionClient(captured);
+    const sessionId = "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa";
+    const assignedItems = Array.from({ length: 12 }, (_, index) => ({
+      orderIndex: index + 1,
+      studyItemId: `NX-${String(index + 1).padStart(3, "0")}`,
+    }));
+    const assignmentProof = createGateCAssignmentProof({
+      items: assignedItems,
+      poolVersion: "NUANG-CORE-QUICK-FULL-CANDIDATE-MIXED-1.0",
+      sessionId,
+    });
+    const responses = assignedItems.map((item) => ({
+      changeCount: 0,
+      confusionFlag: false,
+      confusionNote: "",
+      finalChoice: { kind: "scale", value: 3 },
+      firstAnswerElapsedMs: 2500,
+      firstChoice: { kind: "scale", value: 3 },
+      orderIndex: item.orderIndex,
+      responseChanged: false,
+      studyItemId: item.studyItemId,
+      unsureReason: null,
+    }));
+
+    const response = await completeSession(
+      jsonRequest(
+        `http://localhost/api/research/gate-c/sessions/${sessionId}/complete`,
+        {
+          assignmentProof,
+          clientDurationMs: 80_000,
+          responses,
+          sessionToken: "a-session-token-that-is-long-enough",
+        },
+      ),
+      { params: Promise.resolve({ sessionId }) },
+    );
+
+    expect(response.status).toBe(200);
+    expect(captured.rpc).toMatchObject({
+      supplied_responses: responses,
+      target_session_id: sessionId,
+    });
   });
 });
 

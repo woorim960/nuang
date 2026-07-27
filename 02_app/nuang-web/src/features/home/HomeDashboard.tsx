@@ -18,7 +18,6 @@ import {
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { PersonalityPlaygroundPost } from "@/features/feed/PersonalityPlaygroundPost";
-import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
 import {
   type FeedItem,
   listHomeFeedPreviewItems,
@@ -86,14 +85,15 @@ export function HomeDashboard({
     [accountResults, attempts],
   );
   const communityPollItem = feedPreviewItems.find(
-    (item) => item.poll?.promptId === homeDailyCommunityPollPromptId,
+    (item) =>
+      item.kind === "balance_game" &&
+      item.authorHandle === "nuang.official" &&
+      Boolean(item.poll),
   );
   const conversations = selectConversations(
     feedPreviewItems,
     communityPollItem?.id,
   );
-  const viewerCode = getHeroResultCode(model.hero);
-
   return (
     <div className={styles.home}>
       <header className={styles.brandBar}>
@@ -127,7 +127,7 @@ export function HomeDashboard({
 
       <HomeProfileDiscovery profile={featuredProfile} />
 
-      <HomeConversations items={conversations} viewerCode={viewerCode} />
+      <HomeConversations items={conversations} />
     </div>
   );
 }
@@ -163,14 +163,6 @@ function HomeHero({ hero }: { hero: HomeHeroModel }) {
               ? "내 모습을 더 자세히 알아볼까요?"
               : "답하던 곳부터 이어가요"}
         </h1>
-        <p className={styles.heroBody}>
-          {hero.adaptive
-            ? "비슷하게 나온 코드 한 자리를 몇 가지 질문으로 확인해요."
-            : isFresh
-              ? "첫 결과를 바탕으로 더 다양한 상황 속 내 모습을 살펴봐요."
-              : "지금까지 답한 내용은 그대로 남아 있어요."}
-        </p>
-
         {!isFresh ? (
           <div className={styles.progressBlock}>
             <div className={styles.progressMeta}>
@@ -241,12 +233,7 @@ function HomeHero({ hero }: { hero: HomeHeroModel }) {
         </>
       }
     >
-      <p className={styles.eyebrow}>나를 알아보는 첫걸음</p>
       <h1>3분이면 내 성향의 첫 단서를 만나요</h1>
-      <p className={styles.heroBody}>
-        간단한 질문에 답하면, 지금 내 모습과 가까운 5글자 뉴앙 코드를
-        알려드려요.
-      </p>
     </HeroLayout>
   );
 }
@@ -345,9 +332,7 @@ function HomeHeroSkeleton() {
   return (
     <section aria-busy="true" className={`${styles.hero} ${styles.skeleton}`}>
       <div className={styles.heroCopy}>
-        <p className={styles.eyebrow}>내 홈을 준비하는 중</p>
-        <h1>오늘 이어갈 내용을 확인하고 있어요</h1>
-        <p className={styles.heroBody}>잠시만 기다려 주세요.</p>
+        <h1>홈을 준비하고 있어요</h1>
         <span className={styles.skeletonAction} />
       </div>
     </section>
@@ -361,12 +346,7 @@ function HomeRelationshipPrompt() {
         <UsersRound size={20} strokeWidth={1.8} />
       </span>
       <div>
-        <p className={styles.eyebrow}>서로를 이해하는 다음 단계</p>
         <h2>궁금한 사람과 나는 어디가 닮았을까요?</h2>
-        <p>
-          가족·친구·좋아하는 사람과 잘 맞는 점, 대화할 때 다른 점을 비교해
-          보세요.
-        </p>
         <Link href="/feed/search?from=home">
           궁금한 사람 찾아보기
           <ArrowRight aria-hidden="true" size={15} strokeWidth={1.9} />
@@ -383,10 +363,7 @@ function HomeProfileDiscovery({
 }) {
   return (
     <section className={styles.section}>
-      <SectionHeading
-        description="하루에 한 가지 성향을 가볍게 알아보세요."
-        title="오늘 발견할 성향"
-      />
+      <SectionHeading title="오늘 발견할 성향" />
       {profile ? (
         <Link
           aria-label={`${profile.accessibleName} 성향 자세히 보기`}
@@ -409,10 +386,6 @@ function HomeProfileDiscovery({
               <span key={token}>{token}</span>
             ))}
           </div>
-          <span className={styles.profileDiscoveryAction}>
-            이 성향 자세히 보기
-            <ArrowRight aria-hidden="true" size={17} strokeWidth={2} />
-          </span>
         </Link>
       ) : (
         <div
@@ -429,7 +402,6 @@ function HomePlaygroundUnavailable() {
   return (
     <section className={styles.playgroundUnavailable}>
       <strong>오늘의 질문을 준비하고 있어요</strong>
-      <p>커뮤니티의 다른 이야기부터 가볍게 둘러보세요.</p>
       <Link href="/feed">
         커뮤니티 보기
         <ArrowRight aria-hidden="true" size={16} strokeWidth={1.8} />
@@ -438,30 +410,18 @@ function HomePlaygroundUnavailable() {
   );
 }
 
-function HomeConversations({
-  items,
-  viewerCode,
-}: {
-  items: FeedItem[];
-  viewerCode: string | null;
-}) {
+function HomeConversations({ items }: { items: FeedItem[] }) {
   return (
     <section className={styles.section}>
       <SectionHeading
         actionHref="/feed"
         actionLabel="커뮤니티 더 보기"
-        description="비슷한 성향과 다른 관점의 이야기를 함께 골랐어요."
         title="지금 많이 이야기하는 것"
       />
       {items.length > 0 ? (
         <div className={styles.conversationList}>
           {items.map((item) => {
             const itemCode = item.authorProfile?.display.code ?? null;
-            const reason = getConversationReason(
-              viewerCode,
-              itemCode,
-              item.replyCount ?? 0,
-            );
 
             return (
               <Link
@@ -483,11 +443,6 @@ function HomeConversations({
                     <span aria-hidden="true">·</span>
                     <span>{item.timeLabel}</span>
                   </span>
-                  {reason ? (
-                    <small className={styles.conversationReason}>
-                      {reason}
-                    </small>
-                  ) : null}
                   <strong className={styles.conversationTitle}>
                     {item.title}
                   </strong>
@@ -516,39 +471,19 @@ function HomeConversations({
   );
 }
 
-function getConversationReason(
-  viewerCode: string | null,
-  itemCode: string | null,
-  replyCount: number,
-) {
-  if (viewerCode && itemCode) {
-    const matchCount = viewerCode
-      .split("")
-      .filter((letter, index) => letter === itemCode[index]).length;
-    return matchCount >= 3
-      ? `내 코드와 ${matchCount}자리가 가까워요`
-      : "나와 다른 관점을 볼 수 있어요";
-  }
-
-  return replyCount > 0 ? "지금 댓글이 이어지고 있어요" : null;
-}
-
 function SectionHeading({
   actionHref,
   actionLabel,
-  description,
   title,
 }: {
   actionHref?: string;
   actionLabel?: string;
-  description: string;
   title: string;
 }) {
   return (
     <div className={styles.sectionHeading}>
       <div>
         <h2>{title}</h2>
-        <p>{description}</p>
       </div>
       {actionHref && actionLabel ? (
         <Link href={actionHref}>{actionLabel}</Link>
@@ -583,14 +518,6 @@ function isUsefulHomeConversation(item: FeedItem) {
   )?.length;
 
   return (readableCharacterCount ?? 0) >= 12;
-}
-
-function getHeroResultCode(hero: HomeHeroModel) {
-  if (hero.kind === "quick_complete" || hero.kind === "full_complete") {
-    return hero.result.code;
-  }
-
-  return hero.kind === "in_progress" ? (hero.latestResult?.code ?? null) : null;
 }
 
 function selectFeaturedProfile() {

@@ -1,0 +1,197 @@
+{
+  "contractVersion": "nuang-trait-map-withdrawal-fallback-runtime-contract.v2.3",
+  "reportId": "TRAIT-MAP-WITHDRAWAL-FALLBACK-RUNTIME-CONTRACT.2.3",
+  "status": "FAIL_CLOSED_RUNTIME_CONTRACT_READY_NOT_WIRED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3",
+  "sourceProfileReportId": "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4",
+  "sourcePublicationGateReportId": "TRAIT-MAP-PUBLICATION-GATE.2.3",
+  "sourceReopenMatrixReportId": "TRAIT-MAP-REVISION-GATE-REOPEN-MATRIX.2.3",
+  "summary": {
+    "resolverCases": 6,
+    "resolverCasesPassed": 6,
+    "profileReferencesInspected": 9216,
+    "syntheticRetirementImpactedProfiles": 16,
+    "currentProductionAllowlistEntries": 0,
+    "runtimeWiringCompleted": false,
+    "canonicalRetirementsCommitted": 0,
+    "profileCommitsPerformed": 0,
+    "publicationChanges": 0
+  },
+  "resolverContract": {
+    "lookupKey": "canonicalVariantId + exact version + surface + publication-manifest digest",
+    "allowConditions": [
+      "canonical state가 approved이다.",
+      "요청 surface의 명시적 allowlist에 canonical ID와 version이 함께 있다.",
+      "privacyScope와 surface가 호환된다.",
+      "COMMON이 아니다.",
+      "manifest digest와 cache digest가 일치한다."
+    ],
+    "defaultOnMissingDecision": "deny",
+    "fallbackOrder": [
+      "같은 contentKey의 명시적으로 승인된 rollback version",
+      "해당 claim section 생략",
+      "데이터 무결성 event 기록"
+    ],
+    "forbiddenFallbacks": [
+      "retired 문장을 계속 표시",
+      "COMMON 문장을 개인화 문장으로 표시",
+      "같은 claimKey의 다른 축 방향 문장을 대신 표시",
+      "승인되지 않은 최신 초안을 표시",
+      "빈 canonical ID를 클라이언트에 전달"
+    ]
+  },
+  "cacheContract": {
+    "cacheKeyFields": [
+      "surface",
+      "profile_code_or_result_ref",
+      "canonical_manifest_digest",
+      "locale"
+    ],
+    "retirementInvalidationTargets": [
+      "result_summary",
+      "trait_map_detail",
+      "comparison_report",
+      "public_profile",
+      "share_card",
+      "server_render_cache",
+      "client_persisted_query_cache",
+      "share_image_cache"
+    ],
+    "invalidationOrder": [
+      "새 manifest에서 canonical 제거",
+      "서버 캐시 purge",
+      "공유 이미지 revoke 또는 만료",
+      "클라이언트 digest mismatch 재요청",
+      "무결성 재스캔"
+    ],
+    "staleWhileRevalidateAllowed": false
+  },
+  "withdrawalEventSchema": {
+    "requiredFields": [
+      "withdrawal_ref",
+      "canonical_variant_id",
+      "content_key",
+      "retired_version",
+      "reason_code",
+      "affected_surfaces",
+      "affected_profile_codes",
+      "rollback_version",
+      "manifest_before_digest",
+      "manifest_after_digest",
+      "retired_at",
+      "approved_by"
+    ],
+    "appendOnly": true
+  },
+  "consistencyChecks": [
+    "retired canonical ID가 어떤 surface allowlist에도 남지 않는다.",
+    "32개 profile claimRef 중 retired ID를 응답 payload로 반환하지 않는다.",
+    "rollback version이 없다면 section을 생략하되 인접 축 문장을 대신 쓰지 않는다.",
+    "COMMON은 연구 계보에 남겨도 개인화 surface에 반환하지 않는다.",
+    "공유 카드와 이미지 CDN도 manifest digest가 바뀌면 무효화한다."
+  ],
+  "syntheticFixture": {
+    "fixtureId": "TRAIT-MAP-WITHDRAWAL-FALLBACK-SYNTHETIC-FIXTURE.2.3",
+    "resolverCases": [
+      {
+        "caseId": "RUNTIME-01",
+        "canonicalState": "approved",
+        "allowlistedForSurface": true,
+        "surface": "trait_map_detail",
+        "expected": "render_exact_approved_version",
+        "actual": "render_exact_approved_version",
+        "passed": true
+      },
+      {
+        "caseId": "RUNTIME-02",
+        "canonicalState": "research_only",
+        "allowlistedForSurface": false,
+        "surface": "trait_map_detail",
+        "expected": "omit_claim_section",
+        "actual": "omit_claim_section",
+        "passed": true
+      },
+      {
+        "caseId": "RUNTIME-03",
+        "canonicalState": "retired",
+        "allowlistedForSurface": true,
+        "surface": "result_summary",
+        "expected": "deny_and_invalidate_stale_allowlist",
+        "actual": "deny_and_invalidate_stale_allowlist",
+        "passed": true
+      },
+      {
+        "caseId": "RUNTIME-04",
+        "canonicalState": "missing",
+        "allowlistedForSurface": false,
+        "surface": "comparison_report",
+        "expected": "omit_claim_section_and_log_integrity_error",
+        "actual": "omit_claim_section_and_log_integrity_error",
+        "passed": true
+      },
+      {
+        "caseId": "RUNTIME-05",
+        "canonicalState": "common_archive",
+        "allowlistedForSurface": true,
+        "surface": "public_profile",
+        "expected": "deny_common_personalization",
+        "actual": "deny_common_personalization",
+        "passed": true
+      },
+      {
+        "caseId": "RUNTIME-06",
+        "canonicalState": "approved",
+        "allowlistedForSurface": false,
+        "surface": "share_card",
+        "expected": "omit_claim_section",
+        "actual": "omit_claim_section",
+        "passed": true
+      }
+    ],
+    "simulatedRetirement": {
+      "synthetic": true,
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-ATTENTION-OE-R",
+      "contentKey": "trait-map.v2.3.can-scn-general-success-attention-oe-r",
+      "version": 1,
+      "impactedProfileCount": 16,
+      "impactedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERAMC",
+        "ERAMQ",
+        "ERGKC",
+        "ERGKQ",
+        "ERGMC",
+        "ERGMQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRAMC",
+        "IRAMQ",
+        "IRGKC",
+        "IRGKQ",
+        "IRGMC",
+        "IRGMQ"
+      ],
+      "beforeState": "research_only",
+      "simulatedAfterState": "retired",
+      "oldContentRenderedAfterRetirement": false,
+      "commonUsedAsPersonalizedFallback": false,
+      "emptyCanonicalRefReturnedToClient": false,
+      "profileDataCommitted": false,
+      "publicationChanged": false
+    }
+  },
+  "implementationBoundary": {
+    "resolverCodeWired": false,
+    "cacheInvalidationWired": false,
+    "databaseChanged": false,
+    "canonicalChanged": false,
+    "publicationChanged": false
+  },
+  "nextGate": {
+    "name": "RUNTIME_RESOLVER_INTERFACE_AND_TEST_HARNESS",
+    "action": "계약을 순수 함수형 resolver 인터페이스와 32개 profile payload 합성 테스트로 옮기되 현재 앱 발행에는 연결하지 않는다."
+  }
+}

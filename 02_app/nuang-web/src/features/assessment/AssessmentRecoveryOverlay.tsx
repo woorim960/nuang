@@ -71,8 +71,8 @@ export function AssessmentRecoveryOverlay({
         aria-atomic="true"
         aria-live="assertive"
         className={cn(
-          "nuang-recovery-card relative mx-auto max-w-[488px] overflow-hidden rounded-2xl border border-line bg-surface p-3 shadow-[0_-12px_32px_rgb(32_34_50_/_12%)]",
-          isSaved && "bg-[#f2faf6]",
+          "nuang-recovery-card relative mx-auto max-w-[488px] overflow-hidden rounded-2xl border border-line bg-surface p-3 shadow-md",
+          isSaved && "bg-[var(--nu-community-50)]",
         )}
         role="alert"
       >
@@ -83,9 +83,9 @@ export function AssessmentRecoveryOverlay({
           <span
             aria-hidden="true"
             className={cn(
-              "grid h-9 w-9 self-start place-items-center rounded-full bg-[#fff1ee] text-danger",
+              "grid h-9 w-9 self-start place-items-center rounded-full bg-[var(--nu-reaction-50)] text-danger",
               isSaving && "bg-surface-soft text-primary",
-              isSaved && "nuang-recovery-success bg-[#e4f5ec] text-success",
+              isSaved && "nuang-recovery-success bg-[var(--nu-community-100)] text-success",
             )}
           >
             {isSaving ? (

@@ -7,6 +7,7 @@ import {
   LogIn,
   MessagesSquare,
   Settings,
+  ShieldCheck,
   SlidersHorizontal,
 } from "lucide-react";
 import Link from "next/link";
@@ -31,7 +32,11 @@ type MyProfileSummary = {
   source: string;
 };
 
-export function MyOverview() {
+export function MyOverview({
+  showAdminEntry = false,
+}: {
+  showAdminEntry?: boolean;
+}) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [localAttempts, setLocalAttempts] = useState<LocalAssessmentAttempt[]>(
@@ -127,11 +132,6 @@ export function MyOverview() {
                 <strong>{profile.name}</strong>
               </div>
             </div>
-            <p className={styles.profileDescription}>
-              지금의 나와 가장 가까운 대표 성향이에요. 검사와 활동이 쌓이면 더
-              자세한 모습을 확인할 수 있어요.
-            </p>
-
             <div className={styles.profileStats}>
               <span>
                 <strong>{reportCount.toLocaleString("ko-KR")}</strong>
@@ -158,25 +158,21 @@ export function MyOverview() {
       <section className={styles.mySpace}>
         <div className={styles.sectionHeading}>
           <h2>나의 활동</h2>
-          <p>내가 남긴 결과와 커뮤니티 활동을 다시 볼 수 있어요.</p>
         </div>
         <nav aria-label="나의 활동 메뉴" className={styles.activityList}>
           <MyMenuLink
-            description="내가 참여한 질문과 선택을 다시 봐요"
             href="/feed/perspectives?from=my"
             icon={BookmarkCheck}
             title="성향 놀이터 기록"
             tone="play"
           />
           <MyMenuLink
-            description="내 커뮤니티 프로필과 게시물을 확인해요"
             href="/feed/me"
             icon={MessagesSquare}
             title="내 게시물"
             tone="conversation"
           />
           <MyMenuLink
-            description="검사 결과와 비교 리포트를 모아 봐요"
             href="/my/reports"
             icon={FileText}
             title="내 리포트"
@@ -186,8 +182,15 @@ export function MyOverview() {
       </section>
 
       <nav aria-label="계정 메뉴" className={styles.accountMenu}>
+        {showAdminEntry ? (
+          <MyMenuLink
+            href="/admin"
+            icon={ShieldCheck}
+            title="관리자 운영 센터"
+            tone="brand"
+          />
+        ) : null}
         <MyMenuLink
-          description="계정, 공개 범위와 데이터 관리"
           href="/my/settings"
           icon={SlidersHorizontal}
           title="설정과 개인정보"
@@ -195,7 +198,6 @@ export function MyOverview() {
         />
         {!isLoggedIn && !isCheckingAuth ? (
           <MyMenuLink
-            description="커뮤니티와 계정 기능을 이용해요"
             href="/login?next=/my"
             icon={LogIn}
             title="로그인 또는 가입"
@@ -266,7 +268,6 @@ function NextStep({ profile }: { profile: MyProfileSummary }) {
   return (
     <Link className={styles.nextStep} href={href}>
       <span>
-        <small>{isFullResult ? "다음 발견" : "조금 더 자세히"}</small>
         <strong>
           {isFullResult
             ? "새로운 주제 검사로 나를 더 알아봐요"
@@ -279,13 +280,11 @@ function NextStep({ profile }: { profile: MyProfileSummary }) {
 }
 
 function MyMenuLink({
-  description,
   href,
   icon: Icon,
   title,
   tone,
 }: {
-  description: string;
   href: string;
   icon: typeof FileText;
   title: string;
@@ -298,7 +297,6 @@ function MyMenuLink({
       </span>
       <span className={styles.menuCopy}>
         <strong>{title}</strong>
-        <small>{description}</small>
       </span>
       <ChevronRight
         aria-hidden="true"

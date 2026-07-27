@@ -1,0 +1,124 @@
+{
+  "contractVersion": "nuang-trait-map-customer-publication-readiness.v2",
+  "reportId": "TRAIT-MAP-CUSTOMER-PUBLICATION-READINESS.0.1",
+  "status": "CUSTOMER_PUBLICATION_BLOCKED",
+  "generatedAt": "2026-07-23T00:00:00.000Z",
+  "publicationContract": "src/features/nuang-code/trait-map-content-publication-contract-v2.ts",
+  "summary": {
+    "gates": 6,
+    "gatesPassed": 2,
+    "gatesBlocked": 4,
+    "customerApprovedClaims": 0,
+    "profilesReadyForCustomerPublication": 0,
+    "namesCustomerApproved": 0,
+    "canonicalDraftsPending": 0,
+    "sevenRoleReviewsPending": 713,
+    "canonicalEntries": 713,
+    "profileClaimRefs": 9216
+  },
+  "releasePrinciples": [
+    "원장 파일이나 5만 자 충족 여부가 아니라 문장 단위 contentKey로 발행한다.",
+    "같은 contentKey는 화면마다 복사하지 않고 한 출처에서 불러와 정보 중복을 막는다.",
+    "결과 요약은 흥미로운 핵심만, 성향지도 상세는 전체 맥락, 비교는 두 사람의 차이에 필요한 내용만 보여준다.",
+    "처음 생각과 실제 반응은 본인 화면에서만 사용하고 프로필·공유·비교에는 내보내지 않는다.",
+    "고위험 문구는 독립 근거 2개와 안전 검토가 없으면 발행하지 않는다.",
+    "별칭·근거·canonical 문장 버전을 함께 저장하고 변경 시 기존 결과의 해석 버전을 보존한다."
+  ],
+  "blockingGates": [
+    {
+      "gate": "CANONICAL_STRUCTURE",
+      "passed": true,
+      "current": "713/713 자동 게이트 통과, 같은 claim 완전 중복 0개",
+      "completion": "713개 contentKey·출처·개인정보·안전·축 구분 자동 게이트 통과"
+    },
+    {
+      "gate": "SEVEN_ROLE_REVIEW",
+      "passed": false,
+      "current": "0/713 검토 완료",
+      "completion": "성격심리·심리측정·연구방법·쉬운 한국어·안전·제품·데이터 품질 검토"
+    },
+    {
+      "gate": "PROFILE_CONTENT_DEPTH",
+      "passed": false,
+      "current": "30개 원장 보강 필요",
+      "completion": "실제 설명량·편집 핵심·얇은 장·반복 보강 뒤 원장별 내용 게이트 통과"
+    },
+    {
+      "gate": "PROFILE_NAME_USER_VALIDATION",
+      "passed": false,
+      "current": "0/32 고객 승인",
+      "completion": "32개 이름의 이해·구분·회상·오해·공유 의향 사용자 검증"
+    },
+    {
+      "gate": "PROFILE_RECOMPOSITION",
+      "passed": true,
+      "current": "9216/9216 프로필 참조, 960/960 묶음별 이웃 통과",
+      "completion": "최종 승인 문장으로 다시 실행해 9,216개 참조와 960/960 이웃 유지"
+    },
+    {
+      "gate": "CUSTOMER_CONTENT_APPROVAL",
+      "passed": false,
+      "current": "customer_approved claim 0개",
+      "completion": "문장별 contentKey·출처·7개 검토·쉬운 한국어·중복·화면 QA를 통과"
+    }
+  ],
+  "surfaces": [
+    {
+      "surface": "result_summary",
+      "purpose": "정밀 검사 직후 내 코드와 가장 흥미로운 핵심 모습·관계·일상 정보를 짧게 이해",
+      "allowedContent": "본인용 요약, 다섯 축 비율, 선별된 핵심·가족·친구·연인·업무 내용",
+      "forbiddenContent": "연구 원문 전체, 같은 뜻 반복, 타인에게 공개되지 않은 처음 생각·실제 반응",
+      "nextAction": "전체 성향지도 상세로 한 번 연결",
+      "currentState": "blocked_pending_seven_role_and_customer_approval"
+    },
+    {
+      "surface": "trait_map_detail",
+      "purpose": "한 성향을 상황·관계·생각·행동·소통·강점·주의점까지 가장 자세히 이해",
+      "allowedContent": "승인된 장문 contentKey, 근거 화면 연결, 맥락별 구체 예시",
+      "forbiddenContent": "미승인 연구 초안, 진단·능력·도덕성·관계 결과 단정",
+      "nextAction": "내 결과 또는 비교 화면으로 이동",
+      "currentState": "blocked_30_profiles_need_content_repair"
+    },
+    {
+      "surface": "comparison_report",
+      "purpose": "가족·친구·연인·업무 상대와 공통점·차이·대화 방법을 중복 없이 이해",
+      "allowedContent": "두 사용자가 공개에 동의한 점수·관찰 반응과 pair contentKey",
+      "forbiddenContent": "상대의 self_only 사고 과정, 궁합 점수로 관계 성공·실패 예측, 동일 문구 반복",
+      "nextAction": "관계별 대화 팁과 각자의 상세 지도",
+      "currentState": "blocked_pending_pair_specific_content_contract"
+    },
+    {
+      "surface": "profile_preview",
+      "purpose": "커뮤니티 상대가 직접 공개한 코드·별칭·간단한 성향만 빠르게 확인",
+      "allowedContent": "사용자가 공개로 설정한 코드·별칭·한 줄 소개",
+      "forbiddenContent": "세부 점수, 처음 생각, 실제 반응, 민감 영역, 비공개 비교 데이터",
+      "nextAction": "프로필 팔로우 또는 동의 기반 나와 비교",
+      "currentState": "blocked_pending_name_user_validation"
+    },
+    {
+      "surface": "share_card",
+      "purpose": "사용자가 고른 핵심 결과를 안전하고 재미있게 공유",
+      "allowedContent": "코드·승인 별칭·사용자가 직접 선택한 짧은 설명",
+      "forbiddenContent": "고위험·민감 문구, 비공개 점수, 자동 추론한 타인 정보",
+      "nextAction": "공개 결과 링크 또는 앱 진입",
+      "currentState": "blocked_pending_customer_approved_content"
+    }
+  ],
+  "safeReleaseSequence": [
+    "713개 canonical 콘텐츠의 7개 역할 검토",
+    "P0 원장 보강과 32개 상황 장 canonical 재연결",
+    "정밀 결과 요약 화면의 제한된 내부 미리보기",
+    "성향지도 상세의 코드 한 개 단위 품질·화면 QA",
+    "비교 리포트 pair contentKey와 공개 동의 QA",
+    "이름 사용자 검증과 프로필·공유 카드 단계적 공개"
+  ],
+  "rollbackContract": {
+    "triggers": [
+      "근거 철회 또는 새 연구로 의미가 달라짐",
+      "개인정보 범위 위반",
+      "진단·능력·도덕성·관계 결과 오해가 반복됨",
+      "한 글자 이웃 모순 또는 화면 중복이 발견됨"
+    ],
+    "action": "해당 contentKey를 retired로 바꾸고 이전 버전과 노출 화면을 기록한 뒤 승인된 대체 문구가 생길 때까지 숨긴다."
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "contractVersion": "nuang-trait-map-revision-gate-reopen-matrix.v2.3",
+  "reportId": "TRAIT-MAP-REVISION-GATE-REOPEN-MATRIX.2.3",
+  "status": "REOPEN_MATRIX_AND_SYNTHETIC_IMPACT_TEST_READY",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceLedgerReportId": "TRAIT-MAP-CANONICAL-CONTENT-LEDGER-P2-SCREENED.2.3",
+  "sourceProfileReportId": "TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.0.4",
+  "sourceConflictContractReportId": "TRAIT-MAP-MULTI-EVIDENCE-CONFLICT-CONTRACT.2.3",
+  "sourceImpactDryRunReportId": "TRAIT-MAP-REVISION-IMPACT-DRY-RUN.2.3",
+  "summary": {
+    "changeTypes": 4,
+    "gateCatalogEntries": 12,
+    "syntheticImpactCases": 4,
+    "syntheticCasesWithProfileImpact": 4,
+    "totalProfileReferencesInspected": 9216,
+    "canonicalCommitsPerformed": 0,
+    "profileCommitsPerformed": 0,
+    "publicationChanges": 0,
+    "productionAllowlistEntries": 0
+  },
+  "rules": [
+    "변경 유형은 실제 수정 전 diff에서 결정하고 결과를 본 뒤 낮출 수 없다.",
+    "reopen gate는 이전 통과 상태를 승계하지 않는다.",
+    "32개 성향 중 해당 canonical을 참조하는 코드만 내용 영향 대상으로 표시하되 전체 중복·이웃 검사는 모두 다시 실행한다.",
+    "철회는 승인 대기 없이 운영 allowlist에서 우선 제거하는 방향으로 동작한다.",
+    "합성 fixture는 영향 계산만 시험하며 canonical·profile·발행 상태를 바꾸지 않는다."
+  ],
+  "gateCatalog": [
+    "source_trace",
+    "semantic_scope",
+    "context_applicability",
+    "scenario_direct_validation",
+    "independent_seven_role_review",
+    "cognitive_interview",
+    "comprehension_test",
+    "unsafe_language",
+    "duplicate_output",
+    "profile_recomposition_32",
+    "neighbor_differentiation",
+    "publication_surface_approval"
+  ],
+  "matrix": [
+    {
+      "changeType": "wording_only",
+      "definition": "축·방향·상황·주장 범위는 유지하고 쉬운 말·문장 구조만 바꾼다.",
+      "reopenGates": [
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [
+        "source_trace",
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation"
+      ]
+    },
+    {
+      "changeType": "semantic_narrowing",
+      "definition": "기존 문장의 적용 상황·관계·행동 범위를 더 좁힌다.",
+      "reopenGates": [
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation",
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": ["source_trace"]
+    },
+    {
+      "changeType": "axis_or_direction_change",
+      "definition": "semanticAxes, axisSignature 또는 한 축의 방향을 바꾼다.",
+      "reopenGates": [
+        "source_trace",
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation",
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": []
+    },
+    {
+      "changeType": "withdrawal",
+      "definition": "canonical variant를 사용 중단하고 모든 화면에서 제거한다.",
+      "reopenGates": [
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [],
+      "immediateActions": [
+        "모든 운영 allowlist에서 제거",
+        "영향받는 profile claimRef에 fallback 요구",
+        "결과·성향지도·비교·프로필·공유 캐시 무효화",
+        "철회 이유와 rollback version 기록"
+      ]
+    }
+  ],
+  "syntheticImpacts": [
+    {
+      "fixtureId": "REOPEN-WORDING-ONLY",
+      "synthetic": true,
+      "changeType": "wording_only",
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-ATTENTION-OE-R",
+      "contentKey": "trait-map.v2.3.can-scn-general-success-attention-oe-r",
+      "semanticAxes": ["OE"],
+      "impactedProfileCount": 16,
+      "impactedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERAMC",
+        "ERAMQ",
+        "ERGKC",
+        "ERGKQ",
+        "ERGMC",
+        "ERGMQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRAMC",
+        "IRAMQ",
+        "IRGKC",
+        "IRGKQ",
+        "IRGMC",
+        "IRGMQ"
+      ],
+      "reopenedGates": [
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [
+        "source_trace",
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation"
+      ],
+      "affectedSurfaces": [
+        "comparison_report",
+        "public_profile",
+        "result_summary",
+        "share_card",
+        "trait_map_detail"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    },
+    {
+      "fixtureId": "REOPEN-SEMANTIC-NARROWING",
+      "synthetic": true,
+      "changeType": "semantic_narrowing",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K",
+      "contentKey": "trait-map.v2.3.can-scn-general-ordinary-choice-attention-oe-r-sm-k",
+      "semanticAxes": ["OE", "SM"],
+      "impactedProfileCount": 8,
+      "impactedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERGKC",
+        "ERGKQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRGKC",
+        "IRGKQ"
+      ],
+      "reopenedGates": [
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation",
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": ["source_trace"],
+      "affectedSurfaces": [
+        "comparison_report",
+        "public_profile",
+        "result_summary",
+        "share_card",
+        "trait_map_detail"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    },
+    {
+      "fixtureId": "REOPEN-AXIS-OR-DIRECTION-CHANGE",
+      "synthetic": true,
+      "changeType": "axis_or_direction_change",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-K",
+      "contentKey": "trait-map.v2.3.can-scn-general-ordinary-choice-response-se-e-oe-r-sm-k",
+      "semanticAxes": ["SE", "OE", "SM"],
+      "impactedProfileCount": 4,
+      "impactedProfileCodes": ["ERAKC", "ERAKQ", "ERGKC", "ERGKQ"],
+      "reopenedGates": [
+        "source_trace",
+        "semantic_scope",
+        "context_applicability",
+        "scenario_direct_validation",
+        "independent_seven_role_review",
+        "cognitive_interview",
+        "comprehension_test",
+        "unsafe_language",
+        "duplicate_output",
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [],
+      "affectedSurfaces": [
+        "comparison_report",
+        "public_profile",
+        "result_summary",
+        "share_card",
+        "trait_map_detail"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    },
+    {
+      "fixtureId": "REOPEN-WITHDRAWAL",
+      "synthetic": true,
+      "changeType": "withdrawal",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-ATTENTION-OE-R-SM-K",
+      "contentKey": "trait-map.v2.3.can-scn-general-ordinary-choice-attention-oe-r-sm-k",
+      "semanticAxes": ["OE", "SM"],
+      "impactedProfileCount": 8,
+      "impactedProfileCodes": [
+        "ERAKC",
+        "ERAKQ",
+        "ERGKC",
+        "ERGKQ",
+        "IRAKC",
+        "IRAKQ",
+        "IRGKC",
+        "IRGKQ"
+      ],
+      "reopenedGates": [
+        "profile_recomposition_32",
+        "neighbor_differentiation",
+        "publication_surface_approval"
+      ],
+      "preservedGates": [],
+      "affectedSurfaces": [
+        "result_summary",
+        "trait_map_detail",
+        "comparison_report",
+        "public_profile",
+        "share_card"
+      ],
+      "canonicalCommitPerformed": false,
+      "profileCommitPerformed": false,
+      "publicationChanged": false
+    }
+  ],
+  "executionContract": {
+    "requiredOrder": [
+      "변경 diff 생성",
+      "changeType 판정",
+      "영향 profile·surface 계산",
+      "reopen gate 상태 초기화",
+      "32개 재조합·중복·이웃 dry-run",
+      "필수 외부 검토와 직접 검증 재실행",
+      "명시적 화면 allowlist 재승인",
+      "commit"
+    ],
+    "failClosed": "changeType이 없거나 gate 결과가 누락되면 commit과 발행을 차단한다."
+  },
+  "nextGate": {
+    "name": "WITHDRAWAL_AND_FALLBACK_RUNTIME_CONTRACT",
+    "action": "철회 canonical이 발생해도 32개 성향 화면에 오래된 문장이나 빈 참조가 남지 않도록 fallback·cache invalidation 계약을 작성한다."
+  }
+}

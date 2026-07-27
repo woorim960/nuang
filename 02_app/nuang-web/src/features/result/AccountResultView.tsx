@@ -1,13 +1,15 @@
 "use client";
 
-import { ArrowLeft, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Trash2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
+import styles from "@/features/result/AccountResultView.module.css";
 
 const domainShortLabel: Record<string, string> = {
   ER: "마음",
@@ -16,13 +18,6 @@ const domainShortLabel: Record<string, string> = {
   SE: "사람",
   SM: "일상",
 };
-
-const motifByPrefix = {
-  SC: "forest",
-  SV: "water",
-  TC: "sun",
-  TV: "flame",
-} as const;
 
 export function AccountResultView({
   resultReportId,
@@ -60,33 +55,39 @@ export function AccountResultView({
 
   if (state === "loading") {
     return (
-      <main className="mx-auto min-h-dvh max-w-[520px] bg-white px-5 py-8">
-        <p aria-live="polite" className="text-sm text-muted" role="status">
-          결과를 불러오고 있어요.
+      <main className={styles.stateRoot}>
+        <Image
+          alt="결과를 준비하는 뉴앙 캐릭터"
+          className={styles.stateMascot}
+          height={512}
+          priority
+          src="/assets/assessment/nuang-loading-mascot-v2.png"
+          width={512}
+        />
+        <p aria-live="polite" role="status">
+          내 결과를 불러오고 있어요
         </p>
+        <span aria-hidden="true" className={styles.loadingLine} />
       </main>
     );
   }
 
   if (state === "missing" || !result) {
     return (
-      <main className="mx-auto min-h-dvh max-w-[520px] bg-white px-5 py-8">
-        <h1 className="text-xl font-bold">결과를 열 수 없어요</h1>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          삭제되었거나 더 이상 확인할 수 없는 결과예요.
-        </p>
-        <Link
-          className="mt-5 inline-flex min-h-11 items-center font-semibold text-ink"
-          href="/my/reports"
-        >
+      <main className={styles.stateRoot}>
+        <h1>결과를 열 수 없어요</h1>
+        <p>삭제되었거나 더 이상 확인할 수 없는 결과예요.</p>
+        <Link className={styles.stateLink} href="/my/reports">
           내 리포트로 돌아가기
         </Link>
       </main>
     );
   }
 
-  const prefix = result.profileCode.slice(0, 2) as keyof typeof motifByPrefix;
-  const motif = motifByPrefix[prefix] ?? "purple";
+  const profile = getCandidateProfileDefinition(result.profileCode);
+  const profileName = profile?.displayName ?? result.profileName;
+  const resultKindLabel =
+    result.kind === "full" ? "정밀 성향 결과" : "첫 성향 결과";
   const axes = result.domains.map((domain) => ({
     id: domain.domainId,
     label: domain.label,
@@ -125,120 +126,159 @@ export function AccountResultView({
   }
 
   return (
-    <main className="mx-auto min-h-dvh max-w-[520px] bg-white px-5 pb-12">
-      <header className="sticky top-0 z-10 -mx-5 grid h-14 grid-cols-[40px_minmax(0,1fr)_40px] items-center border-b border-line bg-white/95 px-4 backdrop-blur-xl">
+    <main className={styles.root}>
+      <header className={styles.appBar}>
         <Link
           aria-label="내 리포트로 돌아가기"
-          className="grid h-10 w-10 place-items-center rounded-full text-ink hover:bg-surface"
+          className={styles.backButton}
           href="/my/reports"
         >
           <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.9} />
         </Link>
-        <p className="truncate px-2 text-center text-sm font-bold">
-          결과 리포트
-        </p>
+        <p>결과 리포트</p>
         <span aria-hidden="true" />
       </header>
 
-      <section className="border-b border-line pb-6 pt-7">
-        <div className="flex items-center justify-between gap-4">
-          <div className="min-w-0">
-            <p className="text-sm font-semibold text-muted">
-              {result.resultLabel}
+      <div className={styles.content}>
+        <section className={styles.hero}>
+          <div className={styles.heroGlow} />
+          <div className={styles.heroCopy}>
+            <span className={styles.statusTag}>{resultKindLabel}</span>
+            <p className={styles.kicker}>내 뉴앙 코드</p>
+            <p
+              aria-label={`뉴앙 코드 ${result.profileCode}`}
+              className={styles.code}
+            >
+              {result.profileCode.split("").map((letter, index) => (
+                <span aria-hidden="true" key={`${letter}-${index}`}>
+                  {letter}
+                </span>
+              ))}
             </p>
-            <p className="mt-2 text-[34px] font-black leading-none tracking-normal text-ink">
-              {result.profileCode}
-            </p>
-            <h1 className="mt-3 text-2xl font-black leading-8">
-              {result.profileName}
-            </h1>
+            <h1>{profileName}</h1>
           </div>
-          <NuangCharacter motif={motif} size="lg" />
-        </div>
-        <p className="mt-4 text-sm leading-6 text-muted">
-          현재 성향을 코드 자리로 요약한 결과예요. 점수보다 반복해서 나타나는
-          방향을 중심으로 읽어보세요.
-        </p>
-        <p className="mt-3 text-xs text-muted">
-          {formatDate(result.completedAt)} ·{" "}
-          {result.kind === "full" ? "정밀 코어" : "빠른 코어"}
-        </p>
-      </section>
+          <Image
+            alt="빛나는 핵을 품은 뉴앙 캐릭터"
+            className={styles.heroMascot}
+            height={512}
+            priority
+            src="/assets/assessment/nuang-loading-mascot-v2.png"
+            width={512}
+          />
+          <p className={styles.meta}>{formatDate(result.completedAt)} 검사</p>
+        </section>
 
-      <section className="border-b border-line py-6">
-        <h2 className="text-base font-bold">코드 지도</h2>
-        <p className="mt-1 text-sm leading-6 text-muted">
-          중심에서 멀수록 그 성향을 더 자주 사용하는 편이에요.
-        </p>
-        <TraitRadarChart
-          ariaLabel="코드 지도 그래프"
-          axes={axes}
-          centerLabel="코드 지도"
+        <section className={styles.section}>
+          <div className={styles.sectionHeading}>
+            <h2>이번 답에서 보인 내 모습</h2>
+          </div>
+          {profile ? (
+            <div className={styles.overviewList}>
+              {profile.overview.map((item) => (
+                <article className={styles.overviewItem} key={item.label}>
+                  <p>{item.label}</p>
+                  <span>{item.text}</span>
+                </article>
+              ))}
+            </div>
+          ) : (
+            <div className={styles.legacyOverview}>
+              <p>
+                현재 성향을 코드 자리로 요약한 결과예요. 점수보다 여러 상황에서
+                반복해서 나타난 방향을 중심으로 읽어보세요.
+              </p>
+              <span>
+                이 결과는 이전 코드 체계로 만들어졌어요. 새 정밀 검사를 하면
+                현재 뉴앙 코드와 더 자세한 성향지도를 볼 수 있어요.
+              </span>
+            </div>
+          )}
+        </section>
+
+        <TraitMapResultBridge
+          code={result.profileCode}
+          profileName={profileName}
         />
-      </section>
 
-      {result.facets.length > 0 && (
-        <section className="border-b border-line py-6">
-          <h2 className="text-base font-bold">세부 신호</h2>
-          <p className="mt-1 text-sm leading-6 text-muted">
-            가운데 50을 기준으로 어느 방향이 더 자주 나타나는지 보여줘요.
+        <section className={styles.section}>
+          <div className={styles.sectionHeading}>
+            <h2>다섯 영역에서 나타난 방향</h2>
+          </div>
+          <p className={styles.sectionDescription}>
+            중심에서 멀수록 이번 답에서 더 자주 나타난 방향이에요.
           </p>
-          <div className="mt-5 grid gap-4">
-            {result.facets.map((facet) => (
-              <CenteredFacetBar facet={facet} key={facet.facetId} />
+          <div className={styles.radarWrap}>
+            <TraitRadarChart
+              ariaLabel="코드 지도 그래프"
+              axes={axes}
+              centerLabel="응답 방향"
+            />
+          </div>
+          <div className={styles.domainList}>
+            {result.domains.map((domain) => (
+              <div key={domain.domainId}>
+                <span>{domain.label}</span>
+                <strong>
+                  {domain.score === null
+                    ? "응답 부족"
+                    : `${Math.round(domain.score)}%`}
+                </strong>
+              </div>
             ))}
           </div>
         </section>
-      )}
 
-      <TraitMapResultBridge
-        code={result.profileCode}
-        profileName={result.profileName}
-      />
-
-      <section className="border-b border-line py-6">
-        <h2 className="text-base font-bold">영역별 요약</h2>
-        <div className="mt-3 divide-y divide-line border-y border-line">
-          {result.domains.map((domain) => (
-            <div
-              className="flex min-h-14 items-center justify-between gap-3 py-3"
-              key={domain.domainId}
-            >
-              <span className="text-sm font-semibold">{domain.label}</span>
-              <span className="text-sm font-bold text-muted">
-                {domain.score === null ? "응답 부족" : Math.round(domain.score)}
-              </span>
+        {result.facets.length > 0 ? (
+          <section className={styles.section}>
+            <div className={styles.sectionHeading}>
+              <h2>세부 신호</h2>
             </div>
-          ))}
-        </div>
-      </section>
+            <p className={styles.sectionDescription}>
+              가운데 50을 기준으로 어느 방향이 이번 답에서 더 자주 나타났는지
+              보여줘요.
+            </p>
+            <div className={styles.facetList}>
+              {result.facets.map((facet) => (
+                <CenteredFacetBar facet={facet} key={facet.facetId} />
+              ))}
+            </div>
+          </section>
+        ) : null}
 
-      <div className="flex items-center gap-5 py-5 text-sm font-semibold">
-        <Link className="text-ink" href="/my/reports">
-          내 리포트
-        </Link>
-        <Link className="text-muted hover:text-ink" href="/assessments">
-          검사 보기
-        </Link>
+        <section className={styles.nextSection}>
+          {profile ? (
+            <Link className={styles.primaryAction} href="/feed">
+              커뮤니티 둘러보기
+              <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
+            </Link>
+          ) : (
+            <Link className={styles.primaryAction} href="/assessments">
+              새 정밀 검사 시작하기
+              <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
+            </Link>
+          )}
+          <Link className={styles.secondaryAction} href="/my/reports">
+            내 리포트 목록
+          </Link>
+        </section>
+
+        <section className={styles.deleteSection}>
+          <button
+            aria-busy={deleteState === "working"}
+            disabled={deleteState === "working"}
+            onClick={handleDelete}
+            type="button"
+          >
+            <Trash2 aria-hidden="true" size={16} strokeWidth={1.8} />
+            {deleteState === "working" ? "삭제 중" : "이 결과 삭제"}
+          </button>
+          {deleteState === "error" ? (
+            <p role="alert">
+              결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.
+            </p>
+          ) : null}
+        </section>
       </div>
-
-      <section className="border-t border-line py-5">
-        <button
-          aria-busy={deleteState === "working"}
-          className="inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-muted hover:text-danger disabled:cursor-not-allowed disabled:opacity-40"
-          disabled={deleteState === "working"}
-          onClick={handleDelete}
-          type="button"
-        >
-          <Trash2 aria-hidden="true" size={17} />
-          {deleteState === "working" ? "삭제 중" : "결과 삭제"}
-        </button>
-        {deleteState === "error" && (
-          <p className="mt-2 text-sm text-danger" role="alert">
-            결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.
-          </p>
-        )}
-      </section>
     </main>
   );
 }
@@ -259,22 +299,23 @@ function CenteredFacetBar({
       aria-valuemax={100}
       aria-valuemin={0}
       aria-valuenow={bounded}
+      className={styles.facetItem}
       role="meter"
     >
-      <div className="flex items-center justify-between gap-3 text-sm">
-        <span className="font-semibold">{facet.label}</span>
-        <span className="tabular-nums text-muted">{bounded}</span>
+      <div className={styles.facetMeta}>
+        <span>{facet.label}</span>
+        <strong>{bounded}%</strong>
       </div>
-      <div className="mt-2 grid grid-cols-2 gap-px bg-line">
-        <div className="flex h-2.5 justify-end bg-[#f6f5f9]">
+      <div className={styles.facetTrack}>
+        <div>
           <div
-            className="h-full bg-water"
+            className={styles.facetLow}
             style={{ width: `${leftWidth * 2}%` }}
           />
         </div>
-        <div className="h-2.5 bg-[#f6f5f9]">
+        <div>
           <div
-            className="h-full bg-primary"
+            className={styles.facetHigh}
             style={{ width: `${rightWidth * 2}%` }}
           />
         </div>

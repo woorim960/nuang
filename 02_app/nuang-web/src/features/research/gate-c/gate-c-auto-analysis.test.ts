@@ -81,6 +81,36 @@ describe("Gate C automatic field-signal analysis", () => {
       analysis.itemMetrics.find((metric) => metric.studyItemId === itemId),
     ).toMatchObject({ observationCount: 1, confusionFlagRate: 0 });
   });
+
+  it("tracks candidate assignments without allowing automatic publication", () => {
+    const itemId = "NX-RESEARCH-CANDIDATE-001";
+    const sessions: GateCAnalysisSessionRow[] = [
+      {
+        id: "candidate-session",
+        item_assignment: [
+          {
+            sourceKind: "candidate",
+            studyItemId: itemId,
+          },
+        ],
+        pool_version: "NUANG-CORE-QUICK-FULL-CANDIDATE-MIXED-1.0",
+        quality_status: "included",
+        status: "completed",
+      },
+    ];
+
+    const analysis = buildGateCAnalysis(sessions, [
+      response("candidate-session", itemId),
+    ]);
+
+    expect(
+      analysis.itemMetrics.find((metric) => metric.studyItemId === itemId),
+    ).toMatchObject({
+      observationCount: 1,
+      publicationState: "review_only",
+      sourceKind: "candidate",
+    });
+  });
 });
 
 function response(

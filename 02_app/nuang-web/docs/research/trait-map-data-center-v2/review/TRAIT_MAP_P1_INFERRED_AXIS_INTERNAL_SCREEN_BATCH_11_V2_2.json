@@ -1,0 +1,256 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-11.0.1",
+  "batchId": "P1-IAS-11",
+  "status": "P1_INFERRED_AXIS_BATCH_11_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 3,
+    "variants": 6,
+    "retainCandidates": 3,
+    "revisionCandidates": 3,
+    "scopeRemovalClaimAxes": 0,
+    "scopeRemovalVariants": 0,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-SE-FAMILY-GROUP_PARTICIPATION-COMMUNICATION",
+      "claimKey": ".scenario.family.group_participation.communication",
+      "claimKind": "communication",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SE-FAMILY-GROUP_PARTICIPATION-RESPONSE",
+      "claimKey": ".scenario.family.group_participation.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SE-FAMILY-NEED_EXPRESSION-RESPONSE",
+      "claimKey": ".scenario.family.need_expression.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.family.group_participation.communication",
+      "claimKind": "communication",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "한 사람에게 답을 강요하지 않고 모두가 참여할 수 있는 질문을 건네며, 민감한 주제는 당사자의 선택을 확인한 뒤 다루는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "한 사람에게 답을 강요하지 않고 모두가 참여할 수 있는 질문을 건네며, 민감한 주제는 당사자의 선택을 확인한 뒤 다루는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "말의 길이·모임 역할·예의가 E/I를 대신하지 않도록 E는 상호작용 중 생각과 에너지가 움직이는 방향, I는 혼자 정리하고 회복하는 방향을 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "가족들과 질문과 근황을 주고받는 동안 생각이 더 잘 떠오르며, 여러 사람의 이야기를 연결해 대화를 이어가는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "가족들과 질문과 근황을 주고받는 동안 생각이 더 잘 떠오르며, 여러 사람의 이야기를 연결해 대화를 이어가는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "한 사람에게 답을 강요하지 않고 모두가 참여할 수 있는 질문을 건네며, 민감한 주제는 당사자의 선택을 확인한 뒤 다루는 방식이 잘 맞는다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.family.group_participation.communication",
+      "claimKind": "communication",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "여러 사람 앞에서 길게 말하기보다 필요한 내용을 짧게 알리고, 민감한 이야기는 당사자와 따로 확인하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "여러 사람 앞에서 길게 말하기보다 필요한 내용을 짧게 알리고, 민감한 이야기는 당사자와 따로 확인하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "말의 길이·모임 역할·예의가 E/I를 대신하지 않도록 E는 상호작용 중 생각과 에너지가 움직이는 방향, I는 혼자 정리하고 회복하는 방향을 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "모임에서 바로 길게 말하기보다 먼저 혼자 생각을 정리하고, 필요한 내용은 한 사람과 차분히 나누는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "모임에서 바로 길게 말하기보다 먼저 혼자 생각을 정리하고, 필요한 내용은 한 사람과 차분히 나누는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "여러 사람 앞에서 길게 말하기보다 필요한 내용을 짧게 알리고, 민감한 이야기는 당사자와 따로 확인하는 방식이 자연스럽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "claimKey": ".scenario.family.group_participation.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "대화를 먼저 열고 서로의 근황을 연결하며, 필요한 준비나 다음 일정을 정리해 모임의 흐름을 이어가는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 열고 서로의 근황을 연결하며, 필요한 준비나 다음 일정을 정리해 모임의 흐름을 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "E는 대화를 열고 주고받으며 정리하고, I는 혼자 생각을 정리한 뒤 말하는 과정을 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-RESPONSE-SE-I",
+      "claimKey": ".scenario.family.group_participation.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "대화의 중심에 오래 있기보다 익숙한 사람과 이야기하거나 준비·정리처럼 구체적인 역할을 맡아 모임에 참여하는 편이다.",
+        "detailParagraphs": [
+          "대화의 중심에 오래 있기보다 익숙한 사람과 이야기하거나 준비·정리처럼 구체적인 역할을 맡아 모임에 참여하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "말의 길이·모임 역할·예의가 E/I를 대신하지 않도록 E는 상호작용 중 생각과 에너지가 움직이는 방향, I는 혼자 정리하고 회복하는 방향을 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "처음에는 모임의 흐름을 지켜보며 생각을 정리하고, 익숙한 한두 사람과 대화하거나 잠시 혼자 쉬면서 에너지를 조절하는 편이다.",
+        "detailParagraphs": [
+          "처음에는 모임의 흐름을 지켜보며 생각을 정리하고, 익숙한 한두 사람과 대화하거나 잠시 혼자 쉬면서 에너지를 조절하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "대화의 중심에 오래 있기보다 익숙한 사람과 이야기하거나 준비·정리처럼 구체적인 역할을 맡아 모임에 참여하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-RESPONSE-SE-E",
+      "claimKey": ".scenario.family.need_expression.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "대화를 먼저 열고 자신의 감정과 필요한 행동을 설명한 뒤, 가족이 가능한 범위를 들으며 함께 기준을 정하는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 열고 자신의 감정과 필요한 행동을 설명한 뒤, 가족이 가능한 범위를 들으며 함께 기준을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "E는 대화를 열고 주고받으며 정리하고, I는 혼자 생각을 정리한 뒤 말하는 과정을 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.family.need_expression.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "생각을 혼자 정리한 뒤 시간·공간·역할처럼 확인 가능한 요청으로 바꾸어 말하는 편이다.",
+        "detailParagraphs": [
+          "생각을 혼자 정리한 뒤 시간·공간·역할처럼 확인 가능한 요청으로 바꾸어 말하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "E는 대화를 열고 주고받으며 정리하고, I는 혼자 생각을 정리한 뒤 말하는 과정을 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_11_RECOMPOSITION_AND_BATCH_12_SCREEN",
+    "actions": [
+      "3개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "SE·friend 맥락의 P1-IAS-12를 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

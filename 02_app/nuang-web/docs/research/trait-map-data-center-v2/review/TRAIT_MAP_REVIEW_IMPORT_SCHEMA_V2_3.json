@@ -1,0 +1,260 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "nuang-trait-map-review-import.v2.3",
+  "title": "Nuang trait-map independent and cognitive review import",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contractVersion",
+    "batchId",
+    "sourceSystem",
+    "exportedAt",
+    "reviewers",
+    "independentDecisions",
+    "cognitiveObservations",
+    "revisionProposals",
+    "adjudications"
+  ],
+  "properties": {
+    "contractVersion": { "const": "nuang-trait-map-review-import.v2.3" },
+    "batchId": { "type": "string", "minLength": 8 },
+    "sourceSystem": {
+      "enum": [
+        "independent_review_portal",
+        "cognitive_interview_capture",
+        "controlled_manual_import"
+      ]
+    },
+    "exportedAt": { "type": "string", "format": "date-time" },
+    "reviewers": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "reviewerRef",
+          "role",
+          "qualificationState",
+          "conflictState",
+          "verifiedAt"
+        ],
+        "properties": {
+          "reviewerRef": { "type": "string", "minLength": 8 },
+          "role": {
+            "enum": [
+              "personality_psychologist",
+              "psychometrician",
+              "research_methodologist",
+              "korean_plain_language_editor",
+              "safety_privacy_reviewer",
+              "product_content_designer",
+              "data_quality_engineer"
+            ]
+          },
+          "qualificationState": {
+            "enum": ["VERIFIED", "UNVERIFIED", "REJECTED"]
+          },
+          "conflictState": {
+            "enum": ["NONE_DECLARED", "DISCLOSED_MANAGED", "DISQUALIFYING"]
+          },
+          "verifiedAt": { "type": "string", "format": "date-time" }
+        }
+      }
+    },
+    "independentDecisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "decisionId",
+          "reviewerRef",
+          "role",
+          "canonicalVariantId",
+          "contentVersion",
+          "decision",
+          "issueCodes",
+          "rationale",
+          "recordedAt",
+          "sourceRecordHash"
+        ],
+        "properties": {
+          "decisionId": { "type": "string", "minLength": 8 },
+          "reviewerRef": { "type": "string", "minLength": 8 },
+          "role": {
+            "enum": [
+              "personality_psychologist",
+              "psychometrician",
+              "research_methodologist",
+              "korean_plain_language_editor",
+              "safety_privacy_reviewer",
+              "product_content_designer",
+              "data_quality_engineer"
+            ]
+          },
+          "canonicalVariantId": { "type": "string", "minLength": 8 },
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "recordedAt": { "type": "string", "format": "date-time" },
+          "sourceRecordHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "decision": { "enum": ["APPROVE", "REVISE", "HOLD", "REJECT"] },
+          "issueCodes": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "CONSTRUCT_MISMATCH",
+                "AXIS_DIRECTION_AMBIGUOUS",
+                "NEIGHBOR_NOT_DISTINGUISHABLE",
+                "SOURCE_SCOPE_EXCEEDED",
+                "SOURCE_DEPENDENCE_UNRESOLVED",
+                "INDIVIDUAL_OVERGENERALIZATION",
+                "DETERMINISTIC_OR_PREDICTIVE",
+                "CLINICAL_OR_STIGMATIZING",
+                "ABILITY_MORALITY_LEAK",
+                "KOREAN_HARD_TO_UNDERSTAND",
+                "TRANSLATION_TONE",
+                "DUPLICATE_INFORMATION",
+                "SURFACE_SCOPE_MISMATCH",
+                "PRIVACY_SCOPE_TOO_BROAD",
+                "LINEAGE_OR_VERSION_GAP"
+              ]
+            }
+          },
+          "rationale": { "type": "string", "minLength": 10 },
+          "correctionOfDecisionId": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "cognitiveObservations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "observationId",
+          "participantRef",
+          "sessionRef",
+          "canonicalVariantId",
+          "contentVersion",
+          "paraphraseAccuracy",
+          "axisDiscrimination",
+          "wordingDifficulty",
+          "recordedAt",
+          "sourceRecordHash"
+        ],
+        "properties": {
+          "observationId": { "type": "string", "minLength": 8 },
+          "participantRef": { "type": "string", "minLength": 8 },
+          "sessionRef": { "type": "string", "minLength": 8 },
+          "canonicalVariantId": { "type": "string", "minLength": 8 },
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "recordedAt": { "type": "string", "format": "date-time" },
+          "sourceRecordHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "paraphraseAccuracy": {
+            "enum": ["ACCURATE", "PARTIAL", "INACCURATE", "NO_RESPONSE"]
+          },
+          "axisDiscrimination": {
+            "enum": ["CORRECT", "AMBIGUOUS", "REVERSED", "NO_RESPONSE"]
+          },
+          "wordingDifficulty": {
+            "enum": ["NONE", "MINOR", "MATERIAL", "BLOCKING"]
+          },
+          "notesCode": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 3 }
+          },
+          "correctionOfObservationId": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "revisionProposals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "proposalId",
+          "canonicalVariantId",
+          "contentVersion",
+          "proposedContentVersion",
+          "changeKinds",
+          "replacementText",
+          "basisEventIds",
+          "recordedAt",
+          "sourceRecordHash"
+        ],
+        "properties": {
+          "proposalId": { "type": "string", "minLength": 8 },
+          "canonicalVariantId": { "type": "string", "minLength": 8 },
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "recordedAt": { "type": "string", "format": "date-time" },
+          "sourceRecordHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "proposedContentVersion": { "type": "integer", "minimum": 2 },
+          "changeKinds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "WORDING",
+                "AXIS",
+                "DIRECTION",
+                "EVIDENCE_SCOPE",
+                "SURFACE_SCOPE",
+                "PRIVACY_SCOPE",
+                "RETIRE"
+              ]
+            }
+          },
+          "replacementText": { "type": ["string", "null"] },
+          "basisEventIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 8 }
+          }
+        }
+      }
+    },
+    "adjudications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "adjudicationId",
+          "canonicalVariantId",
+          "contentVersion",
+          "basisEventIds",
+          "outcome",
+          "rationale",
+          "recordedAt",
+          "sourceRecordHash"
+        ],
+        "properties": {
+          "adjudicationId": { "type": "string", "minLength": 8 },
+          "canonicalVariantId": { "type": "string", "minLength": 8 },
+          "contentVersion": { "type": "integer", "minimum": 1 },
+          "recordedAt": { "type": "string", "format": "date-time" },
+          "sourceRecordHash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "basisEventIds": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "type": "string", "minLength": 8 }
+          },
+          "outcome": {
+            "enum": [
+              "APPROVE_CURRENT",
+              "APPLY_REVISION",
+              "HOLD_EVIDENCE",
+              "REJECT_RETAIN_LINEAGE"
+            ]
+          },
+          "rationale": { "type": "string", "minLength": 10 }
+        }
+      }
+    }
+  }
+}

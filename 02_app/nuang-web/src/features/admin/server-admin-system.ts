@@ -1,0 +1,290 @@
+import "server-only";
+
+import type { SupabaseClient } from "@supabase/supabase-js";
+
+export type AdminSystemCheck = {
+  action: string;
+  detail: string;
+  key: string;
+  label: string;
+  ok: boolean;
+  severity: "blocker" | "warning";
+};
+
+export async function readAdminSystem(client: SupabaseClient) {
+  const environment: AdminSystemCheck[] = [
+    envCheck("origin", "앱 공개 주소", "NEXT_PUBLIC_APP_ORIGIN"),
+    envCheck("supabase-url", "Supabase 주소", "NEXT_PUBLIC_SUPABASE_URL"),
+    envCheck(
+      "supabase-public",
+      "Supabase 공개 키",
+      "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+    ),
+    envCheck(
+      "supabase-server",
+      "Supabase 서버 키",
+      "SUPABASE_SERVICE_ROLE_KEY",
+    ),
+    envCheck("database-url", "데이터베이스 직접 연결", "DATABASE_URL"),
+    envCheck("encryption", "개인정보 암호화", "FIELD_ENCRYPTION_KEY"),
+    envCheck("share-security", "보안 토큰 서명", "SHARE_TOKEN_PEPPER"),
+    envCheck("admin", "관리자 계정", "ADMIN_BOOTSTRAP_EMAILS"),
+    envCheck("email-api", "인증 이메일 발송", "RESEND_API_KEY"),
+    envCheck(
+      "email-from",
+      "인증 이메일 발신 주소",
+      "EMAIL_VERIFICATION_FROM",
+    ),
+  ];
+
+  const database = await Promise.all([
+    dbCheck(client, "identity", "account", "회원 계정", "회원가입과 로그인이 중단됩니다."),
+    dbCheck(
+      client,
+      "identity",
+      "contact_profile",
+      "비공개 연락처",
+      "프로필의 이메일과 휴대전화번호를 저장할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "profile",
+      "community_profile",
+      "커뮤니티 프로필",
+      "프로필과 팔로우 화면이 동작하지 않습니다.",
+    ),
+    dbCheck(
+      client,
+      "feed",
+      "feed_post",
+      "커뮤니티 게시물",
+      "게시물 작성과 피드 조회가 중단됩니다.",
+    ),
+    dbCheck(
+      client,
+      "feed",
+      "content_report",
+      "게시물·댓글 신고",
+      "위험 콘텐츠 신고를 접수할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "feed",
+      "feed_external_link",
+      "외부 링크 검토",
+      "처음 보는 외부 링크의 안전 검토가 동작하지 않습니다.",
+    ),
+    dbCheck(
+      client,
+      "feed",
+      "community_write_bucket",
+      "커뮤니티 도배 방지",
+      "반복 작성과 도배 요청을 제한할 수 없습니다.",
+    ),
+    communityContentDbCheck(client),
+    dbCheck(
+      client,
+      "assessment",
+      "assessment_attempt",
+      "성향 검사",
+      "검사 응답을 저장할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "report",
+      "result_report",
+      "결과 리포트",
+      "검사 결과를 조회하거나 보관할 수 없습니다.",
+    ),
+    privateDbCheck(client, "trait_map.content_release", "성향지도 콘텐츠"),
+    dbCheck(
+      client,
+      "audit",
+      "admin_audit_log",
+      "운영 기록",
+      "관리자 조치 이력을 남길 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "research_gate_c_session",
+      "검사 연구 참여",
+      "사용자 연구 응답을 저장할 수 없습니다.",
+      "warning",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "research_gate_c_item_decision",
+      "검사 문항 운영 결정",
+      "문항 유지·개선·제외 결정을 저장할 수 없습니다.",
+      "warning",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "research_trait_map_section_decision",
+      "성향지도 문구 운영 결정",
+      "성향지도 피드백의 운영 결정을 저장할 수 없습니다.",
+      "warning",
+    ),
+    storageCheck(client),
+    rpcCheck(
+      client,
+      "커뮤니티 작성 보호",
+      "check_community_write_guard",
+      {
+        p_account_id: null,
+        p_action: "create_post",
+        p_body: null,
+      },
+      "도배와 중복 게시물 차단이 동작하지 않습니다.",
+    ),
+    rpcCheck(
+      client,
+      "관리자 커뮤니티 조치",
+      "admin_apply_community_moderation",
+      {
+        target_action: "invalid_check",
+        target_admin_account_id: null,
+        target_id: null,
+      },
+      "신고·게시물 상태 변경과 운영 기록을 함께 저장할 수 없습니다.",
+    ),
+    rpcCheck(
+      client,
+      "관리자 연구 결정",
+      "admin_manage_research_decision",
+      {
+        target_action: "start_review",
+        target_admin_account_id: null,
+        target_identity: {},
+        target_note: null,
+        target_scope: "gate_c_item",
+      },
+      "연구 검토 결정을 저장할 수 없습니다.",
+      "warning",
+    ),
+  ]);
+
+  return {
+    database,
+    environment,
+    generatedAt: new Date().toISOString(),
+  };
+}
+
+async function communityContentDbCheck(
+  client: SupabaseClient,
+): Promise<AdminSystemCheck> {
+  const rpc = await client.rpc("get_admin_community_content_dashboard");
+  return {
+    action: "공식 밸런스게임과 오늘의 질문 운영 마이그레이션을 적용하세요.",
+    detail: rpc.error ? "공식 콘텐츠 RPC 적용 필요" : "정상",
+    key: "feed.official_community_content",
+    label: "공식 커뮤니티 콘텐츠",
+    ok: !rpc.error,
+    severity: "blocker",
+  };
+}
+
+async function privateDbCheck(
+  client: SupabaseClient,
+  table: "trait_map.content_release",
+  label: string,
+): Promise<AdminSystemCheck> {
+  const rpc = await client.rpc("get_admin_trait_map_content_dashboard");
+  if (!rpc.error) {
+    return {
+      action: "",
+      detail: "정상",
+      key: table,
+      label,
+      ok: true,
+      severity: "blocker",
+    };
+  }
+  return {
+    action: "성향지도 콘텐츠 운영 마이그레이션과 RPC를 적용하세요.",
+    detail: "관리자 콘텐츠 RPC 적용 필요",
+    key: table,
+    label,
+    ok: false,
+    severity: "blocker",
+  };
+}
+
+function envCheck(
+  key: string,
+  label: string,
+  variable: string,
+): AdminSystemCheck {
+  const ok = Boolean(process.env[variable]?.trim());
+  return {
+    action: ok ? "" : `배포 환경 변수 ${variable}을(를) 등록하세요.`,
+    detail: ok ? "설정됨" : `${variable} 필요`,
+    key,
+    label,
+    ok,
+    severity: "blocker",
+  };
+}
+
+async function dbCheck(
+  client: SupabaseClient,
+  schema: string,
+  table: string,
+  label: string,
+  unavailableImpact: string,
+  severity: AdminSystemCheck["severity"] = "blocker",
+): Promise<AdminSystemCheck> {
+  const response = await client.schema(schema).from(table).select("*").limit(1);
+  return {
+    action: response.error
+      ? `${unavailableImpact} 최신 DB 마이그레이션을 적용하세요.`
+      : "",
+    detail: response.error
+      ? `${response.error.code ?? "DB"} · 연결 확인 필요`
+      : "정상",
+    key: `${schema}.${table}`,
+    label,
+    ok: !response.error,
+    severity,
+  };
+}
+
+async function storageCheck(client: SupabaseClient): Promise<AdminSystemCheck> {
+  const response = await client.storage.getBucket("profile-avatars");
+  return {
+    action: response.error
+      ? "프로필 이미지 저장소 마이그레이션을 적용하세요."
+      : "",
+    detail: response.error ? "profile-avatars 저장소 확인 필요" : "정상",
+    key: "storage.profile-avatars",
+    label: "프로필 이미지 저장소",
+    ok: !response.error,
+    severity: "warning",
+  };
+}
+
+async function rpcCheck(
+  client: SupabaseClient,
+  label: string,
+  rpcName: string,
+  args: Record<string, unknown>,
+  unavailableImpact: string,
+  severity: AdminSystemCheck["severity"] = "blocker",
+): Promise<AdminSystemCheck> {
+  const response = await client.rpc(rpcName, args);
+  const missing = ["42883", "PGRST202"].includes(response.error?.code ?? "");
+  return {
+    action: missing
+      ? `${unavailableImpact} 최신 DB 마이그레이션을 적용하세요.`
+      : "",
+    detail: missing ? "운영 함수 적용 필요" : "정상",
+    key: `rpc.${rpcName}`,
+    label,
+    ok: !missing,
+    severity,
+  };
+}

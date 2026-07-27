@@ -1,0 +1,4859 @@
+{
+  "contractVersion": "nuang-trait-map-p2-stratified-review-sample.v2.3",
+  "reportId": "TRAIT-MAP-P2-STRATIFIED-REVIEW-SAMPLE.2.3",
+  "status": "P2_STRATIFIED_REVIEW_SAMPLE_READY",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceQueueReportId": "TRAIT-MAP-INDEPENDENT-REVIEW-QUEUE-POST-P2.2.3",
+  "sourceInternalScreenReportId": "TRAIT-MAP-P2-FLAGGED-INTERNAL-SCREEN.2.3",
+  "summary": {
+    "p2Population": 84,
+    "sampledEntries": 54,
+    "sampleRate": 0.6429,
+    "retainedLexicalFlagEntriesIncluded": 29,
+    "multiAxisEntriesIncluded": 23,
+    "requiredStrata": 57,
+    "coveredStrata": 57,
+    "uncoveredStrata": 0,
+    "requiredIndependentRoles": 7,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "samplingContract": {
+    "mandatoryRules": [
+      "자동 어휘 경고 뒤 내부 유지된 29개를 전부 포함한다.",
+      "두 축 이상이 결합된 단일 출처 P2 문장을 전부 포함한다."
+    ],
+    "greedyCoverageRules": [
+      "모든 상황 ID를 적어도 한 번 포함한다.",
+      "모든 주장 역할(attention·communication·first_thought·actual_response)을 포함한다.",
+      "모든 주제와 10개 방향 기호를 적어도 한 번 포함한다."
+    ],
+    "interpretation": "이 표본은 독립 검토 작업량을 구조화하기 위한 위험 기반 표본이며 통계적 대표성이나 타당도 추정치를 뜻하지 않는다."
+  },
+  "requiredStrata": [
+    "claimKind:actual_response",
+    "claimKind:attention",
+    "claimKind:communication",
+    "claimKind:first_thought",
+    "direction:ER=C",
+    "direction:ER=Q",
+    "direction:OE=N",
+    "direction:OE=R",
+    "direction:RO=A",
+    "direction:RO=G",
+    "direction:SE=E",
+    "direction:SE=I",
+    "direction:SM=K",
+    "direction:SM=M",
+    "scenario:SCN-FAMILY-11",
+    "scenario:SCN-FAMILY-12",
+    "scenario:SCN-FAMILY-3",
+    "scenario:SCN-FAMILY-8",
+    "scenario:SCN-FAMILY-9",
+    "scenario:SCN-FRIEND-10",
+    "scenario:SCN-FRIEND-11",
+    "scenario:SCN-FRIEND-12",
+    "scenario:SCN-FRIEND-5",
+    "scenario:SCN-FRIEND-8",
+    "scenario:SCN-FRIEND-9",
+    "scenario:SCN-GENERAL-1",
+    "scenario:SCN-GENERAL-10",
+    "scenario:SCN-GENERAL-5",
+    "scenario:SCN-GENERAL-8",
+    "scenario:SCN-GENERAL-9",
+    "scenario:SCN-PARTNER-11",
+    "scenario:SCN-PARTNER-12",
+    "scenario:SCN-PARTNER-6",
+    "scenario:SCN-PARTNER-8",
+    "scenario:SCN-PARTNER-9",
+    "scenario:SCN-PERSON-OF-INTEREST-11",
+    "scenario:SCN-PERSON-OF-INTEREST-12",
+    "scenario:SCN-PERSON-OF-INTEREST-4",
+    "scenario:SCN-PERSON-OF-INTEREST-6",
+    "scenario:SCN-PERSON-OF-INTEREST-8",
+    "scenario:SCN-PERSON-OF-INTEREST-9",
+    "scenario:SCN-WORK-10",
+    "scenario:SCN-WORK-12",
+    "scenario:SCN-WORK-3",
+    "scenario:SCN-WORK-5",
+    "scenario:SCN-WORK-6",
+    "scenario:SCN-WORK-8",
+    "topic:aftermath",
+    "topic:boundary",
+    "topic:disagreement",
+    "topic:group_participation",
+    "topic:need_expression",
+    "topic:ordinary_choice",
+    "topic:plan_change",
+    "topic:setback",
+    "topic:success",
+    "topic:uncertainty"
+  ],
+  "uncoveredStrata": [],
+  "sampledEntries": [
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-A",
+      "canonicalVariantId": "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.aftermath.attention",
+      "scenarioRef": "SCN-FAMILY-12",
+      "topic": "aftermath",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "semanticAxes": ["RO"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-12",
+        "topic:aftermath",
+        "claimKind:attention",
+        "direction:RO=A"
+      ],
+      "content": {
+        "summaryText": "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족 안의 부담스러운 일이 지나간 뒤에는 분위기가 실제로 회복됐는지, 남은 역할과 감정, 다시 정해야 할 약속이 있는지를 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.boundary.attention",
+      "scenarioRef": "SCN-FAMILY-9",
+      "topic": "boundary",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-9",
+        "topic:boundary",
+        "claimKind:attention",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "가족이 자신의 시간이나 물건, 사생활을 넘어서면 어떤 행동이 반복됐고 실제로 무엇을 바꿔야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
+      "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
+      "claimKey": ".scenario.family.boundary.process",
+      "scenarioRef": "SCN-FAMILY-9",
+      "topic": "boundary",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-9",
+        "topic:boundary",
+        "claimKind:first_thought",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 불편한 정확한 지점은 무엇이고, 지킬 수 있는 기준을 어떻게 말해야 하지?”를 혼자 정리하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "canonicalVariantId": "CAN-SCN-FAMILY-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "claimKey": ".scenario.family.group_participation.response",
+      "scenarioRef": "SCN-FAMILY-3",
+      "topic": "group_participation",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "semanticAxes": ["SE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-3",
+        "topic:group_participation",
+        "claimKind:actual_response",
+        "direction:SE=E"
+      ],
+      "content": {
+        "summaryText": "대화를 먼저 열고 서로의 근황을 연결하며, 필요한 준비나 다음 일정을 정리해 모임의 흐름을 이어가는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 열고 서로의 근황을 연결하며, 필요한 준비나 다음 일정을 정리해 모임의 흐름을 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-NEED-EXPRESSION-ATTENTION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.need_expression.attention",
+      "scenarioRef": "SCN-FAMILY-8",
+      "topic": "need_expression",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-8",
+        "topic:need_expression",
+        "claimKind:attention",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "가족에게 자신의 필요를 말할 때 마음을 길게 설명하기보다 생활에서 무엇이 달라져야 하는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.need_expression.communication",
+      "scenarioRef": "SCN-FAMILY-8",
+      "topic": "need_expression",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-8",
+        "topic:need_expression",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“저녁 9시 이후에는 혼자 쉬는 시간이 필요해. 그 시간에는 급한 일만 알려줘”처럼 필요와 행동 기준을 함께 전하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-NEED-EXPRESSION-PROCESS-RO-G",
+      "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-PROCESS-RO-G",
+      "claimKey": ".scenario.family.need_expression.process",
+      "scenarioRef": "SCN-FAMILY-8",
+      "topic": "need_expression",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-8",
+        "topic:need_expression",
+        "claimKind:first_thought",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 원하는 행동은 정확히 무엇이고, 가족이 실제로 지킬 수 있는 수준은 어디까지일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
+      "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
+      "claimKey": ".scenario.family.setback.process",
+      "scenarioRef": "SCN-FAMILY-11",
+      "topic": "setback",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-FAMILY-11",
+        "topic:setback",
+        "claimKind:first_thought",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“원인은 무엇이고 내가 실제로 도울 수 있는 부분은 어디까지지?”가 먼저 떠오르면서도 도움을 원하지 않을 수 있다는 점을 함께 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-AFTERMATH-ATTENTION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FRIEND-AFTERMATH-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.aftermath.attention",
+      "scenarioRef": "SCN-FRIEND-12",
+      "topic": "aftermath",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-12",
+        "topic:aftermath",
+        "claimKind:attention",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "친구와 불편한 일이 지나간 뒤에는 혼자서 오간 말과 행동을 되짚고, 오해가 시작된 지점과 다시 확인할 내용을 정리하는 경향이 있다.",
+        "detailParagraphs": [
+          "친구와 불편한 일이 지나간 뒤에는 혼자서 오간 말과 행동을 되짚고, 오해가 시작된 지점과 다시 확인할 내용을 정리하는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-BOUNDARY-ATTENTION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.boundary.attention",
+      "scenarioRef": "SCN-FRIEND-9",
+      "topic": "boundary",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-9",
+        "topic:boundary",
+        "claimKind:attention",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "친구가 연락 빈도·농담·부탁에서 자신의 선을 넘으면 어떤 행동이 불편했고 관계를 유지하려면 무엇이 달라져야 하는지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "친구가 연락 빈도·농담·부탁에서 자신의 선을 넘으면 어떤 행동이 불편했고 관계를 유지하려면 무엇이 달라져야 하는지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-BOUNDARY-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FRIEND-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.boundary.communication",
+      "scenarioRef": "SCN-FRIEND-9",
+      "topic": "boundary",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-9",
+        "topic:boundary",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“그 농담은 나는 불편해. 앞으로는 그 주제로 놀리지 않았으면 좋겠어”처럼 대상 행동과 바라는 변화를 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“그 농담은 나는 불편해. 앞으로는 그 주제로 놀리지 않았으면 좋겠어”처럼 대상 행동과 바라는 변화를 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-NEED-EXPRESSION-ATTENTION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.need_expression.attention",
+      "scenarioRef": "SCN-FRIEND-8",
+      "topic": "need_expression",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-8",
+        "topic:need_expression",
+        "claimKind:attention",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "친구에게 도움이 필요할 때 감정을 넓게 설명하기보다 어떤 상황이고 무엇을 부탁하면 실제로 도움이 되는지 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "친구에게 도움이 필요할 때 감정을 넓게 설명하기보다 어떤 상황이고 무엇을 부탁하면 실제로 도움이 되는지 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.need_expression.communication",
+      "scenarioRef": "SCN-FRIEND-8",
+      "topic": "need_expression",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-8",
+        "topic:need_expression",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“오늘 10분만 내 이야기를 들어줄 수 있어?” 또는 “이 자료를 한 번 봐줄 수 있어?”처럼 필요한 지원을 구체적으로 요청하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“오늘 10분만 내 이야기를 들어줄 수 있어?” 또는 “이 자료를 한 번 봐줄 수 있어?”처럼 필요한 지원을 구체적으로 요청하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-NEED-EXPRESSION-RESPONSE-RO-G",
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-RESPONSE-RO-G",
+      "claimKey": ".scenario.friend.need_expression.response",
+      "scenarioRef": "SCN-FRIEND-8",
+      "topic": "need_expression",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-8",
+        "topic:need_expression",
+        "claimKind:actual_response",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "요청할 내용을 구체적으로 만든 뒤 믿는 친구에게 연락하고, 필요한 시간이나 행동을 분명히 말하는 편이다.",
+        "detailParagraphs": [
+          "요청할 내용을 구체적으로 만든 뒤 믿는 친구에게 연락하고, 필요한 시간이나 행동을 분명히 말하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-SETBACK-ATTENTION-RO-G",
+      "canonicalVariantId": "CAN-SCN-FRIEND-SETBACK-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.setback.attention",
+      "scenarioRef": "SCN-FRIEND-11",
+      "topic": "setback",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-11",
+        "topic:setback",
+        "claimKind:attention",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "친구가 실수하거나 힘든 일을 겪으면 실제로 무슨 일이 있었고 지금 필요한 것이 위로인지 해결인지 먼저 구분하려는 경향이 있다.",
+        "detailParagraphs": [
+          "친구가 실수하거나 힘든 일을 겪으면 실제로 무슨 일이 있었고 지금 필요한 것이 위로인지 해결인지 먼저 구분하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-SUCCESS-PROCESS-OE-R",
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-PROCESS-OE-R",
+      "claimKey": ".scenario.friend.success.process",
+      "scenarioRef": "SCN-FRIEND-10",
+      "topic": "success",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "semanticAxes": ["OE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-10",
+        "topic:success",
+        "claimKind:first_thought",
+        "direction:OE=R"
+      ],
+      "content": {
+        "summaryText": "“어떤 과정이 가장 힘들었고, 이 결과가 친구에게 실제로 무엇을 바꿔줄까?”를 구체적으로 궁금해하기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 과정이 가장 힘들었고, 이 결과가 친구에게 실제로 무엇을 바꿔줄까?”를 구체적으로 궁금해하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-N",
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-N",
+      "claimKey": ".scenario.friend.uncertainty.process",
+      "scenarioRef": "SCN-FRIEND-5",
+      "topic": "uncertainty",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N",
+      "semanticAxes": ["OE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-FRIEND-5",
+        "topic:uncertainty",
+        "claimKind:first_thought",
+        "direction:OE=N"
+      ],
+      "content": {
+        "summaryText": "“내가 놓친 일이 있나?”라는 걱정과 함께 바쁨·생활 변화·다른 고민처럼 여러 설명을 떠올리기 쉽다.",
+        "detailParagraphs": [
+          "“내가 놓친 일이 있나?”라는 걱정과 함께 바쁨·생활 변화·다른 고민처럼 여러 설명을 떠올리기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-BOUNDARY-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-GENERAL-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.general.boundary.communication",
+      "scenarioRef": "SCN-GENERAL-9",
+      "topic": "boundary",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-9",
+        "topic:boundary",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“이 시간에는 연락을 받기 어렵습니다. 급한 일이면 문자로 먼저 알려주세요”처럼 행동 기준과 대안을 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“이 시간에는 연락을 받기 어렵습니다. 급한 일이면 문자로 먼저 알려주세요”처럼 행동 기준과 대안을 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-E-RO-A",
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-E-RO-A",
+      "claimKey": ".scenario.general.need_expression.process",
+      "scenarioRef": "SCN-GENERAL-8",
+      "topic": "need_expression",
+      "claimKind": "first_thought",
+      "axisSignature": "SE=E|RO=A",
+      "semanticAxes": ["SE", "RO"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-8",
+        "topic:need_expression",
+        "claimKind:first_thought",
+        "direction:SE=E",
+        "direction:RO=A"
+      ],
+      "content": {
+        "summaryText": "“내 마음을 솔직히 말하면서도 상대가 부담받지 않게 하려면 어떻게 표현하지?”라는 생각과 거절될 가능성에 대한 걱정이 함께 들기 쉽다.",
+        "detailParagraphs": [
+          "“내 마음을 솔직히 말하면서도 상대가 부담받지 않게 하려면 어떻게 표현하지?”라는 생각과 거절될 가능성에 대한 걱정이 함께 들기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-E-RO-G",
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-E-RO-G",
+      "claimKey": ".scenario.general.need_expression.process",
+      "scenarioRef": "SCN-GENERAL-8",
+      "topic": "need_expression",
+      "claimKind": "first_thought",
+      "axisSignature": "SE=E|RO=G",
+      "semanticAxes": ["SE", "RO"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-8",
+        "topic:need_expression",
+        "claimKind:first_thought",
+        "direction:SE=E",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“이 문제를 누구에게 설명하면 내가 놓친 사실을 빨리 확인하고, 지금 필요한 도움을 함께 정할 수 있을까?”라고 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“이 문제를 누구에게 설명하면 내가 놓친 사실을 빨리 확인하고, 지금 필요한 도움을 함께 정할 수 있을까?”라고 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-I-RO-G",
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-I-RO-G",
+      "claimKey": ".scenario.general.need_expression.process",
+      "scenarioRef": "SCN-GENERAL-8",
+      "topic": "need_expression",
+      "claimKind": "first_thought",
+      "axisSignature": "SE=I|RO=G",
+      "semanticAxes": ["SE", "RO"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-8",
+        "topic:need_expression",
+        "claimKind:first_thought",
+        "direction:SE=I",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“내가 직접 해결할 부분과 다른 사람에게 부탁해야 할 부분은 무엇이지?”를 혼자 구분하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 직접 해결할 부분과 다른 사람에게 부탁해야 할 부분은 무엇이지?”를 혼자 구분하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-E-RO-A",
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-E-RO-A",
+      "claimKey": ".scenario.general.need_expression.response",
+      "scenarioRef": "SCN-GENERAL-8",
+      "topic": "need_expression",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|RO=A",
+      "semanticAxes": ["SE", "RO"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-8",
+        "topic:need_expression",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:RO=A"
+      ],
+      "content": {
+        "summaryText": "말할 내용을 정리한 뒤 먼저 대화를 열고, 자신의 감정과 바라는 행동을 설명하며 상대의 생각도 듣는 편이다.",
+        "detailParagraphs": [
+          "말할 내용을 정리한 뒤 먼저 대화를 열고, 자신의 감정과 바라는 행동을 설명하며 상대의 생각도 듣는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-E-RO-G",
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-E-RO-G",
+      "claimKey": ".scenario.general.need_expression.response",
+      "scenarioRef": "SCN-GENERAL-8",
+      "topic": "need_expression",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|RO=G",
+      "semanticAxes": ["SE", "RO"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-8",
+        "topic:need_expression",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "문제가 생긴 초기에 가까운 사람에게 대화를 요청하고, 질문과 답을 주고받으며 자신이 할 일과 부탁할 일을 바로 나누는 편이다.",
+        "detailParagraphs": [
+          "문제가 생긴 초기에 가까운 사람에게 대화를 요청하고, 질문과 답을 주고받으며 자신이 할 일과 부탁할 일을 바로 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-N-SM-K",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-N-SM-K",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "scenarioRef": "SCN-GENERAL-1",
+      "topic": "ordinary_choice",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|OE=N|SM=K",
+      "semanticAxes": ["SE", "OE", "SM"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-1",
+        "topic:ordinary_choice",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:OE=N",
+        "direction:SM=K"
+      ],
+      "content": {
+        "summaryText": "여러 선택지를 사람들과 이야기해 넓힌 뒤 중요한 기준을 정하고, 결정하면 예약이나 준비처럼 다음 행동을 차례로 이어가는 편이다.",
+        "detailParagraphs": [
+          "여러 선택지를 사람들과 이야기해 넓힌 뒤 중요한 기준을 정하고, 결정하면 예약이나 준비처럼 다음 행동을 차례로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-K",
+      "canonicalVariantId": "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-E-OE-R-SM-K",
+      "claimKey": ".scenario.general.ordinary_choice.response",
+      "scenarioRef": "SCN-GENERAL-1",
+      "topic": "ordinary_choice",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|OE=R|SM=K",
+      "semanticAxes": ["SE", "OE", "SM"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-1",
+        "topic:ordinary_choice",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:OE=R",
+        "direction:SM=K"
+      ],
+      "content": {
+        "summaryText": "확인된 조건과 이전 경험을 비교해 실행할 한 가지를 고르고, 함께할 사람이 편한지 확인한 뒤 일정과 순서로 옮기는 편이다.",
+        "detailParagraphs": [
+          "확인된 조건과 이전 경험을 비교해 실행할 한 가지를 고르고, 함께할 사람이 편한지 확인한 뒤 일정과 순서로 옮기는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-N",
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-N",
+      "claimKey": ".scenario.general.success.process",
+      "scenarioRef": "SCN-GENERAL-10",
+      "topic": "success",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N",
+      "semanticAxes": ["OE"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-10",
+        "topic:success",
+        "claimKind:first_thought",
+        "direction:OE=N"
+      ],
+      "content": {
+        "summaryText": "“누구와 이 기쁨을 나누고 싶지?”, “여기서 다음에는 무엇을 더 해볼 수 있을까?”라는 생각이 빠르게 이어지기 쉽다.",
+        "detailParagraphs": [
+          "“누구와 이 기쁨을 나누고 싶지?”, “여기서 다음에는 무엇을 더 해볼 수 있을까?”라는 생각이 빠르게 이어지기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-R",
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUCCESS-PROCESS-OE-R",
+      "claimKey": ".scenario.general.success.process",
+      "scenarioRef": "SCN-GENERAL-10",
+      "topic": "success",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "semanticAxes": ["OE"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-10",
+        "topic:success",
+        "claimKind:first_thought",
+        "direction:OE=R"
+      ],
+      "content": {
+        "summaryText": "“어떤 선택이 결과를 만들었지?”, “다음에도 같은 방식이 통할까?”를 차분하게 되짚으며 성취의 이유를 찾기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 선택이 결과를 만들었지?”, “다음에도 같은 방식이 통할까?”를 차분하게 되짚으며 성취의 이유를 찾기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-C",
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-C",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "scenarioRef": "SCN-GENERAL-5",
+      "topic": "uncertainty",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|OE=N|ER=C",
+      "semanticAxes": ["SE", "OE", "ER"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-5",
+        "topic:uncertainty",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:OE=N",
+        "direction:ER=C"
+      ],
+      "content": {
+        "summaryText": "가능한 방향을 정리해 사람들과 확인하고 현재 할 수 있는 행동을 시작한 뒤, 시간이 지나 감정과 피로가 남았는지 확인하는 편이다.",
+        "detailParagraphs": [
+          "가능한 방향을 정리해 사람들과 확인하고 현재 할 수 있는 행동을 시작한 뒤, 시간이 지나 감정과 피로가 남았는지 확인하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-Q",
+      "canonicalVariantId": "CAN-SCN-GENERAL-UNCERTAINTY-RESPONSE-SE-E-OE-N-ER-Q",
+      "claimKey": ".scenario.general.uncertainty.response",
+      "scenarioRef": "SCN-GENERAL-5",
+      "topic": "uncertainty",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|OE=N|ER=Q",
+      "semanticAxes": ["SE", "OE", "ER"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-GENERAL-5",
+        "topic:uncertainty",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:OE=N",
+        "direction:ER=Q"
+      ],
+      "content": {
+        "summaryText": "사람들과 정보를 나누어 가능성을 확인하고, 걱정되는 항목을 준비 목록으로 바꾸어 하나씩 점검하는 편이다.",
+        "detailParagraphs": [
+          "사람들과 정보를 나누어 가능성을 확인하고, 걱정되는 항목을 준비 목록으로 바꾸어 하나씩 점검하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-AFTERMATH-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.aftermath.communication",
+      "scenarioRef": "SCN-PARTNER-12",
+      "topic": "aftermath",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-12",
+        "topic:aftermath",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "scenarioRef": "SCN-PARTNER-9",
+      "topic": "boundary",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-9",
+        "topic:boundary",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-K",
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "scenarioRef": "SCN-PARTNER-6",
+      "topic": "disagreement",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|SM=K",
+      "semanticAxes": ["RO", "SM"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-6",
+        "topic:disagreement",
+        "claimKind:actual_response",
+        "direction:RO=A",
+        "direction:SM=K"
+      ],
+      "content": {
+        "summaryText": "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다.",
+        "detailParagraphs": [
+          "감정이 올라와도 연인의 경험을 듣고 자신의 마음을 설명한 뒤, 다시 지킬 약속과 다음 대화 시점을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "scenarioRef": "SCN-PARTNER-6",
+      "topic": "disagreement",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|SM=M",
+      "semanticAxes": ["RO", "SM"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-6",
+        "topic:disagreement",
+        "claimKind:actual_response",
+        "direction:RO=A",
+        "direction:SM=M"
+      ],
+      "content": {
+        "summaryText": "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 경험과 자신의 영향을 들은 뒤 자신의 마음도 말하고, 둘이 받아들일 수 있는 수정 행동을 상황에 맞춰 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-G",
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "scenarioRef": "SCN-PARTNER-8",
+      "topic": "need_expression",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-8",
+        "topic:need_expression",
+        "claimKind:attention",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "scenarioRef": "SCN-PARTNER-8",
+      "topic": "need_expression",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-8",
+        "topic:need_expression",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-C",
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-C",
+      "claimKey": ".scenario.partner.setback.response",
+      "scenarioRef": "SCN-PARTNER-11",
+      "topic": "setback",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|ER=C",
+      "semanticAxes": ["RO", "ER"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-11",
+        "topic:setback",
+        "claimKind:actual_response",
+        "direction:RO=G",
+        "direction:ER=C"
+      ],
+      "content": {
+        "summaryText": "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다.",
+        "detailParagraphs": [
+          "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-Q",
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-Q",
+      "claimKey": ".scenario.partner.setback.response",
+      "scenarioRef": "SCN-PARTNER-11",
+      "topic": "setback",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|ER=Q",
+      "semanticAxes": ["RO", "ER"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PARTNER-11",
+        "topic:setback",
+        "claimKind:actual_response",
+        "direction:RO=G",
+        "direction:ER=Q"
+      ],
+      "content": {
+        "summaryText": "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다.",
+        "detailParagraphs": [
+          "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-R",
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-AFTERMATH-ATTENTION-OE-R",
+      "claimKey": ".scenario.person_of_interest.aftermath.attention",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "topic": "aftermath",
+      "claimKind": "attention",
+      "axisSignature": "OE=R",
+      "semanticAxes": ["OE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-PERSON-OF-INTEREST-12",
+        "topic:aftermath",
+        "claimKind:attention",
+        "direction:OE=R"
+      ],
+      "content": {
+        "summaryText": "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람과 중요한 대화를 마친 뒤에는 혼자 있을 때 오간 말과 행동을 되짚고, 확인한 사실과 아직 답을 모르는 부분을 나누어 정리하는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-G",
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.person_of_interest.boundary.communication",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "topic": "boundary",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "semanticAxes": ["RO"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PERSON-OF-INTEREST-9",
+        "topic:boundary",
+        "claimKind:communication",
+        "direction:RO=G"
+      ],
+      "content": {
+        "summaryText": "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“나는 늦은 밤 반복 연락은 부담스러워. 다음 날 이야기했으면 좋겠어”처럼 행동과 대안을 분명히 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-R",
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-DISAGREEMENT-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.disagreement.process",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "topic": "disagreement",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "semanticAxes": ["OE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-PERSON-OF-INTEREST-6",
+        "topic:disagreement",
+        "claimKind:first_thought",
+        "direction:OE=R"
+      ],
+      "content": {
+        "summaryText": "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“서로 같은 사실을 다르게 해석한 건지, 중요하게 보는 기준 자체가 다른 건지”를 구분하고 싶어 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "topic": "need_expression",
+      "claimKind": "attention",
+      "axisSignature": "SE=E|OE=R",
+      "semanticAxes": ["SE", "OE"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PERSON-OF-INTEREST-8",
+        "topic:need_expression",
+        "claimKind:attention",
+        "direction:SE=E",
+        "direction:OE=R"
+      ],
+      "content": {
+        "summaryText": "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "마음에 드는 사람에게 자신의 필요를 말할 때는 대화를 시작한 뒤 상대 반응을 들으며 원하는 만남·연락·답변을 구체적으로 맞출 지점을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-R",
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-PLAN-CHANGE-PROCESS-OE-R",
+      "claimKey": ".scenario.person_of_interest.plan_change.process",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "topic": "plan_change",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "semanticAxes": ["OE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-PERSON-OF-INTEREST-4",
+        "topic:plan_change",
+        "claimKind:first_thought",
+        "direction:OE=R"
+      ],
+      "content": {
+        "summaryText": "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다.",
+        "detailParagraphs": [
+          "“실제로 취소된 이유가 무엇이고, 다시 만날 의사가 있다는 단서는 있는가?”를 확인하며 추측과 사실을 나누려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-C",
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-C",
+      "claimKey": ".scenario.person_of_interest.setback.process",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "topic": "setback",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R|ER=C",
+      "semanticAxes": ["OE", "ER"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-PERSON-OF-INTEREST-11",
+        "topic:setback",
+        "claimKind:first_thought",
+        "direction:OE=R",
+        "direction:ER=C"
+      ],
+      "content": {
+        "summaryText": "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 분명히 잘못한 부분은 무엇이고, 상대가 나를 싫어한다고 볼 근거가 실제로 있는가?”를 차분히 확인하려 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-AFTERMATH-RESPONSE-SM-M",
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-RESPONSE-SM-M",
+      "claimKey": ".scenario.work.aftermath.response",
+      "scenarioRef": "SCN-WORK-12",
+      "topic": "aftermath",
+      "claimKind": "actual_response",
+      "axisSignature": "SM=M",
+      "semanticAxes": ["SM"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-12",
+        "topic:aftermath",
+        "claimKind:actual_response",
+        "direction:SM=M"
+      ],
+      "content": {
+        "summaryText": "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다.",
+        "detailParagraphs": [
+          "잠시 집중을 내려놓고 회복한 뒤, 재발을 줄일 수 있는 점검 항목이나 작업 방식을 자신의 흐름에 맞게 고치는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.work.disagreement.response",
+      "scenarioRef": "SCN-WORK-6",
+      "topic": "disagreement",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|SM=M",
+      "semanticAxes": ["RO", "SM"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-6",
+        "topic:disagreement",
+        "claimKind:actual_response",
+        "direction:RO=A",
+        "direction:SM=M"
+      ],
+      "content": {
+        "summaryText": "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다.",
+        "detailParagraphs": [
+          "각 구성원의 우려를 요약해 확인하고 자신의 의견도 말한 뒤, 업무 목표와 사람의 부담을 함께 반영하는 실행안을 유연하게 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.work.disagreement.response",
+      "scenarioRef": "SCN-WORK-6",
+      "topic": "disagreement",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|SM=K",
+      "semanticAxes": ["RO", "SM"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-6",
+        "topic:disagreement",
+        "claimKind:actual_response",
+        "direction:RO=G",
+        "direction:SM=K"
+      ],
+      "content": {
+        "summaryText": "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다.",
+        "detailParagraphs": [
+          "각 의견의 근거를 정리하고 구성원에게 미칠 영향을 확인한 뒤, 시험할 기준과 의사결정 시점을 구체적으로 제안하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-K",
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-K",
+      "claimKey": ".scenario.work.group_participation.response",
+      "scenarioRef": "SCN-WORK-3",
+      "topic": "group_participation",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|SM=K",
+      "semanticAxes": ["SE", "SM"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-3",
+        "topic:group_participation",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:SM=K"
+      ],
+      "content": {
+        "summaryText": "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다.",
+        "detailParagraphs": [
+          "질문으로 논의를 열고 여러 의견을 연결한 뒤, 합의된 내용을 할 일과 일정으로 정리하는 역할을 맡는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-M",
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-M",
+      "claimKey": ".scenario.work.group_participation.response",
+      "scenarioRef": "SCN-WORK-3",
+      "topic": "group_participation",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E|SM=M",
+      "semanticAxes": ["SE", "SM"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-3",
+        "topic:group_participation",
+        "claimKind:actual_response",
+        "direction:SE=E",
+        "direction:SM=M"
+      ],
+      "content": {
+        "summaryText": "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다.",
+        "detailParagraphs": [
+          "확인 질문을 먼저 던져 논의를 구체화하고, 가능한 대안이 나오면 작은 실험이나 역할 분담을 제안하며 반응에 맞춰 방법을 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-NEED-EXPRESSION-RESPONSE-SE-I",
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.work.need_expression.response",
+      "scenarioRef": "SCN-WORK-8",
+      "topic": "need_expression",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "semanticAxes": ["SE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-WORK-8",
+        "topic:need_expression",
+        "claimKind:actual_response",
+        "direction:SE=I"
+      ],
+      "content": {
+        "summaryText": "혼자 해결을 시도한 내용을 정리한 뒤 담당자에게 구체적인 질문이나 자원 요청을 하는 편이다.",
+        "detailParagraphs": [
+          "혼자 해결을 시도한 내용을 정리한 뒤 담당자에게 구체적인 질문이나 자원 요청을 하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-SUCCESS-RESPONSE-SE-I",
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-RESPONSE-SE-I",
+      "claimKey": ".scenario.work.success.response",
+      "scenarioRef": "SCN-WORK-10",
+      "topic": "success",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "semanticAxes": ["SE"],
+      "selectionReasons": ["stratified_coverage_member"],
+      "coveredStrata": [
+        "scenario:SCN-WORK-10",
+        "topic:success",
+        "claimKind:actual_response",
+        "direction:SE=I"
+      ],
+      "content": {
+        "summaryText": "결과를 혼자 정리한 뒤 도움이 된 자료와 방법을 기록하고, 함께한 사람에게 구체적으로 공을 돌리는 편이다.",
+        "detailParagraphs": [
+          "결과를 혼자 정리한 뒤 도움이 된 자료와 방법을 기록하고, 함께한 사람에게 구체적으로 공을 돌리는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-K",
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-K",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "scenarioRef": "SCN-WORK-5",
+      "topic": "uncertainty",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=N|SM=K",
+      "semanticAxes": ["OE", "SM"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-5",
+        "topic:uncertainty",
+        "claimKind:actual_response",
+        "direction:OE=N",
+        "direction:SM=K"
+      ],
+      "content": {
+        "summaryText": "가능성을 넓게 검토한 뒤 확인할 질문과 임시 기준을 세우고, 작은 실행으로 정보를 더 얻는 편이다.",
+        "detailParagraphs": [
+          "가능성을 넓게 검토한 뒤 확인할 질문과 임시 기준을 세우고, 작은 실행으로 정보를 더 얻는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-M",
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-N-SM-M",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "scenarioRef": "SCN-WORK-5",
+      "topic": "uncertainty",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=N|SM=M",
+      "semanticAxes": ["OE", "SM"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-5",
+        "topic:uncertainty",
+        "claimKind:actual_response",
+        "direction:OE=N",
+        "direction:SM=M"
+      ],
+      "content": {
+        "summaryText": "여러 가설을 혼자 구조화한 뒤 현재 자원으로 시험할 수 있는 방법을 고르고, 결과를 보며 다음 접근을 유연하게 바꾸는 편이다.",
+        "detailParagraphs": [
+          "여러 가설을 혼자 구조화한 뒤 현재 자원으로 시험할 수 있는 방법을 고르고, 결과를 보며 다음 접근을 유연하게 바꾸는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-K",
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-K",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "scenarioRef": "SCN-WORK-5",
+      "topic": "uncertainty",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=R|SM=K",
+      "semanticAxes": ["OE", "SM"],
+      "selectionReasons": [
+        "retained_after_lexical_flag",
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-5",
+        "topic:uncertainty",
+        "claimKind:actual_response",
+        "direction:OE=R",
+        "direction:SM=K"
+      ],
+      "content": {
+        "summaryText": "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다.",
+        "detailParagraphs": [
+          "확인할 자료와 담당자를 정해 정보를 모으고, 사람에게 미칠 영향을 살핀 뒤 일정에 맞는 한 가지 실행안으로 좁히는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    },
+    {
+      "reviewItemId": "P2-SAMPLE-CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-M",
+      "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-M",
+      "claimKey": ".scenario.work.uncertainty.response",
+      "scenarioRef": "SCN-WORK-5",
+      "topic": "uncertainty",
+      "claimKind": "actual_response",
+      "axisSignature": "OE=R|SM=M",
+      "semanticAxes": ["OE", "SM"],
+      "selectionReasons": [
+        "multi_axis_single_source",
+        "stratified_coverage_member"
+      ],
+      "coveredStrata": [
+        "scenario:SCN-WORK-5",
+        "topic:uncertainty",
+        "claimKind:actual_response",
+        "direction:OE=R",
+        "direction:SM=M"
+      ],
+      "content": {
+        "summaryText": "작은 예시나 초안을 만들어 반응을 확인하고, 얻은 정보에 따라 다음 방식과 속도를 조정하는 편이다.",
+        "detailParagraphs": [
+          "작은 예시나 초안을 만들어 반응을 확인하고, 얻은 정보에 따라 다음 방식과 속도를 조정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "sourceBlockCount": 1,
+      "independentReview": {
+        "personality_psychologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "psychometrician": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "research_methodologist": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "korean_plain_language_editor": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "safety_privacy_reviewer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "product_content_designer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        },
+        "data_quality_engineer": {
+          "state": "pending",
+          "decision": null,
+          "issueCodes": [],
+          "rationale": null,
+          "reviewerRef": null,
+          "reviewedAt": null
+        }
+      },
+      "publicationState": "research_only",
+      "customerPublicationApproved": false
+    }
+  ],
+  "nextGate": {
+    "name": "INDEPENDENT_P2_STRATIFIED_REVIEW",
+    "actions": [
+      "7개 역할이 표본 문장을 서로의 판단을 보지 않고 검토한다.",
+      "유지 경고 문장은 자동 단서 사전의 개선 여부도 함께 판정한다.",
+      "표본에서 중대한 반복 결함이 나오면 같은 층의 P2 전체로 검토를 확대한다."
+    ]
+  }
+}

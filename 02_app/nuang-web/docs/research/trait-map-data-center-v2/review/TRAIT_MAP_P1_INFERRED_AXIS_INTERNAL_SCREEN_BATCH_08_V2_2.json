@@ -1,0 +1,657 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-08.0.1",
+  "batchId": "P1-IAS-08",
+  "status": "P1_INFERRED_AXIS_BATCH_08_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 8,
+    "variants": 18,
+    "retainCandidates": 13,
+    "revisionCandidates": 5,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-AFTERMATH-ATTENTION",
+      "claimKey": ".scenario.partner.aftermath.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-AFTERMATH-COMMUNICATION",
+      "claimKey": ".scenario.partner.aftermath.communication",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-AFTERMATH-PROCESS",
+      "claimKey": ".scenario.partner.aftermath.process",
+      "claimKind": "first_thought",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-BOUNDARY-ATTENTION",
+      "claimKey": ".scenario.partner.boundary.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-BOUNDARY-COMMUNICATION",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-NEED_EXPRESSION-ATTENTION",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "claimKind": "attention",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-NEED_EXPRESSION-COMMUNICATION",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "claimKind": "communication",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-RO-PARTNER-SETBACK-RESPONSE",
+      "claimKey": ".scenario.partner.setback.response",
+      "claimKind": "actual_response",
+      "axisRef": "RO",
+      "internalDecision": "retain_inferred_ro_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "연인과 부담스러운 일이 지나간 뒤에는 혼자 있을 때 실제로 오간 말과 행동을 다시 정리하고, 아직 풀리지 않은 원인과 다음에 바꿀 점을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인과 부담스러운 일이 지나간 뒤에는 혼자 있을 때 실제로 오간 말과 행동을 다시 정리하고, 아직 풀리지 않은 원인과 다음에 바꿀 점을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "부담스러운 일이 지나간 뒤에는 연인과의 분위기가 실제로 풀렸는지, 남은 감정이나 다시 맞춰야 할 약속이 있는지를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 일이 지나간 뒤에는 연인과의 분위기가 실제로 풀렸는지, 남은 감정이나 다시 맞춰야 할 약속이 있는지를 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.aftermath.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“생각을 정리해 보니 우리가 다르게 이해한 부분은 이거였어. 다음에는 이렇게 해보면 좋겠어”처럼 되짚은 사실과 제안을 연결해 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.aftermath.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“아까 일은 지금 어떻게 느껴져? 내가 바꿔야 할 게 있으면 듣고 싶어”처럼 회복 상태와 다음 행동을 함께 확인하는 말하기가 잘 맞는다.",
+        "detailParagraphs": [
+          "“아까 일은 지금 어떻게 느껴져? 내가 바꿔야 할 게 있으면 듣고 싶어”처럼 회복 상태와 다음 행동을 함께 확인하는 말하기가 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast_and_er_separation",
+        "rationale": "A는 연인의 마음·관계 영향·필요를 직접 나타내고 G의 수정 행동이 중심이 되지 않게 하며, C/Q 결합 문장은 감정 활성화 시점을 따로 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“아까 일로 어떤 마음이 남았어? 우리 관계에서 지금 서로에게 필요한 게 무엇인지 듣고 싶어”처럼 감정과 관계의 필요를 확인하는 말하기가 잘 맞는다.",
+        "detailParagraphs": [
+          "“아까 일로 어떤 마음이 남았어? 우리 관계에서 지금 서로에게 필요한 게 무엇인지 듣고 싶어”처럼 감정과 관계의 필요를 확인하는 말하기가 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“아까 일은 지금 어떻게 느껴져? 내가 바꿔야 할 게 있으면 듣고 싶어”처럼 회복 상태와 다음 행동을 함께 확인하는 말하기가 잘 맞는다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-PROCESS-RO-G",
+      "claimKey": ".scenario.partner.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“문제가 시작된 지점은 어디였고, 다음에는 어떤 신호를 더 일찍 확인해야 할까?”를 차근차근 되짚기 쉽다.",
+        "detailParagraphs": [
+          "“문제가 시작된 지점은 어디였고, 다음에는 어떤 신호를 더 일찍 확인해야 할까?”를 차근차근 되짚기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-PROCESS-RO-A",
+      "claimKey": ".scenario.partner.aftermath.process",
+      "claimKind": "first_thought",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“이제 괜찮아졌을까?”라는 걱정과 “다음에는 같은 일이 반복되지 않게 무엇을 정하면 좋을까?”라는 생각이 이어지기 쉽다.",
+        "detailParagraphs": [
+          "“이제 괜찮아졌을까?”라는 걱정과 “다음에는 같은 일이 반복되지 않게 무엇을 정하면 좋을까?”라는 생각이 이어지기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast_and_er_separation",
+        "rationale": "A는 연인의 마음·관계 영향·필요를 직접 나타내고 G의 수정 행동이 중심이 되지 않게 하며, C/Q 결합 문장은 감정 활성화 시점을 따로 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“그 일로 연인은 어떤 마음이 남았고, 우리 관계에서 지금 서로에게 필요한 것은 무엇일까?”를 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“그 일로 연인은 어떤 마음이 남았고, 우리 관계에서 지금 서로에게 필요한 것은 무엇일까?”를 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“이제 괜찮아졌을까?”라는 걱정과 “다음에는 같은 일이 반복되지 않게 무엇을 정하면 좋을까?”라는 생각이 이어지기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.boundary.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "연인이 자신의 시간·사생활·선택을 넘어서면 어떤 행동이 문제였고 관계를 지키면서 바꿔야 할 기준이 무엇인지 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 자신의 시간·사생활·선택을 넘어서면 어떤 행동이 문제였고 관계를 지키면서 바꿔야 할 기준이 무엇인지 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.boundary.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "연인이 자신의 선을 넘으면 관계를 잃을 걱정과 상대가 받을 상처, 둘이 안전하게 지내기 위해 꼭 바꿔야 할 행동을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 자신의 선을 넘으면 관계를 잃을 걱정과 상대가 받을 상처, 둘이 안전하게 지내기 위해 꼭 바꿔야 할 행동을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast_and_er_separation",
+        "rationale": "A는 연인의 마음·관계 영향·필요를 직접 나타내고 G의 수정 행동이 중심이 되지 않게 하며, C/Q 결합 문장은 감정 활성화 시점을 따로 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인이 자신의 선을 넘으면 상대는 이 경계를 어떻게 느낄지, 말하지 않을 때 관계에 어떤 감정이 쌓일지, 둘에게 필요한 존중이 무엇인지 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인이 자신의 선을 넘으면 상대는 이 경계를 어떻게 느낄지, 말하지 않을 때 관계에 어떤 감정이 쌓일지, 둘에게 필요한 존중이 무엇인지 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인이 자신의 선을 넘으면 관계를 잃을 걱정과 상대가 받을 상처, 둘이 안전하게 지내기 위해 꼭 바꿔야 할 행동을 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“내 휴대전화를 허락 없이 보는 것은 원하지 않아. 궁금한 점은 나에게 직접 물어봐 줘”처럼 금지 행동과 대안을 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-BOUNDARY-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.boundary.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“우리 관계가 중요하지만 내 휴대전화를 허락 없이 보는 건 원하지 않아. 궁금한 점은 직접 물어봐 줘”처럼 관계와 경계를 함께 말하는 방식이 자연스럽다.",
+        "detailParagraphs": [
+          "“우리 관계가 중요하지만 내 휴대전화를 허락 없이 보는 건 원하지 않아. 궁금한 점은 직접 물어봐 줘”처럼 관계와 경계를 함께 말하는 방식이 자연스럽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 감정을 한꺼번에 쏟기보다 실제로 달라지길 바라는 행동과 대화할 적절한 시점을 먼저 정리하려는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.need_expression.attention",
+      "claimKind": "attention",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "연인에게 자신의 필요를 말할 때 상대 마음과 관계에 생길 변화, 서로 받아들일 수 있는 새 약속을 먼저 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "연인에게 자신의 필요를 말할 때 상대 마음과 관계에 생길 변화, 서로 받아들일 수 있는 새 약속을 먼저 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=G",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“연락이 늦어질 때는 짧게 알려주면 좋겠어. 그러면 내가 기다리는 시간을 알 수 있어”처럼 행동과 이유를 함께 말하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.need_expression.communication",
+      "claimKind": "communication",
+      "axisSignature": "RO=A",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "“요즘 함께 보내는 시간이 줄어 서운했어. 이번 주에는 둘만의 시간을 정하고 싶은데 너는 어때?”처럼 감정·요청·질문을 연결하는 방식이 잘 맞는다.",
+        "detailParagraphs": [
+          "“요즘 함께 보내는 시간이 줄어 서운했어. 이번 주에는 둘만의 시간을 정하고 싶은데 너는 어때?”처럼 감정·요청·질문을 연결하는 방식이 잘 맞는다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-C",
+      "claimKey": ".scenario.partner.setback.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|ER=C",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다.",
+        "detailParagraphs": [
+          "차분하게 상황을 들은 뒤 “들어줄까, 같이 방법을 찾을까?”를 묻고, 상대가 원하는 경우에만 구체적인 대안을 함께 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-Q",
+      "claimKey": ".scenario.partner.setback.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=G|ER=Q",
+      "axisDirection": "G",
+      "originalContent": {
+        "summaryText": "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다.",
+        "detailParagraphs": [
+          "걱정과 감정이 올라온 상태에서도 연인의 경험을 듣고 필요한 사과와 수정 행동을 정하며, 회복에는 시간이 필요한 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_ro_contrast_candidate",
+        "rationale": "G는 관계 문제의 원인·해결·다음 행동, A는 마음·관계 영향·필요를 직접 보여 주고 결합 축도 각 뜻을 유지한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-A-ER-C",
+      "claimKey": ".scenario.partner.setback.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|ER=C",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "연인의 마음을 듣고 필요한 사과와 수정 행동을 정한 뒤, 시간이 지난 후 자신의 실망과 관계에 남은 감정을 확인하는 편이다.",
+        "detailParagraphs": [
+          "연인의 마음을 듣고 필요한 사과와 수정 행동을 정한 뒤, 시간이 지난 후 자신의 실망과 관계에 남은 감정을 확인하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast_and_er_separation",
+        "rationale": "A는 연인의 마음·관계 영향·필요를 직접 나타내고 G의 수정 행동이 중심이 되지 않게 하며, C/Q 결합 문장은 감정 활성화 시점을 따로 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "감정이 크게 올라오기 전 연인의 마음과 지금 필요한 것을 차분히 듣고, 그 일이 관계에 남긴 영향과 자신의 마음도 시간을 두고 나누는 편이다.",
+        "detailParagraphs": [
+          "감정이 크게 올라오기 전 연인의 마음과 지금 필요한 것을 차분히 듣고, 그 일이 관계에 남긴 영향과 자신의 마음도 시간을 두고 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인의 마음을 듣고 필요한 사과와 수정 행동을 정한 뒤, 시간이 지난 후 자신의 실망과 관계에 남은 감정을 확인하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-A-ER-Q",
+      "claimKey": ".scenario.partner.setback.response",
+      "claimKind": "actual_response",
+      "axisSignature": "RO=A|ER=Q",
+      "axisDirection": "A",
+      "originalContent": {
+        "summaryText": "해결이 궁금한 마음을 잠시 미루고 먼저 연인이 어떤 기분인지 살핀 뒤, 상대가 원할 때 원인 정리와 다음 행동을 함께 찾는 편이다.",
+        "detailParagraphs": [
+          "해결이 궁금한 마음을 잠시 미루고 먼저 연인이 어떤 기분인지 살핀 뒤, 상대가 원할 때 원인 정리와 다음 행동을 함께 찾는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_ro_contrast_and_er_separation",
+        "rationale": "A는 연인의 마음·관계 영향·필요를 직접 나타내고 G의 수정 행동이 중심이 되지 않게 하며, C/Q 결합 문장은 감정 활성화 시점을 따로 보존한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "걱정과 감정이 빠르게 올라와도 연인이 어떤 기분인지와 지금 필요한 것이 무엇인지 먼저 묻고, 이 일이 관계에 미친 영향을 함께 나누는 편이다.",
+        "detailParagraphs": [
+          "걱정과 감정이 빠르게 올라와도 연인이 어떤 기분인지와 지금 필요한 것이 무엇인지 먼저 묻고, 이 일이 관계에 미친 영향을 함께 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "해결이 궁금한 마음을 잠시 미루고 먼저 연인이 어떤 기분인지 살핀 뒤, 상대가 원할 때 원인 정리와 다음 행동을 함께 찾는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_08_RECOMPOSITION_AND_BATCH_09_SCREEN",
+    "actions": [
+      "5개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "RO·partner 다음 묶음 P1-IAS-09를 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

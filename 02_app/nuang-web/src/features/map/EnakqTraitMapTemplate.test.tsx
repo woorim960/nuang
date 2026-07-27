@@ -9,6 +9,10 @@ describe("TraitMapDetailTemplate", () => {
     render(<TraitMapDetailTemplate guide={guide} />);
 
     expect(
+      screen.getByLabelText("ENAKQ 다섯 글자의 성향 이름"),
+    ).toHaveTextContent("E외향형N가능성형A마음형K꾸준형Q빠른반응형");
+
+    expect(
       screen.getByRole("heading", { name: "관계를 여는 지휘자" }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("뉴앙 코드 ENAKQ")).toBeInTheDocument();
@@ -38,13 +42,15 @@ describe("TraitMapDetailTemplate", () => {
     await user.click(screen.getByRole("button", { name: /핵심 모습/ }));
 
     expect(
-      screen.getByText("궁금한 내용을 바로 골라 보세요"),
+      screen.getByRole("button", { name: /마음 가는 사람/ }),
     ).toBeInTheDocument();
 
     await user.click(screen.getByRole("button", { name: /마음 가는 사람/ }));
 
     await waitFor(() => expect(scrollIntoView).toHaveBeenCalledTimes(1));
-    expect(screen.queryByText("궁금한 내용을 바로 골라 보세요")).toBeNull();
+    expect(
+      screen.getByRole("button", { name: /마음 가는 사람/ }),
+    ).toHaveAttribute("aria-expanded", "false");
   });
 
   it("updates the sticky chapter header from the actual scroll position", async () => {

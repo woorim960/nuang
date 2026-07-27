@@ -1,0 +1,166 @@
+{
+  "contractVersion": "nuang-trait-map-targeted-axis-rewrite-decisions.v2.1",
+  "reportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-DECISIONS-CAB-01.0.2",
+  "batchId": "CAB-01",
+  "status": "TRACEABLE_V2_DECISIONS_MIGRATED_REMOVED_AXIS_DECISIONS_RETIRED",
+  "publicationState": "research_only",
+  "reviewedAt": "2026-07-24T00:00:00.000Z",
+  "sourcePacketReportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-CAB-01.0.2",
+  "sourceDecisionReportId": "TRAIT-MAP-TARGETED-AXIS-REWRITE-DECISIONS-CAB-01.0.1",
+  "rules": [
+    "canonical 왼쪽·오른쪽 ID와 changedAxis가 모두 일치하는 결정만 이전한다.",
+    "v2.1에서 제거한 RO·ER 쌍의 결정과 C/Q 새 문단은 새 원장에 적용하지 않는다.",
+    "이전한 결정도 7개 역할 검토 전까지 내부 편집 초안으로 유지한다."
+  ],
+  "summary": {
+    "targetPairs": 8,
+    "migratedDecisions": 8,
+    "retiredV2Decisions": 4,
+    "authoredParagraphs": 1,
+    "customerApprovedDecisions": 0
+  },
+  "decisions": [
+    {
+      "reviewId": "TAR-CAB-01-01",
+      "decision": "ADD_MISSING_DIRECTION_PARAGRAPH",
+      "removeSharedFrom": null,
+      "replaceAllOn": null,
+      "authoredSide": "right",
+      "authoredDirection": "I",
+      "authoredParagraph": "익숙한 선택지를 혼자 비교해 지금 에너지와 시간에 맞는 한 가지를 정하고, 작게 시작한 뒤 결과를 보며 방법과 순서를 조정하는 편이다.",
+      "sourceCandidateRefs": [
+        "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-N-SM-M:aecd9e54d7dd",
+        "CAN-SCN-GENERAL-ORDINARY-CHOICE-RESPONSE-SE-I-OE-R-SM-K:d04f576cd423"
+      ],
+      "rationale": "공유 문장은 R·M의 행동만 설명한다. I 방향의 혼자 비교하고 정리하는 과정을 기존 I 후보에서 보강한다.",
+      "migratedFromReviewId": "TAR-CAB-01-03",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-02",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 사람들과 가능성을 넓히는 E 방향이다. I 쪽에는 혼자 비교해 기준과 단계를 정하는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-01-04",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-03",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "left",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 사람에게 남은 영향과 관계 회복을 보는 A 방향이다. G 쪽에는 후속 행동과 재발 가능성을 보는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-01-05",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-04",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 진행 순서·놓친 단서·다음 행동을 보는 G 방향이다. A 쪽에는 혼자 회복한 뒤 다시 연결할 사람을 보는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-01-06",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-05",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "left",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 아직 불편한 사람을 떠올리는 A 방향이다. G 쪽에는 위험을 줄일 확인 행동을 찾는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-01-07",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-06",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 문제 원인과 바꿀 행동을 찾는 G 방향이다. A 쪽에는 자신의 마음을 정리한 뒤 다시 이야기할 사람을 찾는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-01-08",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-07",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "right",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 확인·사과·다음 계획을 순서대로 이어 일상 흐름으로 돌아가는 K 방향이다. M 쪽에는 현재 걱정과 피로가 줄어드는 속도에 맞추는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-01-09",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    },
+    {
+      "reviewId": "TAR-CAB-01-08",
+      "decision": "KEEP_DIRECTIONAL_SHARED_BLOCK_ON_MATCHING_SIDE",
+      "removeSharedFrom": "left",
+      "replaceAllOn": null,
+      "authoredSide": null,
+      "authoredDirection": null,
+      "authoredParagraph": null,
+      "sourceCandidateRefs": [],
+      "rationale": "공유 문장은 에너지 상태에 따라 기록·대화·다음 행동을 선택하는 M 방향이다. K 쪽에는 회복·정리·재연결의 순서를 이어가는 고유 문단이 있다.",
+      "migratedFromReviewId": "TAR-CAB-01-10",
+      "migrationBasis": "왼쪽·오른쪽 canonical ID와 changedAxis가 v2 결정 쌍과 정확히 일치한다."
+    }
+  ],
+  "retiredV2Decisions": [
+    {
+      "reviewId": "TAR-CAB-01-01",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "changedAxis": "RO",
+      "reason": "v2.1에서 일반 선택 attention의 비통제 RO 축을 제거해 교정 쌍 자체가 폐기됐다.",
+      "preservedInAuditTrail": true
+    },
+    {
+      "reviewId": "TAR-CAB-01-02",
+      "claimKey": ".scenario.general.ordinary_choice.attention",
+      "changedAxis": "RO",
+      "reason": "v2.1에서 일반 선택 attention의 비통제 RO 축을 제거해 교정 쌍 자체가 폐기됐다.",
+      "preservedInAuditTrail": true
+    },
+    {
+      "reviewId": "TAR-CAB-01-11",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "changedAxis": "ER",
+      "reason": "v2.1에서 새 만남 response의 비통제 ER 축을 제거해 교정 쌍 자체가 폐기됐다.",
+      "preservedInAuditTrail": true
+    },
+    {
+      "reviewId": "TAR-CAB-01-12",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "changedAxis": "ER",
+      "reason": "v2.1에서 새 만남 response의 비통제 ER 축을 제거해 교정 쌍 자체가 폐기됐다.",
+      "preservedInAuditTrail": true
+    }
+  ],
+  "approval": {
+    "internalEditorialDecisionComplete": true,
+    "sevenRoleReviewComplete": false,
+    "customerPublicationApproved": false
+  }
+}

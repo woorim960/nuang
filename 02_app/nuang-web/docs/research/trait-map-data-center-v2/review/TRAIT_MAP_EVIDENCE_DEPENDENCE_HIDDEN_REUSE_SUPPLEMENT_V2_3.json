@@ -1,0 +1,96 @@
+{
+  "contractVersion": "nuang-trait-map-hidden-dataset-reuse-supplement.v2.3",
+  "registryId": "TRAIT-MAP-EVIDENCE-DEPENDENCE-HIDDEN-REUSE-SUPPLEMENT.2.3",
+  "status": "PARTIAL_BIBLIOGRAPHIC_REVIEW_HIDDEN_REUSE_CONFIRMED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "reviewerIdentity": {
+    "type": "internal_bibliographic_audit",
+    "id": "CODEX-INTERNAL-RESEARCH-AUDIT",
+    "isIndependentExternalReviewer": false,
+    "mayApprovePublication": false
+  },
+  "normalizedSource": {
+    "sourceId": "SRC-BFI2-2017",
+    "studyFamilies": [
+      {
+        "studyFamilyId": "FAMILY-ESCS",
+        "datasetId": "DATASET-ESCS",
+        "sampleId": "SAMPLE-BFI2-2017-STUDY-1-ESCS",
+        "sampleSize": 1137,
+        "nestedSampleSizes": {
+          "completedAtLeastOneIpipList": 995,
+          "completedAllTwelveIpipLists": 401
+        },
+        "design": "Eugene-Springfield Community Sample의 형용사·IPIP·기존 BFI 자료를 이용한 BFI-2 facet 및 예비 문항 구성"
+      },
+      {
+        "studyFamilyId": "FAMILY-BFI2-2017-DEVELOPMENT",
+        "datasetId": "DATASET-BFI2-2017-DEVELOPMENT",
+        "sampleId": "SAMPLE-BFI2-2017-STUDY-2-PERSONALITYLAB",
+        "sampleSize": 1000,
+        "design": "personalitylab.org에서 모집한 영어권 성인 BFI-2 문항 개발 표본"
+      },
+      {
+        "studyFamilyId": "FAMILY-BFI2-2017-INTERNET-VALIDATION",
+        "datasetId": "DATASET-BFI2-2017-INTERNET-VALIDATION",
+        "sampleId": "SAMPLE-BFI2-2017-STUDY-3-INTERNET",
+        "sampleSize": 1000,
+        "design": "personalitylab.org의 별도 인터넷 검증 표본; 논문이 Study 2와 비중복이라고 명시"
+      },
+      {
+        "studyFamilyId": "FAMILY-BFI2-2017-STUDENT-VALIDATION",
+        "datasetId": "DATASET-BFI2-2017-STUDENT-VALIDATION",
+        "sampleId": "SAMPLE-BFI2-2017-STUDY-3-STUDENT",
+        "sampleSize": 470,
+        "design": "대형 공립대 심리학 수강생 검증 표본; 일부가 추가 측정과 재검사에 참여"
+      }
+    ],
+    "sourceLevelFinding": "세 연구의 community·Internet·student 자료로 15개 facet의 위계적 BFI-2를 개발하고 평가했다.",
+    "primaryEvidenceLocators": [
+      {
+        "url": "https://www.colby.edu/wp-content/uploads/2013/08/Soto_John_2017.pdf",
+        "locator": "Study 1-3, Participants and procedure; Study 1 Phase 2",
+        "supports": "ESCS 사용, Study 2 N=1000, Study 3 Internet N=1000·student N=470, Internet 표본 비중복"
+      },
+      {
+        "url": "https://www.colby.edu/academics/departments-and-programs/psychology/research-opportunities/personality-lab/the-bfi-2/",
+        "locator": "official BFI-2 page",
+        "supports": "공식 논문·도구·채점 자료 연결"
+      }
+    ]
+  },
+  "correctionsToPriorRegistry": [
+    {
+      "affectedSourceIds": ["SRC-BFAS-2007", "SRC-IPC-2013"],
+      "correction": "ESCS는 논문별 dataset ID가 아니라 같은 FAMILY-ESCS·DATASET-ESCS로 통합해야 한다.",
+      "appliedInThisSupplement": true
+    }
+  ],
+  "decisions": [
+    {
+      "pairId": "SRC-BFI2-2017::SRC-IPC-2013",
+      "sourceIds": ["SRC-BFI2-2017", "SRC-IPC-2013"],
+      "highRiskVariantCount": 120,
+      "sharedAuthors": [],
+      "state": "confirmed_partial_dataset_reuse",
+      "sharedStudyFamilyIds": ["FAMILY-ESCS"],
+      "sharedDatasetIds": ["DATASET-ESCS"],
+      "detail": "BFI-2 2017 Study 1과 IPC 2013 Sample 3은 모두 Eugene-Springfield Community Sample 자료를 사용했다.",
+      "claimLevelIndependenceState": "unresolved_until_finding_is_mapped_to_specific_nonoverlapping_samples",
+      "publicationCountingState": "DO_NOT_COUNT_AS_TWO_INDEPENDENT_SOURCES_WITHOUT_SAMPLE_LEVEL_FINDING_TRACE"
+    },
+    {
+      "pairId": "SRC-BFAS-2007::SRC-BFI2-2017",
+      "sourceIds": ["SRC-BFAS-2007", "SRC-BFI2-2017"],
+      "highRiskVariantCount": 0,
+      "sharedAuthors": [],
+      "state": "confirmed_partial_dataset_reuse",
+      "sharedStudyFamilyIds": ["FAMILY-ESCS"],
+      "sharedDatasetIds": ["DATASET-ESCS"],
+      "detail": "두 논문 모두 ESCS를 사용했다. BFI-2 연구는 더 넓은 ESCS 문항 자료를 다시 분석했고 BFAS 연구는 ESCS facet 자료로 aspect 구조를 도출했다.",
+      "claimLevelIndependenceState": "unresolved_until_finding_is_mapped_to_specific_nonoverlapping_samples",
+      "publicationCountingState": "DO_NOT_COUNT_SHARED_ESCS_RESULTS_TWICE"
+    }
+  ]
+}

@@ -1,18 +1,26 @@
 .post {
   padding: 1rem;
   border: 0;
-  border-bottom: 8px solid #f6f5f2;
-  color: #20232a;
-  background: linear-gradient(180deg, #fffdf8 0, #fff 22%);
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  color: var(--nu-color-text);
+  background: linear-gradient(
+    180deg,
+    var(--nu-neutral-0) 0,
+    var(--nu-color-surface) 22%
+  );
   animation: post-in 220ms ease-out both;
 }
 
 .post[data-highlighted="true"] {
   position: relative;
   z-index: 1;
-  border-bottom-color: #eeeafd;
-  background: linear-gradient(180deg, #fcfbff, #fff 34%);
-  box-shadow: inset 3px 0 0 #8c7ee4;
+  border-bottom-color: var(--nu-brand-100);
+  background: linear-gradient(
+    180deg,
+    var(--nu-neutral-0),
+    var(--nu-color-surface) 34%
+  );
+  box-shadow: inset 3px 0 0 var(--nu-info-300);
 }
 
 .header {
@@ -26,9 +34,9 @@
 .avatar {
   width: 2.5rem;
   height: 2.5rem;
-  border: 1px solid #ebd8b6;
+  border: 1px solid var(--nu-warm-300);
   border-radius: 50%;
-  background: #fff;
+  background: var(--nu-color-surface);
   object-fit: cover;
 }
 
@@ -39,19 +47,10 @@
 }
 
 .identity strong {
-  color: #20232a;
-  font-size: 0.84375rem;
-  font-weight: 700;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.015em;
-}
-
-.identity small {
-  overflow: hidden;
-  color: #737887;
-  font-size: 0.6875rem;
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap;
 }
 
 .recordLink {
@@ -59,19 +58,19 @@
   min-height: 32px;
   align-items: center;
   padding-left: 0.4rem;
-  color: #8b621f;
-  font-size: 0.6875rem;
-  font-weight: 700;
+  color: var(--nu-color-play);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
   white-space: nowrap;
 }
 
 .title {
   margin: 1rem 0 0;
-  color: #20232a;
-  font-size: 1rem;
-  font-weight: 700;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.025em;
-  line-height: 1.45;
+  line-height: var(--nu-leading-label);
 }
 
 .poll {
@@ -81,27 +80,18 @@
 .footnote {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 0.75rem;
   margin-top: 0.7rem;
-}
-
-.footnote p {
-  margin: 0;
-  color: #92939a;
-  font-size: 0.6875rem;
-  font-weight: 450;
-  line-height: 1.45;
-  word-break: keep-all;
 }
 
 .footnote a {
   flex: 0 0 auto;
   min-height: 32px;
-  color: #7468bd;
-  font-size: 0.6875rem;
-  font-weight: 700;
-  line-height: 32px;
+  color: var(--nu-info-500);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+  line-height: var(--nu-leading-title);
   white-space: nowrap;
 }
 
@@ -112,7 +102,7 @@
 .recordLink:focus-visible,
 .footnote a:focus-visible {
   border-radius: 8px;
-  outline: 2px solid #c8c2f5;
+  outline: 2px solid var(--nu-color-brand-border);
   outline-offset: 2px;
 }
 

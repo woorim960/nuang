@@ -30,7 +30,7 @@ export function NuangNextActionFlow({
   return (
     <section
       aria-label="뉴앙 다음 행동 흐름"
-      className="rounded-lg border border-line bg-white p-4 shadow-[0_10px_24px_rgb(63_56_118_/_6%)]"
+      className="rounded-lg border border-line bg-white p-4 shadow-sm"
     >
       <div className="flex items-center justify-between gap-3">
         <div>
@@ -57,10 +57,10 @@ function NuangNextActionFlowLink({ item }: { item: NuangNextActionFlowItem }) {
   return (
     <Link
       aria-label={`${item.stepLabel}단계 ${item.title} 열기`}
-      className="flex min-h-20 items-center gap-3 rounded-lg bg-surface-soft p-3 transition-colors hover:bg-[#f5f2ff] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
+      className="flex min-h-20 items-center gap-3 rounded-lg bg-surface-soft p-3 transition-colors hover:bg-[var(--nu-brand-50)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
       href={item.href}
     >
-      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-white text-primary shadow-[0_8px_18px_rgb(63_56_118_/_8%)]">
+      <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg bg-white text-primary shadow-sm">
         <Icon aria-hidden="true" size={18} />
       </span>
       <span className="min-w-0 flex-1">

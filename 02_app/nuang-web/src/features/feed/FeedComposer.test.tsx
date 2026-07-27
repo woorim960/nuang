@@ -60,14 +60,17 @@ describe("FeedComposer", () => {
     });
     fireEvent.click(screen.getByRole("radio", { name: "일상 주제" }));
 
-    expect(screen.getByRole("button", { name: "카페 태그 삭제" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "산책 태그 삭제" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "카페 태그 삭제" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "산책 태그 삭제" }),
+    ).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "업로드" }));
 
     expect(
       screen.getByRole("heading", { name: "게시물 미리보기" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("커뮤니티에서는 이렇게 보여요")).toBeInTheDocument();
     expect(vi.mocked(fetch)).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "업로드" }));
 
@@ -258,7 +261,9 @@ describe("FeedComposer", () => {
       "aria-checked",
       "true",
     );
-    expect(screen.getByRole("button", { name: "기록 태그 삭제" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "기록 태그 삭제" }),
+    ).toBeInTheDocument();
     expect(
       screen.getByText("로그인됐어요. 사진만 다시 선택하면 게시할 수 있어요."),
     ).toBeInTheDocument();
@@ -311,7 +316,7 @@ function stubSuccessfulPost() {
             feedWrite: {
               action: "create_post",
               id: "feed_post_001",
-              moderationStatus: "pending_review",
+              moderationStatus: "published",
               targetType: "feed_post",
             },
             ok: true,

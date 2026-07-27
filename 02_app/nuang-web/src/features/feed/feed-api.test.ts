@@ -53,6 +53,23 @@ describe("feed api", () => {
     expect(body.error).toBe("validation_error");
   });
 
+  it("rejects cross-site write requests before reading their payload", async () => {
+    const response = await feedPost(
+      new Request("http://localhost:3000/api/feed", {
+        body: JSON.stringify(validPostPayload),
+        headers: {
+          "content-type": "application/json",
+          "sec-fetch-site": "cross-site",
+        },
+        method: "POST",
+      }),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(body.error).toBe("invalid_request_origin");
+  });
+
   it("rejects unsupported multipart photos before auth", async () => {
     const formData = new FormData();
     formData.set("payload", JSON.stringify(validPostPayload));

@@ -1,0 +1,94 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "reportId": "QC-BRIDGE-CALIBRATION-AUDIT.0.1",
+  "status": "STRUCTURAL_CALIBRATION_PASSED_HUMAN_VALIDATION_REQUIRED",
+  "axis": "ER_emotional_activation_and_worry",
+  "pairs": [
+    {
+      "baseAnchor": "ENAKQ",
+      "derivedCode": "ENAKC",
+      "changedLetters": "Q/C",
+      "scenarioCount": 72,
+      "claimCount": 288,
+      "inheritedClaimCount": 248,
+      "axisOverrideClaimCount": 40,
+      "overrideScenarioIds": [
+        "SCN-PARTNER-11",
+        "SCN-PERSON-OF-INTEREST-11",
+        "SCN-FAMILY-5",
+        "SCN-WORK-11",
+        "SCN-GENERAL-4",
+        "SCN-GENERAL-5",
+        "SCN-GENERAL-11",
+        "SCN-GENERAL-12",
+        "SCN-PARTNER-5",
+        "SCN-PERSON-OF-INTEREST-5"
+      ],
+      "copyAudit": "288/288",
+      "longformCharacters": 77502,
+      "chapterCount": 16,
+      "neighborClaimCount": 20,
+      "customerVisibleClaims": 0
+    },
+    {
+      "baseAnchor": "IRGMC",
+      "derivedCode": "IRGMQ",
+      "changedLetters": "C/Q",
+      "scenarioCount": 72,
+      "claimCount": 288,
+      "inheritedClaimCount": 248,
+      "axisOverrideClaimCount": 40,
+      "overrideScenarioIds": [
+        "SCN-PARTNER-11",
+        "SCN-PERSON-OF-INTEREST-11",
+        "SCN-FAMILY-5",
+        "SCN-WORK-11",
+        "SCN-GENERAL-4",
+        "SCN-GENERAL-5",
+        "SCN-GENERAL-11",
+        "SCN-GENERAL-12",
+        "SCN-PARTNER-5",
+        "SCN-PERSON-OF-INTEREST-5"
+      ],
+      "copyAudit": "288/288",
+      "longformCharacters": 77172,
+      "chapterCount": 16,
+      "neighborClaimCount": 20,
+      "customerVisibleClaims": 0
+    }
+  ],
+  "checks": {
+    "sameTenDiscriminatingScenes": true,
+    "balancedInheritanceAndOverrides": true,
+    "fullProfileResearchStructure": true,
+    "directionalSceneChecks": [
+      {
+        "claimId": "ENAKC.scenario.general.uncertainty.attention",
+        "expectedPhrases": ["걱정이 크게 올라오기 전", "대응 선택지"],
+        "passed": true
+      },
+      {
+        "claimId": "IRGMQ.scenario.general.uncertainty.attention",
+        "expectedPhrases": ["좋지 않은 결과", "놓친 단서"],
+        "passed": true
+      },
+      {
+        "claimId": "ENAKC.scenario.general.aftermath.response",
+        "expectedPhrases": ["후속 행동", "늦게 확인"],
+        "passed": true
+      },
+      {
+        "claimId": "IRGMQ.scenario.general.aftermath.response",
+        "expectedPhrases": ["반복되는 걱정", "시간이 필요한"],
+        "passed": true
+      }
+    ]
+  },
+  "customerApprovedProfiles": 0,
+  "nextGate": [
+    "코드 이름을 가린 Q/C 양방향 인지 인터뷰",
+    "불편함의 초기 활성화·처음 드는 생각·실제 행동·회복 시간을 각각 평정",
+    "사건 직후와 시간이 지난 뒤의 감정·몸의 긴장·반복 생각을 분리해 확인",
+    "Q/C 차이를 예민함·강한 멘탈·정신건강·회복력의 우열로 오해하지 않는지 확인"
+  ]
+}

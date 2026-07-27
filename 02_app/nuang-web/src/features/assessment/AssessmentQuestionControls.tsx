@@ -236,11 +236,7 @@ export function AssessmentUnsureSheet({
   selectedReason?: AssessmentUnsureReason;
 }) {
   return (
-    <AssessmentBottomSheet
-      copy="가장 가까운 이유 하나를 골라주세요."
-      onClose={onClose}
-      title="왜 답하기 어려운가요?"
-    >
+    <AssessmentBottomSheet onClose={onClose} title="왜 답하기 어려운가요?">
       <div className={styles.sheetReasons}>
         {assessmentUnsureReasons.map((reason) => (
           <button

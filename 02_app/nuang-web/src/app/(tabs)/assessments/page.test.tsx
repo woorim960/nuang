@@ -12,8 +12,8 @@ describe("AssessmentsPage", () => {
 
     expect(screen.getByRole("heading", { name: "검사" })).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "어떤 나를 알아보고 싶나요?" }),
-    ).toBeInTheDocument();
+      screen.queryByRole("heading", { name: "어떤 나를 알아보고 싶나요?" }),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "지금 알아보면 재밌는 나" }),
     ).toBeInTheDocument();
@@ -45,8 +45,8 @@ describe("AssessmentsPage", () => {
 
     fireEvent.click(screen.getByRole("tab", { name: "친구와" }));
     expect(
-      screen.getByText("서로를 얼마나 알고 있을까요?"),
-    ).toBeInTheDocument();
+      screen.getByRole("link", { name: /친구 성향 맞히기/ }),
+    ).toHaveAttribute("href", "/assessments/friend-match");
 
     fireEvent.click(screen.getByRole("tab", { name: "별난 연구소" }));
     expect(

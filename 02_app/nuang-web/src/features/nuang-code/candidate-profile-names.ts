@@ -1,6 +1,8 @@
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 
-export const candidateProfileNameReleaseId = "NUANG-PROFILE-NAME-CANDIDATE-1.1";
+export const candidateProfileNameReleaseId = "NUANG-PROFILE-NAME-CANDIDATE-2.1";
+export const candidateSymbolLanguageReleaseId =
+  "NUANG-CODE-SYMBOL-LANGUAGE-1.0";
 
 export const candidateCodeSymbols = [
   ["I", "E"],
@@ -25,9 +27,13 @@ export type CandidateProfileDefinition = {
   accessibleName: string;
   code: string;
   codeTokens: readonly string[];
+  codeTypeNames: readonly string[];
   displayName: string;
+  familyId: CandidateProfileFamilyId;
+  familyName: string;
   overview: readonly CandidateProfileOverviewItem[];
   preciseName: string;
+  shortName: string;
   summary: string;
 };
 
@@ -41,6 +47,7 @@ export type CandidateDirectionCopy = {
   description: string;
   oppositeSymbol: CandidateCodeSymbol;
   preciseToken: string;
+  publicTypeName: string;
   shortToken: string;
   symbol: CandidateCodeSymbol;
 };
@@ -53,46 +60,233 @@ export type CandidateAxisCopy = {
   guardrail: string;
 };
 
-export const candidateRoleNames: Readonly<Record<string, string>> = {
-  ERGKC: "답을 세우는 설계자",
-  ERGKQ: "뜨거운 해법 설계자",
-  ERGMC: "현장의 해법 탐구자",
-  ERGMQ: "열정의 현장 해결가",
-  ERAKC: "온도를 맞추는 조율가",
-  ERAKQ: "진심을 잇는 조율가",
-  ERAMC: "곁을 맞추는 동행가",
-  ERAMQ: "마음으로 걷는 동행가",
-  ENGKC: "가능성을 짓는 기획자",
-  ENGKQ: "영감을 키우는 기획자",
-  ENGMC: "새 길을 여는 탐험가",
-  ENGMQ: "번뜩이는 길잡이",
-  ENAKC: "이야기를 잇는 연결가",
-  ENAKQ: "관계를 여는 지휘자",
-  ENAMC: "상상을 나누는 동행가",
-  ENAMQ: "설렘을 잇는 이야기꾼",
-  IRGKC: "답을 쌓는 설계자",
-  IRGKQ: "열기를 품은 설계자",
-  IRGMC: "단서를 좇는 탐구자",
-  IRGMQ: "질문을 품은 탐구자",
-  IRAKC: "마음을 지키는 조율가",
-  IRAKQ: "파동을 품은 조율가",
-  IRAMC: "곁을 지키는 동행가",
-  IRAMQ: "마음결을 걷는 동행가",
-  INGKC: "가능성을 짓는 전략가",
-  INGKQ: "불꽃을 품은 전략가",
-  INGMC: "새 길을 찾는 탐구자",
-  INGMQ: "생각의 파도 탐험가",
-  INAKC: "조용히 잇는 연결가",
-  INAKQ: "고요한 마음 지휘자",
-  INAMC: "상상을 걷는 동행가",
-  INAMQ: "마음을 품은 이야기꾼",
+export type CandidateProfileFamilyId =
+  | "CONCRETE_CARE"
+  | "PRACTICAL_SOLUTION"
+  | "POSSIBILITY_CONNECTION"
+  | "POSSIBILITY_SOLUTION";
+
+export type CandidateProfileNameEntry = {
+  displayName: string;
+  familyId: CandidateProfileFamilyId;
+  shortName: string;
 };
+
+export const candidateProfileFamilies: Readonly<
+  Record<
+    CandidateProfileFamilyId,
+    {
+      description: string;
+      name: string;
+      symbols: "NA" | "NG" | "RA" | "RG";
+    }
+  >
+> = {
+  PRACTICAL_SOLUTION: {
+    symbols: "RG",
+    name: "현실 해법형",
+    description:
+      "확인된 사실과 구체적인 단서를 바탕으로 원인을 찾고 해결할 부분을 살펴봐요.",
+  },
+  CONCRETE_CARE: {
+    symbols: "RA",
+    name: "생활 관계형",
+    description:
+      "구체적인 상황을 살피면서 그 안에 있는 사람의 마음과 관계 변화를 중요하게 봐요.",
+  },
+  POSSIBILITY_SOLUTION: {
+    symbols: "NG",
+    name: "가능성 개척형",
+    description:
+      "새로운 가능성과 관점을 탐색하고, 아이디어를 실제 해결 방향으로 연결해요.",
+  },
+  POSSIBILITY_CONNECTION: {
+    symbols: "NA",
+    name: "관계 영감형",
+    description:
+      "사람의 마음과 새로운 가능성을 함께 살피며 생각과 관계를 이어가요.",
+  },
+};
+
+export const candidateProfileNameCatalog: Readonly<
+  Record<string, CandidateProfileNameEntry>
+> = {
+  ERGKC: {
+    shortName: "운영가",
+    displayName: "차분히 답을 세우는 운영가",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  ERGKQ: {
+    shortName: "해결사",
+    displayName: "변수에 빠르게 반응하는 해결사",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  ERGMC: {
+    shortName: "대응가",
+    displayName: "유연하게 답을 찾는 대응가",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  ERGMQ: {
+    shortName: "현장해결가",
+    displayName: "빠르게 움직이는 현장해결가",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  ERAKC: {
+    shortName: "조율가",
+    displayName: "차분히 관계를 맞추는 조율가",
+    familyId: "CONCRETE_CARE",
+  },
+  ERAKQ: {
+    shortName: "관계지기",
+    displayName: "관계 변화를 살피는 관계지기",
+    familyId: "CONCRETE_CARE",
+  },
+  ERAMC: {
+    shortName: "동행가",
+    displayName: "유연하게 곁을 걷는 동행가",
+    familyId: "CONCRETE_CARE",
+  },
+  ERAMQ: {
+    shortName: "공감자",
+    displayName: "마음에 바로 반응하는 공감자",
+    familyId: "CONCRETE_CARE",
+  },
+  ENGKC: {
+    shortName: "기획자",
+    displayName: "가능성을 계획하는 기획자",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  ENGKQ: {
+    shortName: "혁신가",
+    displayName: "변화에 답하는 혁신가",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  ENGMC: {
+    shortName: "개척자",
+    displayName: "새 길을 여는 개척자",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  ENGMQ: {
+    shortName: "발상가",
+    displayName: "가능성을 펼치는 발상가",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  ENAKC: {
+    shortName: "연결가",
+    displayName: "사람과 가능성을 잇는 연결가",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+  ENAKQ: {
+    shortName: "지휘자",
+    displayName: "관계를 여는 지휘자",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+  ENAMC: {
+    shortName: "소통가",
+    displayName: "상상과 마음을 나누는 소통가",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+  ENAMQ: {
+    shortName: "이야기꾼",
+    displayName: "마음과 상상을 펼치는 이야기꾼",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+  IRGKC: {
+    shortName: "분석가",
+    displayName: "차근차근 답을 쌓는 분석가",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  IRGKQ: {
+    shortName: "전략가",
+    displayName: "변수를 꼼꼼히 살피는 전략가",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  IRGMC: {
+    shortName: "탐구자",
+    displayName: "단서로 답을 찾는 탐구자",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  IRGMQ: {
+    shortName: "추적자",
+    displayName: "변화의 원인을 좇는 추적자",
+    familyId: "PRACTICAL_SOLUTION",
+  },
+  IRAKC: {
+    shortName: "수호자",
+    displayName: "조용히 마음을 지키는 수호자",
+    familyId: "CONCRETE_CARE",
+  },
+  IRAKQ: {
+    shortName: "관찰자",
+    displayName: "마음 변화를 살피는 관찰자",
+    familyId: "CONCRETE_CARE",
+  },
+  IRAMC: {
+    shortName: "지원가",
+    displayName: "조용히 곁을 맞추는 지원가",
+    familyId: "CONCRETE_CARE",
+  },
+  IRAMQ: {
+    shortName: "경청자",
+    displayName: "마음 변화를 듣는 경청자",
+    familyId: "CONCRETE_CARE",
+  },
+  INGKC: {
+    shortName: "설계자",
+    displayName: "가능성을 차근차근 짓는 설계자",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  INGKQ: {
+    shortName: "구상가",
+    displayName: "가능성과 변수를 살피는 구상가",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  INGMC: {
+    shortName: "탐험가",
+    displayName: "새 가능성을 찾는 탐험가",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  INGMQ: {
+    shortName: "사색가",
+    displayName: "가능성을 깊이 좇는 사색가",
+    familyId: "POSSIBILITY_SOLUTION",
+  },
+  INAKC: {
+    shortName: "조정자",
+    displayName: "조용히 관계를 잇는 조정자",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+  INAKQ: {
+    shortName: "안내자",
+    displayName: "마음과 가능성을 살피는 안내자",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+  INAMC: {
+    shortName: "상상가",
+    displayName: "마음과 가능성을 그리는 상상가",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+  INAMQ: {
+    shortName: "기록가",
+    displayName: "마음의 이야기를 품는 기록가",
+    familyId: "POSSIBILITY_CONNECTION",
+  },
+};
+
+export const candidateRoleNames: Readonly<Record<string, string>> =
+  Object.fromEntries(
+    Object.entries(candidateProfileNameCatalog).map(([code, profile]) => [
+      code,
+      profile.displayName,
+    ]),
+  );
 
 const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
   E: {
     symbol: "E",
     oppositeSymbol: "I",
     shortToken: "함께",
+    publicTypeName: "외향형",
     preciseToken: "함께 활력·먼저 표현",
     detailTitle: "함께할 때 활력이 올라요",
     description:
@@ -102,6 +296,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "I",
     oppositeSymbol: "E",
     shortToken: "혼자",
+    publicTypeName: "내향형",
     preciseToken: "혼자 회복·살핀 뒤 표현",
     detailTitle: "혼자 정리하며 회복해요",
     description:
@@ -111,6 +306,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "R",
     oppositeSymbol: "N",
     shortToken: "구체",
+    publicTypeName: "현실형",
     preciseToken: "구체적인 것에 관심",
     detailTitle: "구체적인 것에 관심이 머물러요",
     description:
@@ -120,6 +316,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "N",
     oppositeSymbol: "R",
     shortToken: "탐색",
+    publicTypeName: "가능성형",
     preciseToken: "새 관점과 가능성 탐색",
     detailTitle: "새 관점과 가능성을 더 찾아봐요",
     description:
@@ -129,6 +326,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "G",
     oppositeSymbol: "A",
     shortToken: "원인과 해결 살피기",
+    publicTypeName: "해결형",
     preciseToken: "원인과 해결할 부분에 관심",
     detailTitle: "원인과 해결할 부분에 관심이 가요",
     description:
@@ -138,6 +336,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "A",
     oppositeSymbol: "G",
     shortToken: "상대 마음 살피기",
+    publicTypeName: "마음형",
     preciseToken: "상대가 어떤 마음인지에 관심",
     detailTitle: "상대가 어떤 마음인지 살펴봐요",
     description:
@@ -147,6 +346,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "K",
     oppositeSymbol: "M",
     shortToken: "꾸준",
+    publicTypeName: "꾸준형",
     preciseToken: "비교적 꾸준히 이어짐",
     detailTitle: "일상의 흐름이 비교적 꾸준해요",
     description:
@@ -156,6 +356,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "M",
     oppositeSymbol: "K",
     shortToken: "상황 따라",
+    publicTypeName: "상황형",
     preciseToken: "상황 영향을 더 받음",
     detailTitle: "일상의 흐름이 상황 영향을 더 받아요",
     description:
@@ -165,6 +366,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "C",
     oppositeSymbol: "Q",
     shortToken: "차분한 반응",
+    publicTypeName: "차분반응형",
     preciseToken: "걱정·감정이 천천히 커짐",
     detailTitle: "걱정과 감정이 비교적 천천히 커져요",
     description:
@@ -174,6 +376,7 @@ const directionCopy: Record<CandidateCodeSymbol, CandidateDirectionCopy> = {
     symbol: "Q",
     oppositeSymbol: "C",
     shortToken: "빠른 걱정·감정 반응",
+    publicTypeName: "빠른반응형",
     preciseToken: "걱정·감정이 빨리 커짐",
     detailTitle: "걱정과 감정이 비교적 빨리 커져요",
     description:
@@ -229,7 +432,8 @@ function buildProfileDefinition(code: string): CandidateProfileDefinition {
   const directions = code
     .split("")
     .map((symbol) => directionCopy[symbol as CandidateCodeSymbol]);
-  const displayName = candidateRoleNames[code];
+  const nameEntry = candidateProfileNameCatalog[code];
+  const displayName = nameEntry?.displayName;
   const overview = buildProfileOverview(code);
   const preciseName = directions
     .map((direction) => direction.preciseToken)
@@ -239,11 +443,17 @@ function buildProfileDefinition(code: string): CandidateProfileDefinition {
     throw new Error(`Missing candidate role name for ${code}`);
   }
 
+  const family = candidateProfileFamilies[nameEntry.familyId];
+
   return {
     code,
     displayName,
+    shortName: nameEntry.shortName,
+    familyId: nameEntry.familyId,
+    familyName: family.name,
     accessibleName: `${displayName}, 뉴앙 코드 ${code}`,
-    codeTokens: directions.map((direction) => direction.shortToken),
+    codeTokens: directions.map((direction) => direction.publicTypeName),
+    codeTypeNames: directions.map((direction) => direction.publicTypeName),
     overview,
     preciseName,
     summary: overview.map((item) => item.text).join(" "),

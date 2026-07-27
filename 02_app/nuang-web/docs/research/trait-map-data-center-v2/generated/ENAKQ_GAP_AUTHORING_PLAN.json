@@ -1,0 +1,1441 @@
+{
+  "contractVersion": "nuang-trait-map-data-center.v2",
+  "planId": "ENAKQ-GAP-AUTHORING-PLAN.0.1",
+  "code": "ENAKQ",
+  "status": "RESEARCH_WORK_QUEUE_NOT_FOR_PRODUCTION",
+  "sourceCoverageReport": "ENAKQ-SCENARIO-COVERAGE.0.1",
+  "gapCount": 42,
+  "priorityCounts": { "P0": 18, "P1": 24, "P2": 0 },
+  "authoringOrder": [
+    "P0: 마음에 드는 사람·연인·일상에서 고객 관심과 안전 영향이 큰 장면",
+    "P1: 가족·친구·일과 공부 장면",
+    "P2: 후속 보강 장면"
+  ],
+  "nonNegotiableRule": "빈 상황을 그럴듯한 문장으로 채우지 않고, 근거 탐색·뉴앙 자료 검증·쉬운 한국어 검토를 거친 claim만 승인 후보로 올린다.",
+  "items": [
+    {
+      "workItemId": "ENAKQ-GAP-01",
+      "scenarioId": "SCN-GENERAL-2",
+      "chapterId": "daily_choice_and_change",
+      "relationshipContext": "general",
+      "moment": "new_encounter",
+      "priority": "P0",
+      "plainKoreanQuestion": "일상에서 새로운 사람이나 상황을 만날 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.general.new_encounter.attention",
+        "ENAKQ.scenario.general.new_encounter.process",
+        "ENAKQ.scenario.general.new_encounter.response",
+        "ENAKQ.scenario.general.new_encounter.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-02",
+      "scenarioId": "SCN-GENERAL-3",
+      "chapterId": "daily_choice_and_change",
+      "relationshipContext": "general",
+      "moment": "group_participation",
+      "priority": "P0",
+      "plainKoreanQuestion": "일상에서 여럿이 함께하는 자리에 참여할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.general.group_participation.attention",
+        "ENAKQ.scenario.general.group_participation.process",
+        "ENAKQ.scenario.general.group_participation.response",
+        "ENAKQ.scenario.general.group_participation.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-03",
+      "scenarioId": "SCN-GENERAL-6",
+      "chapterId": "daily_choice_and_change",
+      "relationshipContext": "general",
+      "moment": "disagreement",
+      "priority": "P0",
+      "plainKoreanQuestion": "일상에서 생각이 다른 사람과 부딪힐 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.general.disagreement.attention",
+        "ENAKQ.scenario.general.disagreement.process",
+        "ENAKQ.scenario.general.disagreement.response",
+        "ENAKQ.scenario.general.disagreement.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-04",
+      "scenarioId": "SCN-GENERAL-10",
+      "chapterId": "daily_choice_and_change",
+      "relationshipContext": "general",
+      "moment": "success",
+      "priority": "P0",
+      "plainKoreanQuestion": "일상에서 좋은 결과나 기쁜 일이 생겼을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "emotional_activation",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.general.success.attention",
+        "ENAKQ.scenario.general.success.process",
+        "ENAKQ.scenario.general.success.response",
+        "ENAKQ.scenario.general.success.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-05",
+      "scenarioId": "SCN-FAMILY-2",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "new_encounter",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 새로운 사람이나 상황을 만날 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.new_encounter.attention",
+        "ENAKQ.scenario.family.new_encounter.process",
+        "ENAKQ.scenario.family.new_encounter.response",
+        "ENAKQ.scenario.family.new_encounter.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-06",
+      "scenarioId": "SCN-FAMILY-3",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "group_participation",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 여럿이 함께하는 자리에 참여할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.group_participation.attention",
+        "ENAKQ.scenario.family.group_participation.process",
+        "ENAKQ.scenario.family.group_participation.response",
+        "ENAKQ.scenario.family.group_participation.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-07",
+      "scenarioId": "SCN-FAMILY-4",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "plan_change",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 계획이 갑자기 달라질 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "decision",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.plan_change.attention",
+        "ENAKQ.scenario.family.plan_change.process",
+        "ENAKQ.scenario.family.plan_change.response",
+        "ENAKQ.scenario.family.plan_change.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-08",
+      "scenarioId": "SCN-FAMILY-5",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "uncertainty",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 앞일이 분명하지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "emotional_activation"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.uncertainty.attention",
+        "ENAKQ.scenario.family.uncertainty.process",
+        "ENAKQ.scenario.family.uncertainty.response",
+        "ENAKQ.scenario.family.uncertainty.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-09",
+      "scenarioId": "SCN-FAMILY-9",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "boundary",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 부탁을 거절하거나 선을 정해야 할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": ["attention", "decision", "communication"],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.boundary.attention",
+        "ENAKQ.scenario.family.boundary.process",
+        "ENAKQ.scenario.family.boundary.response",
+        "ENAKQ.scenario.family.boundary.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-10",
+      "scenarioId": "SCN-FAMILY-10",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "success",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 좋은 결과나 기쁜 일이 생겼을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "emotional_activation",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.success.attention",
+        "ENAKQ.scenario.family.success.process",
+        "ENAKQ.scenario.family.success.response",
+        "ENAKQ.scenario.family.success.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-11",
+      "scenarioId": "SCN-FAMILY-11",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "setback",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 실수하거나 기대한 결과가 나오지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "emotional_activation",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.setback.attention",
+        "ENAKQ.scenario.family.setback.process",
+        "ENAKQ.scenario.family.setback.response",
+        "ENAKQ.scenario.family.setback.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-12",
+      "scenarioId": "SCN-FAMILY-12",
+      "chapterId": "family",
+      "relationshipContext": "family",
+      "moment": "aftermath",
+      "priority": "P1",
+      "plainKoreanQuestion": "가족과 부담스러운 일이 지나간 뒤, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "recovery",
+        "follow_through",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.family.aftermath.attention",
+        "ENAKQ.scenario.family.aftermath.process",
+        "ENAKQ.scenario.family.aftermath.response",
+        "ENAKQ.scenario.family.aftermath.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-13",
+      "scenarioId": "SCN-FRIEND-3",
+      "chapterId": "friend",
+      "relationshipContext": "friend",
+      "moment": "group_participation",
+      "priority": "P1",
+      "plainKoreanQuestion": "친구와 여럿이 함께하는 자리에 참여할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.friend.group_participation.attention",
+        "ENAKQ.scenario.friend.group_participation.process",
+        "ENAKQ.scenario.friend.group_participation.response",
+        "ENAKQ.scenario.friend.group_participation.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-14",
+      "scenarioId": "SCN-FRIEND-4",
+      "chapterId": "friend",
+      "relationshipContext": "friend",
+      "moment": "plan_change",
+      "priority": "P1",
+      "plainKoreanQuestion": "친구와 계획이 갑자기 달라질 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "decision",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.friend.plan_change.attention",
+        "ENAKQ.scenario.friend.plan_change.process",
+        "ENAKQ.scenario.friend.plan_change.response",
+        "ENAKQ.scenario.friend.plan_change.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-15",
+      "scenarioId": "SCN-FRIEND-5",
+      "chapterId": "friend",
+      "relationshipContext": "friend",
+      "moment": "uncertainty",
+      "priority": "P1",
+      "plainKoreanQuestion": "친구와 앞일이 분명하지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "emotional_activation"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.friend.uncertainty.attention",
+        "ENAKQ.scenario.friend.uncertainty.process",
+        "ENAKQ.scenario.friend.uncertainty.response",
+        "ENAKQ.scenario.friend.uncertainty.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-16",
+      "scenarioId": "SCN-FRIEND-8",
+      "chapterId": "friend",
+      "relationshipContext": "friend",
+      "moment": "need_expression",
+      "priority": "P1",
+      "plainKoreanQuestion": "친구와 자신이 원하는 것을 말해야 할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.friend.need_expression.attention",
+        "ENAKQ.scenario.friend.need_expression.process",
+        "ENAKQ.scenario.friend.need_expression.response",
+        "ENAKQ.scenario.friend.need_expression.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-17",
+      "scenarioId": "SCN-FRIEND-10",
+      "chapterId": "friend",
+      "relationshipContext": "friend",
+      "moment": "success",
+      "priority": "P1",
+      "plainKoreanQuestion": "친구와 좋은 결과나 기쁜 일이 생겼을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "emotional_activation",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.friend.success.attention",
+        "ENAKQ.scenario.friend.success.process",
+        "ENAKQ.scenario.friend.success.response",
+        "ENAKQ.scenario.friend.success.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-18",
+      "scenarioId": "SCN-FRIEND-11",
+      "chapterId": "friend",
+      "relationshipContext": "friend",
+      "moment": "setback",
+      "priority": "P1",
+      "plainKoreanQuestion": "친구와 실수하거나 기대한 결과가 나오지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "emotional_activation",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.friend.setback.attention",
+        "ENAKQ.scenario.friend.setback.process",
+        "ENAKQ.scenario.friend.setback.response",
+        "ENAKQ.scenario.friend.setback.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-19",
+      "scenarioId": "SCN-FRIEND-12",
+      "chapterId": "friend",
+      "relationshipContext": "friend",
+      "moment": "aftermath",
+      "priority": "P1",
+      "plainKoreanQuestion": "친구와 부담스러운 일이 지나간 뒤, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "recovery",
+        "follow_through",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.friend.aftermath.attention",
+        "ENAKQ.scenario.friend.aftermath.process",
+        "ENAKQ.scenario.friend.aftermath.response",
+        "ENAKQ.scenario.friend.aftermath.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-20",
+      "scenarioId": "SCN-PARTNER-2",
+      "chapterId": "partner",
+      "relationshipContext": "partner",
+      "moment": "new_encounter",
+      "priority": "P0",
+      "plainKoreanQuestion": "연인과 새로운 사람이나 상황을 만날 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.partner.new_encounter.attention",
+        "ENAKQ.scenario.partner.new_encounter.process",
+        "ENAKQ.scenario.partner.new_encounter.response",
+        "ENAKQ.scenario.partner.new_encounter.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-21",
+      "scenarioId": "SCN-PARTNER-3",
+      "chapterId": "partner",
+      "relationshipContext": "partner",
+      "moment": "group_participation",
+      "priority": "P0",
+      "plainKoreanQuestion": "연인과 여럿이 함께하는 자리에 참여할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.partner.group_participation.attention",
+        "ENAKQ.scenario.partner.group_participation.process",
+        "ENAKQ.scenario.partner.group_participation.response",
+        "ENAKQ.scenario.partner.group_participation.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-22",
+      "scenarioId": "SCN-PARTNER-4",
+      "chapterId": "partner",
+      "relationshipContext": "partner",
+      "moment": "plan_change",
+      "priority": "P0",
+      "plainKoreanQuestion": "연인과 계획이 갑자기 달라질 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "decision",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.partner.plan_change.attention",
+        "ENAKQ.scenario.partner.plan_change.process",
+        "ENAKQ.scenario.partner.plan_change.response",
+        "ENAKQ.scenario.partner.plan_change.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-23",
+      "scenarioId": "SCN-PARTNER-10",
+      "chapterId": "partner",
+      "relationshipContext": "partner",
+      "moment": "success",
+      "priority": "P0",
+      "plainKoreanQuestion": "연인과 좋은 결과나 기쁜 일이 생겼을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "emotional_activation",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.partner.success.attention",
+        "ENAKQ.scenario.partner.success.process",
+        "ENAKQ.scenario.partner.success.response",
+        "ENAKQ.scenario.partner.success.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-24",
+      "scenarioId": "SCN-PARTNER-11",
+      "chapterId": "partner",
+      "relationshipContext": "partner",
+      "moment": "setback",
+      "priority": "P0",
+      "plainKoreanQuestion": "연인과 실수하거나 기대한 결과가 나오지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "emotional_activation",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.partner.setback.attention",
+        "ENAKQ.scenario.partner.setback.process",
+        "ENAKQ.scenario.partner.setback.response",
+        "ENAKQ.scenario.partner.setback.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-25",
+      "scenarioId": "SCN-PARTNER-12",
+      "chapterId": "partner",
+      "relationshipContext": "partner",
+      "moment": "aftermath",
+      "priority": "P0",
+      "plainKoreanQuestion": "연인과 부담스러운 일이 지나간 뒤, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "recovery",
+        "follow_through",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.partner.aftermath.attention",
+        "ENAKQ.scenario.partner.aftermath.process",
+        "ENAKQ.scenario.partner.aftermath.response",
+        "ENAKQ.scenario.partner.aftermath.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-26",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-2",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "new_encounter",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 새로운 사람이나 상황을 만날 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.new_encounter.attention",
+        "ENAKQ.scenario.person_of_interest.new_encounter.process",
+        "ENAKQ.scenario.person_of_interest.new_encounter.response",
+        "ENAKQ.scenario.person_of_interest.new_encounter.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-27",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-3",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "group_participation",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 여럿이 함께하는 자리에 참여할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.group_participation.attention",
+        "ENAKQ.scenario.person_of_interest.group_participation.process",
+        "ENAKQ.scenario.person_of_interest.group_participation.response",
+        "ENAKQ.scenario.person_of_interest.group_participation.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-28",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-4",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "plan_change",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 계획이 갑자기 달라질 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "decision",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.plan_change.attention",
+        "ENAKQ.scenario.person_of_interest.plan_change.process",
+        "ENAKQ.scenario.person_of_interest.plan_change.response",
+        "ENAKQ.scenario.person_of_interest.plan_change.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-29",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-6",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "disagreement",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 생각이 다른 사람과 부딪힐 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.disagreement.attention",
+        "ENAKQ.scenario.person_of_interest.disagreement.process",
+        "ENAKQ.scenario.person_of_interest.disagreement.response",
+        "ENAKQ.scenario.person_of_interest.disagreement.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-30",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-7",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "support_requested",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 누군가 도움이나 위로를 바랄 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.support_requested.attention",
+        "ENAKQ.scenario.person_of_interest.support_requested.process",
+        "ENAKQ.scenario.person_of_interest.support_requested.response",
+        "ENAKQ.scenario.person_of_interest.support_requested.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-31",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-10",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "success",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 좋은 결과나 기쁜 일이 생겼을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "emotional_activation",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.success.attention",
+        "ENAKQ.scenario.person_of_interest.success.process",
+        "ENAKQ.scenario.person_of_interest.success.response",
+        "ENAKQ.scenario.person_of_interest.success.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-32",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-11",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "setback",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 실수하거나 기대한 결과가 나오지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "emotional_activation",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.setback.attention",
+        "ENAKQ.scenario.person_of_interest.setback.process",
+        "ENAKQ.scenario.person_of_interest.setback.response",
+        "ENAKQ.scenario.person_of_interest.setback.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-33",
+      "scenarioId": "SCN-PERSON-OF-INTEREST-12",
+      "chapterId": "person_of_interest",
+      "relationshipContext": "person_of_interest",
+      "moment": "aftermath",
+      "priority": "P0",
+      "plainKoreanQuestion": "마음에 드는 사람과 부담스러운 일이 지나간 뒤, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "recovery",
+        "follow_through",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.person_of_interest.aftermath.attention",
+        "ENAKQ.scenario.person_of_interest.aftermath.process",
+        "ENAKQ.scenario.person_of_interest.aftermath.response",
+        "ENAKQ.scenario.person_of_interest.aftermath.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-34",
+      "scenarioId": "SCN-WORK-2",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "new_encounter",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 새로운 사람이나 상황을 만날 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.new_encounter.attention",
+        "ENAKQ.scenario.work.new_encounter.process",
+        "ENAKQ.scenario.work.new_encounter.response",
+        "ENAKQ.scenario.work.new_encounter.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-35",
+      "scenarioId": "SCN-WORK-3",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "group_participation",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 여럿이 함께하는 자리에 참여할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.group_participation.attention",
+        "ENAKQ.scenario.work.group_participation.process",
+        "ENAKQ.scenario.work.group_participation.response",
+        "ENAKQ.scenario.work.group_participation.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-36",
+      "scenarioId": "SCN-WORK-4",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "plan_change",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 계획이 갑자기 달라질 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "decision",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.plan_change.attention",
+        "ENAKQ.scenario.work.plan_change.process",
+        "ENAKQ.scenario.work.plan_change.response",
+        "ENAKQ.scenario.work.plan_change.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-37",
+      "scenarioId": "SCN-WORK-5",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "uncertainty",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 앞일이 분명하지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "attention",
+        "first_thought",
+        "emotional_activation"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.uncertainty.attention",
+        "ENAKQ.scenario.work.uncertainty.process",
+        "ENAKQ.scenario.work.uncertainty.response",
+        "ENAKQ.scenario.work.uncertainty.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-38",
+      "scenarioId": "SCN-WORK-6",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "disagreement",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 생각이 다른 사람과 부딪힐 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.disagreement.attention",
+        "ENAKQ.scenario.work.disagreement.process",
+        "ENAKQ.scenario.work.disagreement.response",
+        "ENAKQ.scenario.work.disagreement.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-39",
+      "scenarioId": "SCN-WORK-8",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "need_expression",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 자신이 원하는 것을 말해야 할 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.need_expression.attention",
+        "ENAKQ.scenario.work.need_expression.process",
+        "ENAKQ.scenario.work.need_expression.response",
+        "ENAKQ.scenario.work.need_expression.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-40",
+      "scenarioId": "SCN-WORK-10",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "success",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 좋은 결과나 기쁜 일이 생겼을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "emotional_activation",
+        "communication",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.success.attention",
+        "ENAKQ.scenario.work.success.process",
+        "ENAKQ.scenario.work.success.response",
+        "ENAKQ.scenario.work.success.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-41",
+      "scenarioId": "SCN-WORK-11",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "setback",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 실수하거나 기대한 결과가 나오지 않을 때, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "first_thought",
+        "emotional_activation",
+        "actual_response"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.setback.attention",
+        "ENAKQ.scenario.work.setback.process",
+        "ENAKQ.scenario.work.setback.response",
+        "ENAKQ.scenario.work.setback.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    },
+    {
+      "workItemId": "ENAKQ-GAP-42",
+      "scenarioId": "SCN-WORK-12",
+      "chapterId": "work_and_study",
+      "relationshipContext": "work",
+      "moment": "aftermath",
+      "priority": "P1",
+      "plainKoreanQuestion": "일하거나 공부할 때 부담스러운 일이 지나간 뒤, ENAKQ는 무엇을 먼저 살피고 어떤 생각과 반응으로 이어지는가?",
+      "requiredObservationChannels": [
+        "recovery",
+        "follow_through",
+        "communication"
+      ],
+      "plannedClaimIds": [
+        "ENAKQ.scenario.work.aftermath.attention",
+        "ENAKQ.scenario.work.aftermath.process",
+        "ENAKQ.scenario.work.aftermath.response",
+        "ENAKQ.scenario.work.aftermath.communication"
+      ],
+      "researchQuestions": [
+        "무엇이 가장 먼저 눈에 들어오는가?",
+        "처음 드는 생각은 무엇이며 실제 반응과 어떻게 다른가?",
+        "왜 그런 반응이 쉬운지 5축과 facet 수준에서 어떻게 설명되는가?",
+        "같은 코드 안에서도 반응을 바꾸는 상황 조건은 무엇인가?",
+        "상대가 오해하기 쉬운 지점과 도움이 되는 대화 방식은 무엇인가?"
+      ],
+      "evidenceGate": {
+        "minimumNormalizedFindings": 1,
+        "requiresNuangUserValidation": true,
+        "requiresKoreanPlainLanguageReview": true,
+        "customerPublicationAllowed": false
+      },
+      "authoringStatus": "evidence_search_required"
+    }
+  ]
+}

@@ -53,7 +53,7 @@ describe("feed server writes", () => {
         return {
           data: {
             id: "22222222-2222-4222-8222-222222222222",
-            moderation_status: "pending_review",
+            moderation_status: "published",
           },
           error: null,
         };
@@ -80,7 +80,7 @@ describe("feed server writes", () => {
       data: {
         action: "create_post",
         id: "22222222-2222-4222-8222-222222222222",
-        moderationStatus: "pending_review",
+        moderationStatus: "published",
         targetType: "feed_post",
       },
       ok: true,
@@ -89,7 +89,7 @@ describe("feed server writes", () => {
     expect(feedInsert?.insertRow).toMatchObject({
       attachment_payload: [],
       author_account_id: accountId,
-      moderation_status: "pending_review",
+      moderation_status: "published",
       public_projection_payload: {
         attachmentTypes: [],
         bodyPreview: "오늘의 질문에서 내 리듬을 한 문장으로 남겨요.",
@@ -101,6 +101,153 @@ describe("feed server writes", () => {
       visibility: "public",
     });
     expect(JSON.stringify(feedInsert?.insertRow)).not.toContain("raw_score");
+  });
+
+  it("stores a user report for a published community post", async () => {
+    const targetPostId = "22222222-2222-4222-8222-222222222222";
+    const targetAuthorId = "99999999-9999-4999-8999-999999999999";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            author_account_id: targetAuthorId,
+            id: targetPostId,
+            moderation_status: "published",
+          },
+          error: null,
+        };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "content_report"
+      ) {
+        return {
+          data: { id: "33333333-3333-4333-8333-333333333333" },
+          error: null,
+        };
+      }
+
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "report_content",
+        details: "같은 광고가 반복돼요.",
+        reason: "spam",
+        target: {
+          id: targetPostId,
+          type: "feed_post",
+        },
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      data: {
+        action: "report_content",
+        id: "33333333-3333-4333-8333-333333333333",
+        targetType: "feed_post",
+      },
+      ok: true,
+    });
+    expect(
+      operations.find((operation) => operation.table === "content_report")
+        ?.insertRow,
+    ).toMatchObject({
+      details: "같은 광고가 반복돼요.",
+      post_id: targetPostId,
+      reason: "spam",
+      reporter_account_id: accountId,
+      severity: "low",
+      status: "queued",
+      target_author_account_id: targetAuthorId,
+    });
+  });
+
+  it("keeps a post with an unknown external link in review until approval", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "link_domain_policy"
+      ) {
+        return { data: [], error: null };
+      }
+
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        return {
+          data: {
+            id: "22222222-2222-4222-8222-222222222222",
+            moderation_status: operation.insertRow?.moderation_status,
+          },
+          error: null,
+        };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_external_link"
+      ) {
+        return { data: null, error: null };
+      }
+
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "create_post",
+        body: "이 링크를 함께 봐요 https://unreviewed.example/path",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: { moderationStatus: "pending_review" },
+      ok: true,
+    });
+    expect(
+      operations.find((operation) => operation.table === "feed_post")
+        ?.insertRow,
+    ).toMatchObject({
+      moderation_status: "pending_review",
+      published_at: null,
+    });
+    expect(
+      operations.find(
+        (operation) => operation.table === "feed_external_link",
+      )?.insertRow,
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          hostname: "unreviewed.example",
+          review_status: "pending",
+        }),
+      ]),
+    );
   });
 
   it("stores balance game posts with poll options and an anonymous code vote", async () => {
@@ -121,7 +268,7 @@ describe("feed server writes", () => {
         return {
           data: {
             id: "22222222-2222-4222-8222-222222222222",
-            moderation_status: "pending_review",
+            moderation_status: "published",
           },
           error: null,
         };
@@ -265,6 +412,34 @@ describe("feed server writes", () => {
         };
       }
 
+      if (operation.schema === "feed" && operation.table === "feed_poll") {
+        return {
+          data: {
+            id: pollId,
+            post_id: "77777777-7777-4777-8777-777777777777",
+            status: "active",
+          },
+          error: null,
+        };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_option"
+      ) {
+        return {
+          data: { id: optionId, poll_id: pollId },
+          error: null,
+        };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "official_community_content"
+      ) {
+        return { data: null, error: null };
+      }
+
       if (operation.schema === "feed" && operation.table === "feed_poll_vote") {
         if (operation.insertRow) {
           return {
@@ -324,6 +499,60 @@ describe("feed server writes", () => {
         ["is", "deleted_at", null],
       ]),
     );
+  });
+
+  it("rejects a vote after the balance game response closes", async () => {
+    const pollId = "33333333-3333-4333-8333-333333333333";
+    const optionId = "55555555-5555-4555-8555-555555555555";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return {
+          data: { account_id: accountId },
+          error: null,
+        };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_poll") {
+        return {
+          data: {
+            id: pollId,
+            post_id: "77777777-7777-4777-8777-777777777777",
+            status: "closed",
+          },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_option"
+      ) {
+        return {
+          data: { id: optionId, poll_id: pollId },
+          error: null,
+        };
+      }
+      return { data: null, error: null };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "vote_poll",
+        optionId,
+        pollId,
+      },
+      user,
+    });
+
+    expect(result).toEqual({ code: "feed_response_closed", ok: false });
+    expect(
+      operations.some(
+        (operation) =>
+          operation.table === "feed_poll_vote" && operation.insertRow,
+      ),
+    ).toBe(false);
   });
 
   it("stores duplicate seed card reactions idempotently", async () => {

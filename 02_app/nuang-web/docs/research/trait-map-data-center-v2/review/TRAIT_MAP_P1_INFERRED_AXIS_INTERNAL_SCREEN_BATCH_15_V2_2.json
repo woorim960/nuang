@@ -1,0 +1,256 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-15.0.1",
+  "batchId": "P1-IAS-15",
+  "status": "P1_INFERRED_AXIS_BATCH_15_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 3,
+    "variants": 6,
+    "retainCandidates": 3,
+    "revisionCandidates": 3,
+    "scopeRemovalClaimAxes": 0,
+    "scopeRemovalVariants": 0,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-SE-WORK-AFTERMATH-ATTENTION",
+      "claimKey": ".scenario.work.aftermath.attention",
+      "claimKind": "attention",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SE-WORK-NEED_EXPRESSION-RESPONSE",
+      "claimKey": ".scenario.work.need_expression.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SE-WORK-SUCCESS-RESPONSE",
+      "claimKey": ".scenario.work.success.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-ATTENTION-SE-E",
+      "claimKey": ".scenario.work.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "부담스러운 업무가 지나간 뒤에는 사람들 사이에 남은 영향과 다시 생길 수 있는 문제, 회복에 필요한 시간, 다음에 바꿀 절차를 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 업무가 지나간 뒤에는 사람들 사이에 남은 영향과 다시 생길 수 있는 문제, 회복에 필요한 시간, 다음에 바꿀 절차를 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "업무 영향·지원 요청·공동 축하만으로 E를 표시하지 않고, 상호작용 중 생각과 에너지가 움직이는 E를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "부담스러운 업무가 지나간 뒤에는 함께한 사람들과 경험을 주고받는 동안 무엇이 남았고 다음에 무엇을 바꿀지 생각이 더 분명해지는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 업무가 지나간 뒤에는 함께한 사람들과 경험을 주고받는 동안 무엇이 남았고 다음에 무엇을 바꿀지 생각이 더 분명해지는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "부담스러운 업무가 지나간 뒤에는 사람들 사이에 남은 영향과 다시 생길 수 있는 문제, 회복에 필요한 시간, 다음에 바꿀 절차를 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-AFTERMATH-ATTENTION-SE-I",
+      "claimKey": ".scenario.work.aftermath.attention",
+      "claimKind": "attention",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "부담스러운 업무가 지나간 뒤에는 혼자서 실제 진행 순서와 놓친 단서, 다음에 바꿀 작업 조건을 되짚는 경향이 있다.",
+        "detailParagraphs": [
+          "부담스러운 업무가 지나간 뒤에는 혼자서 실제 진행 순서와 놓친 단서, 다음에 바꿀 작업 조건을 되짚는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "혼자 진행 과정과 생각을 정리한 뒤 필요한 사람과 소통하는 I의 흐름이 직접 드러난다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-RESPONSE-SE-E",
+      "claimKey": ".scenario.work.need_expression.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "현재까지 한 일과 막힌 지점, 필요한 지원, 지원을 받았을 때 가능한 다음 행동을 정리해 요청하는 편이다.",
+        "detailParagraphs": [
+          "현재까지 한 일과 막힌 지점, 필요한 지원, 지원을 받았을 때 가능한 다음 행동을 정리해 요청하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "업무 영향·지원 요청·공동 축하만으로 E를 표시하지 않고, 상호작용 중 생각과 에너지가 움직이는 E를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "담당자나 동료와 막힌 지점을 주고받는 동안 필요한 지원과 다음 행동을 더 분명히 정리하고, 대화 속에서 요청을 구체화하는 편이다.",
+        "detailParagraphs": [
+          "담당자나 동료와 막힌 지점을 주고받는 동안 필요한 지원과 다음 행동을 더 분명히 정리하고, 대화 속에서 요청을 구체화하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "현재까지 한 일과 막힌 지점, 필요한 지원, 지원을 받았을 때 가능한 다음 행동을 정리해 요청하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.work.need_expression.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "혼자 해결을 시도한 내용을 정리한 뒤 담당자에게 구체적인 질문이나 자원 요청을 하는 편이다.",
+        "detailParagraphs": [
+          "혼자 해결을 시도한 내용을 정리한 뒤 담당자에게 구체적인 질문이나 자원 요청을 하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "혼자 진행 과정과 생각을 정리한 뒤 필요한 사람과 소통하는 I의 흐름이 직접 드러난다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-RESPONSE-SE-E",
+      "claimKey": ".scenario.work.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "성과를 함께 축하하고 기여를 구체적으로 알리며, 잘된 과정을 정리해 다음 계획으로 이어가는 편이다.",
+        "detailParagraphs": [
+          "성과를 함께 축하하고 기여를 구체적으로 알리며, 잘된 과정을 정리해 다음 계획으로 이어가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "업무 영향·지원 요청·공동 축하만으로 E를 표시하지 않고, 상호작용 중 생각과 에너지가 움직이는 E를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "성과에 관한 이야기를 함께 나누고 서로의 기여를 주고받는 동안 즐거움과 에너지가 커지며, 다음 아이디어도 더 잘 떠오르는 편이다.",
+        "detailParagraphs": [
+          "성과에 관한 이야기를 함께 나누고 서로의 기여를 주고받는 동안 즐거움과 에너지가 커지며, 다음 아이디어도 더 잘 떠오르는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "성과를 함께 축하하고 기여를 구체적으로 알리며, 잘된 과정을 정리해 다음 계획으로 이어가는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-SUCCESS-RESPONSE-SE-I",
+      "claimKey": ".scenario.work.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "결과를 혼자 정리한 뒤 도움이 된 자료와 방법을 기록하고, 함께한 사람에게 구체적으로 공을 돌리는 편이다.",
+        "detailParagraphs": [
+          "결과를 혼자 정리한 뒤 도움이 된 자료와 방법을 기록하고, 함께한 사람에게 구체적으로 공을 돌리는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "혼자 진행 과정과 생각을 정리한 뒤 필요한 사람과 소통하는 I의 흐름이 직접 드러난다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_15_RECOMPOSITION_AND_BATCH_16_SCREEN",
+    "actions": [
+      "3개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "SM·partner 맥락의 P1-IAS-16을 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

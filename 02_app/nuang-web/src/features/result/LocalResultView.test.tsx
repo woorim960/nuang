@@ -107,8 +107,8 @@ describe("LocalResultView", () => {
       await screen.findByRole("region", { name: "결과 활용" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "다음으로" }),
-    ).toBeInTheDocument();
+      screen.queryByRole("heading", { name: "다음으로" }),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "성향지도 열기" })).toHaveAttribute(
       "href",
       "/map",
@@ -446,7 +446,7 @@ describe("LocalResultView", () => {
       screen.getByRole("button", { name: "이 결과는 어떻게 봐야 하나요?" }),
     );
     expect(
-      screen.getByText(/능력이나 좋고 나쁨, 정신건강을 판단하지 않아요/),
+      screen.getByText(/능력, 좋고 나쁨, 정신건강을 판단하는 결과는 아니에요/),
     ).toBeVisible();
     expect(
       fetchMock.mock.calls.some(
@@ -620,9 +620,9 @@ function buildCompletedAttempt(
         ? candidateQuickScoringRelease
         : assessment.releaseId === candidateFullCoreAssessment.releaseId
           ? candidateFullScoringRelease
-      : assessment.mode === "full"
-        ? fullScoringRelease
-        : quickScoringRelease;
+          : assessment.mode === "full"
+            ? fullScoringRelease
+            : quickScoringRelease;
   const scoreResult = calculateCoreScore(
     scoringRelease,
     Object.values(responses),

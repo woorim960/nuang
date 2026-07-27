@@ -46,12 +46,50 @@ describe("BottomNavigation", () => {
   it("keeps community as the emphasized primary navigation item", () => {
     render(<BottomNavigation />);
 
-    expect(screen.getByRole("link", { name: "커뮤니티 탭" })).toHaveAttribute(
-      "data-primary-navigation",
-      "true",
+    const communityTab = screen.getByRole("link", {
+      name: "커뮤니티 탭",
+    });
+
+    expect(communityTab).toHaveAttribute("data-primary-navigation", "true");
+    expect(communityTab).toHaveClass("text-[var(--nu-neutral-400)]");
+    expect(communityTab).not.toHaveClass(
+      "text-[var(--nu-bottom-nav-primary-active-fg)]",
     );
     expect(screen.getByRole("link", { name: "홈 탭" })).not.toHaveAttribute(
       "data-primary-navigation",
     );
+  });
+
+  it("uses the brand focus on community only while the community route is active", () => {
+    navigationMock.usePathname.mockReturnValue("/feed");
+
+    render(<BottomNavigation />);
+
+    expect(screen.getByRole("link", { name: "커뮤니티 탭" })).toHaveClass(
+      "text-[var(--nu-bottom-nav-primary-active-fg)]",
+    );
+  });
+
+  it("keeps the navigation content centered in a safe-area-aware bar", () => {
+    render(<BottomNavigation />);
+
+    const navigation = screen.getByRole("navigation", {
+      name: "하단 주요 메뉴",
+    });
+    const bar = navigation.querySelector("[data-bottom-navigation-bar]");
+    const links = screen.getAllByRole("link");
+
+    expect(bar).toHaveClass(
+      "h-[var(--nu-bottom-nav-total-height)]",
+      "pb-[var(--nu-bottom-nav-safe-area-bottom)]",
+      "items-center",
+    );
+    links.forEach((link) => {
+      expect(link).toHaveClass(
+        "h-[var(--nu-bottom-nav-content-height)]",
+        "items-center",
+        "justify-center",
+      );
+    });
   });
 });

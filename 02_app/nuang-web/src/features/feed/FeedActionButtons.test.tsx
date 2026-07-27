@@ -317,7 +317,7 @@ describe("FeedActionButtons", () => {
     expect(screen.getByRole("button", { name: "공유" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "저장" })).toBeInTheDocument();
     expect(screen.getByText("87")).toBeInTheDocument();
-    expect(screen.getByText("답변 14")).toBeInTheDocument();
+    expect(screen.getByText("14")).toBeInTheDocument();
     expect(screen.queryByLabelText("질문의 답변")).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "답변" }));

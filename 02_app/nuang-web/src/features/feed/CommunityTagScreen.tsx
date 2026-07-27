@@ -21,15 +21,6 @@ export function CommunityTagScreen({
         </Link>
       }
     >
-      <section className={styles.intro}>
-        <span>태그 모아보기</span>
-        <h2>#{tag}</h2>
-        <p>
-          같은 태그를 사용한 공개 게시물 {posts.length.toLocaleString("ko-KR")}
-          개를 모았어요.
-        </p>
-      </section>
-
       {posts.length > 0 ? (
         <section aria-label={`#${tag} 게시물`} className={styles.postList}>
           {posts.map((post) => (

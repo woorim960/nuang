@@ -6,7 +6,7 @@ type ButtonVariant = "primary" | "secondary" | "quiet";
 
 const variants: Record<ButtonVariant, string> = {
   primary:
-    "bg-primary text-white shadow-[0_10px_24px_rgb(101_70_215_/_22%)] hover:bg-primary-strong",
+    "bg-primary text-white shadow-floating hover:bg-primary-strong",
   secondary:
     "border border-line bg-white text-foreground hover:border-primary/40 hover:bg-surface-soft",
   quiet: "bg-transparent text-primary hover:bg-surface-soft",

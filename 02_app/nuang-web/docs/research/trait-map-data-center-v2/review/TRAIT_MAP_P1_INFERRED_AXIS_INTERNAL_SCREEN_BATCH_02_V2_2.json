@@ -1,0 +1,254 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-02.0.1",
+  "batchId": "P1-IAS-02",
+  "status": "P1_INFERRED_AXIS_BATCH_02_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 3,
+    "variants": 6,
+    "retainCandidates": 3,
+    "revisionCandidates": 3,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-OE-FRIEND-SUCCESS-ATTENTION",
+      "claimKey": ".scenario.friend.success.attention",
+      "claimKind": "attention",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-FRIEND-SUCCESS-PROCESS",
+      "claimKey": ".scenario.friend.success.process",
+      "claimKind": "first_thought",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-OE-FRIEND-UNCERTAINTY-PROCESS",
+      "claimKey": ".scenario.friend.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisRef": "OE",
+      "internalDecision": "retain_inferred_oe_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-ATTENTION-OE-R",
+      "claimKey": ".scenario.friend.success.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "친구에게 좋은 일이 생기면 큰 반응을 먼저 보이기보다 친구가 실제로 노력한 부분과 원하는 축하 방식을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "친구에게 좋은 일이 생기면 큰 반응을 먼저 보이기보다 친구가 실제로 노력한 부분과 원하는 축하 방식을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast",
+        "rationale": "친구의 마음·축하 방식이 OE를 대신 설명하지 않도록 R은 확인한 과정·결과, N은 앞으로 열릴 가능성·연결이 직접 드러나게 정리한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "친구에게 좋은 일이 생기면 실제로 노력한 과정과 구체적으로 달라진 결과, 친구가 직접 말한 축하 방식을 살피는 경향이 있다.",
+        "detailParagraphs": [
+          "친구에게 좋은 일이 생기면 실제로 노력한 과정과 구체적으로 달라진 결과, 친구가 직접 말한 축하 방식을 살피는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "친구에게 좋은 일이 생기면 큰 반응을 먼저 보이기보다 친구가 실제로 노력한 부분과 원하는 축하 방식을 살피는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-ATTENTION-OE-N",
+      "claimKey": ".scenario.friend.success.attention",
+      "claimKind": "attention",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "친구에게 좋은 일이 생기면 노력한 과정과 친구가 중요하게 여긴 의미, 함께 기뻐할 방법이 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "친구에게 좋은 일이 생기면 노력한 과정과 친구가 중요하게 여긴 의미, 함께 기뻐할 방법이 먼저 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast",
+        "rationale": "친구의 마음·축하 방식이 OE를 대신 설명하지 않도록 R은 확인한 과정·결과, N은 앞으로 열릴 가능성·연결이 직접 드러나게 정리한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "친구에게 좋은 일이 생기면 이 성취가 앞으로 열어 줄 가능성과 새롭게 이어질 경험, 함께 기념할 새로운 방법이 먼저 눈에 들어오는 경향이 있다.",
+        "detailParagraphs": [
+          "친구에게 좋은 일이 생기면 이 성취가 앞으로 열어 줄 가능성과 새롭게 이어질 경험, 함께 기념할 새로운 방법이 먼저 눈에 들어오는 경향이 있다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "친구에게 좋은 일이 생기면 노력한 과정과 친구가 중요하게 여긴 의미, 함께 기뻐할 방법이 먼저 눈에 들어오는 경향이 있다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-PROCESS-OE-R",
+      "claimKey": ".scenario.friend.success.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“어떤 과정이 가장 힘들었고, 이 결과가 친구에게 실제로 무엇을 바꿔줄까?”를 구체적으로 궁금해하기 쉽다.",
+        "detailParagraphs": [
+          "“어떤 과정이 가장 힘들었고, 이 결과가 친구에게 실제로 무엇을 바꿔줄까?”를 구체적으로 궁금해하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인 가능한 변화와 반복 행동, N은 여러 가능한 설명을 직접 보여 주어 양방향 대비가 분명하다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUCCESS-PROCESS-OE-N",
+      "claimKey": ".scenario.friend.success.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“얼마나 기뻤을까, 이 이야기를 더 듣고 싶다”는 마음과 새로운 축하 아이디어가 함께 떠오르기 쉽다.",
+        "detailParagraphs": [
+          "“얼마나 기뻤을까, 이 이야기를 더 듣고 싶다”는 마음과 새로운 축하 아이디어가 함께 떠오르기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_oe_contrast",
+        "rationale": "친구의 마음·축하 방식이 OE를 대신 설명하지 않도록 R은 확인한 과정·결과, N은 앞으로 열릴 가능성·연결이 직접 드러나게 정리한다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "“이 성취가 앞으로 어떤 기회와 새로운 이야기로 이어질까?”를 떠올리며 색다른 축하 방법을 생각하기 쉽다.",
+        "detailParagraphs": [
+          "“이 성취가 앞으로 어떤 기회와 새로운 이야기로 이어질까?”를 떠올리며 색다른 축하 방법을 생각하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "“얼마나 기뻤을까, 이 이야기를 더 듣고 싶다”는 마음과 새로운 축하 아이디어가 함께 떠오르기 쉽다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-R",
+      "claimKey": ".scenario.friend.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=R",
+      "axisDirection": "R",
+      "originalContent": {
+        "summaryText": "“내가 아는 사실은 답장이 늦었다는 것뿐인지, 다른 변화도 반복됐는지”를 구분하고 싶어 하기 쉽다.",
+        "detailParagraphs": [
+          "“내가 아는 사실은 답장이 늦었다는 것뿐인지, 다른 변화도 반복됐는지”를 구분하고 싶어 하기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인 가능한 변화와 반복 행동, N은 여러 가능한 설명을 직접 보여 주어 양방향 대비가 분명하다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-N",
+      "claimKey": ".scenario.friend.uncertainty.process",
+      "claimKind": "first_thought",
+      "axisSignature": "OE=N",
+      "axisDirection": "N",
+      "originalContent": {
+        "summaryText": "“내가 놓친 일이 있나?”라는 걱정과 함께 바쁨·생활 변화·다른 고민처럼 여러 설명을 떠올리기 쉽다.",
+        "detailParagraphs": [
+          "“내가 놓친 일이 있나?”라는 걱정과 함께 바쁨·생활 변화·다른 고민처럼 여러 설명을 떠올리기 쉽다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_oe_contrast_candidate",
+        "rationale": "R은 확인 가능한 변화와 반복 행동, N은 여러 가능한 설명을 직접 보여 주어 양방향 대비가 분명하다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_02_RECOMPOSITION_AND_BATCH_03_SCREEN",
+    "actions": [
+      "3개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "OE·partner 맥락의 P1-IAS-03을 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

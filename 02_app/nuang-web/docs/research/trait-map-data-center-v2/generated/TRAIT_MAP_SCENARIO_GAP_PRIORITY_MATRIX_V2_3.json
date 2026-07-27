@@ -1,0 +1,688 @@
+{
+  "contractVersion": "nuang-trait-map-scenario-gap-priority-matrix.v2.3",
+  "reportId": "TRAIT-MAP-SCENARIO-GAP-PRIORITY-MATRIX.2.3",
+  "status": "RESEARCH_ORDER_LOCKED_BY_REPRODUCIBLE_SCORING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceGapGroupReportId": "TRAIT-MAP-NO-EXACT-CONTEXT-GAP-GROUPS.2.3",
+  "reviewerIdentity": {
+    "type": "internal_research_operations_prioritization",
+    "isIndependentExternalReviewer": false,
+    "mayApprovePublication": false
+  },
+  "scoringRules": {
+    "directValidation": {
+      "directionalEntryCountWeight": 3,
+      "semanticAxisCountWeight": 3,
+      "claimKindCountWeight": 2,
+      "highRiskBase": 5,
+      "personOfInterestAdditionalWeight": 4,
+      "tiers": {
+        "P0": "score >= 40",
+        "P1": "25 <= score < 40",
+        "P2": "score < 25 and directional entries > 0",
+        "ARCHIVE_COMMON_ONLY": "directional entries = 0"
+      }
+    },
+    "backgroundResearch": {
+      "directionalEntryCountWeight": 2,
+      "canonicalEntryCountWeight": 1,
+      "personOfInterestContextWeight": 4,
+      "familyContextWeight": 2,
+      "noPriorExtractionWeight": 5,
+      "interpretation": "점수가 높을수록 더 많은 개인화 문장과 위험한 맥락에 영향을 주며 아직 배경 원문 추출이 없다."
+    }
+  },
+  "summary": {
+    "scenarioGroupsPrioritized": 16,
+    "p0DirectValidationGroups": 6,
+    "p1DirectValidationGroups": 4,
+    "p2DirectValidationGroups": 5,
+    "commonOnlyArchiveGroups": 1,
+    "groupsWithBackgroundAlreadyExtracted": 3,
+    "directValidationCompletedGroups": 0,
+    "releasedCanonicalEntries": 0,
+    "publicationApprovalsGranted": 0
+  },
+  "directValidationOrder": [
+    {
+      "rank": 1,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "score": 71,
+      "tier": "P0",
+      "label": "관심 상대의 뜻이 분명하지 않을 때"
+    },
+    {
+      "rank": 2,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "score": 59,
+      "tier": "P0",
+      "label": "관심 상대 앞에서 실수하거나 기대와 다른 반응을 받았을 때"
+    },
+    {
+      "rank": 3,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "score": 53,
+      "tier": "P0",
+      "label": "관심 상대에게 자신의 필요를 말할 때"
+    },
+    {
+      "rank": 4,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "score": 44,
+      "tier": "P0",
+      "label": "관심 상대가 도움을 요청할 때"
+    },
+    {
+      "rank": 5,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "score": 41,
+      "tier": "P0",
+      "label": "관심 상대와 의견이 다를 때"
+    },
+    {
+      "rank": 6,
+      "scenarioRef": "SCN-FAMILY-7",
+      "score": 40,
+      "tier": "P0",
+      "label": "가족이 도움을 요청할 때"
+    },
+    {
+      "rank": 7,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "score": 35,
+      "tier": "P1",
+      "label": "관심 상대와의 계획이 갑자기 바뀔 때"
+    },
+    {
+      "rank": 8,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "score": 32,
+      "tier": "P1",
+      "label": "관심 상대와 일이 지나간 뒤 돌아볼 때"
+    },
+    {
+      "rank": 9,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "score": 26,
+      "tier": "P1",
+      "label": "관심 상대가 있는 모임에 참여할 때"
+    },
+    {
+      "rank": 10,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "score": 26,
+      "tier": "P1",
+      "label": "관심 상대와 경계를 정해야 할 때"
+    },
+    {
+      "rank": 11,
+      "scenarioRef": "SCN-FAMILY-12",
+      "score": 23,
+      "tier": "P2",
+      "label": "가족과 일이 지나간 뒤 돌아볼 때"
+    },
+    {
+      "rank": 12,
+      "scenarioRef": "SCN-FAMILY-9",
+      "score": 23,
+      "tier": "P2",
+      "label": "가족과 경계를 정해야 할 때"
+    },
+    {
+      "rank": 13,
+      "scenarioRef": "SCN-FAMILY-11",
+      "score": 22,
+      "tier": "P2",
+      "label": "가족 안에서 실수나 기대와 다른 일이 생겼을 때"
+    },
+    {
+      "rank": 14,
+      "scenarioRef": "SCN-FAMILY-3",
+      "score": 18,
+      "tier": "P2",
+      "label": "가족 모임이나 공동 활동에 참여할 때"
+    },
+    {
+      "rank": 15,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "score": 17,
+      "tier": "ARCHIVE_COMMON_ONLY",
+      "label": "관심 상대에게 좋은 일이 생겼을 때"
+    },
+    {
+      "rank": 16,
+      "scenarioRef": "SCN-FAMILY-5",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족의 뜻이나 상황이 분명하지 않을 때"
+    }
+  ],
+  "backgroundResearchOrder": [
+    {
+      "rank": 1,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "score": 57,
+      "tier": "P0",
+      "label": "관심 상대의 뜻이 분명하지 않을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 2,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "score": 45,
+      "tier": "P0",
+      "label": "관심 상대 앞에서 실수하거나 기대와 다른 반응을 받았을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 3,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "score": 34,
+      "tier": "P1",
+      "label": "관심 상대에게 자신의 필요를 말할 때",
+      "backgroundAlreadyExtracted": true
+    },
+    {
+      "rank": 4,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "score": 28,
+      "tier": "P1",
+      "label": "관심 상대와 의견이 다를 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 5,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "score": 28,
+      "tier": "P1",
+      "label": "관심 상대가 도움을 요청할 때",
+      "backgroundAlreadyExtracted": true
+    },
+    {
+      "rank": 6,
+      "scenarioRef": "SCN-FAMILY-7",
+      "score": 26,
+      "tier": "P1",
+      "label": "가족이 도움을 요청할 때",
+      "backgroundAlreadyExtracted": true
+    },
+    {
+      "rank": 7,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "score": 23,
+      "tier": "P1",
+      "label": "관심 상대와 일이 지나간 뒤 돌아볼 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 8,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "score": 23,
+      "tier": "P1",
+      "label": "관심 상대와의 계획이 갑자기 바뀔 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 9,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "score": 18,
+      "tier": "P2",
+      "label": "관심 상대가 있는 모임에 참여할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 10,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "score": 18,
+      "tier": "P2",
+      "label": "관심 상대와 경계를 정해야 할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 11,
+      "scenarioRef": "SCN-FAMILY-11",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족 안에서 실수나 기대와 다른 일이 생겼을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 12,
+      "scenarioRef": "SCN-FAMILY-12",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족과 일이 지나간 뒤 돌아볼 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 13,
+      "scenarioRef": "SCN-FAMILY-9",
+      "score": 16,
+      "tier": "P2",
+      "label": "가족과 경계를 정해야 할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 14,
+      "scenarioRef": "SCN-FAMILY-3",
+      "score": 13,
+      "tier": "P2",
+      "label": "가족 모임이나 공동 활동에 참여할 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 15,
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "score": 13,
+      "tier": "P2",
+      "label": "관심 상대에게 좋은 일이 생겼을 때",
+      "backgroundAlreadyExtracted": false
+    },
+    {
+      "rank": 16,
+      "scenarioRef": "SCN-FAMILY-5",
+      "score": 10,
+      "tier": "P2",
+      "label": "가족의 뜻이나 상황이 분명하지 않을 때",
+      "backgroundAlreadyExtracted": false
+    }
+  ],
+  "rows": [
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-5",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-5",
+      "label": "관심 상대의 뜻이 분명하지 않을 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 16,
+      "directionalEntryCount": 16,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["ER", "OE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 71, "backgroundResearchScore": 57 },
+      "tiers": { "directValidation": "P0", "backgroundResearch": "P0" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-11",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-11",
+      "label": "관심 상대 앞에서 실수하거나 기대와 다른 반응을 받았을 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 12,
+      "directionalEntryCount": 12,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["ER", "OE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 59, "backgroundResearchScore": 45 },
+      "tiers": { "directValidation": "P0", "backgroundResearch": "P0" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-8",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-8",
+      "label": "관심 상대에게 자신의 필요를 말할 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 10,
+      "directionalEntryCount": 10,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["OE", "SE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": true,
+      "scores": { "directValidationScore": 53, "backgroundResearchScore": 34 },
+      "tiers": { "directValidation": "P0", "backgroundResearch": "P1" },
+      "requiredTracks": {
+        "backgroundResearch": "scope_extracted_update_only",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-7",
+      "scenarioRef": "SCN-FAMILY-7",
+      "label": "가족이 도움을 요청할 때",
+      "targetContext": "family",
+      "canonicalEntryCount": 8,
+      "directionalEntryCount": 8,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": true,
+      "scores": { "directValidationScore": 40, "backgroundResearchScore": 26 },
+      "tiers": { "directValidation": "P0", "backgroundResearch": "P1" },
+      "requiredTracks": {
+        "backgroundResearch": "scope_extracted_update_only",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-7",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-7",
+      "label": "관심 상대가 도움을 요청할 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 8,
+      "directionalEntryCount": 8,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": true,
+      "scores": { "directValidationScore": 44, "backgroundResearchScore": 28 },
+      "tiers": { "directValidation": "P0", "backgroundResearch": "P1" },
+      "requiredTracks": {
+        "backgroundResearch": "scope_extracted_update_only",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-6",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-6",
+      "label": "관심 상대와 의견이 다를 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 7,
+      "directionalEntryCount": 6,
+      "commonArchiveEntryCount": 1,
+      "semanticAxes": ["OE", "RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 41, "backgroundResearchScore": 28 },
+      "tiers": { "directValidation": "P0", "backgroundResearch": "P1" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-12",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-12",
+      "label": "관심 상대와 일이 지나간 뒤 돌아볼 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 6,
+      "directionalEntryCount": 4,
+      "commonArchiveEntryCount": 2,
+      "semanticAxes": ["OE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 32, "backgroundResearchScore": 23 },
+      "tiers": { "directValidation": "P1", "backgroundResearch": "P1" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-4",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-4",
+      "label": "관심 상대와의 계획이 갑자기 바뀔 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 6,
+      "directionalEntryCount": 4,
+      "commonArchiveEntryCount": 2,
+      "semanticAxes": ["OE", "SE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 35, "backgroundResearchScore": 23 },
+      "tiers": { "directValidation": "P1", "backgroundResearch": "P1" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-12",
+      "scenarioRef": "SCN-FAMILY-12",
+      "label": "가족과 일이 지나간 뒤 돌아볼 때",
+      "targetContext": "family",
+      "canonicalEntryCount": 3,
+      "directionalEntryCount": 3,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": ["attention", "communication", "first_thought"],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 23, "backgroundResearchScore": 16 },
+      "tiers": { "directValidation": "P2", "backgroundResearch": "P2" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-9",
+      "scenarioRef": "SCN-FAMILY-9",
+      "label": "가족과 경계를 정해야 할 때",
+      "targetContext": "family",
+      "canonicalEntryCount": 3,
+      "directionalEntryCount": 3,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["RO"],
+      "claimKinds": ["actual_response", "attention", "first_thought"],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 23, "backgroundResearchScore": 16 },
+      "tiers": { "directValidation": "P2", "backgroundResearch": "P2" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-11",
+      "scenarioRef": "SCN-FAMILY-11",
+      "label": "가족 안에서 실수나 기대와 다른 일이 생겼을 때",
+      "targetContext": "family",
+      "canonicalEntryCount": 5,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 3,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 22, "backgroundResearchScore": 16 },
+      "tiers": { "directValidation": "P2", "backgroundResearch": "P2" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-3",
+      "scenarioRef": "SCN-FAMILY-3",
+      "label": "가족 모임이나 공동 활동에 참여할 때",
+      "targetContext": "family",
+      "canonicalEntryCount": 2,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["SE"],
+      "claimKinds": ["actual_response", "communication"],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 18, "backgroundResearchScore": 13 },
+      "tiers": { "directValidation": "P2", "backgroundResearch": "P2" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-3",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-3",
+      "label": "관심 상대가 있는 모임에 참여할 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 5,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 3,
+      "semanticAxes": ["SE"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 26, "backgroundResearchScore": 18 },
+      "tiers": { "directValidation": "P1", "backgroundResearch": "P2" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-9",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-9",
+      "label": "관심 상대와 경계를 정해야 할 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 5,
+      "directionalEntryCount": 2,
+      "commonArchiveEntryCount": 3,
+      "semanticAxes": ["RO"],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 26, "backgroundResearchScore": 18 },
+      "tiers": { "directValidation": "P1", "backgroundResearch": "P2" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-FAMILY-5",
+      "scenarioRef": "SCN-FAMILY-5",
+      "label": "가족의 뜻이나 상황이 분명하지 않을 때",
+      "targetContext": "family",
+      "canonicalEntryCount": 1,
+      "directionalEntryCount": 1,
+      "commonArchiveEntryCount": 0,
+      "semanticAxes": ["ER", "OE"],
+      "claimKinds": ["attention"],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 16, "backgroundResearchScore": 10 },
+      "tiers": { "directValidation": "P2", "backgroundResearch": "P2" },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "new_nuang_empirical_validation_required",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    },
+    {
+      "gapGroupId": "GAP-SCN-PERSON-OF-INTEREST-10",
+      "scenarioRef": "SCN-PERSON-OF-INTEREST-10",
+      "label": "관심 상대에게 좋은 일이 생겼을 때",
+      "targetContext": "person_of_interest",
+      "canonicalEntryCount": 4,
+      "directionalEntryCount": 0,
+      "commonArchiveEntryCount": 4,
+      "semanticAxes": [],
+      "claimKinds": [
+        "actual_response",
+        "attention",
+        "communication",
+        "first_thought"
+      ],
+      "backgroundAlreadyExtracted": false,
+      "scores": { "directValidationScore": 17, "backgroundResearchScore": 13 },
+      "tiers": {
+        "directValidation": "ARCHIVE_COMMON_ONLY",
+        "backgroundResearch": "P2"
+      },
+      "requiredTracks": {
+        "backgroundResearch": "primary_source_search_and_extraction",
+        "directValidation": "not_applicable_common_archive",
+        "clauseScopeReview": "required"
+      },
+      "releaseState": "research_only_context_gap_open"
+    }
+  ],
+  "nextGate": {
+    "name": "P0_DIRECT_VALIDATION_MODULE_SPECIFICATION",
+    "scenarioRefs": [
+      "SCN-PERSON-OF-INTEREST-5",
+      "SCN-PERSON-OF-INTEREST-11",
+      "SCN-PERSON-OF-INTEREST-8",
+      "SCN-PERSON-OF-INTEREST-7",
+      "SCN-PERSON-OF-INTEREST-6",
+      "SCN-FAMILY-7"
+    ],
+    "action": "P0 6개 장면군에 대해 자극문, 응답 수집, blind 행동 코딩, 연속 축 점수 분석, 인지 면담을 포함한 실행 가능한 검증 모듈을 작성한다."
+  }
+}

@@ -1,0 +1,169 @@
+{
+  "contractVersion": "nuang-trait-map-p0-direct-validation-fixture-validation.v2.3",
+  "reportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-FIXTURE-VALIDATION.2.3",
+  "status": "SYNTHETIC_FIXTURE_VALID_MIGRATION_DRAFT_READY_NOT_APPLIED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceDataContractReportId": "TRAIT-MAP-P0-DIRECT-VALIDATION-DATA-CONTRACT.2.3",
+  "sourceFixtureId": "TRAIT-MAP-P0-DIRECT-VALIDATION-SYNTHETIC-FIXTURE.2.3",
+  "summary": {
+    "checks": 19,
+    "passedChecks": 19,
+    "failedChecks": 0,
+    "syntheticParticipants": 12,
+    "syntheticAssignments": 24,
+    "syntheticResponses": 96,
+    "syntheticCoderRatings": 192,
+    "migrationDraftTables": 10,
+    "rlsEnabledByDraftTables": 10,
+    "rlsPoliciesCreatedByDraft": 0,
+    "databaseMigrationsApplied": 0,
+    "realParticipants": 0,
+    "publicationApprovalsGranted": 0
+  },
+  "checks": [
+    {
+      "checkId": "fixture_is_synthetic",
+      "state": "passed",
+      "evidence": { "actual": true }
+    },
+    {
+      "checkId": "fixture_has_no_real_participant_data",
+      "state": "passed",
+      "evidence": { "actual": false }
+    },
+    {
+      "checkId": "module_versions_unique",
+      "state": "passed",
+      "evidence": { "count": 6 }
+    },
+    {
+      "checkId": "participants_unique",
+      "state": "passed",
+      "evidence": { "count": 12 }
+    },
+    {
+      "checkId": "sessions_unique",
+      "state": "passed",
+      "evidence": { "count": 12 }
+    },
+    {
+      "checkId": "one_session_per_participant",
+      "state": "passed",
+      "evidence": { "counts": [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1] }
+    },
+    {
+      "checkId": "two_assignments_per_session",
+      "state": "passed",
+      "evidence": { "counts": [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2] }
+    },
+    {
+      "checkId": "four_assignments_per_module",
+      "state": "passed",
+      "evidence": { "counts": [4, 4, 4, 4, 4, 4] }
+    },
+    {
+      "checkId": "assignment_module_orders_unique",
+      "state": "passed",
+      "evidence": { "assignments": 24 }
+    },
+    {
+      "checkId": "four_response_layers_per_assignment",
+      "state": "passed",
+      "evidence": {
+        "counts": [
+          4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4
+        ]
+      }
+    },
+    {
+      "checkId": "response_layers_complete_and_unique",
+      "state": "passed",
+      "evidence": {
+        "required": [
+          "attention",
+          "first_thought",
+          "actual_response",
+          "communication"
+        ]
+      }
+    },
+    {
+      "checkId": "one_axis_snapshot_per_session",
+      "state": "passed",
+      "evidence": { "snapshots": 12 }
+    },
+    {
+      "checkId": "two_coder_assignments_per_response",
+      "state": "passed",
+      "evidence": {
+        "counts": [
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+          2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+          2, 2, 2, 2
+        ]
+      }
+    },
+    {
+      "checkId": "coder_refs_distinct_within_response",
+      "state": "passed",
+      "evidence": {}
+    },
+    {
+      "checkId": "one_rating_per_coder_assignment",
+      "state": "passed",
+      "evidence": { "ratings": 192 }
+    },
+    {
+      "checkId": "coder_packets_do_not_contain_axis_or_participant_fields",
+      "state": "passed",
+      "evidence": {}
+    },
+    {
+      "checkId": "prohibited_direct_identifier_fields_absent",
+      "state": "passed",
+      "evidence": {
+        "prohibitedFieldNames": [
+          "name",
+          "email",
+          "phone",
+          "account_id",
+          "profile_id",
+          "social_handle"
+        ]
+      }
+    },
+    { "checkId": "all_references_resolve", "state": "passed", "evidence": {} },
+    {
+      "checkId": "expected_fixture_cardinality",
+      "state": "passed",
+      "evidence": {
+        "moduleVersions": 6,
+        "participants": 12,
+        "sessions": 12,
+        "assignments": 24,
+        "responses": 96,
+        "coderAssignments": 192,
+        "coderRatings": 192
+      }
+    }
+  ],
+  "failures": [],
+  "migrationDraft": {
+    "file": "review/TRAIT_MAP_P0_DIRECT_VALIDATION_MIGRATION_DRAFT_V2_3.sql",
+    "state": "draft_only_not_applied",
+    "defaultAccess": "RLS enabled with no policies; non-owner access denied by default",
+    "requiresBeforeApply": [
+      "independent security and privacy review",
+      "explicit customer authorization",
+      "environment-specific rollback plan",
+      "RLS policy and API function review"
+    ]
+  },
+  "nextGate": {
+    "name": "P0_ANALYSIS_PLAN_AND_SYNTHETIC_RUNNER",
+    "action": "실제 DB 적용 전, 합성 fixture로 코더 일치도·혼합 반응·축×상황 모형의 분석 입력과 출력 계약을 시험한다."
+  }
+}

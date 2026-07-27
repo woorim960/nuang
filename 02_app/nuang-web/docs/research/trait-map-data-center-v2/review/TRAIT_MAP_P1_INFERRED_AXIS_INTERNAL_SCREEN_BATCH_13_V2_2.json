@@ -1,0 +1,256 @@
+{
+  "contractVersion": "nuang-trait-map-p1-inferred-axis-internal-screen-batch.v2.2",
+  "reportId": "TRAIT-MAP-P1-INFERRED-AXIS-INTERNAL-SCREEN-BATCH-13.0.1",
+  "batchId": "P1-IAS-13",
+  "status": "P1_INFERRED_AXIS_BATCH_13_INTERNAL_SCREEN_COMPLETE_RECOMPOSITION_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceBatchReportId": "TRAIT-MAP-P1-INFERRED-AXIS-REVIEW-BATCHES.0.1",
+  "summary": {
+    "claimAxisReviews": 3,
+    "variants": 6,
+    "retainCandidates": 3,
+    "revisionCandidates": 3,
+    "scopeRemovalClaimAxes": 0,
+    "scopeRemovalVariants": 0,
+    "independentRoleApprovedEntries": 0,
+    "customerApprovedEntries": 0
+  },
+  "claimReviews": [
+    {
+      "reviewId": "P1-IAS-SE-PARTNER-AFTERMATH-RESPONSE",
+      "claimKey": ".scenario.partner.aftermath.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SE-PARTNER-NEED_EXPRESSION-RESPONSE",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    },
+    {
+      "reviewId": "P1-IAS-SE-PARTNER-SUCCESS-RESPONSE",
+      "claimKey": ".scenario.partner.success.response",
+      "claimKind": "actual_response",
+      "axisRef": "SE",
+      "internalDecision": "retain_inferred_se_axis_after_copy_revisions"
+    }
+  ],
+  "entries": [
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-RESPONSE-SE-E",
+      "claimKey": ".scenario.partner.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "그 일을 다시 이야기할 계기를 만들고 서로 남은 감정을 확인한 뒤, 필요한 사과·수정·새 약속을 실제 행동으로 이어가려는 편이다.",
+        "detailParagraphs": [
+          "그 일을 다시 이야기할 계기를 만들고 서로 남은 감정을 확인한 뒤, 필요한 사과·수정·새 약속을 실제 행동으로 이어가려는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "대화 시작·적극적 축하·조용한 활동만으로 E/I를 나누지 않고, 상호작용 중 정리·충전되는 E와 혼자 정리한 뒤 나누는 I를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인과 다시 대화를 주고받는 동안 자신의 생각과 감정도 더 분명해지고, 서로의 이야기를 연결하며 관계를 풀어 가는 편이다.",
+        "detailParagraphs": [
+          "연인과 다시 대화를 주고받는 동안 자신의 생각과 감정도 더 분명해지고, 서로의 이야기를 연결하며 관계를 풀어 가는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "그 일을 다시 이야기할 계기를 만들고 서로 남은 감정을 확인한 뒤, 필요한 사과·수정·새 약속을 실제 행동으로 이어가려는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-AFTERMATH-RESPONSE-SE-I",
+      "claimKey": ".scenario.partner.aftermath.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "바로 긴 대화를 이어가기보다 혼자 생각을 정리한 뒤, 필요한 내용과 다시 정할 약속을 추려 후속 대화를 요청하는 편이다.",
+        "detailParagraphs": [
+          "바로 긴 대화를 이어가기보다 혼자 생각을 정리한 뒤, 필요한 내용과 다시 정할 약속을 추려 후속 대화를 요청하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "E는 연인과 주고받으며 생각을 정리하고, I는 혼자 정리한 뒤 대화하는 과정을 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-E",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "대화를 먼저 요청해 자신의 감정과 필요를 설명하고, 연인의 입장도 들은 뒤 둘이 지킬 수 있는 행동을 정하는 편이다.",
+        "detailParagraphs": [
+          "대화를 먼저 요청해 자신의 감정과 필요를 설명하고, 연인의 입장도 들은 뒤 둘이 지킬 수 있는 행동을 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "E는 연인과 주고받으며 생각을 정리하고, I는 혼자 정리한 뒤 대화하는 과정을 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.partner.need_expression.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "혼자 생각을 정리한 뒤 비교적 차분한 때에 구체적인 상황과 요청을 말하고, 연인의 입장도 듣는 편이다.",
+        "detailParagraphs": [
+          "혼자 생각을 정리한 뒤 비교적 차분한 때에 구체적인 상황과 요청을 말하고, 연인의 입장도 듣는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "retain_direct_se_contrast_candidate",
+        "rationale": "E는 연인과 주고받으며 생각을 정리하고, I는 혼자 정리한 뒤 대화하는 과정을 직접 보여 준다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": null,
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUCCESS-RESPONSE-SE-E",
+      "claimKey": ".scenario.partner.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=E",
+      "axisDirection": "E",
+      "originalContent": {
+        "summaryText": "연인의 성취를 적극적으로 반기고 구체적인 노력을 알아봐 주며, 상대가 원하는 방식으로 축하를 함께 만드는 편이다.",
+        "detailParagraphs": [
+          "연인의 성취를 적극적으로 반기고 구체적인 노력을 알아봐 주며, 상대가 원하는 방식으로 축하를 함께 만드는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "대화 시작·적극적 축하·조용한 활동만으로 E/I를 나누지 않고, 상호작용 중 정리·충전되는 E와 혼자 정리한 뒤 나누는 I를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인과 기쁨을 바로 주고받고 성취에 관한 이야기를 함께 나누는 동안 즐거움과 에너지가 더 커지는 편이다.",
+        "detailParagraphs": [
+          "연인과 기쁨을 바로 주고받고 성취에 관한 이야기를 함께 나누는 동안 즐거움과 에너지가 더 커지는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인의 성취를 적극적으로 반기고 구체적인 노력을 알아봐 주며, 상대가 원하는 방식으로 축하를 함께 만드는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUCCESS-RESPONSE-SE-I",
+      "claimKey": ".scenario.partner.success.response",
+      "claimKind": "actual_response",
+      "axisSignature": "SE=I",
+      "axisDirection": "I",
+      "originalContent": {
+        "summaryText": "연인의 노력을 알아봐 주고, 조용히 쉬기·맛있는 것을 먹기처럼 바로 실행할 수 있는 축하 방법을 물어 함께 정하는 편이다.",
+        "detailParagraphs": [
+          "연인의 노력을 알아봐 주고, 조용히 쉬기·맛있는 것을 먹기처럼 바로 실행할 수 있는 축하 방법을 물어 함께 정하는 편이다."
+        ],
+        "contentShape": "single_core_paragraph"
+      },
+      "internalScreening": {
+        "state": "completed_internal_claim_contrast_screen_not_expert_approval",
+        "decision": "revise_for_direct_se_contrast",
+        "rationale": "대화 시작·적극적 축하·조용한 활동만으로 E/I를 나누지 않고, 상호작용 중 정리·충전되는 E와 혼자 정리한 뒤 나누는 I를 직접 나타낸다.",
+        "checkedAxisContract": true,
+        "checkedBothDirections": true,
+        "checkedOtherAxisContamination": true,
+        "checkedPlainKoreanAndSafety": true,
+        "reviewerType": "model_internal_claim_contrast_screen",
+        "reviewedAt": "2026-07-24T00:00:00.000Z"
+      },
+      "proposedRevision": {
+        "summaryText": "연인의 성취가 지닌 뜻을 혼자 충분히 생각한 뒤, 둘이 편하게 쉴 수 있는 자리에서 차분히 축하와 기쁨을 나누는 편이다.",
+        "detailParagraphs": [
+          "연인의 성취가 지닌 뜻을 혼자 충분히 생각한 뒤, 둘이 편하게 쉴 수 있는 자리에서 차분히 축하와 기쁨을 나누는 편이다."
+        ],
+        "contentShape": "single_core_paragraph",
+        "sourceParagraphs": [
+          "연인의 노력을 알아봐 주고, 조용히 쉬기·맛있는 것을 먹기처럼 바로 실행할 수 있는 축하 방법을 물어 함께 정하는 편이다."
+        ],
+        "state": "internal_editorial_candidate_independent_review_required"
+      },
+      "independentRoleReviewState": "pending",
+      "customerPublicationApproved": false,
+      "publicationState": "research_only"
+    }
+  ],
+  "nextGate": {
+    "name": "BATCH_13_RECOMPOSITION_AND_BATCH_14_SCREEN",
+    "actions": [
+      "3개 교정을 P1 누적 원장에 적용해 80개 이웃을 다시 검사한다.",
+      "SE·person_of_interest 맥락의 P1-IAS-14를 판독한다.",
+      "독립 역할 검토 전까지 research_only로 유지한다."
+    ]
+  }
+}

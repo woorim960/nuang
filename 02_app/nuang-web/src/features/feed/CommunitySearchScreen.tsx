@@ -53,6 +53,27 @@ export function CommunitySearchScreen({ posts }: { posts: FeedItem[] }) {
         right.count - left.count || left.label.localeCompare(right.label, "ko"),
     );
   }, [normalizedQuery, normalizedTagQuery, posts]);
+  const suggestedTags = useMemo(() => {
+    const tags = new Map<string, { count: number; label: string }>();
+    for (const post of posts) {
+      for (const tag of post.topic?.tags ?? []) {
+        const normalizedTag = normalizeFeedTag(tag).toLocaleLowerCase("ko-KR");
+        const current = tags.get(normalizedTag);
+        tags.set(normalizedTag, {
+          count: (current?.count ?? 0) + 1,
+          label: current?.label ?? tag,
+        });
+      }
+    }
+
+    return [...tags.values()]
+      .sort(
+        (left, right) =>
+          right.count - left.count ||
+          left.label.localeCompare(right.label, "ko"),
+      )
+      .slice(0, 6);
+  }, [posts]);
   const profileResults = useMemo(() => {
     if (!normalizedQuery || isTagQuery) return [];
 
@@ -105,15 +126,7 @@ export function CommunitySearchScreen({ posts }: { posts: FeedItem[] }) {
         </div>
       </section>
 
-      {!normalizedQuery ? (
-        <div className={styles.definitionCard}>
-          <strong>검색에서 찾을 수 있는 것</strong>
-          <p>
-            공개 게시물의 내용과 주제, #태그, 닉네임, 공개된 뉴앙 코드를 찾아요.
-            태그를 바로 찾으려면 #을 붙여 입력해 보세요.
-          </p>
-        </div>
-      ) : (
+      {normalizedQuery ? (
         <>
           <div className={styles.resultHeader}>
             <strong>검색 결과</strong>
@@ -216,7 +229,23 @@ export function CommunitySearchScreen({ posts }: { posts: FeedItem[] }) {
             </div>
           )}
         </>
-      )}
+      ) : suggestedTags.length > 0 ? (
+        <section className={styles.resultGroup}>
+          <strong className={styles.resultGroupTitle}>추천 태그</strong>
+          <div className={styles.tagResultList}>
+            {suggestedTags.map((tag) => (
+              <Link
+                className={styles.tagResultItem}
+                href={`/feed/tags/${encodeURIComponent(tag.label)}`}
+                key={tag.label}
+              >
+                <span>#{tag.label}</span>
+                <small>{tag.count.toLocaleString("ko-KR")}</small>
+              </Link>
+            ))}
+          </div>
+        </section>
+      ) : null}
     </CommunityScreenShell>
   );
 }

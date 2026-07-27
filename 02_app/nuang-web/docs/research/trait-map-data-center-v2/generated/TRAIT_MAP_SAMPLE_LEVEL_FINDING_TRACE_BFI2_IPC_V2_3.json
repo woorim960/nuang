@@ -1,0 +1,29 @@
+{
+  "contractVersion": "nuang-trait-map-sample-level-finding-trace.v2.3",
+  "reportId": "TRAIT-MAP-SAMPLE-LEVEL-FINDING-TRACE-BFI2-IPC.2.3",
+  "status": "NON_OVERLAPPING_SUPPORT_CONFIRMED_SCOPE_REVIEW_PENDING",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "sourceHiddenReuseReportId": "TRAIT-MAP-HIDDEN-DATASET-REUSE-REVIEW.2.3",
+  "registryId": "TRAIT-MAP-SAMPLE-LEVEL-FINDING-REGISTRY-BFI2-IPC.2.3",
+  "summary": {
+    "findingsMapped": 2,
+    "canonicalEntriesWithBothFindings": 184,
+    "highRiskCanonicalEntriesWithBothFindings": 120,
+    "highRiskEntriesWithNonOverlappingSupportAvailable": 120,
+    "independentReplicationsOfSameClaim": 0,
+    "externalIndependentApprovals": 0
+  },
+  "interpretation": {
+    "sourcePairState": "NON_OVERLAPPING_SAMPLE_SUPPORT_AVAILABLE_FOR_COMPLEMENTARY_FINDINGS",
+    "mayCountAsTwoDistinctFindingSources": true,
+    "mayCallIndependentReplication": false,
+    "mayPublishCanonicalWithoutScopeReview": false,
+    "reason": "공유 ESCS를 제외해도 각 finding에 별도 표본 근거가 남지만, 두 finding은 동일한 가설의 반복 검증이 아니며 canonical 전체 문구의 직접성은 아직 검토되지 않았다."
+  },
+  "nextGate": {
+    "name": "CANONICAL_CLAIM_TO_FINDING_SCOPE_AUDIT",
+    "entries": 120,
+    "action": "고위험 canonical 문장마다 BFI-2 위계 구조와 IPC 대인 구조가 실제 문구의 어느 부분을 지지하는지 구절 단위로 표시하고 과잉 해석을 hold한다."
+  }
+}

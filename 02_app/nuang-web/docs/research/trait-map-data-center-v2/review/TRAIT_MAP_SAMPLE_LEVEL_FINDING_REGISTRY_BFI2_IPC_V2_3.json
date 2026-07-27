@@ -1,0 +1,2847 @@
+{
+  "contractVersion": "nuang-trait-map-sample-level-finding-registry.v2.3",
+  "registryId": "TRAIT-MAP-SAMPLE-LEVEL-FINDING-REGISTRY-BFI2-IPC.2.3",
+  "status": "NON_OVERLAPPING_FINDING_SUPPORT_MAPPED",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "reviewerIdentity": {
+    "type": "internal_bibliographic_audit",
+    "id": "CODEX-INTERNAL-RESEARCH-AUDIT",
+    "isIndependentExternalReviewer": false,
+    "mayApprovePublication": false
+  },
+  "countingRules": [
+    "공유 ESCS 결과는 두 번 세지 않는다.",
+    "BFI-2 finding은 Study 3 Internet·student validation 표본으로 제한해 센다.",
+    "IPC finding은 비공유 Sample 2 MTurk 결과로 제한해 센다.",
+    "두 finding은 서로 다른 구성개념 부분을 보완하므로 같은 가설의 독립 반복 검증으로 부르지 않는다.",
+    "canonical 문장 전체가 두 finding의 범위를 넘지 않는지는 별도 독립 claim 검토가 필요하다."
+  ],
+  "findings": [
+    {
+      "findingId": "FND-BFI2-HIERARCHICAL-FACETS",
+      "sourceId": "SRC-BFI2-2017",
+      "findingScope": "넓은 Big Five 영역 아래 15개 facet을 둔 BFI-2의 위계 구조와 측정 특성",
+      "supportingStudySampleLinks": [
+        {
+          "study": "Study 3 Internet validation sample",
+          "datasetId": "DATASET-BFI2-2017-INTERNET-VALIDATION",
+          "sampleId": "SAMPLE-BFI2-2017-STUDY-3-INTERNET",
+          "sampleSize": 1000,
+          "sharedWithIpc2013": false,
+          "evidenceRole": "item·facet·domain 구조 및 측정 특성의 독립 검증"
+        },
+        {
+          "study": "Study 3 student validation sample",
+          "datasetId": "DATASET-BFI2-2017-STUDENT-VALIDATION",
+          "sampleId": "SAMPLE-BFI2-2017-STUDY-3-STUDENT",
+          "sampleSize": 470,
+          "sharedWithIpc2013": false,
+          "evidenceRole": "구조·수렴·재검사·자기-타인 일치의 별도 검증"
+        }
+      ],
+      "excludedSharedDatasetLinks": [
+        {
+          "study": "Study 1 ESCS",
+          "datasetId": "DATASET-ESCS",
+          "reason": "IPC 2013 Sample 3과 같은 community sample 계보이므로 독립성 계산에서 제외"
+        }
+      ],
+      "resultLocator": {
+        "url": "https://www.colby.edu/wp-content/uploads/2013/08/Soto_John_2017.pdf",
+        "location": "Study 3 Method; Tables 2-8; Figure 1; abstract"
+      },
+      "nonOverlappingSupportState": "confirmed"
+    },
+    {
+      "findingId": "FND-IPC-INTERPERSONAL-DISTINCTIONS",
+      "sourceId": "SRC-IPC-2013",
+      "findingScope": "Assertiveness·Enthusiasm·Compassion·Politeness가 대인관계 원형의 서로 다른 위치와 연결되는 구조",
+      "supportingStudySampleLinks": [
+        {
+          "study": "Sample 2 MTurk",
+          "datasetId": "DATASET-IPC-2013-MTURK",
+          "sampleId": "SAMPLE-IPC-2013-2-MTURK",
+          "sampleSize": 294,
+          "sharedWithBfi22017": false,
+          "evidenceRole": "별도 MTurk 표본에서 목표 구조와 관찰 구조의 높은 합치 확인",
+          "reportedOverallCongruence": 0.97
+        }
+      ],
+      "excludedSharedDatasetLinks": [
+        {
+          "study": "Sample 3 ESCS",
+          "datasetId": "DATASET-ESCS",
+          "reason": "BFI-2 2017 Study 1과 같은 community sample 계보이므로 독립성 계산에서 제외"
+        }
+      ],
+      "resultLocator": {
+        "url": "https://www.researchgate.net/publication/232926949_Unifying_the_Aspects_of_the_Big_Five_the_Interpersonal_Circumplex_and_Trait_Affiliation",
+        "location": "Method Sample 2; Results Tables 1-2 and 4; Discussion"
+      },
+      "nonOverlappingSupportState": "confirmed"
+    }
+  ],
+  "canonicalLinks": [
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-E-ER-C",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-E-ER-Q",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-I-ER-C",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-ATTENTION-SE-I-ER-Q",
+      "claimKey": ".scenario.general.aftermath.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-E-ER-C",
+      "claimKey": ".scenario.general.aftermath.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-E-ER-Q",
+      "claimKey": ".scenario.general.aftermath.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-I-ER-C",
+      "claimKey": ".scenario.general.aftermath.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-PROCESS-SE-I-ER-Q",
+      "claimKey": ".scenario.general.aftermath.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-E-ER-C",
+      "claimKey": ".scenario.general.aftermath.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-E-ER-Q",
+      "claimKey": ".scenario.general.aftermath.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-I-ER-C",
+      "claimKey": ".scenario.general.aftermath.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-RESPONSE-SE-I-ER-Q",
+      "claimKey": ".scenario.general.aftermath.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-COMMUNICATION-SE-E-ER-C",
+      "claimKey": ".scenario.general.aftermath.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-COMMUNICATION-SE-E-ER-Q",
+      "claimKey": ".scenario.general.aftermath.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-COMMUNICATION-SE-I-ER-C",
+      "claimKey": ".scenario.general.aftermath.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-AFTERMATH-COMMUNICATION-SE-I-ER-Q",
+      "claimKey": ".scenario.general.aftermath.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
+      "claimKey": ".scenario.general.new_encounter.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
+      "claimKey": ".scenario.general.new_encounter.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-ATTENTION-SE-I-OE-R",
+      "claimKey": ".scenario.general.new_encounter.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-ATTENTION-SE-I-OE-N",
+      "claimKey": ".scenario.general.new_encounter.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-PROCESS-SE-E-OE-R",
+      "claimKey": ".scenario.general.new_encounter.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-PROCESS-SE-E-OE-N",
+      "claimKey": ".scenario.general.new_encounter.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-PROCESS-SE-I-OE-R",
+      "claimKey": ".scenario.general.new_encounter.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-PROCESS-SE-I-OE-N",
+      "claimKey": ".scenario.general.new_encounter.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N",
+      "claimKey": ".scenario.general.new_encounter.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-COMMUNICATION-SE-E-OE-R",
+      "claimKey": ".scenario.general.new_encounter.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-COMMUNICATION-SE-E-OE-N",
+      "claimKey": ".scenario.general.new_encounter.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-COMMUNICATION-SE-I-OE-R",
+      "claimKey": ".scenario.general.new_encounter.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEW-ENCOUNTER-COMMUNICATION-SE-I-OE-N",
+      "claimKey": ".scenario.general.new_encounter.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-ATTENTION-SE-E",
+      "claimKey": ".scenario.general.group_participation.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-ATTENTION-SE-I",
+      "claimKey": ".scenario.general.group_participation.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-PROCESS-SE-E",
+      "claimKey": ".scenario.general.group_participation.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-PROCESS-SE-I",
+      "claimKey": ".scenario.general.group_participation.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "claimKey": ".scenario.general.group_participation.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-RESPONSE-SE-I",
+      "claimKey": ".scenario.general.group_participation.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.general.group_participation.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-GROUP-PARTICIPATION-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.general.group_participation.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-ATTENTION-RO-G",
+      "claimKey": ".scenario.general.disagreement.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-ATTENTION-RO-A",
+      "claimKey": ".scenario.general.disagreement.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-PROCESS-RO-G",
+      "claimKey": ".scenario.general.disagreement.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-PROCESS-RO-A",
+      "claimKey": ".scenario.general.disagreement.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-RESPONSE-RO-G",
+      "claimKey": ".scenario.general.disagreement.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-RESPONSE-RO-A",
+      "claimKey": ".scenario.general.disagreement.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.general.disagreement.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-DISAGREEMENT-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.general.disagreement.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "claimKey": ".scenario.general.support_requested.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "claimKey": ".scenario.general.support_requested.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "claimKey": ".scenario.general.support_requested.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "claimKey": ".scenario.general.support_requested.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "claimKey": ".scenario.general.support_requested.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "claimKey": ".scenario.general.support_requested.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.general.support_requested.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.general.support_requested.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-ATTENTION-SE-E",
+      "claimKey": ".scenario.general.need_expression.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-ATTENTION-SE-I",
+      "claimKey": ".scenario.general.need_expression.attention",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-E-RO-G",
+      "claimKey": ".scenario.general.need_expression.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-PROCESS-SE-I-RO-A",
+      "claimKey": ".scenario.general.need_expression.process",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-E-RO-G",
+      "claimKey": ".scenario.general.need_expression.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-RESPONSE-SE-I-RO-A",
+      "claimKey": ".scenario.general.need_expression.response",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.general.need_expression.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-GENERAL-NEED-EXPRESSION-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.general.need_expression.communication",
+      "riskDomains": ["none"],
+      "highRisk": false,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.disagreement.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.disagreement.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-PROCESS-RO-G",
+      "claimKey": ".scenario.family.disagreement.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-PROCESS-RO-A",
+      "claimKey": ".scenario.family.disagreement.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-RESPONSE-RO-G",
+      "claimKey": ".scenario.family.disagreement.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-RESPONSE-RO-A",
+      "claimKey": ".scenario.family.disagreement.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.disagreement.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-DISAGREEMENT-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.family.disagreement.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "claimKey": ".scenario.family.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "claimKey": ".scenario.family.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "claimKey": ".scenario.family.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "claimKey": ".scenario.family.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "claimKey": ".scenario.family.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "claimKey": ".scenario.family.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.family.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FAMILY-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.family.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-I-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-I-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-PROCESS-SE-E-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-PROCESS-SE-E-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-PROCESS-SE-I-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-PROCESS-SE-I-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-RESPONSE-SE-E-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-RESPONSE-SE-E-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-RESPONSE-SE-I-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-RESPONSE-SE-I-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-COMMUNICATION-SE-E-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-COMMUNICATION-SE-E-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-COMMUNICATION-SE-I-OE-R",
+      "claimKey": ".scenario.friend.new_encounter.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-NEW-ENCOUNTER-COMMUNICATION-SE-I-OE-N",
+      "claimKey": ".scenario.friend.new_encounter.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-E",
+      "claimKey": ".scenario.friend.group_participation.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-I",
+      "claimKey": ".scenario.friend.group_participation.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-PROCESS-SE-E",
+      "claimKey": ".scenario.friend.group_participation.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-PROCESS-SE-I",
+      "claimKey": ".scenario.friend.group_participation.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "claimKey": ".scenario.friend.group_participation.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-RESPONSE-SE-I",
+      "claimKey": ".scenario.friend.group_participation.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.friend.group_participation.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-GROUP-PARTICIPATION-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.friend.group_participation.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.disagreement.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-ATTENTION-RO-A",
+      "claimKey": ".scenario.friend.disagreement.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-PROCESS-RO-G",
+      "claimKey": ".scenario.friend.disagreement.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-PROCESS-RO-A",
+      "claimKey": ".scenario.friend.disagreement.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-RESPONSE-RO-G",
+      "claimKey": ".scenario.friend.disagreement.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-RESPONSE-RO-A",
+      "claimKey": ".scenario.friend.disagreement.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.disagreement.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-DISAGREEMENT-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.friend.disagreement.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "claimKey": ".scenario.friend.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "claimKey": ".scenario.friend.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "claimKey": ".scenario.friend.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "claimKey": ".scenario.friend.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "claimKey": ".scenario.friend.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "claimKey": ".scenario.friend.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.friend.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-FRIEND-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.friend.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-E",
+      "claimKey": ".scenario.partner.group_participation.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-I",
+      "claimKey": ".scenario.partner.group_participation.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-PROCESS-SE-E",
+      "claimKey": ".scenario.partner.group_participation.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-PROCESS-SE-I",
+      "claimKey": ".scenario.partner.group_participation.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-RESPONSE-SE-E",
+      "claimKey": ".scenario.partner.group_participation.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-RESPONSE-SE-I",
+      "claimKey": ".scenario.partner.group_participation.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.partner.group_participation.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-GROUP-PARTICIPATION-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.partner.group_participation.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.disagreement.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.disagreement.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-G",
+      "claimKey": ".scenario.partner.disagreement.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-PROCESS-RO-A",
+      "claimKey": ".scenario.partner.disagreement.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.partner.disagreement.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.disagreement.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-DISAGREEMENT-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.disagreement.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "claimKey": ".scenario.partner.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "claimKey": ".scenario.partner.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "claimKey": ".scenario.partner.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "claimKey": ".scenario.partner.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "claimKey": ".scenario.partner.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "claimKey": ".scenario.partner.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.partner.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PARTNER-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.partner.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-ATTENTION-SE-E",
+      "claimKey": ".scenario.person_of_interest.new_encounter.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-ATTENTION-SE-I",
+      "claimKey": ".scenario.person_of_interest.new_encounter.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-PROCESS-SE-E",
+      "claimKey": ".scenario.person_of_interest.new_encounter.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-PROCESS-SE-I",
+      "claimKey": ".scenario.person_of_interest.new_encounter.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-RESPONSE-SE-E",
+      "claimKey": ".scenario.person_of_interest.new_encounter.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-RESPONSE-SE-I",
+      "claimKey": ".scenario.person_of_interest.new_encounter.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.person_of_interest.new_encounter.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.person_of_interest.new_encounter.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-G",
+      "claimKey": ".scenario.person_of_interest.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-ATTENTION-RO-A",
+      "claimKey": ".scenario.person_of_interest.support_requested.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-G",
+      "claimKey": ".scenario.person_of_interest.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-PROCESS-RO-A",
+      "claimKey": ".scenario.person_of_interest.support_requested.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-G",
+      "claimKey": ".scenario.person_of_interest.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-RESPONSE-RO-A",
+      "claimKey": ".scenario.person_of_interest.support_requested.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.person_of_interest.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-SUPPORT-REQUESTED-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.person_of_interest.support_requested.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
+      "claimKey": ".scenario.person_of_interest.need_expression.attention",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
+      "claimKey": ".scenario.person_of_interest.need_expression.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-I",
+      "claimKey": ".scenario.person_of_interest.need_expression.process",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-E",
+      "claimKey": ".scenario.person_of_interest.need_expression.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-RESPONSE-SE-I",
+      "claimKey": ".scenario.person_of_interest.need_expression.response",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.person_of_interest.need_expression.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.person_of_interest.need_expression.communication",
+      "riskDomains": ["relationship_outcome"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-E",
+      "claimKey": ".scenario.work.group_participation.attention",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-I",
+      "claimKey": ".scenario.work.group_participation.attention",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-PROCESS-SE-E",
+      "claimKey": ".scenario.work.group_participation.process",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-PROCESS-SE-I",
+      "claimKey": ".scenario.work.group_participation.process",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-M",
+      "claimKey": ".scenario.work.group_participation.response",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-I-SM-K",
+      "claimKey": ".scenario.work.group_participation.response",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-COMMUNICATION-SE-E",
+      "claimKey": ".scenario.work.group_participation.communication",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-COMMUNICATION-SE-I",
+      "claimKey": ".scenario.work.group_participation.communication",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-ATTENTION-RO-G",
+      "claimKey": ".scenario.work.disagreement.attention",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-ATTENTION-RO-A",
+      "claimKey": ".scenario.work.disagreement.attention",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-PROCESS-RO-G",
+      "claimKey": ".scenario.work.disagreement.process",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-PROCESS-RO-A",
+      "claimKey": ".scenario.work.disagreement.process",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-K",
+      "claimKey": ".scenario.work.disagreement.response",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-M",
+      "claimKey": ".scenario.work.disagreement.response",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-COMMUNICATION-RO-G",
+      "claimKey": ".scenario.work.disagreement.communication",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    },
+    {
+      "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-COMMUNICATION-RO-A",
+      "claimKey": ".scenario.work.disagreement.communication",
+      "riskDomains": ["work_performance"],
+      "highRisk": true,
+      "findingRefs": [
+        "FND-BFI2-HIERARCHICAL-FACETS",
+        "FND-IPC-INTERPERSONAL-DISTINCTIONS"
+      ],
+      "nonOverlappingDatasetSupportAvailable": true,
+      "independentReplicationOfSameClaim": false,
+      "evidenceRole": "complementary_construct_support_not_same_claim_replication",
+      "canonicalWordingScopeState": "pending_independent_claim_scope_review",
+      "publicationState": "research_only"
+    }
+  ]
+}

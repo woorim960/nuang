@@ -2,7 +2,14 @@ import { expect, test } from "@playwright/test";
 
 test("home renders the NUANG mobile shell", async ({ page }) => {
   await page.goto("/home");
-  await expect(page.getByRole("heading", { name: /안녕하세요/ })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "홈", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "3분이면 내 성향의 첫 단서를 만나요",
+    }),
+  ).toBeVisible();
   await expect(
     page.getByRole("navigation", { name: "하단 주요 메뉴" }),
   ).toBeVisible();
@@ -14,7 +21,7 @@ test("login keeps required consent before social auth entry", async ({
   await page.goto("/login?next=/feed");
 
   await expect(
-    page.getByRole("heading", { name: "뉴앙에 로그인" }),
+    page.getByRole("heading", { name: "로그인하고 뉴앙을 이어가요" }),
   ).toBeVisible();
 
   const kakaoButton = page.getByRole("button", { name: "카카오로 계속하기" });
@@ -22,17 +29,14 @@ test("login keeps required consent before social auth entry", async ({
 
   await expect(kakaoButton).toBeDisabled();
   await expect(googleButton).toBeDisabled();
-  await expect(page.getByText("네이버")).toBeVisible();
-  await expect(page.getByText("준비 중")).toBeVisible();
-
-  await page.getByLabel("이용약관에 동의합니다").check();
-  await page.getByLabel("필수 개인정보 처리에 동의합니다").check();
+  await page.getByLabel("이용약관에 동의해요").check();
+  await page.getByLabel("개인정보 처리방침에 동의해요").check();
 
   await expect(kakaoButton).toBeEnabled();
   await expect(googleButton).toBeEnabled();
   await expect(
-    page.getByText("원하는 계정으로 안전하게 연결할 수 있어요."),
-  ).toBeVisible();
+    page.getByText("필수 항목에 동의하면 로그인할 수 있어요."),
+  ).not.toBeVisible();
 });
 
 test("auth callback redirects safely without an OAuth code", async ({

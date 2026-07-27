@@ -21,18 +21,18 @@
 .eyebrow {
   margin: 0;
   color: var(--primary);
-  font-size: 0.8125rem;
-  font-weight: 680;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: 0.01em;
 }
 
 .setupTitle,
 .centerTitle {
   margin: 0.55rem 0 0;
-  font-size: clamp(1.75rem, 7vw, 2.15rem);
-  font-weight: 720;
+  font-size: var(--nu-text-fluid-display-sm);
+  font-weight: var(--nu-weight-bold);
   letter-spacing: -0.035em;
-  line-height: 1.3;
+  line-height: var(--nu-leading-title);
   text-wrap: balance;
 }
 
@@ -44,8 +44,8 @@
 .centerCopy {
   margin: 0.9rem 0 0;
   color: var(--muted);
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body);
   text-wrap: balance;
 }
 
@@ -68,8 +68,8 @@
 
 .privacyNotice p {
   margin: 0;
-  font-size: 0.8125rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .setupFields {
@@ -83,8 +83,8 @@
   display: grid;
   gap: 0.45rem;
   color: var(--foreground);
-  font-size: 0.8125rem;
-  font-weight: 620;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
 }
 
 .textInput,
@@ -111,9 +111,9 @@
 .textarea {
   min-height: 92px;
   padding: 0.75rem 0.85rem;
-  font-size: 0.875rem;
-  font-weight: 480;
-  line-height: 1.55;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-medium);
+  line-height: var(--nu-leading-body-sm);
   resize: vertical;
 }
 
@@ -137,9 +137,9 @@
   gap: 0.7rem;
   padding: 0.75rem 0;
   color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 520;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-medium);
+  line-height: var(--nu-leading-body-sm);
   cursor: pointer;
 }
 
@@ -161,8 +161,8 @@
   border: 0;
   border-radius: 13px;
   font: inherit;
-  font-size: 0.875rem;
-  font-weight: 680;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
@@ -215,8 +215,8 @@
   border-radius: 14px;
   background: var(--surface-soft);
   color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .centerStage .primaryAction {
@@ -236,17 +236,17 @@
 .itemRecall p {
   margin: 0;
   color: var(--primary);
-  font-size: 0.8125rem;
-  font-weight: 640;
-  line-height: 1.45;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
+  line-height: var(--nu-leading-label);
 }
 
 .itemRecall h1 {
   margin: 0.4rem 0 0;
-  font-size: 1.2rem;
-  font-weight: 650;
+  font-size: var(--nu-text-title);
+  font-weight: var(--nu-weight-semibold);
   letter-spacing: -0.02em;
-  line-height: 1.45;
+  line-height: var(--nu-leading-label);
 }
 
 .itemRecall span {
@@ -256,15 +256,15 @@
   border-radius: 999px;
   background: color-mix(in srgb, var(--primary) 7%, var(--surface));
   color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 570;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-medium);
 }
 
 .probeGuide {
   margin: 1rem 0 0;
   color: var(--muted);
-  font-size: 0.8125rem;
-  line-height: 1.55;
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .probeFields {
@@ -282,15 +282,15 @@
 
 .probeLabel small {
   color: var(--muted);
-  font-size: 0.6875rem;
-  font-weight: 520;
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-medium);
 }
 
 .probeQuestion {
   color: var(--muted);
-  font-size: 0.75rem;
-  font-weight: 470;
-  line-height: 1.5;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-medium);
+  line-height: var(--nu-leading-label);
 }
 
 .detailPanel {
@@ -301,8 +301,8 @@
 .detailPanel summary {
   padding: 1rem 0;
   color: var(--muted);
-  font-size: 0.8125rem;
-  font-weight: 620;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
   cursor: pointer;
   list-style-position: inside;
 }
@@ -327,8 +327,8 @@
   gap: 0.65rem;
   padding: 0.45rem 0.2rem;
   color: var(--foreground);
-  font-size: 0.8125rem;
-  font-weight: 520;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-medium);
   cursor: pointer;
 }
 
@@ -353,14 +353,14 @@
 
 .sessionSummary dt {
   color: var(--muted);
-  font-size: 0.6875rem;
+  font-size: var(--nu-text-caption);
 }
 
 .sessionSummary dd {
   overflow: hidden;
   margin: 0.25rem 0 0;
-  font-size: 0.75rem;
-  font-weight: 650;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -369,8 +369,8 @@
   min-height: 2.5rem;
   margin: 0.65rem 0 0;
   color: var(--conversation);
-  font-size: 0.75rem;
-  line-height: 1.45;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-label);
 }
 
 @media (min-width: 640px) {

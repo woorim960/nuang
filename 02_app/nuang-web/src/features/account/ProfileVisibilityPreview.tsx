@@ -2,7 +2,6 @@
 
 import {
   ChevronDown,
-  Eye,
   LockKeyhole,
   RefreshCw,
   ShieldCheck,
@@ -157,7 +156,6 @@ export function ProfileVisibilityPreview() {
       <div aria-live="polite" className={styles.statePanel} role="status">
         <span className={styles.loader} />
         <strong>공개 정보를 확인하고 있어요</strong>
-        <p>다른 사람에게 보이는 현재 설정을 안전하게 불러옵니다.</p>
       </div>
     );
   }
@@ -203,13 +201,9 @@ export function ProfileVisibilityPreview() {
         aria-labelledby="public-information-title"
         className={styles.group}
       >
-        <div className={styles.groupIntro}>
-          <Eye aria-hidden="true" size={19} strokeWidth={1.7} />
-          <span>
-            <h2 id="public-information-title">공개 정보</h2>
-            <p>다른 사람이 내 프로필에서 볼 수 있는 정보를 정해요.</p>
-          </span>
-        </div>
+        <h2 className="sr-only" id="public-information-title">
+          공개 정보
+        </h2>
 
         <div className={styles.fixedRow}>
           <span>
@@ -252,7 +246,6 @@ export function ProfileVisibilityPreview() {
           <LockKeyhole aria-hidden="true" size={18} strokeWidth={1.7} />
           <span>
             <strong>항상 비공개로 보호되는 정보</strong>
-            <small>어떤 설정을 골라도 공개하지 않아요.</small>
           </span>
           <ChevronDown aria-hidden="true" size={18} />
         </summary>

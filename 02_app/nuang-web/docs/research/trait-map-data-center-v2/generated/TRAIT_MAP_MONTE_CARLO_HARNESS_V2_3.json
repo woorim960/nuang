@@ -1,0 +1,683 @@
+{
+  "contractVersion": "nuang-trait-map-monte-carlo-harness.v2.3",
+  "reportId": "TRAIT-MAP-MONTE-CARLO-HARNESS.2.3",
+  "status": "ENGINEERING_HARNESS_SMOKE_TEST_COMPLETE",
+  "publicationState": "research_only",
+  "generatedAt": "2026-07-24T00:00:00.000Z",
+  "interpretationBoundary": {
+    "isEmpiricalValidation": false,
+    "isSampleSizeApproval": false,
+    "isFactorModelRecoveryStudy": false,
+    "permittedConclusion": "고정 seed로 5범주·결측·역문항·경계 추가 문항 흐름이 재현 가능하게 실행되고 결과 형식이 잠겼다.",
+    "prohibitedConclusions": [
+      "현재 5축 구조가 실제 사람에게 타당하다.",
+      "특정 표본 수가 충분하다.",
+      "추가 질문 알고리즘이 운영 사용에 승인됐다.",
+      "모의 정확도가 실제 정확도다."
+    ]
+  },
+  "measurementAssets": {
+    "baseReleaseId": "NUANG-CORE-BETA-1.0",
+    "baseItemCount": 60,
+    "baseAxisItemCounts": { "ER": 12, "OE": 18, "RO": 6, "SE": 12, "SM": 12 },
+    "followUpStatus": "HYPOTHETICAL_RESEARCH_ONLY_NOT_RELEASED",
+    "followUpItemCounts": { "SE": 6, "OE": 6, "RO": 6, "SM": 6, "ER": 6 },
+    "followUpItems": {
+      "SE": [
+        {
+          "itemRevisionId": "NX-019",
+          "domainId": "SE",
+          "facetId": "SE-AI",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 1
+        },
+        {
+          "itemRevisionId": "NX-088",
+          "domainId": "SE",
+          "facetId": "SE-AI",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 2
+        },
+        {
+          "itemRevisionId": "NX-026",
+          "domainId": "SE",
+          "facetId": "SE-AI",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 3
+        },
+        {
+          "itemRevisionId": "NX-097",
+          "domainId": "SE",
+          "facetId": "SE-AI",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 4
+        },
+        {
+          "itemRevisionId": "NX-036",
+          "domainId": "SE",
+          "facetId": "SE-AI",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 5
+        },
+        {
+          "itemRevisionId": "NX-121",
+          "domainId": "SE",
+          "facetId": "SE-AI",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 6
+        }
+      ],
+      "OE": [
+        {
+          "itemRevisionId": "NX-002",
+          "domainId": "OE",
+          "facetId": "OE-AE",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 1
+        },
+        {
+          "itemRevisionId": "NX-083",
+          "domainId": "OE",
+          "facetId": "OE-AE",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 2
+        },
+        {
+          "itemRevisionId": "NX-028",
+          "domainId": "OE",
+          "facetId": "OE-AE",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 3
+        },
+        {
+          "itemRevisionId": "NX-117",
+          "domainId": "OE",
+          "facetId": "OE-AE",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 4
+        },
+        {
+          "itemRevisionId": "NX-096",
+          "domainId": "OE",
+          "facetId": "OE-AE",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 5
+        },
+        {
+          "itemRevisionId": "NX-135",
+          "domainId": "OE",
+          "facetId": "OE-AE",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 6
+        }
+      ],
+      "RO": [
+        {
+          "itemRevisionId": "NX-011",
+          "domainId": "RO",
+          "facetId": "RO-EC",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 1
+        },
+        {
+          "itemRevisionId": "NX-013",
+          "domainId": "RO",
+          "facetId": "RO-EC",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 2
+        },
+        {
+          "itemRevisionId": "NX-044",
+          "domainId": "RO",
+          "facetId": "RO-EC",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 3
+        },
+        {
+          "itemRevisionId": "NX-017",
+          "domainId": "RO",
+          "facetId": "RO-EC",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 4
+        },
+        {
+          "itemRevisionId": "NX-054",
+          "domainId": "RO",
+          "facetId": "RO-EC",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 5
+        },
+        {
+          "itemRevisionId": "NX-018",
+          "domainId": "RO",
+          "facetId": "RO-EC",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 6
+        }
+      ],
+      "SM": [
+        {
+          "itemRevisionId": "NX-008",
+          "domainId": "SM",
+          "facetId": "SM-EP",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 1
+        },
+        {
+          "itemRevisionId": "NX-014",
+          "domainId": "SM",
+          "facetId": "SM-EP",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 2
+        },
+        {
+          "itemRevisionId": "NX-123",
+          "domainId": "SM",
+          "facetId": "SM-EP",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 3
+        },
+        {
+          "itemRevisionId": "NX-045",
+          "domainId": "SM",
+          "facetId": "SM-EP",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 4
+        },
+        {
+          "itemRevisionId": "NX-129",
+          "domainId": "SM",
+          "facetId": "SM-EP",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 5
+        },
+        {
+          "itemRevisionId": "NX-119",
+          "domainId": "SM",
+          "facetId": "SM-EP",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 6
+        }
+      ],
+      "ER": [
+        {
+          "itemRevisionId": "NX-076",
+          "domainId": "ER",
+          "facetId": "ER-IR",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 1
+        },
+        {
+          "itemRevisionId": "NX-012",
+          "domainId": "ER",
+          "facetId": "ER-IR",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 2
+        },
+        {
+          "itemRevisionId": "NX-103",
+          "domainId": "ER",
+          "facetId": "ER-IR",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 3
+        },
+        {
+          "itemRevisionId": "NX-081",
+          "domainId": "ER",
+          "facetId": "ER-IR",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 4
+        },
+        {
+          "itemRevisionId": "NX-105",
+          "domainId": "ER",
+          "facetId": "ER-IR",
+          "keyedDirection": "HIGH",
+          "scoringKey": "direct",
+          "followUpOrder": 5
+        },
+        {
+          "itemRevisionId": "NX-146",
+          "domainId": "ER",
+          "facetId": "ER-IR",
+          "keyedDirection": "LOW",
+          "scoringKey": "reverse",
+          "followUpOrder": 6
+        }
+      ]
+    }
+  },
+  "simulationConfig": {
+    "harnessVersion": "nuang-trait-map-monte-carlo-harness.v2.3",
+    "seed": 23072401,
+    "replicationsPerCell": 20,
+    "candidateSampleSizes": [240, 480, 960],
+    "responseCategories": 5,
+    "thresholds": [-1.1, -0.35, 0.35, 1.1],
+    "boundaryScoreThreshold": 0.18,
+    "minimumAnsweredRatioPerAxis": 0.5,
+    "followUpBatchSizes": [3, 6],
+    "scenarios": [
+      {
+        "id": "REFERENCE",
+        "loading": 0.7,
+        "facetAxisCorrelation": 0.75,
+        "reverseMethodEffect": 0.08,
+        "unsureProbability": 0.03,
+        "thresholdScale": 1,
+        "description": "중간 신호·낮은 방법 효과·낮은 판단 어려움"
+      },
+      {
+        "id": "WEAK_SIGNAL",
+        "loading": 0.5,
+        "facetAxisCorrelation": 0.6,
+        "reverseMethodEffect": 0.14,
+        "unsureProbability": 0.07,
+        "thresholdScale": 1.08,
+        "description": "약한 신호·높은 판단 어려움"
+      },
+      {
+        "id": "REVERSE_METHOD_STRESS",
+        "loading": 0.64,
+        "facetAxisCorrelation": 0.7,
+        "reverseMethodEffect": 0.32,
+        "unsureProbability": 0.05,
+        "thresholdScale": 1,
+        "description": "역문항 방법 효과가 큰 스트레스 조건"
+      }
+    ]
+  },
+  "metricDefinitions": {
+    "baseLatentCorrelation": "축별 단순 채점 평균과 생성에 사용한 잠재 축 사이 Pearson 상관의 5축 평균",
+    "baseClassificationAccuracy": "0을 기준으로 한 잠재 방향과 단순 채점 방향 일치율",
+    "boundaryActivationRate": "단순 채점 절댓값이 0.18 미만인 축 비율",
+    "postFollowUpClassificationAccuracy": "경계 축에 연구 후보 6문항을 추가한 뒤 전체 방향 일치율",
+    "unresolvedAfterThreeRate": "추가 3문항 뒤에도 절댓값이 0.18 미만인 경계 축 비율",
+    "unresolvedAfterFollowUpRate": "추가 6문항 뒤에도 절댓값이 0.18 미만인 축 비율",
+    "unsureRate": "생성된 기본 문항 중 판단 어려움으로 처리된 비율"
+  },
+  "cellResults": [
+    {
+      "scenarioId": "REFERENCE",
+      "sampleSize": 240,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.8602,
+          "p10": 0.8487,
+          "p90": 0.8722
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.8321,
+          "p10": 0.8203,
+          "p90": 0.8436
+        },
+        "boundaryActivationRate": {
+          "mean": 0.3134,
+          "p10": 0.2953,
+          "p90": 0.3342
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.8397,
+          "p10": 0.8302,
+          "p90": 0.8482
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8507,
+          "p10": 0.8251,
+          "p90": 0.8712
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.7921,
+          "p10": 0.7682,
+          "p90": 0.8236
+        },
+        "unsureRate": { "mean": 0.0299, "p10": 0.0282, "p90": 0.0314 }
+      }
+    },
+    {
+      "scenarioId": "REFERENCE",
+      "sampleSize": 480,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.8592,
+          "p10": 0.8532,
+          "p90": 0.8656
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.8323,
+          "p10": 0.8206,
+          "p90": 0.8416
+        },
+        "boundaryActivationRate": {
+          "mean": 0.3118,
+          "p10": 0.2995,
+          "p90": 0.3238
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.8418,
+          "p10": 0.8357,
+          "p90": 0.8477
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8474,
+          "p10": 0.8275,
+          "p90": 0.8659
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.7877,
+          "p10": 0.7645,
+          "p90": 0.815
+        },
+        "unsureRate": { "mean": 0.0299, "p10": 0.0285, "p90": 0.0317 }
+      }
+    },
+    {
+      "scenarioId": "REFERENCE",
+      "sampleSize": 960,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.8615,
+          "p10": 0.8564,
+          "p90": 0.8678
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.8356,
+          "p10": 0.8313,
+          "p90": 0.8413
+        },
+        "boundaryActivationRate": {
+          "mean": 0.3111,
+          "p10": 0.3041,
+          "p90": 0.3184
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.8439,
+          "p10": 0.8376,
+          "p90": 0.8501
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8465,
+          "p10": 0.837,
+          "p90": 0.8566
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.785,
+          "p10": 0.7737,
+          "p90": 0.7948
+        },
+        "unsureRate": { "mean": 0.03, "p10": 0.0292, "p90": 0.0311 }
+      }
+    },
+    {
+      "scenarioId": "WEAK_SIGNAL",
+      "sampleSize": 240,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.7227,
+          "p10": 0.7052,
+          "p90": 0.7357
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.7617,
+          "p10": 0.7463,
+          "p90": 0.7772
+        },
+        "boundaryActivationRate": {
+          "mean": 0.4247,
+          "p10": 0.4117,
+          "p90": 0.4371
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.7769,
+          "p10": 0.7624,
+          "p90": 0.7898
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8575,
+          "p10": 0.8395,
+          "p90": 0.875
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.8036,
+          "p10": 0.7839,
+          "p90": 0.8182
+        },
+        "unsureRate": { "mean": 0.0698, "p10": 0.067, "p90": 0.0724 }
+      }
+    },
+    {
+      "scenarioId": "WEAK_SIGNAL",
+      "sampleSize": 480,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.7194,
+          "p10": 0.7033,
+          "p90": 0.7339
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.7567,
+          "p10": 0.7399,
+          "p90": 0.766
+        },
+        "boundaryActivationRate": {
+          "mean": 0.4272,
+          "p10": 0.419,
+          "p90": 0.4381
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.7725,
+          "p10": 0.7635,
+          "p90": 0.7805
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8576,
+          "p10": 0.845,
+          "p90": 0.8747
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.8055,
+          "p10": 0.7913,
+          "p90": 0.8267
+        },
+        "unsureRate": { "mean": 0.0698, "p10": 0.0678, "p90": 0.0713 }
+      }
+    },
+    {
+      "scenarioId": "WEAK_SIGNAL",
+      "sampleSize": 960,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.724,
+          "p10": 0.7163,
+          "p90": 0.7314
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.7577,
+          "p10": 0.7524,
+          "p90": 0.7678
+        },
+        "boundaryActivationRate": {
+          "mean": 0.4248,
+          "p10": 0.417,
+          "p90": 0.4329
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.7743,
+          "p10": 0.7654,
+          "p90": 0.7819
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8599,
+          "p10": 0.8495,
+          "p90": 0.8664
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.8049,
+          "p10": 0.7933,
+          "p90": 0.8152
+        },
+        "unsureRate": { "mean": 0.0703, "p10": 0.069, "p90": 0.0715 }
+      }
+    },
+    {
+      "scenarioId": "REVERSE_METHOD_STRESS",
+      "sampleSize": 240,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": { "mean": 0.82, "p10": 0.8094, "p90": 0.8327 },
+        "baseClassificationAccuracy": {
+          "mean": 0.81,
+          "p10": 0.7925,
+          "p90": 0.8244
+        },
+        "boundaryActivationRate": {
+          "mean": 0.3323,
+          "p10": 0.3092,
+          "p90": 0.3489
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.8221,
+          "p10": 0.8064,
+          "p90": 0.8376
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.847,
+          "p10": 0.825,
+          "p90": 0.8652
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.7744,
+          "p10": 0.7363,
+          "p90": 0.7946
+        },
+        "unsureRate": { "mean": 0.0501, "p10": 0.0474, "p90": 0.0521 }
+      }
+    },
+    {
+      "scenarioId": "REVERSE_METHOD_STRESS",
+      "sampleSize": 480,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.8187,
+          "p10": 0.812,
+          "p90": 0.8234
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.8082,
+          "p10": 0.8009,
+          "p90": 0.8165
+        },
+        "boundaryActivationRate": {
+          "mean": 0.3376,
+          "p10": 0.3253,
+          "p90": 0.3484
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.8182,
+          "p10": 0.8108,
+          "p90": 0.8239
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8464,
+          "p10": 0.83,
+          "p90": 0.8611
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.7846,
+          "p10": 0.764,
+          "p90": 0.8018
+        },
+        "unsureRate": { "mean": 0.0498, "p10": 0.0485, "p90": 0.0513 }
+      }
+    },
+    {
+      "scenarioId": "REVERSE_METHOD_STRESS",
+      "sampleSize": 960,
+      "replications": 20,
+      "metrics": {
+        "baseLatentCorrelation": {
+          "mean": 0.8209,
+          "p10": 0.817,
+          "p90": 0.8237
+        },
+        "baseClassificationAccuracy": {
+          "mean": 0.8111,
+          "p10": 0.8062,
+          "p90": 0.8193
+        },
+        "boundaryActivationRate": {
+          "mean": 0.3351,
+          "p10": 0.3284,
+          "p90": 0.3415
+        },
+        "postFollowUpClassificationAccuracy": {
+          "mean": 0.8199,
+          "p10": 0.8137,
+          "p90": 0.8263
+        },
+        "unresolvedAfterThreeRate": {
+          "mean": 0.8477,
+          "p10": 0.8352,
+          "p90": 0.8574
+        },
+        "unresolvedAfterFollowUpRate": {
+          "mean": 0.7846,
+          "p10": 0.7716,
+          "p90": 0.7952
+        },
+        "unsureRate": { "mean": 0.0501, "p10": 0.0484, "p90": 0.0517 }
+      }
+    }
+  ],
+  "automatedInvariants": {
+    "baseItemCountIs60": true,
+    "eachAxisHasSixFollowUpItems": true,
+    "followUpDirectionBalanced": true,
+    "resultCellCount": 9,
+    "nonFiniteMetricCount": 0
+  },
+  "nextGate": {
+    "name": "EXTERNAL_STATISTICAL_ENGINE_RECOVERY_STUDY",
+    "requirements": [
+      "순서형 CFA·ESEM·IRT를 지원하는 검증된 통계 엔진과 버전을 고정한다.",
+      "10세부 성향·5축·부분 위계·방법 요인의 자료 생성과 모형 회수를 분리 구현한다.",
+      "편향·표준오차·수렴·coverage·모형 선택 오류·DIF 탐지력 기준을 사전 등록한다.",
+      "개발·확인·재검사·집단별 holdout 손실을 포함해 표본 범위를 결정한다."
+    ]
+  }
+}

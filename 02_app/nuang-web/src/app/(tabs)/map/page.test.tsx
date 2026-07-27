@@ -29,8 +29,8 @@ describe("MapPage", () => {
       screen.getByRole("heading", { name: "성향지도" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("나와 궁금한 사람의 성향을 한곳에서 알아봐요."),
-    ).toBeInTheDocument();
+      screen.queryByText("나와 궁금한 사람의 성향을 한곳에서 알아봐요."),
+    ).not.toBeInTheDocument();
     expect(
       await screen.findByRole("heading", { name: "누구의 성향이 궁금한가요?" }),
     ).toBeInTheDocument();
@@ -54,10 +54,7 @@ describe("MapPage", () => {
     );
     expect(screen.getByTestId("selected-code")).toHaveTextContent("ENAKQ");
     expect(
-      screen.getByText("이 코드가 어떤 생각과 행동으로 이어지는지 살펴보세요."),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("궁금한 사람의 코드는 아래에서 직접 조합할 수 있어요."),
+      screen.getByRole("heading", { name: "코드 조합해 보기" }),
     ).toBeInTheDocument();
     expect(screen.queryByText("TVOAE")).not.toBeInTheDocument();
   });
@@ -71,7 +68,7 @@ describe("MapPage", () => {
 
     expect(screen.getByTestId("selected-code")).toHaveTextContent("INAKQ");
     expect(
-      screen.getAllByRole("heading", { name: "고요한 마음 지휘자" }),
+      screen.getAllByRole("heading", { name: "마음과 가능성을 살피는 안내자" }),
     ).toHaveLength(2);
     const detailLinks = screen.getAllByRole("link", {
       name: "상세 성향지도 보기",
@@ -90,11 +87,13 @@ describe("MapPage", () => {
       }),
     );
 
-    await user.click(screen.getByRole("button", { name: "1번째 I 혼자" }));
+    await user.click(
+      screen.getByRole("button", { name: "1번째 I 내향형" }),
+    );
 
     expect(screen.getByTestId("selected-code")).toHaveTextContent("INAKQ");
     expect(
-      screen.getAllByRole("heading", { name: "고요한 마음 지휘자" }),
+      screen.getAllByRole("heading", { name: "마음과 가능성을 살피는 안내자" }),
     ).toHaveLength(2);
   });
 
@@ -104,12 +103,12 @@ describe("MapPage", () => {
 
     await user.type(
       screen.getByRole("searchbox", { name: "코드 또는 역할 이름 검색" }),
-      "마음결",
+      "경청자",
     );
 
     expect(
       screen.getByRole("button", {
-        name: "IRAMQ 마음결을 걷는 동행가 살펴보기",
+        name: "IRAMQ 마음 변화를 듣는 경청자 살펴보기",
       }),
     ).toBeInTheDocument();
     expect(
