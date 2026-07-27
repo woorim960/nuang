@@ -36,6 +36,109 @@ describe("traitMapCustomerGuideSchema", () => {
     }
   });
 
+  it("edits every generated guide into the ENAKQ customer-facing pattern", () => {
+    const codes = getPublishedTraitMapCustomerGuideCodes().filter(
+      (code) => code !== "ENAKQ",
+    );
+    const internalPhrases = [
+      "데이터센터",
+      "원장",
+      "인지 인터뷰",
+      "연구 단계",
+      "조합 가설",
+      "코드만으로",
+      "데이터 계보",
+      "정량 파일럿",
+      "claim",
+      "상속하고",
+    ];
+    const oldGenericSectionTitles = [
+      "먼저 나타나는 모습",
+      "생각이 이어지는 방식",
+      "실제로 보이는 행동",
+    ];
+
+    for (const code of codes) {
+      const guide = getPublishedTraitMapCustomerGuide(code);
+      expect(guide, code).not.toBeNull();
+      const paragraphs =
+        guide?.chapters.flatMap((chapter) =>
+          chapter.sections.flatMap((section) => section.paragraphs),
+        ) ?? [];
+      const copy = paragraphs.join(" ");
+      const formalSentences =
+        copy
+          .match(/[^.!?]*[가-힣]다[.!?]/g)
+          ?.map((sentence) => sentence.trim()) ?? [];
+      const formalEndingCount = formalSentences.length;
+
+      expect(
+        guide?.chapters.every((chapter) => chapter.sections.length >= 3),
+        `${code} should use three or more meaningful sections per chapter: ${
+          guide?.chapters
+            .filter((chapter) => chapter.sections.length < 3)
+            .map((chapter) => `${chapter.number}:${chapter.sections.length}`)
+            .join(", ") ?? ""
+        }`,
+      ).toBe(true);
+      expect(
+        guide?.chapters[2].sections.map((section) =>
+          section.title.slice(0, 1),
+        ),
+        `${code} should explain all five letters separately`,
+      ).toEqual(code.split(""));
+      expect(
+        internalPhrases.filter((phrase) => copy.includes(phrase)),
+        `${code} still exposes internal research copy`,
+      ).toEqual([]);
+      expect(
+        guide?.chapters
+          .flatMap((chapter) =>
+            chapter.sections.map((section) => section.title),
+          )
+          .filter((title) => oldGenericSectionTitles.includes(title)),
+        `${code} still uses generic source-section titles`,
+      ).toEqual([]);
+      expect(
+        formalEndingCount,
+        `${code} still contains source-style '-다' sentences: ${formalSentences
+          .slice(0, 8)
+          .join(" / ")}`,
+      ).toBe(0);
+
+      const normalizedParagraphs = paragraphs.map((paragraph) =>
+        paragraph.replace(/[A-Z]{5}/g, "").replace(/[^가-힣a-zA-Z0-9]/g, ""),
+      );
+      expect(
+        new Set(normalizedParagraphs).size,
+        `${code} contains repeated customer-facing paragraphs`,
+      ).toBe(normalizedParagraphs.length);
+
+      const meaningfulSentenceSignatures = paragraphs
+        .flatMap(
+          (paragraph) =>
+            paragraph.match(/[^.!?]+[.!?]?/g)?.map((sentence) => sentence) ??
+            [],
+        )
+        .map((sentence) =>
+          sentence
+            .replace(/[A-Z]{5}/g, "")
+            .replace(/[^가-힣a-zA-Z0-9]/g, ""),
+        )
+        .filter((sentence) => sentence.length >= 30);
+      expect(
+        new Set(meaningfulSentenceSignatures).size,
+        `${code} contains repeated explanatory sentences: ${meaningfulSentenceSignatures
+          .filter(
+            (sentence, sentenceIndex, all) =>
+              all.indexOf(sentence) !== sentenceIndex,
+          )
+          .slice(0, 4)
+          .join(", ")}`,
+      ).toBe(meaningfulSentenceSignatures.length);
+    }
+  });
+
   it("rejects a guide when a relationship chapter is replaced", () => {
     const guide = structuredClone(enakqCustomerGuideV2);
     guide.chapters[9].slot = "daily_life";
