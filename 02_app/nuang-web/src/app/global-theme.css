@@ -56,9 +56,14 @@
   --nu-neutral-150: #ecebf0;
   --nu-neutral-200: #e3e1e7;
   --nu-neutral-300: #d2cfd8;
-  --nu-neutral-400: #aaa6b1;
-  --nu-neutral-500: #85818c;
-  --nu-neutral-600: #6f6b76;
+  /*
+   * 읽기용 중립색은 흰 배경에서 WCAG AA(4.5:1) 이상을 유지합니다.
+   * 화면의 부드러운 인상은 밝은 배경·선 토큰으로 유지하고,
+   * 작은 글자와 비활성 메뉴는 흐릿해지지 않도록 분리합니다.
+   */
+  --nu-neutral-400: #76717d;
+  --nu-neutral-500: #69646f;
+  --nu-neutral-600: #5f5a65;
   --nu-neutral-700: #55515b;
   --nu-neutral-800: #37343d;
   --nu-neutral-900: #222028;
@@ -98,7 +103,7 @@
   --nu-info-50: #eef5ff;
   --nu-info-100: #dceaff;
   --nu-info-300: #90b9eb;
-  --nu-info-500: #4b89d0;
+  --nu-info-500: #3977bd;
   --nu-info-700: #2f6daf;
 
   --nu-warm-50: #fff2ed;
@@ -340,5 +345,20 @@
     --nu-color-text-muted: var(--nu-neutral-700);
     --nu-color-text-subtle: var(--nu-neutral-600);
     --nu-color-border: var(--nu-neutral-300);
+  }
+}
+
+/*
+ * iOS Safari는 16px보다 작은 입력 요소에 포커스할 때 화면을 자동 확대합니다.
+ * 모바일의 모든 실제 입력 화면에서 레이아웃이 흔들리지 않도록 최소 크기를
+ * 테마 수준에서 보장합니다.
+ */
+@media (max-width: 768px) {
+  input:not([type="checkbox"]):not([type="radio"]):not([type="range"]):not(
+      [type="color"]
+    ),
+  textarea,
+  select {
+    font-size: 1rem !important;
   }
 }

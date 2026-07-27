@@ -6,20 +6,12 @@ import { createGateCAssignmentProof } from "@/features/research/gate-c/gate-c-se
 import { gateCParticipantDefinitions } from "@/features/research/gate-c/gate-c-study-fixture";
 
 const routeMocks = vi.hoisted(() => ({
-  refreshAnalysis: vi.fn(async () => ({})),
   serviceClient: null as unknown,
 }));
 
 vi.mock("@/lib/supabase/service", () => ({
   createSupabaseServiceClient: vi.fn(() => routeMocks.serviceClient),
 }));
-
-vi.mock("@/features/research/gate-c/gate-c-auto-analysis", async () => {
-  const actual = await vi.importActual<
-    typeof import("@/features/research/gate-c/gate-c-auto-analysis")
-  >("@/features/research/gate-c/gate-c-auto-analysis");
-  return { ...actual, refreshGateCAnalysis: routeMocks.refreshAnalysis };
-});
 
 describe("Gate C public research API", () => {
   beforeEach(() => {
@@ -68,7 +60,7 @@ describe("Gate C public research API", () => {
     expect(captured.insert).not.toHaveProperty("ip_address");
   });
 
-  it("atomically stores the exact assigned 12-item set and refreshes analysis", async () => {
+  it("atomically stores the exact assigned 12-item set and queues analysis", async () => {
     const captured: { rpc: null | Record<string, unknown> } = { rpc: null };
     routeMocks.serviceClient = createCompletionClient(captured);
     const definition = gateCParticipantDefinitions.FORM_A;
@@ -104,7 +96,7 @@ describe("Gate C public research API", () => {
 
     expect(response.status).toBe(200);
     expect(body).toMatchObject({
-      analysisStatus: "refreshed",
+      analysisStatus: "queued",
       ok: true,
       qualityStatus: "included",
     });
@@ -114,7 +106,6 @@ describe("Gate C public research API", () => {
       supplied_responses: responses,
       target_session_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
     });
-    expect(routeMocks.refreshAnalysis).toHaveBeenCalledTimes(1);
   });
 
   it("rejects a submission whose items do not match the server-assigned form", async () => {
@@ -208,6 +199,7 @@ function createStartClient(captured: {
     limit: async () => ({ data: [], error: null }),
   };
   return {
+    rpc: async () => ({ data: null, error: null }),
     from: () => ({
       insert: async (row: Record<string, unknown>) => {
         captured.insert = row;
@@ -234,7 +226,10 @@ function createCompletionClient(captured: {
   };
   return {
     from: () => ({ select: () => sessionBuilder }),
-    rpc: async (_name: string, args: Record<string, unknown>) => {
+    rpc: async (name: string, args: Record<string, unknown>) => {
+      if (name === "check_gate_c_request_guard") {
+        return { data: null, error: null };
+      }
       captured.rpc = args;
       return {
         data: [

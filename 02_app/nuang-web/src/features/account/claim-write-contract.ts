@@ -11,6 +11,7 @@ export type ClaimResultWriteFailureCode =
   | "account_link_missing"
   | "age_or_required_consent_missing"
   | "assessment_release_mismatch"
+  | "assessment_response_invalid"
   | "assessment_attempt_write_failed"
   | "assessment_response_write_failed"
   | "score_snapshot_write_failed"
@@ -70,7 +71,7 @@ export const claimResultWriteSteps = [
 export const claimResultWriteFailures: Record<
   ClaimResultWriteFailureCode,
   {
-    httpStatus: 400 | 403 | 409 | 500;
+    httpStatus: 400 | 403 | 409 | 422 | 500;
     message: string;
     retryable: boolean;
     step: ClaimResultWriteStepId;
@@ -93,6 +94,13 @@ export const claimResultWriteFailures: Record<
     message: "검사 버전을 확인할 수 없어 결과를 저장하지 못했어요.",
     retryable: false,
     step: "create_assessment_attempt",
+  },
+  assessment_response_invalid: {
+    httpStatus: 422,
+    message:
+      "검사 응답을 다시 확인할 수 없어 결과를 저장하지 못했어요. 검사 결과 화면을 새로 열어 주세요.",
+    retryable: false,
+    step: "insert_assessment_responses",
   },
   assessment_attempt_write_failed: {
     httpStatus: 500,

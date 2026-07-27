@@ -10,6 +10,7 @@ import {
   createGateCAssignmentProof,
   createGateCIdentifiers,
   createGateCSecret,
+  checkGateCRequestGuard,
   hashGateCSecret,
   isAllowedGateCRequest,
 } from "@/features/research/gate-c/gate-c-server-security";
@@ -53,6 +54,22 @@ export async function POST(request: Request) {
 
   const serviceClient = createSupabaseServiceClient();
   if (!serviceClient) return createApiClosedResponse("supabase_env_missing");
+  const guard = await checkGateCRequestGuard({
+    action: "start_session",
+    client: serviceClient,
+    request,
+  });
+  if (guard) {
+    return NextResponse.json(
+      {
+        error:
+          guard === "rate_limited"
+            ? "research_rate_limited"
+            : "research_guard_unavailable",
+      },
+      { status: guard === "rate_limited" ? 429 : 503 },
+    );
+  }
 
   const [assignmentResponse, exposureResponse] = await Promise.all([
     serviceClient

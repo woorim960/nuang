@@ -4,6 +4,7 @@ import {
   randomUUID,
   timingSafeEqual,
 } from "node:crypto";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 type GateCAssignmentProofPayload = {
   items: Array<{
@@ -32,6 +33,40 @@ export function createGateCIdentifiers() {
 
 export function hashGateCSecret(secret: string) {
   return createHmac("sha256", readPepper()).update(secret).digest("hex");
+}
+
+export function createGateCRequestFingerprint(request: Request) {
+  const forwardedFor = request.headers.get("x-forwarded-for");
+  const ip = forwardedFor?.split(",")[0]?.trim() || "unknown";
+  const userAgent = request.headers.get("user-agent")?.slice(0, 240) ?? "";
+  const language = request.headers.get("accept-language")?.slice(0, 120) ?? "";
+
+  return createHmac("sha256", readPepper())
+    .update(`gate-c-request:${ip}:${userAgent}:${language}`)
+    .digest("hex");
+}
+
+export async function checkGateCRequestGuard({
+  action,
+  client,
+  request,
+}: {
+  action: "complete_session" | "start_session" | "withdraw_submission";
+  client: SupabaseClient;
+  request: Request;
+}) {
+  const response = (await client.rpc("check_gate_c_request_guard", {
+    p_action: action,
+    p_subject_hash: createGateCRequestFingerprint(request),
+  })) as {
+    data: string | null;
+    error: { code?: string } | null;
+  };
+
+  if (response.error) return "guard_unavailable" as const;
+  if (response.data === null) return null;
+  if (response.data === "rate_limited") return "rate_limited" as const;
+  return "guard_unavailable" as const;
 }
 
 export function isAllowedGateCRequest(request: Request) {

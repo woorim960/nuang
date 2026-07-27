@@ -7,7 +7,7 @@ import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
-import { readJsonResponse } from "@/features/account/response-json";
+import { listClientAccountResults } from "@/features/account/client-account-results";
 import {
   listFreeTopicResultsLocalFirst,
   syncQueuedFreeTopicResults,
@@ -66,7 +66,7 @@ export function MyTraitDetailView() {
     async function load() {
       const [nextAttempts, nextAccountResults] = await Promise.all([
         listLocalAttempts(),
-        listAccountResults(),
+        listClientAccountResults(),
         syncQueuedFreeTopicResults(),
       ]);
 
@@ -91,11 +91,16 @@ export function MyTraitDetailView() {
     () => buildLatestAccountResult(accountResults),
     [accountResults],
   );
-  const detail: TraitDetail | null = localScore
-    ? buildLocalTraitDetail(localScore)
-    : latestAccountResult
-      ? buildAccountTraitDetail(latestAccountResult)
-      : null;
+  const localDetail = localScore ? buildLocalTraitDetail(localScore) : null;
+  const accountDetail = latestAccountResult
+    ? buildAccountTraitDetail(latestAccountResult)
+    : null;
+  const detail: TraitDetail | null =
+    accountDetail &&
+    (!localDetail ||
+      accountDetail.completedAt.localeCompare(localDetail.completedAt) >= 0)
+      ? accountDetail
+      : localDetail;
 
   if (!loaded) {
     return <TraitDetailLoading />;
@@ -453,26 +458,6 @@ function buildLatestAccountResult(results: AccountResultSummary[]) {
   return results
     .filter((result) => getCandidateProfileDefinition(result.profileCode))
     .sort((a, b) => b.completedAt.localeCompare(a.completedAt))[0];
-}
-
-async function listAccountResults(): Promise<AccountResultSummary[]> {
-  try {
-    const response = await fetch("/api/account-results", {
-      cache: "no-store",
-      method: "GET",
-    });
-
-    if (!response.ok) return [];
-
-    const body = await readJsonResponse<{
-      ok?: boolean;
-      results?: AccountResultSummary[];
-    }>(response);
-
-    return body?.ok && Array.isArray(body.results) ? body.results : [];
-  } catch {
-    return [];
-  }
 }
 
 function getAverageScore(result: StoredFreeTopicResult) {

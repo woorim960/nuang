@@ -12,6 +12,7 @@ import {
 
 const validConsentDraft = {
   analytics: false,
+  is14OrOlder: true,
   marketing: false,
   privacy: true,
   terms: true,

@@ -1,7 +1,7 @@
 "use client";
 
 import { BadgeCheck, Check, MailCheck, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import {
   type PrivateContactPayload,
   privateContactConsentVersion,
@@ -9,6 +9,7 @@ import {
   privateEmailRegistrationVersion,
 } from "@/features/account/private-contact-contract";
 import { readJsonResponse } from "@/features/account/response-json";
+import { useModalDialog } from "@/hooks/useModalDialog";
 import styles from "./PrivateContactEditor.module.css";
 
 type ContactField = "email" | "mobile_phone";
@@ -67,6 +68,11 @@ export function PrivateContactEditor() {
   const [message, setMessage] = useState("");
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [activeEntryWarning, setActiveEntryWarning] = useState(false);
+  const deleteTitleId = useId();
+  const deleteDialogRef = useModalDialog<HTMLElement>({
+    onClose: closeDeleteConfirm,
+    open: deleteConfirmOpen && Boolean(deleteField),
+  });
 
   useEffect(() => {
     let active = true;
@@ -181,13 +187,10 @@ export function PrivateContactEditor() {
   async function requestEmailVerification() {
     setVerificationState("requesting");
     setVerificationMessage("");
-    const response = await fetch(
-      "/api/me/contact/email-verification/request",
-      {
-        headers: { "content-type": "application/json" },
-        method: "POST",
-      },
-    );
+    const response = await fetch("/api/me/contact/email-verification/request", {
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
     const payload =
       await readJsonResponse<VerificationRequestResponse>(response);
 
@@ -227,17 +230,14 @@ export function PrivateContactEditor() {
 
     setVerificationState("confirming");
     setVerificationMessage("");
-    const response = await fetch(
-      "/api/me/contact/email-verification/confirm",
-      {
-        body: JSON.stringify({
-          challengeId: verificationChallengeId,
-          code: verificationCode,
-        }),
-        headers: { "content-type": "application/json" },
-        method: "POST",
-      },
-    );
+    const response = await fetch("/api/me/contact/email-verification/confirm", {
+      body: JSON.stringify({
+        challengeId: verificationChallengeId,
+        code: verificationCode,
+      }),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
     const payload =
       await readJsonResponse<VerificationConfirmResponse>(response);
 
@@ -380,6 +380,13 @@ export function PrivateContactEditor() {
     setDeleteField(field);
     setActiveEntryWarning(false);
     setDeleteConfirmOpen(true);
+  }
+
+  function closeDeleteConfirm() {
+    if (state === "deleting") return;
+    setDeleteConfirmOpen(false);
+    setActiveEntryWarning(false);
+    setDeleteField(null);
   }
 
   return (
@@ -605,8 +612,7 @@ export function PrivateContactEditor() {
                       onClick={() => saveContact("mobile_phone")}
                       type="button"
                     >
-                      {state === "saving" &&
-                      editingField === "mobile_phone"
+                      {state === "saving" && editingField === "mobile_phone"
                         ? "저장 중"
                         : "번호 저장"}
                     </button>
@@ -656,9 +662,16 @@ export function PrivateContactEditor() {
       ) : null}
 
       {deleteConfirmOpen && deleteField ? (
-        <div className={styles.backdrop}>
-          <section aria-modal="true" className={styles.dialog} role="dialog">
-            <strong>
+        <div className={styles.backdrop} data-modal-layer="true">
+          <section
+            aria-labelledby={deleteTitleId}
+            aria-modal="true"
+            className={styles.dialog}
+            ref={deleteDialogRef}
+            role="dialog"
+            tabIndex={-1}
+          >
+            <strong id={deleteTitleId}>
               {activeEntryWarning
                 ? "연락처와 이벤트 응모를 함께 삭제할까요?"
                 : deleteField === "email"
@@ -674,11 +687,8 @@ export function PrivateContactEditor() {
             </p>
             <div>
               <button
-                onClick={() => {
-                  setDeleteConfirmOpen(false);
-                  setActiveEntryWarning(false);
-                  setDeleteField(null);
-                }}
+                data-modal-initial-focus="true"
+                onClick={closeDeleteConfirm}
                 type="button"
               >
                 유지하기

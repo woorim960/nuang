@@ -23,6 +23,9 @@ const requiredByMode = {
     "DATABASE_URL",
     "SHARE_TOKEN_PEPPER",
     "FIELD_ENCRYPTION_KEY",
+    "LEGAL_OPERATOR_NAME",
+    "PRIVACY_CONTACT_EMAIL",
+    "SUPABASE_DATA_REGION",
   ],
 };
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import {
   hasCompletedOnboarding,
   onboardingEntryContract,
@@ -19,6 +19,33 @@ export function EntryGate() {
     );
   }, [router]);
 
+  return <EntryLoadingState />;
+}
+
+export function OnboardingHomeGate({ children }: { children: ReactNode }) {
+  const router = useRouter();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+
+    if (hasCompletedOnboarding()) {
+      queueMicrotask(() => {
+        if (active) setReady(true);
+      });
+    } else {
+      router.replace(onboardingEntryContract.firstVisitDestination);
+    }
+
+    return () => {
+      active = false;
+    };
+  }, [router]);
+
+  return ready ? children : <EntryLoadingState />;
+}
+
+function EntryLoadingState() {
   return (
     <main aria-busy="true" className={styles.root}>
       <div aria-hidden="true" className={styles.visual}>

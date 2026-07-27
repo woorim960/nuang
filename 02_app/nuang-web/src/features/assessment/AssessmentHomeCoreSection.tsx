@@ -4,6 +4,8 @@ import { ArrowRight, Check } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { listClientAccountResults } from "@/features/account/client-account-results";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
@@ -20,17 +22,24 @@ type CoreJourneyState = {
 
 export function AssessmentHomeCoreSection() {
   const [attempts, setAttempts] = useState<LocalAssessmentAttempt[]>([]);
+  const [accountResults, setAccountResults] = useState<AccountResultSummary[]>(
+    [],
+  );
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
 
-    listLocalAttempts()
-      .then((nextAttempts) => {
-        if (isMounted) setAttempts(nextAttempts);
+    Promise.all([listLocalAttempts(), listClientAccountResults()])
+      .then(([nextAttempts, nextAccountResults]) => {
+        if (!isMounted) return;
+        setAttempts(nextAttempts);
+        setAccountResults(nextAccountResults);
       })
       .catch(() => {
-        if (isMounted) setAttempts([]);
+        if (!isMounted) return;
+        setAttempts([]);
+        setAccountResults([]);
       })
       .finally(() => {
         if (isMounted) setLoaded(true);
@@ -41,7 +50,10 @@ export function AssessmentHomeCoreSection() {
     };
   }, []);
 
-  const journey = useMemo(() => buildJourneyState(attempts), [attempts]);
+  const journey = useMemo(
+    () => buildJourneyState(attempts, accountResults),
+    [accountResults, attempts],
+  );
 
   if (!loaded) {
     return (
@@ -128,7 +140,10 @@ export function AssessmentHomeCoreSection() {
 
 function buildJourneyState(
   attempts: LocalAssessmentAttempt[],
+  accountResults: AccountResultSummary[],
 ): CoreJourneyState {
+  const latestAccountFull = getLatestAccountResult(accountResults, "full");
+  const latestAccountQuick = getLatestAccountResult(accountResults, "quick");
   const fullCompleted = getLatestAttempt(attempts, "nu-core-full", "completed");
   const fullInProgress = getLatestAttempt(
     attempts,
@@ -145,6 +160,22 @@ function buildJourneyState(
     "nu-core-quick",
     "in_progress",
   );
+
+  if (
+    latestAccountFull &&
+    (!fullCompleted ||
+      latestAccountFull.completedAt.localeCompare(
+        fullCompleted.completedAt ?? fullCompleted.updatedAt,
+      ) >= 0)
+  ) {
+    return {
+      cta: "내 성향 결과 보기",
+      eyebrow: "정밀 성향 검사 완료",
+      href: `/results/account/${latestAccountFull.resultReportId}`,
+      step: 2,
+      title: `${latestAccountFull.profileCode} · ${latestAccountFull.profileName}`,
+    };
+  }
 
   if (fullCompleted) {
     const score = fullCompleted.resultSnapshot?.scoreResult;
@@ -177,12 +208,16 @@ function buildJourneyState(
     };
   }
 
-  if (quickCompleted) {
+  if (quickCompleted || latestAccountQuick) {
+    const backDestination = quickCompleted
+      ? `/results/local/${quickCompleted.id}`
+      : `/results/account/${latestAccountQuick?.resultReportId}`;
+
     return {
       cta: "정밀 성향 검사 시작하기",
       eyebrow: "첫 성향 검사 완료",
       href: buildPrecisionIntroHref({
-        backDestination: `/results/local/${quickCompleted.id}`,
+        backDestination,
         entrySource: "first-result",
         returnDestination: "/assessments",
       }),
@@ -209,6 +244,17 @@ function buildJourneyState(
     step: 0,
     title: "나를 설명하는 다섯 글자를 만나보세요",
   };
+}
+
+function getLatestAccountResult(
+  results: AccountResultSummary[],
+  kind: AccountResultSummary["kind"],
+) {
+  return [...results]
+    .filter((result) => result.kind === kind)
+    .sort((left, right) =>
+      right.completedAt.localeCompare(left.completedAt),
+    )[0];
 }
 
 function getLatestAttempt(

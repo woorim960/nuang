@@ -37,6 +37,10 @@ const communitySafetyMigration = readFileSync(
   "supabase/migrations/202607280003_community_safety_mvp.sql",
   "utf8",
 );
+const communityMutationGuardMigration = readFileSync(
+  "supabase/migrations/202607280006_community_mutation_guard.sql",
+  "utf8",
+);
 const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}\n${homeCommunityPollMigration}\n${topicMediaMigration}`;
 
 describe("feed db schema draft", () => {
@@ -195,6 +199,39 @@ describe("feed db schema draft", () => {
     );
     expect(communitySafetyMigration).toContain(
       "revoke all on feed.content_report, feed.community_write_bucket",
+    );
+  });
+
+  it("fails closed around public interaction targets and rate limits every growing action", () => {
+    expect(communityMutationGuardMigration).toContain(
+      "create or replace function feed.check_community_mutation_guard",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "moderation_status = 'published'",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "visibility in ('public', 'profile_public')",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "comment.deleted_at is null",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "when 'react' then",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "when 'bookmark' then",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "when 'vote_poll' then",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "when 'follow_profile' then",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "return 'target_invalid'",
+    );
+    expect(communityMutationGuardMigration).toContain(
+      "to service_role",
     );
   });
 });

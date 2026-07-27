@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { CommunityFeed } from "@/features/feed/CommunityFeed";
 import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
@@ -86,6 +86,30 @@ describe("CommunityFeed", () => {
         name: "여러 성향을 골라 게시물 모아보기",
       }),
     ).not.toBeInTheDocument();
+  });
+
+  it("keeps keyboard focus inside the filter and restores it when closed", async () => {
+    render(<CommunityFeed posts={[post]} />);
+
+    const filterTrigger = screen.getByRole("button", {
+      name: "여러 성향을 골라 게시물 모아보기",
+    });
+    filterTrigger.focus();
+    fireEvent.click(filterTrigger);
+
+    const dialog = screen.getByRole("dialog", { name: "성향 필터" });
+    const closeButton = screen.getByRole("button", {
+      name: "커뮤니티로 돌아가기",
+    });
+
+    await waitFor(() => expect(closeButton).toHaveFocus());
+    expect(filterTrigger.closest("nav")).toHaveAttribute("inert");
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(dialog).not.toBeInTheDocument();
+    await waitFor(() => expect(filterTrigger).toHaveFocus());
+    expect(filterTrigger.closest("nav")).not.toHaveAttribute("inert");
   });
 
   it("opens search and notifications as dedicated routes", () => {

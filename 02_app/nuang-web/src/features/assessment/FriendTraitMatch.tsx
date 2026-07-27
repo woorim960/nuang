@@ -1,7 +1,13 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
+import {
+  createFriendTraitMatchInviteUrl,
+  type FriendTraitMatchChoiceId,
+  type FriendTraitMatchInviteState,
+} from "@/features/assessment/friend-trait-match-invite";
 import styles from "@/features/assessment/FriendTraitMatch.module.css";
 
 const choices = [
@@ -15,14 +21,30 @@ const choices = [
   },
 ] as const;
 
-type ChoiceId = (typeof choices)[number]["id"];
+type ChoiceId = FriendTraitMatchChoiceId;
 
-export function FriendTraitMatch() {
+export function FriendTraitMatch({
+  inviteState = { status: "sender" },
+}: {
+  inviteState?: FriendTraitMatchInviteState;
+}) {
+  if (inviteState.status === "invalid" || inviteState.status === "expired") {
+    return <InviteError state={inviteState.status} />;
+  }
+
+  if (inviteState.status === "ready") {
+    return <InviteReceiver invite={inviteState} />;
+  }
+
+  return <InviteSender />;
+}
+
+function InviteSender() {
   const [step, setStep] = useState(0);
   const [myChoice, setMyChoice] = useState<ChoiceId | null>(null);
-  const [friendChoice, setFriendChoice] = useState<ChoiceId | null>(null);
+  const [predictedChoice, setPredictedChoice] = useState<ChoiceId | null>(null);
   const [shareStatus, setShareStatus] = useState("");
-  const selectedChoice = step === 0 ? myChoice : friendChoice;
+  const selectedChoice = step === 0 ? myChoice : predictedChoice;
 
   return (
     <CommunityScreenShell
@@ -60,7 +82,7 @@ export function FriendTraitMatch() {
                   key={choice.id}
                   onClick={() => {
                     if (step === 0) setMyChoice(choice.id);
-                    else setFriendChoice(choice.id);
+                    else setPredictedChoice(choice.id);
                   }}
                   type="button"
                 >
@@ -84,9 +106,12 @@ export function FriendTraitMatch() {
               </article>
               <article>
                 <small>내가 예상한 친구의 선택</small>
-                <strong>{getChoiceLabel(friendChoice)}</strong>
+                <strong>{getChoiceLabel(predictedChoice)}</strong>
               </article>
             </div>
+            <p className={styles.inviteNote}>
+              초대 링크는 만든 날부터 14일 동안 열 수 있어요.
+            </p>
             {shareStatus ? (
               <p className={styles.status} role="status">
                 {shareStatus}
@@ -123,31 +148,243 @@ export function FriendTraitMatch() {
   );
 
   async function createInviteLink() {
-    const inviteUrl = new URL(
-      "/assessments/friend-match",
-      window.location.origin,
-    );
-    inviteUrl.searchParams.set("invite", "friend-view");
-    inviteUrl.searchParams.set("mine", myChoice ?? "");
-    inviteUrl.searchParams.set("guess", friendChoice ?? "");
+    if (!myChoice || !predictedChoice) return;
+
+    const inviteUrl = createFriendTraitMatchInviteUrl({
+      guess: predictedChoice,
+      mine: myChoice,
+      origin: window.location.origin,
+    });
 
     if (window.navigator.share) {
       try {
         await window.navigator.share({
           text: "내가 예상한 너의 선택이 맞는지 확인해 줘!",
           title: "뉴앙 친구 성향 맞히기",
-          url: inviteUrl.toString(),
+          url: inviteUrl,
         });
         setShareStatus("초대 화면을 열었어요.");
         return;
       } catch {
+        setShareStatus("공유를 취소했어요. 다시 눌러 초대할 수 있어요.");
         return;
       }
     }
 
-    await window.navigator.clipboard?.writeText(inviteUrl.toString());
-    setShareStatus("초대 링크를 복사했어요.");
+    try {
+      if (!window.navigator.clipboard?.writeText) throw new Error();
+      await window.navigator.clipboard.writeText(inviteUrl);
+      setShareStatus("초대 링크를 복사했어요.");
+    } catch {
+      setShareStatus("링크를 복사하지 못했어요. 다시 시도해 주세요.");
+    }
   }
+}
+
+function InviteReceiver({
+  invite,
+}: {
+  invite: Extract<FriendTraitMatchInviteState, { status: "ready" }>;
+}) {
+  const [actualChoice, setActualChoice] = useState<ChoiceId | null>(null);
+  const [showResult, setShowResult] = useState(false);
+
+  if (showResult && actualChoice) {
+    const predictionMatched = invite.guess === actualChoice;
+    const choicesMatched = invite.mine === actualChoice;
+    const resultCopy = getResultCopy({ choicesMatched, predictionMatched });
+
+    return (
+      <CommunityScreenShell
+        backHref="/assessments"
+        backLabel="검사로 돌아가기"
+        title="친구 성향 맞히기"
+      >
+        <main className={styles.body}>
+          <div aria-label="결과 확인 완료" className={styles.progress}>
+            {[0, 1, 2].map((index) => (
+              <span data-active="true" key={index} />
+            ))}
+          </div>
+
+          <section className={styles.stepCopy}>
+            <small>두 사람의 선택</small>
+            <h2>{resultCopy.title}</h2>
+            <p className={styles.resultLead}>{resultCopy.description}</p>
+          </section>
+
+          <div className={styles.resultSummary}>
+            <ResultRow label="친구의 선택" value={invite.mine} />
+            <ResultRow label="친구가 예상한 내 선택" value={invite.guess} />
+            <ResultRow emphasis label="내 실제 선택" value={actualChoice} />
+          </div>
+
+          <section className={styles.resultInsight}>
+            <strong>
+              {predictionMatched ? "친구의 예상이 맞았어요" : "예상과 달랐어요"}
+            </strong>
+            <p>
+              이 한 장면의 선택만으로 성향을 정하지는 않아요. 서로 왜 그렇게
+              골랐는지 이야기하면 차이를 더 재미있게 이해할 수 있어요.
+            </p>
+          </section>
+
+          <footer className={styles.footer}>
+            <Link
+              className={styles.footerAction}
+              href="/assessments/friend-match"
+            >
+              나도 친구 성향 맞히기
+            </Link>
+          </footer>
+        </main>
+      </CommunityScreenShell>
+    );
+  }
+
+  return (
+    <CommunityScreenShell
+      backHref="/assessments"
+      backLabel="검사로 돌아가기"
+      title="친구 성향 맞히기"
+    >
+      <main className={styles.body}>
+        <div aria-label="친구 답변 1/1 단계" className={styles.progress}>
+          <span data-active="true" />
+        </div>
+
+        <section className={styles.stepCopy}>
+          <small>친구가 내 선택을 예상했어요</small>
+          <h2>나는 실제로 어떤 답을 고를까요?</h2>
+        </section>
+
+        <p className={styles.question}>
+          친구와 약속한 날, 친구가 갑자기 일정을 바꾸자고 해요. 이때 나는?
+        </p>
+        <div className={styles.choiceList}>
+          {choices.map((choice, index) => (
+            <button
+              aria-pressed={actualChoice === choice.id}
+              key={choice.id}
+              onClick={() => setActualChoice(choice.id)}
+              type="button"
+            >
+              <span>{index + 1}</span>
+              <span>{choice.label}</span>
+            </button>
+          ))}
+        </div>
+
+        <footer className={styles.footer}>
+          <button
+            disabled={!actualChoice}
+            onClick={() => setShowResult(true)}
+            type="button"
+          >
+            결과 보기
+          </button>
+        </footer>
+      </main>
+    </CommunityScreenShell>
+  );
+}
+
+function InviteError({
+  state,
+}: {
+  state: Extract<
+    FriendTraitMatchInviteState,
+    { status: "expired" | "invalid" }
+  >["status"];
+}) {
+  const expired = state === "expired";
+
+  return (
+    <CommunityScreenShell
+      backHref="/assessments"
+      backLabel="검사로 돌아가기"
+      title="친구 성향 맞히기"
+    >
+      <main className={`${styles.body} ${styles.errorBody}`}>
+        <section className={styles.errorState} role="alert">
+          <span aria-hidden="true">N</span>
+          <small>
+            {expired ? "사용 기간이 지난 초대" : "확인할 수 없는 초대"}
+          </small>
+          <h2>
+            {expired
+              ? "초대 링크의 사용 기간이 지났어요"
+              : "초대 링크를 확인할 수 없어요"}
+          </h2>
+          <p>
+            {expired
+              ? "친구에게 새 링크를 보내 달라고 부탁하거나, 내가 새 게임을 시작해 보세요."
+              : "링크가 잘못되었거나 필요한 정보가 빠졌어요. 새 게임은 바로 시작할 수 있어요."}
+          </p>
+        </section>
+
+        <footer className={styles.footer}>
+          <Link
+            className={styles.footerAction}
+            href="/assessments/friend-match"
+          >
+            새 게임 시작하기
+          </Link>
+        </footer>
+      </main>
+    </CommunityScreenShell>
+  );
+}
+
+function ResultRow({
+  emphasis = false,
+  label,
+  value,
+}: {
+  emphasis?: boolean;
+  label: string;
+  value: ChoiceId;
+}) {
+  return (
+    <article data-emphasis={emphasis ? "true" : "false"}>
+      <small>{label}</small>
+      <strong>{getChoiceLabel(value)}</strong>
+    </article>
+  );
+}
+
+function getResultCopy({
+  choicesMatched,
+  predictionMatched,
+}: {
+  choicesMatched: boolean;
+  predictionMatched: boolean;
+}) {
+  if (predictionMatched && choicesMatched) {
+    return {
+      description: "친구의 예상도 맞았고, 이번 상황에서 고른 답도 같아요.",
+      title: "서로의 선택을 정확히 알았어요",
+    };
+  }
+
+  if (predictionMatched) {
+    return {
+      description: "고른 답은 달랐지만, 친구는 내 선택을 정확히 예상했어요.",
+      title: "다른 선택까지 잘 알고 있었어요",
+    };
+  }
+
+  if (choicesMatched) {
+    return {
+      description: "친구의 예상과는 달랐지만, 실제로 고른 답은 서로 같아요.",
+      title: "예상 밖의 공통점을 찾았어요",
+    };
+  }
+
+  return {
+    description: "친구의 예상과 내 실제 선택이 달랐고, 서로 고른 답도 달라요.",
+    title: "서로 다른 생각을 발견했어요",
+  };
 }
 
 function getChoiceLabel(choiceId: ChoiceId | null) {

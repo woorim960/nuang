@@ -24,18 +24,21 @@ import {
   feedPostTopicLabels,
 } from "@/features/feed/feed-topic";
 import type { PublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
+import type { PublicProfileSearchIntent } from "@/features/public-profile/public-profile-search-contract";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import { profileVisibilityPolicyVersion } from "@/features/together/profile-visibility-policy";
 import styles from "./CommunityProfileScreen.module.css";
 
 export function CommunityProfileScreen({
   initialSocialState,
+  intent = "browse",
   mode = "other",
   posts,
   profile,
   showAdminEntry = false,
 }: {
   initialSocialState: CommunityProfileSocialState;
+  intent?: PublicProfileSearchIntent;
   mode?: "other" | "preview" | "self";
   posts: FeedItem[];
   profile: PublicProfileCardPayload;
@@ -70,6 +73,7 @@ export function CommunityProfileScreen({
   const isPreview = mode === "preview";
   const isSelf =
     mode === "self" || (mode === "other" && initialSocialState.isOwnProfile);
+  const isCompareIntent = intent === "compare" && !isSelf && !isPreview;
   const codeIsVisible = profile.display.code !== "-----";
   const comparisonAvailable =
     profile.visibility.includedFields.includes("representative_profile") &&
@@ -242,14 +246,30 @@ export function CommunityProfileScreen({
 
   return (
     <CommunityScreenShell
-      backHref={isSelf ? null : isPreview ? "/my/settings/visibility" : "/feed"}
-      backLabel={isPreview ? "공개 정보 설정으로 돌아가기" : undefined}
+      backHref={
+        isSelf
+          ? null
+          : isPreview
+            ? "/my/settings/visibility"
+            : isCompareIntent
+              ? "/feed/search?intent=compare"
+              : "/feed"
+      }
+      backLabel={
+        isPreview
+          ? "공개 정보 설정으로 돌아가기"
+          : isCompareIntent
+            ? "비교할 사람 찾기로 돌아가기"
+            : undefined
+      }
       title={
         isSelf
           ? "마이"
           : isPreview
             ? "프로필 미리보기"
-            : profile.display.displayName
+            : isCompareIntent
+              ? "비교할 사람 확인"
+              : profile.display.displayName
       }
       trailing={
         isSelf ? (
@@ -360,7 +380,9 @@ export function CommunityProfileScreen({
               {comparePending
                 ? "비교 중"
                 : comparisonAvailable
-                  ? "나와 비교"
+                  ? isCompareIntent
+                    ? "이 사람과 비교하기"
+                    : "나와 비교"
                   : "비교 비공개"}
             </button>
           </div>
@@ -377,14 +399,14 @@ export function CommunityProfileScreen({
             {showAdminEntry ? (
               <Link className={styles.adminEntry} href="/admin">
                 <span>
-                  <ShieldCheck aria-hidden="true" size={18} strokeWidth={1.65} />
+                  <ShieldCheck
+                    aria-hidden="true"
+                    size={18}
+                    strokeWidth={1.65}
+                  />
                 </span>
                 <strong>관리자 운영 센터</strong>
-                <ChevronRight
-                  aria-hidden="true"
-                  size={17}
-                  strokeWidth={1.65}
-                />
+                <ChevronRight aria-hidden="true" size={17} strokeWidth={1.65} />
               </Link>
             ) : null}
           </>

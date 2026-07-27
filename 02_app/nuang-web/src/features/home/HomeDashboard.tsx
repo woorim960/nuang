@@ -347,7 +347,7 @@ function HomeRelationshipPrompt() {
       </span>
       <div>
         <h2>궁금한 사람과 나는 어디가 닮았을까요?</h2>
-        <Link href="/feed/search?from=home">
+        <Link href="/feed/search?intent=compare&from=home">
           궁금한 사람 찾아보기
           <ArrowRight aria-hidden="true" size={15} strokeWidth={1.9} />
         </Link>

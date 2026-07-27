@@ -17,6 +17,7 @@ import {
 
 const validConsentDraft = {
   analytics: false,
+  is14OrOlder: true,
   marketing: false,
   privacy: true,
   terms: true,
@@ -26,6 +27,13 @@ const validClaimPayload = {
   assessmentKind: "full",
   consentDraft: validConsentDraft,
   localResultId: "local_test_123",
+  responses: [
+    {
+      answeredAt: "2026-07-04T00:00:00.000Z",
+      itemId: "NU-B1-001",
+      value: 5,
+    },
+  ],
   versionBundle: {
     assessmentReleaseId: "NUANG-CORE-FULL-0.9",
     codeSchemeVersion: "NUANG-CODE-5AXIS-PROVISIONAL-0.9",
@@ -67,18 +75,16 @@ describe("account api schemas", () => {
     expect(parsed.success).toBe(true);
   });
 
-  it("keeps core account summaries to scored facets, not raw responses", () => {
+  it("accepts raw responses but does not trust client supplied scores", () => {
     const parsed = claimResultRequestSchema.parse(validClaimPayload);
     const serialized = JSON.stringify(parsed);
 
-    expect(parsed.resultSummary.facets?.[0]).toMatchObject({
-      facetId: "SE_SOC",
-      label: "외향 리듬",
-      score: 72,
-      status: "valid",
+    expect(parsed.responses).toHaveLength(1);
+    expect(parsed.resultSummary).toEqual({
+      completedAt: "2026-07-04T00:00:00.000Z",
     });
-    expect(serialized).not.toContain("responses");
-    expect(serialized).not.toContain("answeredAt");
+    expect(serialized).not.toContain("불꽃의 온기 탐험가");
+    expect(serialized).not.toContain("TVOAE");
   });
 
   it("requires terms and privacy consent for claim-result", () => {

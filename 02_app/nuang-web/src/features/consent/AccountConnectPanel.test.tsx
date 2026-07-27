@@ -63,6 +63,12 @@ describe("AccountConnectPanel", () => {
         name: "개인정보 처리방침에 동의해요",
       }),
     );
+    expect(kakaoButton).toBeDisabled();
+    fireEvent.click(
+      screen.getByRole("checkbox", {
+        name: "만 14세 이상이에요",
+      }),
+    );
 
     expect(kakaoButton).toBeEnabled();
     expect(

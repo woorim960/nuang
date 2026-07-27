@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { refreshGateCAnalysis } from "@/features/research/gate-c/gate-c-auto-analysis";
 import {
+  checkGateCRequestGuard,
   hashGateCSecret,
   isAllowedGateCRequest,
   verifyGateCAssignmentProof,
@@ -70,6 +70,22 @@ export async function POST(
 
   const serviceClient = createSupabaseServiceClient();
   if (!serviceClient) return createApiClosedResponse("supabase_env_missing");
+  const guard = await checkGateCRequestGuard({
+    action: "complete_session",
+    client: serviceClient,
+    request,
+  });
+  if (guard) {
+    return NextResponse.json(
+      {
+        error:
+          guard === "rate_limited"
+            ? "research_rate_limited"
+            : "research_guard_unavailable",
+      },
+      { status: guard === "rate_limited" ? 429 : 503 },
+    );
+  }
 
   const unifiedSessionResponse = await serviceClient
     .from("research_gate_c_session")
@@ -188,16 +204,8 @@ export async function POST(
     );
   }
 
-  let analysisStatus: "refreshed" | "retry_pending" = "refreshed";
-  try {
-    await refreshGateCAnalysis(serviceClient);
-  } catch (error) {
-    analysisStatus = "retry_pending";
-    console.error("Gate C analysis refresh failed", error);
-  }
-
   return NextResponse.json({
-    analysisStatus,
+    analysisStatus: "queued",
     ok: true,
     participantCode: rpcResponse.data[0].participant_code,
     publicReceiptId: rpcResponse.data[0].public_receipt_id,

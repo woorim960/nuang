@@ -18,7 +18,10 @@ import {
   persistExternalLinks,
   prepareExternalLinks,
 } from "@/features/feed/server-link-safety";
-import { checkCommunityWriteGuard } from "@/features/feed/server-write-guard";
+import {
+  checkCommunityWriteGuard,
+  type CommunityWriteGuardCode,
+} from "@/features/feed/server-write-guard";
 import {
   getCurrentNuangProfileName,
   isCurrentNuangCode,
@@ -161,15 +164,7 @@ async function writeFeedPost({
     client,
   });
   if (guardFailure) {
-    return {
-      code:
-        guardFailure === "duplicate_content"
-          ? "feed_duplicate_content"
-          : guardFailure === "rate_limited"
-            ? "feed_rate_limited"
-            : "account_link_missing",
-      ok: false,
-    };
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
   }
 
   const externalLinks = await prepareExternalLinks({
@@ -417,17 +412,14 @@ async function writeFeedComment({
     action: "create_comment",
     body: payload.body,
     client,
+    target: {
+      id: target.data.id,
+      key: target.data.key,
+      type: target.data.dbTargetType,
+    },
   });
   if (guardFailure) {
-    return {
-      code:
-        guardFailure === "duplicate_content"
-          ? "feed_duplicate_content"
-          : guardFailure === "rate_limited"
-            ? "feed_rate_limited"
-            : "account_link_missing",
-      ok: false,
-    };
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
   }
   const moderationStatus = externalLinks.some(
     (link) => link.status === "pending",
@@ -514,15 +506,14 @@ async function writeFeedContentReport({
     accountId,
     action: "report_content",
     client,
+    target: {
+      id: payload.target.id,
+      key: null,
+      type: payload.target.type,
+    },
   });
   if (guardFailure) {
-    return {
-      code:
-        guardFailure === "rate_limited"
-          ? "feed_rate_limited"
-          : "account_link_missing",
-      ok: false,
-    };
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
   }
 
   const response = await client
@@ -594,6 +585,20 @@ async function writeFeedReaction({
     return { code: target.code, ok: false };
   }
 
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "react",
+    client,
+    target: {
+      id: target.data.id,
+      key: target.data.key,
+      type: target.data.dbTargetType,
+    },
+  });
+  if (guardFailure) {
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+  }
+
   const row = {
     account_id: accountId,
     reaction: payload.reaction,
@@ -661,6 +666,20 @@ async function writeFeedBookmark({
 
   if (normalizedTarget.dbTargetType === "feed_comment") {
     return { code: "feed_target_not_supported", ok: false };
+  }
+
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "bookmark",
+    client,
+    target: {
+      id: normalizedTarget.id,
+      key: normalizedTarget.key,
+      type: normalizedTarget.dbTargetType,
+    },
+  });
+  if (guardFailure) {
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
   }
 
   const row = {
@@ -802,6 +821,20 @@ async function writeFeedPreference({
     return { code: "feed_target_not_supported", ok: false };
   }
 
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "not_interested",
+    client,
+    target: {
+      id: target.data.id,
+      key: target.data.key,
+      type: target.data.dbTargetType,
+    },
+  });
+  if (guardFailure) {
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+  }
+
   const response = await insertOrReadExistingPreference({
     accountId,
     client,
@@ -829,6 +862,20 @@ async function writePollVote({
   client: ServiceClient;
   payload: Extract<FeedWriteRequest, { action: "vote_poll" }>;
 }): Promise<ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>> {
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "vote_poll",
+    client,
+    target: {
+      id: payload.pollId,
+      key: null,
+      type: "feed_poll",
+    },
+  });
+  if (guardFailure) {
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+  }
+
   const response = await insertPollVote({
     accountId,
     client,
@@ -1421,6 +1468,21 @@ function getFeedDbFailureCode(
   }
 
   return fallback;
+}
+
+function mapCommunityGuardFailure(
+  failure: CommunityWriteGuardCode,
+): FeedWriteFailureCode {
+  if (failure === "duplicate_content") return "feed_duplicate_content";
+  if (failure === "rate_limited") return "feed_rate_limited";
+  if (failure === "required_consent_missing") {
+    return "feed_required_consent_missing";
+  }
+  if (failure === "target_invalid") return "feed_target_invalid";
+  if (failure === "guard_unavailable") {
+    return "feed_write_guard_unavailable";
+  }
+  return "account_link_missing";
 }
 
 function buildExistingReactionQuery({

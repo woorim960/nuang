@@ -17,6 +17,12 @@ type MockResponse = {
   error: { code?: string; message?: string } | null;
 };
 
+type MockRpcOperation = {
+  name: string;
+  params: Record<string, unknown>;
+  schema: string;
+};
+
 const accountId = "11111111-1111-4111-8111-111111111111";
 const user = {
   app_metadata: {
@@ -629,6 +635,87 @@ describe("feed server writes", () => {
     });
   });
 
+  it("rejects a reaction when the server guard cannot resolve a public target", async () => {
+    const { client, operations, rpcOperations } = createMockClient(
+      (operation) => {
+        if (
+          operation.schema === "identity" &&
+          operation.table === "auth_identity"
+        ) {
+          return { data: { account_id: accountId }, error: null };
+        }
+        return { data: null, error: { message: "unexpected operation" } };
+      },
+      () => ({ data: "target_invalid", error: null }),
+    );
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "react",
+        reaction: "like",
+        target: {
+          id: "22222222-2222-4222-8222-222222222222",
+          type: "feed_post",
+        },
+      },
+      user,
+    });
+
+    expect(result).toEqual({ code: "feed_target_invalid", ok: false });
+    expect(rpcOperations).toContainEqual({
+      name: "check_community_mutation_guard",
+      params: expect.objectContaining({
+        p_action: "react",
+        p_target_id: "22222222-2222-4222-8222-222222222222",
+        p_target_key: null,
+        p_target_type: "feed_post",
+      }),
+      schema: "feed",
+    });
+    expect(
+      operations.some((operation) => operation.table === "feed_reaction"),
+    ).toBe(false);
+  });
+
+  it("fails closed when the community write guard is unavailable", async () => {
+    const { client, operations } = createMockClient(
+      (operation) => {
+        if (
+          operation.schema === "identity" &&
+          operation.table === "auth_identity"
+        ) {
+          return { data: { account_id: accountId }, error: null };
+        }
+        return { data: null, error: { message: "unexpected operation" } };
+      },
+      () => ({
+        data: null,
+        error: { code: "PGRST202", message: "function not found" },
+      }),
+    );
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "bookmark",
+        target: {
+          id: "daily_mood_001",
+          type: "feed_seed_card",
+        },
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      code: "feed_write_guard_unavailable",
+      ok: false,
+    });
+    expect(
+      operations.some((operation) => operation.table === "feed_bookmark"),
+    ).toBe(false);
+  });
+
   it("rejects unknown seed card targets before writing", async () => {
     const { client, operations } = createMockClient((operation) => {
       if (
@@ -1016,11 +1103,37 @@ describe("feed server writes", () => {
 
 function createMockClient(
   responder: (operation: MockOperation) => MockResponse,
+  rpcResponder: (operation: MockRpcOperation) => MockResponse = () => ({
+    data: null,
+    error: null,
+  }),
 ) {
   const operations: MockOperation[] = [];
+  const rpcOperations: MockRpcOperation[] = [];
+  const resolveResponse = (operation: MockOperation): MockResponse => {
+    if (
+      operation.schema === "consent" &&
+      operation.table === "age_and_consent_status"
+    ) {
+      return {
+        data: {
+          is_14_or_older: true,
+          required_privacy_version: "privacy.v0.1",
+          required_terms_version: "terms.v0.1",
+        },
+        error: null,
+      };
+    }
+    return responder(operation);
+  };
   const client = {
     schema(schema: string) {
       return {
+        rpc(name: string, params: Record<string, unknown>) {
+          const operation = { name, params, schema };
+          rpcOperations.push(structuredClone(operation));
+          return Promise.resolve(rpcResponder(operation));
+        },
         from(table: string) {
           const operation: MockOperation = {
             filters: [],
@@ -1046,7 +1159,7 @@ function createMockClient(
             maybeSingle() {
               operation.method = "maybeSingle";
               operations.push(structuredClone(operation));
-              return Promise.resolve(responder(operation));
+              return Promise.resolve(resolveResponse(operation));
             },
             order() {
               return builder;
@@ -1057,7 +1170,7 @@ function createMockClient(
             single() {
               operation.method = "single";
               operations.push(structuredClone(operation));
-              return Promise.resolve(responder(operation));
+              return Promise.resolve(resolveResponse(operation));
             },
             then<TResult1 = unknown, TResult2 = never>(
               onfulfilled?:
@@ -1066,7 +1179,7 @@ function createMockClient(
                 ((reason: unknown) => TResult2 | PromiseLike<TResult2>) | null,
             ) {
               operations.push(structuredClone(operation));
-              return Promise.resolve(responder(operation)).then(
+              return Promise.resolve(resolveResponse(operation)).then(
                 onfulfilled,
                 onrejected,
               );
@@ -1086,6 +1199,7 @@ function createMockClient(
   return {
     client,
     operations,
+    rpcOperations,
   };
 }
 

@@ -3,7 +3,6 @@ import {
   BookOpenCheck,
   ChevronDown,
   Map,
-  RefreshCw,
 } from "lucide-react";
 import Link from "next/link";
 import type {
@@ -15,6 +14,7 @@ import {
   type TraitMapSectionFeedbackMetric,
 } from "@/features/research/trait-map/trait-map-feedback-analysis";
 import { AdminResearchDecisionActions } from "./AdminResearchDecisionActions";
+import { AdminResearchRefreshButton } from "./AdminResearchRefreshButton";
 import {
   gateCDecisionKey,
   type ResearchDecision,
@@ -50,10 +50,7 @@ export function AdminResearchDashboard({
           <p>검사와 성향지도 품질</p>
           <h1>검사 연구</h1>
         </div>
-        <Link className={shared.headerAction} href="/admin/research">
-          <RefreshCw aria-hidden="true" size={16} strokeWidth={1.7} />
-          새로고침
-        </Link>
+        <AdminResearchRefreshButton />
       </header>
 
       <section aria-label="연구 지표" className={styles.summary}>

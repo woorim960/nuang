@@ -8,6 +8,7 @@ describe("customer-facing policy pages", () => {
     render(<TermsPolicyPage />);
 
     expect(screen.getByText("이용약관")).toBeInTheDocument();
+    expect(screen.getByText("시행일 2026년 7월 28일")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "서비스 이용" }),
     ).toBeInTheDocument();
@@ -44,6 +45,15 @@ describe("customer-facing policy pages", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "공개와 보호" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "보관과 삭제" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "회원의 권리" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "담당자와 문의" }),
     ).toBeInTheDocument();
     expect(
       screen.getByText(

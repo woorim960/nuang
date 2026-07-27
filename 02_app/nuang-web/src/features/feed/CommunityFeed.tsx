@@ -10,7 +10,14 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  useEffect,
+  useId,
+  useMemo,
+  useState,
+  type ReactNode,
+  type RefObject,
+} from "react";
 import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
 import { FeedComposer } from "@/features/feed/FeedComposer";
 import { FeedMediaCarousel } from "@/features/feed/FeedMediaCarousel";
@@ -21,6 +28,7 @@ import { SafeLinkedText } from "@/features/feed/SafeLinkedText";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import { candidateRoleNames } from "@/features/nuang-code/candidate-profile-names";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
+import { useModalDialog } from "@/hooks/useModalDialog";
 import styles from "@/app/feed/page.module.css";
 
 type FeedMode = "decal" | "recommended";
@@ -51,17 +59,10 @@ export function CommunityFeed({
   const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
   const [draftCodes, setDraftCodes] = useState<string[]>([]);
   const [filterQuery, setFilterQuery] = useState("");
-
-  useEffect(() => {
-    if (!panel) return;
-
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setPanel(null);
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [panel]);
+  const filterDialogRef = useModalDialog<HTMLElement>({
+    onClose: () => setPanel(null),
+    open: panel === "filter",
+  });
 
   useEffect(() => {
     if (!highlightedPostId || highlightedPostId === "complete") return;
@@ -204,7 +205,11 @@ export function CommunityFeed({
       </section>
 
       {panel === "filter" ? (
-        <CommunityPanelFrame label="성향 필터" onClose={() => setPanel(null)}>
+        <CommunityPanelFrame
+          dialogRef={filterDialogRef}
+          label="성향 필터"
+          onClose={() => setPanel(null)}
+        >
           <label className={styles.panelSearchField}>
             <Search aria-hidden="true" size={18} />
             <span className="sr-only">코드 또는 성향 이름 검색</span>
@@ -498,31 +503,38 @@ function Avatar({ label, post }: { label: string; post: FeedItem }) {
 function CommunityPanelFrame({
   action,
   children,
+  dialogRef,
   label,
   onClose,
 }: {
   action?: ReactNode;
   children: ReactNode;
+  dialogRef: RefObject<HTMLElement | null>;
   label: string;
   onClose: () => void;
 }) {
+  const titleId = useId();
+
   return (
-    <div className={styles.panelBackdrop}>
+    <div className={styles.panelBackdrop} data-modal-layer="true">
       <section
-        aria-label={label}
+        aria-labelledby={titleId}
         aria-modal="true"
         className={styles.communityPanel}
+        ref={dialogRef}
         role="dialog"
+        tabIndex={-1}
       >
         <header className={styles.panelHeader}>
           <button
             aria-label="커뮤니티로 돌아가기"
+            data-modal-initial-focus="true"
             onClick={onClose}
             type="button"
           >
             <ArrowLeft aria-hidden="true" size={21} />
           </button>
-          <strong>{label}</strong>
+          <strong id={titleId}>{label}</strong>
           <span className={styles.panelHeaderAction}>{action}</span>
         </header>
         <div className={styles.panelBody}>{children}</div>

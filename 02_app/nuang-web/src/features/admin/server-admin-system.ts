@@ -35,6 +35,17 @@ export async function readAdminSystem(client: SupabaseClient) {
       "인증 이메일 발신 주소",
       "EMAIL_VERIFICATION_FROM",
     ),
+    envCheck("legal-name", "서비스 운영자 이름", "LEGAL_OPERATOR_NAME"),
+    envCheck(
+      "privacy-contact",
+      "개인정보 문의 이메일",
+      "PRIVACY_CONTACT_EMAIL",
+    ),
+    envCheck(
+      "data-region",
+      "개인정보 저장 지역",
+      "SUPABASE_DATA_REGION",
+    ),
   ];
 
   const database = await Promise.all([
@@ -139,6 +150,8 @@ export async function readAdminSystem(client: SupabaseClient) {
         p_body: null,
       },
       "도배와 중복 게시물 차단이 동작하지 않습니다.",
+      "blocker",
+      "feed",
     ),
     rpcCheck(
       client,
@@ -164,6 +177,50 @@ export async function readAdminSystem(client: SupabaseClient) {
       },
       "연구 검토 결정을 저장할 수 없습니다.",
       "warning",
+    ),
+    rpcCheck(
+      client,
+      "검사 결과 안전 저장",
+      "claim_assessment_result_atomic",
+      {
+        p_account_id: "00000000-0000-4000-8000-000000000000",
+        p_assessment_kind: "readiness_check",
+        p_assessment_slug: "readiness-check",
+        p_code_scheme_version: "readiness",
+        p_completed_at: new Date(0).toISOString(),
+        p_item_release_version: "readiness",
+        p_local_result_id: "admin_system_noop",
+        p_measurement_release_id: "readiness",
+        p_profile_code: "ENAKQ",
+        p_profile_name: "readiness",
+        p_responses: [],
+        p_score_payload: {},
+        p_scoring_release_id: "readiness",
+        p_scoring_version: "readiness",
+        p_share_summary: {},
+        p_summary: {},
+      },
+      "검사 응답과 서버 채점 결과를 한 번에 안전하게 저장할 수 없습니다.",
+    ),
+    rpcCheck(
+      client,
+      "검사 연구 요청 보호",
+      "check_gate_c_request_guard",
+      {
+        p_action: "start_session",
+        p_subject_hash: "invalid-admin-system-check",
+      },
+      "검사 연구의 반복·자동 요청을 제한할 수 없습니다.",
+    ),
+    rpcCheck(
+      client,
+      "회원 탈퇴",
+      "delete_own_nuang_account",
+      {
+        p_account_id: "00000000-0000-4000-8000-000000000000",
+        p_supabase_user_id: "00000000-0000-4000-8000-000000000001",
+      },
+      "사용자 계정과 인증 정보를 안전하게 함께 삭제할 수 없습니다.",
     ),
   ]);
 
@@ -274,15 +331,19 @@ async function rpcCheck(
   args: Record<string, unknown>,
   unavailableImpact: string,
   severity: AdminSystemCheck["severity"] = "blocker",
+  schema = "public",
 ): Promise<AdminSystemCheck> {
-  const response = await client.rpc(rpcName, args);
+  const response =
+    schema === "public"
+      ? await client.rpc(rpcName, args)
+      : await client.schema(schema).rpc(rpcName, args);
   const missing = ["42883", "PGRST202"].includes(response.error?.code ?? "");
   return {
     action: missing
       ? `${unavailableImpact} 최신 DB 마이그레이션을 적용하세요.`
       : "",
     detail: missing ? "운영 함수 적용 필요" : "정상",
-    key: `rpc.${rpcName}`,
+    key: `rpc.${schema}.${rpcName}`,
     label,
     ok: !missing,
     severity,

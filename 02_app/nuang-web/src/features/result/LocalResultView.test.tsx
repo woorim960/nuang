@@ -167,6 +167,7 @@ describe("LocalResultView", () => {
       getItem: vi.fn(() =>
         JSON.stringify({
           analytics: false,
+          is14OrOlder: true,
           marketing: false,
           privacy: true,
           terms: true,
@@ -217,13 +218,17 @@ describe("LocalResultView", () => {
     );
     const claimBody = JSON.parse(String(claimCall?.[1]?.body));
 
-    expect(claimBody.resultSummary.facets).toHaveLength(10);
-    expect(claimBody.resultSummary.facets[0]).toMatchObject({
-      facetId: expect.any(String),
-      label: expect.any(String),
-      score: expect.any(Number),
-      status: expect.stringMatching(/valid|partial|insufficient/),
+    expect(claimBody.responses).toHaveLength(fullCoreAssessment.items.length);
+    expect(claimBody.responses[0]).toMatchObject({
+      answeredAt: expect.any(String),
+      itemId: expect.any(String),
+      value: expect.any(Number),
     });
+    expect(claimBody.resultSummary).toEqual({
+      completedAt: expect.any(String),
+    });
+    expect(claimBody.resultSummary).not.toHaveProperty("facets");
+    expect(claimBody).not.toHaveProperty("profileCode");
     expect(screen.queryByText(/계정에 저장/)).not.toBeInTheDocument();
   });
 
@@ -241,6 +246,7 @@ describe("LocalResultView", () => {
       getItem: vi.fn(() =>
         JSON.stringify({
           analytics: false,
+          is14OrOlder: true,
           marketing: false,
           privacy: true,
           terms: true,

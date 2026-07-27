@@ -19,16 +19,14 @@ import type {
   ShareLinkFailureCode,
   ShareLinkSuccessInput,
 } from "@/features/account/share-link-contract";
-import { readResultAccountStatus } from "@/features/account/server-reads";
 import {
-  candidateFullCoreAssessment,
-  candidateFullScoringRelease,
-} from "@/features/assessment/candidate-full-core-seed";
+  deriveTrustedClaimResult,
+  type TrustedClaimResult,
+} from "@/features/account/server-result-claim";
 import {
-  candidateQuickCoreAssessment,
-  candidateQuickScoringRelease,
-} from "@/features/assessment/candidate-quick-core-seed";
-import { isRequiredConsentComplete } from "@/features/consent/consent-draft";
+  isRequiredConsentComplete,
+  type ConsentDraft,
+} from "@/features/consent/consent-draft";
 import { getAppOrigin } from "@/lib/supabase/env";
 import { getSupabaseServiceEnv } from "@/lib/supabase/service";
 
@@ -63,10 +61,10 @@ export async function claimResultToAccount({
     return { code: "age_or_required_consent_missing", ok: false };
   }
 
-  const trustedRelease = getTrustedClaimRelease(payload);
+  const trustedResult = deriveTrustedClaimResult(payload);
 
-  if (!trustedRelease) {
-    return { code: "assessment_release_mismatch", ok: false };
+  if (!trustedResult) {
+    return { code: "assessment_response_invalid", ok: false };
   }
 
   const account = await ensureAccountForUser(client, user);
@@ -75,178 +73,64 @@ export async function claimResultToAccount({
     return { code: "account_link_missing", ok: false };
   }
 
-  const consent = await writeConsentState(client, account.accountId, payload);
+  const consent = await persistAccountConsent(
+    client,
+    account.accountId,
+    payload.consentDraft,
+  );
 
   if (!consent.ok) {
     return { code: "age_or_required_consent_missing", ok: false };
   }
 
-  const existingAttempt = await client
-    .schema("assessment")
-    .from("assessment_attempt")
-    .select("id")
-    .eq("account_id", account.accountId)
-    .eq("local_result_id", payload.localResultId)
-    .maybeSingle();
-
-  if (existingAttempt.error) {
-    return { code: "assessment_attempt_write_failed", ok: false };
-  }
-
-  if (existingAttempt.data) {
-    return restoreClaimedResult({
-      client,
-      localResultId: payload.localResultId,
-      user,
-    });
-  }
-
-  const now = new Date().toISOString();
   const assessmentSlug =
     payload.assessmentKind === "full" ? "nu-core-full" : "nu-core-quick";
-  const attemptResponse = await client
-    .schema("assessment")
-    .from("assessment_attempt")
-    .insert({
-      account_id: account.accountId,
-      assessment_kind: payload.assessmentKind,
-      assessment_slug: assessmentSlug,
-      claimed_at: now,
-      completed_at: payload.resultSummary.completedAt,
-      code_scheme_version: trustedRelease.codeSchemeVersion,
-      item_release_version: trustedRelease.assessmentReleaseId,
-      local_result_id: payload.localResultId,
-      measurement_release_id: trustedRelease.assessmentReleaseId,
-      scoring_release_id: trustedRelease.scoringReleaseId,
-      scoring_version: trustedRelease.scoringModelVersion,
-      status: "claimed",
-    })
-    .select("id, claimed_at")
-    .single();
-
-  if (attemptResponse.error || !attemptResponse.data) {
-    if (attemptResponse.error?.code === "23505") {
-      return restoreClaimedResult({
-        client,
-        localResultId: payload.localResultId,
-        user,
-      });
-    }
-
-    return { code: "assessment_attempt_write_failed", ok: false };
-  }
-
-  const attempt = attemptResponse.data as { claimed_at: string; id: string };
-  const scorePayload = buildScorePayload(payload);
-
-  const scoreResponse = await client
-    .schema("scoring")
-    .from("score_snapshot")
-    .insert({
-      account_id: account.accountId,
-      attempt_id: attempt.id,
-      code_scheme_version: trustedRelease.codeSchemeVersion,
-      measurement_release_id: trustedRelease.assessmentReleaseId,
-      score_payload: scorePayload,
-      scoring_release_id: trustedRelease.scoringReleaseId,
-      scoring_version: trustedRelease.scoringModelVersion,
-    })
-    .select("id")
-    .single();
-
-  if (scoreResponse.error) {
-    return { code: "score_snapshot_write_failed", ok: false };
-  }
-
-  const reportResponse = await client
-    .schema("report")
-    .from("result_report")
-    .insert({
-      account_id: account.accountId,
-      attempt_id: attempt.id,
-      code_scheme_version: trustedRelease.codeSchemeVersion,
-      measurement_release_id: trustedRelease.assessmentReleaseId,
-      profile_code: payload.resultSummary.profileCode,
-      profile_name: payload.resultSummary.profileName,
-      report_kind: payload.assessmentKind,
-      scoring_release_id: trustedRelease.scoringReleaseId,
-      share_summary: buildShareSummary(payload),
-      summary: buildResultSummary(payload),
-    })
-    .select("id")
-    .single();
-
-  if (reportResponse.error || !reportResponse.data) {
-    return { code: "result_report_write_failed", ok: false };
-  }
-
-  const report = reportResponse.data as { id: string };
-
-  return {
-    data: {
-      assessmentAttemptId: attempt.id,
-      claimedAt: attempt.claimed_at,
-      profileCode: payload.resultSummary.profileCode,
-      profileName: payload.resultSummary.profileName,
-      resultReportId: report.id,
-    },
-    ok: true,
-  };
-}
-
-function getTrustedClaimRelease(payload: ClaimResultPayload) {
-  const candidateRelease =
-    payload.assessmentKind === "full"
-      ? {
-          assessmentReleaseId: candidateFullCoreAssessment.releaseId,
-          codeSchemeVersion: candidateFullScoringRelease.codeSchemeVersion,
-          scoringModelVersion: candidateFullScoringRelease.scoringModelVersion,
-          scoringReleaseId: candidateFullScoringRelease.scoringReleaseId,
-        }
-      : {
-          assessmentReleaseId: candidateQuickCoreAssessment.releaseId,
-          codeSchemeVersion: candidateQuickScoringRelease.codeSchemeVersion,
-          scoringModelVersion: candidateQuickScoringRelease.scoringModelVersion,
-          scoringReleaseId: candidateQuickScoringRelease.scoringReleaseId,
-        };
-
-  return Object.entries(candidateRelease).every(
-    ([key, value]) =>
-      payload.versionBundle[key as keyof typeof candidateRelease] === value,
-  )
-    ? candidateRelease
-    : null;
-}
-
-async function restoreClaimedResult({
-  client,
-  localResultId,
-  user,
-}: {
-  client: ServiceClient;
-  localResultId: string;
-  user: User;
-}): Promise<
-  ServerWriteResult<ClaimResultWriteSuccessInput, ClaimResultWriteFailureCode>
-> {
-  const restored = await readResultAccountStatus({
-    client,
-    localResultId,
-    user,
+  const claimResponse = await client.rpc("claim_assessment_result_atomic", {
+    p_account_id: account.accountId,
+    p_assessment_kind: payload.assessmentKind,
+    p_assessment_slug: assessmentSlug,
+    p_code_scheme_version: trustedResult.trustedRelease.codeSchemeVersion,
+    p_completed_at: trustedResult.completedAt,
+    p_item_release_version:
+      trustedResult.trustedRelease.assessmentReleaseId,
+    p_local_result_id: payload.localResultId,
+    p_measurement_release_id:
+      trustedResult.trustedRelease.assessmentReleaseId,
+    p_profile_code: trustedResult.profileCode,
+    p_profile_name: trustedResult.profileName,
+    p_responses: trustedResult.responseRows,
+    p_score_payload: buildScorePayload(payload, trustedResult),
+    p_scoring_release_id: trustedResult.trustedRelease.scoringReleaseId,
+    p_scoring_version: trustedResult.trustedRelease.scoringModelVersion,
+    p_share_summary: buildShareSummary(payload, trustedResult),
+    p_summary: buildResultSummary(payload, trustedResult),
   });
 
-  if (!restored.ok || !restored.data) {
+  if (claimResponse.error || !Array.isArray(claimResponse.data)) {
+    return { code: "result_report_write_failed", ok: false };
+  }
+
+  const claimed = claimResponse.data[0] as
+    | {
+        assessment_attempt_id: string;
+        claimed_at: string;
+        profile_code: string;
+        profile_name: string;
+        result_report_id: string;
+      }
+    | undefined;
+
+  if (!claimed) {
     return { code: "result_report_write_failed", ok: false };
   }
 
   return {
     data: {
-      assessmentAttemptId: restored.data.assessmentAttemptId,
-      claimedAt: restored.data.claimedAt,
-      profileCode: restored.data.profileCode,
-      profileName: restored.data.profileName,
-      restored: true,
-      resultReportId: restored.data.resultReportId,
+      assessmentAttemptId: claimed.assessment_attempt_id,
+      claimedAt: claimed.claimed_at,
+      profileCode: claimed.profile_code,
+      profileName: claimed.profile_name,
+      resultReportId: claimed.result_report_id,
     },
     ok: true,
   };
@@ -530,10 +414,10 @@ export async function ensureAccountForUser(client: ServiceClient, user: User) {
   };
 }
 
-async function writeConsentState(
+export async function persistAccountConsent(
   client: ServiceClient,
   accountId: string,
-  payload: ClaimResultPayload,
+  consentDraft: ConsentDraft,
 ) {
   const declaredAt = new Date().toISOString();
 
@@ -545,10 +429,10 @@ async function writeConsentState(
         account_id: accountId,
         age_band: null,
         age_source: "self_declared",
-        analytics_opt_in: payload.consentDraft.analytics,
+        analytics_opt_in: consentDraft.analytics,
         declared_at: declaredAt,
-        is_14_or_older: false,
-        marketing_opt_in: payload.consentDraft.marketing,
+        is_14_or_older: true,
+        marketing_opt_in: consentDraft.marketing,
         policy_version: consentPolicyVersion,
         required_privacy_version: privacyVersion,
         required_terms_version: termsVersion,
@@ -649,41 +533,49 @@ function stringValue(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-function buildResultSummary(payload: ClaimResultPayload) {
+function buildResultSummary(
+  payload: ClaimResultPayload,
+  trustedResult: TrustedClaimResult,
+) {
   return {
     assessmentKind: payload.assessmentKind,
-    completedAt: payload.resultSummary.completedAt,
-    domains: payload.resultSummary.domains ?? [],
-    facets: payload.resultSummary.facets ?? [],
-    profileCode: payload.resultSummary.profileCode,
-    profileName: payload.resultSummary.profileName,
-    resultLabel:
-      payload.resultSummary.resultLabel ?? "현재 가장 가까운 대표 성향",
+    completedAt: trustedResult.completedAt,
+    domains: trustedResult.domains,
+    facets: trustedResult.facets,
+    profileCode: trustedResult.profileCode,
+    profileName: trustedResult.profileName,
+    resultLabel: trustedResult.resultLabel,
     versionBundle: payload.versionBundle,
   };
 }
 
-function buildShareSummary(payload: ClaimResultPayload) {
+function buildShareSummary(
+  payload: ClaimResultPayload,
+  trustedResult: TrustedClaimResult,
+) {
   return {
     assessmentKind: payload.assessmentKind,
-    completedAt: payload.resultSummary.completedAt,
-    domains: payload.resultSummary.domains ?? [],
-    profileCode: payload.resultSummary.profileCode,
-    profileName: payload.resultSummary.profileName,
-    resultLabel:
-      payload.resultSummary.resultLabel ?? "현재 가장 가까운 대표 성향",
+    completedAt: trustedResult.completedAt,
+    domains: trustedResult.domains,
+    profileCode: trustedResult.profileCode,
+    profileName: trustedResult.profileName,
+    resultLabel: trustedResult.resultLabel,
     versionBundle: payload.versionBundle,
   };
 }
 
-function buildScorePayload(payload: ClaimResultPayload) {
+function buildScorePayload(
+  payload: ClaimResultPayload,
+  trustedResult: TrustedClaimResult,
+) {
   return {
     assessmentKind: payload.assessmentKind,
-    completedAt: payload.resultSummary.completedAt,
-    domains: payload.resultSummary.domains ?? [],
+    completedAt: trustedResult.completedAt,
+    domains: trustedResult.domains,
+    facets: trustedResult.facets,
     includesDirectResponses: false,
-    profileCode: payload.resultSummary.profileCode,
-    profileName: payload.resultSummary.profileName,
+    profileCode: trustedResult.profileCode,
+    profileName: trustedResult.profileName,
     versionBundle: payload.versionBundle,
   };
 }

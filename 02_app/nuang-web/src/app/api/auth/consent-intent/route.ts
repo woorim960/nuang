@@ -1,0 +1,26 @@
+import { NextResponse } from "next/server";
+import {
+  consentDraftSchema,
+  consentIntentCookieName,
+} from "@/features/consent/consent-draft";
+import { readValidatedJson } from "@/lib/api/request";
+
+export async function POST(request: Request) {
+  const payload = await readValidatedJson(request, consentDraftSchema);
+
+  if (!payload.ok) {
+    return payload.response;
+  }
+
+  const response = NextResponse.json({ ok: true });
+  response.cookies.set({
+    httpOnly: true,
+    maxAge: 10 * 60,
+    name: consentIntentCookieName,
+    path: "/",
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    value: encodeURIComponent(JSON.stringify(payload.data)),
+  });
+  return response;
+}

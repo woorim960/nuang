@@ -40,7 +40,6 @@ import {
 } from "@/features/assessment/precision-entry";
 import type { ResultAccountStatus } from "@/features/account/result-account-status";
 import type {
-  CoreScoreResult,
   DomainScore,
   FacetScore,
 } from "@/lib/scoring/types";
@@ -226,7 +225,6 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
         const outcome = await claimLocalResult({
           attempt,
           consentDraft,
-          result,
           versionBundle: {
             assessmentReleaseId: resultSnapshot.assessmentReleaseId,
             codeSchemeVersion: resultSnapshot.codeSchemeVersion,
@@ -1097,12 +1095,10 @@ async function readAccountStatus(
 async function claimLocalResult({
   attempt,
   consentDraft,
-  result,
   versionBundle,
 }: {
   attempt: LocalAssessmentAttempt;
   consentDraft: ConsentDraft;
-  result: CoreScoreResult;
   versionBundle: {
     assessmentReleaseId: string;
     codeSchemeVersion: string;
@@ -1119,36 +1115,21 @@ async function claimLocalResult({
       state: "error" | "unauthenticated";
     }
 > {
-  const assessment = isCandidateQuickRelease(attempt)
-    ? candidateQuickCoreAssessment
-    : isCandidateFullRelease(attempt)
-      ? candidateFullCoreAssessment
-      : attempt.assessmentId === "nu-core-full"
-        ? fullCoreAssessment
-        : quickCoreAssessment;
   const response = await fetch("/api/claim-result", {
     body: JSON.stringify({
       assessmentKind: attempt.mode,
       consentDraft,
       localResultId: attempt.id,
+      responses: Object.values(attempt.responses).map((response) => ({
+        answeredAt: response.answeredAt,
+        isUnsure: response.isUnsure,
+        itemId: response.itemId,
+        unsureReason: response.unsureReason,
+        value: response.value,
+      })),
       versionBundle,
       resultSummary: {
         completedAt: attempt.completedAt ?? attempt.updatedAt,
-        domains: result.domains.slice(0, 5).map((domain) => ({
-          domainId: domain.domainId,
-          label: domain.label,
-          score: domain.score,
-          symbol: domain.symbol,
-        })),
-        facets: result.facets.slice(0, 10).map((facet) => ({
-          facetId: facet.facetId,
-          label: facet.label,
-          score: facet.score,
-          status: facet.status,
-        })),
-        profileCode: result.code,
-        profileName: result.profileName,
-        resultLabel: assessment.resultLabel,
       },
     }),
     headers: {
@@ -1189,9 +1170,10 @@ function readStoredConsentDraft(): ConsentDraft | null {
 
     const parsed = JSON.parse(raw) as Partial<ConsentDraft>;
 
-    if (parsed.terms && parsed.privacy) {
+    if (parsed.is14OrOlder && parsed.terms && parsed.privacy) {
       return {
         analytics: Boolean(parsed.analytics),
+        is14OrOlder: true,
         marketing: Boolean(parsed.marketing),
         privacy: true,
         terms: true,

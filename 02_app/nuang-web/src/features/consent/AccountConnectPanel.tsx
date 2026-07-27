@@ -34,6 +34,9 @@ export function AccountConnectPanel({
 }) {
   const router = useRouter();
   const [savedConsentDraft] = useState(readSavedConsentDraft);
+  const [is14OrOlder, setIs14OrOlder] = useState(
+    savedConsentDraft?.is14OrOlder ?? false,
+  );
   const [terms, setTerms] = useState(savedConsentDraft?.terms ?? false);
   const [privacy, setPrivacy] = useState(savedConsentDraft?.privacy ?? false);
   const [analytics, setAnalytics] = useState(
@@ -50,12 +53,16 @@ export function AccountConnectPanel({
   const [connectedAccount, setConnectedAccount] =
     useState<ConnectedAccount | null>(null);
   const [isCheckingAccount, setIsCheckingAccount] = useState(true);
-  const isReadyForAuth = isRequiredConsentComplete({ privacy, terms });
-  const allRequiredChecked = terms && privacy;
+  const isReadyForAuth = isRequiredConsentComplete({
+    is14OrOlder,
+    privacy,
+    terms,
+  });
+  const allRequiredChecked = is14OrOlder && terms && privacy;
 
   const consentSummary = useMemo(
-    () => ({ terms, privacy, analytics, marketing }),
-    [analytics, marketing, privacy, terms],
+    () => ({ terms, privacy, is14OrOlder, analytics, marketing }),
+    [analytics, is14OrOlder, marketing, privacy, terms],
   );
 
   useEffect(() => {
@@ -109,6 +116,20 @@ export function AccountConnectPanel({
   async function handleProviderClick(
     provider: (typeof socialAuthProviders)[number],
   ) {
+    const parsedConsent = consentDraftSchema.safeParse(consentSummary);
+
+    if (!parsedConsent.success) {
+      setMessage("필수 항목을 확인해 주세요.");
+      return;
+    }
+
+    const consentSaved = await saveConsentIntent(parsedConsent.data);
+
+    if (!consentSaved) {
+      setMessage("필수 동의를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.");
+      return;
+    }
+
     if (
       typeof localStorage !== "undefined" &&
       typeof localStorage.setItem === "function"
@@ -217,11 +238,17 @@ export function AccountConnectPanel({
           emphasis
           label="필수 항목 모두 동의"
           onChange={(checked) => {
+            setIs14OrOlder(checked);
             setTerms(checked);
             setPrivacy(checked);
           }}
         />
         <div className={styles.consentGroup}>
+          <ConsentCheck
+            checked={is14OrOlder}
+            label="만 14세 이상이에요"
+            onChange={setIs14OrOlder}
+          />
           <ConsentCheck
             checked={terms}
             label="이용약관에 동의해요"
@@ -489,5 +516,19 @@ function readSavedConsentDraft(): ConsentDraft | null {
     return parsedDraft.success ? parsedDraft.data : null;
   } catch {
     return null;
+  }
+}
+
+async function saveConsentIntent(draft: ConsentDraft) {
+  try {
+    const response = await fetch("/api/auth/consent-intent", {
+      body: JSON.stringify(draft),
+      headers: { "content-type": "application/json" },
+      method: "POST",
+    });
+
+    return response.ok;
+  } catch {
+    return false;
   }
 }

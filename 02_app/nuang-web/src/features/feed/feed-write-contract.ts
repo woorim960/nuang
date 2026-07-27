@@ -23,6 +23,8 @@ export type FeedWriteFailureCode =
   | "feed_target_not_supported"
   | "feed_response_closed"
   | "feed_rate_limited"
+  | "feed_required_consent_missing"
+  | "feed_write_guard_unavailable"
   | "feed_duplicate_content"
   | "feed_external_link_blocked"
   | "feed_already_reported"
@@ -48,7 +50,7 @@ export type FeedWriteSuccessInput = {
 export const feedWriteFailures: Record<
   FeedWriteFailureCode,
   {
-    httpStatus: 400 | 403 | 409 | 429 | 500;
+    httpStatus: 400 | 403 | 409 | 429 | 500 | 503;
     message: string;
     retryable: boolean;
     step: FeedWriteStepId;
@@ -93,6 +95,19 @@ export const feedWriteFailures: Record<
   feed_rate_limited: {
     httpStatus: 429,
     message: "짧은 시간에 요청이 많았어요. 잠시 쉬었다가 다시 시도해 주세요.",
+    retryable: true,
+    step: "validate_target",
+  },
+  feed_required_consent_missing: {
+    httpStatus: 403,
+    message:
+      "커뮤니티를 이용하려면 만 14세 이상 확인과 필수 약관 동의가 필요해요.",
+    retryable: false,
+    step: "validate_target",
+  },
+  feed_write_guard_unavailable: {
+    httpStatus: 503,
+    message: "안전 확인이 지연되고 있어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "validate_target",
   },

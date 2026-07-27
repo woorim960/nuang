@@ -45,6 +45,13 @@
   padding: 0 1rem;
 }
 
+.effectiveDate {
+  margin: 1rem 0 0;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  text-align: right;
+}
+
 .section {
   padding: 1.2rem 0;
   border-bottom: 1px solid var(--nu-color-border);

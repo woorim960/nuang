@@ -1,24 +1,47 @@
 import { z } from "zod";
 import { consentDraftSchema } from "@/features/consent/consent-draft";
 
-const domainSummarySchema = z.object({
-  domainId: z.string().min(1).max(24),
-  label: z.string().min(1).max(40),
-  score: z.number().min(0).max(100).nullable(),
-  symbol: z.string().min(1).max(8).nullable(),
-});
+const claimResponseSchema = z
+  .object({
+    answeredAt: z.string().datetime(),
+    isUnsure: z.boolean().optional(),
+    itemId: z.string().min(1).max(120),
+    unsureReason: z
+      .enum([
+        "NO_EXPERIENCE",
+        "CONTEXT_VARIES",
+        "WORDING_UNCLEAR",
+        "PREFER_NOT_TO_ANSWER",
+      ])
+      .optional(),
+    value: z.number().int().min(1).max(5).optional(),
+  })
+  .superRefine((response, context) => {
+    const hasValue = response.value !== undefined;
+    const isUnsure = response.isUnsure === true;
 
-const facetSummarySchema = z.object({
-  facetId: z.string().min(1).max(24),
-  label: z.string().min(1).max(40),
-  score: z.number().min(0).max(100).nullable(),
-  status: z.enum(["valid", "partial", "insufficient"]).optional(),
-});
+    if (hasValue === isUnsure) {
+      context.addIssue({
+        code: "custom",
+        message: "응답 값과 판단 어려움 중 하나만 선택해야 합니다.",
+        path: ["value"],
+      });
+    }
+
+    if (!isUnsure && response.unsureReason) {
+      context.addIssue({
+        code: "custom",
+        message: "판단 어려움 사유는 판단 어려움 응답에만 사용할 수 있습니다.",
+        path: ["unsureReason"],
+      });
+    }
+  });
 
 export const claimResultRequestSchema = z.object({
   assessmentKind: z.enum(["quick", "full"]),
   consentDraft: consentDraftSchema,
   localResultId: z.string().min(6).max(128),
+  responses: z.array(claimResponseSchema).min(1).max(80),
   versionBundle: z.object({
     assessmentReleaseId: z.string().min(1).max(120),
     codeSchemeVersion: z.string().min(1).max(120),
@@ -27,11 +50,6 @@ export const claimResultRequestSchema = z.object({
   }),
   resultSummary: z.object({
     completedAt: z.string().datetime(),
-    domains: z.array(domainSummarySchema).max(5).optional(),
-    facets: z.array(facetSummarySchema).max(10).optional(),
-    profileCode: z.string().min(1).max(16),
-    profileName: z.string().min(1).max(80),
-    resultLabel: z.string().min(1).max(80).optional(),
   }),
 });
 

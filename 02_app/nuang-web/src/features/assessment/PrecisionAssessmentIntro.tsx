@@ -29,6 +29,7 @@ import {
   type PrecisionEntrySource,
   resolveLocalPrecisionEntry,
 } from "@/features/assessment/precision-entry";
+import { listClientAccountResults } from "@/features/account/client-account-results";
 
 type PrecisionAssessmentIntroProps = {
   assessment?: AssessmentDefinition;
@@ -95,10 +96,22 @@ export function PrecisionAssessmentIntro({
       setErrorMessage(null);
 
       try {
-        const attempts = await listLocalAttempts();
+        const [attempts, accountResults] = await Promise.all([
+          listLocalAttempts(),
+          listClientAccountResults(),
+        ]);
+        const latestAccountFull = accountResults
+          .filter((result) => result.kind === "full")
+          .sort((left, right) =>
+            right.completedAt.localeCompare(left.completedAt),
+          )[0];
+        const hasAccountQuick = accountResults.some(
+          (result) => result.kind === "quick",
+        );
         const nextDecision = resolveLocalPrecisionEntry(attempts, {
           assessment,
-          requireQuickPrerequisite,
+          requireQuickPrerequisite:
+            requireQuickPrerequisite && !hasAccountQuick,
         });
 
         if (!isMounted) return;
@@ -115,6 +128,11 @@ export function PrecisionAssessmentIntro({
                 },
           );
           setSurface("intro");
+          return;
+        }
+
+        if (latestAccountFull) {
+          router.replace(`/results/account/${latestAccountFull.resultReportId}`);
           return;
         }
 

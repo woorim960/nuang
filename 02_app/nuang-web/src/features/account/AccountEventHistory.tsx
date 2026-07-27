@@ -9,11 +9,12 @@ import {
   TicketCheck,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import type {
   AccountEventEntryStatus,
   AccountEventHistoryPayload,
 } from "@/features/account/account-event-contract";
+import { useModalDialog } from "@/hooks/useModalDialog";
 import styles from "./AccountEventHistory.module.css";
 
 const statusCopy: Record<
@@ -61,14 +62,19 @@ export function AccountEventHistory() {
   >("loading");
   const [message, setMessage] = useState("");
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  const confirmTitleId = useId();
+  const confirmDialogRef = useModalDialog<HTMLElement>({
+    onClose: closeConfirm,
+    open: Boolean(confirmId),
+  });
 
   useEffect(() => {
     let active = true;
     void fetch("/api/me/events", { cache: "no-store" })
       .then(async (response) => {
-        const body = (await response.json().catch(() => null)) as
-          | AccountEventHistoryPayload
-          | null;
+        const body = (await response
+          .json()
+          .catch(() => null)) as AccountEventHistoryPayload | null;
         if (!active) return;
         if (!response.ok || !body?.ok) {
           setMessage("참여한 이벤트를 불러오지 못했어요.");
@@ -118,6 +124,10 @@ export function AccountEventHistory() {
     setConfirmId(null);
     setMessage("이벤트 응모를 취소했어요.");
     setState("idle");
+  }
+
+  function closeConfirm() {
+    if (state !== "withdrawing") setConfirmId(null);
   }
 
   if (state === "loading") {
@@ -228,15 +238,25 @@ export function AccountEventHistory() {
       ) : null}
 
       {confirmId ? (
-        <div className={styles.backdrop}>
-          <section aria-modal="true" className={styles.dialog} role="dialog">
-            <strong>이벤트 응모를 취소할까요?</strong>
+        <div className={styles.backdrop} data-modal-layer="true">
+          <section
+            aria-labelledby={confirmTitleId}
+            aria-modal="true"
+            className={styles.dialog}
+            ref={confirmDialogRef}
+            role="dialog"
+            tabIndex={-1}
+          >
+            <strong id={confirmTitleId}>이벤트 응모를 취소할까요?</strong>
             <p>
-              응모만 취소돼요. 프로필에 등록한 휴대전화번호는 그대로
-              유지됩니다.
+              응모만 취소돼요. 프로필에 등록한 휴대전화번호는 그대로 유지됩니다.
             </p>
             <div>
-              <button onClick={() => setConfirmId(null)} type="button">
+              <button
+                data-modal-initial-focus="true"
+                onClick={closeConfirm}
+                type="button"
+              >
                 계속 참여
               </button>
               <button

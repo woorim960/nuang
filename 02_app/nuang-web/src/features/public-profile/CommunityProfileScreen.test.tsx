@@ -232,6 +232,30 @@ describe("CommunityProfileScreen", () => {
     });
   });
 
+  it("continues comparison intent into the public profile action", () => {
+    render(
+      <CommunityProfileScreen
+        initialSocialState={{
+          followerCount: 12,
+          following: false,
+          followingCount: 8,
+          isOwnProfile: false,
+        }}
+        intent="compare"
+        posts={[post]}
+        profile={profile}
+      />,
+    );
+
+    expect(screen.getByText("비교할 사람 확인")).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "이 사람과 비교하기" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "비교할 사람 찾기로 돌아가기" }),
+    ).toHaveAttribute("href", "/feed/search?intent=compare");
+  });
+
   it("keeps the own community profile in place and shares it directly", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, "clipboard", {

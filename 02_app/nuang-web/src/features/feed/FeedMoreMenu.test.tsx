@@ -63,6 +63,27 @@ describe("FeedMoreMenu", () => {
     });
   });
 
+  it("traps modal focus and restores the more button after Escape", async () => {
+    render(<FeedMoreMenu postId="daily_mood_001" />);
+
+    const moreButton = screen.getByRole("button", { name: "더 보기" });
+    moreButton.focus();
+    fireEvent.click(moreButton);
+
+    const dialog = screen.getByRole("dialog", { name: "콘텐츠 메뉴" });
+    const closeButton = screen.getByRole("button", { name: "닫기" });
+    await waitFor(() => expect(closeButton).toHaveFocus());
+
+    fireEvent.keyDown(document, { key: "Tab" });
+    expect(screen.getByRole("button", { name: "관심 없음" })).toHaveFocus();
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(dialog).not.toBeInTheDocument();
+    await waitFor(() => expect(moreButton).toHaveFocus());
+    expect(moreButton).toHaveAttribute("aria-expanded", "false");
+  });
+
   it("keeps unauthenticated not interested requests inside the menu", async () => {
     vi.stubGlobal(
       "fetch",

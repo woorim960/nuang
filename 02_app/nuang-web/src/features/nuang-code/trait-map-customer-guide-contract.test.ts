@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { enakqCustomerGuideV2 } from "@/features/nuang-code/enakq-customer-guide-v2";
 import {
+  getPublishedTraitMapCustomerGuide,
+  getPublishedTraitMapCustomerGuideCodes,
+} from "@/features/nuang-code/trait-map-customer-guide-registry";
+import {
   traitMapCustomerGuideChapterSlots,
   traitMapCustomerGuideSchema,
 } from "@/features/nuang-code/trait-map-customer-guide-contract";
+import { candidateProfileDefinitions } from "@/features/nuang-code/candidate-profile-names";
 
 describe("traitMapCustomerGuideSchema", () => {
   it("accepts the published ENAKQ customer guide", () => {
@@ -13,6 +18,22 @@ describe("traitMapCustomerGuideSchema", () => {
     expect(
       enakqCustomerGuideV2.chapters.map((chapter) => chapter.slot),
     ).toEqual(traitMapCustomerGuideChapterSlots);
+  });
+
+  it("publishes a complete, contract-valid guide for all 32 Nuang codes", () => {
+    const codes = Object.keys(candidateProfileDefinitions).sort();
+
+    expect(codes).toHaveLength(32);
+    expect(getPublishedTraitMapCustomerGuideCodes()).toEqual(codes);
+
+    for (const code of codes) {
+      const guide = getPublishedTraitMapCustomerGuide(code);
+      expect(guide, code).not.toBeNull();
+      expect(traitMapCustomerGuideSchema.safeParse(guide).success, code).toBe(
+        true,
+      );
+      expect(guide?.chapters).toHaveLength(15);
+    }
   });
 
   it("rejects a guide when a relationship chapter is replaced", () => {

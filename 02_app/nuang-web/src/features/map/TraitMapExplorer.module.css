@@ -1,7 +1,7 @@
 .map {
   display: grid;
   gap: 0;
-  margin: calc(-20px - env(safe-area-inset-top)) -1.25rem -0.5rem;
+  margin: calc(-20px - env(safe-area-inset-top)) -1rem -0.5rem;
   padding: env(safe-area-inset-top) 0 1.8rem;
   overflow-x: clip;
   background: var(--nu-color-app-bg);

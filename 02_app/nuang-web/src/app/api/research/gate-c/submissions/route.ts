@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { refreshGateCAnalysis } from "@/features/research/gate-c/gate-c-auto-analysis";
 import {
+  checkGateCRequestGuard,
   hashGateCSecret,
   isAllowedGateCRequest,
 } from "@/features/research/gate-c/gate-c-server-security";
@@ -29,6 +29,22 @@ export async function DELETE(request: Request) {
 
   const serviceClient = createSupabaseServiceClient();
   if (!serviceClient) return createApiClosedResponse("supabase_env_missing");
+  const guard = await checkGateCRequestGuard({
+    action: "withdraw_submission",
+    client: serviceClient,
+    request,
+  });
+  if (guard) {
+    return NextResponse.json(
+      {
+        error:
+          guard === "rate_limited"
+            ? "research_rate_limited"
+            : "research_guard_unavailable",
+      },
+      { status: guard === "rate_limited" ? 429 : 503 },
+    );
+  }
 
   const response = await serviceClient.rpc("withdraw_gate_c_public_session", {
     supplied_withdrawal_secret_hash: hashGateCSecret(
@@ -48,12 +64,6 @@ export async function DELETE(request: Request) {
       { error: "research_submission_not_found" },
       { status: 404 },
     );
-  }
-
-  try {
-    await refreshGateCAnalysis(serviceClient);
-  } catch (error) {
-    console.error("Gate C analysis refresh after withdrawal failed", error);
   }
 
   return NextResponse.json({ ok: true });

@@ -93,9 +93,7 @@ describe("PrivateContactEditor", () => {
     render(<PrivateContactEditor />);
 
     expect(await screen.findByText("010-****-5678")).toBeInTheDocument();
-    expect(
-      screen.getByText(/나만 확인할 수 있어요/),
-    ).toBeInTheDocument();
+    expect(screen.getByText(/나만 확인할 수 있어요/)).toBeInTheDocument();
     await waitFor(() =>
       expect(screen.getByRole("button", { name: "변경" })).toBeEnabled(),
     );
@@ -138,10 +136,9 @@ describe("PrivateContactEditor", () => {
 
     render(<PrivateContactEditor />);
 
-    fireEvent.change(
-      await screen.findByRole("textbox", { name: "이메일" }),
-      { target: { value: "Woorim.Prog@gmail.com" } },
-    );
+    fireEvent.change(await screen.findByRole("textbox", { name: "이메일" }), {
+      target: { value: "Woorim.Prog@gmail.com" },
+    });
     fireEvent.click(screen.getByRole("button", { name: "이메일 저장" }));
 
     expect(await screen.findByText("wo***@gmail.com")).toBeInTheDocument();
@@ -170,9 +167,7 @@ describe("PrivateContactEditor", () => {
     };
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(
-        Response.json({ contact: savedContact, ok: true }),
-      )
+      .mockResolvedValueOnce(Response.json({ contact: savedContact, ok: true }))
       .mockResolvedValueOnce(
         Response.json({
           contact: { ...savedContact, marketingOptIn: true },
@@ -213,9 +208,7 @@ describe("PrivateContactEditor", () => {
     };
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(
-        Response.json({ contact: savedContact, ok: true }),
-      )
+      .mockResolvedValueOnce(Response.json({ contact: savedContact, ok: true }))
       .mockResolvedValueOnce(
         Response.json({
           ok: true,
@@ -240,9 +233,7 @@ describe("PrivateContactEditor", () => {
 
     render(<PrivateContactEditor />);
 
-    fireEvent.click(
-      await screen.findByRole("button", { name: /인증하기/ }),
-    );
+    fireEvent.click(await screen.findByRole("button", { name: /인증하기/ }));
     fireEvent.change(
       await screen.findByRole("textbox", { name: "이메일 인증번호" }),
       { target: { value: "123456" } },
@@ -262,5 +253,46 @@ describe("PrivateContactEditor", () => {
       challengeId: "33333333-3333-4333-8333-333333333333",
       code: "123456",
     });
+  });
+
+  it("keeps delete confirmation focus safe and restores the trigger", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        Response.json({
+          contact: {
+            emailMasked: "wo***@gmail.com",
+            emailStatus: "verified",
+            emailVerifiedAt: "2026-07-27T01:02:00.000Z",
+            hasEmail: true,
+            hasMobilePhone: true,
+            marketingOptIn: false,
+            mobilePhoneMasked: "010-****-5678",
+            mobilePhoneStatus: "unverified",
+            updatedAt: "2026-07-27T01:02:00.000Z",
+          },
+          ok: true,
+        }),
+      ),
+    );
+
+    render(<PrivateContactEditor />);
+
+    const trigger = await screen.findByRole("button", {
+      name: "이메일 삭제",
+    });
+    trigger.focus();
+    fireEvent.click(trigger);
+
+    const dialog = screen.getByRole("dialog", {
+      name: "이메일을 삭제할까요?",
+    });
+    const safeButton = screen.getByRole("button", { name: "유지하기" });
+    await waitFor(() => expect(safeButton).toHaveFocus());
+
+    fireEvent.keyDown(document, { key: "Escape" });
+
+    expect(dialog).not.toBeInTheDocument();
+    await waitFor(() => expect(trigger).toHaveFocus());
   });
 });

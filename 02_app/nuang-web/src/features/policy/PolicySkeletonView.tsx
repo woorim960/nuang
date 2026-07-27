@@ -15,6 +15,9 @@ export function PolicySkeletonView({ policy }: { policy: PolicySkeleton }) {
       </header>
 
       <div className={styles.sections}>
+        <p className={styles.effectiveDate}>
+          시행일 {policy.effectiveDate}
+        </p>
         {policy.sections.map((section) => (
           <section className={styles.section} key={section.title}>
             <h2>{section.title}</h2>

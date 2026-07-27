@@ -355,7 +355,7 @@ export function LocalResultManager() {
 
       {loaded ? (
         <ReportGroup
-          actionHref="/together"
+          actionHref="/feed/search?intent=compare"
           actionLabel="비교 시작하기"
           emptyCopy="아직 저장된 비교 리포트가 없어요."
           entries={comparisonEntries}

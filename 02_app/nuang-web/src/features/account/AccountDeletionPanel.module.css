@@ -1,0 +1,91 @@
+.panel {
+  display: grid;
+  justify-items: start;
+  gap: 0.9rem;
+  padding: 2rem 1.15rem;
+}
+
+.icon {
+  display: grid;
+  width: 46px;
+  height: 46px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-color-danger);
+  background: var(--nu-color-danger-soft);
+}
+
+.panel h1,
+.panel p {
+  margin: 0;
+}
+
+.panel h1 {
+  font-size: var(--nu-text-title-lg);
+  font-weight: var(--nu-weight-bold);
+}
+
+.panel > p {
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-body);
+  line-height: var(--nu-leading-body);
+  word-break: keep-all;
+}
+
+.panel label {
+  display: grid;
+  width: 100%;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.panel label span {
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+}
+
+.panel input {
+  width: 100%;
+  min-height: 50px;
+  padding: 0 0.9rem;
+  border: 1px solid var(--nu-color-border-strong);
+  border-radius: 14px;
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface);
+  font: inherit;
+}
+
+.panel button {
+  display: inline-flex;
+  width: 100%;
+  min-height: 50px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0;
+  border-radius: 14px;
+  color: white;
+  background: var(--nu-color-danger);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.panel button:disabled {
+  color: var(--nu-neutral-500);
+  background: var(--nu-neutral-100);
+}
+
+.panel .message {
+  color: var(--nu-color-danger);
+  font-size: var(--nu-text-label);
+}
+
+.spinner {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

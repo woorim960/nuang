@@ -1,14 +1,30 @@
 import { expect, test } from "@playwright/test";
 
-test("home renders the NUANG mobile shell", async ({ page }) => {
+test("a first visit completes onboarding before home becomes available", async ({
+  page,
+}) => {
+  await page.goto("/home");
+  await expect(page).toHaveURL(/\/onboarding$/);
+  await expect(
+    page.getByRole("region", {
+      name: "좌우 방향키 또는 손가락으로 넘기는 서비스 가이드",
+    }),
+  ).toBeVisible();
+
+  await page
+    .getByRole("button", { name: "4번째 빠른 코어 검사 안내 보기" })
+    .click();
+  await page
+    .getByRole("button", { name: "빠른 코어 검사 시작하기" })
+    .click();
+  await expect(page).toHaveURL(/\/assessments\/nu-core-quick/);
+
   await page.goto("/home");
   await expect(
     page.getByRole("heading", { name: "홈", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("heading", {
-      name: "3분이면 내 성향의 첫 단서를 만나요",
-    }),
+    page.getByRole("link", { name: "첫 성향 검사 시작하기" }),
   ).toBeVisible();
   await expect(
     page.getByRole("navigation", { name: "하단 주요 메뉴" }),
@@ -29,6 +45,7 @@ test("login keeps required consent before social auth entry", async ({
 
   await expect(kakaoButton).toBeDisabled();
   await expect(googleButton).toBeDisabled();
+  await page.getByLabel("만 14세 이상이에요").check();
   await page.getByLabel("이용약관에 동의해요").check();
   await page.getByLabel("개인정보 처리방침에 동의해요").check();
 

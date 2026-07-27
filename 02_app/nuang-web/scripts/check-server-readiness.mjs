@@ -15,6 +15,9 @@ const requiredKeys = [
   "DATABASE_URL",
   "SHARE_TOKEN_PEPPER",
   "FIELD_ENCRYPTION_KEY",
+  "LEGAL_OPERATOR_NAME",
+  "PRIVACY_CONTACT_EMAIL",
+  "SUPABASE_DATA_REGION",
 ];
 
 const missing = requiredKeys.filter((key) => !nonEmpty(env[key]));
@@ -88,6 +91,11 @@ await checkServiceTables([
   ["public", "research_gate_c_session", "id, status, quality_status"],
   [
     "public",
+    "research_gate_c_request_bucket",
+    "subject_hash, action, bucket_kind, bucket_start, request_count",
+  ],
+  [
+    "public",
     "research_gate_c_item_decision",
     "id, decision_state, updated_at",
   ],
@@ -107,6 +115,9 @@ await checkServiceTables([
 await checkLegacyTableRemoved();
 await checkServiceDeleteRpcNoop();
 await checkCommunityWriteGuardRpc();
+await checkAssessmentResultClaimRpc();
+await checkGateCRequestGuardRpc();
+await checkSelfAccountDeletionRpc();
 await checkAdminAtomicRpcs();
 await checkAnonSensitiveReads();
 await checkAnonFeedReads();
@@ -282,6 +293,63 @@ async function checkCommunityWriteGuardRpc() {
     name: "service can execute feed.check_community_write_guard",
     ok: !error && data === "account_link_missing",
   });
+}
+
+async function checkAssessmentResultClaimRpc() {
+  await checkRpcExists(
+    "claim_assessment_result_atomic",
+    {
+      p_account_id: "00000000-0000-4000-8000-000000000000",
+      p_assessment_kind: "readiness_check",
+      p_assessment_slug: "readiness-check",
+      p_code_scheme_version: "readiness",
+      p_completed_at: new Date(0).toISOString(),
+      p_item_release_version: "readiness",
+      p_local_result_id: "server_readiness_noop",
+      p_measurement_release_id: "readiness",
+      p_profile_code: "ENAKQ",
+      p_profile_name: "readiness",
+      p_responses: [],
+      p_score_payload: {},
+      p_scoring_release_id: "readiness",
+      p_scoring_version: "readiness",
+      p_share_summary: {},
+      p_summary: {},
+    },
+    "server-trusted assessment result claim RPC is available",
+  );
+}
+
+async function checkGateCRequestGuardRpc() {
+  const { data, error } = await serviceClient.rpc(
+    "check_gate_c_request_guard",
+    {
+      p_action: "start_session",
+      p_subject_hash: "invalid-readiness-subject",
+    },
+  );
+
+  const missing = ["42883", "PGRST202"].includes(error?.code ?? "");
+  pushCheck({
+    detail: missing
+      ? describeError(error)
+      : error
+        ? `available (${error.code ?? "expected guard"})`
+        : `result=${String(data)}`,
+    name: "Gate C request guard RPC is available",
+    ok: !missing && (Boolean(error) || data === "invalid_subject"),
+  });
+}
+
+async function checkSelfAccountDeletionRpc() {
+  await checkRpcExists(
+    "delete_own_nuang_account",
+    {
+      p_account_id: "00000000-0000-4000-8000-000000000000",
+      p_supabase_user_id: "00000000-0000-4000-8000-000000000001",
+    },
+    "self-service account deletion RPC is available",
+  );
 }
 
 async function checkAdminAtomicRpcs() {

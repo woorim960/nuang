@@ -4,7 +4,8 @@
   margin: 0 auto;
   color: var(--nu-color-text);
   background: var(--nu-color-surface);
-  box-shadow: 0 0 0 1px color-mix(in srgb, var(--nu-neutral-900) 5%, transparent);
+  box-shadow: 0 0 0 1px
+    color-mix(in srgb, var(--nu-neutral-900) 5%, transparent);
 }
 
 .screenHeader {
@@ -60,6 +61,14 @@
 
 .searchSection {
   padding: 1rem;
+}
+
+.searchGuide {
+  margin: -0.25rem 1rem 0.8rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
 }
 
 .searchField {
@@ -272,6 +281,45 @@
   font-size: var(--nu-text-caption);
   font-weight: var(--nu-weight-bold);
   letter-spacing: 0.04em;
+}
+
+.profileResultMeta {
+  display: grid;
+  justify-items: end;
+  gap: 0.28rem;
+}
+
+.profileResultMeta > small {
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  white-space: nowrap;
+}
+
+.inlineSearchState {
+  display: flex;
+  min-height: 64px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-top: 1px solid var(--nu-color-border-strong);
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+}
+
+.inlineSearchState button {
+  flex: 0 0 auto;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.searchInputGuide {
+  margin: 0;
+  padding: 1rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  text-align: center;
 }
 
 .emptyState {

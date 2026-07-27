@@ -1,6 +1,9 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { EntryGate } from "@/features/onboarding/EntryGate";
+import {
+  EntryGate,
+  OnboardingHomeGate,
+} from "@/features/onboarding/EntryGate";
 import { onboardingEntryContract } from "@/features/onboarding/onboarding-storage";
 
 const { hasCompletedOnboarding, replace } = vi.hoisted(() => ({
@@ -50,5 +53,35 @@ describe("EntryGate", () => {
         onboardingEntryContract.completedDestination,
       );
     });
+  });
+
+  it("protects direct home entry until onboarding is complete", async () => {
+    hasCompletedOnboarding.mockReturnValue(false);
+
+    render(
+      <OnboardingHomeGate>
+        <p>홈 콘텐츠</p>
+      </OnboardingHomeGate>,
+    );
+
+    expect(screen.queryByText("홈 콘텐츠")).not.toBeInTheDocument();
+    await waitFor(() => {
+      expect(replace).toHaveBeenCalledWith(
+        onboardingEntryContract.firstVisitDestination,
+      );
+    });
+  });
+
+  it("shows home content immediately after onboarding completion is confirmed", async () => {
+    hasCompletedOnboarding.mockReturnValue(true);
+
+    render(
+      <OnboardingHomeGate>
+        <p>홈 콘텐츠</p>
+      </OnboardingHomeGate>,
+    );
+
+    expect(await screen.findByText("홈 콘텐츠")).toBeVisible();
+    expect(replace).not.toHaveBeenCalled();
   });
 });

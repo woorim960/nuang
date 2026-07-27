@@ -248,6 +248,22 @@ export async function writeProfileFollow({
     return { code: "profile_not_found" as const, ok: false as const };
   }
 
+  if (action === "follow") {
+    const guardFailure = await checkCommunityWriteGuard({
+      accountId: followerAccountId,
+      action: "follow_profile",
+      client,
+      target: {
+        id: publicSnapshotId,
+        key: null,
+        type: "public_profile",
+      },
+    });
+    if (guardFailure) {
+      return { code: "follow_write_failed" as const, ok: false as const };
+    }
+  }
+
   const now = new Date().toISOString();
   const mutation = await client
     .schema("feed")
@@ -447,14 +463,22 @@ export async function writeProfileSafetyAction({
 
     const guardFailure = await checkCommunityWriteGuard({
       accountId: viewerAccountId,
-      action: "report_content",
+      action: "report_profile",
       client,
+      target: {
+        id: publicSnapshotId,
+        key: null,
+        type: "public_profile",
+      },
     });
     if (guardFailure === "rate_limited") {
       return {
         code: "profile_report_rate_limited" as const,
         ok: false as const,
       };
+    }
+    if (guardFailure) {
+      return { code: "profile_report_failed" as const, ok: false as const };
     }
 
     const response = await client
