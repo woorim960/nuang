@@ -16,6 +16,13 @@ const deliveryMigration = readFileSync(
   ),
   "utf8",
 );
+const retryCronMigration = readFileSync(
+  join(
+    process.cwd(),
+    "supabase/migrations/202608020001_advertising_mail_outbox_retry_cron.sql",
+  ),
+  "utf8",
+);
 
 describe("advertising database release", () => {
   it("stores an inquiry and exactly two mail intents in one security-definer RPC", () => {
@@ -104,5 +111,26 @@ describe("advertising database release", () => {
         `revoke all on public.${table} from public, anon, authenticated`,
       );
     }
+  });
+
+  it("runs the mail retry worker every minute without resending completed mail", () => {
+    expect(inquiryMigration).toContain(
+      "outbox.status in ('pending', 'retry') and outbox.next_attempt_at <= now()",
+    );
+    expect(inquiryMigration).toContain("for update skip locked");
+    expect(inquiryMigration).toContain("when 1 then interval '1 minute'");
+    expect(inquiryMigration).toContain("attempt_count < 5");
+
+    expect(retryCronMigration).toContain(
+      "create or replace function public.invoke_advertising_mail_outbox_retry()",
+    );
+    expect(retryCronMigration).toContain("nuang_app_origin");
+    expect(retryCronMigration).toContain("nuang_ad_outbox_cron_secret");
+    expect(retryCronMigration).toContain("net.http_post(");
+    expect(retryCronMigration).toContain(
+      "'nuang-advertising-mail-outbox-retry'",
+    );
+    expect(retryCronMigration).toContain("'* * * * *'");
+    expect(retryCronMigration).not.toContain("business@notice.nuang.app");
   });
 });

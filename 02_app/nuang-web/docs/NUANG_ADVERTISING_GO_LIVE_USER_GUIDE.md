@@ -95,13 +95,22 @@ Resend webhook은 공개 HTTPS 주소를 요구하며 실패 시 재시도한다
 
 ### 3-4. 메일 재시도 예약 작업 연결
 
-호스팅 서비스의 예약 작업이 다음 주소를 5~15분마다 호출하도록 설정한다.
+Supabase Cron이 다음 주소를 1분마다 호출하도록 설정한다. 문의 저장 직후에는 즉시 발송을 시도하며, 이 작업은 **첫 발송에 실패했고 재시도 시간이 된 메일만** 다시 처리한다. 정상 발송된 메일은 대상에 포함되지 않는다.
 
 - 방식: `GET` 또는 `POST`
 - 주소: `https://실제서비스주소/api/internal/advertising/outbox/drain`
 - 헤더: `Authorization: Bearer AD_OUTBOX_CRON_SECRET에 저장한 값`
 
-문의 저장 직후에도 발송을 시도하지만, 이 예약 작업이 있어야 일시적인 메일 장애 뒤 자동 재시도가 보장된다.
+적용 파일: `supabase/migrations/202608020001_advertising_mail_outbox_retry_cron.sql`
+
+Supabase Vault에는 아래 두 비밀값을 저장한다. 실제 값은 코드나 문서에 기록하지 않는다.
+
+| Vault 이름 | 값 |
+| --- | --- |
+| `nuang_app_origin` | `https://nuang.app` |
+| `nuang_ad_outbox_cron_secret` | Vercel의 `AD_OUTBOX_CRON_SECRET`과 같은 값 |
+
+재시도 간격은 첫 실패 후 1분, 두 번째 실패 후 5분, 이후 30분·2시간으로 늘어나며 최대 5회까지만 시도한다. Cron은 1분마다 대기열을 확인하지만 `pending` 또는 `retry` 상태이고 `next_attempt_at`이 지난 행만 잠금 처리하므로 정상 메일과 아직 재시도 시간이 되지 않은 메일은 발송하지 않는다.
 
 ## 4. Google AdSense 준비
 
