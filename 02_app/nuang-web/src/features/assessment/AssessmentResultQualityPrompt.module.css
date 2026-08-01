@@ -1,0 +1,69 @@
+.root {
+  padding: 1.4rem var(--nu-page-gutter);
+  border-top: 8px solid var(--nu-color-app-bg);
+  border-bottom: 1px solid var(--nu-color-border);
+  background: linear-gradient(
+    180deg,
+    var(--nu-color-surface),
+    color-mix(
+      in srgb,
+      var(--nu-color-community-soft) 32%,
+      var(--nu-color-surface)
+    )
+  );
+}
+
+.root > p {
+  margin: 0;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.root h2 {
+  margin: 0.35rem 0 0;
+  color: var(--nu-color-text-strong);
+  font-size: var(--nu-text-title-sm);
+  font-weight: var(--nu-weight-heavy);
+  line-height: var(--nu-leading-title);
+}
+
+.root > span {
+  display: block;
+  margin-top: 0.75rem;
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body);
+}
+
+.root > div {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.root button {
+  min-height: 44px;
+  padding: 0.55rem 0.35rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: var(--nu-radius-md);
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface);
+  font: inherit;
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
+}
+
+.root button:focus-visible {
+  border-color: var(--nu-color-brand-strong);
+  outline: 2px solid var(--nu-color-brand-surface);
+  outline-offset: 2px;
+}
+
+@media (max-width: 340px) {
+  .root > div {
+    grid-template-columns: 1fr;
+  }
+}

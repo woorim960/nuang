@@ -3,11 +3,13 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { FeedMoreMenu } from "@/features/feed/FeedMoreMenu";
 
 const navigationMocks = vi.hoisted(() => ({
+  push: vi.fn(),
   refresh: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
+    push: navigationMocks.push,
     refresh: navigationMocks.refresh,
   }),
 }));
@@ -15,6 +17,7 @@ vi.mock("next/navigation", () => ({
 describe("FeedMoreMenu", () => {
   afterEach(() => {
     navigationMocks.refresh.mockClear();
+    navigationMocks.push.mockClear();
     vi.unstubAllGlobals();
   });
 
@@ -158,6 +161,71 @@ describe("FeedMoreMenu", () => {
         id: "22222222-2222-4222-8222-222222222222",
         type: "feed_post",
       },
+    });
+  });
+
+  it("shows edit and delete only for the viewer's own manageable post", () => {
+    render(
+      <FeedMoreMenu
+        canManage
+        postId="22222222-2222-4222-8222-222222222222"
+        returnTo="/my"
+        targetType="feed_post"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "더 보기" }));
+
+    expect(
+      screen.getByRole("button", { name: "수정하기" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "삭제하기" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "신고하기" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("requires confirmation before deleting an owned post", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        Response.json({
+          feedWrite: {
+            action: "delete_post",
+            id: "22222222-2222-4222-8222-222222222222",
+          },
+          ok: true,
+        }),
+      ),
+    );
+
+    render(
+      <FeedMoreMenu
+        canManage
+        postId="22222222-2222-4222-8222-222222222222"
+        returnTo="/my"
+        targetType="feed_post"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "더 보기" }));
+    fireEvent.click(screen.getByRole("button", { name: "삭제하기" }));
+    expect(
+      screen.getByText("이 게시물을 삭제할까요?"),
+    ).toBeInTheDocument();
+    expect(fetch).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getAllByRole("button", { name: "삭제하기" }).at(-1)!);
+
+    await waitFor(() => {
+      expect(navigationMocks.push).toHaveBeenCalledWith("/my");
+      expect(navigationMocks.refresh).toHaveBeenCalledTimes(1);
+    });
+    expect(getLastRequestBody()).toEqual({
+      action: "delete_post",
+      postId: "22222222-2222-4222-8222-222222222222",
     });
   });
 });

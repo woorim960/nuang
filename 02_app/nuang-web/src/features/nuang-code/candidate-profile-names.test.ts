@@ -24,9 +24,9 @@ describe("candidate profile name release", () => {
     expect(new Set(names)).toHaveLength(32);
     expect(new Set(shortNames)).toHaveLength(32);
     expect(candidateProfileNameReleaseId).toBe(
-      "NUANG-PROFILE-NAME-CANDIDATE-2.1",
+      "NUANG-PROFILE-NAME-CANDIDATE-3.0",
     );
-    expect(names.every((name) => name.split(/\s+/).length <= 4)).toBe(true);
+    expect(names.every((name) => name.split(/\s+/).length <= 5)).toBe(true);
     expect(
       shortNames.every((name) => name.length >= 3 && name.length <= 6),
     ).toBe(true);
@@ -63,8 +63,8 @@ describe("candidate profile name release", () => {
     const profile = getCandidateProfileDefinition("ENAKQ");
 
     expect(profile).toMatchObject({
-      displayName: "관계를 여는 지휘자",
-      shortName: "지휘자",
+      displayName: "관계를 여는 선도자",
+      shortName: "선도자",
       familyName: "관계 영감형",
       codeTokens: ["외향형", "가능성형", "마음형", "꾸준형", "빠른반응형"],
     });
@@ -115,7 +115,7 @@ describe("candidate profile name release", () => {
 
   it("does not turn Q into prediction ability or guaranteed risk detection", () => {
     expect(candidateProfileNameCatalog.ERGKQ.displayName).toBe(
-      "변수에 빠르게 반응하는 해결사",
+      "변수에 빠르게 답하는 해결사",
     );
     expect(candidateProfileNameCatalog.IRGKQ.displayName).toBe(
       "변수를 꼼꼼히 살피는 전략가",
@@ -124,8 +124,8 @@ describe("candidate profile name release", () => {
       "변화의 원인을 좇는 추적자",
     );
     expect(candidateProfileNameCatalog.INGKQ).toMatchObject({
-      shortName: "구상가",
-      displayName: "가능성과 변수를 살피는 구상가",
+      shortName: "과학자",
+      displayName: "가능성을 검증하는 과학자",
     });
     expect(Object.values(candidateProfileNameCatalog)).not.toEqual(
       expect.arrayContaining([

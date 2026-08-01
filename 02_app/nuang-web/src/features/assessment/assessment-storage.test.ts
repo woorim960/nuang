@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { prepareAssessmentCompletion } from "@/features/assessment/assessment-completion";
 import {
+  attachLocalReportContentSnapshot,
   beginLocalAdaptiveFollowUp,
   beginLocalAttemptCompletion,
   completeLocalAttempt,
@@ -18,6 +19,7 @@ import type {
   AssessmentAnswer,
   LocalAssessmentAttempt,
 } from "@/features/assessment/types";
+import { buildReportContentSnapshot } from "@/features/result/unified-core-report/report-content-snapshot";
 
 const memoryDb = vi.hoisted(() => ({
   failNextPut: false,
@@ -77,6 +79,50 @@ describe("assessment completion storage", () => {
     expect(completed.resultSnapshot).toMatchObject(readiness.versionBundle);
     expect(repeated.completedAt).toBe(completed.completedAt);
     expect(repeated.resultSnapshot).toEqual(completed.resultSnapshot);
+  });
+
+  it("attaches one immutable report content snapshot without delaying completion", async () => {
+    const attempt = buildReadyAttempt();
+    memoryDb.records.set(attempt.id, structuredClone(attempt));
+    const readiness = prepareAssessmentCompletion(quickCoreAssessment, attempt);
+    const submitting = await beginLocalAttemptCompletion(
+      attempt,
+      "completion_report_snapshot_1",
+      readiness.responseSnapshotHash,
+    );
+    const completed = await completeLocalAttempt(
+      submitting,
+      buildCompletionOptions(readiness, "completion_report_snapshot_1"),
+    );
+    const reportContentSnapshot = buildReportContentSnapshot({
+      code: completed.resultSnapshot!.scoreResult.code!,
+      kind: "quick",
+      measurementVersion: completed.resultSnapshot!.resultCopyVersion,
+    });
+    const attached = await attachLocalReportContentSnapshot(
+      completed.id,
+      readiness.responseSnapshotHash,
+      reportContentSnapshot,
+    );
+    const repeated = await attachLocalReportContentSnapshot(
+      completed.id,
+      readiness.responseSnapshotHash,
+      reportContentSnapshot,
+    );
+
+    expect(attached.resultSnapshot?.reportContentSnapshot).toEqual(
+      reportContentSnapshot,
+    );
+    expect(repeated.resultSnapshot?.reportContentSnapshot).toEqual(
+      reportContentSnapshot,
+    );
+    await expect(
+      attachLocalReportContentSnapshot(
+        completed.id,
+        "different-response-snapshot",
+        reportContentSnapshot,
+      ),
+    ).rejects.toThrow("LOCAL_REPORT_CONTENT_SNAPSHOT_CONFLICT");
   });
 
   it("blocks the same request id when its response snapshot changes", async () => {

@@ -37,6 +37,17 @@ describe("MyTraitDetailView", () => {
   });
 
   it("shows the current five axes in code order with both percentages", async () => {
+    traitDetailMocks.topicResults = [
+      {
+        assessment: {
+          categoryLabel: "관계",
+          slug: "comfort-style",
+          title: "위로받을 때 필요한 것",
+        },
+        completedAt: "2026-07-28T07:20:00.000Z",
+        localResultId: "topic_comfort_latest",
+      },
+    ];
     vi.stubGlobal(
       "fetch",
       vi.fn(
@@ -73,6 +84,16 @@ describe("MyTraitDetailView", () => {
     ).toHaveAttribute(
       "href",
       "/results/account/4292e0e7-0353-43f0-9132-f90149badee5",
+    );
+    expect(screen.getByRole("link", { name: "전체 기록" })).toHaveAttribute(
+      "href",
+      "/my/reports/history",
+    );
+    expect(
+      screen.getByRole("link", { name: /위로받을 때 필요한 것/ }),
+    ).toHaveAttribute(
+      "href",
+      "/assessments/topics/comfort-style/result/topic_comfort_latest",
     );
   });
 

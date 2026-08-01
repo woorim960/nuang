@@ -3,13 +3,15 @@
 import {
   ArrowLeft,
   Bookmark,
+  ChevronRight,
   Globe2,
   Heart,
   ImageUp,
   MessageCircle,
+  MessageCircleQuestion,
   PenLine,
   Plus,
-  ScanSearch,
+  Scale,
   Send,
   ShieldCheck,
   Trash2,
@@ -25,6 +27,7 @@ import {
   type MouseEvent,
 } from "react";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
+import { FeedTopicSelector } from "@/features/feed/FeedTopicSelector";
 import { extractExternalLinks } from "@/features/feed/link-safety";
 import { analyzeLocalFeedImages } from "@/features/feed/feed-image-analysis";
 import {
@@ -70,6 +73,7 @@ type ComposerPhoto = {
 };
 
 type ComposerStep = "edit" | "preview";
+type ComposerSpace = "daily" | "playground";
 
 type FeedVisibility = Extract<
   FeedWriteRequest,
@@ -77,29 +81,50 @@ type FeedVisibility = Extract<
 >["visibility"];
 
 const pendingPostStorageKey = "nuang:feed:pending-post";
+const playgroundComposerTypes = [
+  {
+    description: "두 선택지로 가볍게 의견을 모아요",
+    href: "/feed/balance/new?returnTo=%2Ffeed%2Fnew%3Fspace%3Dplayground",
+    icon: Scale,
+    label: "투표",
+  },
+  {
+    description: "원하는 뉴앙 코드에게 질문해요",
+    href: "/feed/questions/new?returnTo=%2Ffeed%2Fnew%3Fspace%3Dplayground",
+    icon: MessageCircleQuestion,
+    label: "뉴앙에게 물어봐",
+  },
+] as const;
 const visibilityOptions: Array<{
   description: string;
   label: string;
   value: FeedVisibility;
 }> = [
   {
-    description: "커뮤니티의 모든 사용자가 볼 수 있어요.",
+    description: "커뮤니티 피드와 내 프로필에서 누구나 볼 수 있어요.",
     label: "전체 공개",
     value: "public",
   },
   {
-    description: "내 프로필에 들어온 사용자에게 보여요.",
-    label: "프로필 공개",
+    description:
+      "커뮤니티 피드에는 나오지 않고, 내 프로필과 게시물 링크에서 누구나 볼 수 있어요.",
+    label: "프로필에만 공개",
     value: "profile_public",
   },
   {
-    description: "나만 볼 수 있는 기록으로 남겨요.",
+    description: "내 계정에서만 볼 수 있어요.",
     label: "나만 보기",
     value: "private_draft",
   },
 ];
 
-export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
+export function FeedComposer({
+  initialSpace = "daily",
+  standalone = false,
+}: {
+  initialSpace?: ComposerSpace;
+  standalone?: boolean;
+}) {
   const router = useRouter();
   const launchButtonRef = useRef<HTMLButtonElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -119,6 +144,8 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
   const [topicNote, setTopicNote] = useState<string | null>(null);
   const [visibility, setVisibility] = useState<FeedVisibility>("public");
   const [composerStep, setComposerStep] = useState<ComposerStep>("edit");
+  const [composerSpace, setComposerSpace] =
+    useState<ComposerSpace>(initialSpace);
   const trimmedBody = body.trim();
   const selectedPhoto =
     photos.find((photo) => photo.id === selectedPhotoId) ?? photos[0] ?? null;
@@ -188,7 +215,7 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
     if (!open) return;
 
     const focusTimer =
-      composerStep === "edit"
+      composerStep === "edit" && composerSpace === "daily"
         ? window.setTimeout(() => textareaRef.current?.focus(), 0)
         : undefined;
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -216,7 +243,14 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
       if (focusTimer) window.clearTimeout(focusTimer);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [audienceOpen, composerStep, open, router, standalone]);
+  }, [
+    audienceOpen,
+    composerSpace,
+    composerStep,
+    open,
+    router,
+    standalone,
+  ]);
 
   async function handleUpload() {
     if (!canSubmit) {
@@ -448,6 +482,26 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
     }
   }
 
+  function selectComposerSpace(nextSpace: ComposerSpace) {
+    setComposerSpace(nextSpace);
+    setAudienceOpen(false);
+    setStatus({ status: "idle" });
+
+    if (!standalone) return;
+
+    const url = new URL(window.location.href);
+    if (nextSpace === "playground") {
+      url.searchParams.set("space", "playground");
+    } else {
+      url.searchParams.delete("space");
+    }
+    window.history.replaceState(
+      { ...window.history.state, feedComposerSpace: nextSpace },
+      "",
+      `${url.pathname}${url.search}${url.hash}`,
+    );
+  }
+
   function closeComposer() {
     setAudienceOpen(false);
     if (standalone) {
@@ -534,21 +588,60 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
                 >
                   <X aria-hidden="true" size={22} strokeWidth={1.9} />
                 </button>
-                <h2 id="feed-composer-title">새 게시물</h2>
+                <h2 id="feed-composer-title">글쓰기</h2>
+                {composerSpace === "daily" ? (
+                  <button
+                    className={styles.publishButton}
+                    disabled={!canSubmit}
+                    onClick={openPreview}
+                    type="button"
+                  >
+                    업로드
+                  </button>
+                ) : (
+                  <span aria-hidden="true" className={styles.headerSpacer} />
+                )}
+              </header>
+
+              <nav
+                aria-label="글쓰기 공간"
+                className={styles.composerModeNav}
+                role="tablist"
+              >
                 <button
-                  className={styles.publishButton}
-                  disabled={!canSubmit}
-                  onClick={openPreview}
+                  aria-controls="daily-composer-panel"
+                  aria-selected={composerSpace === "daily"}
+                  id="daily-composer-tab"
+                  onClick={() => selectComposerSpace("daily")}
+                  role="tab"
                   type="button"
                 >
-                  업로드
+                  일상
                 </button>
-              </header>
+                <button
+                  aria-controls="playground-composer-panel"
+                  aria-selected={composerSpace === "playground"}
+                  id="playground-composer-tab"
+                  onClick={() => selectComposerSpace("playground")}
+                  role="tab"
+                  type="button"
+                >
+                  놀이터
+                </button>
+                <span
+                  aria-hidden="true"
+                  data-space={composerSpace}
+                  className={styles.composerModeIndicator}
+                />
+              </nav>
 
               <form
                 className={styles.composerForm}
-                id="feed-composer-form"
+                id="daily-composer-panel"
+                hidden={composerSpace !== "daily"}
                 onSubmit={(event) => event.preventDefault()}
+                aria-labelledby="daily-composer-tab"
+                role="tabpanel"
               >
                 <div className={styles.identityRow}>
                   <span aria-hidden="true" className={styles.identityAvatar}>
@@ -609,45 +702,19 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
                   </p>
                 )}
 
-                <section className={styles.topicSection}>
-                  <div className={styles.topicHeading}>
-                    <strong>주제</strong>
-                    <button
-                      className={styles.topicRecommendButton}
-                      disabled={!canRecommendCategory}
-                      onClick={recommendCategory}
-                      type="button"
-                    >
-                      <ScanSearch aria-hidden="true" size={15} />
-                      {recommendingTopic ? "추천 중" : "추천"}
-                    </button>
-                  </div>
-                  <div
-                    aria-label="게시물 주제"
-                    className={styles.categoryScroller}
-                    role="radiogroup"
-                  >
-                    {feedPostTopicCategories.map((category) => (
-                      <button
-                        aria-checked={selectedCategory === category}
-                        aria-label={`${feedPostTopicLabels[category]} 주제`}
-                        key={category}
-                        onClick={() => {
-                          setSelectedCategory(category);
-                          setTopicSource("manual");
-                          setTopicNote(null);
-                        }}
-                        role="radio"
-                        type="button"
-                      >
-                        {feedPostTopicLabels[category]}
-                      </button>
-                    ))}
-                  </div>
-                  {topicNote ? (
-                    <p className={styles.topicNote}>{topicNote}</p>
-                  ) : null}
-                </section>
+                <FeedTopicSelector
+                  canRecommend={canRecommendCategory}
+                  layout="embedded"
+                  note={topicNote}
+                  onChange={(category) => {
+                    setSelectedCategory(category);
+                    setTopicSource("manual");
+                    setTopicNote(null);
+                  }}
+                  onRecommend={recommendCategory}
+                  recommending={recommendingTopic}
+                  selectedCategory={selectedCategory}
+                />
 
                 {selectedPhoto ? (
                   <section className={styles.photoSection}>
@@ -745,17 +812,62 @@ export function FeedComposer({ standalone = false }: { standalone?: boolean }) {
                 <ComposerStatusMessage status={status} />
               </form>
 
-              <input
-                accept="image/jpeg,image/png,image/webp"
-                aria-label="게시물 사진 선택"
-                className="sr-only"
-                multiple
-                onChange={handlePhotoSelection}
-                ref={fileInputRef}
-                type="file"
-              />
+              {composerSpace === "playground" ? (
+                <section
+                  aria-labelledby="playground-composer-tab playground-composer-heading"
+                  className={styles.playgroundComposer}
+                  id="playground-composer-panel"
+                  role="tabpanel"
+                >
+                  <div className={styles.playgroundHeading}>
+                    <h3 id="playground-composer-heading">
+                      어떤 글을 만들까요?
+                    </h3>
+                  </div>
 
-              {audienceOpen ? (
+                  <div className={styles.playgroundTypeList}>
+                    {playgroundComposerTypes.map((item) => {
+                      const Icon = item.icon;
+
+                      return (
+                        <Link
+                          className={styles.playgroundType}
+                          href={item.href}
+                          key={item.href}
+                        >
+                          <span aria-hidden="true" className={styles.typeIcon}>
+                            <Icon size={21} strokeWidth={1.65} />
+                          </span>
+                          <span className={styles.typeCopy}>
+                            <strong>{item.label}</strong>
+                            <small>{item.description}</small>
+                          </span>
+                          <ChevronRight
+                            aria-hidden="true"
+                            className={styles.typeChevron}
+                            size={18}
+                            strokeWidth={1.65}
+                          />
+                        </Link>
+                      );
+                    })}
+                  </div>
+                </section>
+              ) : null}
+
+              {composerSpace === "daily" ? (
+                <input
+                  accept="image/jpeg,image/png,image/webp"
+                  aria-label="게시물 사진 선택"
+                  className="sr-only"
+                  multiple
+                  onChange={handlePhotoSelection}
+                  ref={fileInputRef}
+                  type="file"
+                />
+              ) : null}
+
+              {composerSpace === "daily" && audienceOpen ? (
                 <div
                   className={styles.audienceBackdrop}
                   onMouseDown={(event) => {

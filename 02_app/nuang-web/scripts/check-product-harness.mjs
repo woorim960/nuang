@@ -142,7 +142,7 @@ requireIncludes("docs/NUANG_PRODUCT_CANON.md", [
   "마이",
   "피드는 커뮤니티의 별도 병기 명칭이 아니다",
   "피드 MVP 상호작용 설계의 원본은 `docs/NUANG_FEED_MVP_INTERACTION_DESIGN.md`다",
-  "`함께` 탭은 제거한다",
+  "하단 주요 메뉴에는 독립된 `함께` 탭을 두지 않는다",
   "카카오톡, 링크 복사, 다른 앱으로는 모두 `내 결과 리포트`를 다른 사람이 열 수 있는 동일한 30일 자동 만료 공개 리포트 URL을 사용한다",
   "피드에 공유된 리포트 preview와 연결은 일반 링크 복사 공유와 수명이 다르다",
   "1:1 비교는 링크를 직접 입력해서 시작하지 않는다",
@@ -712,9 +712,9 @@ requireIncludes("docs/NUANG_FEED_MVP_INTERACTION_DESIGN.md", [
   "구현 전 승인 요청 문서",
   "글",
   "오늘의 질문",
-  "밸런스 게임",
+  "투표",
   "`리포트 공유`는 피드 composer 선택지로 노출하지 않는다",
-  "피드 작성 형식을 `글`, `오늘의 질문`, `밸런스 게임` 세 가지로 둔다",
+  "피드 작성 형식을 `글`, `오늘의 질문`, `투표` 세 가지로 둔다",
   "뉴앙 코드별 통계 보기",
   "source: `balance_game`",
   "source: `report_share`",
@@ -732,9 +732,36 @@ requireIncludes("docs/NUANG_FEED_MVP_INTERACTION_DESIGN.md", [
   "승인 요청",
 ]);
 
+requireIncludes("docs/NUANG_TOGETHER_BALANCE_GAME_PRODUCT_SPEC.md", [
+  "검사 > 함께하기",
+  "커뮤니티의 기존 `balance_game` 콘텐츠는 사용자에게 `투표`로 표시",
+  "같은 질문에 각자 답하고",
+  "2인 취향 궁합",
+  "그룹 취향 궁합",
+  "모든 2인 조합",
+  "현재 사용자와 해당 참여자만의 1:1 결과",
+  "together_balance_game",
+  "MVP 수용 기준",
+]);
+
+for (const file of [
+  "src/app/admin/community/page.tsx",
+  "src/app/feed/balance/new/page.tsx",
+  "src/app/feed/balance/[postId]/edit/page.tsx",
+  "src/features/admin/AdminCommunityContentManager.tsx",
+  "src/features/feed/CommunityBalanceGameComposer.tsx",
+  "src/features/feed/CommunityFeed.tsx",
+  "src/features/feed/FeedComposer.tsx",
+  "src/features/feed/FeedPostEditForm.tsx",
+  "src/features/feed/feed-write-contract.ts",
+  "src/features/feed/server-read.ts",
+]) {
+  requireExcludes(file, ["밸런스 게임", "밸런스게임"]);
+}
+
 requireIncludes("docs/NUANG_MVP_SMOKE_CHECKLIST.md", [
   "npm run qa:mvp",
-  "글, 오늘의 질문, 밸런스 게임",
+  "글, 오늘의 질문, 투표",
   "리포트 공유는 피드 작성기 선택지에 없다",
   "뉴앙 코드별 통계 보기",
   "1명 이상 투표한 코드는 비율을 보여준다",
@@ -869,7 +896,7 @@ requireIncludes("src/features/feed/feed-contract.ts", [
 requireIncludes("src/features/feed/FeedComposer.tsx", [
   'label: "글"',
   "오늘의 질문",
-  "밸런스 게임",
+  "투표",
   'router.push(`/login?next=${encodeURIComponent("/feed")}`)',
   'source: "balance_game"',
 ]);
@@ -986,12 +1013,12 @@ requireIncludes("docs/NUANG_STAGE_HARNESS.md", [
   "npm run harness:check",
   "피드는 하단 메뉴에 넣는다",
   "docs/NUANG_FEED_MVP_INTERACTION_DESIGN.md",
-  "피드 MVP 작성 형식, 리포트 preview, 오늘의 질문, 밸런스 게임, 뉴앙 코드별 통계",
+  "피드 MVP 작성 형식, 리포트 preview, 오늘의 질문, 투표, 뉴앙 코드별 통계",
   "함께 탭은 제거한다",
   "결과 공유의 기본 링크 복사 흐름은 리포트 상세의 `공유하기`와 30일 자동 만료 공유 주소를 중심으로 한다",
   "피드에 공유된 리포트 preview와 연결은 작성자가 해당 피드 글을 삭제하기 전까지 유지한다",
   "`202607100003_feed_mvp_interactions.sql` 적용 후 원격 DB에서 `feed.feed_poll`, `feed.feed_poll_option`, `feed.feed_poll_vote` 접근을 확인했다",
-  "개발 seed는 밸런스 게임 5표와 피드 공유 리포트 preview를 포함한다",
+  "개발 seed는 커뮤니티 투표 5표와 피드 공유 리포트 preview를 포함한다",
   "1:1 비교는 링크 직접 입력이 아니라 상대 프로필 팝업의 `나와 비교하기`에서 시작한다",
   "프로필 팝업에는 프로필 이미지가 보여야 한다",
   "공개 코드는 사용자 경험에서 전면 폐기한다",

@@ -23,7 +23,7 @@ describe("BlockedProfilesScreen", () => {
                 alt: "여름 프로필 이미지",
                 motif: "purple",
               }),
-              profileName: "관계를 여는 지휘자",
+              profileName: "관계를 여는 선도자",
               publicSnapshotId: "22222222-2222-4222-8222-222222222222",
             },
           ],
@@ -36,7 +36,7 @@ describe("BlockedProfilesScreen", () => {
     render(<BlockedProfilesScreen />);
 
     expect(await screen.findByText("여름")).toBeInTheDocument();
-    expect(screen.getByText("ENAKQ · 관계를 여는 지휘자")).toBeInTheDocument();
+    expect(screen.getByText("ENAKQ · 관계를 여는 선도자")).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "차단 해제" }));
 

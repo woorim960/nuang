@@ -6,6 +6,7 @@ import {
 } from "@/features/account/private-contact-security";
 import { readPrivateContact } from "@/features/account/server-private-contact";
 import { ensureAccountForUser } from "@/features/account/server-writes";
+import { syncOperatorAccount } from "@/features/admin/server-operator-identity";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
@@ -56,6 +57,11 @@ export async function resolveAdminIdentityForUser({
 
   const authEmail = normalizeEmail(user.email);
   if (isAdminEmail(authEmail)) {
+    await syncOperatorAccount({
+      accountId: account.accountId,
+      client,
+      enabled: true,
+    });
     return {
       accountId: account.accountId,
       email: authEmail as string,
@@ -72,6 +78,11 @@ export async function resolveAdminIdentityForUser({
     contact.data.emailStatus !== "verified" ||
     !contact.data.emailEncrypted
   ) {
+    await syncOperatorAccount({
+      accountId: account.accountId,
+      client,
+      enabled: false,
+    });
     return null;
   }
 
@@ -82,7 +93,20 @@ export async function resolveAdminIdentityForUser({
         ciphertext: contact.data.emailEncrypted,
       }),
     );
-    if (!isAdminEmail(verifiedEmail)) return null;
+    if (!isAdminEmail(verifiedEmail)) {
+      await syncOperatorAccount({
+        accountId: account.accountId,
+        client,
+        enabled: false,
+      });
+      return null;
+    }
+
+    await syncOperatorAccount({
+      accountId: account.accountId,
+      client,
+      enabled: true,
+    });
 
     return {
       accountId: account.accountId,

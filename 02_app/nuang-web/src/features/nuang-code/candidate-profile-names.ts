@@ -1,6 +1,8 @@
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 
-export const candidateProfileNameReleaseId = "NUANG-PROFILE-NAME-CANDIDATE-2.1";
+export const candidateProfileNameReleaseId = "NUANG-PROFILE-NAME-CANDIDATE-3.0";
+export const candidateProfileNarrativeVersion =
+  "NUANG-CANDIDATE-PROFILE-NARRATIVE-1.0";
 export const candidateSymbolLanguageReleaseId =
   "NUANG-CODE-SYMBOL-LANGUAGE-1.0";
 
@@ -112,38 +114,38 @@ export const candidateProfileNameCatalog: Readonly<
   Record<string, CandidateProfileNameEntry>
 > = {
   ERGKC: {
-    shortName: "운영가",
-    displayName: "차분히 답을 세우는 운영가",
+    shortName: "운영자",
+    displayName: "차분히 현장을 이끄는 운영자",
     familyId: "PRACTICAL_SOLUTION",
   },
   ERGKQ: {
     shortName: "해결사",
-    displayName: "변수에 빠르게 반응하는 해결사",
+    displayName: "변수에 빠르게 답하는 해결사",
     familyId: "PRACTICAL_SOLUTION",
   },
   ERGMC: {
-    shortName: "대응가",
-    displayName: "유연하게 답을 찾는 대응가",
+    shortName: "실무가",
+    displayName: "상황에 맞춰 답을 찾는 실무가",
     familyId: "PRACTICAL_SOLUTION",
   },
   ERGMQ: {
-    shortName: "현장해결가",
-    displayName: "빠르게 움직이는 현장해결가",
+    shortName: "돌파자",
+    displayName: "현장의 막힘을 깨는 돌파자",
     familyId: "PRACTICAL_SOLUTION",
   },
   ERAKC: {
     shortName: "조율가",
-    displayName: "차분히 관계를 맞추는 조율가",
+    displayName: "관계를 차분히 맞추는 조율가",
     familyId: "CONCRETE_CARE",
   },
   ERAKQ: {
     shortName: "관계지기",
-    displayName: "관계 변화를 살피는 관계지기",
+    displayName: "마음 변화를 살피는 관계지기",
     familyId: "CONCRETE_CARE",
   },
   ERAMC: {
     shortName: "동행가",
-    displayName: "유연하게 곁을 걷는 동행가",
+    displayName: "편안히 곁을 걷는 동행가",
     familyId: "CONCRETE_CARE",
   },
   ERAMQ: {
@@ -152,13 +154,13 @@ export const candidateProfileNameCatalog: Readonly<
     familyId: "CONCRETE_CARE",
   },
   ENGKC: {
-    shortName: "기획자",
-    displayName: "가능성을 계획하는 기획자",
+    shortName: "통솔자",
+    displayName: "해법을 이끄는 통솔자",
     familyId: "POSSIBILITY_SOLUTION",
   },
   ENGKQ: {
     shortName: "혁신가",
-    displayName: "변화에 답하는 혁신가",
+    displayName: "변화를 이끄는 혁신가",
     familyId: "POSSIBILITY_SOLUTION",
   },
   ENGMC: {
@@ -172,13 +174,13 @@ export const candidateProfileNameCatalog: Readonly<
     familyId: "POSSIBILITY_SOLUTION",
   },
   ENAKC: {
-    shortName: "연결가",
-    displayName: "사람과 가능성을 잇는 연결가",
+    shortName: "지휘자",
+    displayName: "사람과 가능성을 잇는 지휘자",
     familyId: "POSSIBILITY_CONNECTION",
   },
   ENAKQ: {
-    shortName: "지휘자",
-    displayName: "관계를 여는 지휘자",
+    shortName: "선도자",
+    displayName: "관계를 여는 선도자",
     familyId: "POSSIBILITY_CONNECTION",
   },
   ENAMC: {
@@ -222,8 +224,8 @@ export const candidateProfileNameCatalog: Readonly<
     familyId: "CONCRETE_CARE",
   },
   IRAMC: {
-    shortName: "지원가",
-    displayName: "조용히 곁을 맞추는 지원가",
+    shortName: "조력자",
+    displayName: "조용히 힘을 보태는 조력자",
     familyId: "CONCRETE_CARE",
   },
   IRAMQ: {
@@ -237,8 +239,8 @@ export const candidateProfileNameCatalog: Readonly<
     familyId: "POSSIBILITY_SOLUTION",
   },
   INGKQ: {
-    shortName: "구상가",
-    displayName: "가능성과 변수를 살피는 구상가",
+    shortName: "과학자",
+    displayName: "가능성을 검증하는 과학자",
     familyId: "POSSIBILITY_SOLUTION",
   },
   INGMC: {
@@ -252,8 +254,8 @@ export const candidateProfileNameCatalog: Readonly<
     familyId: "POSSIBILITY_SOLUTION",
   },
   INAKC: {
-    shortName: "조정자",
-    displayName: "조용히 관계를 잇는 조정자",
+    shortName: "상담가",
+    displayName: "마음의 길을 함께 찾는 상담가",
     familyId: "POSSIBILITY_CONNECTION",
   },
   INAKQ: {
@@ -267,8 +269,8 @@ export const candidateProfileNameCatalog: Readonly<
     familyId: "POSSIBILITY_CONNECTION",
   },
   INAMQ: {
-    shortName: "기록가",
-    displayName: "마음의 이야기를 품는 기록가",
+    shortName: "통찰자",
+    displayName: "마음의 의미를 읽는 통찰자",
     familyId: "POSSIBILITY_CONNECTION",
   },
 };

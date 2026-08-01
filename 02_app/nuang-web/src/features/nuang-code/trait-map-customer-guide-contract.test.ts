@@ -20,6 +20,25 @@ describe("traitMapCustomerGuideSchema", () => {
     ).toEqual(traitMapCustomerGuideChapterSlots);
   });
 
+  it("publishes ENGKC with the plain-language pilot editorial", () => {
+    const guide = getPublishedTraitMapCustomerGuide("ENGKC");
+    const customerCopy = guide?.chapters
+      .flatMap((chapter) =>
+        chapter.sections.flatMap((section) => section.paragraphs),
+      )
+      .join(" ");
+
+    expect(guide?.version).toBe("ENGKC-CUSTOMER-GUIDE-3.0");
+    expect(guide?.chapters[0].sections[1].paragraphs[1]).toContain(
+      "일을 마친 뒤에야",
+    );
+    expect(customerCopy).not.toContain("피로를 놓칠");
+    expect(customerCopy).not.toContain("반대 성향처럼");
+    expect(customerCopy).not.toContain("맞는 크기로");
+    expect(customerCopy).not.toContain("조절하게 도와");
+    expect(customerCopy).not.toContain("말할 시간을 줄이");
+  });
+
   it("publishes a complete, contract-valid guide for all 32 Nuang codes", () => {
     const codes = Object.keys(candidateProfileDefinitions).sort();
 
@@ -136,6 +155,38 @@ describe("traitMapCustomerGuideSchema", () => {
           .slice(0, 4)
           .join(", ")}`,
       ).toBe(meaningfulSentenceSignatures.length);
+    }
+  });
+
+  it("publishes the approved name and V3 plain-Korean guide together", () => {
+    const forbiddenAwkwardPhrases = [
+      "피로를 놓칠",
+      "반대 성향처럼",
+      "맞는 크기로",
+      "조절하게 도와",
+      "말할 시간을 줄이",
+      "놀이 선택",
+    ];
+
+    for (const [code, profile] of Object.entries(
+      candidateProfileDefinitions,
+    )) {
+      const guide = getPublishedTraitMapCustomerGuide(code);
+      const copy =
+        guide?.chapters
+          .flatMap((chapter) =>
+            chapter.sections.flatMap((section) => section.paragraphs),
+          )
+          .join(" ") ?? "";
+
+      expect(guide?.profileName, code).toBe(profile.displayName);
+      if (!["ENAKQ", "ENGKC"].includes(code)) {
+        expect(guide?.version, code).toBe(`${code}-CUSTOMER-GUIDE-3.0`);
+      }
+      expect(
+        forbiddenAwkwardPhrases.filter((phrase) => copy.includes(phrase)),
+        `${code} still contains wording rejected in the ENGKC pilot`,
+      ).toEqual([]);
     }
   });
 

@@ -6,7 +6,7 @@ describe("ENAKQ trait map template v1", () => {
   it("keeps the representative profile, five axes, and six contexts together", () => {
     expect(enakqTraitMapTemplateV1).toMatchObject({
       code: "ENAKQ",
-      profileName: "관계를 여는 지휘자",
+      profileName: "관계를 여는 선도자",
       status: "research_preview_not_customer_content",
     });
     expect(enakqTraitMapTemplateV1.axes.map((axis) => axis.symbol)).toEqual([

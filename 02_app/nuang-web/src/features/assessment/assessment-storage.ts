@@ -17,6 +17,7 @@ import {
   localCompletedRetentionDays,
   localInProgressRetentionDays,
 } from "@/features/account/local-retention-policy";
+import type { ReportContentSnapshot } from "@/features/result/unified-core-report/report-content-snapshot-contract";
 
 const DB_NAME = "nuang-local";
 const DB_VERSION = 1;
@@ -333,6 +334,41 @@ export async function completeLocalAttempt(
 
   await db.put(ATTEMPT_STORE, completed);
   return completed;
+}
+
+export async function attachLocalReportContentSnapshot(
+  attemptId: string,
+  responseSnapshotHash: string,
+  reportContentSnapshot: ReportContentSnapshot,
+) {
+  const db = await getDb();
+  const storedAttempt = await db.get(ATTEMPT_STORE, attemptId);
+
+  if (
+    !storedAttempt?.resultSnapshot ||
+    storedAttempt.state !== "completed" ||
+    storedAttempt.completionStatus !== "completed" ||
+    storedAttempt.responseSnapshotHash !== responseSnapshotHash ||
+    storedAttempt.resultSnapshot.responseSnapshotHash !== responseSnapshotHash
+  ) {
+    throw new Error("LOCAL_REPORT_CONTENT_SNAPSHOT_CONFLICT");
+  }
+
+  if (storedAttempt.resultSnapshot.reportContentSnapshot) {
+    return storedAttempt;
+  }
+
+  const updated: LocalAssessmentAttempt = {
+    ...storedAttempt,
+    resultSnapshot: {
+      ...storedAttempt.resultSnapshot,
+      reportContentSnapshot,
+    },
+    updatedAt: new Date().toISOString(),
+  };
+
+  await db.put(ATTEMPT_STORE, updated);
+  return updated;
 }
 
 export async function beginLocalAttemptCompletion(

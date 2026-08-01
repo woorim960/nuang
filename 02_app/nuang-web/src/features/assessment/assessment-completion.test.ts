@@ -59,7 +59,7 @@ describe("prepareAssessmentCompletion", () => {
     const readiness = prepareAssessmentCompletion(betaCoreAssessment, attempt);
 
     expect(readiness.result.code).toBe("ENAKQ");
-    expect(readiness.result.profileName).toBe("관계를 여는 지휘자");
+    expect(readiness.result.profileName).toBe("관계를 여는 선도자");
     expect(readiness.versionBundle.assessmentReleaseId).toBe(
       "NUANG-CORE-BETA-1.0",
     );
@@ -73,7 +73,7 @@ describe("prepareAssessmentCompletion", () => {
     );
 
     expect(readiness.result.code).toBe("ENAKQ");
-    expect(readiness.result.profileName).toBe("관계를 여는 지휘자");
+    expect(readiness.result.profileName).toBe("관계를 여는 선도자");
     expect(readiness.needsAdaptiveFollowUp).toBe(false);
     expect(readiness.evidenceStatus).toBe("clear");
   });

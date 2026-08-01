@@ -72,7 +72,7 @@ export const adminCommunityContentRequestSchema = z
       if (value.options.length !== 2) {
         context.addIssue({
           code: "custom",
-          message: "밸런스게임은 서로 다른 두 선택지가 필요합니다.",
+          message: "투표에는 서로 다른 두 선택지가 필요합니다.",
           path: ["options"],
         });
         return;

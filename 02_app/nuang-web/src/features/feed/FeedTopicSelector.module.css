@@ -1,0 +1,100 @@
+.section {
+  padding: 1rem;
+  border-top: 1px solid var(--nu-color-border);
+  background: var(--nu-color-surface);
+}
+
+.section[data-layout="embedded"] {
+  padding: 0.9rem 0 1rem;
+  border-top-color: var(--nu-brand-100);
+  border-bottom: 1px solid var(--nu-brand-100);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.heading strong {
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-heavy);
+}
+
+.recommendButton {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0 0.65rem;
+  border: 1px solid
+    color-mix(in srgb, var(--nu-color-community) 24%, transparent);
+  border-radius: 12px;
+  color: var(--nu-color-community);
+  background: var(--nu-community-50);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-heavy);
+  white-space: nowrap;
+}
+
+.recommendButton:disabled {
+  border-color: var(--nu-color-border);
+  color: var(--nu-neutral-400);
+  background: var(--nu-neutral-75);
+  cursor: not-allowed;
+}
+
+.scroller {
+  display: flex;
+  gap: 0.45rem;
+  overflow-x: auto;
+  margin-right: -1rem;
+  padding: 0.05rem 1rem 0.2rem 0;
+  scroll-padding-inline: 1rem;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.section[data-layout="embedded"] .scroller {
+  margin-right: -1rem;
+}
+
+.scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.scroller button {
+  min-height: 38px;
+  flex: 0 0 auto;
+  padding: 0 0.85rem;
+  border: 1px solid var(--nu-neutral-150);
+  border-radius: 999px;
+  color: var(--nu-neutral-600);
+  background: var(--nu-neutral-25);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.scroller button[aria-checked="true"] {
+  border-color: var(--nu-color-community);
+  color: var(--nu-color-surface);
+  background: var(--nu-color-community);
+  box-shadow: 0 7px 18px
+    color-mix(in srgb, var(--nu-color-community) 18%, transparent);
+}
+
+.note {
+  margin: 0.45rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
+}

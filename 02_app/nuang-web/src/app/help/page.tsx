@@ -1,12 +1,19 @@
 import {
   ArrowLeft,
+  Brain,
+  ChevronDown,
   ExternalLink,
   HeartHandshake,
   Info,
+  MessageCircle,
   Phone,
+  Shield,
   ShieldAlert,
+  ShieldCheck,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
+import type { ComponentType } from "react";
 import {
   helpBoundaries,
   helpPrivacyNotice,
@@ -16,192 +23,201 @@ import {
   urgentSteps,
   type HelpResource,
 } from "@/features/help/help-resources";
-import { cn } from "@/lib/utils/cn";
+import styles from "./page.module.css";
 
-const toneClass: Record<HelpResource["tone"], string> = {
-  danger: "border-danger/25 bg-[var(--nu-reaction-50)] text-danger",
-  primary: "border-primary/20 bg-surface-soft text-primary",
-  water: "border-water/20 bg-[var(--nu-info-50)] text-water",
-  forest: "border-forest/20 bg-[var(--nu-community-50)] text-forest",
-  sun: "border-sun/25 bg-[var(--nu-warm-50)] text-[var(--nu-warm-700)]",
-  neutral: "border-line bg-white text-muted",
+type IconComponent = ComponentType<{
+  "aria-hidden"?: boolean | "true" | "false";
+  size?: number | string;
+  strokeWidth?: number | string;
+}>;
+
+const resourceIcon: Record<HelpResource["id"], IconComponent> = {
+  "mental-health-1577": Brain,
+  "suicide-109": HeartHandshake,
+  "violence-1366": Shield,
+  "welfare-129": Info,
+  "youth-1388": Users,
 };
 
 export default function HelpPage() {
   return (
-    <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-5">
-      <Link
-        className="inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-semibold text-muted"
-        href="/assessments"
-      >
-        <ArrowLeft aria-hidden="true" size={18} />
-        검사
-      </Link>
-
-      <header className="mt-5">
-        <h1 className="text-2xl font-black leading-8">
-          지금 도움이 필요하다면
-        </h1>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          위기와 치료가 필요한 상황은 검사하지 않고 도움받을 곳을 안내합니다.
-        </p>
+    <main className={styles.screen}>
+      <header className={styles.topBar}>
+        <Link aria-label="홈으로 돌아가기" href="/home">
+          <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.7} />
+        </Link>
+        <h1>도움받기</h1>
+        <span aria-hidden="true" />
       </header>
+
+      <section className={styles.hero}>
+        <p>혼자 버티지 않아도 괜찮아요</p>
+        <h2>
+          지금 필요한 도움을
+          <br />
+          바로 찾을 수 있어요.
+        </h2>
+        <div className={styles.privacyLine}>
+          <ShieldCheck aria-hidden="true" size={17} strokeWidth={1.65} />
+          <span>이 화면에서 누른 내용은 뉴앙에 저장하지 않아요.</span>
+        </div>
+      </section>
 
       <section
         aria-labelledby="urgent-help-title"
-        className="mt-5 rounded-lg border border-danger/25 bg-[var(--nu-reaction-50)] p-4"
+        className={styles.urgentSection}
       >
-        <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-white text-danger">
-            <ShieldAlert aria-hidden="true" size={21} />
-          </div>
+        <div className={styles.urgentHeading}>
+          <span className={styles.urgentIcon}>
+            <ShieldAlert aria-hidden="true" size={22} strokeWidth={1.7} />
+          </span>
           <div>
-            <h2 className="font-bold text-danger" id="urgent-help-title">
-              지금 위험하다면
-            </h2>
-            <ul className="mt-2 grid gap-2 text-sm leading-6 text-muted">
-              {urgentSteps.map((step) => (
-                <li key={step}>{step}</li>
-              ))}
-            </ul>
+            <p>즉시 도움이 필요할 때</p>
+            <h2 id="urgent-help-title">지금 다칠 위험이 있다면</h2>
           </div>
         </div>
-        <div className="mt-4 grid grid-cols-3 gap-2">
+
+        <ol className={styles.urgentSteps}>
+          {urgentSteps.map((step, index) => (
+            <li key={step}>
+              <span>{index + 1}</span>
+              <p>{step}</p>
+            </li>
+          ))}
+        </ol>
+
+        <div className={styles.urgentActions}>
           {urgentCallActions.map((action) => (
             <a
               aria-label={action.ariaLabel}
-              className={cn(
-                "inline-flex min-h-11 items-center justify-center gap-2 rounded-lg px-3 text-sm font-bold",
-                action.variant === "danger"
-                  ? "bg-danger text-white"
-                  : "border border-danger/25 bg-white text-danger",
-              )}
+              data-variant={action.variant}
               href={action.href}
               key={action.label}
             >
-              <Phone aria-hidden="true" size={17} />
-              {action.label}
+              <span>
+                <small>{action.description}</small>
+                <strong>{action.label}</strong>
+              </span>
+              <Phone aria-hidden="true" size={18} strokeWidth={1.75} />
             </a>
           ))}
         </div>
       </section>
 
-      <section className="mt-5 grid gap-3">
-        <h2 className="text-base font-bold">연결할 수 있는 곳</h2>
-        {helpResources.map((resource) => (
-          <ResourceCard key={resource.id} resource={resource} />
-        ))}
-      </section>
+      <section
+        aria-labelledby="help-resource-title"
+        className={styles.resourceSection}
+      >
+        <div className={styles.sectionHeading}>
+          <MessageCircle aria-hidden="true" size={19} strokeWidth={1.65} />
+          <h2 id="help-resource-title">상황에 맞는 도움</h2>
+        </div>
 
-      <section className="mt-5 rounded-lg border border-line bg-white p-4">
-        <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-surface-soft text-primary">
-            <HeartHandshake aria-hidden="true" size={20} />
-          </div>
-          <div>
-            <h2 className="font-bold">뉴앙이 하지 않는 것</h2>
-            <div className="mt-3 grid gap-2 text-sm leading-6 text-muted">
-              {helpBoundaries.map((item) => (
-                <p key={item}>{item}</p>
-              ))}
-            </div>
-          </div>
+        <div className={styles.resourceList}>
+          {helpResources.map((resource) => (
+            <ResourceRow key={resource.id} resource={resource} />
+          ))}
         </div>
       </section>
 
-      <section className="mt-5 rounded-lg border border-line bg-white p-4">
-        <h2 className="font-bold">기록하지 않는 정보</h2>
-        <p className="mt-2 text-sm leading-6 text-muted">{helpPrivacyNotice}</p>
-      </section>
-
-      <section className="mt-5 rounded-lg border border-line bg-white p-4">
-        <div className="flex items-start gap-3">
-          <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[var(--nu-info-50)] text-muted">
-            <Info aria-hidden="true" size={20} />
+      <section className={styles.policySection}>
+        <details>
+          <summary>
+            <span>
+              <ShieldCheck aria-hidden="true" size={19} strokeWidth={1.65} />
+              개인정보와 안내 기준
+            </span>
+            <ChevronDown aria-hidden="true" size={18} strokeWidth={1.65} />
+          </summary>
+          <div className={styles.policyBody}>
+            <p>{helpPrivacyNotice}</p>
+            <ul>
+              {helpBoundaries.slice(0, 3).map((item) => (
+                <li key={item}>{item}</li>
+              ))}
+            </ul>
           </div>
-          <div>
-            <h2 className="font-bold">출처와 업데이트</h2>
-            <p className="mt-2 text-sm leading-6 text-muted">
-              연락처는 2026.07.03 KST 기준 공식 기관 페이지에서 확인한
-              정보입니다. 실제 운영 시간과 세부 지원은 각 기관 안내를 확인해
-              주세요.
+        </details>
+
+        <details>
+          <summary>
+            <span>
+              <Info aria-hidden="true" size={19} strokeWidth={1.65} />
+              공식 안내 확인
+            </span>
+            <ChevronDown aria-hidden="true" size={18} strokeWidth={1.65} />
+          </summary>
+          <div className={styles.policyBody}>
+            <p>
+              연락처는 2026년 7월 28일 공식 기관 안내에서 확인했습니다. 운영
+              시간과 지원 범위는 기관 사정에 따라 달라질 수 있어요.
             </p>
-            <div className="mt-3 flex flex-wrap gap-2">
+            <div className={styles.sourceList}>
               {sourceLinks.map((source) => (
                 <a
-                  className="inline-flex min-h-9 items-center gap-1 rounded-lg border border-line px-3 text-xs font-semibold text-muted"
+                  aria-label={`${source.label} 공식 안내 새 창에서 열기`}
                   href={source.href}
                   key={source.href}
                   rel="noreferrer"
                   target="_blank"
                 >
                   {source.label}
-                  <ExternalLink aria-hidden="true" size={13} />
+                  <ExternalLink
+                    aria-hidden="true"
+                    size={14}
+                    strokeWidth={1.6}
+                  />
                 </a>
               ))}
             </div>
           </div>
-        </div>
+        </details>
       </section>
     </main>
   );
 }
 
-function ResourceCard({ resource }: { resource: HelpResource }) {
+function ResourceRow({ resource }: { resource: HelpResource }) {
+  const Icon = resourceIcon[resource.id] ?? HeartHandshake;
+
   return (
-    <article className="rounded-lg border border-line bg-white p-4 shadow-[var(--shadow-soft)]">
-      <div className="flex items-start justify-between gap-3">
-        <div>
-          <p className="text-sm font-semibold text-muted">
-            {resource.availability}
-          </p>
-          <h3 className="mt-1 text-lg font-bold">{resource.title}</h3>
+    <article className={styles.resourceRow} data-tone={resource.tone}>
+      <div className={styles.resourceHeader}>
+        <span className={styles.resourceIcon}>
+          <Icon aria-hidden="true" size={21} strokeWidth={1.65} />
+        </span>
+        <div className={styles.resourceTitle}>
+          <p>{resource.availability}</p>
+          <h3>{resource.title}</h3>
         </div>
-        {resource.phone && (
-          <span
-            className={cn(
-              "shrink-0 rounded-lg border px-3 py-2 text-sm font-black tabular-nums",
-              toneClass[resource.tone],
-            )}
-          >
-            {resource.phone}
-          </span>
-        )}
       </div>
-      <p className="mt-3 text-sm leading-6 text-muted">{resource.summary}</p>
-      <div className="mt-3 flex flex-wrap gap-2">
-        {resource.fit.map((item) => (
-          <span
-            className="rounded-full bg-[var(--nu-info-50)] px-3 py-1 text-xs font-semibold text-muted"
-            key={item}
-          >
-            {item}
-          </span>
-        ))}
-      </div>
-      <div className="mt-4 grid grid-cols-2 gap-2">
-        {resource.phone && (
+
+      <p className={styles.resourceSummary}>{resource.summary}</p>
+      <p className={styles.resourceFit}>{resource.fit.join(" · ")}</p>
+
+      <div className={styles.resourceActions}>
+        {resource.phone ? (
           <a
             aria-label={`${resource.title} ${resource.phone}로 전화하기`}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg bg-primary px-3 text-sm font-bold text-white"
+            className={styles.callAction}
             href={`tel:${resource.phone}`}
           >
-            <Phone aria-hidden="true" size={17} />
-            전화
+            <Phone aria-hidden="true" size={17} strokeWidth={1.75} />
+            {resource.phone} 전화
           </a>
-        )}
-        {resource.href && (
+        ) : null}
+        {resource.href ? (
           <a
-            aria-label={`${resource.title} 공식 안내 열기`}
-            className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-line bg-white px-3 text-sm font-bold text-foreground"
+            aria-label={`${resource.title} 공식 안내 새 창에서 열기`}
+            className={styles.guideAction}
             href={resource.href}
             rel="noreferrer"
             target="_blank"
           >
-            안내
-            <ExternalLink aria-hidden="true" size={15} />
+            공식 안내
+            <ExternalLink aria-hidden="true" size={15} strokeWidth={1.65} />
           </a>
-        )}
+        ) : null}
       </div>
     </article>
   );

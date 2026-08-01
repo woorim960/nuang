@@ -35,6 +35,16 @@ export async function readAdminSystem(client: SupabaseClient) {
       "인증 이메일 발신 주소",
       "EMAIL_VERIFICATION_FROM",
     ),
+    envAnyCheck(
+      "admin-notification-recipients",
+      "운영 검토 알림 수신자",
+      ["ADMIN_REVIEW_NOTIFICATION_EMAILS", "ADMIN_BOOTSTRAP_EMAILS"],
+    ),
+    envAnyCheck(
+      "admin-notification-from",
+      "운영 검토 알림 발신 주소",
+      ["ADMIN_NOTIFICATION_FROM", "EMAIL_VERIFICATION_FROM"],
+    ),
     envCheck("legal-name", "서비스 운영자 이름", "LEGAL_OPERATOR_NAME"),
     envCheck(
       "privacy-contact",
@@ -63,6 +73,14 @@ export async function readAdminSystem(client: SupabaseClient) {
       "community_profile",
       "커뮤니티 프로필",
       "프로필과 팔로우 화면이 동작하지 않습니다.",
+    ),
+    dbCheck(
+      client,
+      "identity",
+      "operator_account",
+      "운영자 계정 표시",
+      "앱에서 뉴앙 운영자 배지를 표시할 수 없습니다.",
+      "warning",
     ),
     dbCheck(
       client,
@@ -236,7 +254,7 @@ async function communityContentDbCheck(
 ): Promise<AdminSystemCheck> {
   const rpc = await client.rpc("get_admin_community_content_dashboard");
   return {
-    action: "공식 밸런스게임과 오늘의 질문 운영 마이그레이션을 적용하세요.",
+    action: "공식 투표와 오늘의 질문 운영 마이그레이션을 적용하세요.",
     detail: rpc.error ? "공식 콘텐츠 RPC 적용 필요" : "정상",
     key: "feed.official_community_content",
     label: "공식 커뮤니티 콘텐츠",
@@ -283,6 +301,28 @@ function envCheck(
     key,
     label,
     ok,
+    severity: "blocker",
+  };
+}
+
+function envAnyCheck(
+  key: string,
+  label: string,
+  variables: string[],
+): AdminSystemCheck {
+  const activeVariable = variables.find((variable) =>
+    Boolean(process.env[variable]?.trim()),
+  );
+  const fallbackLabel = variables.join(" 또는 ");
+
+  return {
+    action: activeVariable
+      ? ""
+      : `배포 환경 변수 ${fallbackLabel} 중 하나를 등록하세요.`,
+    detail: activeVariable ? `${activeVariable} 사용` : `${fallbackLabel} 필요`,
+    key,
+    label,
+    ok: Boolean(activeVariable),
     severity: "blocker",
   };
 }

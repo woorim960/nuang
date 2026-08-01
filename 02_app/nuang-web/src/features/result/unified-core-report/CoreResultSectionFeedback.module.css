@@ -1,0 +1,146 @@
+.root {
+  margin-top: 18px;
+  padding-top: 17px;
+  border-top: 1px solid var(--nu-color-border-soft);
+}
+
+.root fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.root legend {
+  margin: 0 0 10px;
+  color: var(--nu-color-text-secondary);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.sentiments {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.sentiments button,
+.reasons button,
+.submit {
+  min-height: var(--nu-touch-min);
+  border: 1px solid var(--nu-color-border-soft);
+  border-radius: var(--nu-radius-md);
+  color: var(--nu-color-text-secondary);
+  background: var(--nu-color-surface);
+  font: inherit;
+  cursor: pointer;
+}
+
+.sentiments button {
+  padding: 9px 6px;
+  font-size: 12px;
+  font-weight: 750;
+  line-height: 1.35;
+  word-break: keep-all;
+}
+
+.sentiments button[data-active="true"],
+.reasons button[data-active="true"] {
+  border-color: var(--nu-color-brand-border);
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+}
+
+.reasonPanel {
+  margin-top: 12px;
+  padding: 14px;
+  border-radius: var(--nu-radius-lg);
+  background: var(--nu-color-surface-soft);
+}
+
+.reasonPanel > p {
+  margin: 0;
+  color: var(--nu-color-text-muted);
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.reasons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 10px;
+}
+
+.reasons button {
+  min-height: var(--nu-touch-min);
+  padding: 7px 10px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 124px;
+  gap: 6px;
+  margin-top: 12px;
+  padding: 9px 12px;
+  border-color: transparent;
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-brand-action);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.root button:disabled {
+  cursor: wait;
+  opacity: 0.56;
+}
+
+.root > p {
+  margin: 9px 0 0;
+  color: var(--nu-color-danger);
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.receipt {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid var(--nu-color-border-soft);
+  color: var(--nu-color-brand-strong);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.receipt svg {
+  flex: 0 0 auto;
+  margin-top: 1px;
+}
+
+.spinner {
+  animation: spin 800ms linear infinite;
+}
+
+.root button:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--nu-color-focus) 72%, transparent);
+  outline-offset: 2px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner {
+    animation: none;
+  }
+}

@@ -18,6 +18,8 @@ describe("AppShell", () => {
 
     expect(main).toHaveClass("pb-[var(--nu-page-bottom-with-nav)]");
     expect(main).toHaveClass("pt-[calc(20px+env(safe-area-inset-top))]");
+    expect(main).toHaveClass("px-[var(--nu-page-gutter)]");
+    expect(main).toHaveClass("overflow-x-clip");
     expect(
       screen.getByRole("navigation", { name: "하단 주요 메뉴" }),
     ).toBeInTheDocument();

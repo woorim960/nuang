@@ -62,6 +62,36 @@ describe("FeedPage", () => {
     expect(metadata.title).toBe("커뮤니티 | NUANG");
   });
 
+  it("requests the resumed poll even when it fell outside the regular feed page", async () => {
+    await FeedPage({
+      searchParams: Promise.resolve({
+        auth: "connected",
+        optionId: "22222222-2222-4222-8222-222222222222",
+        pollId: "11111111-1111-4111-8111-111111111111",
+        resumeFeed: "poll",
+      }),
+    });
+
+    expect(feedReadMocks.createServerFeedReadPayload).toHaveBeenCalledWith({
+      requiredPollId: "11111111-1111-4111-8111-111111111111",
+    });
+  });
+
+  it("does not request an invalid poll id from the feed store", async () => {
+    await FeedPage({
+      searchParams: Promise.resolve({
+        auth: "connected",
+        optionId: "22222222-2222-4222-8222-222222222222",
+        pollId: "not-a-uuid",
+        resumeFeed: "poll",
+      }),
+    });
+
+    expect(feedReadMocks.createServerFeedReadPayload).toHaveBeenCalledWith({
+      requiredPollId: undefined,
+    });
+  });
+
   it("keeps the bottom navigation as the only way back to main tabs", async () => {
     render(await FeedPage({}));
 
@@ -101,7 +131,7 @@ describe("FeedPage", () => {
 
     expect(screen.getByRole("link", { name: "댓글 2개 보기" })).toHaveAttribute(
       "href",
-      "/feed/posts/44444444-4444-4444-8444-444444444444",
+      "/feed/posts/44444444-4444-4444-8444-444444444444?backTo=%2Ffeed",
     );
   });
 });

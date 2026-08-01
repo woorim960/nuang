@@ -28,7 +28,7 @@ describe("admin community content contract", () => {
       contentType: "balance_game",
       options: [{ key: "same", label: "같은 선택" }],
       prompt: "어느 쪽에 더 가까운가요?",
-      title: "잘못된 밸런스게임",
+      title: "잘못된 투표",
     });
     const duplicate = adminCommunityContentRequestSchema.safeParse({
       action: "create",
@@ -39,7 +39,7 @@ describe("admin community content contract", () => {
         { key: "same", label: "다른 문구" },
       ],
       prompt: "어느 쪽에 더 가까운가요?",
-      title: "잘못된 밸런스게임",
+      title: "잘못된 투표",
     });
 
     expect(missing.success).toBe(false);

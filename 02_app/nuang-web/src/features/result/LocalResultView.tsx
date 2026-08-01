@@ -3,7 +3,7 @@
 import { ArrowLeft, Share2, Trash2 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { ButtonLink } from "@/components/ui/Button";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
@@ -39,17 +39,13 @@ import {
   sanitizePrecisionDestination,
 } from "@/features/assessment/precision-entry";
 import type { ResultAccountStatus } from "@/features/account/result-account-status";
-import type {
-  DomainScore,
-  FacetScore,
-} from "@/lib/scoring/types";
+import type { DomainScore, FacetScore } from "@/lib/scoring/types";
 import {
   getDomainNarrative,
   getFacetInsight,
   getHighestDomains,
   getLowestDomains,
 } from "@/features/result/report-copy";
-import { shareResultImage } from "@/features/result/share-image";
 import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
 import {
   CandidateCoreResultView,
@@ -57,11 +53,16 @@ import {
   CandidateResultLoadingState,
   CandidateUndeterminedResultView,
 } from "@/features/result/CandidateCoreResultView";
-import type { CandidateShareAccountController } from "@/features/result/CandidateResultShareSheet";
+import { CoreResultReportTemplate } from "@/features/result/unified-core-report/CoreResultReportTemplate";
+import { adaptValidatedLocalCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
 import type { ConsentDraft } from "@/features/consent/consent-draft";
+import { ReportShareSheet } from "@/features/share/ReportShareSheet";
+import { buildCoreReportShareContent } from "@/features/share/report-share-contract";
 import { isCoreResultUndetermined } from "@/lib/scoring/core";
 
 type LocalResultViewProps = {
+  backHref?: string;
+  openShareOnMount?: boolean;
   localResultId: string;
 };
 
@@ -93,13 +94,16 @@ const facetShortLabel: Record<string, string> = {
   "SM-OS": "정리",
 };
 
-export function LocalResultView({ localResultId }: LocalResultViewProps) {
+export function LocalResultView({
+  backHref,
+  localResultId,
+  openShareOnMount = false,
+}: LocalResultViewProps) {
   const router = useRouter();
   const [attempt, setAttempt] = useState<LocalAssessmentAttempt | null>(null);
   const [isMissing, setIsMissing] = useState(false);
-  const [shareState, setShareState] = useState<
-    "downloaded" | "error" | "idle" | "shared" | "working"
-  >("idle");
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
   const [claimState, setClaimState] = useState<
     | "checking"
     | "error"
@@ -109,16 +113,9 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
     | "saving"
     | "unauthenticated"
   >("checking");
-  const [shareLinkState, setShareLinkState] = useState<
-    "copied" | "error" | "idle" | "making" | "ready"
-  >("idle");
-  const [feedShareState, setFeedShareState] = useState<
-    "error" | "idle" | "posted" | "posting"
-  >("idle");
   const [serverResultReportId, setServerResultReportId] = useState<
     string | null
   >(null);
-  const [serverShareUrl, setServerShareUrl] = useState<string | null>(null);
   const [deleteState, setDeleteState] = useState<"error" | "idle" | "working">(
     "idle",
   );
@@ -148,16 +145,19 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
 
     let isMounted = true;
 
-    readAccountStatus(localResultId).then((status) => {
+    readAccountStatus(localResultId).then((outcome) => {
       if (!isMounted) return;
 
-      if (!status) {
+      if (outcome.state === "not_found") {
         setClaimState("idle");
         return;
       }
-
-      setServerResultReportId(status.resultReportId);
-      setClaimState("saved");
+      if (outcome.state === "found") {
+        setServerResultReportId(outcome.result.resultReportId);
+        setClaimState("saved");
+        return;
+      }
+      setClaimState(outcome.state);
     });
 
     return () => {
@@ -212,10 +212,16 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
     }
 
     const consentDraft = readStoredConsentDraft();
-
-    if (!consentDraft) return;
-
     let isMounted = true;
+
+    if (!consentDraft) {
+      void Promise.resolve().then(() => {
+        if (isMounted) setClaimState("missing_consent");
+      });
+      return () => {
+        isMounted = false;
+      };
+    }
 
     void Promise.resolve().then(async () => {
       if (!isMounted) return;
@@ -246,8 +252,8 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
         if (outcome.restored) {
           const status = await readAccountStatus(attempt.id);
 
-          if (isMounted && status) {
-            setServerResultReportId(status.resultReportId);
+          if (isMounted && status.state === "found") {
+            setServerResultReportId(status.result.resultReportId);
           }
         }
       } catch {
@@ -293,136 +299,97 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
     );
   }
 
+  const canRequestUnavailableShare =
+    !serverResultReportId &&
+    (claimState === "error" ||
+      claimState === "unauthenticated" ||
+      claimState === "missing_consent");
+
+  function handleUnavailableShareRequest() {
+    if (claimState === "error") {
+      setClaimState("idle");
+      return;
+    }
+
+    const next = `/results/local/${localResultId}?share=1`;
+    router.push(`/login?reason=share&next=${encodeURIComponent(next)}`);
+  }
+
   if (isCandidateResult) {
     const isPersistableCandidate =
       isCandidateQuickRelease(attempt) || isCandidateFullRelease(attempt);
-    const candidateCode = result.code;
-    const candidateProfileName = result.profileName;
 
     if (!isPersistableCandidate) {
-      return <CandidateCoreResultView attempt={attempt} result={result} />;
-    }
-
-    async function handleCandidateCreateShareLink(copyToClipboard = true) {
-      const consentDraft = readStoredConsentDraft();
-
-      if (!serverResultReportId || !consentDraft) {
-        setShareLinkState("error");
-        return null;
-      }
-
-      if (serverShareUrl) {
-        if (copyToClipboard) {
-          try {
-            await copyShareUrlToClipboard(serverShareUrl);
-            setShareLinkState("copied");
-          } catch {
-            setShareLinkState("ready");
+      return (
+        <CandidateCoreResultView
+          attempt={attempt}
+          backHref={backHref}
+          deleteError={
+            deleteState === "error"
+              ? "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요."
+              : null
           }
-        }
-        return serverShareUrl;
-      }
-
-      try {
-        setShareLinkState("making");
-        const response = await fetch("/api/share-links", {
-          body: JSON.stringify({
-            consentDraft,
-            resultReportId: serverResultReportId,
-            ttlDays: 30,
-            visibility: "summary",
-          }),
-          headers: {
-            "content-type": "application/json",
-          },
-          method: "POST",
-        });
-        const body = (await response.json()) as {
-          ok?: boolean;
-          shareLink?: { url?: string };
-        };
-        const shareUrl = body.shareLink?.url;
-
-        if (!response.ok || !body.ok || !shareUrl) {
-          setShareLinkState("error");
-          return null;
-        }
-
-        setServerShareUrl(shareUrl);
-        if (copyToClipboard) {
-          try {
-            await copyShareUrlToClipboard(shareUrl);
-            setShareLinkState("copied");
-          } catch {
-            setShareLinkState("ready");
-          }
-        } else {
-          setShareLinkState("ready");
-        }
-        return shareUrl;
-      } catch {
-        setShareLinkState("error");
-        return null;
-      }
+          deletePending={deleteState === "working"}
+          onDelete={() => void handleDeleteResult()}
+          openShareOnMount={false}
+          result={result}
+        />
+      );
     }
-
-    async function handleCandidateShareToFeed() {
-      if (!serverResultReportId) {
-        setFeedShareState("error");
-        return;
-      }
-
-      try {
-        setFeedShareState("posting");
-        const response = await fetch("/api/feed", {
-          body: JSON.stringify({
-            action: "create_post",
-            attachments: [
-              {
-                id: serverResultReportId,
-                type: "result_summary",
-              },
-            ],
-            body: `${candidateCode} ${candidateProfileName} 결과를 공유했어요.`,
-            source: "report_share",
-            visibility: "public",
-          }),
-          headers: {
-            "content-type": "application/json",
-          },
-          method: "POST",
-        });
-        const payload = (await response.json().catch(() => null)) as {
-          ok?: boolean;
-        } | null;
-
-        if (!response.ok || !payload?.ok) {
-          setFeedShareState("error");
-          return;
-        }
-
-        setFeedShareState("posted");
-        router.push("/feed");
-        router.refresh();
-      } catch {
-        setFeedShareState("error");
-      }
-    }
-
-    const candidateShareAccount: CandidateShareAccountController = {
-      claimState,
-      feedShareState,
-      onCreateShareLink: handleCandidateCreateShareLink,
-      onShareToFeed: handleCandidateShareToFeed,
-      shareLinkState,
-      shareUrl: serverShareUrl,
-    };
 
     return (
       <CandidateCoreResultView
         attempt={attempt}
+        backHref={backHref}
+        deleteError={
+          deleteState === "error"
+            ? "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요."
+            : null
+        }
+        deletePending={deleteState === "working"}
+        onDelete={() => void handleDeleteResult()}
+        onShareRequest={
+          canRequestUnavailableShare ? handleUnavailableShareRequest : undefined
+        }
+        openShareOnMount={openShareOnMount}
         result={result}
-        shareAccount={candidateShareAccount}
+        shareReportId={serverResultReportId ?? undefined}
+        statusMessage={getClaimStatusMessage(claimState)}
+      />
+    );
+  }
+
+  const unifiedLegacyModel = adaptValidatedLocalCoreResult(attempt);
+  if (unifiedLegacyModel) {
+    const legacyPrecisionHref =
+      unifiedLegacyModel.identity.kind === "quick"
+        ? buildPrecisionIntroHref({
+            backDestination: `/results/local/${localResultId}`,
+            entrySource: "first-result",
+            returnDestination: attempt.returnDestination,
+          })
+        : null;
+    return (
+      <CoreResultReportTemplate
+        backHref={backHref}
+        deleteError={
+          deleteState === "error"
+            ? "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요."
+            : null
+        }
+        deletePending={deleteState === "working"}
+        model={unifiedLegacyModel}
+        onDelete={() => void handleDeleteResult()}
+        onShareUnavailable={
+          canRequestUnavailableShare ? handleUnavailableShareRequest : undefined
+        }
+        originalReportKey={
+          serverResultReportId ? `core_${serverResultReportId}` : undefined
+        }
+        precisionHref={legacyPrecisionHref}
+        shareEnabled={Boolean(serverResultReportId)}
+        statusMessage={getClaimStatusMessage(claimState)}
+        surface="completion"
       />
     );
   }
@@ -470,105 +437,22 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
     shortLabel: facetShortLabel[facet.facetId] ?? facet.label,
     value: facet.score,
   }));
-  async function handleShareImage() {
-    try {
-      setShareState("working");
-      const outcome = await shareResultImage({
-        code,
-        domains,
-        motif,
-        profileName,
-        resultLabel: assessment.resultLabel,
-      });
-      setShareState(outcome);
-    } catch {
-      setShareState("error");
-    }
-  }
-
-  async function handleCreateShareLink() {
-    const consentDraft = readStoredConsentDraft();
-
-    if (!serverResultReportId || !consentDraft) {
-      setShareLinkState("error");
-      return;
-    }
-
-    try {
-      setShareLinkState("making");
-      const response = await fetch("/api/share-links", {
-        body: JSON.stringify({
-          consentDraft,
-          resultReportId: serverResultReportId,
-          ttlDays: 30,
-          visibility: "summary",
-        }),
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      });
-      const body = await response.json();
-
-      if (!response.ok || !body.ok) {
-        setShareLinkState("error");
-        return;
-      }
-
-      setServerShareUrl(body.shareLink.url);
-      try {
-        await copyShareUrlToClipboard(body.shareLink.url);
-        setShareLinkState("copied");
-      } catch {
-        setShareLinkState("ready");
-      }
-    } catch {
-      setShareLinkState("error");
-    }
-  }
-
-  async function handleShareToFeed() {
-    if (!serverResultReportId) {
-      setFeedShareState("error");
-      return;
-    }
-
-    try {
-      setFeedShareState("posting");
-      const response = await fetch("/api/feed", {
-        body: JSON.stringify({
-          action: "create_post",
-          attachments: [
-            {
-              id: serverResultReportId,
-              type: "result_summary",
-            },
-          ],
-          body: `${code} ${profileName} 리포트를 공유했어요.`,
-          source: "report_share",
-          visibility: "public",
-        }),
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      });
-      const payload = (await response.json().catch(() => null)) as {
-        ok?: boolean;
-      } | null;
-
-      if (!response.ok || !payload?.ok) {
-        setFeedShareState("error");
-        return;
-      }
-
-      setFeedShareState("posted");
-      router.push("/feed");
-      router.refresh();
-    } catch {
-      setFeedShareState("error");
-    }
-  }
+  const shareContent = buildCoreReportShareContent({
+    code,
+    highlights:
+      highestDomains.length > 0
+        ? highestDomains.map((domain) => {
+            const narrative = getDomainNarrative(domain);
+            return `${narrative.title}: ${narrative.summary}`;
+          })
+        : domains.slice(0, 3).map((domain) => domain.label),
+    profileName,
+    resultLabel: assessment.resultLabel,
+    summary:
+      highestDomains[0] !== undefined
+        ? getDomainNarrative(highestDomains[0]).summary
+        : "다섯 가지 성향 방향에서 이번 답에 더 자주 나타난 모습을 정리했어요.",
+  });
 
   async function handleDeleteResult() {
     const confirmed = window.confirm(
@@ -600,7 +484,7 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
       }
 
       await deleteLocalAttempt(localResultId);
-      router.replace("/my");
+      router.replace(backHref ?? "/my?tab=reports");
     } catch {
       setDeleteState("error");
     }
@@ -619,16 +503,20 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
         <p className="truncate px-2 text-center text-sm font-bold">
           결과 리포트
         </p>
-        <button
-          aria-busy={shareState === "working"}
-          aria-label="결과 이미지 파일로 저장하거나 기기 공유 시트 열기"
-          className="grid h-10 w-10 place-items-center rounded-full text-ink hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40"
-          disabled={shareState === "working"}
-          onClick={handleShareImage}
-          type="button"
-        >
-          <Share2 aria-hidden="true" size={20} strokeWidth={1.9} />
-        </button>
+        {serverResultReportId ? (
+          <button
+            aria-haspopup="dialog"
+            aria-label="검사 결과 공유"
+            className="grid h-10 w-10 place-items-center rounded-full text-ink hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40"
+            onClick={() => setIsShareOpen(true)}
+            ref={shareButtonRef}
+            type="button"
+          >
+            <Share2 aria-hidden="true" size={20} strokeWidth={1.9} />
+          </button>
+        ) : (
+          <span aria-hidden="true" />
+        )}
       </header>
 
       <section className="border-b border-line pb-6 pt-7">
@@ -657,29 +545,6 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
           {formatCompletedDate(attempt.completedAt ?? attempt.updatedAt)} · 응답{" "}
           {answeredCount}개
         </p>
-        {shareState === "shared" && (
-          <p
-            aria-live="polite"
-            className="mt-3 text-xs text-muted"
-            role="status"
-          >
-            이미지 공유 시트를 열었어요.
-          </p>
-        )}
-        {shareState === "downloaded" && (
-          <p
-            aria-live="polite"
-            className="mt-3 text-xs text-muted"
-            role="status"
-          >
-            결과 이미지 파일을 저장했어요.
-          </p>
-        )}
-        {shareState === "error" && (
-          <p className="mt-3 text-xs text-muted" role="alert">
-            이미지 생성에 실패했어요. 잠시 뒤 다시 시도해 주세요.
-          </p>
-        )}
       </section>
 
       <section className="border-b border-line py-6">
@@ -720,7 +585,12 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
         />
       </section>
 
-      <TraitMapResultBridge code={code} profileName={profileName} />
+      <TraitMapResultBridge
+        code={code}
+        depth={isFull ? "precision" : "first-result"}
+        facets={result.facets}
+        profileName={profileName}
+      />
 
       {isFull && (
         <section className="border-b border-line py-6">
@@ -756,102 +626,6 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
               공개 범위 설정
             </Link>
           </div>
-        )}
-      </section>
-
-      <section className="border-b border-line py-6">
-        <h2 className="text-base font-bold">공유</h2>
-        <p className="mt-2 text-sm leading-6 text-muted">
-          주소로 공유된 리포트에는 뉴앙 코드와 코드 자리 요약만 담겨요. 직접
-          응답과 세부 점수는 다른 사람에게 보이지 않고, 공유 주소는 30일 뒤
-          자동으로 만료됩니다.
-        </p>
-        <div className="mt-4">
-          {claimState === "saved" ? (
-            <div className="grid gap-2">
-              <button
-                aria-busy={shareLinkState === "making"}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--nu-color-text-strong)] px-4 text-sm font-bold text-white hover:bg-[var(--nu-neutral-900)] disabled:cursor-not-allowed disabled:opacity-40"
-                disabled={shareLinkState === "making"}
-                onClick={handleCreateShareLink}
-                type="button"
-              >
-                {shareLinkState === "making"
-                  ? "공유 주소 준비 중"
-                  : "공유 주소 복사"}
-              </button>
-              <button
-                aria-busy={feedShareState === "posting"}
-                className="inline-flex min-h-12 w-full items-center justify-center rounded-lg border border-line px-4 text-sm font-bold text-ink hover:bg-[var(--nu-neutral-25)] disabled:cursor-not-allowed disabled:opacity-40"
-                disabled={feedShareState === "posting"}
-                onClick={handleShareToFeed}
-                type="button"
-              >
-                {feedShareState === "posting"
-                  ? "피드에 공유 중"
-                  : "피드에 공유"}
-              </button>
-            </div>
-          ) : claimState === "checking" || claimState === "saving" ? (
-            <p
-              aria-live="polite"
-              className="py-3 text-sm text-muted"
-              role="status"
-            >
-              공유 기능을 준비하고 있어요.
-            </p>
-          ) : (
-            <Link
-              className="inline-flex min-h-12 w-full items-center justify-center rounded-lg bg-[var(--nu-color-text-strong)] px-4 text-sm font-bold text-white hover:bg-[var(--nu-neutral-900)]"
-              href={`/login?next=${encodeURIComponent(`/results/local/${localResultId}`)}`}
-            >
-              로그인하고 공유하기
-            </Link>
-          )}
-          <Link
-            className="mt-3 inline-flex min-h-10 items-center text-sm font-semibold text-muted hover:text-ink"
-            href="/my"
-          >
-            내 결과 관리
-          </Link>
-        </div>
-        {claimState === "error" && (
-          <p className="mt-3 text-sm leading-6 text-muted" role="alert">
-            공유 기능을 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.
-          </p>
-        )}
-        {serverShareUrl && (
-          <p
-            className="mt-3 break-all text-sm leading-6 text-muted"
-            role="status"
-          >
-            공유 주소가 준비됐어요. {serverShareUrl}
-          </p>
-        )}
-        {shareLinkState === "copied" && (
-          <p className="mt-2 text-sm leading-6 text-muted" role="status">
-            공유 주소를 복사했어요. 30일 동안 열 수 있어요.
-          </p>
-        )}
-        {shareLinkState === "ready" && (
-          <p className="mt-2 text-sm leading-6 text-muted" role="status">
-            공유 주소가 준비됐어요. 위 주소를 길게 눌러 복사할 수 있어요.
-          </p>
-        )}
-        {shareLinkState === "error" && (
-          <p className="mt-2 text-sm leading-6 text-muted" role="alert">
-            공유를 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.
-          </p>
-        )}
-        {feedShareState === "posted" && (
-          <p className="mt-2 text-sm leading-6 text-muted" role="status">
-            피드에 공유했어요.
-          </p>
-        )}
-        {feedShareState === "error" && (
-          <p className="mt-2 text-sm leading-6 text-muted" role="alert">
-            피드 공유를 완료하지 못했어요. 잠시 뒤 다시 시도해 주세요.
-          </p>
         )}
       </section>
 
@@ -937,6 +711,16 @@ export function LocalResultView({ localResultId }: LocalResultViewProps) {
           </p>
         )}
       </section>
+      {serverResultReportId ? (
+        <ReportShareSheet
+          content={shareContent}
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          onNavigate={(href) => router.push(href)}
+          originalReportKey={`core_${serverResultReportId}`}
+          returnFocusRef={shareButtonRef}
+        />
+      ) : null}
     </main>
   );
 }
@@ -1063,7 +847,10 @@ function formatCompletedDate(value: string) {
 
 async function readAccountStatus(
   localResultId: string,
-): Promise<ResultAccountStatus | null> {
+): Promise<
+  | { result: ResultAccountStatus; state: "found" }
+  | { state: "error" | "not_found" | "unauthenticated" }
+> {
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 2500);
 
@@ -1077,16 +864,20 @@ async function readAccountStatus(
       },
     );
 
-    if (!response.ok) return null;
+    if (response.status === 401) return { state: "unauthenticated" };
+    if (!response.ok) return { state: "error" };
 
     const body = (await response.json()) as {
       ok?: boolean;
       result?: ResultAccountStatus | null;
     };
 
-    return body.ok ? (body.result ?? null) : null;
+    if (!body.ok) return { state: "error" };
+    return body.result
+      ? { result: body.result, state: "found" }
+      : { state: "not_found" };
   } catch {
-    return null;
+    return { state: "error" };
   } finally {
     clearTimeout(timeoutId);
   }
@@ -1186,29 +977,25 @@ function readStoredConsentDraft(): ConsentDraft | null {
   return null;
 }
 
-async function copyShareUrlToClipboard(shareUrl: string) {
-  const writeText = navigator.clipboard?.writeText;
-
-  if (!writeText) {
-    throw new Error("clipboard_unavailable");
+function getClaimStatusMessage(
+  state:
+    | "checking"
+    | "error"
+    | "idle"
+    | "missing_consent"
+    | "saved"
+    | "saving"
+    | "unauthenticated",
+) {
+  if (state === "saving")
+    return "다른 기기에서도 볼 수 있도록 저장하고 있어요.";
+  if (state === "error") {
+    return "결과는 이 기기에 남아 있어요. 공유 버튼을 누르면 계정 저장을 다시 시도해요.";
   }
-
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
-
-  try {
-    await Promise.race([
-      writeText.call(navigator.clipboard, shareUrl),
-      new Promise((_, reject) => {
-        timeoutId = setTimeout(() => {
-          reject(new Error("clipboard_timeout"));
-        }, 1000);
-      }),
-    ]);
-  } finally {
-    if (timeoutId) {
-      clearTimeout(timeoutId);
-    }
+  if (state === "missing_consent") {
+    return "공유하려면 로그인 화면에서 필수 항목을 확인해 주세요.";
   }
+  return null;
 }
 
 function MissingResult() {

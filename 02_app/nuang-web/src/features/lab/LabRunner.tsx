@@ -1,48 +1,57 @@
 "use client";
 
-import { ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useRef, useState } from "react";
-import { Button } from "@/components/ui/Button";
-import { StatusPill } from "@/components/ui/StatusPill";
+import { useRef, useState } from "react";
+import {
+  AssessmentBottomSheet,
+  AssessmentChoiceResponseOptions,
+  AssessmentQuestionContent,
+  AssessmentQuestionDock,
+  AssessmentQuestionGuide,
+  AssessmentQuestionHeader,
+  AssessmentQuestionPrompt,
+  AssessmentQuestionScreen,
+  AssessmentSheetAction,
+  AssessmentSheetActions,
+  useAssessmentQuestionScroll,
+} from "@/features/assessment/AssessmentQuestionControls";
 import {
   calculateLabResult,
   type LabAnswer,
   type LabAssessment,
 } from "@/features/lab/lab-assessments";
-import { saveLabResult } from "@/features/lab/lab-storage";
-import { cn } from "@/lib/utils/cn";
+import {
+  createLabLocalResultId,
+  saveLabResult,
+  syncLabResult,
+} from "@/features/lab/lab-storage";
 
 export function LabRunner({ assessment }: { assessment: LabAssessment }) {
   const router = useRouter();
   const [answers, setAnswers] = useState<Record<string, LabAnswer>>({});
   const latestAnswersRef = useRef<Record<string, LabAnswer>>({});
+  const completionIdRef = useRef<string | null>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [isExitOpen, setIsExitOpen] = useState(false);
 
   const currentQuestion = assessment.questions[currentIndex];
   const currentAnswer = answers[currentQuestion.id];
-  const answeredCount = Object.keys(answers).length;
-  const progress = Math.round(
-    ((currentIndex + 1) / assessment.questions.length) * 100,
-  );
-
   const canGoNext = Boolean(currentAnswer);
   const isLast = currentIndex === assessment.questions.length - 1;
 
-  const sensitivityTone = useMemo(
-    () => (assessment.sensitivity === "S2" ? "caution" : "neutral"),
-    [assessment.sensitivity],
-  );
+  useAssessmentQuestionScroll(currentQuestion.id);
 
-  function handleSelect(optionId: string, resultId: string) {
+  function handleSelect(optionId: string) {
+    const option = currentQuestion.options.find((item) => item.id === optionId);
+    if (!option) return;
+
     setAnswers((previous) => {
       const nextAnswers = {
         ...previous,
         [currentQuestion.id]: {
           optionId,
           questionId: currentQuestion.id,
-          resultId,
+          resultId: option.resultId,
         },
       };
       latestAnswersRef.current = nextAnswers;
@@ -62,98 +71,84 @@ export function LabRunner({ assessment }: { assessment: LabAssessment }) {
       return;
     }
 
+    if (completionIdRef.current) return;
+
     const finalAnswers = latestAnswersRef.current;
     const result = calculateLabResult(assessment, finalAnswers);
-    saveLabResult({
+    const localResultId = createLabLocalResultId();
+    completionIdRef.current = localResultId;
+    const storedResult = saveLabResult({
       answers: finalAnswers,
       completedAt: new Date().toISOString(),
       contentVersion: assessment.contentVersion,
+      localResultId,
       result,
       slug: assessment.slug,
     });
-    router.push(`/labs/${assessment.slug}/result`);
+    void syncLabResult(storedResult);
+    router.push(
+      `/labs/${assessment.slug}/result?localResultId=${encodeURIComponent(localResultId)}`,
+    );
   }
 
   return (
-    <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-5">
-      <Link
-        className="inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-semibold text-muted"
-        href="/assessments"
-      >
-        <ArrowLeft size={18} />
-        검사
-      </Link>
+    <AssessmentQuestionScreen>
+      <AssessmentQuestionHeader
+        closeLabel="검사 닫기"
+        countLabel={`전체 ${assessment.questions.length}개 중 ${currentIndex + 1}번째 문항`}
+        current={currentIndex + 1}
+        onClose={() => setIsExitOpen(true)}
+        progressLabel="검사 진행률"
+        title={assessment.title}
+        total={assessment.questions.length}
+      />
 
-      <section className="mt-5 rounded-lg border border-line bg-white p-5 shadow-[var(--shadow-soft)]">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex flex-wrap gap-2">
-            <StatusPill tone="primary">별난 성향 연구소</StatusPill>
-            <StatusPill tone={sensitivityTone}>{assessment.sensitivity}</StatusPill>
-          </div>
-          <span className="text-sm font-semibold text-muted">
-            {currentIndex + 1} / {assessment.questions.length}
-          </span>
-        </div>
+      <AssessmentQuestionContent>
+        <AssessmentQuestionGuide>
+          최근의 평소 모습을 떠올려 주세요
+        </AssessmentQuestionGuide>
+        <AssessmentQuestionPrompt
+          contextLabel={currentQuestion.contextLabel}
+          key={currentQuestion.id}
+          text={currentQuestion.text}
+        />
 
-        <div className="mt-4 h-2.5 overflow-hidden rounded-full bg-[var(--nu-brand-100)]">
-          <div
-            className="h-full rounded-full bg-primary transition-[width]"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+        <AssessmentChoiceResponseOptions
+          choices={currentQuestion.options}
+          legend="이럴 때 나는?"
+          name={`lab-response-${currentQuestion.id}`}
+          onChange={handleSelect}
+          selectedId={currentAnswer?.optionId}
+        />
+      </AssessmentQuestionContent>
 
-        <p className="mt-6 text-sm leading-6 text-muted">
-          정답 없는 생활 취향 질문이에요. 가장 가까운 쪽을 골라주세요.
-        </p>
-        <h1 className="mt-3 text-2xl font-black leading-9 tracking-normal">
-          {currentQuestion.text}
-        </h1>
+      <AssessmentQuestionDock
+        nextDisabled={!canGoNext}
+        nextLabel={isLast ? "결과 보기" : "다음"}
+        onNext={goNext}
+        onPrevious={goPrevious}
+        previousDisabled={currentIndex === 0}
+      />
 
-        <div className="mt-6 grid gap-2">
-          {currentQuestion.options.map((option) => {
-            const isSelected = currentAnswer?.optionId === option.id;
-            return (
-              <button
-                className={cn(
-                  "min-h-12 rounded-lg border border-line bg-white px-4 text-left text-sm font-semibold transition-colors",
-                  isSelected && "border-primary bg-surface-soft text-primary",
-                )}
-                key={option.id}
-                onClick={() => handleSelect(option.id, option.resultId)}
-                type="button"
-              >
-                {option.label}
-              </button>
-            );
-          })}
-        </div>
-      </section>
-
-      <section className="mt-3 rounded-lg border border-line bg-white p-3 text-sm leading-6 text-muted">
-        {assessment.safetyNote}
-      </section>
-
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <Button
-          disabled={currentIndex === 0}
-          icon={<ChevronLeft size={17} />}
-          onClick={goPrevious}
-          variant="secondary"
+      {isExitOpen ? (
+        <AssessmentBottomSheet
+          copy="아직 결과가 만들어지기 전이에요. 나가면 이번 답변은 사라져요."
+          onClose={() => setIsExitOpen(false)}
+          title="검사를 그만할까요?"
         >
-          이전
-        </Button>
-        <Button
-          disabled={!canGoNext}
-          icon={<ChevronRight size={17} />}
-          onClick={goNext}
-        >
-          {isLast ? "결과 보기" : "다음"}
-        </Button>
-      </div>
-
-      <p className="mt-4 text-center text-xs text-muted">
-        {answeredCount}개 응답 · 자동 저장됨
-      </p>
-    </main>
+          <AssessmentSheetActions>
+            <AssessmentSheetAction onClick={() => setIsExitOpen(false)}>
+              계속 답하기
+            </AssessmentSheetAction>
+            <AssessmentSheetAction
+              onClick={() => router.push("/home?view=lab")}
+              variant="secondary"
+            >
+              검사 홈으로 나가기
+            </AssessmentSheetAction>
+          </AssessmentSheetActions>
+        </AssessmentBottomSheet>
+      ) : null}
+    </AssessmentQuestionScreen>
   );
 }

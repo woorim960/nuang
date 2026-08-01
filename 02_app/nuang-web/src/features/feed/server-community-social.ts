@@ -1,5 +1,6 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { checkCommunityWriteGuard } from "@/features/feed/server-write-guard";
+import { sendAdminReviewNotification } from "@/features/admin/server-admin-review-notification";
 import type {
   CommunityNotification,
   CommunityNotificationsResult,
@@ -493,7 +494,9 @@ export async function writeProfileSafetyAction({
         status: "queued",
         target_account_id: snapshot.accountId,
         target_public_snapshot_id: publicSnapshotId,
-      });
+      })
+      .select("id,created_at")
+      .single();
 
     if (response.error?.code === "23505") {
       return {
@@ -502,9 +505,17 @@ export async function writeProfileSafetyAction({
       };
     }
 
-    return response.error
-      ? { code: "profile_report_failed" as const, ok: false as const }
-      : { data: { reported: true }, ok: true as const };
+    if (response.error || !response.data) {
+      return { code: "profile_report_failed" as const, ok: false as const };
+    }
+
+    await sendAdminReviewNotification({
+      id: String(response.data.id),
+      kind: "profile_report",
+      occurredAt: String(response.data.created_at ?? now),
+    });
+
+    return { data: { reported: true }, ok: true as const };
   }
 
   const response = await client

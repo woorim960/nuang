@@ -31,8 +31,13 @@ npm run env:check:auth
 필요한 외부 준비:
 
 - Supabase 프로젝트 생성
-- Supabase Auth Site URL: `NEXT_PUBLIC_APP_ORIGIN`과 동일하게 설정
-- Supabase Auth redirect allowlist에 `/auth/callback` 경로가 포함된 앱 URL 등록
+- Supabase Auth Site URL: 운영에서는 공식 HTTPS 주소로 설정
+- Supabase Auth redirect allowlist에 운영·로컬의 정확한 callback URL을 각각 등록
+  - 운영: `https://<공식 도메인>/auth/callback`
+  - 로컬: `http://localhost:3000/auth/callback`
+- 운영 Vercel의 `NEXT_PUBLIC_APP_ORIGIN`도 같은 공식 HTTPS 주소로 설정
+- Site URL을 localhost로 둔 채 운영 callback을 누락하면 OAuth 성공 후
+  Supabase가 기본값인 localhost로 복귀하므로 출시 차단 결함으로 처리
 - Google provider app 등록
 - Kakao provider app 등록
 - Naver는 기본 provider가 아니므로 custom OAuth/OIDC 또는 별도 callback 구현 전까지 실제 redirect 차단 유지
@@ -102,7 +107,11 @@ Naver:
 
 - `npm run env:check:auth` 통과
 - Google/Kakao provider dashboard 등록 완료
-- `/auth/callback?next=/my` redirect 확인
+- 운영 로그인 시작 후 Kakao URL의 `redirect_to`가
+  `https://<공식 도메인>/auth/callback?next=%2Fmy`인지 확인
+- 인증 완료 후 `/auth/callback?next=/my`에서 같은 운영 도메인의 `/my`로 복귀
+- Supabase Site URL, Redirect URLs, Vercel `NEXT_PUBLIC_APP_ORIGIN`의 공식
+  도메인이 서로 같은지 확인
 - Naver 버튼은 unavailable 상태 유지 또는 custom OAuth 검증 완료
 
 계정 저장·공유 오픈 전:

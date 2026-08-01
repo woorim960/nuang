@@ -60,6 +60,7 @@ describe("FeedPostDetailPage", () => {
       },
       viewer: {
         isAuthenticated: true,
+        nuangCode: "ENAKQ",
       },
     });
 
@@ -71,7 +72,7 @@ describe("FeedPostDetailPage", () => {
       }),
     );
 
-    expect(screen.getByRole("heading", { name: "이야기" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "게시물" })).toBeInTheDocument();
     expect(
       screen.getByText("서로 다른 생각을 편하게 나누기 위해 남긴 이야기예요."),
     ).toBeInTheDocument();
@@ -81,15 +82,12 @@ describe("FeedPostDetailPage", () => {
     ).toBeInTheDocument();
     expect(screen.getByText("다른 관점도 흥미롭네요.")).toBeInTheDocument();
     expect(
-      screen.getByPlaceholderText("생각을 이어서 남겨보세요."),
+      screen.getByPlaceholderText("댓글을 입력하세요"),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "좋아요" })).toBePressed();
     expect(screen.getByRole("button", { name: "저장" })).toBeInTheDocument();
     expect(
-      screen.queryByRole("button", { name: "댓글" }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "피드로 돌아가기" }),
+      screen.getByRole("link", { name: "이전 화면으로 돌아가기" }),
     ).toHaveAttribute("href", "/feed");
   });
 
@@ -98,5 +96,43 @@ describe("FeedPostDetailPage", () => {
       follow: false,
       index: false,
     });
+  });
+
+  it("returns to the profile that opened the post", async () => {
+    feedReadMocks.createServerFeedPostDetailPayload.mockResolvedValue({
+      comments: [],
+      post: {
+        authorHandle: "me",
+        authorName: "나",
+        avatarLabel: "나",
+        body: "프로필에서 연 게시물",
+        id: "44444444-4444-4444-8444-444444444444",
+        kind: "user_post",
+        layout: "thread",
+        likeLabel: "좋아요 0개",
+        priority: 0,
+        replyLabel: "답글 0개",
+        targetType: "feed_post",
+        timeLabel: "방금",
+        title: "일상",
+      },
+      viewer: {
+        isAuthenticated: true,
+        nuangCode: "ENAKQ",
+      },
+    });
+
+    render(
+      await FeedPostDetailPage({
+        params: Promise.resolve({
+          postId: "44444444-4444-4444-8444-444444444444",
+        }),
+        searchParams: Promise.resolve({ backTo: "/my" }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("link", { name: "이전 화면으로 돌아가기" }),
+    ).toHaveAttribute("href", "/my");
   });
 });

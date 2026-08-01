@@ -12,6 +12,8 @@ export const feedContractVersion = "feed.v0.1";
 
 export const feedWriteActions = [
   "create_post",
+  "update_post",
+  "delete_post",
   "create_comment",
   "react",
   "bookmark",
@@ -22,6 +24,8 @@ export const feedWriteActions = [
   "vote_poll",
 ] as const;
 
+// Legacy storage discriminator for the feed poll shown to users as
+// "투표". The together assessment "밸런스 게임" uses a separate domain.
 export const feedPostSources = [
   "daily_mood",
   "daily_question",
@@ -30,6 +34,8 @@ export const feedPostSources = [
   "free_text",
   "balance_game",
   "report_share",
+  "together_balance_room_share",
+  "together_balance_result_share",
 ] as const;
 
 export const feedVisibilityLevels = [
@@ -74,6 +80,7 @@ export const feedAttachmentTypes = [
   "trait_card",
   "map_summary",
   "result_summary",
+  "original_report",
 ] as const;
 
 export const feedWritePolicy = {
@@ -92,6 +99,7 @@ const feedTargetSchema = z.object({
 
 const feedAttachmentSchema = z.object({
   id: z.string().trim().min(4).max(128),
+  profileId: z.string().uuid().optional(),
   type: z.enum(feedAttachmentTypes),
 });
 
@@ -109,16 +117,50 @@ const feedPostTopicSchema = z.object({
     ),
 });
 
+const feedPollDraftSchema = z
+  .object({
+    options: z.tuple([
+      z.string().trim().min(1).max(80),
+      z.string().trim().min(1).max(80),
+    ]),
+    question: z.string().trim().min(4).max(160),
+  })
+  .refine(
+    ({ options }) =>
+      options[0].toLocaleLowerCase("ko-KR") !==
+      options[1].toLocaleLowerCase("ko-KR"),
+    {
+      message: "서로 다른 두 선택지를 입력해 주세요.",
+      path: ["options", 1],
+    },
+  );
+
 export const createFeedPostRequestSchema = z.object({
   action: z.literal("create_post"),
   attachments: z.array(feedAttachmentSchema).max(2).optional(),
   body: z.string().trim().max(800),
   clientRequestId: z.string().trim().min(8).max(128).optional(),
+  poll: feedPollDraftSchema.optional(),
   pollOptionKey: z.string().trim().min(1).max(64).optional(),
   source: z.enum(feedPostSources),
   sourceId: z.string().trim().min(4).max(128).optional(),
   topic: feedPostTopicSchema.optional(),
   visibility: z.enum(feedVisibilityLevels),
+});
+
+export const updateFeedPostRequestSchema = z.object({
+  action: z.literal("update_post"),
+  body: z.string().trim().max(800),
+  poll: feedPollDraftSchema.optional(),
+  postId: z.string().uuid(),
+  sourceId: z.string().trim().min(4).max(128).optional(),
+  topic: feedPostTopicSchema.optional(),
+  visibility: z.enum(feedVisibilityLevels),
+});
+
+export const deleteFeedPostRequestSchema = z.object({
+  action: z.literal("delete_post"),
+  postId: z.string().uuid(),
 });
 
 export const createFeedCommentRequestSchema = z.object({
@@ -175,10 +217,13 @@ export const createFeedPollVoteRequestSchema = z.object({
   clientRequestId: z.string().trim().min(8).max(128).optional(),
   optionId: z.string().uuid(),
   pollId: z.string().uuid(),
+  replaceExisting: z.boolean().optional(),
 });
 
 export const feedWriteRequestSchema = z.discriminatedUnion("action", [
   createFeedPostRequestSchema,
+  updateFeedPostRequestSchema,
+  deleteFeedPostRequestSchema,
   createFeedCommentRequestSchema,
   createFeedReactionRequestSchema,
   createFeedBookmarkRequestSchema,

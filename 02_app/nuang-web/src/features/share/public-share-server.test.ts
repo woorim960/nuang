@@ -1,5 +1,9 @@
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { readPublicShareToken } from "@/features/share/public-share-server";
+
+const browserAuthMocks = vi.hoisted(() => ({
+  userId: null as string | null,
+}));
 
 const serviceMocks = vi.hoisted(() => ({
   client: null as null | ReturnType<typeof createMockShareClient>,
@@ -16,28 +20,39 @@ vi.mock("@/lib/supabase/service", () => ({
   getSupabaseServiceEnv: vi.fn(() => serviceMocks.env),
 }));
 
+vi.mock("@/lib/supabase/server", () => ({
+  createServerSupabaseClient: vi.fn(async () =>
+    browserAuthMocks.userId
+      ? {
+          auth: {
+            getUser: async () => ({
+              data: { user: { id: browserAuthMocks.userId } },
+            }),
+          },
+        }
+      : null,
+  ),
+}));
+
 describe("public share server read", () => {
-  it("uses the current Nuang code name over a stale stored profile name", async () => {
+  beforeEach(() => {
+    browserAuthMocks.userId = null;
+    serviceMocks.client = null;
+  });
+
+  it("resolves an active token without requiring a public profile", async () => {
     serviceMocks.client = createMockShareClient({
+      attempt: { completed_at: "2026-07-04T00:00:00.000Z" },
       report: {
+        attempt_id: "11111111-1111-4111-8111-111111111111",
+        created_at: "2026-07-04T00:00:00.000Z",
+        id: "22222222-2222-4222-8222-222222222222",
+        profile_code: "ENAKQ",
+        profile_name: "예전 저장 이름",
         report_kind: "full",
-        share_summary: {
-          assessmentKind: "full",
-          completedAt: "2026-07-04T00:00:00.000Z",
-          domains: [
-            {
-              domainId: "SE",
-              label: "사람 사이 에너지",
-              score: 44,
-              symbol: "E",
-            },
-          ],
-          profileCode: "ENAKQ",
-          profileName: "예전 저장 이름",
-          resultLabel: "현재 가장 가까운 대표 성향",
-        },
       },
       share: {
+        account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
         expires_at: "2099-08-01T00:00:00.000Z",
         result_report_id: "22222222-2222-4222-8222-222222222222",
         status: "active",
@@ -48,15 +63,81 @@ describe("public share server read", () => {
 
     expect(result.status).toBe("active");
     if (result.status !== "active") return;
-    expect(result.payload.share.result.profileCode).toBe("ENAKQ");
-    expect(result.payload.share.result.profileName).toBe("관계를 여는 지휘자");
+    expect(result.model.result.code).toBe("ENAKQ");
+    expect(result.model.result.domains).toEqual([]);
+    expect(result.model.identity.originResultId).toBeNull();
+  });
+
+  it.each([
+    ["revoked", { expires_at: "2099-08-01T00:00:00.000Z", status: "revoked" }],
+    ["expired", { expires_at: "2020-08-01T00:00:00.000Z", status: "active" }],
+  ] as const)("returns %s for a closed token", async (expected, tokenState) => {
+    serviceMocks.client = createMockShareClient({
+      attempt: null,
+      report: null,
+      share: createShare(tokenState),
+    });
+
+    await expect(readPublicShareToken("public-token")).resolves.toEqual({
+      status: expected,
+    });
+  });
+
+  it("returns not_found when the linked result was deleted", async () => {
+    serviceMocks.client = createMockShareClient({
+      attempt: null,
+      report: null,
+      share: createShare(),
+    });
+
+    await expect(readPublicShareToken("public-token")).resolves.toEqual({
+      status: "not_found",
+    });
+  });
+
+  it("denies a signed-in viewer when either account blocked the other", async () => {
+    browserAuthMocks.userId = "viewer-user";
+    serviceMocks.client = createMockShareClient({
+      attempt: null,
+      block: { id: "block-id" },
+      identity: { account_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb" },
+      report: null,
+      share: createShare(),
+    });
+
+    await expect(readPublicShareToken("public-token")).resolves.toEqual({
+      status: "blocked",
+    });
+  });
+
+  it("fails closed when a signed-in viewer's block relation cannot be read", async () => {
+    browserAuthMocks.userId = "viewer-user";
+    serviceMocks.client = createMockShareClient({
+      attempt: null,
+      blockError: { message: "block relation unavailable" },
+      identity: { account_id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb" },
+      report: null,
+      share: createShare(),
+    });
+
+    await expect(readPublicShareToken("public-token")).resolves.toEqual({
+      status: "closed",
+    });
   });
 });
 
 function createMockShareClient({
+  attempt,
+  block = null,
+  blockError = null,
+  identity = null,
   report,
   share,
 }: {
+  attempt: unknown;
+  block?: unknown;
+  blockError?: unknown;
+  identity?: unknown;
   report: unknown;
   share: unknown;
 }) {
@@ -70,14 +151,22 @@ function createMockShareClient({
               ? { data: share, error: null }
               : key === "report.result_report"
                 ? { data: report, error: null }
-                : {
-                    data: null,
-                    error: { message: `Unexpected table ${key}` },
-                  };
+                : key === "assessment.assessment_attempt"
+                  ? { data: attempt, error: null }
+                  : key === "identity.auth_identity"
+                    ? { data: identity, error: null }
+                    : key === "feed.profile_block"
+                      ? { data: block, error: blockError }
+                      : {
+                          data: null,
+                          error: { message: `Unexpected table ${key}` },
+                        };
           const builder = {
             eq: () => builder,
             is: () => builder,
+            limit: () => builder,
             maybeSingle: async () => response,
+            order: () => builder,
             select: () => builder,
           };
 
@@ -85,5 +174,17 @@ function createMockShareClient({
         },
       };
     },
+  };
+}
+
+function createShare(
+  override: Partial<{ expires_at: string; status: string }> = {},
+) {
+  return {
+    account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+    expires_at: "2099-08-01T00:00:00.000Z",
+    result_report_id: "22222222-2222-4222-8222-222222222222",
+    status: "active",
+    ...override,
   };
 }

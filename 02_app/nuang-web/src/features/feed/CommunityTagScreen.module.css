@@ -81,6 +81,9 @@
 }
 
 .profileLink strong {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
   color: var(--nu-color-text);
   font-size: var(--nu-text-body-sm);
   font-weight: var(--nu-weight-bold);

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
 import { CommunityFeed } from "@/features/feed/CommunityFeed";
 import { createServerFeedReadPayload } from "@/features/feed/server-read";
+import { parseLegacyHomePollResumeIntent } from "@/features/navigation/legacy-home-feed-resume";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -11,15 +12,27 @@ export const metadata: Metadata = {
 export default async function FeedPage({
   searchParams,
 }: {
-  searchParams?: Promise<{ posted?: string; review?: string }>;
+  searchParams?: Promise<{
+    posted?: string;
+    review?: string;
+    view?: string;
+    auth?: string;
+    optionId?: string;
+    pollId?: string;
+    resumeFeed?: string;
+  }>;
 }) {
-  const feedPayload = await createServerFeedReadPayload();
   const query = searchParams ? await searchParams : {};
+  const pollResumeIntent = parseLegacyHomePollResumeIntent(query);
+  const feedPayload = await createServerFeedReadPayload({
+    requiredPollId: pollResumeIntent?.pollId,
+  });
 
   return (
     <div className={styles.shell}>
       <CommunityFeed
         highlightedPostId={query.posted ?? null}
+        initialMode={getInitialMode(query.view)}
         pendingReviewNotice={query.review === "pending"}
         posts={feedPayload.items}
         viewerCode={feedPayload.viewerCode}
@@ -27,4 +40,9 @@ export default async function FeedPage({
       <BottomNavigation />
     </div>
   );
+}
+
+function getInitialMode(view: string | undefined) {
+  if (view === "decal" || view === "playground") return view;
+  return "recommended" as const;
 }

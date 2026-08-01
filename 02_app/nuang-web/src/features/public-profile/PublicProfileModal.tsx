@@ -4,6 +4,7 @@ import { ChevronRight, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import type { PublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import { profileVisibilityPolicyVersion } from "@/features/together/profile-visibility-policy";
@@ -173,12 +174,15 @@ export function PublicProfileModal({
               size="lg"
             />
             <div className="min-w-0 flex-1 pt-1">
-              <h2
-                className="truncate text-2xl font-black leading-7 tracking-normal text-[var(--nu-color-text-strong)]"
-                id="public-profile-title"
-              >
-                {profile.display.displayName}
-              </h2>
+              <div className="flex min-w-0 items-center gap-2">
+                <h2
+                  className="min-w-0 truncate text-2xl font-black leading-7 tracking-normal text-[var(--nu-color-text-strong)]"
+                  id="public-profile-title"
+                >
+                  {profile.display.displayName}
+                </h2>
+                {profile.operator ? <NuangOperatorBadge /> : null}
+              </div>
               <p className="mt-1 text-sm font-bold text-[var(--nu-neutral-600)]">
                 {profile.display.code}
               </p>

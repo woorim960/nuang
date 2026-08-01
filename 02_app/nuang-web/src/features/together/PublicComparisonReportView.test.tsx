@@ -29,7 +29,7 @@ const viewerResult: CoreScoreResult = {
     },
   ],
   facets: [],
-  profileName: "관계를 여는 지휘자",
+  profileName: "관계를 여는 선도자",
 };
 
 const targetResult: CoreScoreResult = {
@@ -90,7 +90,7 @@ describe("PublicComparisonReportView", () => {
         name: "상대와 나는 어디가 닮고 다를까요?",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText("관계를 여는 지휘자")).toBeInTheDocument();
+    expect(screen.getByText("관계를 여는 선도자")).toBeInTheDocument();
     expect(screen.getByText("변화의 원인을 좇는 추적자")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "둘의 성향 요약" }),
@@ -129,7 +129,7 @@ describe("PublicComparisonReportView", () => {
       screen.getByText(/직접 응답, 원점수, 민감 항목/),
     ).toBeInTheDocument();
     expect(screen.getByText(/궁합 점수가 아니에요/)).toBeInTheDocument();
-    expect(screen.getAllByText("관계를 여는 지휘자")).toHaveLength(1);
+    expect(screen.getAllByText("관계를 여는 선도자")).toHaveLength(1);
     expect(screen.getAllByText("변화의 원인을 좇는 추적자")).toHaveLength(1);
     fireEvent.click(screen.getByRole("button", { name: /관계에 맞춰 보기/ }));
     expect(

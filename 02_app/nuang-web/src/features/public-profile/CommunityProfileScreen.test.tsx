@@ -1,7 +1,9 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { feedItems } from "@/features/feed/feed-seed";
+import type { FeedItem } from "@/features/feed/feed-seed";
 import { CommunityProfileScreen } from "@/features/public-profile/CommunityProfileScreen";
+import type { OriginalProfileReportSummary } from "@/features/public-profile/profile-report-contract";
 
 const navigationMock = vi.hoisted(() => ({
   push: vi.fn(),
@@ -16,6 +18,51 @@ vi.mock("next/navigation", () => ({
 const post = feedItems.find((item) => item.authorProfile);
 if (!post?.authorProfile) throw new Error("public profile fixture missing");
 const profile = post.authorProfile;
+const topicReport: OriginalProfileReportSummary = {
+  assessmentSlug: "comfort-style",
+  assessmentTitle: "위로받을 때 필요한 것",
+  completedAt: "2026-07-28T10:00:00.000Z",
+  reportKey: "topic_11111111-1111-4111-8111-111111111111",
+  resultName: "방법은 같이 찾고, 속도는 내가 정하고 싶어요",
+  summary: "검사 당시의 답을 바탕으로 만든 원본 결과예요.",
+  type: "topic",
+  viewerCanManage: false,
+  visibility: "profile_public",
+};
+const labReport: OriginalProfileReportSummary = {
+  assessmentSlug: "recharge-ritual",
+  assessmentTitle: "나는 왜 쉬어도 안 풀릴까?",
+  completedAt: "2026-07-27T10:00:00.000Z",
+  reportKey: "lab_22222222-2222-4222-8222-222222222222",
+  resultName: "조용히 충전하는 밤 산책가",
+  summary: "지친 뒤 회복하는 나만의 방식을 정리했어요.",
+  type: "lab",
+  viewerCanManage: false,
+  visibility: "profile_public",
+};
+const reportPost: FeedItem = {
+  ...post,
+  body: "지금의 나와 닮은 검사 결과를 공유해요.",
+  id: "report-share-post",
+  kind: "report_share",
+  media: undefined,
+  poll: undefined,
+  questionAudience: undefined,
+  reportShare: {
+    assessmentKind: "full",
+    assessmentTitle: "위로받을 때 필요한 것",
+    completedAt: "2026-07-28T10:00:00.000Z",
+    domains: [],
+    href: `/feed/profiles/${profile.source.publicSnapshotId}/reports/${topicReport.reportKey}`,
+    profileCode: "INGMC",
+    profileName: "새 가능성을 찾는 탐험가",
+    reportKey: topicReport.reportKey,
+    reportType: "topic",
+    resultLabel: topicReport.resultName,
+    summary: topicReport.summary,
+  },
+  topic: undefined,
+};
 
 describe("CommunityProfileScreen", () => {
   afterEach(() => {
@@ -279,6 +326,13 @@ describe("CommunityProfileScreen", () => {
     expect(
       screen.getByRole("button", { name: "프로필 공유" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /의견 보내기/ })).toHaveAttribute(
+      "href",
+      "/my/feedback?from=%2Fmy",
+    );
+    expect(
+      screen.queryByRole("link", { name: "내 리포트" }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText("내 프로필 관리")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "프로필 공유" }));
 
@@ -289,5 +343,223 @@ describe("CommunityProfileScreen", () => {
         ),
       ),
     );
+  });
+
+  it("opens the original report collection from the public profile", () => {
+    render(
+      <CommunityProfileScreen
+        initialContent="reports"
+        initialSocialState={{
+          followerCount: 12,
+          following: false,
+          followingCount: 8,
+          isOwnProfile: false,
+        }}
+        posts={[post]}
+        profile={profile}
+        reports={[topicReport]}
+      />,
+    );
+
+    expect(screen.getByRole("button", { name: "검사 결과1" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(
+      screen.getByRole("link", {
+        name: /위로받을 때 필요한 것.*리포트 보기/,
+      }),
+    ).toHaveAttribute(
+      "href",
+      `/feed/profiles/${profile.source.communityProfileId ?? profile.source.publicSnapshotId}/reports/${topicReport.reportKey}`,
+    );
+    expect(screen.queryByRole("switch")).not.toBeInTheDocument();
+  });
+
+  it("groups saved results with the same customer categories as the assessment hub", () => {
+    render(
+      <CommunityProfileScreen
+        initialContent="reports"
+        initialSocialState={{
+          followerCount: 12,
+          following: false,
+          followingCount: 8,
+          isOwnProfile: true,
+        }}
+        mode="self"
+        posts={[post]}
+        profile={profile}
+        reports={[
+          { ...topicReport, viewerCanManage: true },
+          { ...labReport, viewerCanManage: true },
+        ]}
+      />,
+    );
+
+    expect(
+      screen.getByRole("button", { name: "나 알아보기" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "함께하기" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "별난 연구소" }),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "나 알아보기" }));
+    expect(screen.getByText(topicReport.assessmentTitle)).toBeInTheDocument();
+    expect(
+      screen.queryByText(labReport.assessmentTitle),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "별난 연구소" }));
+    expect(screen.getByText(labReport.assessmentTitle)).toBeInTheDocument();
+    expect(
+      screen.queryByText(topicReport.assessmentTitle),
+    ).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "함께하기" }));
+    expect(
+      screen.getByText("아직 함께한 검사 결과가 없어요"),
+    ).toBeInTheDocument();
+  });
+
+  it("filters profile posts down to shared reports", () => {
+    render(
+      <CommunityProfileScreen
+        initialSocialState={{
+          followerCount: 2,
+          following: false,
+          followingCount: 3,
+          isOwnProfile: true,
+        }}
+        mode="self"
+        posts={[{ ...post, body: "일반 게시물 내용" }, reportPost]}
+        profile={profile}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "리포트" }));
+
+    expect(
+      screen.getByLabelText(`${profile.display.displayName}님의 게시물 종류`),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByLabelText(`${profile.display.displayName}님의 게시물 주제`),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("지금의 나와 닮은 검사 결과를 공유해요."),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("일반 게시물 내용")).not.toBeInTheDocument();
+    expect(
+      screen.getByLabelText("게시물 주제"),
+    ).toHaveTextContent("리포트");
+    expect(screen.getByRole("link", { name: /리포트 보기/ })).toHaveAttribute(
+      "href",
+      reportPost.reportShare?.href,
+    );
+  });
+
+  it("separates playground format filters from reusable topic filters", () => {
+    const everydayPost: FeedItem = {
+      ...post,
+      body: "친구와 보낸 평범한 하루",
+      id: "everyday-post",
+      kind: "user_post",
+      questionAudience: undefined,
+      topic: {
+        category: "relationships",
+        label: "관계",
+        tags: ["친구"],
+      },
+    };
+    const playgroundPost: FeedItem = {
+      ...post,
+      body: "INGMC에게 묻고 싶은 관계 질문",
+      id: "playground-post",
+      kind: "daily_question",
+      questionAudience: { codes: ["INGMC"], mode: "exact" },
+      topic: {
+        category: "relationships",
+        label: "관계",
+        tags: ["대화"],
+      },
+    };
+
+    render(
+      <CommunityProfileScreen
+        initialSocialState={{
+          followerCount: 2,
+          following: false,
+          followingCount: 3,
+          isOwnProfile: true,
+        }}
+        mode="self"
+        posts={[everydayPost, playgroundPost]}
+        profile={profile}
+        viewerCode="INGMC"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "놀이터" }));
+    expect(screen.getByText(playgroundPost.body)).toBeInTheDocument();
+    expect(screen.queryByText(everydayPost.body)).not.toBeInTheDocument();
+    expect(screen.getByLabelText("게시물 주제")).toHaveTextContent(
+      "놀이터#대화",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "관계" }));
+    expect(screen.getByText(playgroundPost.body)).toBeInTheDocument();
+  });
+
+  it("lets only the owner change one original report visibility", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <CommunityProfileScreen
+        initialContent="reports"
+        initialSocialState={{
+          followerCount: 2,
+          following: false,
+          followingCount: 3,
+          isOwnProfile: true,
+        }}
+        mode="self"
+        posts={[post]}
+        profile={profile}
+        reports={[{ ...topicReport, viewerCanManage: true }]}
+      />,
+    );
+
+    const visibilitySwitch = screen.getByRole("switch", {
+      name: `${topicReport.assessmentTitle} 리포트를 프로필에 공개`,
+    });
+    expect(visibilitySwitch).toBeChecked();
+    fireEvent.click(visibilitySwitch);
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/profile-report-visibility",
+        expect.objectContaining({ method: "PATCH" }),
+      );
+    });
+    expect(
+      await screen.findByRole("switch", {
+        name: `${topicReport.assessmentTitle} 리포트를 프로필에 공개`,
+      }),
+    ).not.toBeChecked();
+    expect(screen.getByText("나만 볼 수 있어요")).toBeInTheDocument();
+    expect(
+      screen.queryByText("이 리포트는 이제 나만 볼 수 있어요."),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("이 리포트를 프로필에 공개했어요."),
+    ).not.toBeInTheDocument();
   });
 });

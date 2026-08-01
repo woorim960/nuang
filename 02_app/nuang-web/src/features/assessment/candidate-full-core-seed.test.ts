@@ -22,6 +22,6 @@ describe("candidate full core product binding", () => {
     );
 
     expect(result.code).toBe("ENAKQ");
-    expect(result.profileName).toBe("관계를 여는 지휘자");
+    expect(result.profileName).toBe("관계를 여는 선도자");
   });
 });

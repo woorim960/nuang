@@ -11,9 +11,12 @@ import {
 import { AssessmentLoadingState } from "@/features/assessment/AssessmentLoadingState";
 import {
   AssessmentBottomSheet,
+  AssessmentQuestionContent,
   AssessmentQuestionDock,
   AssessmentQuestionGuideButton,
   AssessmentQuestionHeader,
+  AssessmentQuestionPrompt,
+  AssessmentQuestionScreen,
   AssessmentScaleResponseOptions,
   AssessmentUnsureControl,
   AssessmentUnsureSheet,
@@ -36,6 +39,7 @@ import {
 import {
   beginLocalAttemptCompletion,
   beginLocalAdaptiveFollowUp,
+  attachLocalReportContentSnapshot,
   completeLocalAttempt,
   getLatestCompletedAttempt,
   getOrCreateLocalAttempt,
@@ -58,7 +62,7 @@ import { coreResultCopyVersion } from "@/features/result/report-copy";
 import type { ResponseValue } from "@/lib/scoring/types";
 import { isCoreResultUndetermined } from "@/lib/scoring/core";
 import { cn } from "@/lib/utils/cn";
-import styles from "./AssessmentRunner.module.css";
+import styles from "./AssessmentQuestionSurface.module.css";
 
 type RunnerSurface = "completion" | "question" | "midpoint";
 type MilestoneDestination = "midpoint" | "questions" | "home";
@@ -453,6 +457,25 @@ export function AssessmentRunner({
         },
       });
 
+      if (
+        readiness.evidenceStatus !== "insufficient_evidence" &&
+        readiness.result.code
+      ) {
+        void import("@/features/result/unified-core-report/report-content-snapshot")
+          .then(({ buildReportContentSnapshot }) =>
+            attachLocalReportContentSnapshot(
+              completed.id,
+              readiness.responseSnapshotHash,
+              buildReportContentSnapshot({
+                code: readiness.result.code!,
+                kind: assessment.mode,
+                measurementVersion: coreResultCopyVersion,
+              }),
+            ),
+          )
+          .catch(() => undefined);
+      }
+
       if (completionRunIdRef.current !== runId) return;
 
       clearCompletionTimers();
@@ -823,7 +846,7 @@ export function AssessmentRunner({
   const isMidpoint = surface === "midpoint";
 
   return (
-    <main className={styles.runner}>
+    <AssessmentQuestionScreen>
       <AssessmentQuestionHeader
         closeLabel="검사 닫기"
         countLabel={
@@ -846,36 +869,19 @@ export function AssessmentRunner({
         />
       ) : (
         <>
-          <section className={styles.mainContent}>
+          <AssessmentQuestionContent>
             <AssessmentQuestionGuideButton onClick={() => setIsHelpOpen(true)}>
               {isAdaptiveQuestion
                 ? "비슷하게 나온 코드만 다시 확인해요"
                 : "최근 6개월을 기준으로"}
             </AssessmentQuestionGuideButton>
 
-            <div
-              aria-atomic="true"
-              aria-live="polite"
-              className={cn(
-                styles.questionRegion,
-                questionDirection === "backward"
-                  ? styles.questionBackward
-                  : styles.questionForward,
-              )}
+            <AssessmentQuestionPrompt
+              contextLabel={currentItem.contextLabel}
+              direction={questionDirection}
               key={currentItem.itemId}
-            >
-              {currentItem.contextLabel ? (
-                <p className={styles.context}>{currentItem.contextLabel}</p>
-              ) : null}
-              <h1
-                className={cn(
-                  styles.question,
-                  !currentItem.contextLabel && styles.questionWithoutContext,
-                )}
-              >
-                {currentItem.text}
-              </h1>
-            </div>
+              text={currentItem.text}
+            />
 
             <AssessmentScaleResponseOptions
               disabled={isChoiceDisabled}
@@ -917,7 +923,7 @@ export function AssessmentRunner({
                 {runnerError}
               </p>
             ) : null}
-          </section>
+          </AssessmentQuestionContent>
 
           <AssessmentQuestionDock
             nextDisabled={!canGoNext || isPersisting || isActionSaving}
@@ -1034,7 +1040,7 @@ export function AssessmentRunner({
           )}
         </AssessmentBottomSheet>
       ) : null}
-    </main>
+    </AssessmentQuestionScreen>
   );
 }
 

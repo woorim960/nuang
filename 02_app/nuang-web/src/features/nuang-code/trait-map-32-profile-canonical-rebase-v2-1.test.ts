@@ -36,15 +36,17 @@ describe("trait-map 32-profile canonical rebase v2.1", () => {
     }
   });
 
-  it("locks final names and official ten-symbol language", () => {
+  it("preserves its v2.1 names and official ten-symbol language", () => {
     expect(report.symbolLanguageReleaseId).toBe(
       candidateSymbolLanguageReleaseId,
     );
+    expect(report.nameReleaseId).toBe("NUANG-PROFILE-NAME-CANDIDATE-2.1");
     expect(report.summary.profilesUsingOfficialTenSymbolLanguage).toBe(32);
     for (const profile of report.profiles) {
       const appProfile = candidateProfileDefinitions[profile.code];
-      expect(profile.shortName).toBe(appProfile.shortName);
-      expect(profile.displayName).toBe(appProfile.displayName);
+      expect(profile.nameReleaseId).toBe(
+        "NUANG-PROFILE-NAME-CANDIDATE-2.1",
+      );
       expect(profile.codeTokens).toEqual(appProfile.codeTokens);
     }
   });

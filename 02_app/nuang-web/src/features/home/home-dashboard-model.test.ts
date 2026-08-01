@@ -60,7 +60,7 @@ describe("buildHomeDashboardModel", () => {
       result: {
         code: "ENAKQ",
         href: "/results/local/local_quick_ready",
-        profileName: "관계를 여는 지휘자",
+        profileName: "관계를 여는 선도자",
       },
     });
   });
@@ -133,7 +133,7 @@ describe("buildHomeDashboardModel", () => {
       kind: "full",
       localResultId: null,
       profileCode: "ENAKQ",
-      profileName: "관계를 여는 지휘자",
+      profileName: "관계를 여는 선도자",
       resultLabel: "정밀 성향 결과",
       resultReportId: "11111111-1111-4111-8111-111111111111",
     };

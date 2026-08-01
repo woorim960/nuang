@@ -98,6 +98,7 @@ describe("result account status server read", () => {
             completed_at: "2026-07-08T00:00:00.000Z",
             id: "11111111-1111-4111-8111-111111111111",
             local_result_id: "local_test_123",
+            scoring_version: "MODEL-1",
           },
         ],
         error: null,
@@ -110,23 +111,43 @@ describe("result account status server read", () => {
         data: [
           {
             attempt_id: "11111111-1111-4111-8111-111111111111",
+            code_scheme_version: "CODE-1",
             created_at: "2026-07-09T00:00:00.000Z",
             id: "22222222-2222-4222-8222-222222222222",
+            measurement_release_id: "ASSESSMENT-1",
             profile_code: "TVOAE",
             profile_name: "불꽃의 온기 탐험가",
             report_kind: "full",
+            scoring_release_id: "SCORING-1",
             summary: {
+              alternativeCodes: ["SVOAE"],
               completedAt: "2026-07-08T00:00:00.000Z",
-              domains: [],
+              domains: [
+                {
+                  domainId: "SE",
+                  isBoundary: true,
+                  label: "사람 사이 에너지",
+                  score: 52,
+                  status: "valid",
+                  symbol: "T",
+                },
+              ],
               facets: [
                 {
                   facetId: "SE_SOC",
                   label: "외향 리듬",
                   score: 72,
                   status: "valid",
+                  validResponses: 4,
                 },
               ],
+              originResultId: "local_test_123",
+              reportContentSnapshot: null,
+              responseSnapshotHash: "fnv1a32x2:abcdef12",
+              resultCopyVersion: "core-result-copy.v0.1",
+              resultEvidenceStatus: "near_boundary",
               resultLabel: "현재 대표 성향",
+              resultStatus: "ready",
             },
           },
         ],
@@ -142,28 +163,96 @@ describe("result account status server read", () => {
     expect(result).toEqual({
       data: [
         {
+          alternativeCodes: ["SVOAE"],
           assessmentAttemptId: "11111111-1111-4111-8111-111111111111",
           completedAt: "2026-07-08T00:00:00.000Z",
           createdAt: "2026-07-09T00:00:00.000Z",
-          domains: [],
+          domains: [
+            {
+              domainId: "SE",
+              isBoundary: true,
+              label: "사람 사이 에너지",
+              score: 52,
+              status: "valid",
+              symbol: "T",
+            },
+          ],
           facets: [
             {
               facetId: "SE_SOC",
               label: "외향 리듬",
               score: 72,
               status: "valid",
+              validResponses: 4,
             },
           ],
           kind: "full",
           localResultId: "local_test_123",
+          originResultId: "local_test_123",
           profileCode: "TVOAE",
           profileName: "불꽃의 온기 탐험가",
+          reportContentSnapshot: null,
+          responseSnapshotHash: "fnv1a32x2:abcdef12",
+          resultCopyVersion: "core-result-copy.v0.1",
+          resultEvidenceStatus: "near_boundary",
           resultLabel: "현재 대표 성향",
           resultReportId: "22222222-2222-4222-8222-222222222222",
+          resultStatus: "ready",
+          versionBundle: {
+            assessmentReleaseId: "ASSESSMENT-1",
+            codeSchemeVersion: "CODE-1",
+            scoringModelVersion: "MODEL-1",
+            scoringReleaseId: "SCORING-1",
+          },
         },
       ],
       ok: true,
     });
+  });
+
+  it("fails the collection instead of dropping a damaged completion row", async () => {
+    const client = createClient({
+      "assessment.assessment_attempt": {
+        data: [
+          {
+            claimed_at: "2026-07-31T00:00:00.000Z",
+            completed_at: "2026-07-31T00:00:00.000Z",
+            id: "11111111-1111-4111-8111-111111111111",
+            local_result_id: "local_damaged_latest",
+            scoring_version: "MODEL-1",
+          },
+        ],
+        error: null,
+      },
+      "identity.auth_identity": {
+        data: { account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" },
+        error: null,
+      },
+      "report.result_report": {
+        data: [
+          {
+            attempt_id: "11111111-1111-4111-8111-111111111111",
+            code_scheme_version: "CODE-1",
+            created_at: "2026-07-31T00:00:00.000Z",
+            id: "22222222-2222-4222-8222-222222222222",
+            measurement_release_id: "ASSESSMENT-1",
+            profile_code: "ENAKQ",
+            profile_name: "관계를 여는 선도자",
+            report_kind: "full",
+            scoring_release_id: "SCORING-1",
+            summary: { domains: "broken" },
+          },
+        ],
+        error: null,
+      },
+    });
+
+    await expect(
+      readAccountResults({
+        client,
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({ code: "account_results_read_failed", ok: false });
   });
 });
 

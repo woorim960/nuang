@@ -18,7 +18,7 @@ const profileNameSql = readFileSync(
   "utf8",
 );
 const roleProfileNameSql = readFileSync(
-  "supabase/migrations/202607190001_candidate_role_profile_name_release.sql",
+  "supabase/migrations/202607280012_candidate_role_profile_name_release_v3.sql",
   "utf8",
 );
 const gateBValidationSql = readFileSync(
@@ -103,11 +103,17 @@ describe("measurement release database catalog", () => {
   });
 
   it("stores the approved short role names and readable overview separately", () => {
-    expect(roleProfileNameSql).toContain("NUANG-PROFILE-NAME-CANDIDATE-1.1");
-    expect(roleProfileNameSql).toContain("('ENAKQ', '관계를 여는 지휘자')");
-    expect(roleProfileNameSql).toContain("에너지와 관심");
-    expect(roleProfileNameSql).toContain("상대 마음 살피기");
-    expect(roleProfileNameSql).not.toContain("마음 먼저");
+    expect(roleProfileNameSql).toContain("NUANG-PROFILE-NAME-CANDIDATE-3.0");
+    expect(roleProfileNameSql).toContain(
+      "('ENAKQ', '선도자', '관계를 여는 선도자')",
+    );
+    expect(roleProfileNameSql).toContain(
+      "('INGKQ', '과학자', '가능성을 검증하는 과학자')",
+    );
+    expect(roleProfileNameSql).toContain(
+      "('ENGKC', '통솔자', '해법을 이끄는 통솔자')",
+    );
+    expect(roleProfileNameSql).toContain('"noTypeSuffix":true');
     expect(
       roleProfileNameSql.match(/^    \('[EIRNGAKMCQ]{5}',/gm),
     ).toHaveLength(32);

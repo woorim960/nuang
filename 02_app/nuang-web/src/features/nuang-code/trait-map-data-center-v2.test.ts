@@ -58,7 +58,7 @@ describe("trait map data center v2", () => {
 
     expect(profiles).toHaveLength(32);
     expect(profiles.find((item) => item.code === "ENAKQ")).toMatchObject({
-      profileName: "관계를 여는 지휘자",
+      profileName: "관계를 여는 선도자",
       neighborCodes: ["INAKQ", "ERAKQ", "ENGKQ", "ENAMQ", "ENAKC"],
     });
 

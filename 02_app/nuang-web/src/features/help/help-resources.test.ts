@@ -15,7 +15,7 @@ describe("help resources", () => {
 
     expect(urgentText).toContain("119");
     expect(urgentText).toContain("112");
-    expect(urgentPhones).toEqual(["109", "119", "112"]);
+    expect(urgentPhones).toEqual(["119", "112", "109"]);
     urgentCallActions.forEach((action) => {
       expect(action.href).toMatch(/^tel:/);
       expect(action.ariaLabel).toContain(action.label);
@@ -58,5 +58,12 @@ describe("help resources", () => {
     sourceLinks.forEach((source) => {
       expect(source.href).toMatch(/^https:\/\//);
     });
+  });
+
+  it("connects mental-health guidance to the official ministry page", () => {
+    expect(
+      helpResources.find((resource) => resource.id === "mental-health-1577")
+        ?.href,
+    ).toBe("https://www.mohw.go.kr/menu.es?mid=a10706040100");
   });
 });

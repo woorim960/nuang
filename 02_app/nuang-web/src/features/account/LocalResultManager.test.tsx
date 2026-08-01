@@ -5,6 +5,10 @@ import {
   deleteLocalAttempt,
   listLocalAttempts,
 } from "@/features/assessment/assessment-storage";
+import {
+  listFreeTopicResultsLocalFirst,
+  type StoredFreeTopicResult,
+} from "@/features/assessment/free-topic-storage";
 import { deleteLabResult, listLabResults } from "@/features/lab/lab-storage";
 
 const fetchMock = vi.fn();
@@ -12,6 +16,12 @@ const fetchMock = vi.fn();
 vi.mock("@/features/assessment/assessment-storage", () => ({
   deleteLocalAttempt: vi.fn(),
   listLocalAttempts: vi.fn(),
+}));
+
+vi.mock("@/features/assessment/free-topic-storage", () => ({
+  deleteFreeTopicResult: vi.fn(),
+  listFreeTopicResultsLocalFirst: vi.fn(),
+  syncQueuedFreeTopicResults: vi.fn(async () => ({ attempted: 0, synced: 0 })),
 }));
 
 vi.mock("@/features/lab/lab-assessments", () => ({
@@ -33,6 +43,7 @@ describe("LocalResultManager", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(listLocalAttempts).mockResolvedValue([]);
+    vi.mocked(listFreeTopicResultsLocalFirst).mockResolvedValue([]);
     vi.mocked(listLabResults).mockReturnValue([]);
     fetchMock.mockImplementation(() =>
       Promise.resolve(
@@ -57,7 +68,6 @@ describe("LocalResultManager", () => {
       await screen.findByText("첫 성향 리포트를 만들어보세요"),
     ).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "관계 비교" })).toBeVisible();
-    expect(screen.getByRole("heading", { name: "주제 검사" })).toBeVisible();
     expect(screen.queryByText("아직 결과가 없어요")).not.toBeInTheDocument();
     expect(screen.queryByText(/기기|계정 저장|로컬/)).not.toBeInTheDocument();
   });
@@ -93,15 +103,42 @@ describe("LocalResultManager", () => {
 
     render(<LocalResultManager />);
 
-    expect(await screen.findByText("현재 내 대표 성향")).toBeInTheDocument();
+    expect(await screen.findByText("최근 검사 결과")).toBeInTheDocument();
     expect(screen.getByText("정밀 코어")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /정밀 코어 결과 열기/ }),
-    ).toHaveAttribute("href", "/results/local/local_test_1");
+    ).toHaveAttribute(
+      "href",
+      "/results/local/local_test_1?backTo=%2Fmy%2Freports%2Fhistory",
+    );
     expect(
       screen.getByRole("button", { name: "정밀 코어 삭제" }),
     ).toBeInTheDocument();
     expect(screen.queryByText("내 데이터 보관하기")).not.toBeInTheDocument();
+  });
+
+  it("puts the newest topic assessment above an older core result", async () => {
+    vi.mocked(listLocalAttempts).mockResolvedValue([createCoreAttempt()]);
+    vi.mocked(listFreeTopicResultsLocalFirst).mockResolvedValue([
+      createTopicResult(),
+    ]);
+
+    render(<LocalResultManager />);
+
+    expect(await screen.findByText("최근 검사 결과")).toBeInTheDocument();
+    expect(screen.getAllByText("위로받을 때 필요한 것")).toHaveLength(1);
+    expect(
+      screen.getByRole("link", {
+        name: "위로받을 때 필요한 것 결과 열기",
+      }),
+    ).toHaveAttribute(
+      "href",
+      "/assessments/topics/comfort-style/result/topic_comfort_latest",
+    );
+    expect(
+      screen.getByRole("heading", { name: "지난 검사 결과" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("정밀 코어")).toBeInTheDocument();
   });
 
   it("does not delete a core result when confirmation is cancelled", async () => {
@@ -148,6 +185,7 @@ describe("LocalResultManager", () => {
         answers: {},
         completedAt: "2026-07-08T00:00:00.000Z",
         expiresAt: "2026-08-07T00:00:00.000Z",
+        localResultId: "lab_result_attempt_1",
         result: {
           profile: {
             id: "spark",
@@ -177,7 +215,7 @@ describe("LocalResultManager", () => {
       }),
     );
 
-    expect(deleteLabResult).toHaveBeenCalledWith("conversation-temperature");
+    expect(deleteLabResult).toHaveBeenCalledWith("lab_result_attempt_1");
   });
 
   it("merges matching local and account results into one row", async () => {
@@ -208,20 +246,23 @@ describe("LocalResultManager", () => {
 
     render(<LocalResultManager />);
 
-    expect(await screen.findByText("현재 내 대표 성향")).toBeInTheDocument();
+    expect(await screen.findByText("최근 검사 결과")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "이전 코어 검사" }),
+      screen.getByRole("heading", { name: "지난 검사 결과" }),
     ).toBeInTheDocument();
     expect(screen.getAllByText("정밀 코어")).toHaveLength(1);
     expect(screen.queryByText(/계정|기기|로컬/)).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /정밀 코어 결과 열기/ }),
-    ).toHaveAttribute("href", "/results/local/local_test_1");
+    ).toHaveAttribute(
+      "href",
+      "/results/local/local_test_1?backTo=%2Fmy%2Freports%2Fhistory",
+    );
     expect(
       screen.getByRole("link", { name: "빠른 코어 결과 열기" }),
     ).toHaveAttribute(
       "href",
-      "/results/account/33333333-3333-4333-8333-333333333333",
+      "/results/account/33333333-3333-4333-8333-333333333333?backTo=%2Fmy%2Freports%2Fhistory",
     );
     expect(
       screen.getByRole("button", { name: "빠른 코어 삭제" }),
@@ -246,7 +287,7 @@ describe("LocalResultManager", () => {
                       "편하게 맞는 자리는 마음이 흔들릴 때의 반응이에요.",
                     targetCode: "ENAKQ",
                     targetDisplayName: "상대",
-                    targetProfileName: "관계를 여는 지휘자",
+                    targetProfileName: "관계를 여는 선도자",
                     viewerCode: "INGMC",
                     viewerProfileName: "새 가능성을 찾는 탐험가",
                   },
@@ -394,6 +435,41 @@ function createCoreAttempt() {
     responses: {},
     state: "completed" as const,
     updatedAt: "2026-07-08T00:00:00.000Z",
+  };
+}
+
+function createTopicResult(): StoredFreeTopicResult {
+  return {
+    answers: {},
+    assessment: {
+      categoryId: "relationship",
+      categoryLabel: "관계",
+      slug: "comfort-style",
+      title: "위로받을 때 필요한 것",
+    },
+    completedAt: "2026-07-28T07:20:00.000Z",
+    expiresAt: "2027-07-28T07:20:00.000Z",
+    formatVersion: 2,
+    instrumentVersion: "comfort-style-v2-common-scenes-2026-07-28",
+    localResultId: "topic_comfort_latest",
+    reportContentVersion: "comfort-style-report-v3-personalized",
+    reportSnapshot: {
+      averageScore: 75,
+      confidenceCopy: "최근 장면을 바탕으로 정리했어요.",
+      confidenceLabel: "최근 도움 기록",
+      headline: "마음을 알아주는 말이 가장 자주 도움이 됐어요.",
+      longReportSections: [],
+      signals: [],
+    },
+    result: {
+      observations: [],
+      scoresByScaleId: { emotional_acknowledgement: 75 },
+      scoresByTargetId: {},
+      summary: "마음을 알아주는 말이 가장 자주 도움이 됐어요.",
+      validResponsesByScaleId: { emotional_acknowledgement: 4 },
+    },
+    scoringVersion: "comfort-style-scoring-v3-pattern-aware",
+    sync: { status: "synced" },
   };
 }
 

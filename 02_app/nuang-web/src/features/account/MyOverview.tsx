@@ -6,6 +6,7 @@ import {
   FileText,
   LogIn,
   MessagesSquare,
+  MessageSquarePlus,
   Settings,
   ShieldCheck,
   SlidersHorizontal,
@@ -17,9 +18,10 @@ import type { NuangCharacterMotif } from "@/components/character/nuang-character
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { readJsonResponse } from "@/features/account/response-json";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
-import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
+import { selectRepresentativeCoreResult } from "@/features/result/unified-core-report/core-result-report-selector";
+import { collectValidatedCoreResultCandidates } from "@/features/result/unified-core-report/validated-core-result-candidates";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import styles from "./MyOverview.module.css";
 
@@ -144,8 +146,8 @@ export function MyOverview({
             </div>
 
             <div className={styles.profileActions}>
-              <Link href="/my/profile">내 성향 보기</Link>
-              <Link href={profile.href}>최신 리포트</Link>
+              <Link href="/my/reports">내 성향 보기</Link>
+              <Link href="/my/reports">최신 리포트</Link>
             </div>
           </section>
 
@@ -173,9 +175,9 @@ export function MyOverview({
             tone="conversation"
           />
           <MyMenuLink
-            href="/my/reports"
+            href="/my/reports/history"
             icon={FileText}
-            title="내 리포트"
+            title="내 기록"
             tone="brand"
           />
         </nav>
@@ -190,6 +192,12 @@ export function MyOverview({
             tone="brand"
           />
         ) : null}
+        <MyMenuLink
+          href="/my/feedback?from=%2Fmy"
+          icon={MessageSquarePlus}
+          title="의견 보내기"
+          tone="conversation"
+        />
         <MyMenuLink
           href="/my/settings"
           icon={SlidersHorizontal}
@@ -251,7 +259,7 @@ function EmptyProfile({
         첫 성향 검사로 대표 성향을 확인하고, 준비된 검사를 더할수록 나를 더
         자세히 이해할 수 있어요.
       </p>
-      <Link className={styles.startAssessment} href="/assessments">
+      <Link className={styles.startAssessment} href="/home">
         첫 성향 검사 시작하기
         <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
       </Link>
@@ -262,7 +270,7 @@ function EmptyProfile({
 function NextStep({ profile }: { profile: MyProfileSummary }) {
   const isFullResult = profile.source === "정밀 코어";
   const href = isFullResult
-    ? "/assessments"
+    ? "/home?view=self"
     : "/assessments/nu-core-full?from=my&backTo=%2Fmy&returnTo=%2Fmy";
 
   return (
@@ -315,49 +323,22 @@ function buildProfileSummary({
   accountResults: AccountResultSummary[];
   localAttempts: LocalAssessmentAttempt[];
 }): MyProfileSummary | null {
-  const accountResult = accountResults
-    .filter((result) => getCandidateProfileDefinition(result.profileCode))
-    .sort((a, b) => b.completedAt.localeCompare(a.completedAt))[0];
-
-  if (accountResult) {
-    return {
-      code: accountResult.profileCode,
-      completedAt: accountResult.completedAt,
-      href: `/results/account/${accountResult.resultReportId}`,
-      motif: getMotif(accountResult.profileCode),
-      name: accountResult.profileName,
-      source: accountResult.kind === "full" ? "정밀 코어" : "빠른 코어",
-    };
-  }
-
-  const localResult = localAttempts
-    .filter((attempt) => attempt.state === "completed")
-    .map((attempt) => {
-      const result = calculateLocalAttemptScore(attempt);
-      return result ? { attempt, result } : null;
-    })
-    .filter(
-      (entry): entry is NonNullable<typeof entry> =>
-        Boolean(entry?.result.code) &&
-        Boolean(getCandidateProfileDefinition(entry?.result.code ?? "")),
-    )
-    .sort((a, b) =>
-      (b.attempt.completedAt ?? b.attempt.updatedAt).localeCompare(
-        a.attempt.completedAt ?? a.attempt.updatedAt,
-      ),
-    )[0];
-
-  if (!localResult?.result.code || !localResult.result.profileName) return null;
+  const collection = collectValidatedCoreResultCandidates({
+    accountReadState: "ready",
+    accountResults,
+    localAttempts,
+  });
+  const representative = selectRepresentativeCoreResult(collection);
+  if (!representative) return null;
 
   return {
-    code: localResult.result.code,
-    completedAt:
-      localResult.attempt.completedAt ?? localResult.attempt.updatedAt,
-    href: `/results/local/${localResult.attempt.id}`,
-    motif: getMotif(localResult.result.code),
-    name: localResult.result.profileName,
+    code: representative.result.code,
+    completedAt: representative.identity.completedAt,
+    href: "/my/reports",
+    motif: getMotif(representative.result.code),
+    name: representative.result.currentProfileName,
     source:
-      localResult.attempt.assessmentId === "nu-core-full"
+      representative.identity.kind === "full"
         ? "정밀 코어"
         : "빠른 코어",
   };

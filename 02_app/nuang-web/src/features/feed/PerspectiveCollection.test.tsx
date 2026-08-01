@@ -12,7 +12,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("PerspectiveCollection", () => {
-  it("shows the viewer's real choices and filters only by recorded topics", () => {
+  it("shows the viewer's real choices and filters by recorded topics", () => {
     render(
       <PerspectiveCollection
         payload={{
@@ -25,6 +25,7 @@ describe("PerspectiveCollection", () => {
             createRecord({
               pollId: "poll-preference",
               question: "혼자 떠난다면 산과 바다 중 어디로 갈까요?",
+              tags: ["여행", "바다"],
               topicLabel: "취향",
               voteId: "vote-preference",
             }),
@@ -42,6 +43,43 @@ describe("PerspectiveCollection", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "관계" }));
 
+    expect(screen.getByText(/친구와 약속 시간이/)).toBeInTheDocument();
+    expect(screen.queryByText(/혼자 떠난다면/)).not.toBeInTheDocument();
+  });
+
+  it("searches only playground records and filters them by tag", () => {
+    render(
+      <PerspectiveCollection
+        payload={{
+          records: [
+            createRecord({
+              question: "친구와 약속 시간이 달라졌다면?",
+              tags: ["친구", "약속"],
+            }),
+            createRecord({
+              pollId: "poll-preference",
+              question: "혼자 떠난다면 산과 바다 중 어디로 갈까요?",
+              tags: ["여행", "바다"],
+              topicLabel: "취향",
+              voteId: "vote-preference",
+            }),
+          ],
+          state: "ready",
+        }}
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "여행 태그로 필터" }),
+    );
+    expect(screen.queryByText(/친구와 약속 시간이/)).not.toBeInTheDocument();
+    expect(screen.getByText(/혼자 떠난다면/)).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "전체 태그" }));
+    fireEvent.change(
+      screen.getByRole("searchbox", { name: "놀이터 기록 검색" }),
+      { target: { value: "친구" } },
+    );
     expect(screen.getByText(/친구와 약속 시간이/)).toBeInTheDocument();
     expect(screen.queryByText(/혼자 떠난다면/)).not.toBeInTheDocument();
   });
@@ -127,6 +165,7 @@ function createRecord(
     selectedOptionLabel: "먼저 이야기한다",
     selectedProfileName: "새 가능성을 찾는 탐험가",
     status: "active",
+    tags: ["친구", "약속"],
     topicLabel: "관계",
     voteId: "vote-relationship",
     ...overrides,

@@ -7,6 +7,7 @@ import {
   normalizeCommunityProfileRow,
   type CommunityProfileRecord,
 } from "@/features/account/community-profile";
+import { readOperatorAccountIds } from "@/features/admin/server-operator-identity";
 import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
 import { candidateProfileNameCatalog } from "@/features/nuang-code/candidate-profile-names";
 import {
@@ -189,6 +190,10 @@ async function searchPublicProfiles({
         left.profile.displayName.localeCompare(right.profile.displayName, "ko"),
     )
     .slice(0, publicProfileSearchMaxResults);
+  const operatorAccountIds = await readOperatorAccountIds({
+    accountIds: rankedCandidates.map(({ profile }) => profile.accountId),
+    client,
+  });
 
   return Promise.all(
     rankedCandidates.map(async ({ profile, row, snapshot }) => {
@@ -200,6 +205,7 @@ async function searchPublicProfiles({
       const profileCard = createPublicProfileCardPayload({
         cardId: `profile_${row.id}`,
         communityProfileId: profile.id,
+        isOperator: operatorAccountIds.has(profile.accountId),
         snapshot: mergedSnapshot,
         status: "published",
       });
@@ -318,6 +324,7 @@ function toSearchItem(
       includedFields.has("core_facet_summary"),
     displayName: card.display.displayName,
     handle: card.display.handle ?? profile.handle,
+    isOperator: Boolean(card.operator),
     profileImage: card.display.profileImage,
     profileMessage: card.display.profileMessage ?? "",
     publicProfileId:

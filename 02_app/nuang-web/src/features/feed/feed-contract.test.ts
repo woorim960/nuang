@@ -31,6 +31,8 @@ describe("feed contract", () => {
   it("defines Nuang feed write surfaces without exposing old community labels", () => {
     expect(feedWriteActions).toEqual([
       "create_post",
+      "update_post",
+      "delete_post",
       "create_comment",
       "react",
       "bookmark",
@@ -48,6 +50,8 @@ describe("feed contract", () => {
       "free_text",
       "balance_game",
       "report_share",
+      "together_balance_room_share",
+      "together_balance_result_share",
     ]);
     expect(feedVisibilityLevels).toEqual([
       "public",
@@ -65,6 +69,7 @@ describe("feed contract", () => {
       "trait_card",
       "map_summary",
       "result_summary",
+      "original_report",
     ]);
   });
 
@@ -91,6 +96,22 @@ describe("feed contract", () => {
           id: "feed_post_001",
           type: "feed_post",
         },
+      }).success,
+    ).toBe(true);
+    expect(
+      feedWriteRequestSchema.safeParse({
+        action: "create_post",
+        attachments: [
+          {
+            id: "topic_44444444-4444-4444-8444-444444444444",
+            profileId: "55555555-5555-4555-8555-555555555555",
+            type: "original_report",
+          },
+        ],
+        body: "공개 원본 리포트를 공유해요.",
+        source: "report_share",
+        sourceId: "topic_44444444-4444-4444-8444-444444444444",
+        visibility: "public",
       }).success,
     ).toBe(true);
     expect(
@@ -147,6 +168,33 @@ describe("feed contract", () => {
         pollId: "22222222-2222-4222-8222-222222222222",
       }).success,
     ).toBe(true);
+  });
+
+  it("accepts a custom balance game and rejects duplicate choices", () => {
+    const customBalanceGame = {
+      action: "create_post",
+      body: "친구들의 선택이 궁금해요.",
+      poll: {
+        options: ["바로 만나기", "조금 더 알아보기"],
+        question: "마음에 드는 사람과 가까워지고 싶을 때?",
+      },
+      source: "balance_game",
+      sourceId: "user_balance_game_v1",
+      visibility: "public",
+    };
+
+    expect(feedWriteRequestSchema.safeParse(customBalanceGame).success).toBe(
+      true,
+    );
+    expect(
+      feedWriteRequestSchema.safeParse({
+        ...customBalanceGame,
+        poll: {
+          ...customBalanceGame.poll,
+          options: ["같은 선택", "같은 선택"],
+        },
+      }).success,
+    ).toBe(false);
   });
 
   it("rejects raw or sensitive attachment shapes", () => {

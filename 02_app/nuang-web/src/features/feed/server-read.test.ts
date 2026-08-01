@@ -11,10 +11,10 @@ import {
 const supabaseMocks = vi.hoisted(() => ({
   serverClient: null as null | {
     auth: {
-      getUser: () => Promise<{
+      getClaims: () => Promise<{
         data: {
-          user: {
-            id: string;
+          claims: {
+            sub: string;
           } | null;
         };
         error: null;
@@ -31,6 +31,21 @@ vi.mock("@/lib/supabase/server", () => ({
 vi.mock("@/lib/supabase/service", () => ({
   createSupabaseServiceClient: vi.fn(() => supabaseMocks.serviceClient),
 }));
+
+function createMockServerClient() {
+  return {
+    auth: {
+      getClaims: async () => ({
+        data: {
+          claims: {
+            sub: "auth-user-001",
+          },
+        },
+        error: null,
+      }),
+    },
+  };
+}
 
 describe("feed server read model", () => {
   afterEach(() => {
@@ -53,18 +68,7 @@ describe("feed server read model", () => {
   });
 
   it("adds visible DB engagement counts to user feed posts", async () => {
-    supabaseMocks.serverClient = {
-      auth: {
-        getUser: async () => ({
-          data: {
-            user: {
-              id: "auth-user-001",
-            },
-          },
-          error: null,
-        }),
-      },
-    };
+    supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedReadPayload();
@@ -87,6 +91,7 @@ describe("feed server read model", () => {
       replyLabel: "답글 2개",
       statusLabel: "게시 전 확인 중",
       viewerHasBookmarked: true,
+      viewerCanManage: true,
       viewerHasLiked: true,
     });
     expect(publicPost).toMatchObject({
@@ -99,23 +104,13 @@ describe("feed server read model", () => {
       ],
       replyLabel: "답글 1개",
       viewerHasBookmarked: false,
+      viewerCanManage: false,
       viewerHasLiked: false,
     });
   });
 
   it("keeps only report shares that use the current Nuang code", async () => {
-    supabaseMocks.serverClient = {
-      auth: {
-        getUser: async () => ({
-          data: {
-            user: {
-              id: "auth-user-001",
-            },
-          },
-          error: null,
-        }),
-      },
-    };
+    supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedReadPayload();
@@ -129,19 +124,41 @@ describe("feed server read model", () => {
     });
   });
 
+  it("links a verified original report share to the owner's canonical report", async () => {
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      includeOriginalReportShare: true,
+    });
+
+    const payload = await createServerFeedReadPayload();
+    const reportPost = payload.items.find(
+      (item) => item.id === "post-original-report-share",
+    );
+
+    expect(reportPost?.reportShare).toMatchObject({
+      href: "/feed/profiles/55555555-5555-4555-8555-555555555555/reports/topic_44444444-4444-4444-8444-444444444444",
+      profileId: "55555555-5555-4555-8555-555555555555",
+      reportKey: "topic_44444444-4444-4444-8444-444444444444",
+      reportType: "topic",
+    });
+  });
+
+  it("removes an original report share when its owner makes the result private", async () => {
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      includeOriginalReportShare: true,
+      originalReportPrivate: true,
+    });
+
+    const payload = await createServerFeedReadPayload();
+
+    expect(
+      payload.items.some((item) => item.id === "post-original-report-share"),
+    ).toBe(false);
+  });
+
   it("filters posts marked as not interested by the current account", async () => {
-    supabaseMocks.serverClient = {
-      auth: {
-        getUser: async () => ({
-          data: {
-            user: {
-              id: "auth-user-001",
-            },
-          },
-          error: null,
-        }),
-      },
-    };
+    supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient({
       hiddenPostIds: ["post-public"],
       hiddenSeedKeys: ["daily_mood_001"],
@@ -156,18 +173,7 @@ describe("feed server read model", () => {
   });
 
   it("builds the home preview from the same filtered feed read model", async () => {
-    supabaseMocks.serverClient = {
-      auth: {
-        getUser: async () => ({
-          data: {
-            user: {
-              id: "auth-user-001",
-            },
-          },
-          error: null,
-        }),
-      },
-    };
+    supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient({
       hiddenPostIds: ["post-public"],
       hiddenSeedKeys: ["daily_mood_001"],
@@ -181,18 +187,7 @@ describe("feed server read model", () => {
   });
 
   it("reads one visible post with every comment the viewer may see", async () => {
-    supabaseMocks.serverClient = {
-      auth: {
-        getUser: async () => ({
-          data: {
-            user: {
-              id: "auth-user-001",
-            },
-          },
-          error: null,
-        }),
-      },
-    };
+    supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedPostDetailPayload(
@@ -249,19 +244,30 @@ describe("feed server read model", () => {
     ]);
   });
 
-  it("builds the signed-in viewer's playground records from current votes", async () => {
-    supabaseMocks.serverClient = {
-      auth: {
-        getUser: async () => ({
-          data: {
-            user: {
-              id: "auth-user-001",
-            },
-          },
-          error: null,
-        }),
+  it("prepends the requested resume poll when it is outside the regular feed page", async () => {
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient();
+
+    const payload = await createServerFeedReadPayload({
+      requiredPollId: "11111111-1111-4111-8111-111111111111",
+    });
+
+    expect(payload.items[0]).toMatchObject({
+      id: "22222222-2222-4222-8222-222222222222",
+      poll: {
+        id: "11111111-1111-4111-8111-111111111111",
+        question: "나 혼자 여행 간다면?",
       },
-    };
+    });
+    expect(
+      payload.items.filter(
+        (item) => item.id === "22222222-2222-4222-8222-222222222222",
+      ),
+    ).toHaveLength(1);
+  });
+
+  it("builds the signed-in viewer's playground records from current votes", async () => {
+    supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedPlaygroundRecordsPayload();
@@ -279,6 +285,7 @@ describe("feed server read model", () => {
           selectedCode: "INGMC",
           selectedOptionLabel: "바다",
           status: "active",
+          tags: ["여행", "바다"],
           topicLabel: "취향",
         },
       ],
@@ -323,15 +330,21 @@ type MockFeedReadOperation = {
 function createMockFeedReadClient({
   hiddenPostIds = [],
   hiddenSeedKeys = [],
+  includeOriginalReportShare = false,
+  originalReportPrivate = false,
   privateReportShare = false,
 }: {
   hiddenPostIds?: string[];
   hiddenSeedKeys?: string[];
+  includeOriginalReportShare?: boolean;
+  originalReportPrivate?: boolean;
   privateReportShare?: boolean;
 } = {}) {
   const options = {
     hiddenPostIds,
     hiddenSeedKeys,
+    includeOriginalReportShare,
+    originalReportPrivate,
     privateReportShare,
   };
 
@@ -395,6 +408,8 @@ function resolveFeedReadOperation(
   options: {
     hiddenPostIds: string[];
     hiddenSeedKeys: string[];
+    includeOriginalReportShare: boolean;
+    originalReportPrivate: boolean;
     privateReportShare: boolean;
   },
 ) {
@@ -414,6 +429,7 @@ function resolveFeedReadOperation(
           {
             id: "22222222-2222-4222-8222-222222222222",
             topic_category: "preferences",
+            topic_tags: ["여행", "바다"],
           },
         ],
         error: null,
@@ -433,6 +449,25 @@ function resolveFeedReadOperation(
           published_at: "2026-07-09T07:11:00.000Z",
           source: "daily_question",
           source_id: "daily_question_detail_001",
+          visibility: "public",
+        },
+        error: null,
+      };
+    }
+
+    if (
+      hasFilter(operation, "eq", "id", "22222222-2222-4222-8222-222222222222")
+    ) {
+      return {
+        data: {
+          author_account_id: "account-other",
+          body: "나 혼자 떠나는 여행 취향을 골라봐요.",
+          created_at: "2026-07-19T07:10:00.000Z",
+          id: "22222222-2222-4222-8222-222222222222",
+          moderation_status: "published",
+          published_at: "2026-07-19T07:10:00.000Z",
+          source: "balance_game",
+          source_id: "balance_game_trip",
           visibility: "public",
         },
         error: null,
@@ -491,6 +526,44 @@ function resolveFeedReadOperation(
 
     return {
       data: [
+        ...(options.includeOriginalReportShare
+          ? [
+              {
+                attachment_payload: [
+                  {
+                    id: "topic_44444444-4444-4444-8444-444444444444",
+                    profileId: "55555555-5555-4555-8555-555555555555",
+                    type: "original_report",
+                  },
+                ],
+                author_account_id: "account-sharer",
+                body: "공개된 위로 성향 리포트를 함께 봐요.",
+                created_at: "2026-07-09T07:12:00.000Z",
+                id: "post-original-report-share",
+                moderation_status: "published",
+                public_projection_payload: {
+                  reportShare: {
+                    assessmentKind: "full",
+                    assessmentTitle: "위로받을 때 필요한 것",
+                    completedAt: "2026-07-04T00:00:00.000Z",
+                    domains: [],
+                    profileCode: "INGMC",
+                    profileId: "55555555-5555-4555-8555-555555555555",
+                    profileName: "조용한 곁 지킴",
+                    reportKey: "topic_44444444-4444-4444-8444-444444444444",
+                    reportType: "topic",
+                    resultLabel: "위로받을 때 필요한 것",
+                    summary:
+                      "말을 재촉하지 않고 곁을 지켜주는 위로가 잘 맞아요.",
+                  },
+                },
+                published_at: "2026-07-09T07:12:00.000Z",
+                source: "report_share",
+                source_id: "topic_44444444-4444-4444-8444-444444444444",
+                visibility: "public",
+              },
+            ]
+          : []),
         {
           author_account_id: "account-other",
           body: "INGMQ 가능성을 깊이 좇는 사색가 리포트를 공유했어요.",
@@ -529,6 +602,22 @@ function resolveFeedReadOperation(
   }
 
   if (operation.schema === "feed" && operation.table === "feed_poll") {
+    if (hasFilterColumn(operation, "in", "post_id")) {
+      return {
+        data: [
+          {
+            created_at: "2026-07-19T07:10:00.000Z",
+            id: "11111111-1111-4111-8111-111111111111",
+            post_id: "22222222-2222-4222-8222-222222222222",
+            prompt_id: "balance_game_trip",
+            question: "나 혼자 여행 간다면?",
+            status: "active",
+          },
+        ],
+        error: null,
+      };
+    }
+
     if (hasFilterColumn(operation, "in", "id")) {
       return {
         data: [
@@ -604,7 +693,7 @@ function resolveFeedReadOperation(
             nuang_code: "ENAKQ",
             option_id: "option-mountain",
             poll_id: "11111111-1111-4111-8111-111111111111",
-            profile_name: "관계를 여는 지휘자",
+            profile_name: "관계를 여는 선도자",
           },
           {
             account_id: "account-water",
@@ -632,7 +721,7 @@ function resolveFeedReadOperation(
           nuang_code: "ENAKQ",
           option_id: "option-mountain",
           poll_id: "11111111-1111-4111-8111-111111111111",
-          profile_name: "관계를 여는 지휘자",
+          profile_name: "관계를 여는 선도자",
         },
         {
           account_id: "account-water",
@@ -831,6 +920,68 @@ function resolveFeedReadOperation(
       })),
       error: null,
     };
+  }
+
+  if (
+    operation.schema === "assessment" &&
+    operation.table === "free_topic_result" &&
+    options.includeOriginalReportShare
+  ) {
+    return {
+      data: [
+        {
+          account_id: "account-report-owner",
+          id: "44444444-4444-4444-8444-444444444444",
+        },
+      ],
+      error: null,
+    };
+  }
+
+  if (
+    operation.schema === "profile" &&
+    operation.table === "profile_report_visibility" &&
+    options.includeOriginalReportShare
+  ) {
+    return {
+      data: options.originalReportPrivate
+        ? [
+            {
+              account_id: "account-report-owner",
+              source_id: "44444444-4444-4444-8444-444444444444",
+              source_kind: "topic",
+              visibility: "private",
+            },
+          ]
+        : [],
+      error: null,
+    };
+  }
+
+  if (
+    operation.schema === "profile" &&
+    operation.table === "community_profile" &&
+    options.includeOriginalReportShare &&
+    hasFilterColumn(operation, "in", "id")
+  ) {
+    return {
+      data: [
+        {
+          account_id: "account-report-owner",
+          id: "55555555-5555-4555-8555-555555555555",
+        },
+      ],
+      error: null,
+    };
+  }
+
+  if (
+    operation.schema === "profile" &&
+    operation.table === "profile_public_snapshot" &&
+    options.includeOriginalReportShare &&
+    hasFilterColumn(operation, "in", "id")
+  ) {
+    return { data: [], error: null };
   }
 
   return {

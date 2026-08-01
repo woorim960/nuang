@@ -1,9 +1,12 @@
 import { z } from "zod";
+import { reportContentSnapshotSchema } from "@/features/result/unified-core-report/report-content-snapshot-contract";
 
 const accountResultDomainSchema = z.object({
   domainId: z.string().min(1).max(24),
+  isBoundary: z.boolean().optional(),
   label: z.string().min(1).max(40),
   score: z.number().min(0).max(100).nullable(),
+  status: z.enum(["valid", "partial", "insufficient"]).optional(),
   symbol: z.string().max(8).nullable().optional(),
 });
 
@@ -12,14 +15,42 @@ const accountResultFacetSchema = z.object({
   label: z.string().min(1).max(40),
   score: z.number().min(0).max(100).nullable(),
   status: z.enum(["valid", "partial", "insufficient"]).optional(),
+  validResponses: z.number().int().min(0).optional(),
+});
+
+const accountResultVersionBundleSchema = z.object({
+  assessmentReleaseId: z.string().min(1).max(120),
+  codeSchemeVersion: z.string().min(1).max(120),
+  scoringModelVersion: z.string().min(1).max(120),
+  scoringReleaseId: z.string().min(1).max(120),
 });
 
 const storedAccountResultSummarySchema = z.object({
+  alternativeCodes: z
+    .array(z.string().regex(/^[A-Z]{5}$/))
+    .max(5)
+    .optional(),
   completedAt: z.string().datetime().optional(),
   domains: z.array(accountResultDomainSchema).max(5).default([]),
   facets: z.array(accountResultFacetSchema).max(10).default([]),
+  originResultId: z.string().min(6).max(128).optional(),
+  reportContentSnapshot: reportContentSnapshotSchema.nullable().optional(),
+  responseSnapshotHash: z.string().min(8).max(160).optional(),
+  resultCopyVersion: z.string().min(1).max(120).optional(),
+  resultEvidenceStatus: z
+    .enum(["clear", "near_boundary", "insufficient_evidence"])
+    .optional(),
   resultLabel: z.string().min(1).max(80).optional(),
+  resultStatus: z.enum(["ready", "insufficient_evidence"]).optional(),
+  versionBundle: accountResultVersionBundleSchema.optional(),
 });
+
+export type AccountResultVersionBundle = {
+  assessmentReleaseId: string | null;
+  codeSchemeVersion: string | null;
+  scoringModelVersion: string | null;
+  scoringReleaseId: string | null;
+};
 
 export const accountResultsQuerySchema = z.object({
   resultReportId: z.string().uuid().optional(),
@@ -36,6 +67,7 @@ export const deleteAccountResultRequestSchema = z
   );
 
 export type AccountResultSummary = {
+  alternativeCodes?: string[];
   assessmentAttemptId: string;
   completedAt: string;
   createdAt: string;
@@ -43,10 +75,18 @@ export type AccountResultSummary = {
   facets: Array<z.infer<typeof accountResultFacetSchema>>;
   kind: "full" | "quick";
   localResultId: string | null;
+  originResultId?: string | null;
   profileCode: string;
   profileName: string;
+  reportContentSnapshot?: z.infer<typeof reportContentSnapshotSchema> | null;
+  responseSnapshotHash?: string | null;
+  resultCopyVersion?: string | null;
+  resultEvidenceStatus?:
+    "clear" | "near_boundary" | "insufficient_evidence" | null;
   resultLabel: string;
   resultReportId: string;
+  resultStatus?: "ready" | "insufficient_evidence" | null;
+  versionBundle?: AccountResultVersionBundle;
 };
 
 export type AccountComparisonReportSummary = {

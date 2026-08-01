@@ -206,15 +206,16 @@ export function MyTraitDetailView() {
 
       <section className={styles.section}>
         <SectionHeading
-          actionHref="/assessments"
-          actionLabel="검사 둘러보기"
+          actionHref="/my/reports/history"
+          actionLabel="전체 기록"
           title="최근 검사 기록"
         />
         {topicResults.length > 0 ? (
           <div className={styles.recordList}>
             {topicResults.slice(0, 3).map((topicResult) => (
-              <article
+              <Link
                 className={styles.recordRow}
+                href={`/assessments/topics/${topicResult.assessment.slug}/result/${topicResult.localResultId}`}
                 key={topicResult.localResultId}
               >
                 <div>
@@ -224,11 +225,8 @@ export function MyTraitDetailView() {
                     {formatDate(topicResult.completedAt)}
                   </span>
                 </div>
-                <p>
-                  <small>평균</small>
-                  <strong>{getAverageScore(topicResult)}</strong>
-                </p>
-              </article>
+                <ChevronRight aria-hidden="true" size={17} strokeWidth={1.65} />
+              </Link>
             ))}
           </div>
         ) : (
@@ -458,15 +456,6 @@ function buildLatestAccountResult(results: AccountResultSummary[]) {
   return results
     .filter((result) => getCandidateProfileDefinition(result.profileCode))
     .sort((a, b) => b.completedAt.localeCompare(a.completedAt))[0];
-}
-
-function getAverageScore(result: StoredFreeTopicResult) {
-  const values = Object.values(result.result.scoresByTargetId);
-  if (values.length === 0) return "-";
-
-  return Math.round(
-    values.reduce((sum, value) => sum + value, 0) / values.length,
-  );
 }
 
 function formatDate(value: string) {

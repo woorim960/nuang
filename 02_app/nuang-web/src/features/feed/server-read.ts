@@ -1,9 +1,11 @@
-import type { SupabaseClient, User } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
+import { unstable_cache } from "next/cache";
 import {
   mergeCommunityProfileIntoSnapshot,
   readCommunityProfileForAccount,
   readCommunityProfilesForAccounts,
 } from "@/features/account/server-community-profile";
+import { readOperatorAccountIds } from "@/features/admin/server-operator-identity";
 import { createPublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
@@ -27,8 +29,15 @@ import {
   feedPostTopicLabels,
   type FeedPostTopicCategory,
 } from "@/features/feed/feed-topic";
+import { isUserManageableFeedPostSource } from "@/features/feed/feed-post-management";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { getCurrentNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
+import { readOriginalProfileReportSummaries } from "@/features/public-profile/server-profile-reports";
+import {
+  parseProfileReportKey,
+  type OriginalProfileReportSummary,
+  type ProfileReportKind,
+} from "@/features/public-profile/profile-report-contract";
 import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
@@ -49,6 +58,8 @@ type FeedPostRow = {
     | "free_text"
     | "map_reflection"
     | "report_share"
+    | "together_balance_room_share"
+    | "together_balance_result_share"
     | "trait_card";
   source_id: string | null;
   topic_category: FeedPostTopicCategory | null;
@@ -156,6 +167,7 @@ type FeedPlaygroundPollRow = FeedPollRow & {
 type FeedPlaygroundPostRow = {
   id: string;
   topic_category: FeedPostTopicCategory | null;
+  topic_tags: string[];
 };
 
 export type FeedPollStatsPayload = {
@@ -205,6 +217,7 @@ export type FeedPlaygroundRecord = {
   selectedOptionLabel: string;
   selectedProfileName: string | null;
   status: "active" | "closed" | "removed";
+  tags: string[];
   topicLabel: string;
   voteId: string;
 };
@@ -225,12 +238,15 @@ export type FeedPostDetailPayload = {
   post: FeedItem;
   viewer: {
     isAuthenticated: boolean;
+    nuangCode: string | null;
   };
 };
 
 export type CommunityProfileReadPayload = {
   posts: FeedItem[];
   profile: NonNullable<FeedItem["authorProfile"]>;
+  reports: OriginalProfileReportSummary[];
+  viewerCode: string | null;
 };
 
 type FeedHiddenTargets = {
@@ -239,12 +255,14 @@ type FeedHiddenTargets = {
 };
 
 const sourceTitleMap: Record<FeedPostRow["source"], string> = {
-  balance_game: "밸런스 게임",
+  balance_game: "투표",
   daily_mood: "오늘의 기분",
   daily_question: "오늘의 질문",
   free_text: "오늘의 생각",
   map_reflection: "성향지도 노트",
   report_share: "리포트 공유",
+  together_balance_room_share: "밸런스 게임",
+  together_balance_result_share: "밸런스 게임 결과",
   trait_card: "성향 카드",
 };
 
@@ -258,7 +276,70 @@ const demoFeedHandles = new Set([
   "seoyeon.flame",
 ]);
 
-export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
+export const communityFeedCacheTag = "community-feed-read-v1";
+const anonymousFeedViewerKey = "anonymous";
+const readCachedFeedPayload = unstable_cache(
+  async (viewerKey: string) =>
+    createFeedReadPayloadForViewer(
+      viewerKey === anonymousFeedViewerKey ? null : viewerKey,
+    ),
+  ["community-feed-read-payload-v1"],
+  {
+    revalidate: 15,
+    tags: [communityFeedCacheTag],
+  },
+);
+
+export async function createServerFeedReadPayload({
+  requiredPollId,
+}: {
+  requiredPollId?: string;
+} = {}): Promise<FeedReadPayload> {
+  const viewerId = await getCurrentSupabaseUserId();
+
+  let payload: FeedReadPayload;
+  if (process.env.NODE_ENV === "test") {
+    payload = await createFeedReadPayloadForViewer(viewerId);
+  } else {
+    payload = await readCachedFeedPayload(viewerId ?? anonymousFeedViewerKey);
+  }
+
+  return requiredPollId
+    ? ensureFeedPayloadIncludesPoll(payload, requiredPollId)
+    : payload;
+}
+
+async function ensureFeedPayloadIncludesPoll(
+  payload: FeedReadPayload,
+  pollId: string,
+): Promise<FeedReadPayload> {
+  if (
+    !uuidPattern.test(pollId) ||
+    payload.items.some((item) => item.poll?.id === pollId)
+  ) {
+    return payload;
+  }
+
+  const pollPayload = await createServerFeedPollStatsPayload(pollId);
+  if (!pollPayload) return payload;
+
+  const postPayload = await createServerFeedPostDetailPayload(
+    pollPayload.post.id,
+  );
+  if (postPayload?.post.poll?.id !== pollId) return payload;
+
+  return {
+    ...payload,
+    items: [
+      postPayload.post,
+      ...payload.items.filter((item) => item.id !== postPayload.post.id),
+    ],
+  };
+}
+
+async function createFeedReadPayloadForViewer(
+  viewerId: string | null,
+): Promise<FeedReadPayload> {
   const basePayload = createFeedReadPayload();
   const serviceClient = createSupabaseServiceClient();
 
@@ -270,17 +351,30 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
     };
   }
 
-  const accountId = await getCurrentAccountId(serviceClient);
-  const [publicPosts, ownPosts] = await Promise.all([
+  const [accountId, publicPosts] = await Promise.all([
+    viewerId
+      ? readAccountIdForUser(serviceClient, viewerId)
+      : Promise.resolve(null),
     readPublishedPosts(serviceClient),
-    accountId ? readOwnPosts(serviceClient, accountId) : Promise.resolve([]),
   ]);
+  const ownPosts = accountId
+    ? await readOwnPosts(serviceClient, accountId)
+    : [];
   const mergedRows = mergePostRows({
     accountId,
     ownPosts,
     publicPosts,
   });
-  const [hiddenTargets, blockedAccountIds] = await Promise.all([
+  const [
+    hiddenTargets,
+    blockedAccountIds,
+    authorProfilesByAccountId,
+    engagementByPostId,
+    pollByPostId,
+    mediaByPostId,
+    linksByPostId,
+    officialStateByPostId,
+  ] = await Promise.all([
     readNotInterestedTargets({
       accountId,
       client: serviceClient,
@@ -288,49 +382,49 @@ export async function createServerFeedReadPayload(): Promise<FeedReadPayload> {
       seedKeys: [],
     }),
     readBlockedCommunityAccountIds({ accountId, client: serviceClient }),
-  ]);
-  const visibleRows = mergedRows.filter(
-    (row) =>
-      !hiddenTargets.postIds.has(row.id) &&
-      !blockedAccountIds.has(row.author_account_id),
-  );
-  const authorProfilesByAccountId = await readPublicProfileCardsForAccounts({
-    accountIds: [
-      ...visibleRows.map((row) => row.author_account_id),
-      ...(accountId ? [accountId] : []),
-    ],
-    client: serviceClient,
-  });
-  const [
-    engagementByPostId,
-    pollByPostId,
-    mediaByPostId,
-    linksByPostId,
-    officialStateByPostId,
-  ] = await Promise.all([
+    readPublicProfileCardsForAccounts({
+      accountIds: [
+        ...mergedRows.map((row) => row.author_account_id),
+        ...(accountId ? [accountId] : []),
+      ],
+      client: serviceClient,
+    }),
     readPostEngagements({
       accountId,
       client: serviceClient,
-      rows: visibleRows,
+      rows: mergedRows,
     }),
     readPollSummaries({
       accountId,
       client: serviceClient,
-      rows: visibleRows,
+      rows: mergedRows,
     }),
     readPostMedia({
       client: serviceClient,
-      rows: visibleRows,
+      rows: mergedRows,
     }),
     readExternalLinksForPosts({
       client: serviceClient,
-      postIds: visibleRows.map((row) => row.id),
+      postIds: mergedRows.map((row) => row.id),
     }),
     readOfficialContentStates({
       client: serviceClient,
-      postIds: visibleRows.map((row) => row.id),
+      postIds: mergedRows.map((row) => row.id),
     }),
   ]);
+  const inaccessibleOriginalReportPostIds =
+    await readInaccessibleOriginalReportPostIds({
+      blockedAccountIds,
+      client: serviceClient,
+      rows: mergedRows,
+      viewerAccountId: accountId,
+    });
+  const visibleRows = mergedRows.filter(
+    (row) =>
+      !hiddenTargets.postIds.has(row.id) &&
+      !blockedAccountIds.has(row.author_account_id) &&
+      !inaccessibleOriginalReportPostIds.has(row.id),
+  );
   const dbItems = visibleRows
     .map((row, index) =>
       mapPostRowToFeedItem(
@@ -394,17 +488,35 @@ export async function createServerCommunityProfilePayload(
   });
   if (blockedAccountIds.has(source.snapshot.account_id)) return null;
 
+  const operatorAccountIds = await readOperatorAccountIds({
+    accountIds: [source.snapshot.account_id],
+    client: serviceClient,
+  });
   const profile = createPublicProfileCardPayload({
     cardId: `profile_${source.snapshot.id}`,
     communityProfileId: source.communityProfile?.id ?? source.snapshot.id,
+    isOperator: operatorAccountIds.has(source.snapshot.account_id),
     snapshot,
     status: "published",
   });
-  const postRows = await readProfilePosts({
-    accountId: source.snapshot.account_id,
-    client: serviceClient,
-    includeNonPublished: accountId === source.snapshot.account_id,
-  });
+  const [postRows, reports, viewerProfiles] = await Promise.all([
+    readProfilePosts({
+      accountId: source.snapshot.account_id,
+      client: serviceClient,
+      includeNonPublished: accountId === source.snapshot.account_id,
+    }),
+    readOriginalProfileReportSummaries({
+      client: serviceClient,
+      ownerAccountId: source.snapshot.account_id,
+      viewerAccountId: accountId,
+    }),
+    accountId && accountId !== source.snapshot.account_id
+      ? readPublicProfileCardsForAccounts({
+          accountIds: [accountId],
+          client: serviceClient,
+        })
+      : Promise.resolve(new Map<string, FeedItem["authorProfile"]>()),
+  ]);
   const [
     engagementByPostId,
     pollByPostId,
@@ -424,7 +536,15 @@ export async function createServerCommunityProfilePayload(
       postIds: postRows.map((row) => row.id),
     }),
   ]);
+  const inaccessibleOriginalReportPostIds =
+    await readInaccessibleOriginalReportPostIds({
+      blockedAccountIds,
+      client: serviceClient,
+      rows: postRows,
+      viewerAccountId: accountId,
+    });
   const posts = postRows
+    .filter((row) => !inaccessibleOriginalReportPostIds.has(row.id))
     .map((postRow, index) =>
       mapPostRowToFeedItem(
         postRow,
@@ -443,6 +563,15 @@ export async function createServerCommunityProfilePayload(
   return {
     posts,
     profile,
+    reports,
+    viewerCode:
+      accountId === source.snapshot.account_id
+        ? normalizeVisibleCode(profile.display.code)
+        : accountId
+          ? normalizeVisibleCode(
+              viewerProfiles.get(accountId)?.display.code ?? null,
+            )
+          : null,
   };
 }
 
@@ -617,6 +746,14 @@ export async function createServerFeedPostDetailPayload(
   if (!isOwnPost && !isPublicPost) {
     return null;
   }
+  const inaccessibleOriginalReportPostIds =
+    await readInaccessibleOriginalReportPostIds({
+      blockedAccountIds,
+      client: serviceClient,
+      rows: [row],
+      viewerAccountId: accountId,
+    });
+  if (inaccessibleOriginalReportPostIds.has(row.id)) return null;
 
   const [
     authorProfiles,
@@ -628,7 +765,12 @@ export async function createServerFeedPostDetailPayload(
     postReplies,
   ] = await Promise.all([
     readPublicProfileCardsForAccounts({
-      accountIds: [row.author_account_id],
+      accountIds: [
+        row.author_account_id,
+        ...(accountId && accountId !== row.author_account_id
+          ? [accountId]
+          : []),
+      ],
       client: serviceClient,
     }),
     readPostEngagements({
@@ -684,6 +826,15 @@ export async function createServerFeedPostDetailPayload(
     },
     viewer: {
       isAuthenticated: Boolean(accountId),
+      nuangCode: accountId
+        ? normalizeVisibleCode(
+            authorProfiles.get(accountId)?.display.code ??
+              (accountId === row.author_account_id
+                ? (authorProfiles.get(row.author_account_id)?.display.code ??
+                  null)
+                : null),
+          )
+        : null,
     },
   };
 }
@@ -904,7 +1055,7 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
       ? serviceClient
           .schema("feed")
           .from("feed_post")
-          .select("id, topic_category")
+          .select("id, topic_category, topic_tags")
           .in("id", postIds)
           .is("deleted_at", null)
       : Promise.resolve({ data: [], error: null }),
@@ -967,6 +1118,7 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
           selectedOptionLabel: selectedOption?.label ?? "기록된 선택",
           selectedProfileName,
           status: "removed" as const,
+          tags: [],
           topicLabel: "지난 질문",
           voteId: ownVote.id,
         };
@@ -1046,6 +1198,11 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
         selectedOptionLabel: selectedOption?.label ?? "기록된 선택",
         selectedProfileName,
         status: poll.status,
+        tags: Array.isArray(post?.topic_tags)
+          ? post.topic_tags.filter(
+              (tag): tag is string => typeof tag === "string",
+            )
+          : [],
         topicLabel: resolvePlaygroundTopicLabel({
           category: post?.topic_category ?? null,
           promptId: poll.prompt_id,
@@ -1071,7 +1228,7 @@ export async function createServerFeedReportSharePayload(
     .schema("feed")
     .from("feed_post")
     .select(
-      "id, author_account_id, body, moderation_status, public_projection_payload, visibility, created_at",
+      "id, author_account_id, body, moderation_status, source, source_id, attachment_payload, public_projection_payload, visibility, created_at, published_at",
     )
     .eq("id", postId)
     .eq("source", "report_share")
@@ -1083,15 +1240,24 @@ export async function createServerFeedReportSharePayload(
   }
 
   const row = response.data as {
+    attachment_payload: unknown;
     author_account_id: string;
     body: string;
     created_at: string;
     id: string;
     moderation_status: FeedPostRow["moderation_status"];
+    published_at: string | null;
     public_projection_payload: unknown;
+    source: "report_share";
+    source_id: string | null;
     visibility: FeedPostRow["visibility"];
   };
   const accountId = await getCurrentAccountId(serviceClient);
+  const blockedAccountIds = await readBlockedCommunityAccountIds({
+    accountId,
+    client: serviceClient,
+  });
+  if (blockedAccountIds.has(row.author_account_id)) return null;
   const isOwnPost = row.author_account_id === accountId;
   const isPublicPost =
     row.moderation_status === "published" &&
@@ -1100,6 +1266,15 @@ export async function createServerFeedReportSharePayload(
   if (!isOwnPost && !isPublicPost) {
     return null;
   }
+  const normalizedRow = normalizeFeedPostRow(row);
+  const inaccessibleOriginalReportPostIds =
+    await readInaccessibleOriginalReportPostIds({
+      blockedAccountIds,
+      client: serviceClient,
+      rows: [normalizedRow],
+      viewerAccountId: accountId,
+    });
+  if (inaccessibleOriginalReportPostIds.has(row.id)) return null;
 
   const publicProjection = readPublicProjection(row.public_projection_payload);
 
@@ -1116,33 +1291,39 @@ export async function createServerFeedReportSharePayload(
     createdAt: row.created_at,
     reportShare: {
       ...publicProjection.reportShare,
-      href: `/feed/reports/${row.id}`,
+      href: getReportShareHref(publicProjection.reportShare, row.id),
     },
   };
 }
 
 async function getCurrentAccountId(client: SupabaseClient) {
+  const userId = await getCurrentSupabaseUserId();
+  return userId ? readAccountIdForUser(client, userId) : null;
+}
+
+async function getCurrentSupabaseUserId() {
   const serverClient = await createServerSupabaseClient();
 
   if (!serverClient) {
     return null;
   }
 
-  const { data, error } = await serverClient.auth.getUser();
+  const { data, error } = await serverClient.auth.getClaims();
+  const userId = typeof data?.claims?.sub === "string" ? data.claims.sub : null;
 
-  if (error || !data.user) {
+  if (error || !userId) {
     return null;
   }
 
-  return readAccountIdForUser(client, data.user);
+  return userId;
 }
 
-async function readAccountIdForUser(client: SupabaseClient, user: User) {
+async function readAccountIdForUser(client: SupabaseClient, userId: string) {
   const response = await client
     .schema("identity")
     .from("auth_identity")
     .select("account_id")
-    .eq("supabase_user_id", user.id)
+    .eq("supabase_user_id", userId)
     .is("revoked_at", null)
     .order("provider_linked_at", { ascending: true })
     .limit(1)
@@ -1427,7 +1608,10 @@ async function readPostMedia({
     mediaByPostId.set(row.post_id, media);
   }
 
-  const legacyMediaByPostId = await readLegacyPostMedia({ client, rows });
+  const legacyMediaByPostId = await readLegacyPostMedia({
+    client,
+    rows: rows.filter((row) => !mediaByPostId.has(row.id)),
+  });
   for (const [postId, legacyMedia] of legacyMediaByPostId) {
     if (!mediaByPostId.has(postId)) mediaByPostId.set(postId, legacyMedia);
   }
@@ -1586,14 +1770,16 @@ async function readPostEngagements({
 
   if (!commentResponse.error && commentResponse.data) {
     const commentRows = commentResponse.data as FeedPostCommentRow[];
-    const commentProfiles = await readPublicProfileCardsForAccounts({
-      accountIds: commentRows.map((row) => row.author_account_id),
-      client,
-    });
-    const commentLinks = await readExternalLinksForComments({
-      client,
-      commentIds: commentRows.map((row) => row.id),
-    });
+    const [commentProfiles, commentLinks] = await Promise.all([
+      readPublicProfileCardsForAccounts({
+        accountIds: commentRows.map((row) => row.author_account_id),
+        client,
+      }),
+      readExternalLinksForComments({
+        client,
+        commentIds: commentRows.map((row) => row.id),
+      }),
+    ]);
     const visibleCommentsByPostId = new Map<string, FeedPostCommentRow[]>();
 
     for (const row of commentRows) {
@@ -1941,41 +2127,60 @@ async function readPublicProfileCardsForAccounts({
     return profilesByAccountId;
   }
 
-  const communityProfiles = await readCommunityProfilesForAccounts({
-    accountIds: uniqueAccountIds,
-    client,
-  });
+  const [communityProfiles, operatorAccountIds] = await Promise.all([
+    readCommunityProfilesForAccounts({
+      accountIds: uniqueAccountIds,
+      client,
+    }),
+    readOperatorAccountIds({
+      accountIds: uniqueAccountIds,
+      client,
+    }),
+  ]);
+
+  const latestSnapshots = new Map<
+    string,
+    { row: PublicProfileSnapshotRow; snapshot: PublicProfileSnapshotPayload }
+  >();
 
   for (const row of response.data as PublicProfileSnapshotRow[]) {
-    if (profilesByAccountId.has(row.account_id)) {
-      continue;
-    }
+    if (latestSnapshots.has(row.account_id)) continue;
 
-    const baseSnapshot = coercePublicProfileSnapshotPayload(
+    const snapshot = coercePublicProfileSnapshotPayload(
       row.snapshot_payload,
       row.id,
     );
+    if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) continue;
 
-    if (!baseSnapshot || !isCurrentNuangCode(baseSnapshot.profile.code)) {
-      continue;
-    }
+    latestSnapshots.set(row.account_id, { row, snapshot });
+  }
 
-    const communityProfile = communityProfiles.get(row.account_id) ?? null;
-    const snapshot = await mergeCommunityProfileIntoSnapshot({
-      client,
-      profile: communityProfile,
-      snapshot: baseSnapshot,
-    });
+  const cards = await Promise.all(
+    [...latestSnapshots.entries()].map(
+      async ([accountId, { row, snapshot: baseSnapshot }]) => {
+        const communityProfile = communityProfiles.get(accountId) ?? null;
+        const snapshot = await mergeCommunityProfileIntoSnapshot({
+          client,
+          profile: communityProfile,
+          snapshot: baseSnapshot,
+        });
 
-    profilesByAccountId.set(
-      row.account_id,
-      createPublicProfileCardPayload({
-        cardId: `profile_${row.id}`,
-        communityProfileId: communityProfile?.id ?? row.id,
-        snapshot,
-        status: "published",
-      }),
-    );
+        return [
+          accountId,
+          createPublicProfileCardPayload({
+            cardId: `profile_${row.id}`,
+            communityProfileId: communityProfile?.id ?? row.id,
+            isOperator: operatorAccountIds.has(accountId),
+            snapshot,
+            status: "published",
+          }),
+        ] as const;
+      },
+    ),
+  );
+
+  for (const [accountId, card] of cards) {
+    profilesByAccountId.set(accountId, card);
   }
 
   return profilesByAccountId;
@@ -2011,6 +2216,236 @@ function mergePostRows({
   });
 }
 
+type OriginalReportFeedReference = {
+  kind: ProfileReportKind;
+  postId: string;
+  profileId: string;
+  reportKey: string;
+  sourceId: string;
+};
+
+async function readInaccessibleOriginalReportPostIds({
+  blockedAccountIds,
+  client,
+  rows,
+  viewerAccountId,
+}: {
+  blockedAccountIds: Set<string>;
+  client: SupabaseClient;
+  rows: FeedPostRow[];
+  viewerAccountId: string | null;
+}) {
+  const inaccessible = new Set<string>();
+  const references = rows.flatMap((row) => {
+    const parsed = readOriginalReportFeedReference(row);
+    if (parsed === "invalid") {
+      inaccessible.add(row.id);
+      return [];
+    }
+    return parsed ? [parsed] : [];
+  });
+  if (references.length === 0) return inaccessible;
+
+  const idsByKind = new Map<ProfileReportKind, string[]>([
+    ["core", []],
+    ["topic", []],
+    ["lab", []],
+  ]);
+  for (const reference of references) {
+    idsByKind.get(reference.kind)?.push(reference.sourceId);
+  }
+  const profileIds = [...new Set(references.map((item) => item.profileId))];
+  const sourceIds = [...new Set(references.map((item) => item.sourceId))];
+
+  const [
+    coreRows,
+    topicRows,
+    labRows,
+    visibilityRows,
+    communityProfiles,
+    snapshots,
+  ] = await Promise.all([
+    readOriginalSourceOwners({
+      client,
+      ids: idsByKind.get("core") ?? [],
+      kind: "core",
+    }),
+    readOriginalSourceOwners({
+      client,
+      ids: idsByKind.get("topic") ?? [],
+      kind: "topic",
+    }),
+    readOriginalSourceOwners({
+      client,
+      ids: idsByKind.get("lab") ?? [],
+      kind: "lab",
+    }),
+    client
+      .schema("profile")
+      .from("profile_report_visibility")
+      .select("account_id,source_kind,source_id,visibility")
+      .in("source_id", sourceIds),
+    client
+      .schema("profile")
+      .from("community_profile")
+      .select("id,account_id")
+      .in("id", profileIds)
+      .eq("status", "active")
+      .is("deleted_at", null),
+    client
+      .schema("profile")
+      .from("profile_public_snapshot")
+      .select("id,account_id")
+      .in("id", profileIds)
+      .eq("status", "active")
+      .is("deleted_at", null),
+  ]);
+
+  const sourceOwnerByKey = new Map<string, string>();
+  for (const result of [coreRows, topicRows, labRows]) {
+    for (const row of result.rows) {
+      sourceOwnerByKey.set(`${result.kind}:${row.id}`, row.accountId);
+    }
+  }
+  const failedKinds = new Set(
+    [coreRows, topicRows, labRows]
+      .filter((result) => result.failed)
+      .map((result) => result.kind),
+  );
+  const profileOwnerById = new Map<string, string>();
+  for (const response of [communityProfiles, snapshots]) {
+    if (response.error) continue;
+    for (const row of response.data ?? []) {
+      if (row.id && row.account_id) {
+        profileOwnerById.set(String(row.id), String(row.account_id));
+      }
+    }
+  }
+  const visibilityByKey = new Map<string, string>();
+  if (!visibilityRows.error) {
+    for (const row of visibilityRows.data ?? []) {
+      visibilityByKey.set(
+        `${String(row.account_id)}:${String(row.source_kind)}:${String(row.source_id)}`,
+        String(row.visibility),
+      );
+    }
+  }
+
+  for (const reference of references) {
+    const ownerAccountId = sourceOwnerByKey.get(
+      `${reference.kind}:${reference.sourceId}`,
+    );
+    const profileOwnerAccountId = profileOwnerById.get(reference.profileId);
+    const visibility = ownerAccountId
+      ? visibilityByKey.get(
+          `${ownerAccountId}:${reference.kind}:${reference.sourceId}`,
+        )
+      : null;
+    const isPrivateForViewer =
+      visibility === "private" && ownerAccountId !== viewerAccountId;
+
+    if (
+      failedKinds.has(reference.kind) ||
+      Boolean(visibilityRows.error) ||
+      !ownerAccountId ||
+      profileOwnerAccountId !== ownerAccountId ||
+      blockedAccountIds.has(ownerAccountId) ||
+      isPrivateForViewer
+    ) {
+      inaccessible.add(reference.postId);
+    }
+  }
+
+  return inaccessible;
+}
+
+async function readOriginalSourceOwners({
+  client,
+  ids,
+  kind,
+}: {
+  client: SupabaseClient;
+  ids: string[];
+  kind: ProfileReportKind;
+}) {
+  if (ids.length === 0) {
+    return {
+      failed: false,
+      kind,
+      rows: [] as Array<{ accountId: string; id: string }>,
+    };
+  }
+  const table =
+    kind === "core"
+      ? { schema: "report", table: "result_report" }
+      : kind === "topic"
+        ? { schema: "assessment", table: "free_topic_result" }
+        : { schema: "assessment", table: "lab_result" };
+  const response = await client
+    .schema(table.schema)
+    .from(table.table)
+    .select("id,account_id")
+    .in("id", [...new Set(ids)])
+    .is("deleted_at", null);
+
+  return {
+    failed: Boolean(response.error),
+    kind,
+    rows: (response.data ?? []).flatMap((row) =>
+      row.id && row.account_id
+        ? [{ accountId: String(row.account_id), id: String(row.id) }]
+        : [],
+    ),
+  };
+}
+
+function readOriginalReportFeedReference(
+  row: FeedPostRow,
+): OriginalReportFeedReference | "invalid" | null {
+  if (row.source !== "report_share") return null;
+  const projection = readPublicProjection(row.public_projection_payload);
+  const projected = projection.reportShare;
+  const attachments = Array.isArray(row.attachment_payload)
+    ? row.attachment_payload
+    : [];
+  const attachment = attachments.find((value) => {
+    if (!value || typeof value !== "object") return false;
+    return (value as { type?: unknown }).type === "original_report";
+  }) as { id?: unknown; profileId?: unknown } | undefined;
+  const reportKey =
+    typeof projected?.reportKey === "string"
+      ? projected.reportKey
+      : typeof attachment?.id === "string"
+        ? attachment.id
+        : null;
+  const profileId =
+    typeof projected?.profileId === "string"
+      ? projected.profileId
+      : typeof attachment?.profileId === "string"
+        ? attachment.profileId
+        : null;
+  const parsedKey = reportKey ? parseProfileReportKey(reportKey) : null;
+  const hasOriginalSignal = Boolean(attachment || projected?.reportKey);
+  if (!hasOriginalSignal) return null;
+  if (
+    !reportKey ||
+    !profileId ||
+    !uuidPattern.test(profileId) ||
+    !parsedKey ||
+    row.source_id !== reportKey
+  ) {
+    return "invalid";
+  }
+
+  return {
+    kind: parsedKey.kind,
+    postId: row.id,
+    profileId,
+    reportKey,
+    sourceId: parsedKey.sourceId,
+  };
+}
+
 function mapPostRowToFeedItem(
   row: FeedPostRow,
   accountId: string | null,
@@ -2033,9 +2468,12 @@ function mapPostRowToFeedItem(
   const reportShare = publicProjection.reportShare
     ? {
         ...publicProjection.reportShare,
-        href: `/feed/reports/${row.id}`,
+        href: getReportShareHref(publicProjection.reportShare, row.id),
       }
     : undefined;
+  const togetherBalanceRoom = publicProjection.togetherBalanceRoom ?? undefined;
+  const togetherBalanceResult =
+    publicProjection.togetherBalanceResult ?? undefined;
   const topicCategory =
     row.topic_category ?? publicProjection.topic?.category ?? null;
   const topicTags =
@@ -2065,9 +2503,13 @@ function mapPostRowToFeedItem(
     kind:
       row.source === "balance_game"
         ? "balance_game"
-        : row.source === "daily_question"
-          ? "daily_question"
-          : "user_post",
+        : row.source === "together_balance_room_share"
+          ? "together_balance_room_share"
+          : row.source === "together_balance_result_share"
+            ? "together_balance_result_share"
+            : row.source === "daily_question"
+              ? "daily_question"
+              : "user_post",
     layout: "thread",
     links,
     likeCount: engagement.likes,
@@ -2078,6 +2520,8 @@ function mapPostRowToFeedItem(
     priority: -1000 + index,
     questionAudience: parseQuestionAudience(row.source_id),
     reportShare,
+    togetherBalanceResult,
+    togetherBalanceRoom,
     replyCount: engagement.replies,
     replyLabel: formatFeedCountLabel("답글", engagement.replies),
     replyPreview: engagement.replyPreview,
@@ -2097,6 +2541,9 @@ function mapPostRowToFeedItem(
         : undefined,
     viewerHasBookmarked: engagement.viewerHasBookmarked,
     viewerHasLiked: engagement.viewerHasLiked,
+    viewerCanManage: isOwnPost && isUserManageableFeedPostSource(row.source),
+    viewerIsAuthor: isOwnPost,
+    visibility: row.visibility,
   };
 }
 
@@ -2141,6 +2588,19 @@ function readPublicProjection(value: unknown) {
     authorHandle?: unknown;
     authorName?: unknown;
     reportShare?: unknown;
+    capacity?: unknown;
+    completedCount?: unknown;
+    highlight?: unknown;
+    occupancy?: unknown;
+    packSlug?: unknown;
+    packTitle?: unknown;
+    questionCount?: unknown;
+    recruitmentStatus?: unknown;
+    resultStatus?: unknown;
+    roomCode?: unknown;
+    roomName?: unknown;
+    score?: unknown;
+    scoreLabel?: unknown;
     topic?: unknown;
   };
 
@@ -2148,7 +2608,81 @@ function readPublicProjection(value: unknown) {
     authorHandle: stringValue(projection.authorHandle),
     authorName: stringValue(projection.authorName),
     reportShare: parseReportShareProjection(projection.reportShare),
+    togetherBalanceResult: parseTogetherBalanceResultProjection(projection),
+    togetherBalanceRoom: parseTogetherBalanceRoomProjection(projection),
     topic: parseProjectionTopic(projection.topic),
+  };
+}
+
+function parseTogetherBalanceResultProjection(value: {
+  completedCount?: unknown;
+  highlight?: unknown;
+  packSlug?: unknown;
+  packTitle?: unknown;
+  resultStatus?: unknown;
+  roomName?: unknown;
+  score?: unknown;
+  scoreLabel?: unknown;
+}): FeedItem["togetherBalanceResult"] | null {
+  if (
+    typeof value.completedCount !== "number" ||
+    typeof value.packSlug !== "string" ||
+    typeof value.packTitle !== "string" ||
+    typeof value.roomName !== "string" ||
+    typeof value.score !== "number" ||
+    typeof value.scoreLabel !== "string" ||
+    !["current", "final"].includes(String(value.resultStatus))
+  ) {
+    return null;
+  }
+  return {
+    completedCount: value.completedCount,
+    highlight: typeof value.highlight === "string" ? value.highlight : null,
+    href: `/assessments/together/balance-game?pack=${encodeURIComponent(
+      value.packSlug,
+    )}`,
+    packSlug: value.packSlug,
+    packTitle: value.packTitle,
+    resultStatus: value.resultStatus as "current" | "final",
+    roomName: value.roomName,
+    score: value.score,
+    scoreLabel: value.scoreLabel,
+  };
+}
+
+function parseTogetherBalanceRoomProjection(value: {
+  capacity?: unknown;
+  occupancy?: unknown;
+  packSlug?: unknown;
+  packTitle?: unknown;
+  questionCount?: unknown;
+  recruitmentStatus?: unknown;
+  roomCode?: unknown;
+  roomName?: unknown;
+}): FeedItem["togetherBalanceRoom"] | null {
+  if (
+    typeof value.capacity !== "number" ||
+    typeof value.occupancy !== "number" ||
+    typeof value.packSlug !== "string" ||
+    typeof value.packTitle !== "string" ||
+    typeof value.questionCount !== "number" ||
+    typeof value.roomCode !== "string" ||
+    typeof value.roomName !== "string" ||
+    !["open", "full", "closed"].includes(String(value.recruitmentStatus))
+  ) {
+    return null;
+  }
+  return {
+    capacity: value.capacity,
+    href: `/assessments/together/balance-game/rooms/${encodeURIComponent(
+      value.roomCode,
+    )}`,
+    occupancy: value.occupancy,
+    packSlug: value.packSlug,
+    packTitle: value.packTitle,
+    questionCount: value.questionCount,
+    recruitmentStatus: value.recruitmentStatus as "open" | "full" | "closed",
+    roomName: value.roomName,
   };
 }
 
@@ -2177,11 +2711,16 @@ function parseReportShareProjection(
 
   const reportShare = value as {
     assessmentKind?: unknown;
+    assessmentTitle?: unknown;
     completedAt?: unknown;
     domains?: unknown;
+    profileId?: unknown;
     profileCode?: unknown;
     profileName?: unknown;
+    reportKey?: unknown;
+    reportType?: unknown;
     resultLabel?: unknown;
+    summary?: unknown;
   };
 
   if (
@@ -2197,6 +2736,9 @@ function parseReportShareProjection(
       reportShare.assessmentKind === "full"
         ? reportShare.assessmentKind
         : "full",
+    ...(typeof reportShare.assessmentTitle === "string"
+      ? { assessmentTitle: reportShare.assessmentTitle }
+      : {}),
     completedAt:
       typeof reportShare.completedAt === "string"
         ? reportShare.completedAt
@@ -2229,14 +2771,44 @@ function parseReportShareProjection(
         })
       : [],
     profileCode: reportShare.profileCode,
+    ...(typeof reportShare.profileId === "string"
+      ? { profileId: reportShare.profileId }
+      : {}),
     profileName:
       getCurrentNuangProfileName(reportShare.profileCode) ??
       reportShare.profileName,
+    ...(typeof reportShare.reportKey === "string"
+      ? { reportKey: reportShare.reportKey }
+      : {}),
+    ...(reportShare.reportType === "core" ||
+    reportShare.reportType === "topic" ||
+    reportShare.reportType === "lab"
+      ? { reportType: reportShare.reportType }
+      : {}),
     resultLabel:
       typeof reportShare.resultLabel === "string"
         ? reportShare.resultLabel
         : "뉴앙 리포트",
+    ...(typeof reportShare.summary === "string"
+      ? { summary: reportShare.summary }
+      : {}),
   };
+}
+
+function getReportShareHref(
+  reportShare: Omit<NonNullable<FeedItem["reportShare"]>, "href">,
+  postId: string,
+) {
+  if (
+    reportShare.profileId &&
+    uuidPattern.test(reportShare.profileId) &&
+    reportShare.reportKey &&
+    parseProfileReportKey(reportShare.reportKey)
+  ) {
+    return `/feed/profiles/${reportShare.profileId}/reports/${reportShare.reportKey}`;
+  }
+
+  return `/feed/reports/${postId}`;
 }
 
 function normalizeReportShareBody(
@@ -2391,8 +2963,22 @@ function isUsefulFeedItem(item: FeedItem) {
     return false;
   }
 
+  if (item.kind === "balance_game") {
+    return Boolean(item.poll && item.poll.options.length === 2);
+  }
+
+  if (item.kind === "together_balance_room_share") {
+    return Boolean(item.togetherBalanceRoom);
+  }
+
+  if (item.kind === "together_balance_result_share") {
+    return Boolean(item.togetherBalanceResult);
+  }
+
   if (item.reportShare) {
-    return isCurrentNuangCode(item.reportShare.profileCode);
+    return item.reportShare.reportType && item.reportShare.reportType !== "core"
+      ? true
+      : isCurrentNuangCode(item.reportShare.profileCode);
   }
 
   if (item.poll) {

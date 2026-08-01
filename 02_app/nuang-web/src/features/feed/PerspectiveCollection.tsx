@@ -1,5 +1,6 @@
 "use client";
 
+import { Search, X } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
@@ -11,6 +12,7 @@ import type {
 import styles from "./PerspectiveCollection.module.css";
 
 const allTopicsLabel = "전체";
+const allTagsLabel = "전체 태그";
 
 export function PerspectiveCollection({
   backHref = "/feed",
@@ -20,6 +22,8 @@ export function PerspectiveCollection({
   payload: FeedPlaygroundRecordsPayload;
 }) {
   const [topic, setTopic] = useState(allTopicsLabel);
+  const [tag, setTag] = useState(allTagsLabel);
+  const [query, setQuery] = useState("");
   const topics = useMemo(
     () => [
       allTopicsLabel,
@@ -27,10 +31,40 @@ export function PerspectiveCollection({
     ],
     [payload.records],
   );
-  const visibleRecords =
-    topic === allTopicsLabel
-      ? payload.records
-      : payload.records.filter((record) => record.topicLabel === topic);
+  const tags = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const record of payload.records) {
+      for (const recordTag of record.tags) {
+        counts.set(recordTag, (counts.get(recordTag) ?? 0) + 1);
+      }
+    }
+
+    return [...counts.entries()]
+      .sort(
+        ([leftTag, leftCount], [rightTag, rightCount]) =>
+          rightCount - leftCount || leftTag.localeCompare(rightTag, "ko-KR"),
+      )
+      .map(([recordTag]) => recordTag);
+  }, [payload.records]);
+  const normalizedQuery = query.trim().toLocaleLowerCase("ko-KR");
+  const visibleRecords = payload.records.filter((record) => {
+    if (topic !== allTopicsLabel && record.topicLabel !== topic) return false;
+    if (tag !== allTagsLabel && !record.tags.includes(tag)) return false;
+    if (!normalizedQuery) return true;
+
+    return [
+      record.question,
+      record.selectedOptionLabel,
+      record.selectedCode,
+      record.selectedProfileName,
+      record.topicLabel,
+      ...record.tags,
+    ]
+      .filter((value): value is string => Boolean(value))
+      .some((value) =>
+        value.toLocaleLowerCase("ko-KR").includes(normalizedQuery),
+      );
+  });
 
   return (
     <CommunityScreenShell backHref={backHref} title="성향 놀이터 기록">
@@ -69,6 +103,28 @@ export function PerspectiveCollection({
               </div>
             </section>
 
+            <section aria-label="놀이터 기록 검색과 필터" className={styles.filters}>
+              <label className={styles.searchField}>
+                <Search aria-hidden="true" size={18} strokeWidth={1.8} />
+                <input
+                  aria-label="놀이터 기록 검색"
+                  onChange={(event) => setQuery(event.target.value)}
+                  placeholder="질문이나 태그 검색"
+                  type="search"
+                  value={query}
+                />
+                {query ? (
+                  <button
+                    aria-label="기록 검색어 지우기"
+                    onClick={() => setQuery("")}
+                    type="button"
+                  >
+                    <X aria-hidden="true" size={16} strokeWidth={1.8} />
+                  </button>
+                ) : null}
+              </label>
+            </section>
+
             {topics.length > 2 ? (
               <nav aria-label="기록 주제" className={styles.topicTabs}>
                 {topics.map((item) => (
@@ -84,10 +140,57 @@ export function PerspectiveCollection({
               </nav>
             ) : null}
 
+            {tags.length > 0 ? (
+              <section className={styles.tagFilter}>
+                <strong>태그</strong>
+                <nav aria-label="기록 태그" className={styles.tagTabs}>
+                  <button
+                    aria-label="전체 태그"
+                    aria-pressed={tag === allTagsLabel}
+                    onClick={() => setTag(allTagsLabel)}
+                    type="button"
+                  >
+                    전체
+                  </button>
+                  {tags.map((recordTag) => (
+                    <button
+                      aria-label={`${recordTag} 태그로 필터`}
+                      aria-pressed={tag === recordTag}
+                      key={recordTag}
+                      onClick={() => setTag(recordTag)}
+                      type="button"
+                    >
+                      #{recordTag}
+                    </button>
+                  ))}
+                </nav>
+              </section>
+            ) : null}
+
             <section aria-live="polite" className={styles.recordList}>
-              {visibleRecords.map((record) => (
-                <PlaygroundRecordItem key={record.voteId} record={record} />
-              ))}
+              {visibleRecords.length > 0 ? (
+                visibleRecords.map((record) => (
+                  <PlaygroundRecordItem
+                    key={record.voteId}
+                    onTagSelect={setTag}
+                    record={record}
+                  />
+                ))
+              ) : (
+                <div className={styles.noResults}>
+                  <strong>조건에 맞는 기록이 없어요</strong>
+                  <button
+                    onClick={() => {
+                      setQuery("");
+                      setTag(allTagsLabel);
+                      setTopic(allTopicsLabel);
+                    }}
+                    type="button"
+                  >
+                    필터 초기화
+                  </button>
+                </div>
+              )}
             </section>
           </>
         )}
@@ -96,7 +199,13 @@ export function PerspectiveCollection({
   );
 }
 
-function PlaygroundRecordItem({ record }: { record: FeedPlaygroundRecord }) {
+function PlaygroundRecordItem({
+  onTagSelect,
+  record,
+}: {
+  onTagSelect: (tag: string) => void;
+  record: FeedPlaygroundRecord;
+}) {
   return (
     <article className={styles.record}>
       <div className={styles.recordMeta}>
@@ -138,6 +247,21 @@ function PlaygroundRecordItem({ record }: { record: FeedPlaygroundRecord }) {
           <strong>코드 정보 없음</strong>
         )}
       </div>
+
+      {record.tags.length > 0 ? (
+        <div aria-label="기록 태그" className={styles.recordTags}>
+          {record.tags.map((recordTag) => (
+            <button
+              aria-label={`${recordTag} 태그 선택`}
+              key={recordTag}
+              onClick={() => onTagSelect(recordTag)}
+              type="button"
+            >
+              #{recordTag}
+            </button>
+          ))}
+        </div>
+      ) : null}
 
       {record.postId ? (
         <footer className={styles.recordFooter}>

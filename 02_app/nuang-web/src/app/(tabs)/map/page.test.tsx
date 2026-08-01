@@ -41,7 +41,7 @@ describe("MapPage", () => {
 
     await user.click(
       screen.getByRole("button", {
-        name: "ENAKQ 관계를 여는 지휘자 살펴보기",
+        name: "ENAKQ 관계를 여는 선도자 살펴보기",
       }),
     );
 
@@ -113,7 +113,7 @@ describe("MapPage", () => {
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("button", {
-        name: "ENAKQ 관계를 여는 지휘자 살펴보기",
+        name: "ENAKQ 관계를 여는 선도자 살펴보기",
       }),
     ).not.toBeInTheDocument();
   });

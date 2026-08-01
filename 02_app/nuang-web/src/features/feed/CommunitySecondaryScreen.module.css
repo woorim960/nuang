@@ -262,6 +262,17 @@
   white-space: nowrap;
 }
 
+.resultNameRow {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.resultNameRow > strong {
+  min-width: 0;
+}
+
 .resultCopy small {
   display: -webkit-box;
   overflow: hidden;

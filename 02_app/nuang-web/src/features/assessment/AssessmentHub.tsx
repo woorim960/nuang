@@ -1,79 +1,100 @@
 "use client";
 
 import {
-  ArrowRight,
+  BatteryCharging,
   BookOpenCheck,
   ChevronRight,
   HeartHandshake,
-  LockKeyhole,
+  HelpCircle,
   MessageCircle,
-  Sparkles,
+  MessagesSquare,
+  RotateCcw,
+  Search,
 } from "lucide-react";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, type ComponentType } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { AssessmentHomeCoreSection } from "@/features/assessment/AssessmentHomeCoreSection";
 import {
-  assessmentCatalog,
   assessmentHubFilters,
   type AssessmentCatalogItem,
   type AssessmentHubFilter,
   labAssessmentCatalog,
-  recommendedAssessmentCatalog,
-  togetherAssessmentCatalog,
   topicAssessmentCatalog,
+  togetherAssessmentCatalog,
 } from "@/features/assessment/assessment-catalog";
 import styles from "./AssessmentHub.module.css";
 
-const relationshipRecommendationIds = [
-  "topic:conversation-temperature",
-  "topic:distance-rhythm",
-  "topic:conflict-repair",
-];
+type IconComponent = ComponentType<{
+  "aria-hidden"?: boolean | "true" | "false";
+  size?: number | string;
+  strokeWidth?: number | string;
+}>;
 
-const selfRecommendationIds = [
-  "topic:focus-switch",
-  "topic:organizing-style",
-  "topic:mood-shift",
-];
+const iconByKey: Record<AssessmentCatalogItem["iconKey"], IconComponent> = {
+  battery: BatteryCharging,
+  compare: HeartHandshake,
+  conversation: MessagesSquare,
+  repair: RotateCcw,
+};
+
+const motifBySlug: Record<string, NuangCharacterMotif> = {
+  "conflict-repair": "water",
+  "conversation-temperature": "purple",
+  "recharge-ritual": "sun",
+};
 
 export function AssessmentHub() {
-  const [activeFilter, setActiveFilter] =
-    useState<AssessmentHubFilter>("recommended");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const requestedView = searchParams.get("view");
+  const activeFilter = resolveAssessmentHomeView(requestedView);
 
-  const filteredItems = useMemo(
-    () =>
-      activeFilter === "recommended"
-        ? []
-        : assessmentCatalog.filter((assessment) =>
-            assessment.themes.includes(activeFilter),
-          ),
-    [activeFilter],
-  );
+  useEffect(() => {
+    if (requestedView !== null && !isAssessmentHomeView(requestedView)) {
+      router.replace("/home", { scroll: false });
+    }
+  }, [requestedView, router]);
+
+  function selectFilter(filter: AssessmentHubFilter) {
+    router.push(filter === "recommended" ? "/home" : `/home?view=${filter}`, {
+      scroll: false,
+    });
+  }
 
   return (
     <div className={styles.hub}>
       <header className={styles.header}>
         <div className={styles.wordmark}>
           <span>NUANG</span>
-          <h1>검사</h1>
+          <span className={styles.pageLabel}>홈</span>
         </div>
         <Link
           aria-label="내 검사 기록 보기"
           className={styles.recordLink}
-          href="/my/reports"
+          href="/my/reports/history"
         >
-          <BookOpenCheck aria-hidden="true" size={19} strokeWidth={1.7} />
+          <BookOpenCheck aria-hidden="true" size={19} strokeWidth={1.65} />
           <span>내 기록</span>
         </Link>
       </header>
 
+      <section className={styles.brandPromise}>
+        <p>성향으로 나와 우리를 발견하는 곳</p>
+        <h1>나를 이해하고, 서로를 이해하는 성향 놀이터</h1>
+        <span>생활 속 나를 발견하고, 함께 고르며 서로를 알아가요.</span>
+      </section>
+
+      <GlobalHomeJourney />
+
       <nav
-        aria-label="검사 주제"
+        aria-label="홈 콘텐츠 둘러보기"
         className={styles.categoryDock}
         role="tablist"
       >
-        <div className={styles.categoryScroller}>
+        <div className={styles.categoryGrid}>
           {assessmentHubFilters.map((filter) => {
             const isActive = activeFilter === filter.id;
 
@@ -85,7 +106,7 @@ export function AssessmentHub() {
                 data-active={isActive}
                 id={`assessment-tab-${filter.id}`}
                 key={filter.id}
-                onClick={() => setActiveFilter(filter.id)}
+                onClick={() => selectFilter(filter.id)}
                 role="tab"
                 type="button"
               >
@@ -102,210 +123,196 @@ export function AssessmentHub() {
         id="assessment-discovery-panel"
         role="tabpanel"
       >
-        {activeFilter === "recommended" ? (
-          <RecommendedDiscovery />
-        ) : (
-          <FilteredDiscovery filter={activeFilter} items={filteredItems} />
-        )}
+        {activeFilter === "recommended" ? <RecommendedDiscovery /> : null}
+        {activeFilter === "self" ? <SelfDiscovery /> : null}
+        {activeFilter === "together" ? <TogetherDiscovery /> : null}
+        {activeFilter === "lab" ? (
+          <LabDiscovery items={labAssessmentCatalog} />
+        ) : null}
       </section>
+    </div>
+  );
+}
 
-      <section className={styles.coreSection}>
-        <div className={styles.sectionHeading}>
-          <h2>뉴앙 코드 여정</h2>
+export function AssessmentHubFallback() {
+  return (
+    <div aria-busy="true" className={styles.hub}>
+      <header className={styles.header}>
+        <div className={styles.wordmark}>
+          <span>NUANG</span>
+          <span className={styles.pageLabel}>홈</span>
         </div>
-        <AssessmentHomeCoreSection />
+        <span className={styles.recordPlaceholder} />
+      </header>
+      <section className={styles.brandPromise}>
+        <p>성향으로 나와 우리를 발견하는 곳</p>
+        <h1>나를 이해하고, 서로를 이해하는 성향 놀이터</h1>
+        <span>생활 속 나를 발견하고, 함께 고르며 서로를 알아가요.</span>
       </section>
-
-      <section className={styles.utilitySection}>
-        <Link
-          aria-label="뉴앙 검사 질문 리뷰에 참여하기, 약 4분, 리뷰 이벤트 진행"
-          className={styles.utilityRow}
-          href="/research?from=assessments"
-        >
-          <span className={styles.utilityIcon} data-tone="teal">
-            <MessageCircle aria-hidden="true" size={18} strokeWidth={1.7} />
-          </span>
-          <span className={styles.utilityCopy}>
-            <strong>검사 질문 리뷰하기</strong>
-            <small>약 4분 · 리뷰 참여자 중 10명 커피 쿠폰 추첨</small>
-          </span>
-          <ChevronRight aria-hidden="true" size={18} strokeWidth={1.7} />
-        </Link>
-
-        <Link
-          aria-label="마음이 많이 힘들 때 도움 정보 보기"
-          className={styles.utilityRow}
-          href="/help"
-        >
-          <span className={styles.utilityIcon} data-tone="rose">
-            <LockKeyhole aria-hidden="true" size={18} strokeWidth={1.7} />
-          </span>
-          <span className={styles.utilityCopy}>
-            <strong>마음이 많이 힘든가요?</strong>
-            <small>검사가 아닌 안전한 도움 정보를 확인할 수 있어요.</small>
-          </span>
-          <ChevronRight aria-hidden="true" size={18} strokeWidth={1.7} />
-        </Link>
+      <section className={styles.journeySection}>
+        <div className={styles.hubJourneySkeleton}>
+          <span />
+          <span />
+          <span />
+        </div>
       </section>
+      <div className={styles.tabSkeleton} />
     </div>
   );
 }
 
 function RecommendedDiscovery() {
+  const releasedTopics = topicAssessmentCatalog.filter(
+    (item) => item.publicationStatus === "published",
+  );
+
   return (
     <>
-      <section className={styles.featuredSection}>
-        <div className={styles.sectionHeading}>
-          <h2>지금 알아보면 재밌는 나</h2>
-        </div>
-        <FeaturedRail items={recommendedAssessmentCatalog} />
-      </section>
-
-      <AssessmentSection
-        items={selectItems(relationshipRecommendationIds)}
-        title="관계 속 내 모습"
-      />
-
-      <AssessmentSection
-        items={selectItems(selfRecommendationIds)}
-        title="혼자일 때의 나"
-      />
-
-      <TogetherSpotlight item={togetherAssessmentCatalog[0]} />
+      {releasedTopics.length > 0 ? (
+        <TopicDiscovery items={releasedTopics.slice(0, 3)} />
+      ) : null}
+      <TogetherDiscovery includeFind={false} />
+      <LabDiscovery items={labAssessmentCatalog.slice(0, 2)} />
+      <UtilitySection />
     </>
   );
 }
 
-function FilteredDiscovery({
-  filter,
-  items,
-}: {
-  filter: AssessmentHubFilter;
-  items: AssessmentCatalogItem[];
-}) {
-  if (filter === "lab") {
-    return <LabDiscovery items={labAssessmentCatalog} />;
-  }
+function SelfDiscovery() {
+  const releasedTopics = topicAssessmentCatalog.filter(
+    (item) => item.publicationStatus === "published",
+  );
 
-  if (filter === "together") {
-    return <TogetherSpotlight item={togetherAssessmentCatalog[0]} compact />;
-  }
-
-  const copy = getFilterCopy(filter);
-
-  return <AssessmentSection items={items} title={copy.title} />;
-}
-
-function FeaturedRail({ items }: { items: AssessmentCatalogItem[] }) {
   return (
-    <div className={styles.featuredRail}>
-      {items.map((item, index) => (
-        <Link
-          aria-label={`${item.title}, 약 ${item.estimatedMinutes}분, 바로 알아보기`}
-          className={styles.featuredCard}
-          data-accent={item.accent}
-          href={item.href}
-          key={item.id}
-        >
-          <div className={styles.featuredCopy}>
-            <h3>{item.title}</h3>
-            <p>{item.caption}</p>
-            <div className={styles.featuredMeta}>
-              <strong>약 {item.estimatedMinutes}분</strong>
-              <span>
-                바로 알아보기
-                <ArrowRight aria-hidden="true" size={15} strokeWidth={1.8} />
-              </span>
-            </div>
-          </div>
-          {index === 0 ? (
-            <div className={styles.featuredCharacter}>
-              <span />
-              <NuangCharacter
-                className={styles.character}
-                motif="purple"
-                size="md"
-              />
-            </div>
-          ) : (
-            <Sparkles
-              aria-hidden="true"
-              className={styles.featuredMark}
-              size={28}
-              strokeWidth={1.35}
-            />
-          )}
-        </Link>
-      ))}
-    </div>
+    <>
+      {releasedTopics.length > 0 ? (
+        <TopicDiscovery items={releasedTopics} />
+      ) : null}
+    </>
   );
 }
 
-function AssessmentSection({
-  items,
-  title,
-}: {
-  items: AssessmentCatalogItem[];
-  title: string;
-}) {
+function TopicDiscovery({ items }: { items: AssessmentCatalogItem[] }) {
   return (
-    <section className={styles.listSection}>
+    <section className={styles.topicSection}>
       <div className={styles.sectionHeading}>
-        <h2>{title}</h2>
+        <span>생활 속 나를 알아보기</span>
+        <h2>지금 궁금한 내 모습을 골라보세요</h2>
       </div>
-      <div className={styles.assessmentList}>
-        {items.map((item) => (
-          <AssessmentRow item={item} key={item.id} />
-        ))}
+      <div className={styles.topicList}>
+        {items.map((item) => {
+          const Icon = iconByKey[item.iconKey];
+
+          return (
+            <Link className={styles.topicStory} href={item.href} key={item.id}>
+              <span className={styles.topicIcon}>
+                <Icon aria-hidden="true" size={22} strokeWidth={1.55} />
+              </span>
+              <span className={styles.storyCopy}>
+                <strong>{item.title}</strong>
+                <small>{item.caption}</small>
+                <em>12개 질문 · 약 {item.estimatedMinutes}분</em>
+              </span>
+              <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-function AssessmentRow({ item }: { item: AssessmentCatalogItem }) {
+function GlobalHomeJourney() {
   return (
-    <Link
-      aria-label={`${item.title}: ${item.caption}, 약 ${item.estimatedMinutes}분`}
-      className={styles.assessmentRow}
-      href={item.href}
-    >
-      <span className={styles.rowMarker} data-accent={item.accent} />
-      <span className={styles.rowCopy}>
-        <strong>{item.title}</strong>
-        <small>{item.caption}</small>
-        <em>약 {item.estimatedMinutes}분</em>
-      </span>
-      <ChevronRight aria-hidden="true" size={18} strokeWidth={1.7} />
-    </Link>
+    <section aria-label="내 성향 여정" className={styles.journeySection}>
+      <AssessmentHomeCoreSection />
+    </section>
   );
 }
 
-function TogetherSpotlight({
-  compact = false,
-  item,
-}: {
-  compact?: boolean;
-  item: AssessmentCatalogItem;
-}) {
+function TogetherDiscovery({ includeFind = true }: { includeFind?: boolean }) {
+  const [balanceGame, ...otherTogetherItems] = togetherAssessmentCatalog;
+
   return (
-    <section
-      className={compact ? styles.togetherCompact : styles.togetherSection}
-    >
-      {!compact ? (
-        <div className={styles.sectionHeading}>
-          <h2>친구 성향 맞히기</h2>
-        </div>
+    <>
+      <TogetherSpotlight item={balanceGame} />
+      {otherTogetherItems.length > 0 ? (
+        <section className={styles.togetherListSection}>
+          <div className={styles.sectionHeading}>
+            <span>둘이 더 알아보기</span>
+            <h2>서로를 얼마나 잘 알고 있을까요?</h2>
+          </div>
+          <div className={styles.topicList}>
+            {otherTogetherItems.map((item) => (
+              <Link
+                className={styles.topicStory}
+                href={item.href}
+                key={item.id}
+              >
+                <span className={styles.topicIcon}>
+                  <HeartHandshake
+                    aria-hidden="true"
+                    size={22}
+                    strokeWidth={1.55}
+                  />
+                </span>
+                <span className={styles.storyCopy}>
+                  <strong>{item.title}</strong>
+                  <small>{item.caption}</small>
+                  <em>초대로 함께하기 · 약 {item.estimatedMinutes}분</em>
+                </span>
+                <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
+              </Link>
+            ))}
+          </div>
+        </section>
       ) : null}
-      <Link className={styles.togetherRow} href={item.href}>
-        <span className={styles.togetherIcon}>
-          <HeartHandshake aria-hidden="true" size={23} strokeWidth={1.55} />
-        </span>
-        <span className={styles.togetherCopy}>
+      {includeFind ? (
+        <section className={styles.findSection}>
+          <Link className={styles.findRow} href="/feed/search?intent=compare">
+            <span className={styles.softIcon}>
+              <Search aria-hidden="true" size={20} strokeWidth={1.65} />
+            </span>
+            <span>
+              <strong>비교할 사람 찾기</strong>
+              <small>궁금한 사람의 프로필에서 나와 비교해요</small>
+            </span>
+            <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
+          </Link>
+        </section>
+      ) : null}
+    </>
+  );
+}
+
+function TogetherSpotlight({ item }: { item: AssessmentCatalogItem }) {
+  const isBalanceGame = item.id === "together:balance-game";
+
+  return (
+    <section className={styles.togetherSection}>
+      <div className={styles.sectionHeading}>
+        <span>{isBalanceGame ? "2~8명이 함께" : "둘이서 더 재밌게"}</span>
+        <h2>
+          {isBalanceGame
+            ? "우리, 얼마나 비슷하게 고를까요?"
+            : "서로 보는 모습은 얼마나 같을까요?"}
+        </h2>
+      </div>
+      <Link className={styles.togetherStory} href={item.href}>
+        <div className={styles.avatarPair} aria-hidden="true">
+          <NuangCharacter motif="purple" size="sm" />
+          <NuangCharacter motif="forest" size="sm" />
+        </div>
+        <span className={styles.storyCopy}>
           <strong>{item.title}</strong>
           <small>{item.caption}</small>
-          <em>함께 하기 · 약 {item.estimatedMinutes}분</em>
+          <em>
+            {isBalanceGame
+              ? "2~8명 · 1분부터 원하는 만큼"
+              : `초대로 함께하기 · 약 ${item.estimatedMinutes}분`}
+          </em>
         </span>
-        <ChevronRight aria-hidden="true" size={19} strokeWidth={1.7} />
+        <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
       </Link>
     </section>
   );
@@ -314,47 +321,82 @@ function TogetherSpotlight({
 function LabDiscovery({ items }: { items: AssessmentCatalogItem[] }) {
   return (
     <section className={styles.labSection}>
-      <div className={styles.sectionHeading}>
-        <h2>별난 성향 연구소</h2>
+      <div className={styles.labHero}>
+        <div>
+          <span>별난 성향 연구소</span>
+          <h2>내 안의 의외성을 발견해요</h2>
+          <p>진단이 아닌, 2분 선택 놀이예요.</p>
+        </div>
+        <div className={styles.labHeroCharacter}>
+          <NuangCharacter motif="flame" priority size="md" />
+        </div>
       </div>
-      <div className={styles.labRail}>
-        {items.map((item) => (
-          <Link className={styles.labCard} href={item.href} key={item.id}>
-            <span>2분 선택 놀이</span>
-            <h3>{item.title}</h3>
-            <p>{item.caption}</p>
-            <strong>가볍게 시작하기</strong>
-          </Link>
-        ))}
+
+      <div className={styles.labList}>
+        {items.map((item) => {
+          const Icon = iconByKey[item.iconKey];
+          const slug = item.id.replace("lab:", "");
+
+          return (
+            <Link className={styles.labRow} href={item.href} key={item.id}>
+              <span className={styles.labVisual} data-accent={item.accent}>
+                <Icon aria-hidden="true" size={21} strokeWidth={1.6} />
+                <NuangCharacter
+                  className={styles.labCharacter}
+                  motif={motifBySlug[slug] ?? "purple"}
+                  size="sm"
+                />
+              </span>
+              <span className={styles.labCopy}>
+                <strong>{item.title}</strong>
+                <small>{item.caption}</small>
+                <em>약 {item.estimatedMinutes}분</em>
+              </span>
+              <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
 }
 
-function selectItems(ids: string[]) {
-  return ids
-    .map((id) =>
-      topicAssessmentCatalog.find((assessment) => assessment.id === id),
-    )
-    .filter((assessment): assessment is AssessmentCatalogItem =>
-      Boolean(assessment),
-    );
+function UtilitySection() {
+  return (
+    <section className={styles.utilitySection}>
+      <Link className={styles.utilityRow} href="/research?from=assessments">
+        <span className={styles.softIcon} data-tone="teal">
+          <MessageCircle aria-hidden="true" size={19} strokeWidth={1.65} />
+        </span>
+        <span>
+          <strong>검사 질문 리뷰하기</strong>
+          <small>참여자 중 10명 커피 쿠폰 추첨</small>
+        </span>
+        <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
+      </Link>
+
+      <Link className={styles.utilityRow} href="/help">
+        <span className={styles.softIcon} data-tone="rose">
+          <HelpCircle aria-hidden="true" size={19} strokeWidth={1.65} />
+        </span>
+        <span>
+          <strong>마음이 많이 힘들 때</strong>
+          <small>바로 도움받을 수 있는 곳을 확인해요</small>
+        </span>
+        <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
+      </Link>
+    </section>
+  );
 }
 
-function getFilterCopy(filter: AssessmentHubFilter) {
-  if (filter === "relationship") {
-    return {
-      title: "관계 속 내 모습",
-    };
-  }
+export function resolveAssessmentHomeView(
+  value: string | null | undefined,
+): AssessmentHubFilter {
+  return isAssessmentHomeView(value) ? value : "recommended";
+}
 
-  if (filter === "emotion") {
-    return {
-      title: "감정과 회복의 방식",
-    };
-  }
-
-  return {
-    title: "나를 더 자세히 알아보기",
-  };
+function isAssessmentHomeView(
+  value: string | null | undefined,
+): value is AssessmentHubFilter {
+  return assessmentHubFilters.some((filter) => filter.id === value);
 }

@@ -67,7 +67,7 @@ describe("FriendTraitMatch sender", () => {
     render(<FriendTraitMatch />);
 
     fireEvent.click(
-      screen.getByRole("button", {
+      screen.getByRole("radio", {
         name: /바뀐 일정에 맞춰 새 계획부터/,
       }),
     );
@@ -77,7 +77,7 @@ describe("FriendTraitMatch sender", () => {
       screen.getByText("친구라면 어떤 답을 고를까요?"),
     ).toBeInTheDocument();
     fireEvent.click(
-      screen.getByRole("button", {
+      screen.getByRole("radio", {
         name: /왜 바뀌었는지 친구의 상황부터/,
       }),
     );
@@ -118,7 +118,7 @@ describe("FriendTraitMatch receiver", () => {
       screen.getByText("나는 실제로 어떤 답을 고를까요?"),
     ).toBeInTheDocument();
     fireEvent.click(
-      screen.getByRole("button", {
+      screen.getByRole("radio", {
         name: /왜 바뀌었는지 친구의 상황부터/,
       }),
     );

@@ -16,14 +16,19 @@ import {
 } from "@/features/account/private-contact-contract";
 import {
   AssessmentBottomSheet,
+  AssessmentQuestionContent,
   AssessmentQuestionDock,
   AssessmentQuestionHeader,
+  AssessmentQuestionPrompt,
+  AssessmentQuestionScreen,
   AssessmentScaleResponseOptions,
+  AssessmentSheetAction,
+  AssessmentSheetActions,
   AssessmentUnsureControl,
   AssessmentUnsureSheet,
   useAssessmentQuestionScroll,
 } from "@/features/assessment/AssessmentQuestionControls";
-import runnerStyles from "@/features/assessment/AssessmentRunner.module.css";
+import runnerStyles from "@/features/assessment/AssessmentQuestionSurface.module.css";
 import {
   gateCAgeBandLabels,
   gateCAgeBands,
@@ -46,7 +51,6 @@ import {
   type GateCResponseChoice,
 } from "@/features/research/gate-c/gate-c-study-contract";
 import { gateCParticipantDefinitions } from "@/features/research/gate-c/gate-c-study-fixture";
-import { cn } from "@/lib/utils/cn";
 import styles from "./GateCPublicStudy.module.css";
 
 type Surface = "complete" | "questions" | "setup";
@@ -595,7 +599,7 @@ export function GateCPublicStudy({
   }
 
   return (
-    <main className={runnerStyles.runner}>
+    <AssessmentQuestionScreen>
       <AssessmentQuestionHeader
         closeLabel="참여 그만하기"
         countLabel={`전체 ${definition.items.length}개 중 ${currentQuestionIndex + 1}번째 질문`}
@@ -606,16 +610,12 @@ export function GateCPublicStudy({
         total={definition.items.length}
       />
 
-      <section className={runnerStyles.mainContent}>
-        <div
-          className={runnerStyles.questionRegion}
+      <AssessmentQuestionContent>
+        <AssessmentQuestionPrompt
+          contextLabel={currentQuestion.contextLabel}
           key={currentQuestion.studyItemId}
-        >
-          <p className={runnerStyles.context}>{currentQuestion.contextLabel}</p>
-          <h1 className={runnerStyles.question}>
-            {currentQuestion.promptText}
-          </h1>
-        </div>
+          text={currentQuestion.promptText}
+        />
 
         <AssessmentScaleResponseOptions
           guide="최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 이 모습이 얼마나 자주 나타나는지 하나 선택해 주세요."
@@ -677,7 +677,7 @@ export function GateCPublicStudy({
             {errorMessage}
           </p>
         ) : null}
-      </section>
+      </AssessmentQuestionContent>
 
       <AssessmentQuestionDock
         nextDisabled={!currentResponse || submitting}
@@ -714,28 +714,20 @@ export function GateCPublicStudy({
           onClose={() => setExitOpen(false)}
           title="참여를 그만둘까요?"
         >
-          <div className={runnerStyles.sheetActions}>
-            <button
-              className={runnerStyles.sheetAction}
-              onClick={() => setExitOpen(false)}
-              type="button"
-            >
+          <AssessmentSheetActions>
+            <AssessmentSheetAction onClick={() => setExitOpen(false)}>
               계속 참여하기
-            </button>
-            <button
-              className={cn(
-                runnerStyles.sheetAction,
-                runnerStyles.sheetActionSecondary,
-              )}
+            </AssessmentSheetAction>
+            <AssessmentSheetAction
               onClick={() => router.push("/home")}
-              type="button"
+              variant="secondary"
             >
               홈으로 나가기
-            </button>
-          </div>
+            </AssessmentSheetAction>
+          </AssessmentSheetActions>
         </AssessmentBottomSheet>
       ) : null}
-    </main>
+    </AssessmentQuestionScreen>
   );
 }
 

@@ -207,7 +207,7 @@ export function AdminCommunityContentManager({
               <span>{editor.id ? "콘텐츠 편집" : "새 콘텐츠"}</span>
               <h2>
                 {contentType === "balance_game"
-                  ? "밸런스게임 만들기"
+                  ? "투표 만들기"
                   : "오늘의 질문 만들기"}
               </h2>
             </div>

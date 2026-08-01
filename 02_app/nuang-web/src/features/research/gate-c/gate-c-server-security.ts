@@ -5,6 +5,7 @@ import {
   timingSafeEqual,
 } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { isSameOriginBrowserRequest } from "@/lib/api/request-origin";
 
 type GateCAssignmentProofPayload = {
   items: Array<{
@@ -70,8 +71,7 @@ export async function checkGateCRequestGuard({
 }
 
 export function isAllowedGateCRequest(request: Request) {
-  const fetchSite = request.headers.get("sec-fetch-site");
-  return !fetchSite || fetchSite === "same-origin" || fetchSite === "none";
+  return isSameOriginBrowserRequest(request);
 }
 
 export function createGateCAssignmentProof({

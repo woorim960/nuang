@@ -1,0 +1,139 @@
+.root {
+  padding: 1.55rem var(--nu-page-gutter);
+  border-top: 8px solid var(--nu-color-app-bg);
+  border-bottom: 1px solid var(--nu-color-border);
+  background: var(--nu-color-surface);
+}
+
+.root > p {
+  margin: 0;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.root h2 {
+  margin: 0.35rem 0 0;
+  color: var(--nu-color-text-strong);
+  font-size: var(--nu-text-title);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.025em;
+  line-height: var(--nu-leading-title);
+}
+
+.root > span {
+  display: block;
+  margin-top: 0.75rem;
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-callout);
+  line-height: var(--nu-leading-body);
+}
+
+.principles {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.principles li {
+  position: relative;
+  padding-left: 1rem;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body);
+}
+
+.principles li::before {
+  position: absolute;
+  top: 0.7em;
+  left: 0;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--nu-color-brand-soft);
+  content: "";
+}
+
+.root details {
+  margin-top: 1rem;
+  border-top: 1px solid var(--nu-color-border-soft);
+}
+
+.root summary {
+  display: flex;
+  min-height: 50px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
+  list-style: none;
+}
+
+.root summary::-webkit-details-marker {
+  display: none;
+}
+
+.root details[open] summary span {
+  transform: rotate(45deg);
+}
+
+.root summary span {
+  font-size: 1.25rem;
+  font-weight: var(--nu-weight-regular);
+  transition: transform var(--nu-duration-normal) var(--nu-ease-standard);
+}
+
+.root ol {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0 0 0.35rem;
+  list-style: none;
+}
+
+.root ol li {
+  border-top: 1px solid var(--nu-color-border-soft);
+}
+
+.root ol a {
+  position: relative;
+  display: grid;
+  gap: 0.25rem;
+  min-height: 44px;
+  padding: 0.8rem 1.5rem 0.8rem 0;
+  color: inherit;
+}
+
+.root ol strong {
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+}
+
+.root ol span,
+.root ol small {
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body);
+}
+
+.root ol small {
+  color: var(--nu-color-text-subtle);
+}
+
+.root ol svg {
+  position: absolute;
+  top: 0.9rem;
+  right: 0;
+  color: var(--nu-color-text-subtle);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .root summary span {
+    transition: none;
+  }
+}

@@ -22,6 +22,10 @@ export type PublicProfileCardPayload = {
     domainHighlights: PublicAxisSummary[];
     facetSummaryCount: number;
   };
+  operator?: {
+    label: "뉴앙 운영자";
+    mark: "nuang-n";
+  };
   source: {
     communityProfileId?: string;
     publicSnapshotContractVersion: typeof publicProfileSnapshotContractVersion;
@@ -43,11 +47,13 @@ export type PublicProfileCardPayload = {
 export function createPublicProfileCardPayload({
   cardId,
   communityProfileId,
+  isOperator = false,
   snapshot,
   status = "preview",
 }: {
   cardId: string;
   communityProfileId?: string;
+  isOperator?: boolean;
   snapshot: PublicProfileSnapshotPayload;
   status?: PublicProfileCardPayload["status"];
 }): PublicProfileCardPayload {
@@ -73,6 +79,14 @@ export function createPublicProfileCardPayload({
         (facet) => facet.score !== null,
       ).length,
     },
+    ...(isOperator
+      ? {
+          operator: {
+            label: "뉴앙 운영자" as const,
+            mark: "nuang-n" as const,
+          },
+        }
+      : {}),
     source: {
       communityProfileId: communityProfileId ?? snapshot.snapshotId,
       publicSnapshotContractVersion: snapshot.contractVersion,

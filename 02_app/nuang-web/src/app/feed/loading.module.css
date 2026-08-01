@@ -1,0 +1,194 @@
+.shell {
+  min-height: 100dvh;
+  color: var(--nu-color-text);
+  background: var(--nu-color-app-bg);
+}
+
+.page {
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding-bottom: var(--nu-page-bottom-with-nav);
+  background: var(--nu-color-surface);
+}
+
+.header {
+  display: flex;
+  min-height: 56px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.4375rem 0.875rem;
+  border-bottom: 1px solid var(--nu-color-border);
+}
+
+.header > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.header span {
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+  letter-spacing: 0.085em;
+}
+
+.header strong {
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.header > i {
+  width: 4.8rem;
+  height: 1.75rem;
+  border-radius: 999px;
+  background: var(--nu-neutral-75);
+}
+
+.tabs {
+  position: relative;
+  display: grid;
+  min-height: 50px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  border-bottom: 1px solid var(--nu-color-border);
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-callout);
+  text-align: center;
+}
+
+.tabs i {
+  position: absolute;
+  bottom: -1px;
+  left: 0.875rem;
+  width: calc((100% - 5.25rem) / 3);
+  height: 2px;
+  border-radius: 999px;
+  background: var(--nu-community-200);
+}
+
+.composer {
+  display: grid;
+  min-height: 78px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.85rem 0.9375rem;
+  border-bottom: 8px solid var(--nu-color-app-bg);
+}
+
+.composer i,
+.post header > i {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: var(--nu-info-50);
+}
+
+.composer span,
+.composer b,
+.post header b,
+.post header em,
+.post p,
+.post > div,
+.post footer i {
+  display: block;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--nu-neutral-75);
+}
+
+.composer span {
+  width: 64%;
+  height: 0.8rem;
+}
+
+.composer b {
+  width: 3.8rem;
+  height: 2.2rem;
+}
+
+.feed {
+  display: grid;
+}
+
+.post {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem 0.9375rem 1.15rem;
+  border-bottom: 1px solid var(--nu-color-border);
+}
+
+.post header {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.post header span {
+  display: grid;
+  flex: 1;
+  gap: 0.45rem;
+}
+
+.post header b {
+  width: 28%;
+  height: 0.78rem;
+}
+
+.post header em {
+  width: 46%;
+  height: 0.65rem;
+}
+
+.post p {
+  width: 82%;
+  height: 0.9rem;
+  margin: 0;
+}
+
+.post > div {
+  height: 11.5rem;
+  border-radius: 14px;
+}
+
+.post footer {
+  display: flex;
+  gap: 1rem;
+}
+
+.post footer i {
+  width: 2.7rem;
+  height: 0.75rem;
+}
+
+.composer span,
+.composer b,
+.post header > i,
+.post header b,
+.post header em,
+.post p,
+.post > div,
+.post footer i {
+  animation: feed-loading-pulse 1.15s ease-in-out infinite alternate;
+}
+
+@keyframes feed-loading-pulse {
+  to {
+    opacity: 0.48;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .composer span,
+  .composer b,
+  .post header > i,
+  .post header b,
+  .post header em,
+  .post p,
+  .post > div,
+  .post footer i {
+    animation: none;
+  }
+}

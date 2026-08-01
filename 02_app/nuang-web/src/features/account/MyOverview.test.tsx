@@ -2,6 +2,7 @@ import { render, screen, waitFor } from "@testing-library/react";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MyOverview } from "@/features/account/MyOverview";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { candidateFullScoringRelease } from "@/features/assessment/candidate-full-core-seed";
 
 const myOverviewMocks = vi.hoisted(() => ({
   authUser: { id: "auth-user" } as { id: string } | null,
@@ -57,11 +58,11 @@ describe("MyOverview", () => {
     expect(screen.getByText("새 가능성을 찾는 탐험가")).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "내 성향 보기" })).toHaveAttribute(
       "href",
-      "/my/profile",
+      "/my/reports",
     );
     expect(screen.getByRole("link", { name: "최신 리포트" })).toHaveAttribute(
       "href",
-      "/results/account/4292e0e7-0353-43f0-9132-f90149badee5",
+      "/my/reports",
     );
     expect(
       screen.getByRole("link", { name: "성향 놀이터 기록" }),
@@ -69,6 +70,10 @@ describe("MyOverview", () => {
     expect(screen.getByRole("link", { name: "내 게시물" })).toHaveAttribute(
       "href",
       "/feed/me",
+    );
+    expect(screen.getByRole("link", { name: "의견 보내기" })).toHaveAttribute(
+      "href",
+      "/my/feedback?from=%2Fmy",
     );
   });
 
@@ -91,7 +96,7 @@ describe("MyOverview", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "첫 성향 검사 시작하기" }),
-    ).toHaveAttribute("href", "/assessments");
+    ).toHaveAttribute("href", "/home");
 
     await waitFor(() => {
       expect(
@@ -126,17 +131,42 @@ describe("MyOverview", () => {
 });
 
 function createAccountResult(): AccountResultSummary {
+  const profileCode = "INGMC";
   return {
+    alternativeCodes: [],
     assessmentAttemptId: "attempt-account",
     completedAt: "2026-07-19T03:00:00.000Z",
     createdAt: "2026-07-19T03:00:00.000Z",
-    domains: [],
-    facets: [],
+    domains: candidateFullScoringRelease.domains.map((domain) => ({
+      domainId: domain.domainId,
+      isBoundary: false,
+      label: domain.label,
+      score: 70,
+      status: "valid" as const,
+      symbol: profileCode[(domain.codePosition ?? 1) - 1],
+    })),
+    facets: candidateFullScoringRelease.facets.map((facet) => ({
+      facetId: facet.facetId,
+      label: facet.label,
+      score: 70,
+      status: "valid" as const,
+      validResponses: Math.max(1, facet.minValidResponses),
+    })),
     kind: "full",
     localResultId: null,
-    profileCode: "INGMC",
+    originResultId: "origin-account-result",
+    profileCode,
     profileName: "새 가능성을 찾는 탐험가",
     resultLabel: "현재 가장 가까운 대표 성향",
+    resultCopyVersion: "candidate-result-copy.v1",
+    resultEvidenceStatus: "clear",
     resultReportId: "4292e0e7-0353-43f0-9132-f90149badee5",
+    resultStatus: "ready",
+    versionBundle: {
+      assessmentReleaseId: candidateFullScoringRelease.assessmentReleaseId,
+      codeSchemeVersion: candidateFullScoringRelease.codeSchemeVersion,
+      scoringModelVersion: candidateFullScoringRelease.scoringModelVersion,
+      scoringReleaseId: candidateFullScoringRelease.scoringReleaseId,
+    },
   };
 }

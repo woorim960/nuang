@@ -78,7 +78,7 @@ describe("AdminContentPage", () => {
     );
 
     expect(screen.getByText("이 화면은 이렇게 사용해요")).toBeInTheDocument();
-    expect(screen.getByText(/관계를 여는 지휘자/)).toBeInTheDocument();
+    expect(screen.getByText(/관계를 여는 선도자/)).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "연인과 함께할 때" }),
     ).toBeInTheDocument();
@@ -105,5 +105,29 @@ describe("AdminContentPage", () => {
     expect(
       screen.getByRole("button", { name: "게시 준비 완료" }),
     ).toBeInTheDocument();
+  });
+
+  it("keeps the result data operating guide inside the content center", async () => {
+    render(
+      await AdminContentPage({
+        searchParams: Promise.resolve({ view: "guide" }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "결과 데이터는 모으고, 새 버전은 검토해서 발행해요",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("매주 하는 세 가지")).toBeInTheDocument();
+    expect(screen.getByText("데이터별 관리 원칙")).toBeInTheDocument();
+    expect(screen.getByText("표본 수를 읽는 방법")).toBeInTheDocument();
+    expect(screen.getByText("새 버전 게시 전 확인")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: /품질 신호 보기/ }),
+    ).toHaveAttribute("href", "/admin/feedback#core-result-quality");
+    expect(
+      screen.getByRole("link", { name: /게시 버전 보기/ }),
+    ).toHaveAttribute("href", "/admin/content?view=releases");
   });
 });

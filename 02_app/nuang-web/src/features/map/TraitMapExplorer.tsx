@@ -7,7 +7,6 @@ import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { readJsonResponse } from "@/features/account/response-json";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
-import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import {
   candidateAxisCopy,
@@ -15,6 +14,10 @@ import {
   candidatePublicPairOrder,
   type CandidateProfileDefinition,
 } from "@/features/nuang-code/candidate-profile-names";
+import {
+  collectValidatedCoreResultCandidates,
+  selectRepresentativeCoreResult,
+} from "@/features/result/unified-core-report";
 import styles from "./TraitMapExplorer.module.css";
 
 const SAVED_CODE_STORAGE_KEY = "nuang.map.saved-codes.v1";
@@ -60,11 +63,20 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
     let isMounted = true;
 
     async function loadViewerProfile() {
-      const [localAttempts, accountResults] = await Promise.all([
-        listLocalAttempts().catch(() => []),
+      const [localRead, accountRead] = await Promise.all([
+        listLocalAttempts()
+          .then((attempts) => ({ attempts, state: "ready" as const }))
+          .catch(() => ({ attempts: [], state: "error" as const })),
         listMapAccountResults(),
       ]);
-      const profile = buildMapViewerProfile({ accountResults, localAttempts });
+      const profile =
+        localRead.state === "error" || accountRead.state === "error"
+          ? null
+          : buildMapViewerProfile({
+              accountReadState: accountRead.state,
+              accountResults: accountRead.results,
+              localAttempts: localRead.attempts,
+            });
 
       if (!isMounted) return;
       setViewerProfile(profile);
@@ -589,79 +601,55 @@ function ProfileResult({
   );
 }
 
-async function listMapAccountResults(): Promise<AccountResultSummary[]> {
+async function listMapAccountResults(): Promise<{
+  results: AccountResultSummary[];
+  state: "error" | "not_requested" | "ready";
+}> {
   try {
     const response = await fetch("/api/account-results", {
       cache: "no-store",
       method: "GET",
     });
-    if (!response.ok) return [];
+    if (response.status === 401) return { results: [], state: "not_requested" };
+    if (!response.ok) return { results: [], state: "error" };
 
     const body = await readJsonResponse<{
       ok?: boolean;
       results?: AccountResultSummary[];
     }>(response);
 
-    return body?.ok && Array.isArray(body.results) ? body.results : [];
+    return body?.ok && Array.isArray(body.results)
+      ? { results: body.results, state: "ready" }
+      : { results: [], state: "error" };
   } catch {
-    return [];
+    return { results: [], state: "error" };
   }
 }
 
 function buildMapViewerProfile({
+  accountReadState,
   accountResults,
   localAttempts,
 }: {
+  accountReadState: "not_requested" | "ready";
   accountResults: AccountResultSummary[];
   localAttempts: LocalAssessmentAttempt[];
 }): MapViewerProfile | null {
-  const accountCandidates = accountResults.flatMap((result) => {
-    const profile = candidateProfileDefinitions[result.profileCode];
-    if (!profile) return [];
-
-    return [
-      {
-        code: profile.code,
-        completedAt: result.completedAt,
-        displayName: profile.displayName,
-        kind: result.kind,
-      },
-    ];
-  });
-  const localCandidates = localAttempts.flatMap((attempt) => {
-    if (attempt.state !== "completed") return [];
-
-    const score = calculateLocalAttemptScore(attempt);
-    const profile = score?.code
-      ? candidateProfileDefinitions[score.code]
-      : undefined;
-    if (!profile) return [];
-
-    return [
-      {
-        code: profile.code,
-        completedAt: attempt.completedAt ?? attempt.updatedAt,
-        displayName: profile.displayName,
-        kind: attempt.mode,
-      },
-    ];
-  });
-  const [representative] = [...accountCandidates, ...localCandidates].sort(
-    (left, right) => {
-      const kindDifference =
-        Number(right.kind === "full") - Number(left.kind === "full");
-      if (kindDifference !== 0) return kindDifference;
-      return right.completedAt.localeCompare(left.completedAt);
-    },
+  const representative = selectRepresentativeCoreResult(
+    collectValidatedCoreResultCandidates({
+      accountReadState,
+      accountResults,
+      localAttempts,
+    }),
   );
 
   if (!representative) return null;
 
   return {
-    code: representative.code,
-    displayName: representative.displayName,
+    code: representative.result.code,
+    displayName: representative.result.currentProfileName,
     sourceLabel:
-      representative.kind === "full"
+      representative.identity.kind === "full"
         ? "내 대표 코드 · 정밀 검사 기준"
         : "내 첫 코드 · 빠른 검사 기준",
   };

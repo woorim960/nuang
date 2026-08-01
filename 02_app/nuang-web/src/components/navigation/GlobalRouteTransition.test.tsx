@@ -1,4 +1,5 @@
 import { act, fireEvent, render, screen } from "@testing-library/react";
+import Link from "next/link";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GlobalRouteTransition } from "@/components/navigation/GlobalRouteTransition";
 
@@ -24,17 +25,18 @@ describe("GlobalRouteTransition", () => {
     vi.useRealTimers();
   });
 
-  it("shows the Nuang loading character immediately for an internal route", () => {
+  it("shows the Nuang loading character immediately for a standard route", () => {
     render(
       <>
         <GlobalRouteTransition />
-        <a href="/feed" onClick={(event) => event.preventDefault()}>
-          커뮤니티
-        </a>
+        <Link href="/map" onClick={(event) => event.preventDefault()}>
+          성향지도
+        </Link>
       </>,
     );
 
-    fireEvent.click(screen.getByRole("link", { name: "커뮤니티" }));
+    fireEvent.click(screen.getByRole("link", { name: "성향지도" }));
+    act(() => vi.advanceTimersByTime(0));
 
     expect(
       screen.getByRole("heading", { name: "다음 화면을 준비하고 있어요" }),
@@ -42,7 +44,7 @@ describe("GlobalRouteTransition", () => {
     expect(screen.getByRole("status")).toHaveTextContent("화면 연결 중");
   });
 
-  it("finishes after the destination route is ready", () => {
+  it("does not cover a community route that finishes before the delay", () => {
     const { rerender } = render(
       <>
         <GlobalRouteTransition />
@@ -53,6 +55,10 @@ describe("GlobalRouteTransition", () => {
     );
 
     fireEvent.click(screen.getByRole("link", { name: "커뮤니티" }));
+    expect(
+      screen.queryByRole("heading", { name: "다음 화면을 준비하고 있어요" }),
+    ).not.toBeInTheDocument();
+
     navigationMock.pathname = "/feed";
 
     rerender(
@@ -62,11 +68,33 @@ describe("GlobalRouteTransition", () => {
       </>,
     );
 
-    act(() => vi.advanceTimersByTime(500));
+    act(() => vi.advanceTimersByTime(communityDelayForTest + 100));
 
     expect(
       screen.queryByRole("heading", { name: "다음 화면을 준비하고 있어요" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("shows a lightweight loading screen only when a community route is slow", () => {
+    render(
+      <>
+        <GlobalRouteTransition />
+        <a href="/feed" onClick={(event) => event.preventDefault()}>
+          커뮤니티
+        </a>
+      </>,
+    );
+
+    fireEvent.click(screen.getByRole("link", { name: "커뮤니티" }));
+    act(() => vi.advanceTimersByTime(communityDelayForTest - 1));
+    expect(
+      screen.queryByRole("heading", { name: "다음 화면을 준비하고 있어요" }),
+    ).not.toBeInTheDocument();
+
+    act(() => vi.advanceTimersByTime(1));
+    expect(
+      screen.getByRole("heading", { name: "다음 화면을 준비하고 있어요" }),
+    ).toBeInTheDocument();
   });
 
   it("does not interrupt same-page or external links", () => {
@@ -86,3 +114,5 @@ describe("GlobalRouteTransition", () => {
     ).not.toBeInTheDocument();
   });
 });
+
+const communityDelayForTest = 180;

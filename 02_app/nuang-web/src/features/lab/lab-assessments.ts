@@ -1,3 +1,5 @@
+import type { AssessmentAgeAccessPolicy } from "@/features/assessment/assessment-age-access-policy";
+
 export type LabSensitivity = "S1" | "S2";
 
 export type LabResultProfile = {
@@ -18,12 +20,14 @@ export type LabOption = {
 };
 
 export type LabQuestion = {
+  contextLabel?: string;
   id: string;
   text: string;
   options: LabOption[];
 };
 
 export type LabAssessment = {
+  ageAccessPolicy: AssessmentAgeAccessPolicy;
   slug: string;
   title: string;
   cardTitle: string;
@@ -51,6 +55,7 @@ export type LabScoreResult = {
 
 export const labAssessments: LabAssessment[] = [
   {
+    ageAccessPolicy: "all_ages",
     slug: "conversation-temperature",
     title: "대화 온도 실험",
     cardTitle: "관계 대화 스타일",
@@ -116,6 +121,7 @@ export const labAssessments: LabAssessment[] = [
     ],
     questions: [
       {
+        contextLabel: "중요한 말을 꺼내야 할 때",
         id: "ct-01",
         text: "중요한 이야기가 생기면 나는 보통",
         options: [
@@ -125,6 +131,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "상대의 말이 분명하지 않을 때",
         id: "ct-02",
         text: "상대가 애매하게 말하면 나는",
         options: [
@@ -134,6 +141,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "대화가 불편해졌을 때",
         id: "ct-03",
         text: "대화가 불편해질 때 더 편한 방식은",
         options: [
@@ -143,6 +151,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "내 마음을 표현할 때",
         id: "ct-04",
         text: "내 마음을 표현할 때 가까운 쪽은",
         options: [
@@ -152,6 +161,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "여러 사람과 대화할 때",
         id: "ct-05",
         text: "단체 대화에서 내가 자주 하는 역할은",
         options: [
@@ -161,6 +171,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "상대의 답이 늦어질 때",
         id: "ct-06",
         text: "상대가 바로 답하지 않으면 나는",
         options: [
@@ -172,6 +183,7 @@ export const labAssessments: LabAssessment[] = [
     ],
   },
   {
+    ageAccessPolicy: "all_ages",
     slug: "recharge-ritual",
     title: "충전 루틴 실험",
     cardTitle: "휴식과 회복 방식",
@@ -237,6 +249,7 @@ export const labAssessments: LabAssessment[] = [
     ],
     questions: [
       {
+        contextLabel: "기운이 많이 빠진 날",
         id: "rr-01",
         text: "기운이 빠진 날 가장 먼저 하고 싶은 일은",
         options: [
@@ -246,6 +259,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "예상하지 못한 여유가 생겼을 때",
         id: "rr-02",
         text: "쉬는 시간이 생기면 나는",
         options: [
@@ -255,6 +269,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "머릿속이 복잡할 때",
         id: "rr-03",
         text: "머릿속이 복잡할 때 도움 되는 것은",
         options: [
@@ -264,6 +279,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "주말에 쉬는 시간을 보낼 때",
         id: "rr-04",
         text: "주말이 끝나고 덜 지치려면",
         options: [
@@ -273,6 +289,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "약속이 갑자기 취소됐을 때",
         id: "rr-05",
         text: "갑자기 약속이 취소되면 나는",
         options: [
@@ -282,6 +299,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "다시 힘이 생겼다고 느낄 때",
         id: "rr-06",
         text: "회복됐다고 느끼는 순간은",
         options: [
@@ -293,6 +311,7 @@ export const labAssessments: LabAssessment[] = [
     ],
   },
   {
+    ageAccessPolicy: "all_ages",
     slug: "conflict-repair",
     title: "갈등 회복 실험",
     cardTitle: "갈등 뒤 회복 방식",
@@ -358,6 +377,7 @@ export const labAssessments: LabAssessment[] = [
     ],
     questions: [
       {
+        contextLabel: "갈등이 막 생겼을 때",
         id: "cr-01",
         text: "갈등이 생긴 직후 내가 더 원하는 것은",
         options: [
@@ -367,6 +387,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "상대가 화난 것처럼 보일 때",
         id: "cr-02",
         text: "상대가 화난 것 같을 때 나는",
         options: [
@@ -376,6 +397,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "사과를 주고받을 때",
         id: "cr-03",
         text: "사과를 주고받을 때 더 중요하게 느끼는 것은",
         options: [
@@ -385,6 +407,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "갈등 대화가 길어질 때",
         id: "cr-04",
         text: "갈등 대화가 길어질 때 나는",
         options: [
@@ -394,6 +417,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "관계를 다시 맞추려 할 때",
         id: "cr-05",
         text: "다시 관계를 맞출 때 내가 편한 말은",
         options: [
@@ -403,6 +427,7 @@ export const labAssessments: LabAssessment[] = [
         ],
       },
       {
+        contextLabel: "갈등이 끝나지 않은 채 이어질 때",
         id: "cr-06",
         text: "갈등 후 가장 부담스러운 것은",
         options: [

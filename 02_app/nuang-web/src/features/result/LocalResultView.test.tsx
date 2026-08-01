@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createResponseSnapshotHash } from "@/features/assessment/assessment-completion";
@@ -14,10 +14,7 @@ import {
   candidateFullCoreAssessment,
   candidateFullScoringRelease,
 } from "@/features/assessment/candidate-full-core-seed";
-import {
-  fullCoreAssessment,
-  fullScoringRelease,
-} from "@/features/assessment/full-core-seed";
+import { fullScoringRelease } from "@/features/assessment/full-core-seed";
 import {
   quickCoreAssessment,
   quickScoringRelease,
@@ -41,6 +38,14 @@ const routerMock = vi.hoisted(() => ({
   replace: vi.fn(),
 }));
 const fetchMock = vi.fn();
+
+function expectFiveCodeTabs() {
+  expect(
+    within(
+      screen.getByRole("tablist", { name: "뉴앙 코드 자리 선택" }),
+    ).getAllByRole("tab"),
+  ).toHaveLength(5);
+}
 
 vi.mock("@/features/assessment/assessment-storage", () => ({
   beginLocalAdaptiveFollowUp: storageMock.beginLocalAdaptiveFollowUp,
@@ -98,41 +103,33 @@ describe("LocalResultView", () => {
 
   it("surfaces the result action deck for a full core result", async () => {
     storageMock.getLocalAttempt.mockResolvedValue(
-      buildCompletedAttempt(fullCoreAssessment),
+      buildCompletedAttempt(candidateFullCoreAssessment),
     );
 
     render(<LocalResultView localResultId="local_full" />);
 
     expect(
-      await screen.findByRole("region", { name: "결과 활용" }),
+      await screen.findByRole("heading", {
+        name: "관계를 여는 선도자, 뉴앙 코드 ENAKQ",
+      }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("heading", { name: "다음으로" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "성향지도 열기" })).toHaveAttribute(
-      "href",
-      "/map",
-    );
-    expect(screen.getByRole("link", { name: "내 리포트" })).toHaveAttribute(
-      "href",
-      "/my/reports",
-    );
     expect(
-      screen.getByRole("link", { name: "공개 범위 설정" }),
-    ).toHaveAttribute("href", "/my/settings/visibility");
+      screen.getByRole("link", { name: "내 성향지도 이어서 보기" }),
+    ).toHaveAttribute("href", "/map/ENAKQ");
     expect(
-      screen.getByRole("img", { name: "코드 지도 그래프" }),
-    ).toBeInTheDocument();
+      screen.getByRole("link", { name: "다른 검사 둘러보기" }),
+    ).toHaveAttribute("href", "/home");
+    expectFiveCodeTabs();
     expect(
-      screen.getByRole("img", { name: "세부 신호 그래프" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", {
-        name: "결과 이미지 파일로 저장하거나 기기 공유 시트 열기",
+      screen.queryByRole("button", {
+        name: "검사 결과 공유",
       }),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "결과 삭제" }),
+      screen.getByRole("button", { name: "이 결과 삭제" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByText(/계정 저장|이 기기에 저장|로컬 결과/),
@@ -143,25 +140,27 @@ describe("LocalResultView", () => {
 
   it("guides quick core results toward the full core extension", async () => {
     storageMock.getLocalAttempt.mockResolvedValue(
-      buildCompletedAttempt(quickCoreAssessment),
+      buildCompletedAttempt(candidateQuickCoreAssessment),
     );
 
     render(<LocalResultView localResultId="local_quick" />);
 
     expect(
-      await screen.findByText("내 성향 더 자세히 알아보기"),
+      await screen.findByText("정밀 검사 이어서 하기"),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "정밀 성향 검사 소개 열기" }),
+      screen.getByRole("link", { name: "정밀 검사로 더 알아보기" }),
     ).toHaveAttribute(
       "href",
-      "/assessments/nu-core-full?from=first-result&backTo=%2Fresults%2Flocal%2Flocal_quick",
+      `/assessments/nu-core-full?from=first-result&backTo=${encodeURIComponent(
+        `/results/local/local_${candidateQuickCoreAssessment.assessmentId}`,
+      )}`,
     );
   });
 
   it("connects an eligible signed-in result in the background", async () => {
     storageMock.getLocalAttempt.mockResolvedValue(
-      buildCompletedAttempt(fullCoreAssessment),
+      buildCompletedAttempt(candidateFullCoreAssessment),
     );
     vi.stubGlobal("localStorage", {
       getItem: vi.fn(() =>
@@ -208,17 +207,16 @@ describe("LocalResultView", () => {
       );
     });
     expect(
-      await screen.findByRole("button", { name: "공유 주소 복사" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "피드에 공유" }),
+      await screen.findByRole("button", { name: "검사 결과 공유" }),
     ).toBeInTheDocument();
     const claimCall = fetchMock.mock.calls.find(
       ([url, init]) => url === "/api/claim-result" && init?.method === "POST",
     );
     const claimBody = JSON.parse(String(claimCall?.[1]?.body));
 
-    expect(claimBody.responses).toHaveLength(fullCoreAssessment.items.length);
+    expect(claimBody.responses).toHaveLength(
+      candidateFullCoreAssessment.items.length,
+    );
     expect(claimBody.responses[0]).toMatchObject({
       answeredAt: expect.any(String),
       itemId: expect.any(String),
@@ -232,15 +230,83 @@ describe("LocalResultView", () => {
     expect(screen.queryByText(/계정에 저장/)).not.toBeInTheDocument();
   });
 
-  it("shows the generated share address when clipboard copy is blocked", async () => {
+  it("retries account saving from the share action after a temporary claim error", async () => {
     const user = userEvent.setup();
-    const writeText = vi.fn().mockRejectedValue(new Error("clipboard blocked"));
+    storageMock.getLocalAttempt.mockResolvedValue(
+      buildCompletedAttempt(candidateFullCoreAssessment),
+    );
+    vi.stubGlobal("localStorage", {
+      getItem: vi.fn(() =>
+        JSON.stringify({
+          analytics: false,
+          is14OrOlder: true,
+          marketing: false,
+          privacy: true,
+          terms: true,
+        }),
+      ),
+      removeItem: vi.fn(),
+      setItem: vi.fn(),
+    });
+    fetchMock
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ ok: true, result: null }), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ ok: false }), {
+          headers: { "content-type": "application/json" },
+          status: 503,
+        }),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            ok: true,
+            result: {
+              resultReportId: "22222222-2222-4222-8222-222222222222",
+            },
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
+      );
+
+    render(<LocalResultView localResultId="local_full" />);
+
+    expect(
+      await screen.findByText(
+        "결과는 이 기기에 남아 있어요. 공유 버튼을 누르면 계정 저장을 다시 시도해요.",
+      ),
+    ).toBeInTheDocument();
+    await user.click(screen.getByRole("button", { name: "검사 결과 공유" }));
+
+    await waitFor(() => {
+      expect(
+        fetchMock.mock.calls.filter(
+          ([url, init]) =>
+            url === "/api/claim-result" && init?.method === "POST",
+        ),
+      ).toHaveLength(2);
+    });
+    expect(
+      await screen.findByRole("button", { name: "검사 결과 공유" }),
+    ).toBeInTheDocument();
+  });
+
+  it("copies a generated common report share link", async () => {
+    const user = userEvent.setup();
+    const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, "clipboard", {
       configurable: true,
       value: { writeText },
     });
     storageMock.getLocalAttempt.mockResolvedValue(
-      buildCompletedAttempt(fullCoreAssessment),
+      buildCompletedAttempt(candidateFullCoreAssessment),
     );
     vi.stubGlobal("localStorage", {
       getItem: vi.fn(() =>
@@ -281,9 +347,7 @@ describe("LocalResultView", () => {
           JSON.stringify({
             ok: true,
             shareLink: {
-              expiresAt: "2026-08-09T00:00:00.000Z",
-              id: "33333333-3333-4333-8333-333333333333",
-              url: "http://localhost:3000/share/public-token",
+              url: "http://localhost:3000/share/core-token",
             },
           }),
           {
@@ -296,25 +360,21 @@ describe("LocalResultView", () => {
     render(<LocalResultView localResultId="local_full" />);
 
     await user.click(
-      await screen.findByRole("button", { name: "공유 주소 복사" }),
+      await screen.findByRole("button", { name: "검사 결과 공유" }),
     );
+    await user.click(await screen.findByRole("button", { name: "링크 복사" }));
 
     expect(writeText).toHaveBeenCalledWith(
-      "http://localhost:3000/share/public-token",
+      "http://localhost:3000/share/core-token",
     );
     expect(
-      await screen.findByText(
-        "공유 주소가 준비됐어요. 위 주소를 길게 눌러 복사할 수 있어요.",
-      ),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText(/http:\/\/localhost:3000\/share\/public-token/),
+      await screen.findByText("원본 리포트 링크를 복사했어요."),
     ).toBeInTheDocument();
   });
 
   it("restores saved report status without exposing share management", async () => {
     storageMock.getLocalAttempt.mockResolvedValue(
-      buildCompletedAttempt(fullCoreAssessment),
+      buildCompletedAttempt(candidateFullCoreAssessment),
     );
     fetchMock.mockResolvedValue(
       new Response(
@@ -350,10 +410,7 @@ describe("LocalResultView", () => {
     render(<LocalResultView localResultId="local_full" />);
 
     expect(
-      await screen.findByRole("button", { name: "공유 주소 복사" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: "피드에 공유" }),
+      await screen.findByRole("button", { name: "검사 결과 공유" }),
     ).toBeInTheDocument();
     expect(screen.queryByText(/활성 공유 링크/)).not.toBeInTheDocument();
     expect(screen.queryByText("공유 링크 관리")).not.toBeInTheDocument();
@@ -437,10 +494,10 @@ describe("LocalResultView", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "관계를 여는 지휘자, 뉴앙 코드 ENAKQ",
+        name: "관계를 여는 선도자, 뉴앙 코드 ENAKQ",
       }),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("tab")).toHaveLength(5);
+    expectFiveCodeTabs();
     expect(
       screen.queryByRole("button", { name: /공유|카카오|피드/ }),
     ).not.toBeInTheDocument();
@@ -448,11 +505,9 @@ describe("LocalResultView", () => {
       screen.queryByRole("link", { name: /공유/ }),
     ).not.toBeInTheDocument();
 
-    await user.click(
-      screen.getByRole("button", { name: "이 결과는 어떻게 봐야 하나요?" }),
-    );
+    await user.click(screen.getByText("결과를 이해하는 방법"));
     expect(
-      screen.getByText(/능력, 좋고 나쁨, 정신건강을 판단하는 결과는 아니에요/),
+      screen.getByText(/확률·사람들 사이의 순위·능력 점수가 아니에요/),
     ).toBeVisible();
     expect(
       fetchMock.mock.calls.some(
@@ -465,7 +520,6 @@ describe("LocalResultView", () => {
   });
 
   it("opens a completed candidate quick result in the new five-code report", async () => {
-    const user = userEvent.setup();
     storageMock.getLocalAttempt.mockResolvedValue(
       buildCompletedAttempt(candidateQuickCoreAssessment),
     );
@@ -474,10 +528,10 @@ describe("LocalResultView", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "관계를 여는 지휘자, 뉴앙 코드 ENAKQ",
+        name: "관계를 여는 선도자, 뉴앙 코드 ENAKQ",
       }),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("tab")).toHaveLength(5);
+    expectFiveCodeTabs();
     expect(
       fetchMock.mock.calls.some(
         ([url, init]) =>
@@ -489,27 +543,9 @@ describe("LocalResultView", () => {
         String(url).includes("claim-result?localResultId="),
       ),
     ).toBe(true);
-    expect(screen.getByRole("button", { name: "공유" })).toBeInTheDocument();
-
-    await user.click(screen.getByRole("button", { name: "공유" }));
     expect(
-      screen.getByRole("dialog", { name: "내 뉴앙 코드를 나눠볼까요?" }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /결과 이미지 저장·공유/ }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "로그인하고 공유하기" }),
-    ).toHaveAttribute(
-      "href",
-      "/login?next=%2Fresults%2Flocal%2Flocal_nu-core-quick",
-    );
-
-    await user.keyboard("{Escape}");
-    expect(
-      screen.queryByRole("dialog", { name: "내 뉴앙 코드를 나눠볼까요?" }),
+      screen.queryByRole("button", { name: "공유" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "공유" })).toHaveFocus();
   });
 
   it("opens a completed candidate precision result as the finished full flow", async () => {
@@ -521,10 +557,10 @@ describe("LocalResultView", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "관계를 여는 지휘자, 뉴앙 코드 ENAKQ",
+        name: "관계를 여는 선도자, 뉴앙 코드 ENAKQ",
       }),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("tab")).toHaveLength(5);
+    expectFiveCodeTabs();
   });
 
   it("withholds a candidate report when any code position is centered", async () => {

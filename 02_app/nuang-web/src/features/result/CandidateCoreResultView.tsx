@@ -41,25 +41,39 @@ import {
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { CoreScoreResult } from "@/lib/scoring/types";
-import {
-  CandidateResultShareSheet,
-  type CandidateShareAccountController,
-} from "@/features/result/CandidateResultShareSheet";
 import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
+import { ReportShareSheet } from "@/features/share/ReportShareSheet";
+import { buildCoreReportShareContent } from "@/features/share/report-share-contract";
+import { CoreResultReportTemplate } from "@/features/result/unified-core-report/CoreResultReportTemplate";
+import { adaptValidatedLocalCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
 import styles from "@/features/result/CandidateCoreResultView.module.css";
 
 type CandidateCoreResultViewProps = {
   attempt: LocalAssessmentAttempt;
+  backHref?: string;
+  deleteError?: string | null;
+  deletePending?: boolean;
+  onDelete?: () => void;
+  onShareRequest?: () => void;
+  openShareOnMount?: boolean;
   result: CoreScoreResult;
-  shareAccount?: CandidateShareAccountController;
+  shareReportId?: string;
+  statusMessage?: string | null;
 };
 
 const candidateAxisTabLabels = ["사람", "생각", "관계", "일상", "마음"];
 
 export function CandidateCoreResultView({
   attempt,
+  backHref,
+  deleteError,
+  deletePending,
+  onDelete,
+  onShareRequest,
+  openShareOnMount,
   result,
-  shareAccount,
+  shareReportId,
+  statusMessage,
 }: CandidateCoreResultViewProps) {
   const [selectedPosition, setSelectedPosition] = useState(0);
   const [isTrustOpen, setIsTrustOpen] = useState(false);
@@ -109,9 +123,9 @@ export function CandidateCoreResultView({
   const selectedRightDirection = selectedAxis.directions[selectedRightSymbol];
   const nextPosition = (selectedPosition + 1) % candidateAxisCopy.length;
   const isQuickResult = isCandidateQuickRelease(attempt);
-  const isShareAvailable = Boolean(
-    shareAccount && (isQuickResult || isCandidateFullRelease(attempt)),
-  );
+  const isShareAvailable =
+    Boolean(shareReportId) &&
+    (isQuickResult || isCandidateFullRelease(attempt));
   const resultLabel = isQuickResult ? "첫 성향 결과" : "정밀 성향 결과";
   const precisionHref = isQuickResult
     ? buildPrecisionIntroHref({
@@ -120,10 +134,40 @@ export function CandidateCoreResultView({
         returnDestination: attempt.returnDestination,
       })
     : null;
+  const unifiedModel = adaptValidatedLocalCoreResult(attempt);
+
+  if (unifiedModel) {
+    return (
+      <CoreResultReportTemplate
+        backHref={backHref}
+        deleteError={deleteError}
+        deletePending={deletePending}
+        feedbackResultReportId={shareReportId}
+        model={unifiedModel}
+        onDelete={onDelete}
+        onShareUnavailable={onShareRequest}
+        openShareOnMount={openShareOnMount}
+        originalReportKey={shareReportId ? `core_${shareReportId}` : undefined}
+        precisionHref={precisionHref}
+        shareEnabled={isShareAvailable}
+        statusMessage={statusMessage}
+        surface="completion"
+      />
+    );
+  }
 
   if (!result.code || !profile || !selectedDirection || !selectedDomain) {
     return null;
   }
+  const shareContent = buildCoreReportShareContent({
+    code: result.code,
+    highlights: profile.overview
+      .slice(0, 3)
+      .map((item) => `${item.label}: ${item.text}`),
+    profileName: profile.displayName,
+    resultLabel,
+    summary: profile.summary,
+  });
 
   return (
     <main className={styles.root}>
@@ -213,6 +257,8 @@ export function CandidateCoreResultView({
 
         <TraitMapResultBridge
           code={result.code}
+          depth={isQuickResult ? "first-result" : "precision"}
+          facets={result.facets}
           profileName={profile.displayName}
         />
 
@@ -501,24 +547,20 @@ export function CandidateCoreResultView({
                 커뮤니티 둘러보기
                 <ArrowRight aria-hidden="true" size={18} strokeWidth={1.9} />
               </Link>
-              <Link className={styles.secondaryAction} href="/assessments">
+              <Link className={styles.secondaryAction} href="/home">
                 다른 검사 만나보기
               </Link>
             </>
           )}
         </section>
       </div>
-      {shareAccount ? (
-        <CandidateResultShareSheet
-          account={shareAccount}
-          attempt={attempt}
-          isOpen={isShareOpen}
-          onClose={closeShare}
-          result={result}
-          resultLabel={resultLabel}
-          returnFocusRef={shareButtonRef}
-        />
-      ) : null}
+      <ReportShareSheet
+        content={shareContent}
+        isOpen={isShareOpen}
+        onClose={closeShare}
+        originalReportKey={shareReportId ? `core_${shareReportId}` : undefined}
+        returnFocusRef={shareButtonRef}
+      />
     </main>
   );
 }

@@ -7,6 +7,8 @@ import {
   deriveTrustedClaimResult,
   type TrustedClaimPayload,
 } from "@/features/account/server-result-claim";
+import { buildTrustedResultSummary } from "@/features/account/server-writes";
+import { coreResultCopyVersion } from "@/features/result/report-copy";
 
 const completedAt = "2026-07-28T00:00:00.000Z";
 
@@ -15,7 +17,9 @@ function buildPayload(): TrustedClaimPayload {
     assessmentKind: "full",
     localResultId: "local_server_score_test",
     responses: candidateFullCoreAssessment.items.map((item, index) => ({
-      answeredAt: new Date(Date.parse(completedAt) + index * 1000).toISOString(),
+      answeredAt: new Date(
+        Date.parse(completedAt) + index * 1000,
+      ).toISOString(),
       itemId: item.itemId,
       value: item.isReverse ? 1 : 5,
     })),
@@ -36,9 +40,50 @@ describe("deriveTrustedClaimResult", () => {
     expect(result?.profileCode).toHaveLength(5);
     expect(result?.profileName).toBeTruthy();
     expect(result?.domains).toHaveLength(5);
+    expect(result?.facets.every((facet) => facet.validResponses > 0)).toBe(
+      true,
+    );
+    expect(result?.evidenceStatus).toBe("clear");
+    expect(result?.responseSnapshotHash).toMatch(/^fnv1a32x2:/);
+    expect(result?.resultCopyVersion).toBe(coreResultCopyVersion);
+    expect(result?.resultStatus).toBe("ready");
     expect(result?.responseRows).toHaveLength(
       candidateFullCoreAssessment.items.length,
     );
+  });
+
+  it("stores the trusted boundary, origin, evidence, and version contract", () => {
+    const payload = buildPayload();
+    const trusted = deriveTrustedClaimResult(payload);
+
+    expect(trusted).not.toBeNull();
+    if (!trusted) return;
+    const summary = buildTrustedResultSummary(payload, trusted);
+
+    expect(summary).toMatchObject({
+      alternativeCodes: trusted.alternativeCodes,
+      originResultId: payload.localResultId,
+      reportContentSnapshot: expect.objectContaining({
+        excerptManifestDigest: expect.stringMatching(/^fnv1a32x2:/),
+        guideVersion: expect.any(String),
+        manifestDigest: "NUANG-RESULT-SUMMARY-PUBLICATION-CLOSED-2.3.0",
+        profileNameReleaseId: "NUANG-PROFILE-NAME-CANDIDATE-3.0",
+        schemaVersion: "nuang-core-result-content-snapshot.v2",
+        surface: "owner_report",
+      }),
+      responseSnapshotHash: trusted.responseSnapshotHash,
+      resultCopyVersion: coreResultCopyVersion,
+      resultEvidenceStatus: trusted.evidenceStatus,
+      resultStatus: "ready",
+      versionBundle: trusted.trustedRelease,
+    });
+    expect(summary.domains.every((domain) => "isBoundary" in domain)).toBe(
+      true,
+    );
+    expect(summary.facets.every((facet) => "validResponses" in facet)).toBe(
+      true,
+    );
+    expect(JSON.stringify(summary)).not.toContain("responses");
   });
 
   it("ignores client supplied profile claims", () => {

@@ -8,7 +8,7 @@ const visibility = {
   comparisonEnabled: true,
   detailsVisible: true,
   displayName: "여름",
-  profileName: "관계를 여는 지휘자",
+  profileName: "관계를 여는 선도자",
   publicId: "11111111-1111-4111-8111-111111111111",
   revision: 3,
 };

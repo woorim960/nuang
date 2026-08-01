@@ -107,7 +107,7 @@
   display: grid;
   width: min(100%, 430px);
   height: min(92dvh, 840px);
-  grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-rows: auto auto minmax(0, 1fr);
   overflow: hidden;
   border-radius: 28px;
   background: var(--nu-color-surface);
@@ -160,6 +160,57 @@
   background: var(--nu-neutral-150);
   color: var(--nu-neutral-400);
   cursor: not-allowed;
+}
+
+.headerSpacer {
+  display: block;
+  width: 68px;
+}
+
+.composerModeNav {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  padding: 0 1rem;
+  border-bottom: 1px solid var(--nu-color-border);
+  background: var(--nu-color-surface);
+}
+
+.composerModeNav button {
+  position: relative;
+  z-index: 1;
+  min-height: 48px;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
+  transition: color 160ms ease;
+}
+
+.composerModeNav button[aria-selected="true"] {
+  color: var(--nu-color-text);
+  font-weight: var(--nu-weight-bold);
+}
+
+.composerModeNav button:focus-visible {
+  outline: 2px solid var(--nu-color-brand-action);
+  outline-offset: -4px;
+}
+
+.composerModeIndicator {
+  position: absolute;
+  z-index: 2;
+  bottom: -1px;
+  left: 1rem;
+  width: calc((100% - 2rem) / 2);
+  height: 2px;
+  border-radius: 999px;
+  background: var(--nu-color-brand-action);
+  transition: transform 200ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.composerModeIndicator[data-space="playground"] {
+  transform: translateX(100%);
 }
 
 .composerForm {
@@ -227,6 +278,115 @@
   font-size: var(--nu-text-caption);
   font-weight: var(--nu-weight-bold);
   white-space: nowrap;
+}
+
+.playgroundComposer {
+  min-height: 0;
+  overflow-y: auto;
+  padding: 1.4rem 1rem calc(2rem + env(safe-area-inset-bottom));
+  background: var(--nu-color-surface);
+  scrollbar-width: none;
+}
+
+.playgroundComposer::-webkit-scrollbar {
+  display: none;
+}
+
+.playgroundHeading {
+  padding: 0 0 0.85rem;
+}
+
+.playgroundHeading h3 {
+  margin: 0;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
+  letter-spacing: -0.018em;
+}
+
+.playgroundTypeList {
+  border-top: 1px solid var(--nu-color-border);
+  border-bottom: 1px solid var(--nu-color-border);
+}
+
+.playgroundType {
+  display: grid;
+  min-height: 82px;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.9rem 0;
+  color: var(--nu-color-text);
+  transition:
+    background-color 160ms ease,
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.playgroundType + .playgroundType {
+  border-top: 1px solid var(--nu-color-border);
+}
+
+.playgroundType:active {
+  opacity: 0.65;
+  transform: scale(0.99);
+}
+
+.playgroundType:focus-visible {
+  border-radius: 12px;
+  outline: 2px solid var(--nu-color-brand-action);
+  outline-offset: 2px;
+}
+
+.typeIcon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-color-text-secondary);
+  background: var(--nu-color-surface-soft);
+  transition:
+    color 160ms ease,
+    background-color 160ms ease;
+}
+
+.typeCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.24rem;
+}
+
+.typeCopy strong {
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
+  letter-spacing: -0.012em;
+}
+
+.typeCopy small {
+  overflow: hidden;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-regular);
+  line-height: var(--nu-leading-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.typeChevron {
+  color: var(--nu-color-text-muted);
+}
+
+@media (hover: hover) {
+  .playgroundType:hover {
+    background: var(--nu-color-surface-raised);
+  }
+
+  .playgroundType:hover .typeIcon {
+    color: var(--nu-color-brand-action);
+    background: var(--nu-color-brand-surface);
+  }
 }
 
 .trustNote {
@@ -1179,6 +1339,19 @@
     padding-left: 0.75rem;
   }
 
+  .launchButton {
+    gap: 0.5rem;
+  }
+
+  .launchCta {
+    padding-right: 0.65rem;
+    padding-left: 0.65rem;
+  }
+
+  .launchCta > svg {
+    display: none;
+  }
+
   .sheetHeader {
     grid-template-columns: 44px minmax(0, 1fr) 72px;
     padding-right: 0.6rem;
@@ -1188,6 +1361,15 @@
   .composerForm {
     padding-right: 0.85rem;
     padding-left: 0.85rem;
+  }
+
+  .playgroundComposer {
+    padding-right: 0.85rem;
+    padding-left: 0.85rem;
+  }
+
+  .typeCopy small {
+    white-space: normal;
   }
 
   .topicRecommendButton {
@@ -1203,6 +1385,11 @@
   .audienceBackdrop,
   .audienceSheet {
     animation-duration: 1ms !important;
+  }
+
+  .composerModeIndicator,
+  .playgroundType {
+    transition: none;
   }
 }
 

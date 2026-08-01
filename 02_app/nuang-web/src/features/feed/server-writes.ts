@@ -3,7 +3,9 @@ import {
   ensureAccountForUser,
   type ServerWriteResult,
 } from "@/features/account/server-writes";
+import { sendAdminReviewNotification } from "@/features/admin/server-admin-review-notification";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
+import { isUserManageableFeedPostSource } from "@/features/feed/feed-post-management";
 import {
   getBalanceGameOption,
   getBalanceGameTemplate,
@@ -17,6 +19,7 @@ import type {
 import {
   persistExternalLinks,
   prepareExternalLinks,
+  replaceExternalLinksForPost,
 } from "@/features/feed/server-link-safety";
 import {
   checkCommunityWriteGuard,
@@ -26,11 +29,21 @@ import {
   getCurrentNuangProfileName,
   isCurrentNuangCode,
 } from "@/features/nuang-code/profile-name-resolution";
+import {
+  parseProfileReportKey,
+  type ProfileReportKind,
+} from "@/features/public-profile/profile-report-contract";
+import {
+  readOriginalProfileReport,
+  resolveProfileOwnerAccountId,
+  type OriginalProfileReport,
+} from "@/features/public-profile/server-profile-reports";
 
 type ServiceClient = SupabaseClient;
 
 type ReportShareProjection = {
   assessmentKind: "full" | "quick";
+  assessmentTitle?: string;
   completedAt: string;
   domains: Array<{
     domainId: string;
@@ -38,9 +51,13 @@ type ReportShareProjection = {
     score: number | null;
     symbol: string | null;
   }>;
+  profileId?: string;
   profileCode: string;
   profileName: string;
+  reportKey?: string;
+  reportType?: ProfileReportKind;
   resultLabel: string;
+  summary?: string;
 };
 
 type NormalizedTarget =
@@ -85,6 +102,14 @@ export async function writeFeedRequestForAccount({
 
   if (payload.action === "create_post") {
     return writeFeedPost({ accountId: account.accountId, client, payload });
+  }
+
+  if (payload.action === "update_post") {
+    return updateFeedPost({ accountId: account.accountId, client, payload });
+  }
+
+  if (payload.action === "delete_post") {
+    return deleteFeedPost({ accountId: account.accountId, client, payload });
   }
 
   if (payload.action === "create_comment") {
@@ -134,6 +159,412 @@ export async function writeFeedRequestForAccount({
   return writePollVote({ accountId: account.accountId, client, payload });
 }
 
+async function updateFeedPost({
+  accountId,
+  client,
+  payload,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  payload: Extract<FeedWriteRequest, { action: "update_post" }>;
+}): Promise<ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>> {
+  const existingResponse = await client
+    .schema("feed")
+    .from("feed_post")
+    .select(
+      "id,source,source_id,attachment_payload,public_projection_payload,published_at",
+    )
+    .eq("id", payload.postId)
+    .eq("author_account_id", accountId)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (existingResponse.error) {
+    return {
+      code: getFeedDbFailureCode(
+        existingResponse.error,
+        "feed_post_update_failed",
+      ),
+      ok: false,
+    };
+  }
+
+  if (!existingResponse.data) {
+    return { code: "feed_target_invalid", ok: false };
+  }
+
+  const existing = existingResponse.data as {
+    attachment_payload: unknown;
+    id: string;
+    public_projection_payload: unknown;
+    published_at: string | null;
+    source: string;
+    source_id: string | null;
+  };
+
+  if (!isUserManageableFeedPostSource(existing.source)) {
+    return { code: "feed_target_not_supported", ok: false };
+  }
+
+  if (payload.poll && existing.source !== "balance_game") {
+    return { code: "feed_target_invalid", ok: false };
+  }
+
+  if (
+    payload.sourceId &&
+    (existing.source !== "free_text" ||
+      !isValidQuestionAudienceSourceId(payload.sourceId))
+  ) {
+    return { code: "feed_target_invalid", ok: false };
+  }
+
+  if (
+    payload.sourceId &&
+    existing.source_id &&
+    payload.sourceId !== existing.source_id
+  ) {
+    const replyResponse = await client
+      .schema("feed")
+      .from("feed_comment")
+      .select("id", { count: "exact", head: true })
+      .eq("post_id", payload.postId)
+      .is("deleted_at", null);
+
+    if (replyResponse.error) {
+      return {
+        code: getFeedDbFailureCode(
+          replyResponse.error,
+          "feed_post_update_failed",
+        ),
+        ok: false,
+      };
+    }
+    if ((replyResponse.count ?? 0) > 0) {
+      return { code: "feed_question_audience_locked", ok: false };
+    }
+  }
+
+  if (!payload.body && existing.source !== "balance_game") {
+    const mediaResponse = await client
+      .schema("feed")
+      .from("feed_post_media")
+      .select("id", { count: "exact", head: true })
+      .eq("post_id", payload.postId)
+      .is("deleted_at", null);
+    const hasFallbackMedia =
+      Array.isArray(existing.attachment_payload) &&
+      existing.attachment_payload.length > 0;
+
+    if (
+      mediaResponse.error &&
+      !isMissingFeedMediaTable(mediaResponse.error) &&
+      !hasFallbackMedia
+    ) {
+      return { code: "feed_post_update_failed", ok: false };
+    }
+
+    if (!hasFallbackMedia && (mediaResponse.count ?? 0) === 0) {
+      return { code: "feed_target_invalid", ok: false };
+    }
+  }
+
+  const moderationText = createPostModerationText(payload);
+  const guardFailure = await checkCommunityWriteGuard({
+    accountId,
+    action: "create_post",
+    body: moderationText,
+    client,
+  });
+  if (guardFailure) {
+    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+  }
+
+  const externalLinks = await prepareExternalLinks({
+    client,
+    text: moderationText,
+  });
+  if (externalLinks.some((link) => link.status === "blocked")) {
+    return { code: "feed_external_link_blocked", ok: false };
+  }
+
+  const moderationStatus = externalLinks.some(
+    (link) => link.status === "pending",
+  )
+    ? "pending_review"
+    : "published";
+  const existingProjection =
+    existing.public_projection_payload &&
+    typeof existing.public_projection_payload === "object" &&
+    !Array.isArray(existing.public_projection_payload)
+      ? existing.public_projection_payload
+      : {};
+  const publicProjection = {
+    ...existingProjection,
+    ...(payload.poll
+      ? {
+          balanceGame: {
+            promptId: existing.source_id ?? "user_balance_game",
+            question: payload.poll.question,
+            selectedOptionKey: null,
+            version: "user-balance-game.v1",
+          },
+        }
+      : {}),
+    sourceId: payload.sourceId ?? existing.source_id,
+    topic: {
+      category: payload.topic?.category ?? null,
+      source: payload.topic?.source ?? "manual",
+      tags: payload.topic?.tags ?? [],
+    },
+  };
+  if (payload.poll) {
+    const pollUpdate = await updateBalanceGamePollContent({
+      client,
+      poll: payload.poll,
+      postId: payload.postId,
+    });
+    if (!pollUpdate.ok) return pollUpdate;
+  }
+
+  const sharedUpdate = {
+    body: payload.body,
+    limited_at: null,
+    moderation_status: moderationStatus,
+    public_projection_payload: publicProjection,
+    published_at:
+      moderationStatus === "published"
+        ? (existing.published_at ?? new Date().toISOString())
+        : null,
+    removed_at: null,
+    source_id: payload.sourceId ?? existing.source_id,
+    visibility: payload.visibility,
+  };
+  let updateResponse = await client
+    .schema("feed")
+    .from("feed_post")
+    .update({
+      ...sharedUpdate,
+      topic_category: payload.topic?.category ?? null,
+      topic_source: payload.topic?.source ?? "manual",
+      topic_tags: payload.topic?.tags ?? [],
+    })
+    .eq("id", payload.postId)
+    .eq("author_account_id", accountId)
+    .is("deleted_at", null)
+    .select("id,moderation_status")
+    .single();
+
+  if (isMissingFeedTopicColumns(updateResponse.error)) {
+    updateResponse = await client
+      .schema("feed")
+      .from("feed_post")
+      .update(sharedUpdate)
+      .eq("id", payload.postId)
+      .eq("author_account_id", accountId)
+      .is("deleted_at", null)
+      .select("id,moderation_status")
+      .single();
+  }
+
+  if (updateResponse.error || !updateResponse.data) {
+    return {
+      code: getFeedDbFailureCode(
+        updateResponse.error,
+        "feed_post_update_failed",
+      ),
+      ok: false,
+    };
+  }
+
+  await replaceExternalLinksForPost({
+    client,
+    links: externalLinks,
+    postId: payload.postId,
+  });
+
+  const row = updateResponse.data as {
+    id: string;
+    moderation_status: FeedWriteSuccessInput["moderationStatus"];
+  };
+  return {
+    data: {
+      action: payload.action,
+      id: row.id,
+      moderationStatus: row.moderation_status,
+      targetType: "feed_post",
+    },
+    ok: true,
+  };
+}
+
+async function updateBalanceGamePollContent({
+  client,
+  poll,
+  postId,
+}: {
+  client: ServiceClient;
+  poll: NonNullable<
+    Extract<FeedWriteRequest, { action: "update_post" }>["poll"]
+  >;
+  postId: string;
+}): Promise<ServerWriteResult<{ id: string }, FeedWriteFailureCode>> {
+  const pollResponse = await client
+    .schema("feed")
+    .from("feed_poll")
+    .select("id,status")
+    .eq("post_id", postId)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (pollResponse.error || !pollResponse.data) {
+    return {
+      code: getFeedDbFailureCode(
+        pollResponse.error,
+        "feed_post_update_failed",
+      ),
+      ok: false,
+    };
+  }
+
+  const storedPoll = pollResponse.data as {
+    id: string;
+    status: "active" | "closed" | "removed";
+  };
+  const voteResponse = await client
+    .schema("feed")
+    .from("feed_poll_vote")
+    .select("id", { count: "exact", head: true })
+    .eq("poll_id", storedPoll.id)
+    .is("deleted_at", null);
+
+  if (voteResponse.error) {
+    return {
+      code: getFeedDbFailureCode(
+        voteResponse.error,
+        "feed_post_update_failed",
+      ),
+      ok: false,
+    };
+  }
+  if (storedPoll.status !== "active" || (voteResponse.count ?? 0) > 0) {
+    return { code: "feed_poll_content_locked", ok: false };
+  }
+
+  const optionsResponse = await client
+    .schema("feed")
+    .from("feed_poll_option")
+    .select("id,sort_order")
+    .eq("poll_id", storedPoll.id)
+    .order("sort_order", { ascending: true });
+  const options = (optionsResponse.data ?? []) as Array<{
+    id: string;
+    sort_order: number;
+  }>;
+
+  if (optionsResponse.error || options.length !== 2) {
+    return { code: "feed_post_update_failed", ok: false };
+  }
+
+  const questionResponse = await client
+    .schema("feed")
+    .from("feed_poll")
+    .update({ question: poll.question })
+    .eq("id", storedPoll.id)
+    .eq("status", "active")
+    .is("deleted_at", null);
+
+  if (questionResponse.error) {
+    return { code: "feed_post_update_failed", ok: false };
+  }
+
+  for (const [index, option] of options.entries()) {
+    const optionResponse = await client
+      .schema("feed")
+      .from("feed_poll_option")
+      .update({ label: poll.options[index] })
+      .eq("id", option.id)
+      .eq("poll_id", storedPoll.id);
+
+    if (optionResponse.error) {
+      return { code: "feed_post_update_failed", ok: false };
+    }
+  }
+
+  return { data: { id: storedPoll.id }, ok: true };
+}
+
+async function deleteFeedPost({
+  accountId,
+  client,
+  payload,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  payload: Extract<FeedWriteRequest, { action: "delete_post" }>;
+}): Promise<ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>> {
+  const existingResponse = await client
+    .schema("feed")
+    .from("feed_post")
+    .select("id,source")
+    .eq("id", payload.postId)
+    .eq("author_account_id", accountId)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (existingResponse.error) {
+    return {
+      code: getFeedDbFailureCode(
+        existingResponse.error,
+        "feed_post_delete_failed",
+      ),
+      ok: false,
+    };
+  }
+
+  if (!existingResponse.data) {
+    return { code: "feed_target_invalid", ok: false };
+  }
+
+  if (!isUserManageableFeedPostSource(existingResponse.data.source)) {
+    return { code: "feed_target_not_supported", ok: false };
+  }
+
+  const deletedAt = new Date().toISOString();
+  const deleteResponse = await client
+    .schema("feed")
+    .from("feed_post")
+    .update({
+      deleted_at: deletedAt,
+      moderation_status: "removed",
+      removed_at: deletedAt,
+    })
+    .eq("id", payload.postId)
+    .eq("author_account_id", accountId)
+    .is("deleted_at", null)
+    .select("id")
+    .single();
+
+  if (deleteResponse.error || !deleteResponse.data) {
+    return {
+      code: getFeedDbFailureCode(
+        deleteResponse.error,
+        "feed_post_delete_failed",
+      ),
+      ok: false,
+    };
+  }
+
+  return {
+    data: {
+      action: payload.action,
+      id: payload.postId,
+      moderationStatus: "removed",
+      targetType: "feed_post",
+    },
+    ok: true,
+  };
+}
+
 async function writeFeedPost({
   accountId,
   client,
@@ -157,10 +588,11 @@ async function writeFeedPost({
     return { code: "feed_target_invalid", ok: false };
   }
 
+  const moderationText = createPostModerationText(payload);
   const guardFailure = await checkCommunityWriteGuard({
     accountId,
     action: "create_post",
-    body: payload.body,
+    body: moderationText,
     client,
   });
   if (guardFailure) {
@@ -169,7 +601,7 @@ async function writeFeedPost({
 
   const externalLinks = await prepareExternalLinks({
     client,
-    text: payload.body,
+    text: moderationText,
   });
   if (externalLinks.some((link) => link.status === "blocked")) {
     return { code: "feed_external_link_blocked", ok: false };
@@ -188,7 +620,8 @@ async function writeFeedPost({
     published_at: moderationStatus === "published" ? publishedAt : null,
     public_projection_payload: publicProjection,
     source: payload.source,
-    source_id: payload.sourceId ?? null,
+    source_id:
+      publicProjection.reportShare?.reportKey ?? payload.sourceId ?? null,
     visibility: payload.visibility,
   };
   let response = await client
@@ -209,7 +642,11 @@ async function writeFeedPost({
       .from("feed_post")
       .insert({
         ...sharedRow,
-        body: payload.body.trim() || "사진을 공유했어요.",
+        body:
+          payload.body.trim() ||
+          (payload.source === "balance_game"
+            ? ""
+            : "사진을 공유했어요."),
       })
       .select("id, moderation_status")
       .single();
@@ -242,9 +679,19 @@ async function writeFeedPost({
     });
 
     if (!pollResult.ok) {
+      await rollbackIncompleteBalanceGamePost({
+        accountId,
+        client,
+        postId: row.id,
+      });
       return pollResult;
     }
   }
+
+  await sendAdminReviewNotification({
+    id: String(response.data.id),
+    kind: "content_report",
+  });
 
   return {
     data: {
@@ -274,6 +721,21 @@ function isMissingFeedTopicColumns(error: unknown) {
   );
 }
 
+function isMissingFeedMediaTable(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as { code?: unknown; message?: unknown };
+  const message =
+    typeof candidate.message === "string"
+      ? candidate.message.toLocaleLowerCase("en-US")
+      : "";
+
+  return (
+    candidate.code === "42P01" ||
+    candidate.code === "PGRST205" ||
+    message.includes("feed_post_media")
+  );
+}
+
 async function writeBalanceGamePoll({
   accountId,
   client,
@@ -285,15 +747,24 @@ async function writeBalanceGamePoll({
   payload: Extract<FeedWriteRequest, { action: "create_post" }>;
   postId: string;
 }): Promise<ServerWriteResult<{ id: string }, FeedWriteFailureCode>> {
+  const customPoll = payload.poll;
   const template = getBalanceGameTemplate(payload.sourceId);
 
-  if (!template) {
+  if (!customPoll && !template) {
     return { code: "feed_target_invalid", ok: false };
   }
 
-  const selectedOption = getBalanceGameOption(template, payload.pollOptionKey);
+  const options = customPoll
+    ? [
+        { key: "option_a", label: customPoll.options[0] },
+        { key: "option_b", label: customPoll.options[1] },
+      ]
+    : template!.options;
+  const selectedOption = template
+    ? getBalanceGameOption(template, payload.pollOptionKey)
+    : null;
 
-  if (!selectedOption) {
+  if (!customPoll && !selectedOption) {
     return { code: "feed_target_invalid", ok: false };
   }
 
@@ -302,8 +773,8 @@ async function writeBalanceGamePoll({
     .from("feed_poll")
     .insert({
       post_id: postId,
-      prompt_id: template.id,
-      question: template.question,
+      prompt_id: template?.id ?? `user_balance_${postId}`,
+      question: customPoll?.question ?? template!.question,
       status: "active",
     })
     .select("id")
@@ -317,7 +788,7 @@ async function writeBalanceGamePoll({
   }
 
   const poll = pollResponse.data as { id: string };
-  const optionRows = template.options.map((option, index) => ({
+  const optionRows = options.map((option, index) => ({
     label: option.label,
     option_key: option.key,
     poll_id: poll.id,
@@ -327,8 +798,7 @@ async function writeBalanceGamePoll({
     .schema("feed")
     .from("feed_poll_option")
     .insert(optionRows)
-    .select("id, option_key")
-    .order("sort_order", { ascending: true });
+    .select("id, option_key");
 
   if (optionResponse.error || !optionResponse.data) {
     return {
@@ -337,6 +807,15 @@ async function writeBalanceGamePoll({
         "feed_poll_write_failed",
       ),
       ok: false,
+    };
+  }
+
+  if (!selectedOption) {
+    return {
+      data: {
+        id: poll.id,
+      },
+      ok: true,
     };
   }
 
@@ -369,6 +848,23 @@ async function writeBalanceGamePoll({
     },
     ok: true,
   };
+}
+
+async function rollbackIncompleteBalanceGamePost({
+  accountId,
+  client,
+  postId,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  postId: string;
+}) {
+  await client
+    .schema("feed")
+    .from("feed_post")
+    .delete()
+    .eq("id", postId)
+    .eq("author_account_id", accountId);
 }
 
 async function writeFeedComment({
@@ -862,25 +1358,41 @@ async function writePollVote({
   client: ServiceClient;
   payload: Extract<FeedWriteRequest, { action: "vote_poll" }>;
 }): Promise<ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>> {
-  const guardFailure = await checkCommunityWriteGuard({
-    accountId,
-    action: "vote_poll",
-    client,
-    target: {
-      id: payload.pollId,
-      key: null,
-      type: "feed_poll",
-    },
-  });
+  const [guardFailure, optionOpen, profile] = await Promise.all([
+    checkCommunityWriteGuard({
+      accountId,
+      action: "vote_poll",
+      client,
+      target: {
+        id: payload.pollId,
+        key: null,
+        type: "feed_poll",
+      },
+    }),
+    isPollOptionOpen({
+      client,
+      optionId: payload.optionId,
+      pollId: payload.pollId,
+    }),
+    readCurrentNuangCodeSnapshot({ accountId, client }),
+  ]);
+
   if (guardFailure) {
     return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+  }
+
+  if (!optionOpen) {
+    return { code: "feed_response_closed", ok: false };
   }
 
   const response = await insertPollVote({
     accountId,
     client,
+    enforceOpen: false,
     optionId: payload.optionId,
     pollId: payload.pollId,
+    preferUpdate: payload.replaceExisting ?? false,
+    profile,
   });
 
   if (!response.ok) return response;
@@ -901,12 +1413,16 @@ async function insertPollVote({
   enforceOpen = true,
   optionId,
   pollId,
+  preferUpdate = false,
+  profile: suppliedProfile,
 }: {
   accountId: string;
   client: ServiceClient;
   enforceOpen?: boolean;
   optionId: string;
   pollId: string;
+  preferUpdate?: boolean;
+  profile?: Awaited<ReturnType<typeof readCurrentNuangCodeSnapshot>>;
 }): Promise<ServerWriteResult<{ id: string }, FeedWriteFailureCode>> {
   if (
     enforceOpen &&
@@ -919,16 +1435,51 @@ async function insertPollVote({
     return { code: "feed_response_closed", ok: false };
   }
 
-  const profile = await readCurrentNuangCodeSnapshot({ accountId, client });
+  const profile =
+    suppliedProfile ??
+    (await readCurrentNuangCodeSnapshot({ accountId, client }));
+  const voteRow = {
+    nuang_code: profile.code,
+    option_id: optionId,
+    profile_name: profile.name,
+  };
+
+  if (preferUpdate) {
+    const directUpdate = await client
+      .schema("feed")
+      .from("feed_poll_vote")
+      .update(voteRow)
+      .eq("account_id", accountId)
+      .eq("poll_id", pollId)
+      .is("deleted_at", null)
+      .select("id")
+      .maybeSingle();
+
+    if (directUpdate.error) {
+      return {
+        code: getFeedDbFailureCode(
+          directUpdate.error,
+          "feed_poll_vote_write_failed",
+        ),
+        ok: false,
+      };
+    }
+
+    if (directUpdate.data) {
+      return {
+        data: directUpdate.data as { id: string },
+        ok: true,
+      };
+    }
+  }
+
   const response = await client
     .schema("feed")
     .from("feed_poll_vote")
     .insert({
       account_id: accountId,
-      nuang_code: profile.code,
-      option_id: optionId,
       poll_id: pollId,
-      profile_name: profile.name,
+      ...voteRow,
     })
     .select("id")
     .single();
@@ -966,11 +1517,7 @@ async function insertPollVote({
   const updated = await client
     .schema("feed")
     .from("feed_poll_vote")
-    .update({
-      nuang_code: profile.code,
-      option_id: optionId,
-      profile_name: profile.name,
-    })
+    .update(voteRow)
     .eq("id", existing.data.id)
     .eq("account_id", accountId)
     .eq("poll_id", pollId)
@@ -1609,7 +2156,14 @@ async function buildPostProjection({
           version: dailyQuestion.version,
         }
       : null,
-    balanceGame: balanceGame
+    balanceGame: payload.poll
+      ? {
+          promptId: payload.sourceId ?? "user_balance_game",
+          question: payload.poll.question,
+          selectedOptionKey: null,
+          version: "user-balance-game.v1",
+        }
+      : balanceGame
       ? {
           promptId: balanceGame.id,
           question: balanceGame.question,
@@ -1619,7 +2173,7 @@ async function buildPostProjection({
       : null,
     reportShare,
     source: payload.source,
-    sourceId: payload.sourceId ?? null,
+    sourceId: reportShare?.reportKey ?? payload.sourceId ?? null,
     topic: payload.topic ?? null,
   };
 }
@@ -1633,6 +2187,19 @@ async function readReportShareProjection({
   client: ServiceClient;
   payload: Extract<FeedWriteRequest, { action: "create_post" }>;
 }): Promise<ReportShareProjection | null> {
+  const originalAttachment = payload.attachments?.find(
+    (attachment) => attachment.type === "original_report",
+  );
+  if (originalAttachment) {
+    return readOriginalReportShareProjection({
+      accountId,
+      client,
+      profileId: originalAttachment.profileId ?? "",
+      reportKey: originalAttachment.id,
+      sourceId: payload.sourceId,
+    });
+  }
+
   const resultReportId = payload.attachments?.find(
     (attachment) => attachment.type === "result_summary",
   )?.id;
@@ -1687,6 +2254,144 @@ async function readReportShareProjection({
   };
 }
 
+async function readOriginalReportShareProjection({
+  accountId,
+  client,
+  profileId,
+  reportKey,
+  sourceId,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  profileId: string;
+  reportKey: string;
+  sourceId?: string;
+}): Promise<ReportShareProjection | null> {
+  const parsedKey = parseProfileReportKey(reportKey);
+  if (
+    !parsedKey ||
+    !uuidPattern.test(profileId) ||
+    (sourceId !== undefined && sourceId !== reportKey)
+  ) {
+    return null;
+  }
+
+  const ownerAccountId = await resolveProfileOwnerAccountId({
+    client,
+    profileId,
+  });
+  if (!ownerAccountId) return null;
+
+  if (
+    ownerAccountId !== accountId &&
+    (await hasProfileBlockBetween({
+      client,
+      leftAccountId: accountId,
+      rightAccountId: ownerAccountId,
+    }))
+  ) {
+    return null;
+  }
+
+  const original = await readOriginalProfileReport({
+    client,
+    ownerAccountId,
+    reportKey,
+    viewerAccountId: accountId,
+  });
+  if (
+    !original ||
+    original.summary.visibility !== "profile_public" ||
+    original.summary.type !== parsedKey.kind
+  ) {
+    return null;
+  }
+
+  return createOriginalReportProjection({ original, profileId, reportKey });
+}
+
+async function hasProfileBlockBetween({
+  client,
+  leftAccountId,
+  rightAccountId,
+}: {
+  client: ServiceClient;
+  leftAccountId: string;
+  rightAccountId: string;
+}) {
+  const [blockedByViewer, blockedViewer] = await Promise.all([
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("blocker_account_id")
+      .eq("blocker_account_id", leftAccountId)
+      .eq("blocked_account_id", rightAccountId)
+      .is("deleted_at", null)
+      .maybeSingle(),
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("blocker_account_id")
+      .eq("blocker_account_id", rightAccountId)
+      .eq("blocked_account_id", leftAccountId)
+      .is("deleted_at", null)
+      .maybeSingle(),
+  ]);
+
+  return Boolean(
+    blockedByViewer.error ||
+      blockedViewer.error ||
+      blockedByViewer.data ||
+      blockedViewer.data,
+  );
+}
+
+function createOriginalReportProjection({
+  original,
+  profileId,
+  reportKey,
+}: {
+  original: OriginalProfileReport;
+  profileId: string;
+  reportKey: string;
+}): ReportShareProjection {
+  const profileCode =
+    original.kind === "core"
+      ? original.result.profileCode
+      : original.kind === "topic"
+        ? (original.result.nuangCodeContext?.code ?? "")
+        : "";
+  const profileName =
+    original.kind === "core"
+      ? original.result.profileName
+      : original.summary.resultName;
+  const resultLabel =
+    original.kind === "core"
+      ? original.result.resultLabel
+      : original.summary.assessmentTitle;
+
+  return {
+    assessmentKind:
+      original.kind === "core" ? original.result.kind : "full",
+    assessmentTitle: original.summary.assessmentTitle,
+    completedAt: original.summary.completedAt,
+    domains:
+      original.kind === "core"
+        ? original.result.domains.map((domain) => ({
+            ...domain,
+            symbol: domain.symbol ?? null,
+          }))
+        : [],
+    profileCode,
+    profileId,
+    profileName,
+    reportKey,
+    reportType: original.kind,
+    resultLabel,
+    summary: original.summary.summary,
+  };
+}
+
 function parseReportShareSummary(value: unknown): ReportShareProjection | null {
   if (!value || typeof value !== "object") {
     return null;
@@ -1694,11 +2399,16 @@ function parseReportShareSummary(value: unknown): ReportShareProjection | null {
 
   const summary = value as {
     assessmentKind?: unknown;
+    assessmentTitle?: unknown;
     completedAt?: unknown;
     domains?: unknown;
+    profileId?: unknown;
     profileCode?: unknown;
     profileName?: unknown;
+    reportKey?: unknown;
+    reportType?: unknown;
     resultLabel?: unknown;
+    summary?: unknown;
   };
 
   return {
@@ -1706,6 +2416,9 @@ function parseReportShareSummary(value: unknown): ReportShareProjection | null {
       summary.assessmentKind === "quick" || summary.assessmentKind === "full"
         ? summary.assessmentKind
         : "full",
+    ...(typeof summary.assessmentTitle === "string"
+      ? { assessmentTitle: summary.assessmentTitle }
+      : {}),
     completedAt:
       typeof summary.completedAt === "string" ? summary.completedAt : "",
     domains: Array.isArray(summary.domains)
@@ -1737,14 +2450,28 @@ function parseReportShareSummary(value: unknown): ReportShareProjection | null {
       : [],
     profileCode:
       typeof summary.profileCode === "string" ? summary.profileCode : "",
+    ...(typeof summary.profileId === "string"
+      ? { profileId: summary.profileId }
+      : {}),
     profileName:
       typeof summary.profileName === "string"
         ? summary.profileName
         : "뉴앙 리포트",
+    ...(typeof summary.reportKey === "string"
+      ? { reportKey: summary.reportKey }
+      : {}),
+    ...(summary.reportType === "core" ||
+    summary.reportType === "topic" ||
+    summary.reportType === "lab"
+      ? { reportType: summary.reportType }
+      : {}),
     resultLabel:
       typeof summary.resultLabel === "string"
         ? summary.resultLabel
         : "뉴앙 리포트",
+    ...(typeof summary.summary === "string"
+      ? { summary: summary.summary }
+      : {}),
   };
 }
 
@@ -1756,6 +2483,9 @@ function isValidPostSourcePayload(
   }
 
   if (payload.source === "balance_game") {
+    if (payload.poll) {
+      return !payload.pollOptionKey;
+    }
     const template = getBalanceGameTemplate(payload.sourceId);
 
     return Boolean(
@@ -1764,14 +2494,72 @@ function isValidPostSourcePayload(
   }
 
   if (payload.source === "report_share") {
-    return Boolean(
-      payload.attachments?.some(
-        (attachment) => attachment.type === "result_summary",
-      ),
+    const reportAttachments = (payload.attachments ?? []).filter(
+      (attachment) =>
+        attachment.type === "result_summary" ||
+        attachment.type === "original_report",
     );
+    if (reportAttachments.length !== 1) return false;
+
+    const attachment = reportAttachments[0];
+    if (attachment.type === "original_report") {
+      return Boolean(
+        attachment.profileId &&
+          parseProfileReportKey(attachment.id) &&
+          (!payload.sourceId || payload.sourceId === attachment.id),
+      );
+    }
+
+    return uuidPattern.test(attachment.id);
   }
 
   return !payload.pollOptionKey;
+}
+
+function createPostModerationText(
+  payload:
+    | Extract<FeedWriteRequest, { action: "create_post" }>
+    | Extract<FeedWriteRequest, { action: "update_post" }>,
+) {
+  if (!payload.poll) return payload.body;
+
+  return [
+    payload.poll.question,
+    ...payload.poll.options,
+    payload.body,
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
+function isValidQuestionAudienceSourceId(sourceId: string) {
+  if (
+    sourceId === "ask_all" ||
+    sourceId === "ask_similar" ||
+    sourceId === "ask_different"
+  ) {
+    return true;
+  }
+
+  if (sourceId.startsWith("ask_exact_")) {
+    return isCurrentNuangCode(
+      sourceId.slice("ask_exact_".length).toUpperCase(),
+    );
+  }
+
+  if (!sourceId.startsWith("ask_trait_")) return false;
+  const symbols = sourceId
+    .slice("ask_trait_".length)
+    .split("_")
+    .map((symbol) => symbol.toUpperCase());
+  const allowedSymbols = new Set(["E", "I", "R", "N", "G", "A", "K", "M", "C", "Q"]);
+
+  return (
+    symbols.length >= 1 &&
+    symbols.length <= 3 &&
+    new Set(symbols).size === symbols.length &&
+    symbols.every((symbol) => allowedSymbols.has(symbol))
+  );
 }
 
 type FeedWriteRequestTarget = Extract<

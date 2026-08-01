@@ -13,12 +13,14 @@ export function PersonalityPlaygroundPost({
   post,
   recordHref = "/feed/perspectives",
   returnTo = "/feed",
+  viewKey = "default",
 }: {
   continueHref?: string;
   highlighted?: boolean;
   post: FeedItem;
   recordHref?: string;
   returnTo?: string;
+  viewKey?: string;
 }) {
   if (!post.poll) return null;
   const isClosed =
@@ -28,6 +30,7 @@ export function PersonalityPlaygroundPost({
   return (
     <article
       className={styles.post}
+      data-closed={isClosed ? "true" : "false"}
       data-highlighted={highlighted ? "true" : "false"}
       data-official="true"
       id={`community-post-${post.id}`}
@@ -42,19 +45,22 @@ export function PersonalityPlaygroundPost({
           width={48}
         />
         <div className={styles.identity}>
-          <strong>{isFeatured ? "오늘의 성향 놀이터" : "성향 놀이터"}</strong>
+          <strong>
+            {isClosed
+              ? "마감된 성향 놀이터"
+              : isFeatured
+                ? "오늘의 성향 놀이터"
+                : "성향 놀이터"}
+          </strong>
         </div>
         <Link className={styles.recordLink} href={recordHref}>
           내 기록
         </Link>
       </header>
 
-      <h3 className={styles.title}>
-        {isFeatured ? "오늘의 밸런스 게임" : "밸런스 게임"}
-      </h3>
-
       <div className={styles.poll}>
         <FeedPollCard
+          key={`${post.id}:${viewKey}`}
           poll={post.poll}
           returnTo={returnTo}
           variant="playground"

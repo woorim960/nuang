@@ -702,6 +702,17 @@ Auth:
 
 - `npm run env:check:auth` 통과
 - Google/Kakao provider dashboard 설정
+- Supabase Auth Site URL은 운영 공식 HTTPS 주소이고 localhost가 아니다.
+- Redirect URLs에는 운영의 정확한 `/auth/callback`과 로컬 callback이 모두 있다.
+- 운영 Vercel `NEXT_PUBLIC_APP_ORIGIN`은 Supabase Site URL과 같다.
+- 카카오 인증 시작 URL의 `redirect_to`가 운영 `/auth/callback?next=%2Fmy`다.
+- Supabase browser·server client의 인증 쿠키 `maxAge`는 30일로 동일하다.
+- Next.js `proxy.ts`가 정적 자산을 제외한 요청에서 만료 토큰을 갱신하고,
+  갱신된 쿠키와 `private, no-store` 응답 헤더를 브라우저에 전달한다.
+- Supabase Free 운영 설정은 time-box와 inactivity timeout이 모두 `never`이므로
+  앱의 30일 인증 쿠키가 브라우저 로그인 유지 기간을 결정한다.
+- 사용자가 직접 로그아웃하거나 계정 보안 조치로 세션이 폐기되면 30일
+  이전이라도 즉시 다시 로그인해야 한다.
 - Naver는 disabled 유지 또는 custom OAuth/OIDC 검증 완료
 - `/auth/callback?next=/my` 동작 확인
 

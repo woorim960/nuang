@@ -4,6 +4,8 @@ import { createPublicProfileSnapshotPayload } from "@/features/together/public-c
 import type { CoreScoreResult } from "@/lib/scoring/types";
 import type { FeedExternalLink } from "./link-safety";
 
+// "balance_game" remains the persisted community poll kind for compatibility.
+// Do not reuse it for the together assessment "밸런스 게임".
 export type FeedItemKind =
   | "balance_game"
   | "daily_mood"
@@ -11,10 +13,35 @@ export type FeedItemKind =
   | "map_reflection"
   | "official_note"
   | "report_share"
+  | "together_balance_result_share"
+  | "together_balance_room_share"
   | "trait_card"
   | "user_post";
 
 export type FeedItemLayout = "media" | "thread";
+
+export type FeedTogetherBalanceRoomSummary = {
+  capacity: number;
+  href: string;
+  occupancy: number;
+  packSlug: string;
+  packTitle: string;
+  questionCount: number;
+  recruitmentStatus: "open" | "full" | "closed";
+  roomName: string;
+};
+
+export type FeedTogetherBalanceResultSummary = {
+  completedCount: number;
+  highlight: string | null;
+  href: string;
+  packSlug: string;
+  packTitle: string;
+  resultStatus: "current" | "final";
+  roomName: string;
+  score: number;
+  scoreLabel: string;
+};
 
 export type FeedReplyPreview = {
   authorCode?: string;
@@ -64,6 +91,7 @@ export type FeedPollSummary = {
 
 export type FeedReportShareSummary = {
   assessmentKind: "full" | "quick";
+  assessmentTitle?: string;
   completedAt: string;
   domains: Array<{
     domainId: string;
@@ -72,9 +100,13 @@ export type FeedReportShareSummary = {
     symbol: string | null;
   }>;
   href: string;
+  profileId?: string;
   profileCode: string;
   profileName: string;
+  reportKey?: string;
+  reportType?: "core" | "lab" | "topic";
   resultLabel: string;
+  summary?: string;
 };
 
 export type FeedPostMedia = {
@@ -115,6 +147,8 @@ export type FeedItem = {
   priority: number;
   questionAudience?: FeedQuestionAudience;
   reportShare?: FeedReportShareSummary;
+  togetherBalanceResult?: FeedTogetherBalanceResultSummary;
+  togetherBalanceRoom?: FeedTogetherBalanceRoomSummary;
   replyCount?: number;
   replyLabel: string;
   replyPreview?: FeedReplyPreview[];
@@ -126,8 +160,11 @@ export type FeedItem = {
   title: string;
   topic?: FeedPostTopicSummary;
   verified?: boolean;
+  visibility?: "private_draft" | "profile_public" | "public";
   viewerHasBookmarked?: boolean;
   viewerHasLiked?: boolean;
+  viewerCanManage?: boolean;
+  viewerIsAuthor?: boolean;
   visualTone?: "dark" | "light";
 };
 
@@ -195,9 +232,10 @@ const feedPublicProfiles = {
   official: createSeedPublicProfileCard({
     cardId: "feed_profile_official",
     displayName: "NUANG",
+    isOperator: true,
     motif: "purple",
     profileCode: "ENAKQ",
-    profileName: "관계를 여는 지휘자",
+    profileName: "관계를 여는 선도자",
     snapshotId: "11111111-1111-4111-8111-111111111111",
     scores: [72, 64, 68, 59, 76],
   }),
@@ -215,7 +253,7 @@ const feedPublicProfiles = {
     displayName: "성향 카드",
     motif: "flame",
     profileCode: "ENGKQ",
-    profileName: "변화에 답하는 혁신가",
+    profileName: "변화를 이끄는 혁신가",
     snapshotId: "33333333-3333-4333-8333-333333333333",
     scores: [78, 67, 72, 57, 74],
   }),
@@ -334,6 +372,7 @@ export const feedItems: ReadonlyArray<FeedItem> = [
 function createSeedPublicProfileCard({
   cardId,
   displayName,
+  isOperator = false,
   motif,
   profileCode,
   profileName,
@@ -342,6 +381,7 @@ function createSeedPublicProfileCard({
 }: {
   cardId: string;
   displayName: string;
+  isOperator?: boolean;
   motif: "flame" | "forest" | "purple" | "sun" | "water";
   profileCode: string;
   profileName: string;
@@ -364,6 +404,7 @@ function createSeedPublicProfileCard({
 
   return createPublicProfileCardPayload({
     cardId,
+    isOperator,
     snapshot,
     status: "published",
   });

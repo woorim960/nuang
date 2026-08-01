@@ -6,8 +6,12 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { FeedPollSummary } from "@/features/feed/feed-seed";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
+import { getCurrentNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
 import { cn } from "@/lib/utils/cn";
 import styles from "./FeedPollCard.module.css";
+
+type PollOption = FeedPollSummary["options"][number];
+type PollCodePerspective = FeedPollSummary["codePerspectives"][number];
 
 type VoteStatus =
   | { status: "idle" }
@@ -28,27 +32,42 @@ export function FeedPollCard({
 }) {
   const router = useRouter();
   const [status, setStatus] = useState<VoteStatus>({ status: "idle" });
-  const [viewerVoteOptionId, setViewerVoteOptionId] = useState(
-    poll.viewerVoteOptionId,
-  );
-  const [perspectiveOpen, setPerspectiveOpen] = useState(
-    poll.status === "closed" || !poll.viewerVoteOptionId,
-  );
+  const [localVote, setLocalVote] = useState<{
+    codePerspectives: PollCodePerspective[];
+    options: PollOption[];
+    pollId: string;
+    totalVotes: number;
+    viewerVoteOptionId: string;
+  } | null>(null);
+  const [perspectiveOpen, setPerspectiveOpen] = useState(false);
   const [perspectiveCode, setPerspectiveCode] = useState<string | null>(null);
   const [showParticipatingCodes, setShowParticipatingCodes] = useState(false);
   const resumedVoteRef = useRef(false);
   const isClosed = poll.status === "closed";
+  const localVoteApplies =
+    localVote?.pollId === poll.id &&
+    localVote.viewerVoteOptionId !== poll.viewerVoteOptionId;
+  const viewerVoteOptionId = localVoteApplies
+    ? localVote.viewerVoteOptionId
+    : poll.viewerVoteOptionId;
+  const displayOptions = localVoteApplies ? localVote.options : poll.options;
+  const displayTotalVotes = localVoteApplies
+    ? localVote.totalVotes
+    : poll.totalVotes;
+  const displayCodePerspectives = localVoteApplies
+    ? localVote.codePerspectives
+    : poll.codePerspectives;
   const hasVoted = Boolean(viewerVoteOptionId);
   const showResults = hasVoted || isClosed;
   const canVote = allowVote && !isClosed && status.status !== "pending";
   const selectedPerspective = perspectiveCode
-    ? (poll.codePerspectives.find((row) => row.code === perspectiveCode) ??
+    ? (displayCodePerspectives.find((row) => row.code === perspectiveCode) ??
       null)
     : null;
   const activePerspectiveCode = selectedPerspective?.code ?? null;
-  const perspectiveOptions = selectedPerspective?.options ?? poll.options;
+  const perspectiveOptions = selectedPerspective?.options ?? displayOptions;
   const viewerPerspective = poll.viewerCode
-    ? (poll.codePerspectives.find((row) => row.code === poll.viewerCode) ??
+    ? (displayCodePerspectives.find((row) => row.code === poll.viewerCode) ??
       null)
     : null;
 
@@ -68,11 +87,28 @@ export function FeedPollCard({
 
     resumedVoteRef.current = true;
     const timeoutId = window.setTimeout(() => {
-      setStatus({ status: "pending" });
+      const optimisticVote = createOptimisticVote({
+        codePerspectives: displayCodePerspectives,
+        nextOptionId: resumedOptionId,
+        options: displayOptions,
+        previousOptionId: null,
+        totalVotes: displayTotalVotes,
+        viewerCode: poll.viewerCode,
+      });
 
-      void postPollVote(poll.id, resumedOptionId)
+      setStatus({ status: "pending" });
+      setLocalVote({
+        ...optimisticVote,
+        pollId: poll.id,
+        viewerVoteOptionId: resumedOptionId,
+      });
+      setPerspectiveOpen(true);
+
+      void postPollVote(poll.id, resumedOptionId, false)
         .then((response) => {
           if (!response.ok) {
+            setLocalVote(null);
+            setPerspectiveOpen(false);
             setStatus({
               message: "로그인은 완료됐지만 투표를 저장하지 못했어요.",
               status: "error",
@@ -80,11 +116,11 @@ export function FeedPollCard({
             return;
           }
 
-          setViewerVoteOptionId(resumedOptionId);
           router.replace(returnTo);
-          router.refresh();
         })
         .catch(() => {
+          setLocalVote(null);
+          setPerspectiveOpen(false);
           setStatus({
             message: "네트워크 연결 때문에 투표를 확인하지 못했어요.",
             status: "error",
@@ -95,18 +131,55 @@ export function FeedPollCard({
     return () => {
       window.clearTimeout(timeoutId);
     };
-  }, [allowVote, hasVoted, isClosed, poll.id, poll.options, returnTo, router]);
+  }, [
+    allowVote,
+    displayOptions,
+    displayCodePerspectives,
+    displayTotalVotes,
+    hasVoted,
+    isClosed,
+    poll.id,
+    poll.options,
+    poll.totalVotes,
+    poll.viewerCode,
+    returnTo,
+    router,
+  ]);
 
   async function handleVote(optionId: string) {
     if (!canVote || optionId === viewerVoteOptionId) return;
 
     const isReplacingVote = hasVoted;
+    const previousVote = {
+      localVote,
+      perspectiveOpen,
+    };
+    const optimisticVote = createOptimisticVote({
+      codePerspectives: displayCodePerspectives,
+      nextOptionId: optionId,
+      options: displayOptions,
+      previousOptionId: viewerVoteOptionId,
+      totalVotes: displayTotalVotes,
+      viewerCode: poll.viewerCode,
+    });
+
     setStatus({ status: "pending" });
+    setLocalVote({
+      ...optimisticVote,
+      pollId: poll.id,
+      viewerVoteOptionId: optionId,
+    });
+    setPerspectiveOpen(true);
 
     try {
-      const response = await postPollVote(poll.id, optionId);
+      const response = await postPollVote(
+        poll.id,
+        optionId,
+        isReplacingVote,
+      );
 
       if (response.status === 401) {
+        restoreVote(previousVote);
         const resumePath = createPollResumePath({
           optionId,
           pollId: poll.id,
@@ -120,6 +193,7 @@ export function FeedPollCard({
       }
 
       if (!response.ok) {
+        restoreVote(previousVote);
         const failure = (await response.json().catch(() => null)) as {
           code?: string;
           message?: string;
@@ -135,19 +209,22 @@ export function FeedPollCard({
         return;
       }
 
-      setViewerVoteOptionId(optionId);
-      setPerspectiveOpen(true);
-      router.refresh();
       setStatus(
         isReplacingVote
           ? { message: "선택을 바꿨어요.", status: "success" }
           : { status: "idle" },
       );
     } catch {
+      restoreVote(previousVote);
       setStatus({
         message: "네트워크 연결 때문에 투표를 확인하지 못했어요.",
         status: "error",
       });
+    }
+
+    function restoreVote(snapshot: typeof previousVote) {
+      setLocalVote(snapshot.localVote);
+      setPerspectiveOpen(snapshot.perspectiveOpen);
     }
   }
 
@@ -180,8 +257,10 @@ export function FeedPollCard({
           <span className={styles.closedBadge}>투표 마감</span>
         ) : null}
       </div>
-      <div className={cn("space-y-2", variant === "home" ? "mt-4" : "mt-3")}>
-        {poll.options.map((option) => (
+      <div
+        className={cn("space-y-2", variant === "home" ? "mt-4" : "mt-3")}
+      >
+        {displayOptions.map((option) => (
           <button
             aria-pressed={option.id === viewerVoteOptionId}
             className={cn(
@@ -261,7 +340,7 @@ export function FeedPollCard({
       </div>
       {showResults && variant === "feed" ? (
         <div className="mt-3 flex items-center justify-between gap-4 text-label font-semibold text-[var(--nu-color-text-muted)]">
-          <span>총 {poll.totalVotes.toLocaleString("ko-KR")}명 참여</span>
+          <span>총 {displayTotalVotes.toLocaleString("ko-KR")}명 참여</span>
           {poll.canViewCodeStats ? (
             <Link
               className="text-[var(--nu-color-text-strong)]"
@@ -273,20 +352,20 @@ export function FeedPollCard({
             <span>코드별 비교는 참여자가 더 모이면 열려요</span>
           )}
         </div>
-      ) : showResults && variant === "playground" ? (
-        <section aria-label="뉴앙 코드별 선택" className={styles.perspective}>
+      ) : hasVoted && variant === "playground" ? (
+        <section aria-label="뉴앙 코드별 결과" className={styles.perspective}>
           <div className={styles.perspectiveHeader}>
             <button
               aria-controls={`poll-perspective-${poll.id}`}
               aria-expanded={perspectiveOpen}
-              aria-label={`코드별 선택 ${perspectiveOpen ? "접기" : "펼치기"}`}
+              aria-label={`결과 보기 ${perspectiveOpen ? "접기" : "펼치기"}`}
               className={styles.perspectiveToggle}
               onClick={() => setPerspectiveOpen((current) => !current)}
               type="button"
             >
-              <strong>코드별 선택</strong>
+              <strong>결과 보기</strong>
               <span>
-                {poll.totalVotes.toLocaleString("ko-KR")}명 참여
+                {displayTotalVotes.toLocaleString("ko-KR")}명 참여
                 <ChevronDown
                   aria-hidden="true"
                   className={styles.perspectiveChevron}
@@ -329,7 +408,7 @@ export function FeedPollCard({
                     }
                     type="button"
                   >
-                    내 코드 {poll.viewerCode}
+                    {poll.viewerCode}
                     {!viewerPerspective ? " · 집계 중" : ""}
                   </button>
                 ) : null}
@@ -342,14 +421,14 @@ export function FeedPollCard({
                   }
                   type="button"
                 >
-                  참여 코드 {poll.codePerspectives.length}
+                  참여 코드 {displayCodePerspectives.length}
                 </button>
               </div>
 
               {showParticipatingCodes ? (
                 <div className={styles.codePicker}>
-                  {poll.codePerspectives.length > 0 ? (
-                    poll.codePerspectives.map((row) => (
+                  {displayCodePerspectives.length > 0 ? (
+                    displayCodePerspectives.map((row) => (
                       <button
                         aria-label={`${row.code} ${row.totalVotes}명`}
                         aria-pressed={activePerspectiveCode === row.code}
@@ -390,16 +469,16 @@ export function FeedPollCard({
                   </div>
                 ))}
               </div>
-
-              <p className={styles.perspectiveNote}>
-                {createPerspectiveNote(selectedPerspective, perspectiveOptions)}
-              </p>
             </div>
           ) : null}
         </section>
       ) : null}
       {isClosed && variant !== "feed" ? (
-        <p className={styles.closedNote}>마감된 최종 결과예요.</p>
+        <p className={styles.closedNote}>
+          {hasVoted || poll.canViewCodeStats
+            ? "마감된 최종 결과예요."
+            : `마감된 최종 결과 · 총 ${displayTotalVotes.toLocaleString("ko-KR")}명 참여`}
+        </p>
       ) : null}
       {status.status === "pending" ? (
         <p
@@ -429,46 +508,153 @@ export function FeedPollCard({
   );
 }
 
-function createPerspectiveNote(
-  selectedPerspective: FeedPollSummary["codePerspectives"][number] | null,
-  options: Array<{ label: string; ratio: number }>,
+async function postPollVote(
+  pollId: string,
+  optionId: string,
+  replaceExisting: boolean,
 ) {
-  if (!selectedPerspective) {
-    return "전체 참여자의 현재 선택이에요. 같은 선택을 골라도 이유는 사람마다 다를 수 있어요.";
-  }
-
-  const sortedOptions = [...options].sort(
-    (left, right) => right.ratio - left.ratio,
-  );
-  const leadingOption = sortedOptions[0];
-  const followingOption = sortedOptions[1];
-
-  if (!leadingOption) {
-    return "참여가 더 모이면 이 코드의 선택 차이를 보여드릴게요.";
-  }
-
-  if (
-    followingOption &&
-    Math.abs(leadingOption.ratio - followingOption.ratio) <= 10
-  ) {
-    return `${selectedPerspective.code} 안에서도 선택이 비슷하게 나뉘었어요. 같은 코드라도 상황과 경험에 따라 생각은 달라질 수 있어요.`;
-  }
-
-  return `${selectedPerspective.code} 참여자에게서는 ‘${leadingOption.label}’ 선택이 ${leadingOption.ratio}%로 더 많았어요. 이 결과만으로 코드 전체를 단정하지는 않아요.`;
-}
-
-async function postPollVote(pollId: string, optionId: string) {
   return fetch("/api/feed", {
     body: JSON.stringify({
       action: "vote_poll",
       optionId,
       pollId,
+      replaceExisting,
     } satisfies FeedWriteRequest),
     headers: {
       "content-type": "application/json",
     },
     method: "POST",
   });
+}
+
+function createOptimisticVote({
+  codePerspectives,
+  nextOptionId,
+  options,
+  previousOptionId,
+  totalVotes,
+  viewerCode,
+}: {
+  codePerspectives: PollCodePerspective[];
+  nextOptionId: string;
+  options: PollOption[];
+  previousOptionId: string | null;
+  totalVotes: number;
+  viewerCode: string | null;
+}) {
+  const nextTotalVotes = previousOptionId ? totalVotes : totalVotes + 1;
+  const optionsWithUpdatedCounts = options.map((option) => {
+    const removedPreviousVote =
+      option.id === previousOptionId && previousOptionId !== nextOptionId
+        ? Math.max(0, option.voteCount - 1)
+        : option.voteCount;
+    const voteCount =
+      option.id === nextOptionId && previousOptionId !== nextOptionId
+        ? removedPreviousVote + 1
+        : removedPreviousVote;
+
+    return {
+      ...option,
+      ratio:
+        nextTotalVotes > 0
+          ? Math.round((voteCount / nextTotalVotes) * 100)
+          : 0,
+      viewerHasVoted: option.id === nextOptionId,
+      voteCount,
+    };
+  });
+
+  return {
+    codePerspectives: createOptimisticCodePerspectives({
+      codePerspectives,
+      nextOptionId,
+      options,
+      previousOptionId,
+      viewerCode,
+    }),
+    options: optionsWithUpdatedCounts,
+    totalVotes: nextTotalVotes,
+  };
+}
+
+function createOptimisticCodePerspectives({
+  codePerspectives,
+  nextOptionId,
+  options,
+  previousOptionId,
+  viewerCode,
+}: {
+  codePerspectives: PollCodePerspective[];
+  nextOptionId: string;
+  options: PollOption[];
+  previousOptionId: string | null;
+  viewerCode: string | null;
+}) {
+  if (!viewerCode) return codePerspectives;
+
+  const nextOptionLabel =
+    options.find((option) => option.id === nextOptionId)?.label ?? null;
+  const previousOptionLabel = previousOptionId
+    ? (options.find((option) => option.id === previousOptionId)?.label ?? null)
+    : null;
+  if (!nextOptionLabel) return codePerspectives;
+
+  const existingPerspective = codePerspectives.find(
+    (perspective) => perspective.code === viewerCode,
+  );
+  if (!existingPerspective) {
+    const totalVotes = 1;
+    return [
+      ...codePerspectives,
+      {
+        code: viewerCode,
+        name: getCurrentNuangProfileName(viewerCode) ?? viewerCode,
+        options: options.map((option) => {
+          const voteCount = option.label === nextOptionLabel ? 1 : 0;
+          return {
+            label: option.label,
+            ratio: Math.round((voteCount / totalVotes) * 100),
+            voteCount,
+          };
+        }),
+        totalVotes,
+      },
+    ];
+  }
+
+  const totalVotes = previousOptionId
+    ? existingPerspective.totalVotes
+    : existingPerspective.totalVotes + 1;
+  const updatedPerspective = {
+    ...existingPerspective,
+    options: existingPerspective.options.map((option) => {
+      const withoutPreviousVote =
+        previousOptionLabel &&
+        previousOptionLabel !== nextOptionLabel &&
+        option.label === previousOptionLabel
+          ? Math.max(0, option.voteCount - 1)
+          : option.voteCount;
+      const voteCount =
+        option.label === nextOptionLabel &&
+        previousOptionLabel !== nextOptionLabel
+          ? withoutPreviousVote + 1
+          : withoutPreviousVote;
+
+      return {
+        ...option,
+        ratio:
+          totalVotes > 0
+            ? Math.round((voteCount / totalVotes) * 100)
+            : 0,
+        voteCount,
+      };
+    }),
+    totalVotes,
+  };
+
+  return codePerspectives.map((perspective) =>
+    perspective.code === viewerCode ? updatedPerspective : perspective,
+  );
 }
 
 function createPollResumePath({

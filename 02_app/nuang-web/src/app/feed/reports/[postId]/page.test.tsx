@@ -1,4 +1,3 @@
-import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import FeedReportSharePage, {
   metadata,
@@ -7,56 +6,51 @@ import FeedReportSharePage, {
 const feedReadMocks = vi.hoisted(() => ({
   createServerFeedReportSharePayload: vi.fn(),
 }));
+const navigationMocks = vi.hoisted(() => ({
+  notFound: vi.fn(),
+  redirect: vi.fn(),
+}));
 
 vi.mock("@/features/feed/server-read", () => ({
   createServerFeedReportSharePayload:
     feedReadMocks.createServerFeedReportSharePayload,
 }));
+vi.mock("next/navigation", () => navigationMocks);
 
 describe("FeedReportSharePage", () => {
-  it("renders a summary-only shared report detail", async () => {
+  it("redirects a shared feed card to the canonical original report", async () => {
     feedReadMocks.createServerFeedReportSharePayload.mockResolvedValue({
-      body: "SVODE 물결의 새길 개척가 리포트를 공유했어요.",
-      createdAt: "2026-07-09T07:10:00.000Z",
       reportShare: {
-        assessmentKind: "full",
-        completedAt: "2026-07-04T00:00:00.000Z",
-        domains: [
-          {
-            domainId: "SE",
-            label: "사람 사이 에너지",
-            score: 42,
-            symbol: "S",
-          },
-        ],
-        href: "/feed/reports/33333333-3333-4333-8333-333333333333",
-        profileCode: "SVODE",
-        profileName: "물결의 새길 개척가",
-        resultLabel: "현재 가장 가까운 대표 성향",
+        href: "/feed/profiles/profile-1/reports/core_33333333-3333-4333-8333-333333333333",
       },
     });
 
-    render(
-      await FeedReportSharePage({
-        params: Promise.resolve({
-          postId: "33333333-3333-4333-8333-333333333333",
-        }),
+    await FeedReportSharePage({
+      params: Promise.resolve({
+        postId: "33333333-3333-4333-8333-333333333333",
       }),
-    );
+    });
 
-    expect(
-      screen.getByRole("heading", { name: "공개 리포트" }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("SVODE")).toBeInTheDocument();
-    expect(screen.getByText("물결의 새길 개척가")).toBeInTheDocument();
-    expect(document.body).toHaveTextContent(
-      "문항별 답변, 원점수, 계정 정보는 포함하지 않습니다.",
+    expect(navigationMocks.redirect).toHaveBeenCalledWith(
+      "/feed/profiles/profile-1/reports/core_33333333-3333-4333-8333-333333333333",
     );
-    expect(
-      screen.getByRole("link", { name: "나도 같은 검사 해보기" }),
-    ).toHaveAttribute("href", "/assessments/nu-core-quick");
-    expect(document.body).not.toHaveTextContent("직접 응답");
-    expect(document.body).not.toHaveTextContent("raw score");
+  });
+
+  it("does not render the retired summary-only page", async () => {
+    navigationMocks.notFound.mockClear();
+    navigationMocks.redirect.mockClear();
+    feedReadMocks.createServerFeedReportSharePayload.mockResolvedValue({
+      reportShare: {
+        href: "/feed/reports/legacy-post",
+      },
+    });
+
+    await FeedReportSharePage({
+      params: Promise.resolve({ postId: "legacy-post" }),
+    });
+
+    expect(navigationMocks.notFound).toHaveBeenCalled();
+    expect(navigationMocks.redirect).not.toHaveBeenCalled();
   });
 
   it("keeps noindex metadata for feed report shares", () => {

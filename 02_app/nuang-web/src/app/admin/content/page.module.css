@@ -393,6 +393,241 @@
   line-height: 1.45;
 }
 
+.dataGuide {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.dataGuideIntro {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  background:
+    radial-gradient(
+      circle at 100% 0,
+      color-mix(in srgb, var(--nu-color-community-soft) 82%, white) 0,
+      transparent 44%
+    ),
+    var(--nu-color-surface);
+}
+
+.dataGuideIntro > div {
+  min-width: 0;
+}
+
+.dataGuideIntro > div > span {
+  color: var(--nu-color-community);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.dataGuideIntro h2 {
+  margin: 0.28rem 0 0;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-title-sm);
+  line-height: 1.35;
+}
+
+.dataGuideIntro p {
+  max-width: 64ch;
+  margin: 0.45rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-body-sm);
+  line-height: 1.65;
+}
+
+.dataGuideIntro nav {
+  display: grid;
+  gap: 0.4rem;
+}
+
+.dataGuideIntro nav a {
+  display: flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--nu-color-community) 14%, white);
+  border-radius: 11px;
+  color: var(--nu-color-brand-strong);
+  background: color-mix(in srgb, var(--nu-color-community-soft) 42%, white);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.workflowList {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.workflowList li {
+  display: flex;
+  min-width: 0;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+}
+
+.workflowList li + li {
+  border-top: 1px solid var(--nu-color-border);
+}
+
+.workflowList b {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-color-community);
+  background: var(--nu-color-community-soft);
+  font-size: var(--nu-text-caption);
+}
+
+.workflowList span {
+  display: grid;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.workflowList strong,
+.layerList dt,
+.sampleList dt {
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.workflowList small,
+.layerList dd,
+.sampleList dd {
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: 1.5;
+}
+
+.guideColumns {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.layerList,
+.sampleList {
+  display: grid;
+  margin: 0;
+}
+
+.layerList > div,
+.sampleList > div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.8rem 1rem;
+}
+
+.layerList > div + div,
+.sampleList > div + div {
+  border-top: 1px solid var(--nu-color-border);
+}
+
+.layerList dd,
+.sampleList dd {
+  margin: 0;
+}
+
+.sampleList > div {
+  grid-template-columns: 76px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sampleNote {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--nu-color-border);
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface-muted);
+  font-size: var(--nu-text-caption);
+  line-height: 1.55;
+}
+
+.publishChecklist {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.publishChecklist li {
+  display: flex;
+  min-width: 0;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.75rem 1rem;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-caption);
+  line-height: 1.5;
+}
+
+.publishChecklist li + li {
+  border-top: 1px solid var(--nu-color-border);
+}
+
+.publishChecklist svg {
+  flex: 0 0 auto;
+  margin-top: 0.1rem;
+  color: var(--nu-color-success);
+}
+
+.prohibitedGuide summary {
+  display: flex;
+  min-height: 54px;
+  cursor: pointer;
+  list-style: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 1rem;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.prohibitedGuide summary::-webkit-details-marker {
+  display: none;
+}
+
+.prohibitedGuide summary span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.prohibitedGuide summary span svg {
+  color: var(--nu-color-warning);
+}
+
+.prohibitedGuide summary > svg {
+  transition: transform 180ms ease;
+}
+
+.prohibitedGuide[open] summary > svg {
+  transform: rotate(180deg);
+}
+
+.prohibitedGuide ul {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0 1rem 1rem 2rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: 1.5;
+}
+
 @media (min-width: 700px) {
   .tabs {
     padding: 0 0.25rem;
@@ -414,5 +649,43 @@
 
   .technicalDetails > dl {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .dataGuideIntro {
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 0.35fr);
+    align-items: center;
+    padding: 1.25rem;
+  }
+
+  .workflowList {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .workflowList li + li {
+    border-top: 0;
+    border-left: 1px solid var(--nu-color-border);
+  }
+
+  .guideColumns {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .publishChecklist {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .publishChecklist li:nth-child(even) {
+    border-left: 1px solid var(--nu-color-border);
+  }
+
+  .publishChecklist li:nth-child(2) {
+    border-top: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .prohibitedGuide summary > svg,
+  .technicalDetails summary svg {
+    transition: none;
   }
 }

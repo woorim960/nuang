@@ -48,8 +48,8 @@ const chapters: TraitMapCustomerGuideChapter[] = [
     number: 2,
     slot: "role_meaning",
     summary:
-      "‘관계를 여는 지휘자’는 대화를 시작하고 여러 사람의 생각을 모아 다음 흐름을 만드는 ENAKQ의 모습을 담은 이름이에요.",
-    title: "‘관계를 여는 지휘자’는 이런 사람이에요",
+      "‘관계를 여는 선도자’는 대화를 시작하고 여러 사람의 생각을 모아 다음 흐름을 만드는 ENAKQ의 모습을 담은 이름이에요.",
+    title: "‘관계를 여는 선도자’는 이런 사람이에요",
     sections: [
       {
         title: "관계를 연다는 뜻",
@@ -59,9 +59,9 @@ const chapters: TraitMapCustomerGuideChapter[] = [
         ],
       },
       {
-        title: "지휘자라는 뜻",
+        title: "관계를 여는 선도자라는 뜻",
         paragraphs: [
-          "여기서 지휘자는 사람을 명령하는 사람이 아니라 서로 다른 목소리가 어울리도록 흐름을 만드는 사람이에요. ENAKQ는 여러 의견의 핵심을 빠르게 잡고, 각자가 원하는 것을 살핀 뒤, 모두가 움직일 수 있는 다음 단계를 제안하는 데 자연스럽게 관심이 가요.",
+          "여기서 선도자는 사람을 명령하는 사람이 아니라 먼저 대화를 열어 함께 움직일 방향을 보여주는 사람이에요. ENAKQ는 여러 의견의 핵심을 빠르게 잡고, 각자가 원하는 것을 살핀 뒤, 모두가 움직일 수 있는 다음 단계를 제안하는 데 자연스럽게 관심이 가요.",
           "회의에서는 흩어진 의견을 정리하고, 친구들과의 약속에서는 장소와 시간을 좁히며, 가족 안에서는 필요한 연락과 역할을 이어줘요. 자신이 모든 일을 맡으려는 것보다 ‘누가 무엇을 하면 자연스럽게 이어질까’를 생각하는 방식에 가까워요.",
         ],
       },
@@ -692,7 +692,7 @@ export const enakqCustomerGuideV2 = traitMapCustomerGuideSchema.parse({
   contractVersion: traitMapCustomerGuideContractVersion,
   heroSummary:
     "사람과 함께할 때 활력이 오르고, 새로운 가능성을 찾으며, 관계에서는 상대의 마음을 세심하게 살펴요. 사람과 생각을 연결한 뒤 다음 행동까지 꾸준히 이어가는 편이고, 중요한 관계가 불확실할 때는 걱정과 감정이 빠르게 커져요.",
-  profileName: "관계를 여는 지휘자",
+  profileName: "관계를 여는 선도자",
   readingMinutes: 24,
   totalCharacters: countTraitMapCustomerGuideCharacters(chapters),
   version: "ENAKQ-CUSTOMER-GUIDE-2.0",

@@ -4,15 +4,25 @@ import { getLabAssessment } from "@/features/lab/lab-assessments";
 
 type LabResultPageProps = {
   params: Promise<{ slug: string }>;
+  searchParams: Promise<{ localResultId?: string }>;
 };
 
-export default async function LabResultPage({ params }: LabResultPageProps) {
+export default async function LabResultPage({
+  params,
+  searchParams,
+}: LabResultPageProps) {
   const { slug } = await params;
+  const { localResultId } = await searchParams;
   const assessment = getLabAssessment(slug);
 
   if (!assessment) {
     notFound();
   }
 
-  return <LabResultView assessment={assessment} />;
+  return (
+    <LabResultView
+      assessment={assessment}
+      localResultId={localResultId}
+    />
+  );
 }

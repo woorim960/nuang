@@ -1,4 +1,11 @@
-import { BookOpenCheck, ChevronDown, LibraryBig } from "lucide-react";
+import {
+  ArrowRight,
+  BookOpenCheck,
+  Check,
+  ChevronDown,
+  LibraryBig,
+  ShieldAlert,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { AdminContentActions } from "@/features/admin/AdminContentActions";
@@ -10,6 +17,14 @@ import {
 } from "@/features/admin/server-admin-content";
 import shared from "@/features/admin/AdminShared.module.css";
 import { candidateProfileNameCatalog } from "@/features/nuang-code/candidate-profile-names";
+import {
+  dataCenterDataLayers,
+  dataCenterOperationsGuideVersion,
+  dataCenterProhibitedActions,
+  dataCenterPublishChecklist,
+  dataCenterSampleRules,
+  dataCenterWeeklyWorkflow,
+} from "@/features/admin/data-center-operations-guide";
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
@@ -24,7 +39,7 @@ const reviewRoles = [
   "product_safety",
 ] as const;
 
-type ContentView = "releases" | "reviews";
+type ContentView = "guide" | "releases" | "reviews";
 
 type ContentReviewGroup = {
   atomId: string;
@@ -45,9 +60,14 @@ export default async function AdminContentPage({
 }) {
   const context = await resolveAdminContext();
   if (!context.ok) return null;
-  const view: ContentView =
-    (await searchParams).view === "reviews" ? "reviews" : "releases";
-  const data = await readAdminContent(context.client).catch(() => null);
+  const requestedView = (await searchParams).view;
+  const view: ContentView = ["guide", "reviews"].includes(requestedView ?? "")
+    ? (requestedView as ContentView)
+    : "releases";
+  const data =
+    view === "guide"
+      ? { releases: [], reviews: [] }
+      : await readAdminContent(context.client).catch(() => null);
   const reviewGroups = data ? groupContentReviews(data.reviews) : [];
   const pendingGroups = reviewGroups.filter(needsOperatorAttention);
 
@@ -55,12 +75,14 @@ export default async function AdminContentPage({
     <main className={shared.page}>
       <header className={shared.pageHeader}>
         <div>
-          <p>성향지도 문구 검토와 게시</p>
+          <p>성향지도·결과 리포트 데이터 운영</p>
           <h1>성향 콘텐츠</h1>
         </div>
         <span className={shared.headerAction}>
           <LibraryBig aria-hidden="true" size={17} strokeWidth={1.7} />
-          {pendingGroups.length}개 확인
+          {view === "guide"
+            ? `가이드 ${dataCenterOperationsGuideVersion}`
+            : `${pendingGroups.length}개 확인`}
         </span>
       </header>
 
@@ -81,11 +103,20 @@ export default async function AdminContentPage({
           문구 검토
           <span>{pendingGroups.length}</span>
         </Link>
+        <Link
+          aria-current={view === "guide" ? "page" : undefined}
+          data-active={view === "guide"}
+          href="/admin/content?view=guide"
+        >
+          운영 가이드
+        </Link>
       </nav>
 
-      <ContentGuide view={view} />
+      {view !== "guide" ? <ContentGuide view={view} /> : null}
 
-      {!data ? (
+      {view === "guide" ? (
+        <DataCenterOperationsGuide />
+      ) : !data ? (
         <section className={shared.error}>
           <strong>성향 콘텐츠를 불러오지 못했습니다</strong>
           <p>데이터베이스 연결과 성향지도 콘텐츠 표를 확인해 주세요.</p>
@@ -96,6 +127,121 @@ export default async function AdminContentPage({
         <ReviewList groups={pendingGroups} />
       )}
     </main>
+  );
+}
+
+function DataCenterOperationsGuide() {
+  return (
+    <div className={styles.dataGuide}>
+      <section className={`${shared.panel} ${styles.dataGuideIntro}`}>
+        <div>
+          <span>매주 한 번 확인하면 충분해요</span>
+          <h2>결과 데이터는 모으고, 새 버전은 검토해서 발행해요</h2>
+          <p>
+            자동 집계는 검토 순서를 알려줍니다. 게시 중인 문장과 과거 결과를
+            직접 고치지 않고, 새 버전을 승인한 뒤 적용합니다.
+          </p>
+        </div>
+        <nav aria-label="데이터센터 운영 바로가기">
+          <Link href="/admin/feedback#core-result-quality">
+            품질 신호 보기
+            <ArrowRight aria-hidden="true" size={15} strokeWidth={1.8} />
+          </Link>
+          <Link href="/admin/research">
+            검사 연구 보기
+            <ArrowRight aria-hidden="true" size={15} strokeWidth={1.8} />
+          </Link>
+          <Link href="/admin/content?view=releases">
+            게시 버전 보기
+            <ArrowRight aria-hidden="true" size={15} strokeWidth={1.8} />
+          </Link>
+        </nav>
+      </section>
+
+      <section className={shared.panel}>
+        <div className={shared.panelHeader}>
+          <h2>매주 하는 세 가지</h2>
+          <span>수집 → 검토 → 새 버전</span>
+        </div>
+        <ol className={styles.workflowList}>
+          {dataCenterWeeklyWorkflow.map((step, index) => (
+            <li key={step.title}>
+              <b>{index + 1}</b>
+              <span>
+                <strong>{step.title}</strong>
+                <small>{step.description}</small>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
+
+      <div className={styles.guideColumns}>
+        <section className={shared.panel}>
+          <div className={shared.panelHeader}>
+            <h2>데이터별 관리 원칙</h2>
+            <span>덮어쓰지 않기</span>
+          </div>
+          <dl className={styles.layerList}>
+            {dataCenterDataLayers.map((layer) => (
+              <div key={layer.label}>
+                <dt>{layer.label}</dt>
+                <dd>{layer.rule}</dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+
+        <section className={shared.panel}>
+          <div className={shared.panelHeader}>
+            <h2>표본 수를 읽는 방법</h2>
+            <span>자동 발행 금지</span>
+          </div>
+          <dl className={styles.sampleList}>
+            {dataCenterSampleRules.map((rule) => (
+              <div key={rule.sample}>
+                <dt>{rule.sample}</dt>
+                <dd>{rule.action}</dd>
+              </div>
+            ))}
+          </dl>
+          <p className={styles.sampleNote}>
+            ‘상황에 따라 달라요’가 많으면 문장이 틀렸다고 단정하지 말고, 적용
+            상황이나 빠진 조건을 먼저 확인하세요.
+          </p>
+        </section>
+      </div>
+
+      <section className={shared.panel}>
+        <div className={shared.panelHeader}>
+          <h2>새 버전 게시 전 확인</h2>
+          <span>{dataCenterPublishChecklist.length}가지</span>
+        </div>
+        <ul className={styles.publishChecklist}>
+          {dataCenterPublishChecklist.map((item) => (
+            <li key={item}>
+              <Check aria-hidden="true" size={16} strokeWidth={2} />
+              <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <details className={`${shared.panel} ${styles.prohibitedGuide}`}>
+        <summary>
+          <span>
+            <ShieldAlert aria-hidden="true" size={18} strokeWidth={1.8} />
+            운영에서 하지 않는 일
+          </span>
+          <ChevronDown aria-hidden="true" size={17} strokeWidth={1.8} />
+        </summary>
+        <ul>
+          {dataCenterProhibitedActions.map((item) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </details>
+    </div>
   );
 }
 

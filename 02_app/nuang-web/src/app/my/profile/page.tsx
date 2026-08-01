@@ -1,5 +1,5 @@
-import { MyTraitDetailRoute } from "@/features/account/MyTraitDetailRoute";
+import { redirect } from "next/navigation";
 
 export default function MyProfileDetailPage() {
-  return <MyTraitDetailRoute />;
+  redirect("/my/reports");
 }

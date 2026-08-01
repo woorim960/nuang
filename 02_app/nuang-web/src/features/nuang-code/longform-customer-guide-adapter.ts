@@ -170,8 +170,8 @@ const chapterTitleBuilders = [
     `‘${displayName}’에 담긴 뜻을 알아봐요`,
   (code: string) => `${code} 다섯 글자를 한 글자씩 알아봐요`,
   (code: string) => `${code}의 다섯 경향이 함께 움직이는 방식을 알아봐요`,
-  (_code: string) => "처음 드는 생각과 실제 나타나는 반응을 나누어 봐요",
-  (_code: string) => "선택하고 움직이고 쉬는 평소 모습을 알아봐요",
+  () => "처음 드는 생각과 실제 나타나는 반응을 나누어 봐요",
+  () => "선택하고 움직이고 쉬는 평소 모습을 알아봐요",
   (code: string) => `가족과 함께 있을 때의 ${code}를 알아봐요`,
   (code: string) => `친구 관계에서 나타나는 ${code}를 알아봐요`,
   (code: string) => `연인 관계에서 나타나는 ${code}를 알아봐요`,
@@ -180,7 +180,7 @@ const chapterTitleBuilders = [
   (code: string) => `${code}가 부담을 느끼고 회복하는 방식을 알아봐요`,
   (code: string) => `${code}의 강점을 편안하게 오래 쓰는 방법을 알아봐요`,
   (code: string) => `${code}가 자주 받는 오해와 잘 통하는 말을 알아봐요`,
-  (_code: string) => "뉴앙이 성향을 살펴보고 설명하는 기준을 알아봐요",
+  () => "뉴앙이 성향을 살펴보고 설명하는 기준을 알아봐요",
 ] as const;
 
 const evidenceReferences = [

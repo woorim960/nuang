@@ -54,7 +54,7 @@ describe("CandidateCoreResultView", () => {
     expect(screen.queryByText(/연구 중인|예비 결과/)).not.toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        name: "관계를 여는 지휘자, 뉴앙 코드 ENAKQ",
+        name: "관계를 여는 선도자, 뉴앙 코드 ENAKQ",
       }),
     ).toBeInTheDocument();
     expect(
@@ -88,12 +88,17 @@ describe("CandidateCoreResultView", () => {
     expect(
       screen.queryByRole("navigation", { name: "결과 리포트 바로가기" }),
     ).not.toBeInTheDocument();
-    expect(screen.getByText("다섯 글자가 말해주는 것")).toBeInTheDocument();
-    expect(screen.getByText("마음 가는 사람 앞에서는")).toBeInTheDocument();
-    expect(screen.getByText("연인과 함께할 때")).toBeInTheDocument();
-    expect(screen.getByText("가족 안에서는")).toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "ENAKQ 성향지도 전체 보기" }),
+      screen.getByText("다섯 글자가 함께 말해주는 것"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("이번 답에서 특히 눈에 띈 모습"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("마음 가는 사람 앞에서")).toBeInTheDocument();
+    expect(screen.getByText("연인과 함께할 때")).toBeInTheDocument();
+    expect(screen.getByText("가족 안에서")).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "ENAKQ 성향지도 자세히 보기" }),
     ).toHaveAttribute("href", "/map/ENAKQ");
     expect(
       document.querySelector('a[href*="#chapter-"]'),
@@ -103,7 +108,7 @@ describe("CandidateCoreResultView", () => {
     ).toHaveAttribute("href", "/feed");
     expect(
       screen.getByRole("link", { name: "다른 검사 만나보기" }),
-    ).toHaveAttribute("href", "/assessments");
+    ).toHaveAttribute("href", "/home");
 
     fireEvent.click(
       screen.getByRole("tab", { name: /A.*관계에서 관심이 가는 곳/ }),
@@ -240,6 +245,10 @@ describe("CandidateCoreResultView", () => {
     expect(
       screen.getByRole("heading", { name: "첫 답에서 보인 내 모습" }),
     ).toBeInTheDocument();
+    expect(screen.queryByText("연인과 함께할 때")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText("이번 답에서 특히 눈에 띈 모습"),
+    ).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /정밀 검사로 더 알아보기/ }),
     ).toHaveAttribute(

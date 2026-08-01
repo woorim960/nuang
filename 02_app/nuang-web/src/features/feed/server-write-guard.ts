@@ -45,37 +45,6 @@ export async function checkCommunityWriteGuard({
   client: SupabaseClient;
   target?: CommunityWriteGuardTarget;
 }): Promise<CommunityWriteGuardCode | null> {
-  const consentResponse = await client
-    .schema("consent")
-    .from("age_and_consent_status")
-    .select(
-      "is_14_or_older,required_privacy_version,required_terms_version",
-    )
-    .eq("account_id", accountId)
-    .maybeSingle();
-
-  if (consentResponse.error) {
-    console.error("[community-write] consent guard unavailable", {
-      code: consentResponse.error.code,
-    });
-    return "guard_unavailable";
-  }
-
-  const consent = consentResponse.data as
-    | {
-        is_14_or_older: boolean;
-        required_privacy_version: string;
-        required_terms_version: string;
-      }
-    | null;
-  if (
-    !consent?.is_14_or_older ||
-    consent.required_privacy_version !== "privacy.v0.1" ||
-    consent.required_terms_version !== "terms.v0.1"
-  ) {
-    return "required_consent_missing";
-  }
-
   const schemaClient = client.schema("feed") as unknown as {
     rpc?: (
       name: string,
@@ -88,14 +57,52 @@ export async function checkCommunityWriteGuard({
 
   if (typeof schemaClient.rpc !== "function") return "guard_unavailable";
 
-  const response = await schemaClient.rpc("check_community_mutation_guard", {
-    p_account_id: accountId,
-    p_action: action,
-    p_body: body ?? null,
-    p_target_id: target?.id ?? null,
-    p_target_key: target?.key ?? null,
-    p_target_type: target?.type ?? null,
-  });
+  const [consentResponse, initialGuardResponse] = await Promise.all([
+    client
+      .schema("consent")
+      .from("age_and_consent_status")
+      .select("required_privacy_version,required_terms_version")
+      .eq("account_id", accountId)
+      .maybeSingle(),
+    schemaClient.rpc("check_community_mutation_guard", {
+      p_account_id: accountId,
+      p_action: action,
+      p_body: body ?? null,
+      p_target_id: target?.id ?? null,
+      p_target_key: target?.key ?? null,
+      p_target_type: target?.type ?? null,
+    }),
+  ]);
+
+  if (consentResponse.error) {
+    console.error("[community-write] consent guard unavailable", {
+      code: consentResponse.error.code,
+    });
+    return "guard_unavailable";
+  }
+
+  const consent = consentResponse.data as
+    | {
+        required_privacy_version: string;
+        required_terms_version: string;
+      }
+    | null;
+  if (
+    consent?.required_privacy_version !== "privacy.v0.1" ||
+    consent.required_terms_version !== "terms.v0.1"
+  ) {
+    return "required_consent_missing";
+  }
+
+  let response = initialGuardResponse;
+
+  if (response.error?.code === "PGRST202") {
+    response = await schemaClient.rpc("check_community_write_guard", {
+      p_account_id: accountId,
+      p_action: action,
+      p_body: body ?? null,
+    });
+  }
 
   if (response.error) {
     console.error("[community-write] guard unavailable", {

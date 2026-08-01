@@ -4,7 +4,9 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NuangRouteLoadingScreen } from "@/components/navigation/NuangRouteLoadingScreen";
 
-const minimumVisibleDuration = 420;
+const standardMinimumVisibleDuration = 420;
+const communityMinimumVisibleDuration = 100;
+const communityLoadingDelay = 180;
 const safetyTimeoutDuration = 10_000;
 
 type NavigationEventLike = Event & {
@@ -22,6 +24,7 @@ export function GlobalRouteTransition() {
   const hideTimerRef = useRef<number | null>(null);
   const safetyTimerRef = useRef<number | null>(null);
   const programmaticStartTimerRef = useRef<number | null>(null);
+  const minimumVisibleDurationRef = useRef(standardMinimumVisibleDuration);
 
   const clearTimer = useCallback((timerRef: { current: number | null }) => {
     if (timerRef.current !== null) {
@@ -30,16 +33,20 @@ export function GlobalRouteTransition() {
     }
   }, []);
 
-  const beginTransition = useCallback(() => {
-    clearTimer(hideTimerRef);
-    clearTimer(safetyTimerRef);
-    startedAtRef.current = window.performance.now();
-    setIsVisible(true);
-    safetyTimerRef.current = window.setTimeout(() => {
-      setIsVisible(false);
-      safetyTimerRef.current = null;
-    }, safetyTimeoutDuration);
-  }, [clearTimer]);
+  const beginTransition = useCallback(
+    (minimumVisibleDuration: number) => {
+      clearTimer(hideTimerRef);
+      clearTimer(safetyTimerRef);
+      minimumVisibleDurationRef.current = minimumVisibleDuration;
+      startedAtRef.current = window.performance.now();
+      setIsVisible(true);
+      safetyTimerRef.current = window.setTimeout(() => {
+        setIsVisible(false);
+        safetyTimerRef.current = null;
+      }, safetyTimeoutDuration);
+    },
+    [clearTimer],
+  );
 
   const finishTransition = useCallback(() => {
     if (startedAtRef.current === null) return;
@@ -48,7 +55,7 @@ export function GlobalRouteTransition() {
     clearTimer(safetyTimerRef);
 
     const elapsed = window.performance.now() - startedAtRef.current;
-    const remaining = Math.max(0, minimumVisibleDuration - elapsed);
+    const remaining = Math.max(0, minimumVisibleDurationRef.current - elapsed);
 
     hideTimerRef.current = window.setTimeout(() => {
       startedAtRef.current = null;
@@ -58,8 +65,9 @@ export function GlobalRouteTransition() {
   }, [clearTimer]);
 
   useEffect(() => {
+    clearTimer(programmaticStartTimerRef);
     finishTransition();
-  }, [finishTransition, routeKey]);
+  }, [clearTimer, finishTransition, routeKey]);
 
   useEffect(() => {
     const shouldShowForUrl = (destination: string) => {
@@ -71,6 +79,31 @@ export function GlobalRouteTransition() {
       return (
         nextUrl.pathname !== currentUrl.pathname ||
         nextUrl.search !== currentUrl.search
+      );
+    };
+
+    const scheduleTransition = (destination: string) => {
+      if (
+        startedAtRef.current !== null ||
+        programmaticStartTimerRef.current !== null
+      ) {
+        return;
+      }
+
+      const nextUrl = new URL(destination, window.location.href);
+      const isCommunityRoute =
+        nextUrl.pathname === "/feed" || nextUrl.pathname.startsWith("/feed/");
+      programmaticStartTimerRef.current = window.setTimeout(
+        () => {
+          programmaticStartTimerRef.current = null;
+          if (startedAtRef.current !== null) return;
+          beginTransition(
+            isCommunityRoute
+              ? communityMinimumVisibleDuration
+              : standardMinimumVisibleDuration,
+          );
+        },
+        isCommunityRoute ? communityLoadingDelay : 0,
       );
     };
 
@@ -99,10 +132,10 @@ export function GlobalRouteTransition() {
         return;
       }
 
-      if (shouldShowForUrl(anchor.href)) beginTransition();
+      if (shouldShowForUrl(anchor.href)) scheduleTransition(anchor.href);
     };
 
-    const handlePopState = () => beginTransition();
+    const handlePopState = () => scheduleTransition(window.location.href);
     const handleNavigate = (event: Event) => {
       const destination = (event as NavigationEventLike).destination?.url;
       if (
@@ -113,14 +146,7 @@ export function GlobalRouteTransition() {
         return;
       }
 
-      clearTimer(programmaticStartTimerRef);
-      programmaticStartTimerRef.current = window.setTimeout(() => {
-        programmaticStartTimerRef.current = null;
-        if (startedAtRef.current !== null) return;
-
-        beginTransition();
-        finishTransition();
-      }, 0);
+      scheduleTransition(destination);
     };
 
     document.addEventListener("click", handleDocumentClick, true);

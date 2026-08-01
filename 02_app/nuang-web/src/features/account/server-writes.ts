@@ -23,6 +23,7 @@ import {
   deriveTrustedClaimResult,
   type TrustedClaimResult,
 } from "@/features/account/server-result-claim";
+import { buildReportContentSnapshot } from "@/features/result/unified-core-report/report-content-snapshot";
 import {
   isRequiredConsentComplete,
   type ConsentDraft,
@@ -91,11 +92,9 @@ export async function claimResultToAccount({
     p_assessment_slug: assessmentSlug,
     p_code_scheme_version: trustedResult.trustedRelease.codeSchemeVersion,
     p_completed_at: trustedResult.completedAt,
-    p_item_release_version:
-      trustedResult.trustedRelease.assessmentReleaseId,
+    p_item_release_version: trustedResult.trustedRelease.assessmentReleaseId,
     p_local_result_id: payload.localResultId,
-    p_measurement_release_id:
-      trustedResult.trustedRelease.assessmentReleaseId,
+    p_measurement_release_id: trustedResult.trustedRelease.assessmentReleaseId,
     p_profile_code: trustedResult.profileCode,
     p_profile_name: trustedResult.profileName,
     p_responses: trustedResult.responseRows,
@@ -103,7 +102,7 @@ export async function claimResultToAccount({
     p_scoring_release_id: trustedResult.trustedRelease.scoringReleaseId,
     p_scoring_version: trustedResult.trustedRelease.scoringModelVersion,
     p_share_summary: buildShareSummary(payload, trustedResult),
-    p_summary: buildResultSummary(payload, trustedResult),
+    p_summary: buildTrustedResultSummary(payload, trustedResult),
   });
 
   if (claimResponse.error || !Array.isArray(claimResponse.data)) {
@@ -533,19 +532,30 @@ function stringValue(value: unknown) {
   return typeof value === "string" && value.trim() ? value.trim() : null;
 }
 
-function buildResultSummary(
-  payload: ClaimResultPayload,
+export function buildTrustedResultSummary(
+  payload: Pick<ClaimResultPayload, "assessmentKind" | "localResultId">,
   trustedResult: TrustedClaimResult,
 ) {
   return {
+    alternativeCodes: trustedResult.alternativeCodes,
     assessmentKind: payload.assessmentKind,
     completedAt: trustedResult.completedAt,
     domains: trustedResult.domains,
     facets: trustedResult.facets,
+    originResultId: payload.localResultId,
     profileCode: trustedResult.profileCode,
     profileName: trustedResult.profileName,
+    reportContentSnapshot: buildReportContentSnapshot({
+      code: trustedResult.profileCode,
+      kind: payload.assessmentKind,
+      measurementVersion: trustedResult.resultCopyVersion,
+    }),
+    responseSnapshotHash: trustedResult.responseSnapshotHash,
+    resultCopyVersion: trustedResult.resultCopyVersion,
+    resultEvidenceStatus: trustedResult.evidenceStatus,
     resultLabel: trustedResult.resultLabel,
-    versionBundle: payload.versionBundle,
+    resultStatus: trustedResult.resultStatus,
+    versionBundle: trustedResult.trustedRelease,
   };
 }
 
@@ -560,7 +570,7 @@ function buildShareSummary(
     profileCode: trustedResult.profileCode,
     profileName: trustedResult.profileName,
     resultLabel: trustedResult.resultLabel,
-    versionBundle: payload.versionBundle,
+    versionBundle: trustedResult.trustedRelease,
   };
 }
 
@@ -569,6 +579,7 @@ function buildScorePayload(
   trustedResult: TrustedClaimResult,
 ) {
   return {
+    alternativeCodes: trustedResult.alternativeCodes,
     assessmentKind: payload.assessmentKind,
     completedAt: trustedResult.completedAt,
     domains: trustedResult.domains,
@@ -576,7 +587,11 @@ function buildScorePayload(
     includesDirectResponses: false,
     profileCode: trustedResult.profileCode,
     profileName: trustedResult.profileName,
-    versionBundle: payload.versionBundle,
+    responseSnapshotHash: trustedResult.responseSnapshotHash,
+    resultCopyVersion: trustedResult.resultCopyVersion,
+    resultEvidenceStatus: trustedResult.evidenceStatus,
+    resultStatus: trustedResult.resultStatus,
+    versionBundle: trustedResult.trustedRelease,
   };
 }
 

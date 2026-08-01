@@ -40,8 +40,9 @@ describe("local export payload", () => {
               resultId: "spark",
             },
           },
-          completedAt: "2026-07-08T00:00:00.000Z",
-          result: {
+        completedAt: "2026-07-08T00:00:00.000Z",
+        localResultId: "lab_export_test_1",
+        result: {
             profile: {
               id: "spark",
               relationTip: "대화 전 짧게 확인해요.",

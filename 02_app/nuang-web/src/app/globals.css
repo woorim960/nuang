@@ -5,6 +5,50 @@
   box-sizing: border-box;
 }
 
+html,
+body {
+  width: 100%;
+  min-width: 0;
+  overflow-x: clip;
+}
+
+body {
+  min-height: 100dvh;
+}
+
+main,
+header,
+footer,
+nav,
+section,
+article,
+aside,
+form,
+fieldset {
+  min-width: 0;
+}
+
+img,
+picture,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+svg,
+input,
+textarea,
+select {
+  max-width: 100%;
+}
+
+input,
+textarea,
+select {
+  min-width: 0;
+}
+
 .grid {
   grid-auto-columns: minmax(0, 1fr);
 }

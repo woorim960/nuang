@@ -1,0 +1,193 @@
+.root,
+.stateRoot {
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  color: var(--nu-color-text);
+  background: var(--nu-color-app-bg);
+}
+
+.appBar {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  min-height: calc(56px + env(safe-area-inset-top));
+  padding: env(safe-area-inset-top) 8px 0;
+  border-bottom: 1px solid var(--nu-color-border-soft);
+  background: var(--nu-color-surface);
+}
+
+.appBar > p {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: center;
+}
+
+.appBar > a {
+  display: grid;
+  width: var(--nu-touch-min);
+  height: var(--nu-touch-min);
+  place-items: center;
+  border-radius: 50%;
+}
+
+.skeleton {
+  display: grid;
+  gap: 18px;
+  padding-bottom: 24px;
+}
+
+.skeletonHero {
+  display: grid;
+  gap: 14px;
+  min-height: 332px;
+  padding: 32px 16px;
+  background: var(--nu-color-brand-surface);
+}
+
+.skeletonHero span,
+.skeletonHero strong,
+.skeletonHero b,
+.skeletonHero i,
+.skeletonRows span {
+  display: block;
+  border-radius: var(--nu-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--nu-color-surface-muted),
+    var(--nu-color-surface),
+    var(--nu-color-surface-muted)
+  );
+  background-size: 200% 100%;
+  animation: skeleton 1.4s linear infinite;
+}
+
+.skeletonHero span {
+  width: 92px;
+  height: 28px;
+}
+
+.skeletonHero strong {
+  width: 230px;
+  height: 48px;
+  margin-top: 20px;
+}
+
+.skeletonHero b {
+  width: 270px;
+  height: 30px;
+}
+
+.skeletonHero i {
+  width: min(100%, 292px);
+  height: 64px;
+}
+
+.skeleton > p {
+  margin: 0;
+  color: var(--nu-color-text-muted);
+  font-size: 14px;
+  text-align: center;
+}
+
+.skeletonRows {
+  display: grid;
+  gap: 14px;
+  padding: 24px 16px;
+  background: var(--nu-color-surface);
+}
+
+.skeletonRows span {
+  width: 100%;
+  height: 62px;
+}
+
+.stateBody {
+  display: grid;
+  min-height: calc(100dvh - 56px);
+  padding: 52px 24px;
+  place-content: center;
+  justify-items: center;
+  background: var(--nu-color-surface);
+  text-align: center;
+}
+
+.stateBody img {
+  width: 104px;
+  height: auto;
+}
+
+.stateBody h1 {
+  margin: 18px 0 0;
+  font-size: 22px;
+  line-height: 1.42;
+  letter-spacing: -0.025em;
+}
+
+.stateBody p {
+  max-width: 320px;
+  margin: 10px 0 0;
+  color: var(--nu-color-text-secondary);
+  font-size: 15px;
+  line-height: 1.62;
+  word-break: keep-all;
+}
+
+.stateBody > button,
+.stateBody > a:not(.secondaryLink) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  gap: 7px;
+  margin-top: 24px;
+  padding: 12px 18px;
+  border: 0;
+  border-radius: var(--nu-radius-lg);
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-brand-action);
+  font: inherit;
+  font-size: 15px;
+  font-weight: 850;
+  cursor: pointer;
+}
+
+.secondaryLink {
+  min-height: var(--nu-touch-min);
+  margin-top: 8px;
+  padding: 12px;
+  color: var(--nu-color-brand-strong);
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.stateBody > .secondaryButton {
+  margin-top: 8px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+  box-shadow: none;
+}
+
+.appBar > a:focus-visible,
+.stateBody > button:focus-visible,
+.stateBody > a:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--nu-color-focus) 72%, transparent);
+  outline-offset: 2px;
+}
+
+@keyframes skeleton {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeletonHero span,
+  .skeletonHero strong,
+  .skeletonHero b,
+  .skeletonHero i,
+  .skeletonRows span {
+    animation: none;
+  }
+}

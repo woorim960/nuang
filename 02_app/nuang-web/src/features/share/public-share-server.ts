@@ -1,31 +1,23 @@
-import { createPublicShareSuccessPayload } from "@/features/share/public-share-contract";
 import { hashShareToken } from "@/features/account/server-writes";
-import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
+import { adaptPublicCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
+import type { CoreResultReportModel } from "@/features/result/unified-core-report/core-result-report-model";
 import {
   createSupabaseServiceClient,
   getSupabaseServiceEnv,
 } from "@/lib/supabase/service";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 type PublicShareReadResult =
   | {
-      payload: ReturnType<typeof createPublicShareSuccessPayload>;
+      model: CoreResultReportModel;
       status: "active";
     }
   | {
       status: "closed";
     }
   | {
-      status: "expired" | "not_found" | "revoked";
+      status: "blocked" | "expired" | "not_found" | "revoked";
     };
-
-type ShareSummary = {
-  assessmentKind?: unknown;
-  completedAt?: unknown;
-  domains?: unknown;
-  profileCode?: unknown;
-  profileName?: unknown;
-  resultLabel?: unknown;
-};
 
 export async function readPublicShareToken(
   token: string,
@@ -41,7 +33,7 @@ export async function readPublicShareToken(
   const shareResponse = await client
     .schema("sharing")
     .from("share_link")
-    .select("id, expires_at, result_report_id, status")
+    .select("account_id, id, expires_at, result_report_id, status")
     .eq("token_hash", tokenHash)
     .maybeSingle();
 
@@ -50,23 +42,36 @@ export async function readPublicShareToken(
   }
 
   const share = shareResponse.data as {
+    account_id: string;
     expires_at: string;
     result_report_id: string;
     status: string;
   };
 
+  const viewerAccess = await readViewerShareAccess({
+    client,
+    ownerAccountId: share.account_id,
+  });
+  if (viewerAccess === "error") return { status: "closed" };
+  if (viewerAccess === "blocked") return { status: "blocked" };
+
   if (share.status === "revoked") {
     return { status: "revoked" };
   }
 
-  if (share.status === "expired" || new Date(share.expires_at).getTime() < Date.now()) {
+  if (
+    share.status === "expired" ||
+    new Date(share.expires_at).getTime() < Date.now()
+  ) {
     return { status: "expired" };
   }
 
   const reportResponse = await client
     .schema("report")
     .from("result_report")
-    .select("report_kind, share_summary")
+    .select(
+      "id, attempt_id, report_kind, profile_code, profile_name, created_at",
+    )
     .eq("id", share.result_report_id)
     .is("deleted_at", null)
     .maybeSingle();
@@ -76,58 +81,98 @@ export async function readPublicShareToken(
   }
 
   const report = reportResponse.data as {
-    report_kind?: unknown;
-    share_summary: ShareSummary;
+    attempt_id: string;
+    created_at: string;
+    id: string;
+    profile_code: string | null;
+    profile_name: string | null;
+    report_kind: string;
   };
-  const shareSummary = report.share_summary;
-  const profileCode = stringOrFallback(shareSummary.profileCode, "-----");
-  const profileName =
-    getCandidateProfileDefinition(profileCode)?.displayName ??
-    stringOrFallback(shareSummary.profileName, "공유 결과");
+  if (
+    (report.report_kind !== "quick" && report.report_kind !== "full") ||
+    !report.profile_code
+  ) {
+    return { status: "not_found" };
+  }
+
+  const attemptResponse = await client
+    .schema("assessment")
+    .from("assessment_attempt")
+    .select("completed_at")
+    .eq("id", report.attempt_id)
+    .eq("account_id", share.account_id)
+    .maybeSingle();
+  if (attemptResponse.error) return { status: "not_found" };
+  const completedAt = attemptResponse.data?.completed_at
+    ? String(attemptResponse.data.completed_at)
+    : String(report.created_at);
+  const model = adaptPublicCoreResult({
+    completedAt,
+    kind: report.report_kind,
+    profileCode: report.profile_code,
+    profileName: report.profile_name,
+    resultReportId: report.id,
+  });
+  if (!model) return { status: "not_found" };
 
   return {
-    payload: createPublicShareSuccessPayload({
-      assessmentKind: normalizeAssessmentKind(
-        shareSummary.assessmentKind ?? report.report_kind,
-      ),
-      completedAt: stringOrFallback(shareSummary.completedAt, ""),
-      domains: normalizeDomains(shareSummary.domains),
-      profileCode,
-      profileName,
-      resultLabel: stringOrFallback(
-        shareSummary.resultLabel,
-        "현재 가장 가까운 대표 성향",
-      ),
-    }),
+    model,
     status: "active",
   };
 }
 
-function normalizeDomains(value: unknown) {
-  if (!Array.isArray(value)) {
-    return [];
+async function readViewerShareAccess({
+  client,
+  ownerAccountId,
+}: {
+  client: NonNullable<ReturnType<typeof createSupabaseServiceClient>>;
+  ownerAccountId: string;
+}) {
+  const serverClient = await createServerSupabaseClient();
+  if (!serverClient) return "anonymous" as const;
+  const auth = await serverClient.auth.getUser();
+  const viewerUserId = auth.data.user?.id;
+  if (!viewerUserId) return "anonymous" as const;
+
+  const identity = await client
+    .schema("identity")
+    .from("auth_identity")
+    .select("account_id")
+    .eq("supabase_user_id", viewerUserId)
+    .is("revoked_at", null)
+    .order("provider_linked_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (identity.error) return "error" as const;
+  const viewerAccountId = identity.data?.account_id
+    ? String(identity.data.account_id)
+    : null;
+  if (!viewerAccountId || viewerAccountId === ownerAccountId) {
+    return "allowed" as const;
   }
 
-  return value.slice(0, 5).map((item) => ({
-    domainId: stringOrFallback(item?.domainId, ""),
-    label: stringOrFallback(item?.label, ""),
-    score: numberOrNull(item?.score),
-    symbol: stringOrNull(item?.symbol),
-  }));
-}
-
-function stringOrFallback(value: unknown, fallback: string) {
-  return typeof value === "string" && value.trim() ? value.trim() : fallback;
-}
-
-function stringOrNull(value: unknown) {
-  return typeof value === "string" && value.trim() ? value.trim() : null;
-}
-
-function numberOrNull(value: unknown) {
-  return typeof value === "number" && Number.isFinite(value) ? value : null;
-}
-
-function normalizeAssessmentKind(value: unknown) {
-  return value === "full" ? "full" : "quick";
+  const [outgoing, incoming] = await Promise.all([
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("id")
+      .eq("blocker_account_id", viewerAccountId)
+      .eq("blocked_account_id", ownerAccountId)
+      .is("deleted_at", null)
+      .limit(1)
+      .maybeSingle(),
+    client
+      .schema("feed")
+      .from("profile_block")
+      .select("id")
+      .eq("blocker_account_id", ownerAccountId)
+      .eq("blocked_account_id", viewerAccountId)
+      .is("deleted_at", null)
+      .limit(1)
+      .maybeSingle(),
+  ]);
+  if (outgoing.error || incoming.error) return "error" as const;
+  return outgoing.data || incoming.data
+    ? ("blocked" as const)
+    : ("allowed" as const);
 }

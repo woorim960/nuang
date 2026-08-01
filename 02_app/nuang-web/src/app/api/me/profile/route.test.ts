@@ -62,7 +62,7 @@ const editorPayload = {
   code: "ENAKQ",
   displayName: profile.displayName,
   handle: profile.handle,
-  profileName: "관계를 여는 지휘자",
+  profileName: "관계를 여는 선도자",
   publicId: profile.id,
   revision: profile.revision,
 };

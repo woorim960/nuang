@@ -125,4 +125,28 @@ describe("public profile card contract", () => {
     expect(publicJson).not.toContain("itemId");
     expect(publicJson).not.toContain("token_hash");
   });
+
+  it("adds only a server-supplied public operator mark", () => {
+    const snapshot = createPublicProfileSnapshotPayload({
+      createdAt: "2026-07-04T00:00:00.000Z",
+      displayProfile: {
+        displayName: "뉴앙 운영자",
+        motif: "purple",
+      },
+      result,
+      snapshotId: "11111111-1111-4111-8111-111111111111",
+    });
+
+    const card = createPublicProfileCardPayload({
+      cardId: "card_operator",
+      isOperator: true,
+      snapshot,
+    });
+
+    expect(card.operator).toEqual({
+      label: "뉴앙 운영자",
+      mark: "nuang-n",
+    });
+    expect(JSON.stringify(card.operator)).not.toContain("@");
+  });
 });

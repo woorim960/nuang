@@ -39,6 +39,19 @@
   color: var(--nu-neutral-800);
 }
 
+.shareButton {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  place-items: center;
+  justify-self: end;
+  border: 0;
+  border-radius: 50%;
+  color: var(--nu-neutral-800);
+  background: transparent;
+  cursor: pointer;
+}
+
 .content {
   padding-bottom: max(2rem, env(safe-area-inset-bottom));
 }
@@ -407,7 +420,11 @@
   min-height: 44px;
   align-items: center;
   margin-top: 1.15rem;
+  padding: 0;
+  border: 0;
   color: var(--nu-info-500);
+  background: transparent;
+  font-family: inherit;
   font-size: var(--nu-text-body-sm);
   font-weight: var(--nu-weight-bold);
 }

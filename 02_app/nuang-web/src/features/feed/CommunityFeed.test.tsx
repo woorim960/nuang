@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { CommunityFeed } from "@/features/feed/CommunityFeed";
 import { homeDailyCommunityPollPromptId } from "@/features/feed/feed-prompts";
@@ -35,6 +41,38 @@ const post: FeedItem = {
 };
 
 describe("CommunityFeed", () => {
+  it("renders an anonymous together-game result card with a replay path", () => {
+    const resultPost: FeedItem = {
+      ...post,
+      body: "우리 그룹의 취향 싱크는 75점이었어요.",
+      id: "55555555-5555-4555-8555-555555555555",
+      kind: "together_balance_result_share",
+      title: "밸런스 게임 결과",
+      togetherBalanceResult: {
+        completedCount: 4,
+        highlight: "치킨 한 마리를 고른다면?",
+        href: "/assessments/together/balance-game?pack=what-to-eat",
+        packSlug: "what-to-eat",
+        packTitle: "우리 뭐 먹을까?",
+        resultStatus: "final",
+        roomName: "우리 뭐 먹을까? 함께한 결과",
+        score: 75,
+        scoreLabel: "자주 통하는 팀",
+      },
+    };
+
+    render(<CommunityFeed posts={[resultPost]} />);
+
+    const card = screen.getByRole("link", {
+      name: /우리 뭐 먹을까?.*75.*자주 통하는 팀.*이 주제로 우리도 해보기/,
+    });
+    expect(card).toHaveAttribute(
+      "href",
+      "/assessments/together/balance-game?pack=what-to-eat",
+    );
+    expect(screen.queryByText("민지")).not.toBeInTheDocument();
+  });
+
   it("switches to decal mode and offers the required code action", () => {
     render(<CommunityFeed posts={[post]} />);
 
@@ -51,7 +89,57 @@ describe("CommunityFeed", () => {
     ).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "내 코드 확인하기" }),
-    ).toHaveAttribute("href", "/assessments");
+    ).toHaveAttribute("href", "/home");
+  });
+
+  it("hides the obvious decal recommendation reason from my own post", () => {
+    const ownPost: FeedItem = {
+      ...post,
+      authorHandle: "me",
+      authorName: "나",
+      authorProfile: {
+        cardId: "my-card",
+        contractVersion: "public-profile-card.v0.1",
+        display: {
+          code: "ENAKQ",
+          displayName: "나",
+          motif: "purple",
+          profileImage: {
+            alt: "내 프로필",
+            motif: "purple",
+            source: "character",
+            src: "/images/nuang/character-purple.png",
+          },
+          profileName: "관계를 여는 지휘자",
+        },
+        highlights: { domainHighlights: [], facetSummaryCount: 0 },
+        privacy: {
+          includesAccountIdentity: false,
+          includesCrisisHelpInteractions: false,
+          includesDirectResponses: false,
+          includesRawScorePayload: false,
+          includesSensitiveAssessments: false,
+        },
+        source: {
+          publicSnapshotContractVersion: "public-profile-snapshot.v0.1",
+          publicSnapshotId: "22222222-2222-4222-8222-222222222222",
+        },
+        status: "published",
+        visibility: {
+          cardScope: "public_profile_card",
+          includedFields: [],
+          policyVersion: "profile-visibility.v0.1",
+        },
+      },
+      viewerIsAuthor: true,
+    };
+
+    render(<CommunityFeed posts={[ownPost]} viewerCode="ENAKQ" />);
+    fireEvent.click(screen.getByRole("button", { name: "데칼코마니" }));
+
+    expect(
+      screen.queryByText("내 코드와 5자리가 가까워요"),
+    ).not.toBeInTheDocument();
   });
 
   it("allows several Nuang profiles to be selected in one filter", () => {
@@ -64,7 +152,7 @@ describe("CommunityFeed", () => {
     );
     fireEvent.click(
       screen.getByRole("button", {
-        name: "ERGKC, 차분히 답을 세우는 운영가",
+        name: "ERGKC, 차분히 현장을 이끄는 운영자",
       }),
     );
     fireEvent.click(
@@ -235,6 +323,33 @@ describe("CommunityFeed", () => {
     );
   });
 
+  it("marks my post and describes my question as sent instead of received", () => {
+    const ownQuestion: FeedItem = {
+      ...post,
+      authorHandle: "me",
+      authorName: "나",
+      questionAudience: { codes: ["ENAKQ"], mode: "exact" },
+      viewerCanManage: true,
+      viewerIsAuthor: true,
+    };
+
+    render(<CommunityFeed posts={[ownQuestion]} viewerCode="ENAKQ" />);
+
+    const article = screen.getByRole("article");
+    expect(article).toHaveAttribute("data-own", "true");
+    expect(screen.getByText("내 글")).toBeInTheDocument();
+    expect(screen.getByText("ENAKQ에게 보낸 질문")).toBeInTheDocument();
+    expect(screen.queryByText("뉴앙에게 물어봐")).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "답변" }));
+    expect(
+      screen.getByText(
+        "내가 보낸 질문이에요. 다른 사람의 답변을 기다려 보세요.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.queryByLabelText("답변 내용")).not.toBeInTheDocument();
+  });
+
   it("keeps a concerns and questions topic as a regular free-form post", () => {
     const generalConcernPost: FeedItem = {
       ...post,
@@ -253,7 +368,7 @@ describe("CommunityFeed", () => {
     expect(screen.getByRole("button", { name: "댓글" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "댓글 1개 보기" })).toHaveAttribute(
       "href",
-      `/feed/posts/${generalConcernPost.id}`,
+      `/feed/posts/${generalConcernPost.id}?backTo=%2Ffeed`,
     );
   });
 
@@ -333,10 +448,204 @@ describe("CommunityFeed", () => {
     render(<CommunityFeed posts={[playgroundPost]} />);
 
     expect(screen.getByText("오늘의 성향 놀이터")).toBeInTheDocument();
+    expect(screen.queryByText("오늘의 투표")).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: /내 기록/ })).toHaveAttribute(
       "href",
       "/feed/perspectives",
     );
+  });
+
+  it("closes an opened poll result whenever the feed tab changes", () => {
+    const playgroundPost: FeedItem = {
+      ...post,
+      authorHandle: "nuang.official",
+      authorName: "NUANG",
+      id: "11111111-1111-4111-8111-111111111111",
+      kind: "balance_game",
+      poll: {
+        canViewCodeStats: true,
+        codePerspectives: [],
+        id: "22222222-2222-4222-8222-222222222222",
+        options: [
+          {
+            id: "option-a",
+            key: "a",
+            label: "함께 보낸다",
+            ratio: 100,
+            viewerHasVoted: true,
+            voteCount: 1,
+          },
+          {
+            id: "option-b",
+            key: "b",
+            label: "혼자 보낸다",
+            ratio: 0,
+            viewerHasVoted: false,
+            voteCount: 0,
+          },
+        ],
+        promptId: homeDailyCommunityPollPromptId,
+        question: "갑자기 하루 여유가 생겼다면?",
+        statsHref: "/feed/polls/poll/stats",
+        totalVotes: 1,
+        viewerCode: "ENAKQ",
+        viewerVoteOptionId: "option-a",
+      },
+    };
+
+    render(<CommunityFeed posts={[playgroundPost]} />);
+
+    const firstResult = screen.getByRole("region", {
+      name: "뉴앙 코드별 결과",
+    });
+    fireEvent.click(
+      within(firstResult).getByRole("button", {
+        name: "결과 보기 펼치기",
+      }),
+    );
+    expect(
+      within(firstResult).getByRole("button", { name: "전체" }),
+    ).toBeVisible();
+
+    fireEvent.click(screen.getByRole("button", { name: "성향 놀이터" }));
+
+    const returnedResult = screen.getByRole("region", {
+      name: "뉴앙 코드별 결과",
+    });
+    expect(
+      within(returnedResult).getByRole("button", {
+        name: "결과 보기 펼치기",
+      }),
+    ).toBeVisible();
+    expect(
+      within(returnedResult).queryByRole("button", { name: "전체" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("collects balance games and official daily questions in personality playground", () => {
+    const playgroundPost: FeedItem = {
+      ...post,
+      id: "11111111-1111-4111-8111-111111111111",
+      kind: "balance_game",
+      poll: {
+        canViewCodeStats: false,
+        codePerspectives: [],
+        id: "22222222-2222-4222-8222-222222222222",
+        options: [
+          {
+            id: "option-a",
+            key: "a",
+            label: "함께 보낸다",
+            ratio: 0,
+            viewerHasVoted: false,
+            voteCount: 0,
+          },
+          {
+            id: "option-b",
+            key: "b",
+            label: "혼자 보낸다",
+            ratio: 0,
+            viewerHasVoted: false,
+            voteCount: 0,
+          },
+        ],
+        promptId: "user-balance",
+        question: "갑자기 하루 여유가 생겼다면?",
+        statsHref: "/feed/polls/poll/stats",
+        totalVotes: 0,
+        viewerCode: null,
+        viewerVoteOptionId: null,
+      },
+    };
+    const dailyQuestion: FeedItem = {
+      ...post,
+      id: "33333333-3333-4333-8333-333333333333",
+      kind: "daily_question",
+      body: "오늘 가장 마음에 남은 말은 무엇인가요?",
+    };
+    const ordinaryPost: FeedItem = {
+      ...post,
+      id: "55555555-5555-4555-8555-555555555555",
+      body: "일반 게시물이에요.",
+    };
+
+    render(
+      <CommunityFeed posts={[ordinaryPost, playgroundPost, dailyQuestion]} />,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "성향 놀이터" }));
+
+    expect(screen.getByText(playgroundPost.poll!.question)).toBeVisible();
+    expect(screen.getByText(dailyQuestion.body)).toBeVisible();
+    expect(screen.queryByText(ordinaryPost.body)).not.toBeInTheDocument();
+  });
+
+  it("renders distinct original-report cards for core, topic, and lab results", () => {
+    const corePost: FeedItem = {
+      ...post,
+      id: "60000000-0000-4000-8000-000000000001",
+      reportShare: {
+        assessmentKind: "full",
+        assessmentTitle: "정밀 코어 검사",
+        completedAt: "2026-07-28T00:00:00.000Z",
+        domains: [],
+        href: "/feed/profiles/profile-1/reports/core_result-1",
+        profileCode: "ENAKQ",
+        profileName: "관계를 여는 선도자",
+        reportType: "core",
+        resultLabel: "정밀 검사 결과",
+        summary: "사람과 가능성을 연결하며 자연스럽게 방향을 만드는 편이에요.",
+      },
+    };
+    const topicPost: FeedItem = {
+      ...post,
+      id: "60000000-0000-4000-8000-000000000002",
+      reportShare: {
+        assessmentKind: "full",
+        assessmentTitle: "위로받을 때 필요한 것",
+        completedAt: "2026-07-28T00:00:00.000Z",
+        domains: [],
+        href: "/feed/profiles/profile-1/reports/topic_result-2",
+        profileCode: "",
+        profileName: "방법은 같이 찾고, 속도는 내가 정하고 싶어요",
+        reportType: "topic",
+        resultLabel: "주제 검사",
+        summary: "도움은 반갑지만 결정할 시간과 선택권도 중요해요.",
+      },
+    };
+    const labPost: FeedItem = {
+      ...post,
+      id: "60000000-0000-4000-8000-000000000003",
+      reportShare: {
+        assessmentKind: "full",
+        assessmentTitle: "애착 탐색",
+        completedAt: "2026-07-28T00:00:00.000Z",
+        domains: [],
+        href: "/feed/profiles/profile-1/reports/lab_result-3",
+        profileCode: "",
+        profileName: "천천히 확인하는 관계 탐색가",
+        reportType: "lab",
+        resultLabel: "별난 연구소",
+        summary: "관계가 안전하다는 확신이 들 때 마음을 더 편하게 열어요.",
+      },
+    };
+
+    render(<CommunityFeed posts={[corePost, topicPost, labPost]} />);
+
+    expect(screen.getByText("정밀 코어 검사")).toBeInTheDocument();
+    expect(screen.getByText("관계를 여는 선도자")).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "사람과 가능성을 연결하며 자연스럽게 방향을 만드는 편이에요.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("주제 검사 · 위로받을 때 필요한 것"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("방법은 같이 찾고, 속도는 내가 정하고 싶어요"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("별난 연구소 · 애착 탐색")).toBeInTheDocument();
+    expect(screen.getByText("천천히 확인하는 관계 탐색가")).toBeInTheDocument();
   });
 
   it("lets only the requested exact Nuang code open the answer composer", () => {
@@ -354,7 +663,7 @@ describe("CommunityFeed", () => {
 
     render(<CommunityFeed posts={[targetedQuestion]} viewerCode="IRGMC" />);
 
-    expect(screen.getByText("ENAKQ에게 질문")).toBeInTheDocument();
+    expect(screen.getByText("ENAKQ에게 묻는 질문")).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "답변" }));
     expect(
       screen.getByText("답변 대상으로 지정된 성향만 답변을 남길 수 있어요."),

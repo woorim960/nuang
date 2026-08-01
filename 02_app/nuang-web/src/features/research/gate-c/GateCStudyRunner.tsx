@@ -3,15 +3,29 @@
 import {
   ArrowRight,
   Check,
-  ChevronLeft,
-  CircleHelp,
   Download,
   ShieldCheck,
   X,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { type ReactNode, useEffect, useRef, useState } from "react";
-import runnerStyles from "@/features/assessment/AssessmentRunner.module.css";
+import { useEffect, useRef, useState } from "react";
+import {
+  AssessmentBottomSheet,
+  AssessmentQuestionContent,
+  AssessmentQuestionDock,
+  AssessmentQuestionGuideButton,
+  AssessmentQuestionHeader,
+  AssessmentQuestionPrompt,
+  AssessmentQuestionScreen,
+  AssessmentScaleResponseOptions,
+  AssessmentSheetAction,
+  AssessmentSheetActions,
+  AssessmentSheetNote,
+  AssessmentUnsureControl,
+  AssessmentUnsureSheet,
+  useAssessmentQuestionScroll,
+} from "@/features/assessment/AssessmentQuestionControls";
+import runnerStyles from "@/features/assessment/AssessmentQuestionSurface.module.css";
 import {
   canExportGateCSession,
   createEmptyGateCProbeRecord,
@@ -26,7 +40,6 @@ import {
   type GateCStudySession,
   type GateCUnsureReason,
 } from "@/features/research/gate-c/gate-c-study-contract";
-import { cn } from "@/lib/utils/cn";
 import styles from "./GateCStudyRunner.module.css";
 
 type RunnerSurface = "complete" | "handoff" | "probes" | "questions" | "setup";
@@ -106,16 +119,12 @@ export function GateCStudyRunner({
     ? (probeRecords[currentProbeItem.studyItemId] ??
       createEmptyGateCProbeRecord())
     : createEmptyGateCProbeRecord();
-  const progress = Math.round(
-    ((currentQuestionIndex + 1) / definition.items.length) * 100,
-  );
-  const probeProgress = Math.round(
-    ((currentProbeIndex + 1) / definition.items.length) * 100,
-  );
-
   useEffect(() => {
     questionShownAtRef.current = Date.now();
   }, [currentQuestionIndex]);
+  useAssessmentQuestionScroll(
+    surface === "questions" ? currentQuestion?.studyItemId ?? null : null,
+  );
 
   function startSession() {
     if (
@@ -364,36 +373,16 @@ export function GateCStudyRunner({
       hasMandatoryGateCProbeEvidence(currentProbeRecord);
 
     return (
-      <main className={runnerStyles.runner}>
-        <header className={runnerStyles.appBar}>
-          <button
-            aria-label="세션 닫기"
-            className={runnerStyles.closeButton}
-            onClick={() => setSheet("exit")}
-            type="button"
-          >
-            <X aria-hidden="true" size={20} strokeWidth={1.8} />
-          </button>
-          <p className={runnerStyles.title}>진행자 기록</p>
-          <p className={runnerStyles.count}>
-            {currentProbeIndex + 1} / {definition.items.length}
-          </p>
-        </header>
-        <div className={runnerStyles.progressWrap}>
-          <div
-            aria-label="진행자 기록 진행률"
-            aria-valuemax={definition.items.length}
-            aria-valuemin={1}
-            aria-valuenow={currentProbeIndex + 1}
-            className={runnerStyles.progress}
-            role="progressbar"
-          >
-            <span
-              className={runnerStyles.progressFill}
-              style={{ width: `${probeProgress}%` }}
-            />
-          </div>
-        </div>
+      <AssessmentQuestionScreen>
+        <AssessmentQuestionHeader
+          closeLabel="세션 닫기"
+          countLabel={`전체 ${definition.items.length}개 중 ${currentProbeIndex + 1}번째 기록`}
+          current={currentProbeIndex + 1}
+          onClose={() => setSheet("exit")}
+          progressLabel="진행자 기록 진행률"
+          title="진행자 기록"
+          total={definition.items.length}
+        />
 
         <section className={styles.probeContent}>
           <div className={styles.itemRecall}>
@@ -522,59 +511,40 @@ export function GateCStudyRunner({
           </details>
         </section>
 
-        <footer className={runnerStyles.dock}>
-          <button
-            aria-label="이전 문항"
-            className={runnerStyles.previousButton}
-            disabled={currentProbeIndex === 0}
-            onClick={() =>
-              setCurrentProbeIndex((current) => Math.max(0, current - 1))
-            }
-            type="button"
-          >
-            <ChevronLeft aria-hidden="true" size={20} strokeWidth={1.8} />
-          </button>
-          <button
-            className={runnerStyles.nextButton}
-            disabled={!mandatoryComplete}
-            onClick={goNextProbe}
-            type="button"
-          >
-            {currentProbeIndex === definition.items.length - 1
+        <AssessmentQuestionDock
+          nextDisabled={!mandatoryComplete}
+          nextLabel={
+            currentProbeIndex === definition.items.length - 1
               ? "기록 마치기"
-              : "다음 문항"}
-            <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
-          </button>
-        </footer>
+              : "다음 문항"
+          }
+          onNext={goNextProbe}
+          onPrevious={() =>
+            setCurrentProbeIndex((current) => Math.max(0, current - 1))
+          }
+          previousDisabled={currentProbeIndex === 0}
+        />
 
         {sheet === "exit" ? (
-          <BottomSheet
+          <AssessmentBottomSheet
             copy="아직 파일로 내려받지 않은 기록은 이 화면을 나가면 사라져요."
             onClose={() => setSheet(null)}
             title="세션을 그만할까요?"
           >
-            <div className={runnerStyles.sheetActions}>
-              <button
-                className={runnerStyles.sheetAction}
-                onClick={() => setSheet(null)}
-                type="button"
-              >
+            <AssessmentSheetActions>
+              <AssessmentSheetAction onClick={() => setSheet(null)}>
                 계속 기록하기
-              </button>
-              <button
-                className={cn(
-                  runnerStyles.sheetAction,
-                  runnerStyles.sheetActionSecondary,
-                )}
+              </AssessmentSheetAction>
+              <AssessmentSheetAction
                 onClick={leaveStudy}
-                type="button"
+                variant="secondary"
               >
                 저장하지 않고 나가기
-              </button>
-            </div>
-          </BottomSheet>
+              </AssessmentSheetAction>
+            </AssessmentSheetActions>
+          </AssessmentBottomSheet>
         ) : null}
-      </main>
+      </AssessmentQuestionScreen>
     );
   }
 
@@ -633,236 +603,111 @@ export function GateCStudyRunner({
   }
 
   return (
-    <main className={runnerStyles.runner}>
-      <header className={runnerStyles.appBar}>
-        <button
-          aria-label="세션 닫기"
-          className={runnerStyles.closeButton}
-          onClick={() => setSheet("exit")}
-          type="button"
-        >
-          <X aria-hidden="true" size={20} strokeWidth={1.8} />
-        </button>
-        <p className={runnerStyles.title}>성향 질문 확인</p>
-        <p
-          aria-label={`전체 ${definition.items.length}개 중 ${currentQuestionIndex + 1}번째 문항`}
-          className={runnerStyles.count}
-        >
-          {currentQuestionIndex + 1} / {definition.items.length}
-        </p>
-      </header>
+    <AssessmentQuestionScreen>
+      <AssessmentQuestionHeader
+        closeLabel="세션 닫기"
+        countLabel={`전체 ${definition.items.length}개 중 ${currentQuestionIndex + 1}번째 문항`}
+        current={currentQuestionIndex + 1}
+        onClose={() => setSheet("exit")}
+        progressLabel="첫 응답 진행률"
+        title="성향 질문 확인"
+        total={definition.items.length}
+      />
 
-      <div className={runnerStyles.progressWrap}>
-        <div
-          aria-label="첫 응답 진행률"
-          aria-valuemax={definition.items.length}
-          aria-valuemin={1}
-          aria-valuenow={currentQuestionIndex + 1}
-          className={runnerStyles.progress}
-          role="progressbar"
-        >
-          <span
-            className={runnerStyles.progressFill}
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-      </div>
-
-      <section className={runnerStyles.mainContent}>
-        <button
-          className={runnerStyles.helpButton}
-          onClick={() => setSheet("help")}
-          type="button"
-        >
-          <CircleHelp aria-hidden="true" size={16} strokeWidth={1.8} />
+      <AssessmentQuestionContent>
+        <AssessmentQuestionGuideButton onClick={() => setSheet("help")}>
           답하는 기준 · 최근 6개월의 평소 모습
-        </button>
+        </AssessmentQuestionGuideButton>
 
-        <div
-          aria-atomic="true"
-          aria-live="polite"
-          className={cn(
-            runnerStyles.questionRegion,
-            runnerStyles.questionForward,
-          )}
+        <AssessmentQuestionPrompt
+          contextLabel={currentQuestion.contextLabel}
           key={currentQuestion.studyItemId}
-        >
-          <p className={runnerStyles.context}>{currentQuestion.contextLabel}</p>
-          <h1 className={runnerStyles.question}>
-            {currentQuestion.promptText}
-          </h1>
-        </div>
+          text={currentQuestion.promptText}
+        />
 
-        <fieldset
-          aria-label="응답 선택"
-          className={runnerStyles.responses}
-          role="radiogroup"
-        >
-          <legend className={runnerStyles.legend}>이럴 때 내 모습은?</legend>
-          <div className={runnerStyles.options}>
-            {responseOptions.map((option) => {
-              const selected =
-                currentResponse?.currentChoice.kind === "scale" &&
-                currentResponse.currentChoice.value === option.value;
-              return (
-                <label
-                  className={cn(
-                    runnerStyles.option,
-                    selected && runnerStyles.optionSelected,
-                  )}
-                  key={option.value}
-                >
-                  <input
-                    checked={selected}
-                    className={runnerStyles.radio}
-                    name={`response-${currentQuestion.studyItemId}`}
-                    onChange={() =>
-                      choose({ kind: "scale", value: option.value })
-                    }
-                    type="radio"
-                    value={option.value}
-                  />
-                  <span>{option.label}</span>
-                </label>
-              );
-            })}
-          </div>
-        </fieldset>
-
-        <div className={runnerStyles.unsureSlot}>
-          {currentResponse?.currentChoice.kind === "unsure" ? (
-            <div className={runnerStyles.unsureSummary}>
-              <p>
-                <strong>답하기 어려움</strong> ·{" "}
-                {responseChoiceLabel(currentResponse.currentChoice)}
-              </p>
-              <button
-                className={runnerStyles.changeButton}
-                onClick={() => setSheet("unsure")}
-                type="button"
-              >
-                변경
-              </button>
-            </div>
-          ) : (
-            <button
-              className={runnerStyles.unsureButton}
-              onClick={() => setSheet("unsure")}
-              type="button"
-            >
-              이 상황은 답하기 어려워요
-            </button>
-          )}
-        </div>
-      </section>
-
-      <footer className={runnerStyles.dock}>
-        <button
-          aria-label="이전 질문"
-          className={runnerStyles.previousButton}
-          disabled={currentQuestionIndex === 0}
-          onClick={() =>
-            setCurrentQuestionIndex((current) => Math.max(0, current - 1))
+        <AssessmentScaleResponseOptions
+          name={`response-${currentQuestion.studyItemId}`}
+          onChange={(value) => choose({ kind: "scale", value })}
+          options={responseOptions}
+          selectedValue={
+            currentResponse?.currentChoice.kind === "scale"
+              ? currentResponse.currentChoice.value
+              : undefined
           }
-          type="button"
-        >
-          <ChevronLeft aria-hidden="true" size={20} strokeWidth={1.8} />
-        </button>
-        <button
-          className={runnerStyles.nextButton}
-          disabled={!currentResponse}
-          onClick={goNextQuestion}
-          type="button"
-        >
-          {currentQuestionIndex === definition.items.length - 1
+        />
+
+        <AssessmentUnsureControl
+          onOpen={() => setSheet("unsure")}
+          selectedReason={
+            currentResponse?.currentChoice.kind === "unsure"
+              ? currentResponse.currentChoice.reason
+              : undefined
+          }
+        />
+      </AssessmentQuestionContent>
+
+      <AssessmentQuestionDock
+        nextDisabled={!currentResponse}
+        nextLabel={
+          currentQuestionIndex === definition.items.length - 1
             ? "첫 응답 마치기"
-            : "다음"}
-          <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
-        </button>
-      </footer>
+            : "다음"
+        }
+        onNext={goNextQuestion}
+        onPrevious={() =>
+          setCurrentQuestionIndex((current) => Math.max(0, current - 1))
+        }
+        previousDisabled={currentQuestionIndex === 0}
+      />
 
       {sheet === "help" ? (
-        <BottomSheet
+        <AssessmentBottomSheet
           copy="특별히 잘됐거나 힘들었던 한 번보다, 비슷한 상황에서 반복해서 나타난 평소 모습을 기준으로 답해 주세요."
           onClose={() => setSheet(null)}
           title="어떤 모습을 떠올리면 될까요?"
         >
-          <p className={runnerStyles.sheetNote}>
+          <AssessmentSheetNote>
             비슷한 경험이 거의 없다면 ‘이 상황은 답하기 어려워요’를 선택해도
             괜찮아요.
-          </p>
-        </BottomSheet>
+          </AssessmentSheetNote>
+        </AssessmentBottomSheet>
       ) : null}
 
       {sheet === "unsure" ? (
-        <BottomSheet
-          copy="가장 가까운 이유 하나를 골라주세요."
+        <AssessmentUnsureSheet
           onClose={() => setSheet(null)}
-          title="왜 답하기 어려운가요?"
-        >
-          <div className={runnerStyles.sheetReasons}>
-            {unsureReasons.map((reason) => (
-              <button
-                aria-pressed={
-                  currentResponse?.currentChoice.kind === "unsure" &&
-                  currentResponse.currentChoice.reason === reason.id
-                }
-                className={cn(
-                  runnerStyles.sheetReason,
-                  currentResponse?.currentChoice.kind === "unsure" &&
-                    currentResponse.currentChoice.reason === reason.id &&
-                    runnerStyles.sheetReasonSelected,
-                )}
-                key={reason.id}
-                onClick={() => {
-                  choose({ kind: "unsure", reason: reason.id });
-                  setSheet(null);
-                }}
-                type="button"
-              >
-                <span
-                  aria-hidden="true"
-                  className={runnerStyles.reasonRadio}
-                  data-checked={
-                    currentResponse?.currentChoice.kind === "unsure" &&
-                    currentResponse.currentChoice.reason === reason.id
-                  }
-                />
-                <span>{reason.label}</span>
-              </button>
-            ))}
-          </div>
-        </BottomSheet>
+          onSelect={(reason) => {
+            choose({ kind: "unsure", reason });
+            setSheet(null);
+          }}
+          selectedReason={
+            currentResponse?.currentChoice.kind === "unsure"
+              ? currentResponse.currentChoice.reason
+              : undefined
+          }
+        />
       ) : null}
 
       {sheet === "exit" ? (
-        <BottomSheet
+        <AssessmentBottomSheet
           copy="응답은 자동 저장되지 않아 이 화면을 나가면 사라져요."
           onClose={() => setSheet(null)}
           title="세션을 그만할까요?"
         >
-          <div className={runnerStyles.sheetActions}>
-            <button
-              className={runnerStyles.sheetAction}
-              onClick={() => setSheet(null)}
-              type="button"
-            >
+          <AssessmentSheetActions>
+            <AssessmentSheetAction onClick={() => setSheet(null)}>
               계속 답하기
-            </button>
-            <button
-              className={cn(
-                runnerStyles.sheetAction,
-                runnerStyles.sheetActionSecondary,
-              )}
+            </AssessmentSheetAction>
+            <AssessmentSheetAction
               onClick={leaveStudy}
-              type="button"
+              variant="secondary"
             >
               저장하지 않고 나가기
-            </button>
-          </div>
-        </BottomSheet>
+            </AssessmentSheetAction>
+          </AssessmentSheetActions>
+        </AssessmentBottomSheet>
       ) : null}
-    </main>
+    </AssessmentQuestionScreen>
   );
 }
 
@@ -895,69 +740,6 @@ function ProbeField({
         value={value}
       />
     </label>
-  );
-}
-
-function BottomSheet({
-  children,
-  copy,
-  onClose,
-  title,
-}: {
-  children: ReactNode;
-  copy?: string;
-  onClose: () => void;
-  title: string;
-}) {
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    const previousFocus = document.activeElement as HTMLElement | null;
-    closeButtonRef.current?.focus();
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      previousFocus?.focus?.();
-    };
-  }, [onClose]);
-
-  return (
-    <div className={runnerStyles.layer} role="presentation">
-      <button
-        aria-label="닫기"
-        className={runnerStyles.backdropButton}
-        onClick={onClose}
-        type="button"
-      />
-      <section
-        aria-labelledby="gate-c-sheet-title"
-        aria-modal="true"
-        className={runnerStyles.sheet}
-        role="dialog"
-      >
-        <div className={runnerStyles.sheetHeader}>
-          <div>
-            <h2 className={runnerStyles.sheetTitle} id="gate-c-sheet-title">
-              {title}
-            </h2>
-            {copy ? <p className={runnerStyles.sheetCopy}>{copy}</p> : null}
-          </div>
-          <button
-            aria-label="닫기"
-            className={runnerStyles.sheetClose}
-            onClick={onClose}
-            ref={closeButtonRef}
-            type="button"
-          >
-            <X aria-hidden="true" size={19} strokeWidth={1.8} />
-          </button>
-        </div>
-        <div className={runnerStyles.sheetBody}>{children}</div>
-      </section>
-    </div>
   );
 }
 

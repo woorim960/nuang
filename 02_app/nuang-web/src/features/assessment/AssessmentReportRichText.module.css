@@ -1,0 +1,168 @@
+.root {
+  display: grid;
+  gap: 0.8rem;
+  margin-top: 0.75rem;
+}
+
+.root p,
+.labeledList dd {
+  margin: 0;
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-callout);
+  line-height: 1.68;
+  text-wrap: pretty;
+}
+
+.firstParagraph {
+  margin-top: 0;
+}
+
+.orderedList {
+  display: grid;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.orderedList li {
+  display: grid;
+  grid-template-columns: 1.65rem minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: start;
+}
+
+.orderedList li > span {
+  display: grid;
+  width: 1.55rem;
+  height: 1.55rem;
+  place-items: center;
+  margin-top: 0.15rem;
+  border-radius: var(--nu-radius-pill);
+  color: var(--nu-color-community);
+  background: var(--nu-color-community-soft);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.orderedList p {
+  margin: 0;
+}
+
+.labeledList {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--nu-color-border-soft);
+}
+
+.labeledList > div {
+  display: grid;
+  grid-template-columns: 3.35rem minmax(0, 1fr);
+  gap: 0.8rem;
+  padding: 0.9rem 0;
+  border-bottom: 1px solid var(--nu-color-border-soft);
+}
+
+.labeledList dt {
+  color: var(--nu-color-text-strong);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+  line-height: 1.7;
+  white-space: nowrap;
+}
+
+.labeledList dd {
+  min-width: 0;
+}
+
+.wideLabels .labeledList > div {
+  grid-template-columns: 1fr;
+  gap: 0.3rem;
+  padding-block: 1rem;
+}
+
+.wideLabels .labeledList dt {
+  color: var(--nu-color-brand-strong);
+  white-space: normal;
+}
+
+.accordion {
+  gap: 0.9rem;
+  margin-top: 0.85rem;
+}
+
+.accordion p,
+.accordion .labeledList dd {
+  line-height: 1.72;
+}
+
+.accordion .firstParagraph {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--nu-color-brand-surface-strong);
+  border-radius: var(--nu-radius-md);
+  color: var(--nu-color-text);
+  background: color-mix(
+    in srgb,
+    var(--nu-color-brand-surface) 72%,
+    var(--nu-color-surface)
+  );
+  font-weight: var(--nu-weight-semibold);
+}
+
+.accordion .orderedList {
+  gap: 0.6rem;
+}
+
+.accordion .orderedList li {
+  grid-template-columns: 1.75rem minmax(0, 1fr);
+  gap: 0.7rem;
+  padding: 0.85rem;
+  border: 1px solid var(--nu-color-border-soft);
+  border-radius: var(--nu-radius-md);
+  background: var(--nu-color-surface);
+}
+
+.accordion .orderedList li > span {
+  margin-top: 0.05rem;
+}
+
+.accordion .labeledList {
+  gap: 0.6rem;
+  border-top: 0;
+}
+
+.accordion .labeledList > div,
+.accordion.wideLabels .labeledList > div {
+  grid-template-columns: 1fr;
+  gap: 0.32rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--nu-color-border-soft);
+  border-radius: var(--nu-radius-md);
+  background: var(--nu-color-surface);
+}
+
+.accordion .labeledList dt {
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-caption);
+  line-height: 1.5;
+  white-space: normal;
+}
+
+.accordion .labeledList dd {
+  color: var(--nu-color-text);
+}
+
+@media (max-width: 359px) {
+  .labeledList > div {
+    grid-template-columns: 1fr;
+    gap: 0.28rem;
+  }
+
+  .accordion .firstParagraph,
+  .accordion .labeledList > div,
+  .accordion.wideLabels .labeledList > div {
+    padding-inline: 0.8rem;
+  }
+}

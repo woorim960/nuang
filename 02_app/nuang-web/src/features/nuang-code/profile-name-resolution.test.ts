@@ -7,7 +7,7 @@ import {
 describe("community Nuang profile name resolution", () => {
   it("recognizes the current 32-code system", () => {
     expect(isSupportedNuangCode("ENAKQ")).toBe(true);
-    expect(getSupportedNuangProfileName("ENAKQ")).toBe("관계를 여는 지휘자");
+    expect(getSupportedNuangProfileName("ENAKQ")).toBe("관계를 여는 선도자");
   });
 
   it("keeps historical shared codes readable during migration", () => {

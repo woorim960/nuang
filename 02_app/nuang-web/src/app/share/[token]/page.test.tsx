@@ -1,12 +1,19 @@
 import { render, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import SharePage, { metadata } from "@/app/share/[token]/page";
-import { createPublicShareSuccessPayload } from "@/features/share/public-share-contract";
 
 const readPublicShareTokenMock = vi.hoisted(() => vi.fn());
 
 vi.mock("@/features/share/public-share-server", () => ({
   readPublicShareToken: readPublicShareTokenMock,
+}));
+vi.mock("@/features/result/unified-core-report/CoreResultReportTemplate", () => ({
+  CoreResultReportTemplate: ({ model, surface }: { model: { result: { code: string } }; surface: string }) => (
+    <main>
+      <h1>{model.result.code}</h1>
+      <p>{surface}</p>
+    </main>
+  ),
 }));
 
 describe("SharePage", () => {
@@ -15,7 +22,7 @@ describe("SharePage", () => {
     readPublicShareTokenMock.mockResolvedValue({ status: "closed" });
   });
 
-  it("keeps the pending share page summary-only and noindex", async () => {
+  it("shows only an unavailable state when an old link cannot resolve", async () => {
     render(
       await SharePage({ params: Promise.resolve({ token: "test-token" }) }),
     );
@@ -25,53 +32,34 @@ describe("SharePage", () => {
       index: false,
     });
     expect(
-      screen.getByRole("heading", { name: "공유 리포트를 열 수 없어요" }),
+      screen.getByRole("heading", { name: "이 리포트는 지금 볼 수 없어요" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("공유한 사람에게 새 주소를 요청해 주세요."),
+      screen.getByText(
+        "공유한 사람이 결과를 숨겼거나 주소의 사용 기간이 끝났어요.",
+      ),
     ).toBeInTheDocument();
     expect(
       screen.queryByText(/임의의 결과|최대 5개|DB|서버/),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("link", { name: "빠른 코어 시작하기" }),
-    ).toHaveAttribute("href", "/assessments/nu-core-quick");
+      screen.getByRole("link", { name: "다른 검사 둘러보기" }),
+    ).toHaveAttribute("href", "/home");
   });
 
-  it("renders an active public report with a same-assessment CTA", async () => {
+  it("renders an active token with the share projection", async () => {
     readPublicShareTokenMock.mockResolvedValue({
-      payload: createPublicShareSuccessPayload({
-        assessmentKind: "full",
-        completedAt: "2026-07-04T00:00:00.000Z",
-        domains: [
-          { domainId: "SE", label: "사람 사이 에너지", score: 72, symbol: "T" },
-          { domainId: "ER", label: "마음의 반응", score: 64, symbol: "V" },
-          { domainId: "SM", label: "일상 리듬", score: 68, symbol: "O" },
-          { domainId: "RO", label: "관계 방식", score: 58, symbol: "A" },
-          { domainId: "OE", label: "감각과 생각", score: 66, symbol: "E" },
-        ],
-        profileCode: "TVOAE",
-        profileName: "불꽃의 온기 탐험가",
-        resultLabel: "현재 대표 성향",
-      }),
+      model: { result: { code: "ENAKQ" } },
       status: "active",
     });
 
     render(
-      await SharePage({ params: Promise.resolve({ token: "active-token" }) }),
+      await SharePage({
+        params: Promise.resolve({ token: "active-token" }),
+      }),
     );
 
-    expect(
-      screen.getByRole("heading", { name: "불꽃의 온기 탐험가" }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("TVOAE")).toBeInTheDocument();
-    expect(
-      screen.getByRole("img", { name: "공유된 코드 지도 그래프" }),
-    ).toBeInTheDocument();
-    expect(screen.getByText("공유 범위")).toBeInTheDocument();
-    expect(screen.queryByText(/문항별 답변/)).toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "나도 같은 검사 해보기" }),
-    ).toHaveAttribute("href", "/assessments/nu-core-full");
+    expect(screen.getByRole("heading", { name: "ENAKQ" })).toBeInTheDocument();
+    expect(screen.getByText("share")).toBeInTheDocument();
   });
 });

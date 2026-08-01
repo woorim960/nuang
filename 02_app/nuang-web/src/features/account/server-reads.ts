@@ -143,7 +143,7 @@ export async function readAccountResults({
     .schema("report")
     .from("result_report")
     .select(
-      "id, attempt_id, report_kind, profile_code, profile_name, summary, created_at",
+      "id, attempt_id, report_kind, profile_code, profile_name, summary, created_at, measurement_release_id, code_scheme_version, scoring_release_id",
     )
     .eq("account_id", account.accountId)
     .is("deleted_at", null)
@@ -168,7 +168,7 @@ export async function readAccountResults({
   const attemptResponse = await client
     .schema("assessment")
     .from("assessment_attempt")
-    .select("id, local_result_id, completed_at, claimed_at")
+    .select("id, local_result_id, completed_at, claimed_at, scoring_version")
     .eq("account_id", account.accountId)
     .in(
       "id",
@@ -186,17 +186,23 @@ export async function readAccountResults({
         completed_at: string | null;
         id: string;
         local_result_id: string | null;
+        scoring_version: string | null;
       }>
     ).map((attempt) => [attempt.id, attempt]),
   );
+  let invalidReportDetected = false;
   const results = reports.flatMap((report): AccountResultSummary[] => {
     const attempt = attempts.get(report.attempt_id);
     const parsedSummary = parseStoredAccountResultSummary(report.summary);
 
-    if (!attempt || !parsedSummary.success) return [];
+    if (!attempt || !parsedSummary.success) {
+      invalidReportDetected = true;
+      return [];
+    }
 
     return [
       {
+        alternativeCodes: parsedSummary.data.alternativeCodes,
         assessmentAttemptId: attempt.id,
         completedAt:
           parsedSummary.data.completedAt ??
@@ -207,15 +213,36 @@ export async function readAccountResults({
         facets: parsedSummary.data.facets,
         kind: report.report_kind,
         localResultId: attempt.local_result_id,
+        originResultId: parsedSummary.data.originResultId ?? null,
         profileCode: report.profile_code,
         profileName: report.profile_name,
+        reportContentSnapshot:
+          parsedSummary.data.reportContentSnapshot ?? null,
+        responseSnapshotHash:
+          parsedSummary.data.responseSnapshotHash ?? null,
+        resultCopyVersion: parsedSummary.data.resultCopyVersion ?? null,
+        resultEvidenceStatus:
+          parsedSummary.data.resultEvidenceStatus ?? null,
         resultLabel:
           parsedSummary.data.resultLabel ??
           (report.report_kind === "full" ? "현재 대표 성향" : "예비 성향"),
         resultReportId: report.id,
+        resultStatus: parsedSummary.data.resultStatus ?? null,
+        versionBundle: {
+          assessmentReleaseId: report.measurement_release_id ?? null,
+          codeSchemeVersion: report.code_scheme_version ?? null,
+          scoringModelVersion: attempt.scoring_version ?? null,
+          scoringReleaseId: report.scoring_release_id ?? null,
+        },
       },
     ];
   });
+
+  // A dropped row could be the actual latest completion. Failing the whole
+  // collection keeps clients from silently presenting an older report as latest.
+  if (invalidReportDetected) {
+    return { code: "account_results_read_failed", ok: false };
+  }
 
   return { data: results, ok: true };
 }
@@ -224,9 +251,12 @@ type AccountResultReportRow = {
   attempt_id: string;
   created_at: string;
   id: string;
+  code_scheme_version: string | null;
+  measurement_release_id: string | null;
   profile_code: string;
   profile_name: string;
   report_kind: "full" | "quick";
+  scoring_release_id: string | null;
   summary: unknown;
 };
 

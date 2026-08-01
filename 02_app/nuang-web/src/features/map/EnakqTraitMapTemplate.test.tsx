@@ -13,7 +13,7 @@ describe("TraitMapDetailTemplate", () => {
     ).toHaveTextContent("E외향형N가능성형A마음형K꾸준형Q빠른반응형");
 
     expect(
-      screen.getByRole("heading", { name: "관계를 여는 지휘자" }),
+      screen.getByRole("heading", { name: "관계를 여는 선도자" }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("뉴앙 코드 ENAKQ")).toBeInTheDocument();
     expect(

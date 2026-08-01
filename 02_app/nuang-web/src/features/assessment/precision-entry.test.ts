@@ -167,9 +167,19 @@ describe("resolveLocalPrecisionEntry", () => {
 
 describe("precision entry route safety", () => {
   it("keeps only approved internal destinations", () => {
+    expect(sanitizePrecisionDestination("/assessments")).toBe("/home");
     expect(sanitizePrecisionDestination("/together/comparison-preview")).toBe(
       "/together/comparison-preview",
     );
+    expect(sanitizePrecisionDestination("/my?tab=reports")).toBe(
+      "/my?tab=reports",
+    );
+    expect(sanitizePrecisionDestination("/my?tab=unknown")).toBeNull();
+    expect(
+      sanitizePrecisionDestination(
+        "/results/account/11111111-1111-4111-8111-111111111111",
+      ),
+    ).toBe("/results/account/11111111-1111-4111-8111-111111111111");
     expect(sanitizePrecisionDestination("https://example.com")).toBeNull();
     expect(sanitizePrecisionDestination("//example.com/path")).toBeNull();
     expect(sanitizePrecisionDestination("/admin")).toBeNull();

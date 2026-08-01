@@ -18,7 +18,7 @@ describe("trait map content contract v1", () => {
       result.roleProfiles.find((profile) => profile.code === "ENAKQ"),
     ).toMatchObject({
       namePurpose: "memory_aid_not_scoring_evidence",
-      profileName: "관계를 여는 지휘자",
+      profileName: "관계를 여는 선도자",
     });
   });
 

@@ -104,7 +104,7 @@ describe("HomeDashboard", () => {
         replyLabel: "답글 0개",
         targetType: "feed_post",
         timeLabel: "방금",
-        title: "밸런스 게임",
+        title: "투표",
       },
     ];
 
@@ -187,14 +187,16 @@ describe("HomeDashboard", () => {
       ],
       targetType: "feed_post",
       timeLabel: "방금",
-      title: "밸런스 게임",
+      title: "투표",
     };
 
     render(<HomeDashboard feedPreviewItems={[communityPollItem]} />);
 
     expect(await screen.findByText("오늘의 성향 놀이터")).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "오늘의 밸런스 게임" }),
+      screen.getByText(
+        "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText("10명 참여")).toBeInTheDocument();
     expect(screen.getByText("60%")).toBeInTheDocument();
@@ -209,7 +211,7 @@ describe("HomeDashboard", () => {
       "/feed?posted=6af1b7c2-b8e1-4ee5-9c68-76b92bda0801",
     );
     expect(
-      screen.getByRole("button", { name: /코드별 선택 펼치기/ }),
+      screen.getByRole("button", { name: "결과 보기 펼치기" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /좋아요/ })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /공유/ })).toBeInTheDocument();
@@ -283,14 +285,14 @@ describe("HomeDashboard", () => {
       replyLabel: "답글 0개",
       targetType: "feed_post",
       timeLabel: "방금",
-      title: "밸런스 게임",
+      title: "투표",
     };
 
     render(<HomeDashboard feedPreviewItems={[communityPollItem]} />);
 
     expect(await screen.findByText("1명 참여")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /코드별 선택 펼치기/ }),
+      screen.getByRole("button", { name: "결과 보기 펼치기" }),
     ).toBeInTheDocument();
   });
 

@@ -34,7 +34,7 @@ const profile: PublicProfileSearchItem = {
   profileMessage: "산책을 좋아해요.",
   publicProfileId: "24000000-0000-4000-8000-000000000003",
   publicSnapshotId: "34000000-0000-4000-8000-000000000003",
-  roleName: "관계를 여는 지휘자",
+  roleName: "관계를 여는 선도자",
 };
 
 describe("CommunitySearchScreen", () => {
@@ -89,7 +89,7 @@ describe("CommunitySearchScreen", () => {
 
     expect(fetchMock).not.toHaveBeenCalled();
     const profileLink = await screen.findByRole("link", {
-      name: /여름[\s\S]*summer\.day[\s\S]*관계를 여는 지휘자/,
+      name: /여름[\s\S]*summer\.day[\s\S]*관계를 여는 선도자/,
     });
 
     expect(fetchMock).toHaveBeenCalledTimes(1);

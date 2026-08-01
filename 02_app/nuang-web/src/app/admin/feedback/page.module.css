@@ -1,0 +1,118 @@
+.statusTabs,
+.kindTabs {
+  display: flex;
+  gap: 0.4rem;
+  overflow-x: auto;
+  padding: 0 1rem 0.2rem;
+  scrollbar-width: none;
+}
+
+.statusTabs::-webkit-scrollbar,
+.kindTabs::-webkit-scrollbar {
+  display: none;
+}
+
+.statusTabs a,
+.kindTabs a {
+  min-height: 36px;
+  flex: 0 0 auto;
+  padding: 0 0.72rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 9px;
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+  line-height: 34px;
+}
+
+.statusTabs a[data-active="true"] {
+  border-color: var(--nu-brand-200);
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+}
+
+.kindTabs a[data-active="true"] {
+  border-color: var(--nu-community-300);
+  color: var(--nu-color-community);
+  background: var(--nu-color-community-soft);
+}
+
+.list {
+  display: grid;
+}
+
+.list article {
+  padding: 1rem;
+  border-bottom: 1px solid var(--nu-color-border);
+}
+
+.list article:last-child {
+  border-bottom: 0;
+}
+
+.list article > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.list article > header > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.2rem;
+}
+
+.list article > header strong {
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-heavy);
+}
+
+.list article > header span {
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+}
+
+.list article > p {
+  margin: 0.75rem 0 0;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body);
+  white-space: pre-wrap;
+  word-break: keep-all;
+}
+
+.list dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  margin: 0.75rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+}
+
+.list dl div {
+  display: inline-flex;
+  gap: 0.3rem;
+}
+
+.list dt {
+  font-weight: var(--nu-weight-bold);
+}
+
+.list dd {
+  margin: 0;
+}
+
+@media (min-width: 700px) {
+  .statusTabs,
+  .kindTabs {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .list article {
+    padding: 1.25rem;
+  }
+}

@@ -1,4 +1,5 @@
 import type { CoreScoreResult, ResponseValue } from "@/lib/scoring/types";
+import type { ReportContentSnapshot } from "@/features/result/unified-core-report/report-content-snapshot-contract";
 
 export type AssessmentMode = "quick" | "full";
 
@@ -61,6 +62,7 @@ export type AssessmentResultSnapshot = {
   codeSchemeVersion: string;
   createdAt: string;
   responseSnapshotHash: string;
+  reportContentSnapshot?: ReportContentSnapshot;
   resultCopyVersion: string;
   resultStatus: "ready" | "insufficient_evidence";
   scoreResult: CoreScoreResult;

@@ -1,0 +1,56 @@
+.badge {
+  display: inline-flex;
+  min-width: 0;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.24rem;
+  padding: 0.2rem 0.46rem 0.2rem 0.32rem;
+  border: 1px solid
+    color-mix(in srgb, var(--nu-color-brand-strong) 14%, transparent);
+  border-radius: 999px;
+  color: color-mix(
+    in srgb,
+    var(--nu-color-brand-strong) 82%,
+    var(--nu-color-text)
+  );
+  background:
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--nu-color-brand-surface-strong) 84%, white),
+      color-mix(in srgb, var(--nu-color-community-soft) 72%, white)
+    );
+  font-size: 0.68rem;
+  font-weight: var(--nu-weight-bold);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+.badge[data-compact="true"] {
+  padding-right: 0.4rem;
+  font-size: 0.64rem;
+}
+
+.mark {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 340px) {
+  .badge {
+    gap: 0.16rem;
+    padding-right: 0.34rem;
+  }
+
+  .badge[data-compact="true"] > span {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}

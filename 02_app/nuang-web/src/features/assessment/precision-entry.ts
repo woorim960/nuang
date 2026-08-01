@@ -117,12 +117,15 @@ export function sanitizePrecisionDestination(
   value: string | null | undefined,
 ): string | null {
   if (!value || !value.startsWith("/") || value.startsWith("//")) return null;
+  if (value === "/assessments") return "/home";
+  if (value === "/my?tab=reports") return value;
 
   const allowedRoutes = [
     "/assessments",
     "/home",
     "/map",
     "/my",
+    "/results/account/",
     "/results/local/",
     "/together",
   ];

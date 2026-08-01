@@ -1,16 +1,14 @@
 import { CandidateCoreResultView } from "@/features/result/CandidateCoreResultView";
-import {
-  betaCoreAssessment,
-  betaScoringRelease,
-} from "@/features/assessment/beta-core-seed";
+import { prepareAssessmentCompletion } from "@/features/assessment/assessment-completion";
+import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
-import { calculateCoreScore } from "@/lib/scoring/core";
+import { coreResultCopyVersion } from "@/features/result/report-copy";
 
 /** 내부 검토용: ENAKQ 정밀 결과 화면을 실제 결과 컴포넌트로 확인합니다. */
 export default function EnakqResultPreviewPage() {
   const completedAt = "2026-07-22T00:00:00.000Z";
   const responses = Object.fromEntries(
-    betaCoreAssessment.items.map((item) => [
+    candidateFullCoreAssessment.items.map((item) => [
       item.itemId,
       {
         answeredAt: completedAt,
@@ -19,25 +17,42 @@ export default function EnakqResultPreviewPage() {
       },
     ]),
   );
-  const attempt: LocalAssessmentAttempt = {
-    assessmentId: betaCoreAssessment.assessmentId,
+  const draft: LocalAssessmentAttempt = {
+    assessmentId: candidateFullCoreAssessment.assessmentId,
     completedAt,
     completionStatus: "completed",
     createdAt: completedAt,
-    currentIndex: betaCoreAssessment.items.length - 1,
+    currentIndex: candidateFullCoreAssessment.items.length - 1,
     expiresAt: "2026-08-01T00:00:00.000Z",
     id: "local_enakq_result_preview",
-    itemIds: betaCoreAssessment.items.map((item) => item.itemId),
+    itemIds: candidateFullCoreAssessment.items.map((item) => item.itemId),
+    localPersistStatus: "saved",
     mode: "full",
-    releaseId: betaCoreAssessment.releaseId,
+    releaseId: candidateFullCoreAssessment.releaseId,
     responses,
     state: "completed",
     updatedAt: completedAt,
   };
-  const result = calculateCoreScore(
-    betaScoringRelease,
-    Object.values(responses),
+  const readiness = prepareAssessmentCompletion(
+    candidateFullCoreAssessment,
+    draft,
   );
+  const attempt: LocalAssessmentAttempt = {
+    ...draft,
+    responseSnapshotHash: readiness.responseSnapshotHash,
+    resultCopyVersion: coreResultCopyVersion,
+    resultEvidenceStatus: readiness.evidenceStatus,
+    resultSnapshot: {
+      ...readiness.versionBundle,
+      createdAt: completedAt,
+      responseSnapshotHash: readiness.responseSnapshotHash,
+      resultCopyVersion: coreResultCopyVersion,
+      resultStatus: "ready",
+      scoreResult: readiness.result,
+    },
+  };
 
-  return <CandidateCoreResultView attempt={attempt} result={result} />;
+  return (
+    <CandidateCoreResultView attempt={attempt} result={readiness.result} />
+  );
 }

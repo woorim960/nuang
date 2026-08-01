@@ -5,7 +5,10 @@ import {
   Bell,
   Check,
   ChevronRight,
+  FileText,
+  FlaskConical,
   ListFilter,
+  MessagesSquare,
   Search,
   X,
 } from "lucide-react";
@@ -18,6 +21,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
 import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
 import { FeedComposer } from "@/features/feed/FeedComposer";
 import { FeedMediaCarousel } from "@/features/feed/FeedMediaCarousel";
@@ -31,7 +35,8 @@ import { PublicProfileImageView } from "@/features/public-profile/PublicProfileI
 import { useModalDialog } from "@/hooks/useModalDialog";
 import styles from "@/app/feed/page.module.css";
 
-type FeedMode = "decal" | "recommended";
+export type FeedMode = "decal" | "playground" | "recommended";
+export type FeedPostFormat = "everyday" | "playground" | "report";
 type CommunityPanel = "filter" | null;
 
 const profileOptions = Object.entries(candidateRoleNames)
@@ -40,11 +45,13 @@ const profileOptions = Object.entries(candidateRoleNames)
 
 export function CommunityFeed({
   highlightedPostId = null,
+  initialMode = "recommended",
   pendingReviewNotice = false,
   posts,
   viewerCode: suppliedViewerCode,
 }: {
   highlightedPostId?: string | null;
+  initialMode?: FeedMode;
   pendingReviewNotice?: boolean;
   posts: FeedItem[];
   viewerCode?: string | null;
@@ -54,7 +61,7 @@ export function CommunityFeed({
     () => orderFeedPosts(posts, viewerCode),
     [posts, viewerCode],
   );
-  const [mode, setMode] = useState<FeedMode>("recommended");
+  const [mode, setMode] = useState<FeedMode>(initialMode);
   const [panel, setPanel] = useState<CommunityPanel>(null);
   const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
   const [draftCodes, setDraftCodes] = useState<string[]>([]);
@@ -72,6 +79,16 @@ export function CommunityFeed({
     postElement?.scrollIntoView?.({ behavior: "smooth", block: "center" });
   }, [highlightedPostId]);
 
+  useEffect(() => {
+    const syncModeWithHistory = () => {
+      const view = new URLSearchParams(window.location.search).get("view");
+      setMode(view === "decal" || view === "playground" ? view : "recommended");
+    };
+
+    window.addEventListener("popstate", syncModeWithHistory);
+    return () => window.removeEventListener("popstate", syncModeWithHistory);
+  }, []);
+
   const decalPosts = viewerCode
     ? orderedPosts.filter((post) => {
         if (isNuangQuestionPost(post)) return false;
@@ -79,15 +96,19 @@ export function CommunityFeed({
         return code && getCodeMatchCount(viewerCode, code) >= 2;
       })
     : [];
+  const playgroundPosts = orderedPosts.filter(isPlaygroundPost);
   const filterActive = mode === "recommended" && selectedCodes.length > 0;
-  const visiblePosts = filterActive
-    ? orderedPosts.filter((post) => {
-        const code = getPostCode(post);
-        return code ? selectedCodes.includes(code) : false;
-      })
-    : mode === "recommended"
-      ? orderedPosts
-      : decalPosts;
+  const visiblePosts =
+    mode === "playground"
+      ? playgroundPosts
+      : filterActive
+        ? orderedPosts.filter((post) => {
+            const code = getPostCode(post);
+            return code ? selectedCodes.includes(code) : false;
+          })
+        : mode === "recommended"
+          ? orderedPosts
+          : decalPosts;
   const filteredProfileOptions = profileOptions.filter(({ code, name }) => {
     const normalizedQuery = filterQuery.trim().toLocaleLowerCase("ko-KR");
     if (!normalizedQuery) return true;
@@ -124,17 +145,25 @@ export function CommunityFeed({
         <div className={styles.modeTabs} data-mode={mode}>
           <button
             aria-current={mode === "recommended" ? "page" : undefined}
-            onClick={() => setMode("recommended")}
+            onClick={() => selectMode("recommended")}
             type="button"
           >
             추천
           </button>
           <button
             aria-current={mode === "decal" ? "page" : undefined}
-            onClick={() => setMode("decal")}
+            onClick={() => selectMode("decal")}
             type="button"
           >
             데칼코마니
+          </button>
+          <button
+            aria-label="성향 놀이터"
+            aria-current={mode === "playground" ? "page" : undefined}
+            onClick={() => selectMode("playground")}
+            type="button"
+          >
+            놀이터
           </button>
           <span aria-hidden="true" className={styles.modeIndicator} />
         </div>
@@ -184,7 +213,7 @@ export function CommunityFeed({
         {visiblePosts.length > 0 ? (
           <div className={styles.postList}>
             {visiblePosts.map((post) => (
-              <CommunityPost
+              <CommunityPostCard
                 filterActive={filterActive}
                 highlighted={highlightedPostId === post.id}
                 mode={mode}
@@ -282,6 +311,22 @@ export function CommunityFeed({
     setPanel("filter");
   }
 
+  function selectMode(nextMode: FeedMode) {
+    if (nextMode === mode) return;
+    setMode(nextMode);
+    setPanel(null);
+
+    const params = new URLSearchParams(window.location.search);
+    if (nextMode === "recommended") params.delete("view");
+    else params.set("view", nextMode);
+    const query = params.toString();
+    window.history.pushState(
+      null,
+      "",
+      `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`,
+    );
+  }
+
   function toggleDraftCode(code: string) {
     setDraftCodes((codes) =>
       codes.includes(code)
@@ -291,27 +336,29 @@ export function CommunityFeed({
   }
 }
 
-function CommunityPost({
+export function CommunityPostCard({
   filterActive,
   highlighted,
   mode,
   post,
+  returnTo = "/feed",
+  showConversationLink = true,
   viewerCode,
 }: {
   filterActive: boolean;
   highlighted: boolean;
   mode: FeedMode;
   post: FeedItem;
+  returnTo?: string;
+  showConversationLink?: boolean;
   viewerCode: string | null;
 }) {
   const isOfficialDailyPoll = isDailyCommunityPoll(post);
   const isNuangQuestion = isNuangQuestionPost(post);
   const code = getPostCode(post);
-  const canAnswerQuestion = canViewerAnswerQuestion(
-    post.questionAudience,
-    viewerCode,
-    code,
-  );
+  const canAnswerQuestion =
+    !post.viewerIsAuthor &&
+    canViewerAnswerQuestion(post.questionAudience, viewerCode, code);
   const recentReply = post.replyPreview?.[0];
   const recommendationReason = getRecommendationReason({
     code,
@@ -321,11 +368,20 @@ function CommunityPost({
     viewerCode,
   });
   const showRecommendationReason =
-    !isNuangQuestion && (filterActive || mode === "decal");
+    !post.viewerIsAuthor &&
+    !isNuangQuestion &&
+    (filterActive || mode === "decal");
   const responsesClosed = post.responseStatus === "closed";
 
   if (isOfficialDailyPoll && post.poll) {
-    return <PersonalityPlaygroundPost highlighted={highlighted} post={post} />;
+    return (
+      <PersonalityPlaygroundPost
+        highlighted={highlighted}
+        post={post}
+        returnTo={returnTo}
+        viewKey={mode}
+      />
+    );
   }
 
   return (
@@ -333,15 +389,42 @@ function CommunityPost({
       className={styles.postCard}
       data-highlighted={highlighted ? "true" : "false"}
       data-official={isOfficialDailyPoll ? "true" : "false"}
+      data-own={post.viewerIsAuthor ? "true" : "false"}
+      data-poll={post.poll ? "true" : "false"}
       id={`community-post-${post.id}`}
     >
       <div className={styles.postHeader}>
         <ProfileIdentity post={post} />
-        <FeedMoreMenu postId={post.id} targetType={post.targetType} />
+        <FeedMoreMenu
+          canManage={post.viewerCanManage}
+          editHref={
+            post.poll
+              ? `/feed/balance/${post.id}/edit?returnTo=${encodeURIComponent(returnTo)}`
+              : post.questionAudience
+                ? `/feed/questions/${post.id}/edit?returnTo=${encodeURIComponent(returnTo)}`
+                : undefined
+          }
+          postId={post.id}
+          returnTo={returnTo}
+          targetType={post.targetType}
+        />
       </div>
 
       {showRecommendationReason ? (
         <p className={styles.recommendationReason}>{recommendationReason}</p>
+      ) : null}
+
+      {getFeedPostDisplayLabel(post) || post.topic?.tags.length ? (
+        <div aria-label="게시물 주제" className={styles.postTopics}>
+          {getFeedPostDisplayLabel(post) ? (
+            <strong>{getFeedPostDisplayLabel(post)}</strong>
+          ) : null}
+          {(post.topic?.tags ?? []).map((tag) => (
+            <Link href={`/feed/tags/${encodeURIComponent(tag)}`} key={tag}>
+              #{tag}
+            </Link>
+          ))}
+        </div>
       ) : null}
 
       {responsesClosed ? (
@@ -350,9 +433,22 @@ function CommunityPost({
         </p>
       ) : null}
 
-      {isNuangQuestion ? (
-        <div className={styles.questionSourceBar}>
-          <strong>뉴앙에게 물어봐</strong>
+      {isNuangQuestion && post.questionAudience ? (
+        <div
+          className={styles.questionAudienceBar}
+          data-own={post.viewerIsAuthor ? "true" : "false"}
+        >
+          <p
+            className={styles.questionAudienceNote}
+            data-matched={canAnswerQuestion ? "true" : "false"}
+          >
+            {getQuestionAudienceNotice(
+              post.questionAudience,
+              viewerCode,
+              canAnswerQuestion,
+              Boolean(post.viewerIsAuthor),
+            )}
+          </p>
           <Link href="/feed/questions/new">
             나도 질문하기
             <ChevronRight aria-hidden="true" size={15} strokeWidth={2} />
@@ -360,33 +456,7 @@ function CommunityPost({
         </div>
       ) : null}
 
-      {isNuangQuestion && post.questionAudience ? (
-        <p
-          className={styles.questionAudienceNote}
-          data-matched={canAnswerQuestion ? "true" : "false"}
-        >
-          {getQuestionAudienceNotice(
-            post.questionAudience,
-            viewerCode,
-            canAnswerQuestion,
-          )}
-        </p>
-      ) : null}
-
-      {post.topic && (!isNuangQuestion || post.topic.tags.length > 0) ? (
-        <div aria-label="게시물 주제" className={styles.postTopics}>
-          {!isNuangQuestion && post.topic.label ? (
-            <strong>{post.topic.label}</strong>
-          ) : null}
-          {post.topic.tags.map((tag) => (
-            <Link href={`/feed/tags/${encodeURIComponent(tag)}`} key={tag}>
-              #{tag}
-            </Link>
-          ))}
-        </div>
-      ) : null}
-
-      {post.body ? (
+      {post.body && !post.togetherBalanceRoom && !post.togetherBalanceResult ? (
         <SafeLinkedText
           className={styles.postBody}
           links={post.links}
@@ -396,17 +466,26 @@ function CommunityPost({
       {post.media?.length ? <FeedMediaCarousel media={post.media} /> : null}
 
       {post.poll ? (
-        <div className={styles.pollWrap}>
-          <FeedPollCard poll={post.poll} returnTo="/feed" variant="home" />
-          {post.poll.viewerVoteOptionId ? (
-            <Link className={styles.pollDetailLink} href={post.poll.statsHref}>
-              뉴앙 코드별 선택과 댓글 보기
-            </Link>
-          ) : null}
+        <div
+          className={styles.pollWrap}
+          data-closed={post.poll.status === "closed" ? "true" : "false"}
+        >
+          <FeedPollCard
+            key={`${post.id}:${mode}`}
+            poll={post.poll}
+            returnTo={returnTo}
+            variant="playground"
+          />
         </div>
       ) : null}
 
       {post.reportShare ? <ReportSharePreview post={post} /> : null}
+      {post.togetherBalanceRoom ? (
+        <TogetherBalanceRoomPreview post={post} />
+      ) : null}
+      {post.togetherBalanceResult ? (
+        <TogetherBalanceResultPreview post={post} />
+      ) : null}
 
       <div className={styles.postActions}>
         <FeedActionButtons
@@ -416,7 +495,9 @@ function CommunityPost({
           commentDisabledMessage={
             responsesClosed
               ? "응답이 마감됐어요. 기존 답변은 계속 볼 수 있어요."
-              : undefined
+              : post.viewerIsAuthor && isNuangQuestion
+                ? "내가 보낸 질문이에요. 다른 사람의 답변을 기다려 보세요."
+                : undefined
           }
           commentPlaceholder={
             isNuangQuestion ? "내 경험으로 답변하기" : "댓글 달기"
@@ -430,6 +511,7 @@ function CommunityPost({
           questionMode={isNuangQuestion}
           replyCount={post.replyCount}
           replyPreview={isNuangQuestion ? post.replyPreview : undefined}
+          returnTo={returnTo}
           targetType={post.targetType}
         />
       </div>
@@ -441,10 +523,10 @@ function CommunityPost({
         </p>
       ) : null}
 
-      {!post.poll && !isNuangQuestion ? (
+      {showConversationLink && !post.poll && !isNuangQuestion ? (
         <Link
           className={styles.conversationLink}
-          href={`/feed/posts/${post.id}`}
+          href={`/feed/posts/${post.id}?backTo=${encodeURIComponent(returnTo)}`}
         >
           {post.replyCount
             ? `댓글 ${post.replyCount.toLocaleString("ko-KR")}개 보기`
@@ -461,13 +543,17 @@ function ProfileIdentity({ post }: { post: FeedItem }) {
       <Avatar label={post.avatarLabel} post={post} />
       <span className={styles.authorCopy}>
         <span className={styles.authorName}>
-          {post.authorName}
+          <span className={styles.authorNameText}>{post.authorName}</span>
+          {post.authorProfile?.operator ? <NuangOperatorBadge compact /> : null}
+          {post.viewerIsAuthor ? (
+            <b className={styles.ownPostBadge}>내 글</b>
+          ) : null}
           {getPostCode(post) ? (
             <b className={styles.codeBadge}>{getPostCode(post)}</b>
           ) : null}
         </span>
         <small>
-          {post.topic?.label ?? post.title} · {post.timeLabel}
+          {getFeedPostDisplayLabel(post) ?? post.title} · {post.timeLabel}
         </small>
       </span>
     </span>
@@ -571,7 +657,7 @@ function FeedEmptyState({
       <div className={styles.emptyFeed}>
         <strong>내 뉴앙 코드를 연결하면 데칼코마니가 열려요</strong>
         <p>나와 여러 성향 자리가 가까운 사람들의 이야기를 모아드려요.</p>
-        <Link href="/assessments">내 코드 확인하기</Link>
+        <Link href="/home">내 코드 확인하기</Link>
       </div>
     );
   }
@@ -581,6 +667,16 @@ function FeedEmptyState({
       <div className={styles.emptyFeed}>
         <strong>나와 코드가 가까운 새 게시물을 기다리고 있어요</strong>
         <p>공개 게시물이 올라오면 가까운 성향부터 이곳에 모아드려요.</p>
+      </div>
+    );
+  }
+
+  if (mode === "playground") {
+    return (
+      <div className={styles.emptyFeed}>
+        <strong>새로운 성향놀이를 준비하고 있어요</strong>
+        <p>투표를 만들면 이곳에서 가볍게 의견을 나눌 수 있어요.</p>
+        <Link href="/feed/balance/new">투표 만들기</Link>
       </div>
     );
   }
@@ -595,17 +691,125 @@ function FeedEmptyState({
 
 function ReportSharePreview({ post }: { post: FeedItem }) {
   if (!post.reportShare) return null;
+  const reportType = post.reportShare.reportType ?? "core";
+  const Icon =
+    reportType === "core"
+      ? FileText
+      : reportType === "topic"
+        ? MessagesSquare
+        : FlaskConical;
+  const typeLabel =
+    reportType === "core"
+      ? post.reportShare.assessmentKind === "full"
+        ? "정밀 코어 검사"
+        : "빠른 코어 검사"
+      : reportType === "topic"
+        ? `주제 검사${post.reportShare.assessmentTitle ? ` · ${post.reportShare.assessmentTitle}` : ""}`
+        : `별난 연구소${post.reportShare.assessmentTitle ? ` · ${post.reportShare.assessmentTitle}` : ""}`;
 
   return (
-    <Link className={styles.reportCard} href={post.reportShare.href}>
-      <div>
-        <span>공유된 뉴앙 리포트</span>
-        <strong>{post.reportShare.profileCode}</strong>
-        <p>{post.reportShare.profileName}</p>
+    <Link
+      className={styles.reportCard}
+      data-report-type={reportType}
+      href={post.reportShare.href}
+    >
+      <span className={styles.reportTypeMark}>
+        <Icon aria-hidden="true" size={20} strokeWidth={1.65} />
+      </span>
+      <div className={styles.reportCardCopy}>
+        <span>{typeLabel}</span>
+        <p className={styles.reportIdentity}>
+          {post.reportShare.profileCode ? (
+            <strong>{post.reportShare.profileCode}</strong>
+          ) : null}
+          <b>{post.reportShare.profileName}</b>
+        </p>
+        {post.reportShare.summary ? (
+          <p className={styles.reportSummary}>{post.reportShare.summary}</p>
+        ) : null}
       </div>
-      <span>리포트 보기</span>
+      <ChevronRight
+        aria-hidden="true"
+        className={styles.reportChevron}
+        size={19}
+        strokeWidth={1.65}
+      />
+      <span className="sr-only">리포트 보기</span>
     </Link>
   );
+}
+
+function TogetherBalanceRoomPreview({ post }: { post: FeedItem }) {
+  const room = post.togetherBalanceRoom;
+  if (!room) return null;
+  const open = room.recruitmentStatus === "open";
+  const remaining = Math.max(0, room.capacity - room.occupancy);
+  const href = open
+    ? room.href
+    : `/assessments/together/balance-game?pack=${encodeURIComponent(
+        room.packSlug,
+      )}`;
+
+  return (
+    <Link className={styles.togetherRoomCard} href={href}>
+      <div>
+        <span>{room.capacity}인 밸런스 게임</span>
+        <strong>{room.packTitle}</strong>
+        <p>
+          {room.occupancy}/{room.capacity}명 참여 중 · {room.questionCount}문항
+          · 약 {getTogetherBalanceMinutes(room.questionCount)}분
+        </p>
+      </div>
+      <span data-open={open}>
+        {open
+          ? remaining === 0
+            ? "모집 완료"
+            : `${remaining}자리 남음`
+          : "모집 마감"}
+      </span>
+      <b>
+        {open ? "함께 고르기" : "같은 팩으로 방 만들기"}
+        <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
+      </b>
+    </Link>
+  );
+}
+
+function TogetherBalanceResultPreview({ post }: { post: FeedItem }) {
+  const result = post.togetherBalanceResult;
+  if (!result) return null;
+
+  return (
+    <Link className={styles.togetherResultCard} href={result.href}>
+      <div>
+        <span>
+          {result.resultStatus === "final" ? "최종 결과" : "현재 결과"} ·{" "}
+          {result.completedCount}명
+        </span>
+        <strong>{result.packTitle}</strong>
+        <p>{result.roomName}</p>
+      </div>
+      <strong>
+        {result.score}
+        <small>점</small>
+      </strong>
+      <p>{result.scoreLabel}</p>
+      {result.highlight ? (
+        <blockquote>“{result.highlight}”에서 모두 통했어요</blockquote>
+      ) : null}
+      <b>
+        이 주제로 우리도 해보기
+        <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
+      </b>
+    </Link>
+  );
+}
+
+function getTogetherBalanceMinutes(questionCount: number) {
+  if (questionCount <= 8) return 1;
+  if (questionCount <= 16) return 2;
+  if (questionCount <= 20) return 3;
+  return 4;
 }
 
 function getRecommendationReason({
@@ -657,7 +861,7 @@ function getViewerCode(posts: FeedItem[]) {
   );
 }
 
-function getPostCode(post: FeedItem) {
+export function getPostCode(post: FeedItem) {
   const code = post.authorProfile?.display.code;
   return code && candidateRoleNames[code] ? code : null;
 }
@@ -686,6 +890,7 @@ function orderFeedPosts(posts: FeedItem[], viewerCode: string | null) {
   );
   const matchedQuestions = nuangQuestions.filter(
     (post) =>
+      !post.viewerIsAuthor &&
       post.questionAudience &&
       canViewerAnswerQuestion(
         post.questionAudience,
@@ -695,11 +900,13 @@ function orderFeedPosts(posts: FeedItem[], viewerCode: string | null) {
   );
   const regularPosts = remainingPosts.filter(
     (post) =>
-      !isNuangQuestionPost(post) &&
+      (!isNuangQuestionPost(post) || post.viewerIsAuthor) &&
       !featuredOfficialQuestions.some((featured) => featured.id === post.id),
   );
   const unmatchedQuestions = nuangQuestions.filter(
-    (post) => !matchedQuestions.some((matched) => matched.id === post.id),
+    (post) =>
+      !post.viewerIsAuthor &&
+      !matchedQuestions.some((matched) => matched.id === post.id),
   );
 
   return [
@@ -711,7 +918,7 @@ function orderFeedPosts(posts: FeedItem[], viewerCode: string | null) {
   ];
 }
 
-function canViewerAnswerQuestion(
+export function canViewerAnswerQuestion(
   audience: FeedItem["questionAudience"],
   viewerCode: string | null,
   askerCode: string | null,
@@ -732,20 +939,40 @@ function getQuestionAudienceNotice(
   audience: NonNullable<FeedItem["questionAudience"]>,
   viewerCode: string | null,
   matched: boolean,
+  isOwnPost: boolean,
 ) {
   if (audience.mode === "exact") {
     const target = audience.codes[0] ?? "지정된 코드";
-    return matched ? `${target}에게 온 질문` : `${target}에게 질문`;
+    if (isOwnPost) return `${target}에게 보낸 질문`;
+    return matched ? `${target}에게 온 질문` : `${target}에게 묻는 질문`;
   }
   if (audience.mode === "trait") {
     const target = audience.codes.join(" · ");
-    return matched ? `${target} 성향에게 온 질문` : `${target} 성향에게 질문`;
+    if (isOwnPost) return `${target} 성향에게 보낸 질문`;
+    return matched
+      ? `${target} 성향에게 온 질문`
+      : `${target} 성향에게 묻는 질문`;
+  }
+  if (audience.mode === "all") {
+    return isOwnPost
+      ? "모든 뉴앙 코드에게 보낸 질문"
+      : "모든 뉴앙 코드에게 온 질문";
+  }
+  if (audience.mode === "similar") {
+    return isOwnPost
+      ? "나와 비슷한 뉴앙 코드에게 보낸 질문"
+      : "비슷한 뉴앙 코드에게 온 질문";
+  }
+  if (audience.mode === "different") {
+    return isOwnPost
+      ? "나와 다른 뉴앙 코드에게 보낸 질문"
+      : "다른 뉴앙 코드에게 온 질문";
   }
   if (!viewerCode) return "답변 대상을 지정한 질문";
-  return matched ? "내 성향에게 온 질문" : "다른 관점에게 질문";
+  return matched ? "내 뉴앙 코드에게 온 질문" : "다른 뉴앙 코드에게 온 질문";
 }
 
-function isDailyCommunityPoll(post: FeedItem) {
+export function isDailyCommunityPoll(post: FeedItem) {
   return (
     post.kind === "balance_game" &&
     post.authorHandle === "nuang.official" &&
@@ -753,6 +980,29 @@ function isDailyCommunityPoll(post: FeedItem) {
   );
 }
 
-function isNuangQuestionPost(post: FeedItem) {
+export function isNuangQuestionPost(post: FeedItem) {
   return Boolean(post.questionAudience);
+}
+
+export function isPlaygroundPost(post: FeedItem) {
+  return (
+    Boolean(post.poll) ||
+    Boolean(post.questionAudience) ||
+    Boolean(post.togetherBalanceRoom) ||
+    post.kind === "daily_question" ||
+    post.kind === "daily_mood"
+  );
+}
+
+export function getFeedPostFormat(post: FeedItem): FeedPostFormat {
+  if (post.kind === "report_share" || post.reportShare) return "report";
+  if (isPlaygroundPost(post)) return "playground";
+  return "everyday";
+}
+
+export function getFeedPostDisplayLabel(post: FeedItem) {
+  const format = getFeedPostFormat(post);
+  if (format === "report") return "리포트";
+  if (format === "playground") return "놀이터";
+  return post.topic?.label ?? null;
 }

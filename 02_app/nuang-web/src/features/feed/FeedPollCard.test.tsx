@@ -74,7 +74,7 @@ describe("FeedPollCard", () => {
     await waitFor(() => {
       expect(navigationMocks.replace).toHaveBeenCalledWith("/home");
     });
-    expect(navigationMocks.refresh).toHaveBeenCalledTimes(1);
+    expect(navigationMocks.refresh).not.toHaveBeenCalled();
   });
 
   it("leaves the home result actions to the surrounding home card", () => {
@@ -123,23 +123,37 @@ describe("FeedPollCard", () => {
     render(<FeedPollCard poll={poll} variant="playground" />);
 
     const perspective = screen.getByRole("region", {
-      name: "뉴앙 코드별 선택",
+      name: "뉴앙 코드별 결과",
     });
     expect(within(perspective).getByText("1명 참여")).toBeInTheDocument();
     expect(
       within(perspective).queryByRole("link", {
-        name: "뉴앙 코드별 선택",
+        name: "뉴앙 코드별 결과",
       }),
+    ).not.toBeInTheDocument();
+
+    expect(
+      within(perspective).getByRole("button", {
+        name: "결과 보기 펼치기",
+      }),
+    ).toBeVisible();
+    expect(
+      within(perspective).queryByRole("button", { name: "INGMC" }),
     ).not.toBeInTheDocument();
 
     fireEvent.click(
       within(perspective).getByRole("button", {
-        name: "코드별 선택 펼치기",
+        name: "결과 보기 펼치기",
       }),
     );
+    expect(
+      screen.queryByText(
+        "전체 참여자의 현재 선택이에요. 같은 선택을 골라도 이유는 사람마다 다를 수 있어요.",
+      ),
+    ).not.toBeInTheDocument();
 
     fireEvent.click(
-      within(perspective).getByRole("button", { name: "내 코드 INGMC" }),
+      within(perspective).getByRole("button", { name: "INGMC" }),
     );
 
     expect(
@@ -174,9 +188,11 @@ describe("FeedPollCard", () => {
 
     render(<FeedPollCard poll={poll} variant="playground" />);
 
-    fireEvent.click(screen.getByRole("button", { name: "코드별 선택 펼치기" }));
+    fireEvent.click(
+      screen.getByRole("button", { name: "결과 보기 펼치기" }),
+    );
     expect(
-      screen.getByRole("button", { name: "내 코드 INGMC · 집계 중" }),
+      screen.getByRole("button", { name: "INGMC · 집계 중" }),
     ).toBeDisabled();
     fireEvent.click(screen.getByRole("button", { name: "참여 코드 0" }));
     expect(
@@ -195,7 +211,7 @@ describe("FeedPollCard", () => {
     render(<FeedPollCard poll={createPoll()} variant="playground" />);
 
     expect(
-      screen.queryByRole("region", { name: "뉴앙 코드별 선택" }),
+      screen.queryByRole("region", { name: "뉴앙 코드별 결과" }),
     ).not.toBeInTheDocument();
 
     fireEvent.click(
@@ -203,14 +219,58 @@ describe("FeedPollCard", () => {
     );
 
     const perspective = await screen.findByRole("region", {
-      name: "뉴앙 코드별 선택",
+      name: "뉴앙 코드별 결과",
     });
     expect(
-      within(perspective).getByRole("button", { name: "코드별 선택 접기" }),
+      within(perspective).getByRole("button", { name: "결과 보기 접기" }),
     ).toBeVisible();
   });
 
-  it("lets the viewer close and reopen code perspectives inline", () => {
+  it("shows the selected option and result before the network response finishes", async () => {
+    let resolveVote: ((response: Response) => void) | undefined;
+    const fetchMock = vi.fn(
+      (input: RequestInfo | URL, request?: RequestInit) => {
+        void input;
+        void request;
+        return new Promise<Response>((resolve) => {
+          resolveVote = resolve;
+        });
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(<FeedPollCard poll={createPoll()} variant="playground" />);
+
+    const selectedOption = screen.getByRole("button", {
+      name: /사람을 만나 함께 보낸다/,
+    });
+    fireEvent.click(selectedOption);
+    fireEvent.click(selectedOption);
+
+    expect(selectedOption).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getAllByText("100%").length).toBeGreaterThan(0);
+    expect(
+      screen.getByRole("button", { name: "결과 보기 접기" }),
+    ).toBeVisible();
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    const [, request] = fetchMock.mock.calls[0]!;
+    expect(JSON.parse(String(request?.body))).toMatchObject({
+      action: "vote_poll",
+      replaceExisting: false,
+    });
+    expect(navigationMocks.refresh).not.toHaveBeenCalled();
+
+    resolveVote?.(
+      new Response(JSON.stringify({ ok: true }), {
+        status: 200,
+      }),
+    );
+    await waitFor(() => {
+      expect(screen.queryByText("투표 저장 중")).not.toBeInTheDocument();
+    });
+  });
+
+  it("starts collapsed and lets the viewer open code perspectives inline", () => {
     const poll = createPoll();
     poll.totalVotes = 9;
     poll.viewerVoteOptionId = poll.options[0]!.id;
@@ -218,24 +278,15 @@ describe("FeedPollCard", () => {
     render(<FeedPollCard poll={poll} variant="playground" />);
 
     const perspective = screen.getByRole("region", {
-      name: "뉴앙 코드별 선택",
+      name: "뉴앙 코드별 결과",
     });
-    fireEvent.click(
-      within(perspective).getByRole("button", {
-        name: "코드별 선택 펼치기",
-      }),
-    );
-    fireEvent.click(
-      within(perspective).getByRole("button", { name: "코드별 선택 접기" }),
-    );
-
     expect(
       within(perspective).queryByRole("button", { name: "전체" }),
     ).not.toBeInTheDocument();
 
     fireEvent.click(
       within(perspective).getByRole("button", {
-        name: "코드별 선택 펼치기",
+        name: "결과 보기 펼치기",
       }),
     );
     expect(
@@ -274,12 +325,76 @@ describe("FeedPollCard", () => {
       action: "vote_poll",
       optionId: poll.options[1]!.id,
       pollId: poll.id,
+      replaceExisting: true,
     });
-    expect(navigationMocks.refresh).toHaveBeenCalledTimes(1);
+    expect(navigationMocks.refresh).not.toHaveBeenCalled();
     expect(screen.getByText("선택을 바꿨어요.")).toBeVisible();
     expect(
       screen.getByRole("button", { name: /혼자 여유롭게 보낸다/ }),
     ).toHaveAttribute("aria-pressed", "true");
+  });
+
+  it("updates the viewer code result and participating-code result after re-voting", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        async () => new Response(JSON.stringify({ ok: true }), { status: 200 }),
+      ),
+    );
+    const poll = createPoll();
+    poll.totalVotes = 3;
+    poll.viewerCode = "INGMC";
+    poll.viewerVoteOptionId = poll.options[0]!.id;
+    poll.options[0] = {
+      ...poll.options[0]!,
+      ratio: 67,
+      viewerHasVoted: true,
+      voteCount: 2,
+    };
+    poll.options[1] = {
+      ...poll.options[1]!,
+      ratio: 33,
+      voteCount: 1,
+    };
+    poll.codePerspectives = [
+      {
+        code: "INGMC",
+        name: "새 가능성을 찾는 탐험가",
+        options: [
+          { label: poll.options[0]!.label, ratio: 100, voteCount: 2 },
+          { label: poll.options[1]!.label, ratio: 0, voteCount: 0 },
+        ],
+        totalVotes: 2,
+      },
+    ];
+
+    render(<FeedPollCard poll={poll} variant="playground" />);
+
+    fireEvent.click(
+      screen.getByRole("button", { name: /혼자 여유롭게 보낸다/ }),
+    );
+
+    const perspective = screen.getByRole("region", {
+      name: "뉴앙 코드별 결과",
+    });
+    expect(within(perspective).getByText("33%")).toBeVisible();
+    expect(within(perspective).getByText("67%")).toBeVisible();
+
+    fireEvent.click(
+      within(perspective).getByRole("button", { name: "INGMC" }),
+    );
+    expect(within(perspective).getAllByText("50%")).toHaveLength(2);
+
+    fireEvent.click(
+      within(perspective).getByRole("button", { name: "참여 코드 1" }),
+    );
+    expect(
+      within(perspective).getByRole("button", { name: "INGMC 2명" }),
+    ).toBeVisible();
+    fireEvent.click(
+      within(perspective).getByRole("button", { name: "INGMC 2명" }),
+    );
+    expect(within(perspective).getAllByText("50%")).toHaveLength(2);
   });
 
   it("keeps final results visible and blocks new votes after closing", () => {
@@ -302,16 +417,61 @@ describe("FeedPollCard", () => {
     render(<FeedPollCard poll={poll} variant="playground" />);
 
     expect(screen.getByText("투표 마감")).toBeInTheDocument();
-    expect(screen.getByText("마감된 최종 결과예요.")).toBeInTheDocument();
+    expect(
+      screen.getByText("마감된 최종 결과 · 총 10명 참여"),
+    ).toBeInTheDocument();
     expect(screen.getAllByText("60%").length).toBeGreaterThan(0);
     expect(
       screen.getByRole("button", { name: /사람을 만나 함께 보낸다/ }),
     ).toBeDisabled();
+    expect(
+      screen.queryByRole("region", { name: "뉴앙 코드별 결과" }),
+    ).not.toBeInTheDocument();
 
     fireEvent.click(
       screen.getByRole("button", { name: /사람을 만나 함께 보낸다/ }),
     );
     expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("keeps accumulated code statistics available after a poll closes", () => {
+    const poll = createPoll();
+    poll.status = "closed";
+    poll.canViewCodeStats = true;
+    poll.totalVotes = 1;
+    poll.viewerVoteOptionId = poll.options[0]!.id;
+    poll.options[0]!.viewerHasVoted = true;
+    poll.codePerspectives = [
+      {
+        code: "ENAKQ",
+        name: "관계를 여는 선도자",
+        options: [
+          { label: poll.options[0]!.label, ratio: 100, voteCount: 1 },
+          { label: poll.options[1]!.label, ratio: 0, voteCount: 0 },
+        ],
+        totalVotes: 1,
+      },
+    ];
+
+    render(<FeedPollCard poll={poll} variant="playground" />);
+
+    const perspective = screen.getByRole("region", {
+      name: "뉴앙 코드별 결과",
+    });
+    expect(
+      within(perspective).getByRole("button", {
+        name: "결과 보기 펼치기",
+      }),
+    ).toBeVisible();
+    expect(screen.getByText("마감된 최종 결과예요.")).toBeVisible();
+    fireEvent.click(
+      within(perspective).getByRole("button", {
+        name: "결과 보기 펼치기",
+      }),
+    );
+    expect(
+      within(perspective).getByRole("button", { name: "참여 코드 1" }),
+    ).toBeVisible();
   });
 });
 

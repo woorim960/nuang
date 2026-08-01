@@ -3,6 +3,7 @@
 import { Search, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
 import { readJsonResponse } from "@/features/account/response-json";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import { normalizeFeedTag } from "@/features/feed/feed-topic";
@@ -368,7 +369,10 @@ function ProfileSearchResult({
     <Link className={styles.resultItem} href={href}>
       <PublicProfileImageView image={profile.profileImage} size="sm" />
       <span className={styles.resultCopy}>
-        <strong>{profile.displayName}</strong>
+        <span className={styles.resultNameRow}>
+          <strong>{profile.displayName}</strong>
+          {profile.isOperator ? <NuangOperatorBadge compact /> : null}
+        </span>
         <small>
           @{profile.handle}
           {profile.roleName ? ` · ${profile.roleName}` : ""}

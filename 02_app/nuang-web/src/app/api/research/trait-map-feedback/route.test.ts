@@ -29,7 +29,7 @@ const fullResult = {
   kind: "full",
   localResultId: null,
   profileCode: "ENAKQ",
-  profileName: "관계를 여는 지휘자",
+  profileName: "관계를 여는 선도자",
   resultLabel: "정밀 검사 결과",
   resultReportId: "10000000-0000-4000-8000-000000000001",
 } as const;

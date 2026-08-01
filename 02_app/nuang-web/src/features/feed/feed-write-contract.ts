@@ -4,6 +4,8 @@ export type FeedWriteStepId =
   | "ensure_account"
   | "validate_target"
   | "insert_feed_post"
+  | "update_feed_post"
+  | "delete_feed_post"
   | "insert_feed_comment"
   | "insert_feed_reaction"
   | "insert_feed_bookmark"
@@ -22,6 +24,8 @@ export type FeedWriteFailureCode =
   | "feed_target_invalid"
   | "feed_target_not_supported"
   | "feed_response_closed"
+  | "feed_poll_content_locked"
+  | "feed_question_audience_locked"
   | "feed_rate_limited"
   | "feed_required_consent_missing"
   | "feed_write_guard_unavailable"
@@ -29,6 +33,8 @@ export type FeedWriteFailureCode =
   | "feed_external_link_blocked"
   | "feed_already_reported"
   | "feed_post_insert_failed"
+  | "feed_post_update_failed"
+  | "feed_post_delete_failed"
   | "feed_comment_insert_failed"
   | "feed_reaction_write_failed"
   | "feed_bookmark_write_failed"
@@ -92,6 +98,19 @@ export const feedWriteFailures: Record<
     retryable: false,
     step: "validate_target",
   },
+  feed_poll_content_locked: {
+    httpStatus: 409,
+    message:
+      "참여가 시작된 투표는 질문과 선택지를 바꿀 수 없어요. 게시물 설명과 공개 범위는 계속 수정할 수 있어요.",
+    retryable: false,
+    step: "validate_target",
+  },
+  feed_question_audience_locked: {
+    httpStatus: 409,
+    message: "답변이 시작된 질문은 답변 대상을 바꿀 수 없어요.",
+    retryable: false,
+    step: "validate_target",
+  },
   feed_rate_limited: {
     httpStatus: 429,
     message: "짧은 시간에 요청이 많았어요. 잠시 쉬었다가 다시 시도해 주세요.",
@@ -100,8 +119,7 @@ export const feedWriteFailures: Record<
   },
   feed_required_consent_missing: {
     httpStatus: 403,
-    message:
-      "커뮤니티를 이용하려면 만 14세 이상 확인과 필수 약관 동의가 필요해요.",
+    message: "커뮤니티를 이용하려면 필수 약관 동의가 필요해요.",
     retryable: false,
     step: "validate_target",
   },
@@ -135,6 +153,18 @@ export const feedWriteFailures: Record<
     retryable: true,
     step: "insert_feed_post",
   },
+  feed_post_update_failed: {
+    httpStatus: 500,
+    message: "게시글 수정을 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    retryable: true,
+    step: "update_feed_post",
+  },
+  feed_post_delete_failed: {
+    httpStatus: 500,
+    message: "게시글을 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    retryable: true,
+    step: "delete_feed_post",
+  },
   feed_comment_insert_failed: {
     httpStatus: 500,
     message: "댓글을 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
@@ -167,7 +197,7 @@ export const feedWriteFailures: Record<
   },
   feed_poll_write_failed: {
     httpStatus: 500,
-    message: "밸런스 게임을 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    message: "투표를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "insert_feed_poll",
   },

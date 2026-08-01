@@ -9,6 +9,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AssessmentRunner } from "@/features/assessment/AssessmentRunner";
 import { prepareAssessmentCompletion } from "@/features/assessment/assessment-completion";
 import {
+  attachLocalReportContentSnapshot,
   beginLocalAdaptiveFollowUp,
   beginLocalAttemptCompletion,
   completeLocalAttempt,
@@ -21,6 +22,7 @@ import {
   startLocalAdaptiveFollowUp,
 } from "@/features/assessment/assessment-storage";
 import { betaCoreAssessment } from "@/features/assessment/beta-core-seed";
+import { candidateQuickCoreAssessment } from "@/features/assessment/candidate-quick-core-seed";
 import { fullCoreAssessment } from "@/features/assessment/full-core-seed";
 import { quickCoreAssessment } from "@/features/assessment/quick-core-seed";
 import type {
@@ -41,6 +43,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@/features/assessment/assessment-storage", () => ({
+  attachLocalReportContentSnapshot: vi.fn(),
   beginLocalAdaptiveFollowUp: vi.fn(),
   beginLocalAttemptCompletion: vi.fn(),
   completeLocalAttempt: vi.fn(),
@@ -217,9 +220,7 @@ describe("AssessmentRunner", () => {
     expect(
       screen.getByRole("radiogroup", { name: "응답 선택" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByText("이럴 때 내 모습은?"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("이럴 때 내 모습은?")).toBeInTheDocument();
     expect(screen.getAllByRole("radio")).toHaveLength(5);
     expect(
       screen.getByRole("radio", { name: "거의 그렇지 않아요" }),
@@ -360,13 +361,13 @@ describe("AssessmentRunner", () => {
   });
 
   it("moves directly to a stored result when completion finishes within 300ms", async () => {
-    const attempt = createAttempt(quickCoreAssessment, {
-      answeredItemCount: quickCoreAssessment.items.length,
-      currentIndex: quickCoreAssessment.items.length - 1,
+    const attempt = createAttempt(candidateQuickCoreAssessment, {
+      answeredItemCount: candidateQuickCoreAssessment.items.length,
+      currentIndex: candidateQuickCoreAssessment.items.length - 1,
     });
     vi.mocked(getOrCreateLocalAttempt).mockResolvedValue(attempt);
 
-    render(<AssessmentRunner assessment={quickCoreAssessment} />);
+    render(<AssessmentRunner assessment={candidateQuickCoreAssessment} />);
 
     fireEvent.click(await screen.findByRole("button", { name: "결과 보기" }));
 
@@ -380,6 +381,17 @@ describe("AssessmentRunner", () => {
     ).not.toBeInTheDocument();
     expect(beginLocalAttemptCompletion).toHaveBeenCalledTimes(1);
     expect(completeLocalAttempt).toHaveBeenCalledTimes(1);
+    await waitFor(() => {
+      expect(attachLocalReportContentSnapshot).toHaveBeenCalledWith(
+        attempt.id,
+        expect.any(String),
+        expect.objectContaining({
+          excerptManifestDigest: expect.stringMatching(/^fnv1a32x2:/),
+          guideVersion: expect.any(String),
+          surface: "owner_report",
+        }),
+      );
+    });
   });
 
   it("reveals the completion surface after 300ms and holds ready for 400ms", async () => {
@@ -674,9 +686,7 @@ describe("AssessmentRunner", () => {
 
       fireEvent.click(
         screen.getByRole("radio", {
-          name: item.isReverse
-            ? "거의 그렇지 않아요"
-            : "거의 항상 그래요",
+          name: item.isReverse ? "거의 그렇지 않아요" : "거의 항상 그래요",
         }),
       );
       await waitFor(() => {

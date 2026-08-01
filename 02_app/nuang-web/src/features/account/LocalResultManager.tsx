@@ -18,6 +18,12 @@ import {
   deleteLocalAttempt,
   listLocalAttempts,
 } from "@/features/assessment/assessment-storage";
+import {
+  deleteFreeTopicResult,
+  listFreeTopicResultsLocalFirst,
+  syncQueuedFreeTopicResults,
+  type StoredFreeTopicResult,
+} from "@/features/assessment/free-topic-storage";
 import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { labAssessments } from "@/features/lab/lab-assessments";
@@ -28,6 +34,10 @@ import {
   type StoredLabResult,
 } from "@/features/lab/lab-storage";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
+import {
+  buildAccountCoreResultHref,
+  buildLocalCoreResultHref,
+} from "@/features/result/unified-core-report/core-result-route-contract";
 import styles from "./LocalResultManager.module.css";
 
 type ResultEntry =
@@ -41,6 +51,17 @@ type ResultEntry =
       kind: "core";
       state: "completed" | "in_progress";
       storage: "account" | "both" | "device";
+      subtitle: string;
+      title: string;
+    }
+  | {
+      accountResultId?: undefined;
+      completedAt: string;
+      href: string;
+      id: string;
+      kind: "topic";
+      state: "completed";
+      storage: "account" | "device";
       subtitle: string;
       title: string;
     }
@@ -79,6 +100,7 @@ export function LocalResultManager() {
     [],
   );
   const [labResults, setLabResults] = useState<StoredLabResult[]>([]);
+  const [topicResults, setTopicResults] = useState<StoredFreeTopicResult[]>([]);
   const [accountResults, setAccountResults] = useState<AccountResultSummary[]>(
     [],
   );
@@ -102,10 +124,12 @@ export function LocalResultManager() {
     let isMounted = true;
 
     async function loadResults() {
-      const [nextCoreAttempts, nextAccountResults] = await Promise.all([
-        listLocalAttempts(),
-        listAccountReportData(),
-      ]);
+      const [nextCoreAttempts, nextAccountResults, nextTopicResults] =
+        await Promise.all([
+          listLocalAttempts(),
+          listAccountReportData(),
+          listFreeTopicResultsLocalFirst(),
+        ]);
       const nextLabResults = listLabResults(
         labAssessments.map((assessment) => assessment.slug),
       );
@@ -113,9 +137,16 @@ export function LocalResultManager() {
       if (!isMounted) return;
       setCoreAttempts(nextCoreAttempts);
       setLabResults(nextLabResults);
+      setTopicResults(nextTopicResults);
       setAccountResults(nextAccountResults.results);
       setComparisonReports(nextAccountResults.comparisonReports);
       setLoaded(true);
+
+      void syncQueuedFreeTopicResults()
+        .then(() => listFreeTopicResultsLocalFirst())
+        .then((syncedTopicResults) => {
+          if (isMounted) setTopicResults(syncedTopicResults);
+        });
     }
 
     loadResults();
@@ -154,7 +185,10 @@ export function LocalResultManager() {
         completedAt: attempt.completedAt ?? attempt.updatedAt,
         expiresAt: attempt.expiresAt,
         href: completed
-          ? `/results/local/${attempt.id}`
+          ? buildLocalCoreResultHref({
+              backHref: "/my/reports/history",
+              localResultId: attempt.id,
+            })
           : `/assessments/${attempt.assessmentId}`,
         id: attempt.id,
         kind: "core",
@@ -183,7 +217,10 @@ export function LocalResultManager() {
           accountResultId: result.resultReportId,
           code: currentProfile?.code,
           completedAt: result.completedAt,
-          href: `/results/account/${result.resultReportId}`,
+          href: buildAccountCoreResultHref({
+            backHref: "/my/reports/history",
+            resultReportId: result.resultReportId,
+          }),
           id: result.resultReportId,
           kind: "core",
           state: "completed",
@@ -212,11 +249,21 @@ export function LocalResultManager() {
         title: "1:1 비교 리포트",
       };
     }),
+    ...topicResults.map((result): ResultEntry => ({
+      completedAt: result.completedAt,
+      href: `/assessments/topics/${result.assessment.slug}/result/${result.localResultId}`,
+      id: result.localResultId,
+      kind: "topic",
+      state: "completed",
+      storage: result.sync.status === "synced" ? "account" : "device",
+      subtitle: result.reportSnapshot.headline,
+      title: result.assessment.title,
+    })),
     ...labResults.map((result): ResultEntry => ({
       completedAt: result.completedAt,
       expiresAt: getLabExpiresAt(result),
-      href: `/labs/${result.slug}/result`,
-      id: result.slug,
+      href: `/labs/${result.slug}/result?localResultId=${encodeURIComponent(result.localResultId)}`,
+      id: result.localResultId,
       kind: "lab",
       state: "completed",
       storage: "device",
@@ -245,6 +292,23 @@ export function LocalResultManager() {
 
         setComparisonReports((reports) =>
           reports.filter((report) => report.comparisonReportId !== entry.id),
+        );
+        return;
+      }
+
+      if (entry.kind === "topic") {
+        const serverDelete = await deleteTopicResult(entry.id);
+
+        if (serverDelete === "error") {
+          setDeleteMessage(
+            "검사 결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+          );
+          return;
+        }
+
+        deleteFreeTopicResult(entry.id);
+        setTopicResults((results) =>
+          results.filter((result) => result.localResultId !== entry.id),
         );
         return;
       }
@@ -282,7 +346,7 @@ export function LocalResultManager() {
 
       deleteLabResult(entry.id);
       setLabResults((results) =>
-        results.filter((result) => result.slug !== entry.id),
+        results.filter((result) => result.localResultId !== entry.id),
       );
     } finally {
       setDeletingEntryId(null);
@@ -297,23 +361,25 @@ export function LocalResultManager() {
     );
   }
 
-  const latestCoreEntry = entries.find(
-    (entry): entry is Extract<ResultEntry, { kind: "core" }> =>
-      entry.kind === "core" && entry.state === "completed",
+  const latestAssessmentEntry = entries.find(
+    (entry): entry is Exclude<ResultEntry, { kind: "comparison" }> =>
+      entry.kind !== "comparison" && entry.state === "completed",
   );
   const inProgressEntries = entries.filter(
     (entry) => entry.kind === "core" && entry.state === "in_progress",
   );
-  const previousCoreEntries = entries.filter(
+  const previousAssessmentEntries = entries.filter(
     (entry) =>
-      entry.kind === "core" &&
+      entry.kind !== "comparison" &&
       entry.state === "completed" &&
-      entry.id !== latestCoreEntry?.id,
+      !(
+        entry.kind === latestAssessmentEntry?.kind &&
+        entry.id === latestAssessmentEntry.id
+      ),
   );
   const comparisonEntries = entries.filter(
     (entry) => entry.kind === "comparison",
   );
-  const labEntries = entries.filter((entry) => entry.kind === "lab");
 
   return (
     <section className={styles.manager}>
@@ -321,10 +387,10 @@ export function LocalResultManager() {
 
       {loaded && entries.length === 0 ? <ReportEmpty /> : null}
 
-      {loaded && latestCoreEntry ? (
+      {loaded && latestAssessmentEntry ? (
         <LatestReport
-          deleting={deletingEntryId === latestCoreEntry.id}
-          entry={latestCoreEntry}
+          deleting={deletingEntryId === latestAssessmentEntry.id}
+          entry={latestAssessmentEntry}
           onDelete={handleDelete}
         />
       ) : null}
@@ -339,17 +405,17 @@ export function LocalResultManager() {
         />
       ) : null}
 
-      {loaded && previousCoreEntries.length > 0 ? (
+      {loaded && previousAssessmentEntries.length > 0 ? (
         <ReportGroup
-          collapsedLimit={3}
-          entries={previousCoreEntries}
-          expanded={expandedGroups.includes("previous-core")}
-          groupId="previous-core"
+          collapsedLimit={5}
+          entries={previousAssessmentEntries}
+          expanded={expandedGroups.includes("previous-assessments")}
+          groupId="previous-assessments"
           onDelete={handleDelete}
           onToggle={toggleGroup}
           deletingEntryId={deletingEntryId}
-          title="이전 코어 검사"
-          tone="core"
+          title="지난 검사 결과"
+          tone="assessment"
         />
       ) : null}
 
@@ -363,19 +429,6 @@ export function LocalResultManager() {
           deletingEntryId={deletingEntryId}
           title="관계 비교"
           tone="comparison"
-        />
-      ) : null}
-
-      {loaded ? (
-        <ReportGroup
-          actionHref="/assessments"
-          actionLabel="검사 둘러보기"
-          emptyCopy="아직 저장된 주제 검사 결과가 없어요."
-          entries={labEntries}
-          onDelete={handleDelete}
-          deletingEntryId={deletingEntryId}
-          title="주제 검사"
-          tone="lab"
         />
       ) : null}
 
@@ -394,17 +447,23 @@ function LatestReport({
   onDelete,
 }: {
   deleting: boolean;
-  entry: Extract<ResultEntry, { kind: "core" }>;
+  entry: Exclude<ResultEntry, { kind: "comparison" }>;
   onDelete: (entry: ResultEntry) => Promise<void>;
 }) {
   return (
-    <section className={styles.latestSection}>
+    <section className={styles.latestSection} data-kind={entry.kind}>
       <div className={styles.latestHeading}>
-        <h2>현재 내 대표 성향</h2>
+        <h2>최근 검사 결과</h2>
         <span>{formatEntryDate(entry)}</span>
       </div>
       <div className={styles.latestIdentity}>
-        {entry.code ? <strong>{entry.code}</strong> : <strong>NUANG</strong>}
+        {entry.kind === "core" && entry.code ? (
+          <strong>{entry.code}</strong>
+        ) : entry.kind === "topic" ? (
+          <FlaskConical aria-hidden="true" size={26} strokeWidth={1.55} />
+        ) : (
+          <FlaskConical aria-hidden="true" size={26} strokeWidth={1.55} />
+        )}
         <div>
           <p>{entry.title}</p>
           <h3>{entry.subtitle}</h3>
@@ -458,7 +517,7 @@ function ReportGroup({
   onDelete: (entry: ResultEntry) => Promise<void>;
   onToggle?: (groupId: string) => void;
   title: string;
-  tone: "comparison" | "core" | "lab" | "progress";
+  tone: "assessment" | "comparison" | "progress";
 }) {
   const canCollapse = Boolean(
     collapsedLimit && groupId && onToggle && entries.length > collapsedLimit,
@@ -554,9 +613,11 @@ function ReportRow({
           <span>{formatEntryDate(entry)}</span>
         </div>
         <div className={styles.rowEnd}>
-          <span data-alert={getEntryStatusLabel(entry) === "확인 필요"}>
-            {getEntryStatusLabel(entry)}
-          </span>
+          {getEntryStatusLabel(entry) ? (
+            <span data-alert={getEntryStatusLabel(entry) === "확인 필요"}>
+              {getEntryStatusLabel(entry)}
+            </span>
+          ) : null}
           <ChevronRight aria-hidden="true" size={16} strokeWidth={1.65} />
         </div>
       </Link>
@@ -591,7 +652,7 @@ function ReportEmpty() {
         <FileText aria-hidden="true" size={22} strokeWidth={1.5} />
       </div>
       <h2>첫 성향 리포트를 만들어보세요</h2>
-      <Link href="/assessments">
+      <Link href="/home">
         검사 둘러보기
         <ChevronRight aria-hidden="true" size={15} strokeWidth={1.7} />
       </Link>
@@ -600,9 +661,8 @@ function ReportEmpty() {
 }
 
 function getSortDate(entry: ResultEntry) {
-  return (
-    entry.completedAt ?? ("expiresAt" in entry ? entry.expiresAt : "") ?? ""
-  );
+  if (entry.state === "completed") return entry.completedAt ?? "";
+  return entry.kind === "core" ? (entry.completedAt ?? "") : "";
 }
 
 function formatEntryDate(entry: ResultEntry) {
@@ -611,6 +671,8 @@ function formatEntryDate(entry: ResultEntry) {
 
   return new Intl.DateTimeFormat("ko-KR", {
     day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
     month: "short",
     year: "numeric",
   }).format(new Date(value));
@@ -622,12 +684,18 @@ function getEntryStatusLabel(entry: ResultEntry) {
     return "확인 필요";
   }
 
-  return entry.state === "completed" ? "완료" : "진행 중";
+  if (entry.state !== "completed") return "진행 중";
+  if (entry.kind === "topic" && entry.storage === "device") return "저장 중";
+  return "";
 }
 
 function getDeleteConfirmMessage(entry: ResultEntry) {
   if (entry.kind === "comparison") {
     return "이 비교 리포트를 삭제할까요? 삭제하면 다시 열 수 없어요.";
+  }
+
+  if (entry.kind === "topic" || entry.kind === "lab") {
+    return "이 검사 결과를 삭제할까요? 삭제하면 다시 열 수 없어요.";
   }
 
   return "이 리포트를 삭제할까요? 삭제하면 다시 열 수 없고 공유 주소와 비교 기록도 함께 삭제돼요.";
@@ -701,6 +769,26 @@ async function deleteComparisonReport(
       headers: {
         "content-type": "application/json",
       },
+      method: "DELETE",
+    });
+
+    if (response.status === 401) return "no_account";
+    if (!response.ok) return "error";
+
+    const body = await readJsonResponse<{ ok?: boolean }>(response);
+    return body?.ok ? "deleted" : "error";
+  } catch {
+    return "error";
+  }
+}
+
+async function deleteTopicResult(
+  localResultId: string,
+): Promise<"deleted" | "error" | "no_account"> {
+  try {
+    const response = await fetch("/api/free-topic-results", {
+      body: JSON.stringify({ localResultId }),
+      headers: { "content-type": "application/json" },
       method: "DELETE",
     });
 

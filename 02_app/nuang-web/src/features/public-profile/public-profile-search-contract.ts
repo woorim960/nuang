@@ -12,6 +12,7 @@ export type PublicProfileSearchItem = {
   comparisonAvailable: boolean;
   displayName: string;
   handle: string;
+  isOperator?: boolean;
   profileImage: PublicProfileImage;
   profileMessage: string;
   publicProfileId: string;

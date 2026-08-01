@@ -1,6 +1,12 @@
 "use client";
 
-import { ArrowLeft, Flag, MoreHorizontal } from "lucide-react";
+import {
+  ArrowLeft,
+  Flag,
+  MoreHorizontal,
+  Pencil,
+  Trash2,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { createPortal } from "react-dom";
@@ -24,16 +30,22 @@ type FeedMoreMenuFailurePayload =
 
 export function FeedMoreMenu({
   compact = false,
+  canManage = false,
+  editHref,
   postId,
+  returnTo,
   targetType = "feed_seed_card",
 }: {
+  canManage?: boolean;
   compact?: boolean;
+  editHref?: string;
   postId: string;
+  returnTo?: string;
   targetType?: "feed_comment" | "feed_post" | "feed_seed_card";
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const [view, setView] = useState<"menu" | "report">("menu");
+  const [view, setView] = useState<"delete" | "menu" | "report">("menu");
   const [reportReason, setReportReason] = useState<ReportReason | null>(null);
   const [reportDetails, setReportDetails] = useState("");
   const [status, setStatus] = useState<FeedMoreMenuStatus>({ status: "idle" });
@@ -87,7 +99,7 @@ export function FeedMoreMenu({
                   className="mx-auto mb-3 block h-1 w-10 rounded-full bg-[var(--nu-neutral-200)]"
                 />
                 <header className="relative flex min-h-10 items-center justify-center px-2 pb-2">
-                  {view === "report" ? (
+                  {view !== "menu" ? (
                     <button
                       aria-label="메뉴로 돌아가기"
                       className="absolute left-1 grid h-9 w-9 place-items-center rounded-full text-[var(--nu-color-text-muted)] hover:bg-[var(--nu-color-app-bg)]"
@@ -108,12 +120,52 @@ export function FeedMoreMenu({
                     className="px-2 text-center text-sm font-bold text-[var(--nu-color-text)]"
                     id={`feed-more-title-${postId}`}
                   >
-                    {view === "report" ? "신고하기" : "콘텐츠 메뉴"}
+                    {view === "report"
+                      ? "신고하기"
+                      : view === "delete"
+                        ? "게시물 삭제"
+                        : canManage
+                          ? "내 게시물"
+                          : "콘텐츠 메뉴"}
                   </h2>
                 </header>
                 {view === "menu" ? (
                   <>
-                    {targetType !== "feed_comment" ? (
+                    {canManage && targetType === "feed_post" ? (
+                      <>
+                        <button
+                          className="flex min-h-12 w-full items-center gap-3 rounded-[14px] px-4 text-left text-sm font-semibold text-[var(--nu-color-text)] hover:bg-[var(--nu-color-app-bg)]"
+                          disabled={status.status === "pending"}
+                          onClick={() => {
+                            const next =
+                              editHref ??
+                              `/feed/posts/${postId}/edit${
+                                returnTo
+                                  ? `?returnTo=${encodeURIComponent(returnTo)}`
+                                  : ""
+                              }`;
+                            setOpen(false);
+                            router.push(next);
+                          }}
+                          type="button"
+                        >
+                          <Pencil aria-hidden="true" size={17} strokeWidth={1.8} />
+                          수정하기
+                        </button>
+                        <button
+                          className="flex min-h-12 w-full items-center gap-3 rounded-[14px] px-4 text-left text-sm font-semibold text-[var(--nu-color-danger)] hover:bg-[var(--nu-color-danger-soft)]"
+                          disabled={status.status === "pending"}
+                          onClick={() => {
+                            setView("delete");
+                            setStatus({ status: "idle" });
+                          }}
+                          type="button"
+                        >
+                          <Trash2 aria-hidden="true" size={17} strokeWidth={1.8} />
+                          삭제하기
+                        </button>
+                      </>
+                    ) : targetType !== "feed_comment" ? (
                       <button
                         className="flex min-h-12 w-full items-center rounded-[14px] px-4 text-left text-sm font-semibold text-[var(--nu-color-text)] hover:bg-[var(--nu-color-app-bg)] disabled:text-[var(--nu-neutral-400)]"
                         disabled={status.status === "pending"}
@@ -125,7 +177,7 @@ export function FeedMoreMenu({
                         관심 없음
                       </button>
                     ) : null}
-                    {targetType !== "feed_seed_card" ? (
+                    {!canManage && targetType !== "feed_seed_card" ? (
                       <button
                         className="flex min-h-12 w-full items-center gap-2 rounded-[14px] px-4 text-left text-sm font-semibold text-[var(--nu-color-danger)] hover:bg-[var(--nu-color-danger-soft)]"
                         onClick={() => {
@@ -139,7 +191,7 @@ export function FeedMoreMenu({
                       </button>
                     ) : null}
                   </>
-                ) : (
+                ) : view === "report" ? (
                   <div className="px-1">
                     <p className="px-3 pb-2 text-xs leading-5 text-[var(--nu-color-text-muted)]">
                       가장 가까운 사유를 선택해 주세요.
@@ -180,6 +232,25 @@ export function FeedMoreMenu({
                       type="button"
                     >
                       {status.status === "pending" ? "접수 중" : "신고 접수"}
+                    </button>
+                  </div>
+                ) : (
+                  <div className="px-2 pb-1">
+                    <div className="rounded-[18px] bg-[var(--nu-color-danger-soft)] px-4 py-4">
+                      <strong className="block text-[15px] font-bold text-[var(--nu-color-text)]">
+                        이 게시물을 삭제할까요?
+                      </strong>
+                      <p className="mt-1 text-sm leading-6 text-[var(--nu-color-text-muted)]">
+                        삭제하면 커뮤니티와 마이에서 더 이상 보이지 않아요.
+                      </p>
+                    </div>
+                    <button
+                      className="mt-3 min-h-11 w-full rounded-[14px] bg-[var(--nu-color-danger)] text-sm font-bold text-white disabled:bg-[var(--nu-neutral-200)]"
+                      disabled={status.status === "pending"}
+                      onClick={() => void submitDelete()}
+                      type="button"
+                    >
+                      {status.status === "pending" ? "삭제 중" : "삭제하기"}
                     </button>
                   </div>
                 )}
@@ -260,6 +331,52 @@ export function FeedMoreMenu({
     } catch {
       setStatus({
         message: "네트워크 연결 때문에 요청을 확인하지 못했어요.",
+        status: "error",
+      });
+    }
+  }
+
+  async function submitDelete() {
+    setStatus({ status: "pending" });
+
+    try {
+      const request: FeedWriteRequest = {
+        action: "delete_post",
+        postId,
+      };
+      const response = await fetch("/api/feed", {
+        body: JSON.stringify(request),
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      });
+      const payload = (await response
+        .json()
+        .catch(() => null)) as FeedMoreMenuFailurePayload | null;
+
+      if (response.status === 401) {
+        setStatus({
+          message: "로그인 후 삭제할 수 있어요.",
+          status: "notice",
+        });
+        return;
+      }
+
+      if (!response.ok) {
+        setStatus({
+          message: payload?.message ?? "게시글을 삭제하지 못했어요.",
+          status: "error",
+        });
+        return;
+      }
+
+      setOpen(false);
+      if (returnTo) {
+        router.push(returnTo);
+      }
+      router.refresh();
+    } catch {
+      setStatus({
+        message: "연결이 불안정해요. 잠시 뒤 다시 시도해 주세요.",
         status: "error",
       });
     }

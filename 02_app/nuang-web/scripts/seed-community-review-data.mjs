@@ -64,6 +64,16 @@ const posts = [
     sourceId: "ask_exact_ingmc",
     topic: ["concerns_questions", "관계", "대화"],
   }),
+  reviewPost(10, 0, {
+    body: "주말에 천천히 걸으며 모아둔 장면들이에요. 한 번에 한 장씩 넘겨 보니 같은 하루도 분위기가 조금씩 다르게 기억되네요.",
+    images: [
+      "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=1200&q=86",
+      "https://images.unsplash.com/photo-1497250681960-ef046c08a56e?auto=format&fit=crop&w=1200&q=86",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=1200&q=86",
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=1200&q=86",
+    ],
+    topic: ["daily_life", "주말", "사진기록"],
+  }),
 ];
 
 console.log(
@@ -223,22 +233,20 @@ function profile(number, code, displayName, motif, profileName) {
 function reviewPost(
   number,
   profileIndex,
-  { body, image, sourceId = null, topic },
+  { body, image, images, sourceId = null, topic },
 ) {
   const item = profiles[profileIndex];
+  const media = images ?? (image ? [image] : []);
   const publishedAt = new Date(
     now.getTime() - number * 37 * 60 * 1000,
   ).toISOString();
   return {
-    attachment_payload: image
-      ? [
-          {
-            alt: `${item.displayName}님의 게시물 사진`,
-            externalUrl: image,
-            type: "image",
-          },
-        ]
-      : [],
+    attachment_payload: media.map((externalUrl, index) => ({
+      alt: `${item.displayName}님의 게시물 사진 ${index + 1}`,
+      externalUrl,
+      id: id("27000000", number * 20 + index + 1),
+      type: "image",
+    })),
     author_account_id: item.accountId,
     body,
     created_at: publishedAt,

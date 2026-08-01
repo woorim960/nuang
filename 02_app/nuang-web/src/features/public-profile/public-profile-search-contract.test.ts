@@ -10,9 +10,9 @@ describe("public profile search contract", () => {
       ok: true,
       value: "Summer.Day",
     });
-    expect(normalizePublicProfileSearchQuery("관계를 여는 지휘자")).toEqual({
+    expect(normalizePublicProfileSearchQuery("관계를 여는 선도자")).toEqual({
       ok: true,
-      value: "관계를 여는 지휘자",
+      value: "관계를 여는 선도자",
     });
   });
 

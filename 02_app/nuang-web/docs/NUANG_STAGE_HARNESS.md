@@ -96,7 +96,7 @@ npm run qa:mvp
 ## 현재 고정 결정
 
 - 피드는 하단 메뉴에 넣는다. 홈에는 preview만 둔다.
-- 피드 MVP 작성 형식, 리포트 preview, 오늘의 질문, 밸런스 게임, 뉴앙 코드별 통계는 `docs/NUANG_FEED_MVP_INTERACTION_DESIGN.md`를 기준으로 한다.
+- 피드 MVP 작성 형식, 리포트 preview, 오늘의 질문, 투표, 뉴앙 코드별 통계는 `docs/NUANG_FEED_MVP_INTERACTION_DESIGN.md`를 기준으로 한다.
 - 함께 탭은 제거한다. 1:1 비교는 프로필 팝업에서 시작하고, 리포트는 마이에서 다시 본다.
 - 결과 공유의 기본 링크 복사 흐름은 리포트 상세의 `공유하기`와 30일 자동 만료 공유 주소를 중심으로 한다.
 - 피드에 공유된 리포트 preview와 연결은 작성자가 해당 피드 글을 삭제하기 전까지 유지한다.
@@ -107,7 +107,7 @@ npm run qa:mvp
 - `202607100001_drop_public_profile_code.sql`은 공개 코드 legacy DB cleanup용 SQL이다. Step 179 server readiness에서 원격 DB의 `profile.profile_public_code`와 `target_public_code_id` 부재를 확인했다.
 - `202607100002_free_topic_results.sql` 적용 후 원격 DB에서 `assessment.free_topic_result` 접근을 확인했다.
 - `202607100003_feed_mvp_interactions.sql` 적용 후 원격 DB에서 `feed.feed_poll`, `feed.feed_poll_option`, `feed.feed_poll_vote` 접근을 확인했다.
-- 개발 seed는 밸런스 게임 5표와 피드 공유 리포트 preview를 포함한다.
+- 개발 seed는 커뮤니티 투표 5표와 피드 공유 리포트 preview를 포함한다.
 - 하단 메뉴에는 함께 탭을 넣지 않는다.
 - 마이는 뉴앙 코드, 코드 이름, 캐릭터, 내 리포트, 설정만 간결하게 보여준다.
 - 사용자 화면에서는 `5축`, `10축`이라는 표현을 쓰지 않고, `뉴앙 코드`, `코드 지도`, `코드 자리`, `세부 신호`를 사용한다.

@@ -27,7 +27,7 @@ describe("FeedPollStatsPage", () => {
       codeRows: [
         {
           code: "ENAKQ",
-          name: "관계를 여는 지휘자",
+          name: "관계를 여는 선도자",
           options: [
             {
               label: "산",
@@ -86,7 +86,7 @@ describe("FeedPollStatsPage", () => {
       viewer: {
         isAuthenticated: true,
         nuangCode: "ENAKQ",
-        profileName: "관계를 여는 지휘자",
+        profileName: "관계를 여는 선도자",
         voteOptionId: "option-sea",
         voteOptionLabel: "바다",
       },

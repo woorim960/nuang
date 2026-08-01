@@ -2,6 +2,10 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import {
+  AssessmentChoiceResponseOptions,
+  AssessmentQuestionPrompt,
+} from "@/features/assessment/AssessmentQuestionControls";
 import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
 import {
   createFriendTraitMatchInviteUrl,
@@ -48,7 +52,7 @@ function InviteSender() {
 
   return (
     <CommunityScreenShell
-      backHref="/assessments"
+      backHref="/home?view=together"
       backLabel="검사로 돌아가기"
       title="친구 성향 맞히기"
     >
@@ -72,25 +76,22 @@ function InviteSender() {
               </h2>
             </section>
 
-            <p className={styles.question}>
-              친구와 약속한 날, 친구가 갑자기 일정을 바꾸자고 해요. 이때 나는?
-            </p>
-            <div className={styles.choiceList}>
-              {choices.map((choice, index) => (
-                <button
-                  aria-pressed={selectedChoice === choice.id}
-                  key={choice.id}
-                  onClick={() => {
-                    if (step === 0) setMyChoice(choice.id);
-                    else setPredictedChoice(choice.id);
-                  }}
-                  type="button"
-                >
-                  <span>{index + 1}</span>
-                  <span>{choice.label}</span>
-                </button>
-              ))}
-            </div>
+            <AssessmentQuestionPrompt
+              contextLabel="친구와 약속한 날"
+              headingLevel={2}
+              key={`friend-match-${step}`}
+              text="친구가 갑자기 일정을 바꾸자고 해요. 이때 나는?"
+            />
+            <AssessmentChoiceResponseOptions
+              choices={choices}
+              legend={step === 0 ? "내 선택은?" : "친구라면?"}
+              name={`friend-match-${step}`}
+              onChange={(choiceId) => {
+                if (step === 0) setMyChoice(choiceId as ChoiceId);
+                else setPredictedChoice(choiceId as ChoiceId);
+              }}
+              selectedId={selectedChoice ?? undefined}
+            />
           </>
         ) : (
           <>
@@ -196,7 +197,7 @@ function InviteReceiver({
 
     return (
       <CommunityScreenShell
-        backHref="/assessments"
+        backHref="/home?view=together"
         backLabel="검사로 돌아가기"
         title="친구 성향 맞히기"
       >
@@ -244,7 +245,7 @@ function InviteReceiver({
 
   return (
     <CommunityScreenShell
-      backHref="/assessments"
+      backHref="/home?view=together"
       backLabel="검사로 돌아가기"
       title="친구 성향 맞히기"
     >
@@ -258,22 +259,18 @@ function InviteReceiver({
           <h2>나는 실제로 어떤 답을 고를까요?</h2>
         </section>
 
-        <p className={styles.question}>
-          친구와 약속한 날, 친구가 갑자기 일정을 바꾸자고 해요. 이때 나는?
-        </p>
-        <div className={styles.choiceList}>
-          {choices.map((choice, index) => (
-            <button
-              aria-pressed={actualChoice === choice.id}
-              key={choice.id}
-              onClick={() => setActualChoice(choice.id)}
-              type="button"
-            >
-              <span>{index + 1}</span>
-              <span>{choice.label}</span>
-            </button>
-          ))}
-        </div>
+        <AssessmentQuestionPrompt
+          contextLabel="친구와 약속한 날"
+          headingLevel={2}
+          text="친구가 갑자기 일정을 바꾸자고 해요. 이때 나는?"
+        />
+        <AssessmentChoiceResponseOptions
+          choices={choices}
+          legend="내 선택은?"
+          name="friend-match-receiver"
+          onChange={(choiceId) => setActualChoice(choiceId as ChoiceId)}
+          selectedId={actualChoice ?? undefined}
+        />
 
         <footer className={styles.footer}>
           <button
@@ -301,7 +298,7 @@ function InviteError({
 
   return (
     <CommunityScreenShell
-      backHref="/assessments"
+      backHref="/home?view=together"
       backLabel="검사로 돌아가기"
       title="친구 성향 맞히기"
     >

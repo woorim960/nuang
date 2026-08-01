@@ -12,9 +12,11 @@ import {
 } from "@/features/assessment/candidate-quick-core-seed";
 import type {
   AssessmentAnswer,
+  AssessmentResultEvidenceStatus,
   AssessmentDefinition,
   LocalAssessmentAttempt,
 } from "@/features/assessment/types";
+import { coreResultCopyVersion } from "@/features/result/report-copy";
 
 export type TrustedClaimPayload = {
   assessmentKind: "full" | "quick";
@@ -32,12 +34,15 @@ export type TrustedClaimPayload = {
 };
 
 export type TrustedClaimResult = {
+  alternativeCodes: string[];
   assessment: AssessmentDefinition;
   completedAt: string;
   domains: ReturnType<typeof prepareAssessmentCompletion>["result"]["domains"];
+  evidenceStatus: AssessmentResultEvidenceStatus;
   facets: ReturnType<typeof prepareAssessmentCompletion>["result"]["facets"];
   profileCode: string;
   profileName: string;
+  responseSnapshotHash: string;
   responseRows: Array<{
     answeredAt: string;
     itemId: string;
@@ -45,7 +50,9 @@ export type TrustedClaimResult = {
     unsureReason: AssessmentAnswer["unsureReason"] | null;
     value: number | null;
   }>;
+  resultCopyVersion: string;
   resultLabel: string;
+  resultStatus: "ready";
   trustedRelease: {
     assessmentReleaseId: string;
     codeSchemeVersion: string;
@@ -149,12 +156,15 @@ export function deriveTrustedClaimResult(
     }
 
     return {
+      alternativeCodes: result.alternativeCodes,
       assessment,
       completedAt,
       domains: result.domains,
+      evidenceStatus: readiness.evidenceStatus,
       facets: result.facets,
       profileCode: result.code,
       profileName: result.profileName,
+      responseSnapshotHash: readiness.responseSnapshotHash,
       responseRows: payload.responses.map((response) => ({
         answeredAt: response.answeredAt,
         itemId: response.itemId,
@@ -162,7 +172,9 @@ export function deriveTrustedClaimResult(
         unsureReason: response.unsureReason ?? null,
         value: response.value ?? null,
       })),
+      resultCopyVersion: coreResultCopyVersion,
       resultLabel: assessment.resultLabel,
+      resultStatus: "ready",
       trustedRelease,
     };
   } catch (error) {

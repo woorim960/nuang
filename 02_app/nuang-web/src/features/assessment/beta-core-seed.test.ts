@@ -63,7 +63,7 @@ describe("beta core item set", () => {
     );
 
     expect(result.code).toBe("ENAKQ");
-    expect(result.profileName).toBe("관계를 여는 지휘자");
+    expect(result.profileName).toBe("관계를 여는 선도자");
   });
 
   it("stays inactive until the empirical release gates pass", () => {

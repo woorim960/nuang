@@ -1,9 +1,21 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { writeFeedRequestForAccount } from "@/features/feed/server-writes";
 
+const originalReportMocks = vi.hoisted(() => ({
+  readOriginalProfileReport: vi.fn(),
+  resolveProfileOwnerAccountId: vi.fn(),
+}));
+
+vi.mock("@/features/public-profile/server-profile-reports", () => ({
+  readOriginalProfileReport: originalReportMocks.readOriginalProfileReport,
+  resolveProfileOwnerAccountId:
+    originalReportMocks.resolveProfileOwnerAccountId,
+}));
+
 type MockOperation = {
+  deleteRow?: boolean;
   filters: Array<[string, string, unknown]>;
   insertRow?: Record<string, unknown>;
   method?: "maybeSingle" | "single";
@@ -13,6 +25,7 @@ type MockOperation = {
 };
 
 type MockResponse = {
+  count?: number | null;
   data: unknown;
   error: { code?: string; message?: string } | null;
 };
@@ -41,6 +54,120 @@ const user = {
 } as unknown as User;
 
 describe("feed server writes", () => {
+  it("stores an original topic report as a verified canonical reference", async () => {
+    const reportId = "44444444-4444-4444-8444-444444444444";
+    const reportKey = `topic_${reportId}`;
+    const profileId = "55555555-5555-4555-8555-555555555555";
+    originalReportMocks.resolveProfileOwnerAccountId.mockResolvedValueOnce(
+      "99999999-9999-4999-8999-999999999999",
+    );
+    originalReportMocks.readOriginalProfileReport.mockResolvedValueOnce({
+      kind: "topic",
+      result: {
+        completedAt: "2026-07-28T09:00:00.000Z",
+        nuangCodeContext: {
+          capturedAt: "2026-07-28T09:00:00.000Z",
+          code: "INGMC",
+        },
+      },
+      summary: {
+        assessmentSlug: "comfort-style",
+        assessmentTitle: "위로받을 때 필요한 것",
+        completedAt: "2026-07-28T09:00:00.000Z",
+        reportKey,
+        resultName: "조용한 곁 지킴",
+        summary: "말을 재촉하지 않고 곁을 지켜주는 위로가 잘 맞아요.",
+        type: "topic",
+        viewerCanManage: false,
+        visibility: "profile_public",
+      },
+    });
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "profile_block") {
+        return { data: null, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        return {
+          data: {
+            id: "22222222-2222-4222-8222-222222222222",
+            moderation_status: "published",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+    const payload = {
+      action: "create_post",
+      attachments: [{ id: reportKey, profileId, type: "original_report" }],
+      body: "내 위로 성향 결과를 공유해요.",
+      source: "report_share",
+      sourceId: reportKey,
+      visibility: "public",
+    } satisfies FeedWriteRequest;
+
+    const result = await writeFeedRequestForAccount({ client, payload, user });
+
+    expect(result.ok).toBe(true);
+    const feedInsert = operations.find((item) => item.table === "feed_post");
+    expect(feedInsert?.insertRow).toMatchObject({
+      attachment_payload: [
+        { id: reportKey, profileId, type: "original_report" },
+      ],
+      public_projection_payload: {
+        reportShare: {
+          assessmentTitle: "위로받을 때 필요한 것",
+          profileId,
+          reportKey,
+          reportType: "topic",
+          resultLabel: "위로받을 때 필요한 것",
+          summary: "말을 재촉하지 않고 곁을 지켜주는 위로가 잘 맞아요.",
+        },
+      },
+      source: "report_share",
+      source_id: reportKey,
+    });
+  });
+
+  it("rejects an original report whose source id does not match its report key", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "create_post",
+        attachments: [
+          {
+            id: "topic_44444444-4444-4444-8444-444444444444",
+            profileId: "55555555-5555-4555-8555-555555555555",
+            type: "original_report",
+          },
+        ],
+        body: "원본 리포트를 공유해요.",
+        source: "report_share",
+        sourceId: "lab_66666666-6666-4666-8666-666666666666",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({ code: "feed_target_invalid", ok: false });
+    expect(operations.some((item) => item.table === "feed_post")).toBe(false);
+  });
+
   it("stores new feed posts with public projection only", async () => {
     const { client, operations } = createMockClient((operation) => {
       if (
@@ -325,7 +452,7 @@ describe("feed server writes", () => {
         return {
           data: {
             profile_code: "ENAKQ",
-            profile_name: "관계를 여는 지휘자",
+            profile_name: "관계를 여는 선도자",
           },
           error: null,
         };
@@ -380,10 +507,347 @@ describe("feed server writes", () => {
       nuang_code: "ENAKQ",
       option_id: "44444444-4444-4444-8444-444444444444",
       poll_id: "33333333-3333-4333-8333-333333333333",
-      profile_name: "관계를 여는 지휘자",
+      profile_name: "관계를 여는 선도자",
     });
     expect(JSON.stringify(operations)).not.toContain("direct_response");
     expect(JSON.stringify(operations)).not.toContain("raw_score");
+  });
+
+  it("stores a user-created balance game without forcing the author's vote", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const pollId = "33333333-3333-4333-8333-333333333333";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        return {
+          data: { id: postId, moderation_status: "published" },
+          error: null,
+        };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_poll") {
+        return { data: { id: pollId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_option"
+      ) {
+        return {
+          data: [
+            {
+              id: "44444444-4444-4444-8444-444444444444",
+              option_key: "option_a",
+            },
+            {
+              id: "55555555-5555-4555-8555-555555555555",
+              option_key: "option_b",
+            },
+          ],
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "create_post",
+        body: "여러분의 선택이 궁금해요.",
+        poll: {
+          options: ["바로 연락하기", "조금 더 기다리기"],
+          question: "좋아하는 사람에게 먼저 연락하고 싶을 때?",
+        },
+        source: "balance_game",
+        sourceId: "user_balance_game_v1",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({ data: { id: postId }, ok: true });
+    expect(
+      operations.find((operation) => operation.table === "feed_poll")
+        ?.insertRow,
+    ).toMatchObject({
+      post_id: postId,
+      prompt_id: `user_balance_${postId}`,
+      question: "좋아하는 사람에게 먼저 연락하고 싶을 때?",
+    });
+    expect(
+      operations.find((operation) => operation.table === "feed_poll_option")
+        ?.insertRow,
+    ).toEqual([
+      expect.objectContaining({
+        label: "바로 연락하기",
+        option_key: "option_a",
+      }),
+      expect.objectContaining({
+        label: "조금 더 기다리기",
+        option_key: "option_b",
+      }),
+    ]);
+    expect(
+      operations.some((operation) => operation.table === "feed_poll_vote"),
+    ).toBe(false);
+  });
+
+  it("removes a partially created balance post when its choices fail to save", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const pollId = "33333333-3333-4333-8333-333333333333";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        !operation.deleteRow
+      ) {
+        return {
+          data: { id: postId, moderation_status: "published" },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.deleteRow
+      ) {
+        return { data: null, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_poll") {
+        return { data: { id: pollId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_option"
+      ) {
+        return {
+          data: null,
+          error: { code: "PGRST100", message: "options insert failed" },
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "create_post",
+        body: "질문과 선택지가 함께 저장돼야 해요.",
+        poll: {
+          options: ["바로 이야기하기", "조금 더 생각하기"],
+          question: "마음에 걸리는 일이 생기면?",
+        },
+        source: "balance_game",
+        sourceId: "user_balance_game_v1",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({ code: "feed_poll_write_failed", ok: false });
+    const rollback = operations.find(
+      (operation) =>
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.deleteRow,
+    );
+    expect(rollback).toBeDefined();
+    expect(hasFilter(rollback!, "eq", "id", postId)).toBe(true);
+    expect(
+      hasFilter(rollback!, "eq", "author_account_id", accountId),
+    ).toBe(true);
+  });
+
+  it("keeps a balance game's question and choices immutable after voting starts", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const pollId = "33333333-3333-4333-8333-333333333333";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            attachment_payload: [],
+            id: postId,
+            public_projection_payload: {},
+            published_at: "2026-07-28T00:00:00.000Z",
+            source: "balance_game",
+            source_id: "user_balance_game_v1",
+          },
+          error: null,
+        };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_poll") {
+        return {
+          data: { id: pollId, status: "active" },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_vote"
+      ) {
+        return { count: 1, data: null, error: null };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "update_post",
+        body: "설명은 바꿀 수 있어요.",
+        poll: {
+          options: ["새 선택 A", "새 선택 B"],
+          question: "새 질문으로 바꿀까요?",
+        },
+        postId,
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({ code: "feed_poll_content_locked", ok: false });
+    expect(
+      operations.some(
+        (operation) =>
+          operation.table === "feed_poll" && Boolean(operation.updateRow),
+      ),
+    ).toBe(false);
+  });
+
+  it("updates a user-created balance game before the first vote", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const pollId = "33333333-3333-4333-8333-333333333333";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            attachment_payload: [],
+            id: postId,
+            public_projection_payload: {},
+            published_at: "2026-07-28T00:00:00.000Z",
+            source: "balance_game",
+            source_id: "user_balance_game_v1",
+          },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "single"
+      ) {
+        return {
+          data: { id: postId, moderation_status: "published" },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: { id: pollId, status: "active" },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_vote"
+      ) {
+        return { count: 0, data: null, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_poll_option" &&
+        !operation.updateRow
+      ) {
+        return {
+          data: [
+            {
+              id: "44444444-4444-4444-8444-444444444444",
+              sort_order: 0,
+            },
+            {
+              id: "55555555-5555-4555-8555-555555555555",
+              sort_order: 1,
+            },
+          ],
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        (operation.table === "feed_poll" ||
+          operation.table === "feed_poll_option" ||
+          operation.table === "feed_external_link")
+      ) {
+        return { data: null, error: null };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "update_post",
+        body: "설명도 함께 바꿨어요.",
+        poll: {
+          options: ["새 선택 A", "새 선택 B"],
+          question: "첫 투표 전에 질문을 다듬었어요.",
+        },
+        postId,
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({ data: { id: postId }, ok: true });
+    expect(
+      operations.find(
+        (operation) =>
+          operation.table === "feed_poll" && Boolean(operation.updateRow),
+      )?.updateRow,
+    ).toEqual({ question: "첫 투표 전에 질문을 다듬었어요." });
+    expect(
+      operations
+        .filter(
+          (operation) =>
+            operation.table === "feed_poll_option" &&
+            Boolean(operation.updateRow),
+        )
+        .map((operation) => operation.updateRow),
+    ).toEqual([{ label: "새 선택 A" }, { label: "새 선택 B" }]);
   });
 
   it("updates an existing balance vote when the viewer changes their choice", async () => {
@@ -410,7 +874,7 @@ describe("feed server writes", () => {
             snapshot_payload: {
               profile: {
                 code: "ENAKQ",
-                name: "관계를 여는 지휘자",
+                name: "관계를 여는 선도자",
               },
             },
           },
@@ -479,6 +943,7 @@ describe("feed server writes", () => {
         action: "vote_poll",
         optionId,
         pollId,
+        replaceExisting: true,
       },
       user,
     });
@@ -495,16 +960,21 @@ describe("feed server writes", () => {
     expect(updateOperation?.updateRow).toEqual({
       nuang_code: "ENAKQ",
       option_id: optionId,
-      profile_name: "관계를 여는 지휘자",
+      profile_name: "관계를 여는 선도자",
     });
     expect(updateOperation?.filters).toEqual(
       expect.arrayContaining([
-        ["eq", "id", voteId],
         ["eq", "account_id", accountId],
         ["eq", "poll_id", pollId],
         ["is", "deleted_at", null],
       ]),
     );
+    expect(
+      operations.some(
+        (operation) =>
+          operation.table === "feed_poll_vote" && operation.insertRow,
+      ),
+    ).toBe(false);
   });
 
   it("rejects a vote after the balance game response closes", async () => {
@@ -1099,6 +1569,257 @@ describe("feed server writes", () => {
       ok: false,
     });
   });
+
+  it("updates only an owned user-manageable post", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            attachment_payload: [],
+            id: postId,
+            public_projection_payload: {
+              authorName: "나",
+            },
+            published_at: "2026-07-28T00:00:00.000Z",
+            source: "free_text",
+          },
+          error: null,
+        };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "link_domain_policy"
+      ) {
+        return { data: [], error: null };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_external_link"
+      ) {
+        return { data: null, error: null };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "single"
+      ) {
+        return {
+          data: {
+            id: postId,
+            moderation_status: "published",
+          },
+          error: null,
+        };
+      }
+
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "update_post",
+        body: "수정한 오늘의 이야기예요.",
+        postId,
+        topic: {
+          category: "daily_life",
+          source: "manual",
+          tags: ["오늘"],
+        },
+        visibility: "profile_public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: {
+        action: "update_post",
+        id: postId,
+        moderationStatus: "published",
+      },
+      ok: true,
+    });
+    const updateOperation = operations.find(
+      (operation) =>
+        operation.table === "feed_post" && Boolean(operation.updateRow),
+    );
+    expect(updateOperation?.updateRow).toMatchObject({
+      body: "수정한 오늘의 이야기예요.",
+      topic_category: "daily_life",
+      topic_tags: ["오늘"],
+      visibility: "profile_public",
+    });
+    expect(
+      hasFilter(updateOperation!, "eq", "author_account_id", accountId),
+    ).toBe(true);
+  });
+
+  it("soft deletes an owned post and preserves it for operational recovery", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: { id: postId, source: "free_text" },
+          error: null,
+        };
+      }
+
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "single"
+      ) {
+        return { data: { id: postId }, error: null };
+      }
+
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: { action: "delete_post", postId },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: {
+        action: "delete_post",
+        id: postId,
+        moderationStatus: "removed",
+      },
+      ok: true,
+    });
+    const deleteOperation = operations.find(
+      (operation) =>
+        operation.table === "feed_post" && Boolean(operation.updateRow),
+    );
+    expect(deleteOperation?.updateRow).toMatchObject({
+      moderation_status: "removed",
+    });
+    expect(deleteOperation?.updateRow?.deleted_at).toEqual(expect.any(String));
+    expect(
+      hasFilter(deleteOperation!, "eq", "author_account_id", accountId),
+    ).toBe(true);
+  });
+
+  it("does not change a question audience after replies have started", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            attachment_payload: [],
+            id: postId,
+            public_projection_payload: {},
+            published_at: "2026-07-28T00:00:00.000Z",
+            source: "free_text",
+            source_id: "ask_all",
+          },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_comment"
+      ) {
+        return { count: 1, data: null, error: null };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "update_post",
+        body: "수정한 질문 내용은 충분히 길어요.",
+        postId,
+        sourceId: "ask_exact_enakq",
+        topic: {
+          category: "concerns_questions",
+          source: "manual",
+          tags: [],
+        },
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      code: "feed_question_audience_locked",
+      ok: false,
+    });
+    expect(
+      operations.some((operation) => Boolean(operation.updateRow)),
+    ).toBe(false);
+  });
+
+  it("does not let a viewer delete another account's post", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post"
+      ) {
+        return { data: null, error: null };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "delete_post",
+        postId: "22222222-2222-4222-8222-222222222222",
+      },
+      user,
+    });
+
+    expect(result).toEqual({ code: "feed_target_invalid", ok: false });
+    expect(
+      operations.some((operation) => Boolean(operation.updateRow)),
+    ).toBe(false);
+  });
 });
 
 function createMockClient(
@@ -1143,6 +1864,10 @@ function createMockClient(
           const builder = {
             eq(column: string, value: unknown) {
               operation.filters.push(["eq", column, value]);
+              return builder;
+            },
+            delete() {
+              operation.deleteRow = true;
               return builder;
             },
             insert(row: Record<string, unknown>) {

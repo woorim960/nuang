@@ -40,9 +40,16 @@ describe("FeedComposer", () => {
     render(<FeedComposer standalone />);
 
     expect(
-      screen.getByRole("heading", { name: "새 게시물" }),
+      screen.getByRole("heading", { name: "글쓰기" }),
     ).toBeInTheDocument();
-    expect(screen.queryByRole("tab")).not.toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: "일상" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(screen.getByRole("tab", { name: "놀이터" })).toHaveAttribute(
+      "aria-selected",
+      "false",
+    );
     expect(
       screen.getByRole("button", { name: "사진 추가" }),
     ).toBeInTheDocument();
@@ -156,7 +163,7 @@ describe("FeedComposer", () => {
     fireEvent.submit(bodyInput.closest("form") as HTMLFormElement);
 
     expect(
-      screen.getByRole("heading", { name: "새 게시물" }),
+      screen.getByRole("heading", { name: "글쓰기" }),
     ).toBeInTheDocument();
     expect(
       screen.queryByRole("heading", { name: "게시물 미리보기" }),
@@ -174,7 +181,7 @@ describe("FeedComposer", () => {
     fireEvent.click(screen.getByRole("button", { name: "수정하기" }));
 
     expect(
-      screen.getByRole("heading", { name: "새 게시물" }),
+      screen.getByRole("heading", { name: "글쓰기" }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("글 내용")).toHaveValue(
       "수정할 수 있는 미리보기예요.",
@@ -250,7 +257,7 @@ describe("FeedComposer", () => {
     render(<FeedComposer standalone />);
 
     expect(
-      await screen.findByRole("heading", { name: "새 게시물" }),
+      await screen.findByRole("heading", { name: "글쓰기" }),
     ).toBeInTheDocument();
     await waitFor(() => {
       expect(screen.getByLabelText("글 내용")).toHaveValue(
@@ -267,9 +274,9 @@ describe("FeedComposer", () => {
     expect(
       screen.getByText("로그인됐어요. 사진만 다시 선택하면 게시할 수 있어요."),
     ).toBeInTheDocument();
-    expect(screen.getAllByRole("button", { name: "프로필 공개" })).toHaveLength(
-      1,
-    );
+    expect(
+      screen.getAllByRole("button", { name: "프로필에만 공개" }),
+    ).toHaveLength(1);
   });
 
   it("saves the draft and returns through login when posting requires an account", async () => {
@@ -303,6 +310,39 @@ describe("FeedComposer", () => {
     expect(window.sessionStorage.getItem("nuang:feed:pending-post")).toContain(
       "짧은 생각을 남겨요.",
     );
+  });
+
+  it("separates daily writing from expandable playground formats", () => {
+    render(<FeedComposer standalone />);
+
+    fireEvent.click(screen.getByRole("tab", { name: "놀이터" }));
+
+    expect(screen.getByRole("tab", { name: "놀이터" })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(
+      screen.getByRole("heading", { name: "어떤 글을 만들까요?" }),
+    ).toBeVisible();
+    expect(screen.queryByLabelText("글 내용")).not.toBeVisible();
+    expect(
+      screen.getByRole("link", { name: /투표/ }),
+    ).toHaveAttribute(
+      "href",
+      "/feed/balance/new?returnTo=%2Ffeed%2Fnew%3Fspace%3Dplayground",
+    );
+    expect(
+      screen.getByRole("link", { name: /뉴앙에게 물어봐/ }),
+    ).toHaveAttribute(
+      "href",
+      "/feed/questions/new?returnTo=%2Ffeed%2Fnew%3Fspace%3Dplayground",
+    );
+    expect(screen.queryByRole("button", { name: "업로드" })).not.toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("tab", { name: "일상" }));
+
+    expect(screen.getByLabelText("글 내용")).toBeVisible();
+    expect(screen.getByRole("button", { name: "업로드" })).toBeDisabled();
   });
 });
 

@@ -1,7 +1,11 @@
 import { feedWriteRequestSchema } from "@/features/feed/feed-contract";
+import { revalidateTag } from "next/cache";
 import { validateFeedPhotoFiles } from "@/features/feed/feed-media";
 import { uploadFeedPostMedia } from "@/features/feed/feed-media-server";
-import { createServerFeedReadPayload } from "@/features/feed/server-read";
+import {
+  communityFeedCacheTag,
+  createServerFeedReadPayload,
+} from "@/features/feed/server-read";
 import {
   createFeedWriteFailurePayload,
   createFeedWriteSuccessPayload,
@@ -82,6 +86,7 @@ export async function POST(request: Request) {
     }
   }
 
+  revalidateTag(communityFeedCacheTag, { expire: 0 });
   return NextResponse.json(createFeedWriteSuccessPayload(result.data));
 }
 

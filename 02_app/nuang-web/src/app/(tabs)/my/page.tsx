@@ -15,7 +15,12 @@ export const metadata: Metadata = {
   title: "마이 | NUANG",
 };
 
-export default async function MyPage() {
+export default async function MyPage({
+  searchParams = Promise.resolve({}),
+}: {
+  searchParams?: Promise<{ tab?: string }>;
+} = {}) {
+  const query = await searchParams;
   const [serverClient, serviceClient] = await Promise.all([
     createServerSupabaseClient(),
     Promise.resolve(createSupabaseServiceClient()),
@@ -53,11 +58,14 @@ export default async function MyPage() {
   return (
     <div className={styles.fullBleedProfile}>
       <CommunityProfileScreen
+        initialContent={query.tab === "reports" ? "reports" : "posts"}
         initialSocialState={{ ...socialState, isOwnProfile: true }}
         mode="self"
         posts={payload.posts}
         profile={payload.profile}
+        reports={payload.reports}
         showAdminEntry={showAdminEntry}
+        viewerCode={payload.viewerCode}
       />
     </div>
   );

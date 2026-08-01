@@ -1,5 +1,6 @@
 import { MessageCircle, Search } from "lucide-react";
 import Link from "next/link";
+import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
@@ -38,7 +39,12 @@ export function CommunityTagScreen({
                       size="sm"
                     />
                     <span>
-                      <strong>{post.authorName}</strong>
+                      <strong>
+                        {post.authorName}
+                        {post.authorProfile.operator ? (
+                          <NuangOperatorBadge compact />
+                        ) : null}
+                      </strong>
                       <small>
                         {post.authorProfile.display.code} · {post.timeLabel}
                       </small>

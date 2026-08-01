@@ -5,8 +5,6 @@ import {
   ChevronRight,
   Ellipsis,
   Flag,
-  Heart,
-  MessageCircle,
   Pencil,
   Settings,
   Share2,
@@ -16,8 +14,14 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
 import type { CommunityProfileSocialState } from "@/features/feed/community-social-contract";
 import type { FeedItem } from "@/features/feed/feed-seed";
+import {
+  CommunityPostCard,
+  getFeedPostFormat,
+  type FeedPostFormat,
+} from "@/features/feed/CommunityFeed";
 import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
 import {
   feedPostTopicCategories,
@@ -25,28 +29,44 @@ import {
 } from "@/features/feed/feed-topic";
 import type { PublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import type { PublicProfileSearchIntent } from "@/features/public-profile/public-profile-search-contract";
+import { ProfileReportCollection } from "@/features/public-profile/ProfileReportCollection";
+import type { OriginalProfileReportSummary } from "@/features/public-profile/profile-report-contract";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import { profileVisibilityPolicyVersion } from "@/features/together/profile-visibility-policy";
 import styles from "./CommunityProfileScreen.module.css";
 
+type ProfilePostFormatFilter = "all" | FeedPostFormat;
+type ProfilePostTopicFilter =
+  | "all"
+  | (typeof feedPostTopicCategories)[number];
+
 export function CommunityProfileScreen({
   initialSocialState,
+  initialContent = "posts",
   intent = "browse",
   mode = "other",
   posts,
   profile,
+  reports = [],
   showAdminEntry = false,
+  viewerCode = null,
 }: {
   initialSocialState: CommunityProfileSocialState;
+  initialContent?: "posts" | "reports";
   intent?: PublicProfileSearchIntent;
   mode?: "other" | "preview" | "self";
   posts: FeedItem[];
   profile: PublicProfileCardPayload;
+  reports?: OriginalProfileReportSummary[];
   showAdminEntry?: boolean;
+  viewerCode?: string | null;
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [activeTopic, setActiveTopic] = useState("전체");
+  const [activePostFormat, setActivePostFormat] =
+    useState<ProfilePostFormatFilter>("all");
+  const [activePostTopic, setActivePostTopic] =
+    useState<ProfilePostTopicFilter>("all");
   const [following, setFollowing] = useState(initialSocialState.following);
   const [followerCount, setFollowerCount] = useState(
     initialSocialState.followerCount,
@@ -57,22 +77,42 @@ export function CommunityProfileScreen({
   const [moreOpen, setMoreOpen] = useState(false);
   const [blockConfirmOpen, setBlockConfirmOpen] = useState(false);
   const [safetyPending, setSafetyPending] = useState(false);
-  const topics = useMemo(
-    () => [
-      "전체",
-      ...feedPostTopicCategories.map(
-        (category) => feedPostTopicLabels[category],
-      ),
-    ],
-    [],
+  const [activeContent, setActiveContent] = useState<"posts" | "reports">(
+    initialContent,
   );
-  const visiblePosts =
-    activeTopic === "전체"
-      ? posts
-      : posts.filter((post) => post.topic?.label === activeTopic);
   const isPreview = mode === "preview";
   const isSelf =
     mode === "self" || (mode === "other" && initialSocialState.isOwnProfile);
+  const formatFilters = useMemo(
+    () => [
+      { id: "all" as const, label: "전체" },
+      { id: "everyday" as const, label: "일상" },
+      { id: "report" as const, label: "리포트" },
+      { id: "playground" as const, label: "놀이터" },
+    ],
+    [],
+  );
+  const topicFilters = useMemo(
+    () => [
+      { id: "all" as const, label: "전체" },
+      ...feedPostTopicCategories.map((category) => ({
+        id: category,
+        label: feedPostTopicLabels[category],
+      })),
+    ],
+    [],
+  );
+  const visiblePosts = useMemo(() => {
+    return posts.filter((post) => {
+      const formatMatches =
+        activePostFormat === "all" ||
+        getFeedPostFormat(post) === activePostFormat;
+      const topicMatches =
+        activePostTopic === "all" ||
+        post.topic?.category === activePostTopic;
+      return formatMatches && topicMatches;
+    });
+  }, [activePostFormat, activePostTopic, posts]);
   const isCompareIntent = intent === "compare" && !isSelf && !isPreview;
   const codeIsVisible = profile.display.code !== "-----";
   const comparisonAvailable =
@@ -296,7 +336,12 @@ export function CommunityProfileScreen({
             size="lg"
           />
           <div className={styles.profileIdentity}>
-            <h2>{profile.display.displayName}</h2>
+            <div className={styles.identityNameRow}>
+              <h2>{profile.display.displayName}</h2>
+              {profile.operator || (isSelf && showAdminEntry) ? (
+                <NuangOperatorBadge />
+              ) : null}
+            </div>
             {profile.display.handle ? (
               <span className={styles.handle}>@{profile.display.handle}</span>
             ) : null}
@@ -391,10 +436,10 @@ export function CommunityProfileScreen({
         {isSelf ? (
           <>
             <nav aria-label="내 프로필 바로가기" className={styles.myShortcuts}>
-              <Link href="/my/profile">내 성향 상세</Link>
-              <Link href="/my/reports">내 리포트</Link>
+              <Link href="/my/reports">내 성향 상세</Link>
               <Link href="/feed/perspectives?from=my">놀이터 기록</Link>
               <Link href="/my/events">참여한 이벤트</Link>
+              <Link href="/my/feedback?from=%2Fmy">의견 보내기</Link>
             </nav>
             {showAdminEntry ? (
               <Link className={styles.adminEntry} href="/admin">
@@ -423,91 +468,108 @@ export function CommunityProfileScreen({
         ) : null}
       </section>
 
-      <section className={styles.feedToolbar}>
-        <div className={styles.feedTitle}>
-          <strong>
-            {isSelf ? "내 게시물" : `${profile.display.displayName}님의 게시물`}
-          </strong>
-          <span>{posts.length}개</span>
-        </div>
-        <span className={styles.filterLabel}>주제별 보기</span>
-        <div
-          aria-label={`${profile.display.displayName}님의 게시물 주제별 보기`}
-          className={styles.topicFilters}
+      <nav aria-label="프로필 콘텐츠" className={styles.contentTabs}>
+        <button
+          aria-current={activeContent === "posts" ? "page" : undefined}
+          onClick={() => setActiveContent("posts")}
+          type="button"
         >
-          {topics.map((topic) => (
-            <button
-              aria-pressed={activeTopic === topic}
-              key={topic}
-              onClick={() => setActiveTopic(topic)}
-              type="button"
-            >
-              {topic}
-            </button>
-          ))}
-        </div>
-      </section>
+          게시물
+          <span>{posts.length}</span>
+        </button>
+        <button
+          aria-current={activeContent === "reports" ? "page" : undefined}
+          onClick={() => setActiveContent("reports")}
+          type="button"
+        >
+          검사 결과
+          <span>{reports.length}</span>
+        </button>
+      </nav>
 
-      {visiblePosts.length > 0 ? (
-        <section className={styles.postList}>
-          {visiblePosts.map((post) => (
-            <article className={styles.postCard} key={post.id}>
-              {post.topic ? (
-                <div aria-label="게시물 태그" className={styles.postTopics}>
-                  {post.topic.label ? (
-                    <span className={styles.postTopic}>{post.topic.label}</span>
-                  ) : null}
-                  {post.topic.tags.map((tag) => (
-                    <Link
-                      href={`/feed/tags/${encodeURIComponent(tag)}`}
-                      key={tag}
+      {activeContent === "posts" ? (
+        <>
+          <section className={styles.feedToolbar}>
+            <div className={styles.feedTitle}>
+              <strong>
+                {isSelf
+                  ? "내 게시물"
+                  : `${profile.display.displayName}님의 게시물`}
+              </strong>
+              <span>{visiblePosts.length}개</span>
+            </div>
+            <div className={styles.profileFilters}>
+              <div className={styles.filterRow}>
+                <span>게시물</span>
+                <div
+                  aria-label={`${profile.display.displayName}님의 게시물 종류`}
+                  className={styles.topicFilters}
+                >
+                  {formatFilters.map((filter) => (
+                    <button
+                      aria-pressed={activePostFormat === filter.id}
+                      key={filter.id}
+                      onClick={() => setActivePostFormat(filter.id)}
+                      type="button"
                     >
-                      #{tag}
-                    </Link>
+                      {filter.label}
+                    </button>
                   ))}
                 </div>
-              ) : null}
-              <p>{post.body || post.title}</p>
-              {post.media?.[0] ? (
-                <Link
-                  className={styles.postMedia}
-                  href={`/feed/posts/${post.id}`}
-                >
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img alt={post.media[0].alt} src={post.media[0].url} />
-                </Link>
-              ) : null}
-              {post.reportShare ? (
-                <Link
-                  className={styles.reportLink}
-                  href={post.reportShare.href}
-                >
-                  <span>
-                    <strong>{post.reportShare.profileCode}</strong>
-                    {post.reportShare.profileName}
-                  </span>
-                  리포트 보기
-                </Link>
-              ) : null}
-              <div className={styles.postMeta}>
-                <span>
-                  <Heart aria-hidden="true" size={16} />
-                  {post.likeCount ?? 0}
-                </span>
-                <span>
-                  <MessageCircle aria-hidden="true" size={16} />
-                  {post.replyCount ?? 0}
-                </span>
-                <Link href={`/feed/posts/${post.id}`}>게시물 보기</Link>
               </div>
-            </article>
-          ))}
-        </section>
+              <div className={styles.filterRow}>
+                <span>주제</span>
+                <div
+                  aria-label={`${profile.display.displayName}님의 게시물 주제`}
+                  className={styles.topicFilters}
+                >
+                  {topicFilters.map((filter) => (
+                    <button
+                      aria-pressed={activePostTopic === filter.id}
+                      key={filter.id}
+                      onClick={() => setActivePostTopic(filter.id)}
+                      type="button"
+                    >
+                      {filter.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {visiblePosts.length > 0 ? (
+            <section className={styles.postList}>
+              {visiblePosts.map((post) => (
+                <CommunityPostCard
+                  filterActive={false}
+                  highlighted={false}
+                  key={post.id}
+                  mode="recommended"
+                  post={post}
+                  returnTo={pathname}
+                  viewerCode={
+                    viewerCode ??
+                    (isSelf && codeIsVisible ? profile.display.code : null)
+                  }
+                />
+              ))}
+            </section>
+          ) : (
+            <div className={styles.emptyPosts}>
+              <strong>{getEmptyPostTitle(activePostFormat)}</strong>
+              <p>다른 게시물 종류나 주제를 선택해 보세요.</p>
+            </div>
+          )}
+        </>
       ) : (
-        <div className={styles.emptyPosts}>
-          <strong>아직 이 주제의 게시물이 없어요</strong>
-          <p>다른 주제를 선택하면 게시물을 계속 볼 수 있어요.</p>
-        </div>
+        <ProfileReportCollection
+          isSelf={isSelf && !isPreview}
+          profileId={
+            profile.source.communityProfileId ?? profile.source.publicSnapshotId
+          }
+          reports={reports}
+        />
       )}
 
       {moreOpen ? (
@@ -592,4 +654,11 @@ function toFriendlyComparisonMessage(message: string) {
     return "내 정밀 코어 검사 결과가 있어야 비교할 수 있어요.";
   }
   return message;
+}
+
+function getEmptyPostTitle(format: ProfilePostFormatFilter) {
+  if (format === "report") return "공유한 리포트가 아직 없어요";
+  if (format === "playground") return "참여한 놀이터 게시물이 아직 없어요";
+  if (format === "everyday") return "작성한 일상 게시물이 아직 없어요";
+  return "조건에 맞는 게시물이 아직 없어요";
 }

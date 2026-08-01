@@ -426,24 +426,9 @@
   font-size: var(--nu-text-caption);
 }
 
-.recordRow > p {
-  display: flex;
+.recordRow > svg {
   flex: 0 0 auto;
-  align-items: baseline;
-  gap: 0.25rem;
-  margin: 0;
-}
-
-.recordRow > p small {
-  color: var(--nu-neutral-400);
-  font-size: var(--nu-text-caption);
-}
-
-.recordRow > p strong {
-  color: var(--nu-info-500);
-  font-size: var(--nu-text-body);
-  font-weight: var(--nu-weight-bold);
-  font-variant-numeric: tabular-nums;
+  color: var(--nu-neutral-300);
 }
 
 .inlineEmpty {

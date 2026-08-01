@@ -27,7 +27,7 @@ const profile = {
   code: "ENAKQ",
   displayName: "여름",
   handle: "summer.walk",
-  profileName: "관계를 여는 지휘자",
+  profileName: "관계를 여는 선도자",
   publicId: "profile-1",
   revision: 4,
 };

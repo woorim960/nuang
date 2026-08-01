@@ -1,5 +1,5 @@
 .post {
-  padding: 1rem;
+  padding: 1rem var(--nu-page-gutter);
   border: 0;
   border-bottom: 8px solid var(--nu-color-app-bg);
   color: var(--nu-color-text);
@@ -21,6 +21,23 @@
     var(--nu-color-surface) 34%
   );
   box-shadow: inset 3px 0 0 var(--nu-info-300);
+}
+
+.post[data-closed="true"] {
+  background: linear-gradient(
+    180deg,
+    var(--nu-info-50),
+    color-mix(in srgb, var(--nu-info-50) 38%, var(--nu-color-surface)) 28%
+  );
+}
+
+.post[data-closed="true"] .avatar {
+  border-color: var(--nu-neutral-200);
+  filter: saturate(0.55);
+}
+
+.post[data-closed="true"] .identity strong {
+  color: var(--nu-color-text-muted);
 }
 
 .header {
@@ -64,17 +81,8 @@
   white-space: nowrap;
 }
 
-.title {
-  margin: 1rem 0 0;
-  color: var(--nu-color-text);
-  font-size: var(--nu-text-body);
-  font-weight: var(--nu-weight-bold);
-  letter-spacing: -0.025em;
-  line-height: var(--nu-leading-label);
-}
-
 .poll {
-  margin-top: 0.875rem;
+  margin-top: 1rem;
 }
 
 .footnote {
@@ -114,6 +122,22 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 350px) {
+  .header {
+    gap: 0.5rem;
+  }
+
+  .avatar {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .recordLink {
+    min-height: 30px;
+    padding-left: 0.2rem;
   }
 }
 

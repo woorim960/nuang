@@ -1,14 +1,20 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Share2, Trash2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { deleteLocalAttempt } from "@/features/assessment/assessment-storage";
+import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
+import { ReportShareSheet } from "@/features/share/ReportShareSheet";
+import { buildCoreReportShareContent } from "@/features/share/report-share-contract";
+import { CoreResultReportTemplate } from "@/features/result/unified-core-report/CoreResultReportTemplate";
+import { adaptAccountCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
 import styles from "@/features/result/AccountResultView.module.css";
 
 const domainShortLabel: Record<string, string> = {
@@ -20,38 +26,54 @@ const domainShortLabel: Record<string, string> = {
 };
 
 export function AccountResultView({
+  backHref = "/my/reports/history",
+  canonicalShareUrl,
+  initialResult,
+  readOnly = false,
   resultReportId,
+  shareEnabled = true,
 }: {
+  backHref?: string;
+  canonicalShareUrl?: string;
+  initialResult?: AccountResultSummary;
+  readOnly?: boolean;
   resultReportId: string;
+  shareEnabled?: boolean;
 }) {
   const router = useRouter();
-  const [result, setResult] = useState<AccountResultSummary | null>(null);
-  const [state, setState] = useState<"loading" | "missing" | "ready">(
-    "loading",
+  const [result, setResult] = useState<AccountResultSummary | null>(
+    initialResult ?? null,
+  );
+  const [state, setState] = useState<"error" | "loading" | "missing" | "ready">(
+    initialResult ? "ready" : "loading",
   );
   const [deleteState, setDeleteState] = useState<"error" | "idle" | "working">(
     "idle",
   );
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    if (initialResult) return;
+
     let isMounted = true;
 
-    readAccountResult(resultReportId).then((nextResult) => {
+    readAccountResult(resultReportId).then((outcome) => {
       if (!isMounted) return;
 
-      if (!nextResult) {
-        setState("missing");
+      if (outcome.state !== "ready") {
+        setState(outcome.state);
         return;
       }
 
-      setResult(nextResult);
+      setResult(outcome.result);
       setState("ready");
     });
 
     return () => {
       isMounted = false;
     };
-  }, [resultReportId]);
+  }, [initialResult, resultReportId]);
 
   if (state === "loading") {
     return (
@@ -72,6 +94,22 @@ export function AccountResultView({
     );
   }
 
+  if (state === "error") {
+    return (
+      <main className={styles.stateRoot}>
+        <h1>결과를 불러오지 못했어요</h1>
+        <p>연결을 확인한 뒤 다시 시도해 주세요.</p>
+        <button
+          className={styles.stateLink}
+          onClick={() => window.location.reload()}
+          type="button"
+        >
+          다시 불러오기
+        </button>
+      </main>
+    );
+  }
+
   if (state === "missing" || !result) {
     return (
       <main className={styles.stateRoot}>
@@ -84,6 +122,7 @@ export function AccountResultView({
     );
   }
 
+  const unifiedModel = adaptAccountCoreResult(result);
   const profile = getCandidateProfileDefinition(result.profileCode);
   const profileName = profile?.displayName ?? result.profileName;
   const resultKindLabel =
@@ -94,6 +133,25 @@ export function AccountResultView({
     shortLabel: domainShortLabel[domain.domainId] ?? domain.label,
     value: domain.score,
   }));
+  const shareContent = buildCoreReportShareContent({
+    code: result.profileCode,
+    highlights: profile
+      ? profile.overview
+          .slice(0, 3)
+          .map((item) => `${item.label}: ${item.text}`)
+      : result.domains.slice(0, 3).map((domain) => {
+          const score =
+            domain.score === null
+              ? "응답 부족"
+              : `${Math.round(domain.score)}%`;
+          return `${domain.label} ${score}`;
+        }),
+    profileName,
+    resultLabel: resultKindLabel,
+    summary:
+      profile?.summary ??
+      "다섯 가지 성향 방향에서 이번 답에 더 자주 나타난 모습을 정리했어요.",
+  });
 
   async function handleDelete() {
     const confirmed = window.confirm(
@@ -112,31 +170,89 @@ export function AccountResultView({
         },
         method: "DELETE",
       });
-      const body = (await response.json()) as { ok?: boolean };
+      const body = (await response.json()) as {
+        ok?: boolean;
+        result?: { localResultId?: string | null };
+      };
 
       if (!response.ok || !body.ok) {
         setDeleteState("error");
         return;
       }
 
-      router.replace("/my/reports");
+      const localResultId =
+        body.result?.localResultId ??
+        unifiedModel?.identity.localResultId ??
+        null;
+      if (localResultId) {
+        await deleteLocalAttempt(localResultId);
+      }
+
+      router.replace(backHref);
     } catch {
       setDeleteState("error");
     }
+  }
+
+  if (unifiedModel) {
+    const precisionHref =
+      unifiedModel.identity.kind === "quick"
+        ? buildPrecisionIntroHref({
+            backDestination: `/results/account/${resultReportId}`,
+            entrySource: "first-result",
+            returnDestination: backHref,
+          })
+        : null;
+    return (
+      <CoreResultReportTemplate
+        backHref={backHref}
+        canonicalShareUrl={canonicalShareUrl}
+        deleteError={
+          deleteState === "error"
+            ? "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요."
+            : null
+        }
+        deletePending={deleteState === "working"}
+        model={unifiedModel}
+        onDelete={readOnly ? undefined : () => void handleDelete()}
+        originalReportKey={`core_${resultReportId}`}
+        precisionHref={precisionHref}
+        secondaryAction={
+          readOnly
+            ? { href: backHref, label: "프로필로 돌아가기" }
+            : { href: "/my/reports/history", label: "지난 결과 보기" }
+        }
+        shareEnabled={shareEnabled}
+        surface={readOnly ? "profile" : "my"}
+      />
+    );
   }
 
   return (
     <main className={styles.root}>
       <header className={styles.appBar}>
         <Link
-          aria-label="내 리포트로 돌아가기"
+          aria-label="이전 화면으로 돌아가기"
           className={styles.backButton}
-          href="/my/reports"
+          href={backHref}
         >
           <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.9} />
         </Link>
         <p>결과 리포트</p>
-        <span aria-hidden="true" />
+        {shareEnabled ? (
+          <button
+            aria-haspopup="dialog"
+            aria-label="검사 결과 공유"
+            className={styles.shareButton}
+            onClick={() => setIsShareOpen(true)}
+            ref={shareButtonRef}
+            type="button"
+          >
+            <Share2 aria-hidden="true" size={19} strokeWidth={1.75} />
+          </button>
+        ) : (
+          <span aria-hidden="true" />
+        )}
       </header>
 
       <div className={styles.content}>
@@ -197,6 +313,8 @@ export function AccountResultView({
 
         <TraitMapResultBridge
           code={result.profileCode}
+          depth={result.kind === "full" ? "precision" : "first-result"}
+          facets={result.facets}
           profileName={profileName}
         />
 
@@ -246,39 +364,57 @@ export function AccountResultView({
         ) : null}
 
         <section className={styles.nextSection}>
-          {profile ? (
+          {readOnly ? (
+            <Link className={styles.primaryAction} href="/home">
+              나도 검사해 보기
+              <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
+            </Link>
+          ) : profile ? (
             <Link className={styles.primaryAction} href="/feed">
               커뮤니티 둘러보기
               <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
             </Link>
           ) : (
-            <Link className={styles.primaryAction} href="/assessments">
+            <Link className={styles.primaryAction} href="/home">
               새 정밀 검사 시작하기
               <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
             </Link>
           )}
-          <Link className={styles.secondaryAction} href="/my/reports">
-            내 리포트 목록
+          <Link className={styles.secondaryAction} href={backHref}>
+            {readOnly ? "프로필로 돌아가기" : "내 리포트 목록"}
           </Link>
         </section>
 
-        <section className={styles.deleteSection}>
-          <button
-            aria-busy={deleteState === "working"}
-            disabled={deleteState === "working"}
-            onClick={handleDelete}
-            type="button"
-          >
-            <Trash2 aria-hidden="true" size={16} strokeWidth={1.8} />
-            {deleteState === "working" ? "삭제 중" : "이 결과 삭제"}
-          </button>
-          {deleteState === "error" ? (
-            <p role="alert">
-              결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.
-            </p>
-          ) : null}
-        </section>
+        {!readOnly ? (
+          <section className={styles.deleteSection}>
+            <button
+              aria-busy={deleteState === "working"}
+              disabled={deleteState === "working"}
+              onClick={handleDelete}
+              type="button"
+            >
+              <Trash2 aria-hidden="true" size={16} strokeWidth={1.8} />
+              {deleteState === "working" ? "삭제 중" : "이 결과 삭제"}
+            </button>
+            {deleteState === "error" ? (
+              <p role="alert">
+                결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.
+              </p>
+            ) : null}
+          </section>
+        ) : null}
       </div>
+      {shareEnabled ? (
+        <ReportShareSheet
+          canonicalUrl={canonicalShareUrl}
+          content={shareContent}
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          onNavigate={(href) => router.push(href)}
+          originalReportKey={`core_${resultReportId}`}
+          returnFocusRef={shareButtonRef}
+        />
+      ) : null}
     </main>
   );
 }
@@ -334,16 +470,19 @@ async function readAccountResult(resultReportId: string) {
       },
     );
 
-    if (!response.ok) return null;
+    if (response.status === 404) return { state: "missing" as const };
+    if (!response.ok) return { state: "error" as const };
 
     const body = (await response.json()) as {
       ok?: boolean;
       results?: AccountResultSummary[];
     };
 
-    return body.ok && body.results?.length === 1 ? body.results[0] : null;
+    return body.ok && body.results?.length === 1
+      ? { result: body.results[0], state: "ready" as const }
+      : { state: "missing" as const };
   } catch {
-    return null;
+    return { state: "error" as const };
   }
 }
 

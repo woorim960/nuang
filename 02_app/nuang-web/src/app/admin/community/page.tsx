@@ -96,7 +96,7 @@ export default async function AdminCommunityPage({
           data-active={view === "balance"}
           href="/admin/community?view=balance"
         >
-          밸런스게임
+          투표
           <span>
             {contentDashboard?.items.filter(
               (item) => item.contentType === "balance_game",
@@ -284,7 +284,7 @@ function sourceLabel(source: string) {
   return (
     {
       ask_nuang: "뉴앙에게 물어봐",
-      balance_game: "밸런스게임",
+      balance_game: "투표",
       daily_question: "오늘의 질문",
       free_text: "자유 게시물",
       report_share: "리포트 공유",
@@ -325,7 +325,7 @@ function sectionTitle(view: CommunityView) {
   if (view === "reports") return "신고 대기열";
   if (view === "posts") return "게시물 상태";
   if (view === "links") return "외부 링크 확인";
-  if (view === "balance") return "밸런스게임";
+  if (view === "balance") return "투표";
   return "오늘의 질문";
 }
 

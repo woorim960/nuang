@@ -8,7 +8,7 @@ import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
 type CommunityProfilePageProps = {
   params: Promise<{ publicSnapshotId: string }>;
-  searchParams: Promise<{ intent?: string; view?: string }>;
+  searchParams: Promise<{ intent?: string; tab?: string; view?: string }>;
 };
 
 export const metadata: Metadata = {
@@ -33,6 +33,7 @@ export default async function CommunityProfilePage({
 
   return (
     <CommunityProfileScreen
+      initialContent={query.tab === "reports" ? "reports" : "posts"}
       initialSocialState={socialState}
       intent={query.intent === "compare" ? "compare" : "browse"}
       mode={
@@ -42,6 +43,8 @@ export default async function CommunityProfilePage({
       }
       posts={payload.posts}
       profile={payload.profile}
+      reports={payload.reports}
+      viewerCode={payload.viewerCode}
     />
   );
 }

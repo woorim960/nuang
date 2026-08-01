@@ -1,241 +1,385 @@
 "use client";
 
-import { ArrowLeft, FlaskConical, Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  MoreHorizontal,
+  RotateCcw,
+  Share2,
+  Trash2,
+} from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { ButtonLink } from "@/components/ui/Button";
-import { StatusPill } from "@/components/ui/StatusPill";
+import { useEffect, useRef, useState } from "react";
+import { NuangCharacter } from "@/components/character/NuangCharacter";
+import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
+import { AssessmentBottomSheet } from "@/features/assessment/AssessmentQuestionControls";
 import { type LabAssessment } from "@/features/lab/lab-assessments";
 import {
   deleteLabResult,
   loadLabResult,
+  loadLabResultById,
+  syncLabResult,
   type StoredLabResult,
 } from "@/features/lab/lab-storage";
+import { ReportShareSheet } from "@/features/share/ReportShareSheet";
+import { buildLabReportShareContent } from "@/features/share/report-share-contract";
+import styles from "./LabResultView.module.css";
 
-export function LabResultView({ assessment }: { assessment: LabAssessment }) {
+const motifBySlug: Record<string, NuangCharacterMotif> = {
+  "conflict-repair": "water",
+  "conversation-temperature": "purple",
+  "recharge-ritual": "sun",
+};
+
+export function LabResultView({
+  answeredCountOverride,
+  assessment,
+  backHref = "/home?view=lab",
+  canonicalShareUrl,
+  initialResult,
+  localResultId,
+  readOnly = false,
+  shareEnabled = true,
+}: {
+  answeredCountOverride?: number;
+  assessment: LabAssessment;
+  backHref?: string;
+  canonicalShareUrl?: string;
+  initialResult?: StoredLabResult;
+  localResultId?: string;
+  readOnly?: boolean;
+  shareEnabled?: boolean;
+}) {
   const router = useRouter();
-  const [storedResult, setStoredResult] = useState<StoredLabResult | null>(null);
-  const [loaded, setLoaded] = useState(false);
+  const [storedResult, setStoredResult] = useState<StoredLabResult | null>(
+    initialResult ?? null,
+  );
+  const [loaded, setLoaded] = useState(Boolean(initialResult));
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const shareButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
+    if (initialResult) return;
+
     window.setTimeout(() => {
-      setStoredResult(loadLabResult(assessment.slug));
+      const selectedResult = localResultId
+        ? loadLabResultById(localResultId)
+        : null;
+      const nextResult =
+        selectedResult?.slug === assessment.slug
+          ? selectedResult
+          : loadLabResult(assessment.slug);
+      setStoredResult(nextResult);
       setLoaded(true);
+      if (nextResult && nextResult.sync?.status !== "synced") {
+        void syncLabResult({
+          ...nextResult,
+          contentVersion:
+            nextResult.contentVersion ?? assessment.contentVersion,
+        }).then(setStoredResult);
+      }
     }, 0);
-  }, [assessment.slug]);
+  }, [
+    assessment.contentVersion,
+    assessment.slug,
+    initialResult,
+    localResultId,
+  ]);
 
   if (!loaded) {
     return (
-      <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-5">
-        <div className="rounded-lg border border-line bg-white p-5 text-sm text-muted">
-          결과 불러오는 중
-        </div>
+      <main aria-busy="true" className={styles.loading}>
+        <NuangCharacter motif={motifBySlug[assessment.slug]} size="lg" />
+        <h1>결과를 정리하고 있어요</h1>
+        <p aria-live="polite" role="status">
+          내 답에서 자주 나타난 모습을 살펴보는 중
+        </p>
       </main>
     );
   }
 
   if (!storedResult) {
     return (
-      <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-5">
-        <MissingLabResult assessment={assessment} />
+      <main className={styles.root}>
+        <header className={styles.appBar}>
+          <Link aria-label="이전 화면으로 돌아가기" href={backHref}>
+            <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.75} />
+          </Link>
+          <p>검사 결과</p>
+          <span aria-hidden="true" />
+        </header>
+        <section className={styles.missing}>
+          <NuangCharacter motif={motifBySlug[assessment.slug]} size="lg" />
+          <h1>아직 결과가 없어요</h1>
+          <p>짧게 답하고 지금 나와 가까운 생활 방식을 살펴보세요.</p>
+          <Link href={`/labs/${assessment.slug}`}>
+            검사 시작하기
+            <ArrowRight aria-hidden="true" size={17} strokeWidth={1.8} />
+          </Link>
+        </section>
       </main>
     );
   }
 
   const { profile, scores, tiedProfileIds } = storedResult.result;
+  const selectedLocalResultId = storedResult.localResultId;
+  const answeredCount =
+    answeredCountOverride ?? Object.keys(storedResult.answers).length;
+  const totalSelections = Math.max(
+    1,
+    Object.values(scores).reduce((total, value) => total + value, 0),
+  );
   const hasTie = tiedProfileIds.length > 1;
-  const contentVersion = storedResult.contentVersion ?? assessment.contentVersion;
-  const answeredCount = Object.keys(storedResult.answers).length;
+  const shareContent = buildLabReportShareContent({
+    assessmentTitle: assessment.title,
+    highlights: [
+      ...profile.strengths.slice(0, 2),
+      `관계에서는 이렇게 알려주세요: ${profile.relationTip}`,
+    ],
+    resultName: profile.title,
+    summary: profile.summary,
+  });
+  const canShare = Boolean(
+    shareEnabled && (canonicalShareUrl || storedResult.serverResultId),
+  );
 
   function handleDelete() {
-    const confirmed = window.confirm(
-      "이 결과를 삭제할까요? 삭제하면 다시 열 수 없어요.",
-    );
-
-    if (!confirmed) return;
-
-    deleteLabResult(assessment.slug);
-    router.replace("/my");
+    deleteLabResult(selectedLocalResultId);
+    router.replace("/home?view=lab");
   }
 
   return (
-    <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-5">
-      <Link
-        className="inline-flex min-h-11 items-center gap-2 rounded-lg text-sm font-semibold text-muted"
-        href="/assessments"
-      >
-        <ArrowLeft size={18} />
-        검사
-      </Link>
-
-      <section className="mt-6 rounded-lg border border-line bg-white p-5 shadow-[var(--shadow-soft)]">
-        <div className="flex items-start justify-between gap-4">
-          <div>
-            <div className="flex flex-wrap gap-2">
-              <StatusPill tone="primary">{assessment.resultLabel}</StatusPill>
-              <StatusPill tone="neutral">{assessment.sensitivity}</StatusPill>
-              <StatusPill tone="neutral">문구 v{toDisplayVersion(contentVersion)}</StatusPill>
-            </div>
-            <h1 className="mt-4 text-2xl font-black leading-8">{profile.title}</h1>
-          </div>
-          <div className="grid h-12 w-12 shrink-0 place-items-center rounded-lg bg-surface-soft text-primary">
-            <FlaskConical size={23} />
-          </div>
-        </div>
-        <p className="mt-4 text-sm leading-6 text-muted">{profile.summary}</p>
-        <p className="mt-3 text-xs leading-5 text-muted">
-          검사일 {formatCompletedDate(storedResult.completedAt)} · 응답 {answeredCount}개
-        </p>
-        {hasTie && (
-          <p className="mt-3 rounded-lg bg-[var(--nu-warm-50)] p-3 text-sm leading-6 text-muted">
-            가까운 결과가 두 개 이상 나왔어요. 이런 경우에는 제목보다 아래
-            설명 중 지금 더 와닿는 문장을 기준으로 봐주세요.
-          </p>
-        )}
-      </section>
-
-      <section className="mt-5 rounded-lg border border-line bg-white p-4">
-        <h2 className="text-base font-bold">잘 드러날 수 있는 점</h2>
-        <div className="mt-3 grid gap-2">
-          {profile.strengths.map((strength) => (
-            <p
-              className="rounded-lg bg-surface-soft px-3 py-2 text-sm leading-6 text-muted"
-              key={strength}
+    <main className={styles.root}>
+      <header className={styles.appBar}>
+        <Link aria-label="이전 화면으로 돌아가기" href={backHref}>
+          <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.75} />
+        </Link>
+        <p>검사 결과</p>
+        <div className={styles.headerActions}>
+          {canShare ? (
+            <button
+              aria-haspopup="dialog"
+              aria-label="검사 결과 공유"
+              onClick={() => setIsShareOpen(true)}
+              ref={shareButtonRef}
+              type="button"
             >
-              {strength}
-            </p>
-          ))}
+              <Share2 aria-hidden="true" size={19} strokeWidth={1.75} />
+            </button>
+          ) : null}
+          {!readOnly ? (
+            <button
+              aria-label="결과 메뉴"
+              onClick={() => setIsMenuOpen(true)}
+              type="button"
+            >
+              <MoreHorizontal aria-hidden="true" size={21} strokeWidth={1.75} />
+            </button>
+          ) : null}
         </div>
-      </section>
+      </header>
 
-      <section className="mt-5 grid gap-3 rounded-lg border border-line bg-white p-4">
-        <h2 className="text-base font-bold">생활 속 참고</h2>
-        <InfoLine label="살펴볼 점" value={profile.watch} />
-        <InfoLine label="관계 팁" value={profile.relationTip} />
-        <InfoLine label="작은 실험" value={profile.smallExperiment} />
-      </section>
-
-      <section className="mt-5 rounded-lg border border-line bg-white p-4">
-        <h2 className="text-base font-bold">결과 분포</h2>
-        <div className="mt-3 grid gap-2">
-          {assessment.profiles.map((item) => (
-            <DistributionBar
-              key={item.id}
-              label={item.shortTitle}
-              value={scores[item.id] ?? 0}
-              max={assessment.questions.length}
-            />
-          ))}
-        </div>
-      </section>
-
-      <section className="mt-5 rounded-lg border border-line bg-white p-4">
-        <h2 className="text-base font-bold">읽을 때 기억할 점</h2>
-        <div className="mt-3 grid gap-2 text-sm leading-6 text-muted">
-          <p>{assessment.safetyNote}</p>
-          <p>
-            이 결과는 코어 성향지도와 5글자 코드를 바꾸지 않아요. 별난 성향
-            연구소 안에서만 보는 가벼운 참고 결과입니다.
+      <div className={styles.content}>
+        <section className={styles.hero}>
+          <div className={styles.heroCopy}>
+            <p>{assessment.resultLabel}</p>
+            <h1>{profile.title}</h1>
+            <span>{profile.summary}</span>
+          </div>
+          <NuangCharacter
+            className={styles.character}
+            motif={motifBySlug[assessment.slug]}
+            size="lg"
+          />
+          <p className={styles.meta}>
+            {formatCompletedDate(storedResult.completedAt)} · {answeredCount}개
+            장면
           </p>
-          <p>
-            결과 문구는 {assessment.contentVersion} 기준이며, 공개 전까지 내부
-            QA를 계속 거칩니다.
-          </p>
-          <p>
-            진단, 치료, 위험 판정, 관계 성공 예측, 채용·금융 판단에 사용할 수
-            없어요.
-          </p>
-        </div>
-      </section>
+        </section>
 
-      <div className="mt-5 grid grid-cols-2 gap-3">
-        <ButtonLink href={`/labs/${assessment.slug}`} variant="secondary">
-          다시 하기
-        </ButtonLink>
-        <ButtonLink href="/assessments">검사 홈</ButtonLink>
+        {hasTie ? (
+          <section className={styles.tieNotice}>
+            <strong>두 방식이 비슷하게 나타났어요</strong>
+          </section>
+        ) : null}
+
+        <section className={styles.section}>
+          <div className={styles.sectionHeading}>
+            <h2>내 선택 분포</h2>
+          </div>
+          <div className={styles.distribution}>
+            {assessment.profiles.map((item) => (
+              <DistributionBar
+                active={item.id === profile.id}
+                key={item.id}
+                label={item.shortTitle}
+                value={scores[item.id] ?? 0}
+                total={totalSelections}
+              />
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.sectionHeading}>
+            <h2>잘 활용되는 모습</h2>
+          </div>
+          <div className={styles.editorialList}>
+            {profile.strengths.map((strength, index) => (
+              <article key={strength}>
+                <span>{String(index + 1).padStart(2, "0")}</span>
+                <p>{strength}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <div className={styles.sectionHeading}>
+            <h2>관계에서 편하게 맞추는 방법</h2>
+          </div>
+          <div className={styles.guideList}>
+            <article>
+              <h3>오해가 생기기 쉬운 순간</h3>
+              <p>{profile.watch}</p>
+            </article>
+            <article>
+              <h3>상대에게 알려주면 좋은 말</h3>
+              <p>{profile.relationTip}</p>
+            </article>
+            <article>
+              <h3>오늘 해볼 작은 시도</h3>
+              <p>{profile.smallExperiment}</p>
+            </article>
+          </div>
+        </section>
+
+        <section className={styles.readingNote}>
+          <h2>이 결과는</h2>
+          <p>
+            {answeredCount}개 장면에서 고른 답을 정리한 생활 방식이에요. 뉴앙
+            코드에는 반영되지 않아요.
+          </p>
+        </section>
+
+        <section className={styles.nextActions}>
+          <Link className={styles.primaryAction} href="/home?view=lab">
+            {readOnly ? "나도 검사해 보기" : "다른 검사 만나보기"}
+            <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
+          </Link>
+          {readOnly ? (
+            <Link className={styles.secondaryAction} href={backHref}>
+              프로필로 돌아가기
+            </Link>
+          ) : (
+            <Link
+              className={styles.secondaryAction}
+              href={`/labs/${assessment.slug}`}
+            >
+              <RotateCcw aria-hidden="true" size={17} strokeWidth={1.8} />
+              다시 하기
+            </Link>
+          )}
+        </section>
       </div>
 
-      <button
-        className="mt-5 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-muted hover:text-danger"
-        onClick={handleDelete}
-        type="button"
-      >
-        <Trash2 aria-hidden="true" size={17} />
-        결과 삭제
-      </button>
-    </main>
-  );
-}
+      {!readOnly && isMenuOpen ? (
+        <AssessmentBottomSheet
+          onClose={() => setIsMenuOpen(false)}
+          title="결과 관리"
+        >
+          <button
+            className={styles.deleteMenuButton}
+            onClick={() => {
+              setIsMenuOpen(false);
+              setIsDeleteOpen(true);
+            }}
+            type="button"
+          >
+            <Trash2 aria-hidden="true" size={18} strokeWidth={1.75} />이 결과
+            삭제
+          </button>
+        </AssessmentBottomSheet>
+      ) : null}
 
-function InfoLine({ label, value }: { label: string; value: string }) {
-  return (
-    <p className="text-sm leading-6">
-      <span className="font-semibold text-foreground">{label} </span>
-      <span className="text-muted">{value}</span>
-    </p>
+      {!readOnly && isDeleteOpen ? (
+        <AssessmentBottomSheet
+          copy="삭제한 결과는 다시 불러올 수 없어요."
+          onClose={() => setIsDeleteOpen(false)}
+          title="결과를 삭제할까요?"
+        >
+          <div className={styles.deleteActions}>
+            <button onClick={() => setIsDeleteOpen(false)} type="button">
+              취소
+            </button>
+            <button onClick={handleDelete} type="button">
+              삭제
+            </button>
+          </div>
+        </AssessmentBottomSheet>
+      ) : null}
+      {canShare ? (
+        <ReportShareSheet
+          canonicalUrl={canonicalShareUrl}
+          content={shareContent}
+          isOpen={isShareOpen}
+          onClose={() => setIsShareOpen(false)}
+          onNavigate={(href) => router.push(href)}
+          originalReportKey={
+            storedResult.serverResultId
+              ? `lab_${storedResult.serverResultId}`
+              : undefined
+          }
+          returnFocusRef={shareButtonRef}
+        />
+      ) : null}
+    </main>
   );
 }
 
 function formatCompletedDate(value: string) {
   const date = new Date(value);
 
-  if (Number.isNaN(date.getTime())) {
-    return "알 수 없음";
-  }
+  if (Number.isNaN(date.getTime())) return "오늘";
 
   return new Intl.DateTimeFormat("ko-KR", {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
+    day: "numeric",
+    month: "long",
   }).format(date);
 }
 
-function toDisplayVersion(value: string) {
-  const match = value.match(/v(\d+\.\d+)$/);
-  return match?.[1] ?? value;
-}
-
 function DistributionBar({
+  active,
   label,
-  max,
+  total,
   value,
 }: {
+  active: boolean;
   label: string;
-  max: number;
+  total: number;
   value: number;
 }) {
-  const width = Math.round((value / max) * 100);
+  const percentage = Math.round((value / total) * 100);
 
   return (
-    <div className="grid gap-2">
-      <div className="flex items-center justify-between gap-3 text-sm">
-        <span className="font-medium">{label}</span>
-        <span className="tabular-nums text-muted">{value}</span>
+    <div className={styles.distributionRow} data-active={active}>
+      <div>
+        <span>{label}</span>
+        <strong>{percentage}%</strong>
       </div>
-      <div className="h-2.5 overflow-hidden rounded-full bg-[var(--nu-brand-100)]">
-        <div
-          aria-hidden="true"
-          className="h-full rounded-full bg-primary"
-          style={{ width: `${width}%` }}
-        />
+      <div
+        aria-label={`${label} ${percentage}퍼센트`}
+        aria-valuemax={100}
+        aria-valuemin={0}
+        aria-valuenow={percentage}
+        className={styles.track}
+        role="progressbar"
+      >
+        <span style={{ width: `${percentage}%` }} />
       </div>
     </div>
-  );
-}
-
-function MissingLabResult({ assessment }: { assessment: LabAssessment }) {
-  return (
-    <section className="rounded-lg border border-line bg-white p-5">
-      <StatusPill tone="neutral">결과 없음</StatusPill>
-      <h1 className="mt-4 text-xl font-black">결과를 찾을 수 없어요</h1>
-      <p className="mt-2 text-sm leading-6 text-muted">
-        보관 기간이 지났거나 삭제된 결과일 수 있어요. 짧게 다시 확인할 수
-        있습니다.
-      </p>
-      <ButtonLink className="mt-5 w-full" href={`/labs/${assessment.slug}`}>
-        다시 하기
-      </ButtonLink>
-    </section>
   );
 }

@@ -1,0 +1,106 @@
+.section {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+  border-top: 1px solid var(--nu-color-border);
+  background: var(--nu-color-surface);
+}
+
+.heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.heading > div {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.42rem;
+  color: var(--nu-color-text);
+}
+
+.heading svg {
+  color: var(--nu-color-community);
+}
+
+.heading strong {
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.heading small {
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-medium);
+}
+
+.inputRow {
+  display: grid;
+  min-height: 46px;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.15rem;
+  padding: 0 0.85rem;
+  border: 1px solid var(--nu-color-community-border);
+  border-radius: 14px;
+  background: var(--nu-color-app-bg);
+  transition:
+    border-color 150ms ease,
+    background 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.inputRow:focus-within {
+  border-color: var(--nu-community-300);
+  background: var(--nu-color-surface);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--nu-color-community) 8%, transparent);
+}
+
+.inputRow > span {
+  color: var(--nu-color-community);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.inputRow input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  outline: 0;
+  color: var(--nu-color-text);
+  background: transparent;
+  font-size: var(--nu-text-body-sm);
+}
+
+.inputRow input::placeholder {
+  color: var(--nu-neutral-400);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.chips button {
+  display: inline-flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 0.28rem;
+  padding: 0 0.68rem;
+  border: 1px solid var(--nu-color-community-border);
+  border-radius: 999px;
+  color: var(--nu-color-community);
+  background: var(--nu-community-100);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.chips button:disabled,
+.inputRow input:disabled {
+  cursor: default;
+  opacity: 0.72;
+}

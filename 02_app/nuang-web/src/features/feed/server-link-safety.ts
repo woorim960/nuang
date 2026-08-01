@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { sendAdminReviewNotification } from "@/features/admin/server-admin-review-notification";
 import {
   extractExternalLinks,
   hostnameMatchesDomain,
@@ -77,7 +78,8 @@ export async function persistExternalLinks({
   const response = await client
     .schema("feed")
     .from("feed_external_link")
-    .insert(rows);
+    .insert(rows)
+    .select("id,created_at,review_status");
 
   // The app remains usable while the migration is being rolled out. Without a
   // stored review record, the renderer fails closed and leaves unknown URLs as
@@ -87,6 +89,48 @@ export async function persistExternalLinks({
       code: response.error.code,
     });
   }
+
+  if (!response.error) {
+    const pendingRows = (response.data ?? []).filter(
+      (row) => row.review_status === "pending",
+    );
+    if (pendingRows.length > 0) {
+      await sendAdminReviewNotification({
+        id: `${postId ?? commentId ?? "link"}-${pendingRows
+          .map((row) => String(row.id))
+          .join("-")}`,
+        kind: "external_link",
+        occurredAt: String(
+          pendingRows[0]?.created_at ?? new Date().toISOString(),
+        ),
+      });
+    }
+  }
+}
+
+export async function replaceExternalLinksForPost({
+  client,
+  links,
+  postId,
+}: {
+  client: SupabaseClient;
+  links: PreparedExternalLink[];
+  postId: string;
+}) {
+  const response = await client
+    .schema("feed")
+    .from("feed_external_link")
+    .delete()
+    .eq("post_id", postId);
+
+  if (response.error && !isMissingLinkSafetyTable(response.error)) {
+    console.error("Unable to replace external link review records", {
+      code: response.error.code,
+    });
+    return;
+  }
+
+  await persistExternalLinks({ client, links, postId });
 }
 
 export async function readExternalLinksForPosts({

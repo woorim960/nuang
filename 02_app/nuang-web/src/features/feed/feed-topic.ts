@@ -25,6 +25,15 @@ export const feedPostTopicLabels: Record<FeedPostTopicCategory, string> = {
   thoughts: "생각",
 };
 
+export function normalizeFeedPostTopicCategory(
+  value: unknown,
+): FeedPostTopicCategory | null {
+  return typeof value === "string" &&
+    feedPostTopicCategories.includes(value as FeedPostTopicCategory)
+    ? (value as FeedPostTopicCategory)
+    : null;
+}
+
 const topicAliases = new Map<string, FeedPostTopicCategory>([
   ["고민", "concerns_questions"],
   ["고민·질문", "concerns_questions"],
