@@ -8,7 +8,7 @@ describe("customer-facing policy pages", () => {
     render(<TermsPolicyPage />);
 
     expect(screen.getByText("이용약관")).toBeInTheDocument();
-    expect(screen.getByText("시행일 2026년 7월 28일")).toBeInTheDocument();
+    expect(screen.getByText("시행일 2026년 8월 1일")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "서비스 이용" }),
     ).toBeInTheDocument();

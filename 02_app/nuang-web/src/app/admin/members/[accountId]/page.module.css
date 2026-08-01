@@ -10,7 +10,7 @@
   height: 38px;
   place-items: center;
   border: 1px solid var(--admin-border, var(--nu-color-border));
-  border-radius: 10px;
+  border-radius: 6px;
   color: var(--nu-color-text-secondary);
   background: var(--nu-color-surface);
 }
@@ -28,13 +28,9 @@
   width: 54px;
   height: 54px;
   place-items: center;
-  border-radius: 16px;
+  border-radius: 6px;
   color: var(--nu-color-brand-strong);
-  background: linear-gradient(
-    145deg,
-    var(--nu-color-brand-surface-strong),
-    var(--nu-color-community-soft)
-  );
+  background: var(--nu-color-brand-surface-strong);
   font-size: var(--nu-text-title-sm);
   font-weight: var(--nu-weight-heavy);
 }
@@ -86,7 +82,7 @@
   align-content: center;
   gap: 0.25rem;
   border: 1px solid var(--admin-border, var(--nu-color-border));
-  border-radius: 10px;
+  border-radius: 6px;
   background: var(--nu-color-surface-raised);
 }
 
@@ -135,6 +131,6 @@
   .metrics {
     overflow: hidden;
     border: 1px solid var(--nu-color-border);
-    border-radius: 14px;
+    border-radius: 8px;
   }
 }

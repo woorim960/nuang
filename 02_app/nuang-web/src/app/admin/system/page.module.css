@@ -4,7 +4,7 @@
   gap: 0.8rem;
   padding: 1rem;
   border: 1px solid var(--nu-color-danger-soft);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--nu-color-danger-soft);
 }
 
@@ -19,7 +19,7 @@
   height: 42px;
   flex: 0 0 auto;
   place-items: center;
-  border-radius: 11px;
+  border-radius: 6px;
   color: var(--nu-color-danger);
   background: var(--nu-color-surface);
 }

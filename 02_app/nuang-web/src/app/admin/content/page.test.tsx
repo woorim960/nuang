@@ -77,7 +77,7 @@ describe("AdminContentPage", () => {
       }),
     );
 
-    expect(screen.getByText("이 화면은 이렇게 사용해요")).toBeInTheDocument();
+    expect(screen.getByText("콘텐츠 운영 절차")).toBeInTheDocument();
     expect(screen.getByText(/관계를 여는 선도자/)).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "연인과 함께할 때" }),
@@ -99,7 +99,7 @@ describe("AdminContentPage", () => {
     expect(
       screen.getByRole("heading", { name: "성향지도 콘텐츠 v1" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("문구 검토를 진행하고 있어요")).toBeInTheDocument();
+    expect(screen.getByText("문구 검토 진행 중")).toBeInTheDocument();
     expect(screen.getByText("뉴앙 코드 축")).toBeInTheDocument();
     expect(screen.getByText("성향 유형")).toBeInTheDocument();
     expect(
@@ -116,7 +116,7 @@ describe("AdminContentPage", () => {
 
     expect(
       screen.getByRole("heading", {
-        name: "결과 데이터는 모으고, 새 버전은 검토해서 발행해요",
+        name: "결과 데이터 운영과 신규 버전 발행",
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("매주 하는 세 가지")).toBeInTheDocument();

@@ -1,50 +1,21 @@
 "use client";
 
 import {
-  BookOpenText,
   ChevronDown,
-  ClipboardList,
-  FlaskConical,
-  Gauge,
-  LayoutDashboard,
+  ChevronRight,
+  ExternalLink,
   LogOut,
-  MessageSquareMore,
-  MessagesSquare,
-  Settings2,
   ShieldCheck,
-  Users,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { AdminCommandMenu } from "./AdminCommandMenu";
+import {
+  adminNavigation,
+  resolveAdminNavigation,
+} from "./admin-navigation";
 import styles from "./AdminShell.module.css";
-
-const navigation = [
-  {
-    label: "서비스 운영",
-    items: [
-      { href: "/admin", icon: LayoutDashboard, label: "운영 개요" },
-      { href: "/admin/members", icon: Users, label: "회원 관리" },
-      { href: "/admin/community", icon: MessagesSquare, label: "커뮤니티" },
-      { href: "/admin/feedback", icon: MessageSquareMore, label: "고객 의견" },
-      { href: "/admin/events", icon: ClipboardList, label: "이벤트" },
-    ],
-  },
-  {
-    label: "품질 관리",
-    items: [
-      { href: "/admin/research", icon: FlaskConical, label: "검사 연구" },
-      { href: "/admin/content", icon: BookOpenText, label: "성향 콘텐츠" },
-    ],
-  },
-  {
-    label: "운영 설정",
-    items: [
-      { href: "/admin/audit", icon: ShieldCheck, label: "운영 기록" },
-      { href: "/admin/system", icon: Settings2, label: "시스템 상태" },
-    ],
-  },
-] as const;
 
 export function AdminShell({
   adminEmail,
@@ -54,6 +25,7 @@ export function AdminShell({
   children: ReactNode;
 }) {
   const pathname = usePathname();
+  const current = resolveAdminNavigation(pathname);
 
   return (
     <div className={styles.shell}>
@@ -62,8 +34,8 @@ export function AdminShell({
           <LogOut aria-hidden="true" size={19} strokeWidth={1.7} />
         </Link>
         <div>
-          <span>NUANG</span>
-          <strong>운영 센터</strong>
+          <strong>NUANG</strong>
+          <span>OPERATIONS</span>
         </div>
         <span className={styles.mobileShield}>
           <ShieldCheck aria-hidden="true" size={18} strokeWidth={1.7} />
@@ -73,11 +45,11 @@ export function AdminShell({
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
           <span className={styles.brandMark}>
-            <Gauge aria-hidden="true" size={20} strokeWidth={1.8} />
+            N
           </span>
           <div>
-            <span>NUANG</span>
-            <strong>운영 센터</strong>
+            <strong>NUANG</strong>
+            <span>OPERATIONS CONSOLE</span>
           </div>
         </div>
         <div className={styles.adminIdentity}>
@@ -85,21 +57,24 @@ export function AdminShell({
             <ShieldCheck aria-hidden="true" size={20} strokeWidth={1.7} />
           </span>
           <div>
-            <strong>관리자</strong>
+            <small>AUTHENTICATED OPERATOR</small>
             <small>{adminEmail}</small>
           </div>
         </div>
         <AdminNavigation pathname={pathname} />
-        <Link className={styles.backToApp} href="/my">
-          <LogOut aria-hidden="true" size={18} strokeWidth={1.7} />
-          앱으로 돌아가기
-        </Link>
+        <footer className={styles.sidebarFooter}>
+          <span>ADMIN PLATFORM V3</span>
+          <Link className={styles.backToApp} href="/my">
+            <LogOut aria-hidden="true" size={17} strokeWidth={1.7} />
+            서비스 화면으로 이동
+          </Link>
+        </footer>
       </aside>
 
       <div className={styles.mobileNav}>
         <details className={styles.mobileMenu}>
           <summary>
-            <strong>{currentSection(pathname)}</strong>
+            <strong>{current.label}</strong>
             <span>
               전체 메뉴
               <ChevronDown aria-hidden="true" size={16} strokeWidth={1.8} />
@@ -111,16 +86,21 @@ export function AdminShell({
 
       <section className={styles.workspace}>
         <header className={styles.desktopHeader}>
-          <div>
-            <span>NUANG OPERATIONS</span>
-            <strong>{currentSection(pathname)}</strong>
+          <div className={styles.breadcrumb}>
+            <span>{current.groupLabel}</span>
+            <ChevronRight aria-hidden="true" size={14} strokeWidth={1.8} />
+            <strong>{current.label}</strong>
           </div>
           <div className={styles.desktopHeaderActions}>
+            <AdminCommandMenu pathname={pathname} />
             <span className={styles.liveStatus}>
               <i aria-hidden="true" />
-              관리자 인증됨
+              보안 세션 활성
             </span>
-            <Link href="/my">서비스 화면</Link>
+            <Link href="/my">
+              서비스 화면
+              <ExternalLink aria-hidden="true" size={14} strokeWidth={1.8} />
+            </Link>
           </div>
         </header>
         <div className={styles.main}>{children}</div>
@@ -132,7 +112,7 @@ export function AdminShell({
 function AdminNavigation({ pathname }: { pathname: string }) {
   return (
     <nav aria-label="관리자 메뉴" className={styles.navigation}>
-      {navigation.map((group) => (
+      {adminNavigation.map((group) => (
         <div className={styles.navGroup} key={group.label}>
           <small>{group.label}</small>
           {group.items.map((item) => {
@@ -157,17 +137,4 @@ function AdminNavigation({ pathname }: { pathname: string }) {
       ))}
     </nav>
   );
-}
-
-function currentSection(pathname: string) {
-  for (const group of navigation) {
-    for (const item of group.items) {
-      const active =
-        item.href === "/admin"
-          ? pathname === item.href
-          : pathname.startsWith(item.href);
-      if (active) return item.label;
-    }
-  }
-  return "운영 센터";
 }

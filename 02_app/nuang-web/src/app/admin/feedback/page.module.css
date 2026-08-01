@@ -18,7 +18,7 @@
   flex: 0 0 auto;
   padding: 0 0.72rem;
   border: 1px solid var(--nu-color-border);
-  border-radius: 9px;
+  border-radius: 5px;
   color: var(--nu-color-text-muted);
   background: var(--nu-color-surface);
   font-size: var(--nu-text-caption);

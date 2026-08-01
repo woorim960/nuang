@@ -10,7 +10,7 @@
   overflow: hidden;
   padding: 1.25rem 1rem;
   border: 1px solid var(--nu-color-border);
-  border-radius: 14px;
+  border-radius: 8px;
   background: var(--nu-color-surface);
 }
 
@@ -26,7 +26,7 @@
   width: 42px;
   height: 42px;
   place-items: center;
-  border-radius: 11px;
+  border-radius: 6px;
   color: var(--nu-color-play);
   background: var(--nu-color-play-soft);
 }
@@ -55,7 +55,7 @@
 .summary dl > div {
   padding: 0.75rem;
   border: 1px solid var(--admin-border, var(--nu-color-border));
-  border-radius: 9px;
+  border-radius: 6px;
   background: var(--nu-color-surface-raised);
 }
 
@@ -86,7 +86,7 @@
 
 .draw > button {
   min-height: 46px;
-  border-radius: 10px;
+  border-radius: 6px;
   color: var(--nu-color-text-on-accent);
   background: var(--nu-color-brand-action);
   font-size: var(--nu-text-body-sm);
@@ -118,7 +118,7 @@
   width: 40px;
   height: 40px;
   place-items: center;
-  border-radius: 9px;
+  border-radius: 5px;
   color: var(--nu-color-text-muted);
 }
 
@@ -161,7 +161,7 @@
   justify-content: center;
   gap: 0.28rem;
   padding: 0 0.65rem;
-  border-radius: 9px;
+  border-radius: 5px;
   color: var(--nu-color-brand-strong);
   background: var(--nu-color-brand-surface);
   font-size: var(--nu-text-caption);
@@ -183,7 +183,7 @@
   margin: 0;
   padding: 1rem;
   border: 1px solid var(--nu-color-border);
-  border-radius: 18px;
+  border-radius: 8px;
   color: var(--nu-color-text-muted);
   background: var(--nu-color-surface);
   font-size: var(--nu-text-body-sm);

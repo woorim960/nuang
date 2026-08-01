@@ -86,7 +86,7 @@ describe("AdminResearchDashboard", () => {
     expect(
       screen.getByText(/정밀 코어 검사 · 사람 사이 에너지/),
     ).toBeInTheDocument();
-    expect(screen.getByText("이 화면은 이렇게 사용해요")).toBeInTheDocument();
+    expect(screen.getByText("문항 품질 검토 절차")).toBeInTheDocument();
 
     const details = screen
       .getByText("분석 근거와 연구 정보")

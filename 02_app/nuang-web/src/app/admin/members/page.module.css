@@ -10,7 +10,7 @@
   gap: 0.55rem;
   padding: 0 0.45rem 0 0.8rem;
   border: 1px solid var(--nu-color-border);
-  border-radius: 10px;
+  border-radius: 6px;
   background: var(--nu-color-surface-raised);
 }
 
@@ -32,7 +32,7 @@
 .search button {
   min-height: 36px;
   padding: 0 0.75rem;
-  border-radius: 9px;
+  border-radius: 5px;
   color: var(--nu-color-brand-strong);
   background: var(--nu-color-brand-surface);
   font-size: var(--nu-text-caption);
@@ -51,7 +51,7 @@
   align-items: center;
   padding: 0 0.7rem;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 5px;
   color: var(--nu-color-text-muted);
   background: var(--nu-color-surface-soft);
   font-size: var(--nu-text-caption);
@@ -84,13 +84,9 @@
   width: 44px;
   height: 44px;
   place-items: center;
-  border-radius: 13px;
+  border-radius: 6px;
   color: var(--nu-color-brand-strong);
-  background: linear-gradient(
-    145deg,
-    var(--nu-color-brand-surface-strong),
-    var(--nu-color-community-soft)
-  );
+  background: var(--nu-color-brand-surface-strong);
   font-size: var(--nu-text-body);
   font-weight: var(--nu-weight-heavy);
 }

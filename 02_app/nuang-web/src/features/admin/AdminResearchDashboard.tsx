@@ -125,8 +125,8 @@ function ItemResearch({
             <BookOpenCheck aria-hidden="true" size={20} strokeWidth={1.7} />
           </span>
           <div>
-            <strong>이 화면은 이렇게 사용해요</strong>
-            <p>참여자가 어려워한 문항을 찾아 검토 순서를 정하는 화면입니다.</p>
+            <strong>문항 품질 검토 절차</strong>
+            <p>참여자가 어려움을 보인 문항을 찾아 검토 우선순위를 결정합니다.</p>
           </div>
           <Link href="/research/gate-c" target="_blank">
             참여 화면
@@ -369,8 +369,8 @@ function TraitMapResearch({
                   <span style={{ width: `${metric.closeRate * 100}%` }} />
                 </div>
                 <div className={styles.fitValues}>
-                  <span>비슷해요 {Math.round(metric.closeRate * 100)}%</span>
-                  <span>달라요 {Math.round(metric.differenceRate * 100)}%</span>
+                  <span>일치 응답 {Math.round(metric.closeRate * 100)}%</span>
+                  <span>차이 응답 {Math.round(metric.differenceRate * 100)}%</span>
                 </div>
                 <AdminResearchDecisionActions
                   available={decisionStoreAvailable}
@@ -451,21 +451,21 @@ function recommendationCopy(row: GateCReviewQueueRow) {
       ? reasonLabel(row.reasonCodes[0])
       : "응답 신호";
     return {
-      description: `${primaryReason} 수치가 높습니다. 질문의 상황과 표현을 우선 살펴보세요.`,
-      title: "문구와 응답 과정을 검토해 주세요",
+      description: `${primaryReason} 수치가 높습니다. 질문의 상황과 표현을 우선 검토해야 합니다.`,
+      title: "문구 및 응답 과정 검토",
     };
   }
   if (row.recommendationStatus === "insufficient_data") {
     return {
       description:
-        "아직 결론을 내리기 이릅니다. 문항을 유지하며 응답을 더 모아주세요.",
-      title: "현재 문항을 유지해 주세요",
+        "현재 표본만으로 결론을 내리기 어렵습니다. 문항을 유지하며 응답을 추가 수집합니다.",
+      title: "현재 문항 유지",
     };
   }
   return {
     description:
-      "현재까지 큰 위험 신호가 없습니다. 새 응답이 쌓이는지만 지켜보면 됩니다.",
-    title: "지금은 별도 조치가 필요하지 않아요",
+      "현재까지 중대한 위험 신호가 없습니다. 신규 응답 추이를 계속 관찰합니다.",
+    title: "별도 조치 불필요",
   };
 }
 

@@ -4,6 +4,7 @@ import {
   ChevronRight,
   FileCheck2,
   Gift,
+  Handshake,
   KeyRound,
   LockKeyhole,
   ShieldCheck,
@@ -45,6 +46,11 @@ const accountItems = [
 ] as const;
 
 const serviceItems = [
+  {
+    href: "/advertise",
+    icon: Handshake,
+    title: "광고·제휴 문의",
+  },
   {
     href: "/policies/terms",
     icon: FileCheck2,

@@ -65,8 +65,8 @@ describe("MyOverview", () => {
       "/my/reports",
     );
     expect(
-      screen.getByRole("link", { name: "성향 놀이터 기록" }),
-    ).toHaveAttribute("href", "/feed/perspectives?from=my");
+      screen.queryByRole("link", { name: "성향 놀이터 기록" }),
+    ).not.toBeInTheDocument();
     expect(screen.getByRole("link", { name: "내 게시물" })).toHaveAttribute(
       "href",
       "/feed/me",

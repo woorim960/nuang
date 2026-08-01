@@ -15,12 +15,15 @@ import {
 import Link from "next/link";
 import {
   useEffect,
+  Fragment,
   useId,
   useMemo,
   useState,
   type ReactNode,
   type RefObject,
 } from "react";
+import { CoupangAffiliateCard } from "@/features/advertising/delivery/CoupangAffiliateCard";
+import type { CoupangAffiliateCreative } from "@/features/advertising/delivery/advertising-delivery-contract";
 import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
 import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
 import { FeedComposer } from "@/features/feed/FeedComposer";
@@ -44,12 +47,14 @@ const profileOptions = Object.entries(candidateRoleNames)
   .sort((left, right) => left.code.localeCompare(right.code));
 
 export function CommunityFeed({
+  commerceAd = null,
   highlightedPostId = null,
   initialMode = "recommended",
   pendingReviewNotice = false,
   posts,
   viewerCode: suppliedViewerCode,
 }: {
+  commerceAd?: CoupangAffiliateCreative | null;
   highlightedPostId?: string | null;
   initialMode?: FeedMode;
   pendingReviewNotice?: boolean;
@@ -212,15 +217,22 @@ export function CommunityFeed({
       <section aria-label="커뮤니티 게시물" className={styles.feedSection}>
         {visiblePosts.length > 0 ? (
           <div className={styles.postList}>
-            {visiblePosts.map((post) => (
-              <CommunityPostCard
-                filterActive={filterActive}
-                highlighted={highlightedPostId === post.id}
-                mode={mode}
-                post={post}
-                viewerCode={viewerCode}
-                key={post.id}
-              />
+            {visiblePosts.map((post, index) => (
+              <Fragment key={post.id}>
+                <CommunityPostCard
+                  filterActive={filterActive}
+                  highlighted={highlightedPostId === post.id}
+                  mode={mode}
+                  post={post}
+                  viewerCode={viewerCode}
+                />
+                {index === 7 &&
+                mode === "recommended" &&
+                !filterActive &&
+                !highlightedPostId ? (
+                  <CoupangAffiliateCard creative={commerceAd} />
+                ) : null}
+              </Fragment>
             ))}
           </div>
         ) : (

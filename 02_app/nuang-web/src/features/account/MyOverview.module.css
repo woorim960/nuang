@@ -280,11 +280,6 @@
   background: var(--nu-color-brand-surface-strong);
 }
 
-.menuIcon[data-tone="play"] {
-  color: var(--nu-color-play);
-  background: var(--nu-warm-100);
-}
-
 .menuIcon[data-tone="conversation"] {
   color: var(--nu-color-community);
   background: var(--nu-community-100);

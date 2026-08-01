@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  BookmarkCheck,
   ChevronRight,
   FileText,
   LogIn,
@@ -163,12 +162,6 @@ export function MyOverview({
         </div>
         <nav aria-label="나의 활동 메뉴" className={styles.activityList}>
           <MyMenuLink
-            href="/feed/perspectives?from=my"
-            icon={BookmarkCheck}
-            title="성향 놀이터 기록"
-            tone="play"
-          />
-          <MyMenuLink
             href="/feed/me"
             icon={MessagesSquare}
             title="내 게시물"
@@ -296,7 +289,7 @@ function MyMenuLink({
   href: string;
   icon: typeof FileText;
   title: string;
-  tone: "brand" | "conversation" | "neutral" | "play";
+  tone: "brand" | "conversation" | "neutral";
 }) {
   return (
     <Link className={styles.menuLink} href={href}>

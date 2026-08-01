@@ -24,7 +24,7 @@
 .filters button {
   min-height: 38px;
   padding: 0 0.8rem;
-  border-radius: 9px;
+  border-radius: 5px;
   color: var(--nu-color-brand-strong);
   background: var(--nu-color-brand-surface);
   font-size: var(--nu-text-caption);
@@ -51,9 +51,8 @@
   width: 8px;
   height: 8px;
   margin-top: 0.45rem;
-  border-radius: 50%;
+  border-radius: 1px;
   background: var(--nu-color-community);
-  box-shadow: 0 0 0 5px var(--nu-color-community-soft);
 }
 
 .list header {

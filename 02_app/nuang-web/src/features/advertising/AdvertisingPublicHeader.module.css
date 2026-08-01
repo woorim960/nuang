@@ -1,0 +1,138 @@
+.header {
+  position: sticky;
+  z-index: 40;
+  top: 0;
+  border-bottom: 1px solid var(--nu-color-border-soft);
+  background: color-mix(in srgb, var(--nu-neutral-25) 94%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.inner {
+  display: grid;
+  width: min(100% - 2rem, 1120px);
+  min-height: 72px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto;
+}
+
+.brand {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 0.72rem;
+  color: var(--nu-neutral-950);
+  text-decoration: none;
+}
+
+.brand > span:first-child {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 9px;
+  color: var(--nu-neutral-0);
+  background: var(--nu-neutral-950);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.04em;
+}
+
+.brand > span:last-child,
+.compactBrand {
+  display: grid;
+  gap: 0.08rem;
+}
+
+.brand strong,
+.compactBrand strong {
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: 0.08em;
+  line-height: 1.1;
+}
+
+.brand small,
+.compactBrand small {
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-semibold);
+  letter-spacing: 0.13em;
+  line-height: 1.2;
+}
+
+.back {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-neutral-800);
+}
+
+.compactBrand {
+  justify-self: center;
+  color: var(--nu-neutral-950);
+  text-align: center;
+  text-decoration: none;
+}
+
+.inquiry {
+  display: inline-flex;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0 0.95rem;
+  border: 1px solid var(--nu-neutral-950);
+  border-radius: 10px;
+  color: var(--nu-neutral-0);
+  background: var(--nu-neutral-950);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+  text-decoration: none;
+}
+
+.headerSpacer {
+  width: 44px;
+  height: 44px;
+}
+
+.header[data-compact] .inner {
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+}
+
+.back:hover {
+  background: var(--nu-neutral-100);
+}
+
+.inquiry:hover {
+  background: var(--nu-neutral-800);
+}
+
+.brand:focus-visible,
+.back:focus-visible,
+.compactBrand:focus-visible,
+.inquiry:focus-visible {
+  outline: 2px solid var(--nu-color-focus);
+  outline-offset: 3px;
+}
+
+@media (max-width: 560px) {
+  .inner {
+    width: calc(100% - 1.5rem);
+    min-height: calc(60px + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .brand small {
+    display: none;
+  }
+
+  .inquiry {
+    min-height: 40px;
+    padding: 0 0.75rem;
+  }
+
+}

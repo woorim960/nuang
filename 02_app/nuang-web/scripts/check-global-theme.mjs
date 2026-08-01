@@ -24,7 +24,9 @@ for (const filePath of walk(sourceRoot)) {
     // 서버에서 생성하는 공유용 SVG는 브라우저 CSS 변수를 해석할 수 없습니다.
     !file.endsWith("src/features/result/share-image.ts") &&
     // 메일 클라이언트는 앱의 global-theme.css를 불러오지 못하므로 인라인 색상이 필요합니다.
-    !file.endsWith("src/features/account/server-email-delivery.ts")
+    !file.endsWith("src/features/account/server-email-delivery.ts") &&
+    !file.endsWith("src/features/admin/server-admin-review-notification.ts") &&
+    !file.endsWith("src/features/advertising/server-advertising-mail-outbox.ts")
   ) {
     checkApplicationSource(file, source);
   }

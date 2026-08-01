@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { BottomNavigation } from "@/components/layout/BottomNavigation";
+import { readFeedCoupangDelivery } from "@/features/advertising/server-advertising-delivery";
 import { CommunityFeed } from "@/features/feed/CommunityFeed";
 import { createServerFeedReadPayload } from "@/features/feed/server-read";
 import { parseLegacyHomePollResumeIntent } from "@/features/navigation/legacy-home-feed-resume";
@@ -27,6 +28,9 @@ export default async function FeedPage({
   const feedPayload = await createServerFeedReadPayload({
     requiredPollId: pollResumeIntent?.pollId,
   });
+  const commerceAd = await readFeedCoupangDelivery({
+    organicPostCount: feedPayload.items.length,
+  });
 
   return (
     <div className={styles.shell}>
@@ -35,6 +39,7 @@ export default async function FeedPage({
         initialMode={getInitialMode(query.view)}
         pendingReviewNotice={query.review === "pending"}
         posts={feedPayload.items}
+        commerceAd={commerceAd}
         viewerCode={feedPayload.viewerCode}
       />
       <BottomNavigation />

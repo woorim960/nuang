@@ -35,7 +35,7 @@
   bottom: 0;
   left: 0;
   height: 2px;
-  border-radius: 999px;
+  border-radius: 1px;
   background: var(--nu-color-brand-action);
   content: "";
 }

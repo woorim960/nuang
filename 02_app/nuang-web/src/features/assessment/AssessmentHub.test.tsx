@@ -29,6 +29,11 @@ vi.mock("@/features/assessment/AssessmentHomeCoreSection", () => ({
   ),
 }));
 
+vi.mock("@/features/advertising/delivery/AdSenseInlineSlot", () => ({
+  AdSenseInlineSlot: ({ config }: { config: unknown }) =>
+    config ? <section aria-label="테스트 홈 광고" /> : null,
+}));
+
 describe("AssessmentHub", () => {
   beforeEach(() => {
     navigationMocks.params = "";
@@ -54,7 +59,19 @@ describe("AssessmentHub", () => {
   });
 
   it("orders recommended content as topics, together, lab, then utilities", () => {
-    render(<AssessmentHub />);
+    render(
+      <AssessmentHub
+        homeAd={{
+          canonicalOrigin: "https://nuang.example",
+          dailyCap: 1,
+          enabled: true,
+          placementKey: "HOME_INLINE_01",
+          publisherId: "ca-pub-1234567890123456",
+          sessionCap: 1,
+          slotId: "1234567890",
+        }}
+      />,
+    );
 
     const topics = screen.getByRole("heading", {
       name: "지금 궁금한 내 모습을 골라보세요",
@@ -62,6 +79,7 @@ describe("AssessmentHub", () => {
     const together = screen.getByRole("heading", {
       name: "우리, 얼마나 비슷하게 고를까요?",
     });
+    const ad = screen.getByRole("region", { name: "테스트 홈 광고" });
     const lab = screen.getByRole("heading", {
       name: "내 안의 의외성을 발견해요",
     });
@@ -70,6 +88,12 @@ describe("AssessmentHub", () => {
     });
 
     expect(topics.compareDocumentPosition(together)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(topics.compareDocumentPosition(ad)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(ad.compareDocumentPosition(together)).toBe(
       Node.DOCUMENT_POSITION_FOLLOWING,
     );
     expect(together.compareDocumentPosition(lab)).toBe(

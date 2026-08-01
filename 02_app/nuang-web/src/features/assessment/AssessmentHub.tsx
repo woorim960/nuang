@@ -17,6 +17,8 @@ import { useEffect, type ComponentType } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { AssessmentHomeCoreSection } from "@/features/assessment/AssessmentHomeCoreSection";
+import { AdSenseInlineSlot } from "@/features/advertising/delivery/AdSenseInlineSlot";
+import type { AdSenseDeliveryConfig } from "@/features/advertising/delivery/advertising-delivery-contract";
 import {
   assessmentHubFilters,
   type AssessmentCatalogItem,
@@ -46,7 +48,11 @@ const motifBySlug: Record<string, NuangCharacterMotif> = {
   "recharge-ritual": "sun",
 };
 
-export function AssessmentHub() {
+export function AssessmentHub({
+  homeAd = null,
+}: {
+  homeAd?: AdSenseDeliveryConfig | null;
+}) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const requestedView = searchParams.get("view");
@@ -123,7 +129,9 @@ export function AssessmentHub() {
         id="assessment-discovery-panel"
         role="tabpanel"
       >
-        {activeFilter === "recommended" ? <RecommendedDiscovery /> : null}
+        {activeFilter === "recommended" ? (
+          <RecommendedDiscovery homeAd={homeAd} />
+        ) : null}
         {activeFilter === "self" ? <SelfDiscovery /> : null}
         {activeFilter === "together" ? <TogetherDiscovery /> : null}
         {activeFilter === "lab" ? (
@@ -161,7 +169,11 @@ export function AssessmentHubFallback() {
   );
 }
 
-function RecommendedDiscovery() {
+function RecommendedDiscovery({
+  homeAd,
+}: {
+  homeAd: AdSenseDeliveryConfig | null;
+}) {
   const releasedTopics = topicAssessmentCatalog.filter(
     (item) => item.publicationStatus === "published",
   );
@@ -171,6 +183,7 @@ function RecommendedDiscovery() {
       {releasedTopics.length > 0 ? (
         <TopicDiscovery items={releasedTopics.slice(0, 3)} />
       ) : null}
+      <AdSenseInlineSlot config={homeAd} />
       <TogetherDiscovery includeFind={false} />
       <LabDiscovery items={labAssessmentCatalog.slice(0, 2)} />
       <UtilitySection />

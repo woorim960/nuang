@@ -8,7 +8,7 @@
   padding: 1.35rem;
   overflow-y: auto;
   border: 0;
-  border-radius: 18px;
+  border-radius: 8px;
   color: var(--admin-text, var(--nu-color-text));
   background: var(--admin-surface, var(--nu-color-surface));
   box-shadow: var(--nu-shadow-admin-dialog);
@@ -17,7 +17,7 @@
 
 .dialog::backdrop {
   background: var(--nu-color-overlay);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(2px);
 }
 
 .close {
@@ -28,7 +28,7 @@
   width: 36px;
   height: 36px;
   place-items: center;
-  border-radius: 9px;
+  border-radius: 5px;
   color: var(--admin-muted, var(--nu-color-text-muted));
 }
 
@@ -37,7 +37,7 @@
   width: 44px;
   height: 44px;
   place-items: center;
-  border-radius: 13px;
+  border-radius: 6px;
   color: var(--nu-color-danger);
   background: var(--nu-color-danger-soft);
 }
@@ -75,7 +75,7 @@
 .actions button {
   min-height: 44px;
   border: 1px solid var(--admin-border, var(--nu-color-border));
-  border-radius: 11px;
+  border-radius: 6px;
   color: var(--admin-muted, var(--nu-color-text-muted));
   background: var(--admin-surface, var(--nu-color-surface));
   font-size: var(--nu-text-label);

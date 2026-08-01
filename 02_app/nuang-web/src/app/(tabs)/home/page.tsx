@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import {
@@ -10,6 +11,7 @@ import {
   type LegacyHomeFeedResumeQuery,
 } from "@/features/navigation/legacy-home-feed-resume";
 import { OnboardingHomeGate } from "@/features/onboarding/EntryGate";
+import { readHomeAdSenseDelivery } from "@/features/advertising/server-advertising-delivery";
 
 export const metadata: Metadata = {
   description:
@@ -32,8 +34,17 @@ export default async function HomePage({
   return (
     <OnboardingHomeGate>
       <Suspense fallback={<AssessmentHubFallback />}>
-        <AssessmentHub />
+        <HomeAssessmentHub />
       </Suspense>
     </OnboardingHomeGate>
   );
+}
+
+async function HomeAssessmentHub() {
+  const requestHeaders = await headers();
+  const homeAd = await readHomeAdSenseDelivery({
+    countryCode: requestHeaders.get("x-vercel-ip-country"),
+    nonce: requestHeaders.get("x-nonce"),
+  });
+  return <AssessmentHub homeAd={homeAd} />;
 }

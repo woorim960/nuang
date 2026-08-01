@@ -23,6 +23,23 @@ export function ReportReadingNavigator({
     : 0;
   const sectionIds = useMemo(() => items.map((item) => item.id), [items]);
 
+  const moveToSection = (id: string) => {
+    setActiveId(id);
+
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    target.scrollIntoView({ behavior: "auto", block: "start" });
+
+    const nextUrl = new URL(window.location.href);
+    nextUrl.hash = id;
+    window.history.replaceState(
+      window.history.state,
+      "",
+      `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`,
+    );
+  };
+
   useEffect(() => {
     if (typeof IntersectionObserver === "undefined") return;
     const elements = sectionIds.flatMap((id) => {
@@ -77,9 +94,13 @@ export function ReportReadingNavigator({
           <a
             aria-current={activeId === item.id ? "location" : undefined}
             data-active={activeId === item.id}
+            data-route-loading="off"
             href={`#${item.id}`}
             key={item.id}
-            onClick={() => setActiveId(item.id)}
+            onClick={(event) => {
+              event.preventDefault();
+              moveToSection(item.id);
+            }}
           >
             {item.label}
           </a>

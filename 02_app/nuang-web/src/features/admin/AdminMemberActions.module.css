@@ -69,7 +69,7 @@
   .actionList button {
     padding: 0.7rem;
     border: 1px solid var(--admin-border, var(--nu-color-border));
-    border-radius: 10px;
+    border-radius: 6px;
   }
 
   .actionList button:last-child {

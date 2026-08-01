@@ -22,6 +22,10 @@ describe("MySettingsPage", () => {
       "href",
       "/my/settings/blocked",
     );
+    expect(screen.getByRole("link", { name: /광고·제휴 문의/ })).toHaveAttribute(
+      "href",
+      "/advertise",
+    );
     expect(screen.queryByText("로그아웃")).not.toBeInTheDocument();
   });
 });

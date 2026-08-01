@@ -17,6 +17,11 @@ vi.mock("next/navigation", () => ({
   }),
 }));
 
+vi.mock("@/features/advertising/delivery/CoupangAffiliateCard", () => ({
+  CoupangAffiliateCard: ({ creative }: { creative: { title: string } | null }) =>
+    creative ? <section aria-label="테스트 피드 광고">{creative.title}</section> : null,
+}));
+
 const post: FeedItem = {
   authorHandle: "story.user",
   authorName: "여름",
@@ -41,6 +46,48 @@ const post: FeedItem = {
 };
 
 describe("CommunityFeed", () => {
+  it("places one commerce card only after eight unfiltered recommended posts", () => {
+    const posts = Array.from({ length: 9 }, (_, index): FeedItem => ({
+      ...post,
+      body: `게시물 ${index + 1}`,
+      id: `00000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+    }));
+    render(
+      <CommunityFeed
+        commerceAd={{
+          altText: "테스트 상품",
+          campaignId: "10000000-0000-4000-8000-000000000001",
+          creativeId: "20000000-0000-4000-8000-000000000001",
+          dailyCap: 2,
+          description: "검수된 테스트 설명",
+          destinationUrl: "https://link.coupang.com/a/example",
+          disclosure:
+            "이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.",
+          imageUrl: "https://image.example/item.jpg",
+          placementKey: "FEED_COMMERCE_01",
+          sessionCap: 1,
+          title: "검수된 제휴 카드",
+        }}
+        posts={posts}
+      />,
+    );
+
+    const ad = screen.getByRole("region", { name: "테스트 피드 광고" });
+    const eighth = document.getElementById(`community-post-${posts[7].id}`);
+    const ninth = document.getElementById(`community-post-${posts[8].id}`);
+    expect(eighth?.compareDocumentPosition(ad)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+    expect(ad.compareDocumentPosition(ninth as Node)).toBe(
+      Node.DOCUMENT_POSITION_FOLLOWING,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "성향 놀이터" }));
+    expect(
+      screen.queryByRole("region", { name: "테스트 피드 광고" }),
+    ).not.toBeInTheDocument();
+  });
+
   it("renders an anonymous together-game result card with a replay path", () => {
     const resultPost: FeedItem = {
       ...post,

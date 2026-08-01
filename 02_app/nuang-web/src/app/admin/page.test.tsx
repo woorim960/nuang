@@ -17,16 +17,20 @@ const overview: AdminOverviewData = {
     activeMembers: 42,
     completedResearch: 12,
     contentReleases: 3,
+    customerFeedback: 6,
     eventEntries: 8,
     newMembers: 4,
     pendingPosts: 2,
+    qualitySignals: 2,
     queuedReports: 1,
+    reportFeedback: 3,
     researchReviews: 5,
   },
   event: {
     drawCompleted: false,
     winnerCount: 10,
   },
+  generatedAt: "2026-08-01T02:00:00.000Z",
   unavailableModules: [],
 };
 
@@ -38,15 +42,15 @@ describe("AdminDashboard", () => {
       screen.getByRole("heading", { name: "운영 개요" }),
     ).toBeInTheDocument();
     expect(screen.getByText("42")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: /프로필 신고 검토/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /커뮤니티 신고/ })).toHaveAttribute(
       "href",
       "/admin/community?view=reports",
     );
-    expect(screen.getByRole("link", { name: /검사 문항 검토/ })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: /연구 검토/ })).toHaveAttribute(
       "href",
       "/admin/research",
     );
-    expect(screen.getByRole("link", { name: "열기" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "이벤트 운영 열기" })).toHaveAttribute(
       "href",
       "/admin/events",
     );
@@ -62,5 +66,26 @@ describe("AdminDashboard", () => {
       follow: false,
       index: false,
     });
+  });
+
+  it("separates unavailable data from a real zero count", () => {
+    render(
+      <AdminDashboard
+        data={{
+          ...overview,
+          counts: {
+            ...overview.counts,
+            customerFeedback: null,
+          },
+          unavailableModules: ["고객 의견"],
+        }}
+      />,
+    );
+
+    expect(screen.getByText("일부 연결 확인 필요")).toBeInTheDocument();
+    expect(screen.getByText(/고객 의견 연결 상태를 확인/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /고객 의견 처리/ })).toHaveTextContent(
+      "확인 필요",
+    );
   });
 });

@@ -135,11 +135,11 @@ function DataCenterOperationsGuide() {
     <div className={styles.dataGuide}>
       <section className={`${shared.panel} ${styles.dataGuideIntro}`}>
         <div>
-          <span>매주 한 번 확인하면 충분해요</span>
-          <h2>결과 데이터는 모으고, 새 버전은 검토해서 발행해요</h2>
+          <span>주 1회 정기 점검</span>
+          <h2>결과 데이터 운영과 신규 버전 발행</h2>
           <p>
-            자동 집계는 검토 순서를 알려줍니다. 게시 중인 문장과 과거 결과를
-            직접 고치지 않고, 새 버전을 승인한 뒤 적용합니다.
+            자동 집계로 검토 우선순위를 확인합니다. 게시 중인 문장과 과거 결과를
+            직접 수정하지 않으며, 신규 버전을 승인한 뒤 적용합니다.
           </p>
         </div>
         <nav aria-label="데이터센터 운영 바로가기">
@@ -249,27 +249,27 @@ function ContentGuide({ view }: { view: ContentView }) {
   const steps =
     view === "reviews"
       ? [
-          ["문장을 읽어요", "어느 성향의 어떤 상황 설명인지 먼저 확인합니다."],
+          ["문장 맥락 확인", "어느 성향의 어떤 상황 설명인지 먼저 확인합니다."],
           [
-            "네 분야를 확인해요",
+            "전문 검토 확인",
             "심리학·성향검사·쉬운 문장·서비스 안전을 각각 판단합니다.",
           ],
           [
-            "콘텐츠를 승인해요",
+            "콘텐츠 승인",
             "네 분야가 모두 통과한 문구만 게시 버전에 포함합니다.",
           ],
         ]
       : [
           [
-            "문구 검토를 끝내요",
+            "문구 검토 완료",
             "게시할 모든 문구가 네 분야 검토와 승인을 마쳐야 합니다.",
           ],
           [
-            "구성을 확인해요",
+            "구성 무결성 확인",
             "5개 축·10개 세부 성향·32개 유형과 설명 문구 수를 확인합니다.",
           ],
           [
-            "고객에게 게시해요",
+            "게시 버전 적용",
             "게시 준비가 끝난 버전만 실제 성향지도에 적용합니다.",
           ],
         ];
@@ -281,7 +281,7 @@ function ContentGuide({ view }: { view: ContentView }) {
           <BookOpenCheck aria-hidden="true" size={20} strokeWidth={1.7} />
         </span>
         <div>
-          <strong>이 화면은 이렇게 사용해요</strong>
+          <strong>콘텐츠 운영 절차</strong>
           <p>
             {view === "reviews"
               ? "고객에게 보여줄 성향 설명이 정확하고 이해하기 쉬운지 확인합니다."
@@ -533,7 +533,7 @@ function ReviewGroup({ group }: { group: ContentReviewGroup }) {
       {canApprove ? (
         <div className={styles.approvalAction}>
           <div>
-            <strong>네 분야 확인이 모두 끝났어요</strong>
+            <strong>네 분야 검토 완료</strong>
             <span>이 문구를 게시 버전에 포함하려면 콘텐츠를 승인하세요.</span>
           </div>
           <AdminContentActions
@@ -651,14 +651,14 @@ function releaseStatusCopy(release: AdminContentRelease) {
   if (release.status === "approved") {
     return {
       description: "최종 확인 후 ‘고객에게 게시’를 누르면 앱에 적용됩니다.",
-      title: "게시할 준비가 끝났어요",
+      title: "게시 준비 완료",
       tone: "brand",
     };
   }
   if (release.status === "in_review") {
     return {
       description: "모든 문구의 네 분야 검토와 콘텐츠 승인을 완료해 주세요.",
-      title: "문구 검토를 진행하고 있어요",
+      title: "문구 검토 진행 중",
       tone: "warning",
     };
   }

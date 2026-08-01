@@ -14,16 +14,20 @@ export type AdminOverviewData = {
     activeMembers: number | null;
     completedResearch: number | null;
     contentReleases: number | null;
+    customerFeedback: number | null;
     eventEntries: number | null;
     newMembers: number | null;
     pendingPosts: number | null;
+    qualitySignals: number | null;
     queuedReports: number | null;
+    reportFeedback: number | null;
     researchReviews: number | null;
   };
   event: {
     drawCompleted: boolean;
     winnerCount: number;
   };
+  generatedAt: string;
   unavailableModules: string[];
 };
 
@@ -61,6 +65,29 @@ export async function readAdminOverview(
       "게시물",
     ),
     countOpenCommunityReports(client),
+    count(
+      client
+        .from("product_feedback")
+        .select("id", { count: "exact", head: true })
+        .in("status", ["received", "reviewing"]),
+      "고객 의견",
+    ),
+    count(
+      client
+        .schema("assessment")
+        .from("quality_observation_review_summary")
+        .select("assessment_slug", { count: "exact", head: true })
+        .in("priority", ["high", "medium"]),
+      "검사 품질",
+    ),
+    count(
+      client
+        .schema("report")
+        .from("core_result_feedback")
+        .select("id", { count: "exact", head: true })
+        .in("status", ["received", "reviewing"]),
+      "결과 문장",
+    ),
     count(
       client
         .from("research_gate_c_session")
@@ -118,15 +145,19 @@ export async function readAdminOverview(
       newMembers: queries[1].value,
       pendingPosts: queries[2].value,
       queuedReports: queries[3].value,
-      completedResearch: queries[4].value,
-      researchReviews: queries[5].value,
-      eventEntries: queries[6].value,
-      contentReleases: queries[7].value,
+      customerFeedback: queries[4].value,
+      qualitySignals: queries[5].value,
+      reportFeedback: queries[6].value,
+      completedResearch: queries[7].value,
+      researchReviews: queries[8].value,
+      eventEntries: queries[9].value,
+      contentReleases: queries[10].value,
     },
     event: {
       drawCompleted: Boolean(drawResponse.data),
       winnerCount: campaign.publicCampaign.winnerCount,
     },
+    generatedAt: new Date().toISOString(),
     unavailableModules,
   };
 }

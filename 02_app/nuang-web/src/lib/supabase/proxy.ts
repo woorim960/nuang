@@ -3,14 +3,23 @@ import { type NextRequest, NextResponse } from "next/server";
 import { supabaseAuthCookieOptions } from "@/lib/supabase/auth-session";
 import { getSupabasePublicEnv } from "@/lib/supabase/env";
 
-export async function refreshSupabaseAuthSession(request: NextRequest) {
+export async function refreshSupabaseAuthSession(
+  request: NextRequest,
+  forwardedRequestHeaders?: Headers,
+) {
   const env = getSupabasePublicEnv();
+  const createResponse = () =>
+    NextResponse.next({
+      request: {
+        headers: forwardedRequestHeaders ?? request.headers,
+      },
+    });
 
   if (!env) {
-    return NextResponse.next({ request });
+    return createResponse();
   }
 
-  let response = NextResponse.next({ request });
+  let response = createResponse();
 
   const supabase = createServerClient(env.url, env.anonKey, {
     cookieOptions: supabaseAuthCookieOptions,
@@ -23,7 +32,7 @@ export async function refreshSupabaseAuthSession(request: NextRequest) {
           request.cookies.set(name, value);
         });
 
-        response = NextResponse.next({ request });
+        response = createResponse();
 
         cookiesToSet.forEach(({ name, options, value }) => {
           response.cookies.set(name, value, options);
