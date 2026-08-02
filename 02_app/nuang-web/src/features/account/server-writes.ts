@@ -1,4 +1,4 @@
-import { createHmac, randomBytes } from "node:crypto";
+import { createHmac, randomBytes, randomUUID } from "node:crypto";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { z } from "zod";
 import {
@@ -28,6 +28,7 @@ import {
   isRequiredConsentComplete,
   type ConsentDraft,
 } from "@/features/consent/consent-draft";
+import { buildTrustedOAuthIdentities } from "@/features/auth/oauth-identity-policy";
 import { getAppOrigin } from "@/lib/supabase/env";
 import { getSupabaseServiceEnv } from "@/lib/supabase/service";
 
@@ -353,63 +354,63 @@ export function hashShareToken(token: string, pepper: string) {
   return createHmac("sha256", pepper).update(token).digest("hex");
 }
 
-export async function ensureAccountForUser(client: ServiceClient, user: User) {
-  const existing = await client
-    .schema("identity")
-    .from("auth_identity")
-    .select("account_id")
-    .eq("supabase_user_id", user.id)
-    .is("revoked_at", null)
-    .order("provider_linked_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+export async function ensureAccountForUser(
+  client: ServiceClient,
+  user: User,
+  options: { auditEvent?: boolean } = {},
+) {
+  const trustedIdentities = buildTrustedOAuthIdentities(user);
 
-  if (existing.error) {
-    return { ok: false as const };
-  }
-
-  if (existing.data) {
+  if (!trustedIdentities.ok) {
     return {
-      accountId: (existing.data as { account_id: string }).account_id,
-      ok: true as const,
+      code: trustedIdentities.code,
+      ok: false as const,
     };
   }
 
-  const accountResponse = await client
-    .schema("identity")
-    .from("account")
-    .insert({})
-    .select("id")
-    .single();
+  const resolver = await client.schema("identity").rpc(
+    "resolve_account_for_auth_user",
+    {
+      p_correlation_id: options.auditEvent ? randomUUID() : null,
+      p_identities: trustedIdentities.identities,
+      p_linked_via: "same_auth_user",
+      p_supabase_user_id: user.id,
+    },
+  );
 
-  if (accountResponse.error || !accountResponse.data) {
-    return { ok: false as const };
+  if (resolver.error || !Array.isArray(resolver.data)) {
+    return { code: "resolver_failed" as const, ok: false as const };
   }
 
-  const accountId = (accountResponse.data as { id: string }).id;
-  const provider = getProvider(user);
-  const identityResponse = await client
-    .schema("identity")
-    .from("auth_identity")
-    .insert({
-      account_id: accountId,
-      last_login_at: new Date().toISOString(),
-      provider,
-      provider_subject: getProviderSubject(user, provider),
-      supabase_user_id: user.id,
-    })
-    .select("account_id")
-    .single();
+  const resolved = resolver.data[0] as
+    | {
+        account_id: string | null;
+        identities_synced: number;
+        resolution: "conflict" | "created" | "deleted" | "existing" | "synced";
+      }
+    | undefined;
 
-  if (identityResponse.error) {
-    return { ok: false as const };
+  if (!resolved?.account_id) {
+    return {
+      code:
+        resolved?.resolution === "conflict"
+          ? ("account_conflict" as const)
+          : resolved?.resolution === "deleted"
+            ? ("identity_deleted" as const)
+            : ("resolver_failed" as const),
+      ok: false as const,
+    };
   }
 
-  await writeContactProfile(client, accountId, user);
+  if (resolved.resolution === "created" || resolved.resolution === "synced") {
+    await writeContactProfile(client, resolved.account_id, user);
+  }
 
   return {
-    accountId,
+    accountId: resolved.account_id,
+    identitiesSynced: resolved.identities_synced,
     ok: true as const,
+    resolution: resolved.resolution,
   };
 }
 
@@ -502,29 +503,6 @@ async function writeContactProfile(
       updated_at: new Date().toISOString(),
     },
     { onConflict: "account_id" },
-  );
-}
-
-function getProvider(user: User) {
-  const provider =
-    stringValue(user.app_metadata?.provider) ??
-    stringValue(user.identities?.[0]?.provider) ??
-    "email";
-
-  if (provider === "google" || provider === "kakao" || provider === "naver") {
-    return provider;
-  }
-
-  return "email";
-}
-
-function getProviderSubject(user: User, provider: string) {
-  const identity =
-    user.identities?.find((item) => item.provider === provider) ??
-    user.identities?.[0];
-
-  return (
-    stringValue(identity?.id) ?? stringValue(identity?.identity_id) ?? user.id
   );
 }
 

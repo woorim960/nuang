@@ -1,0 +1,27 @@
+.assurance {
+  display: grid;
+  gap: 0.2rem;
+  margin-bottom: 1rem;
+  padding: 0.875rem 0;
+  border-block: 1px solid var(--nu-color-border-soft);
+}
+
+.assurance strong {
+  color: var(--nu-color-text-strong);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+  line-height: var(--nu-leading-label);
+}
+
+.assurance span {
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-label);
+  word-break: keep-all;
+}
+
+@media (max-width: 350px) {
+  .assurance {
+    margin-bottom: 0.875rem;
+  }
+}

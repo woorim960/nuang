@@ -35,36 +35,47 @@
   background: var(--nu-color-app-bg);
 }
 
-.header p {
+.header h1 {
   margin: 0;
   font-size: var(--nu-text-callout);
   font-weight: var(--nu-weight-bold);
   text-align: center;
 }
 
-.accountSection {
-  padding: 1.15rem;
-  border-bottom: 8px solid var(--nu-color-app-bg);
-}
-
 .protectionNote {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
-  gap: 0.65rem;
-  margin: 1rem 1.15rem 0;
-  padding: 0.85rem;
-  border: 1px solid var(--nu-community-100);
-  border-radius: 15px;
-  color: var(--nu-info-700);
-  background: var(--nu-community-50);
+  grid-template-columns: 38px minmax(0, 1fr);
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 1rem 0;
+  padding: 0.9rem;
+  border: 1px solid var(--nu-brand-100);
+  border-radius: 18px;
+  background: var(--nu-brand-50);
+}
+
+.protectionNote > span {
+  display: grid;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--nu-info-600);
+  background: var(--nu-color-surface);
+}
+
+.protectionNote strong {
+  display: block;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
 }
 
 .protectionNote p {
-  margin: 0;
+  margin: 0.2rem 0 0;
   color: var(--nu-neutral-600);
-  font-size: var(--nu-text-label);
-  line-height: var(--nu-leading-body-sm);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
   word-break: keep-all;
 }
 
@@ -74,13 +85,35 @@
 }
 
 .deleteLink {
-  display: flex;
-  min-height: 56px;
+  display: grid;
+  min-height: 66px;
+  grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  margin: 1rem 1.15rem 0;
+  gap: 1rem;
+  margin: 1rem 1rem 0;
   border-top: 1px solid var(--nu-color-border);
   color: var(--nu-color-danger);
+}
+
+.deleteLink > span {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.deleteLink strong {
   font-size: var(--nu-text-body-sm);
   font-weight: var(--nu-weight-semibold);
+}
+
+.deleteLink small {
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+}
+
+@media (max-width: 350px) {
+  .protectionNote,
+  .deleteLink {
+    margin-right: 0.875rem;
+    margin-left: 0.875rem;
+  }
 }

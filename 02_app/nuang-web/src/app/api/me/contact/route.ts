@@ -116,15 +116,15 @@ export async function PATCH(request: Request) {
   if (!saved.ok) {
     if (saved.code === "email_in_use") {
       return contactFailure(
-        saved.code,
-        "이미 다른 뉴앙 계정에 등록된 이메일이에요.",
+        "contact_unavailable",
+        "이 연락처는 지금 저장할 수 없어요. 입력한 내용을 다시 확인해 주세요.",
         409,
       );
     }
     if (saved.code === "mobile_phone_in_use") {
       return contactFailure(
-        saved.code,
-        "이미 다른 뉴앙 계정에 등록된 번호예요.",
+        "contact_unavailable",
+        "이 연락처는 지금 저장할 수 없어요. 입력한 내용을 다시 확인해 주세요.",
         409,
       );
     }

@@ -437,7 +437,6 @@ export function CommunityProfileScreen({
           <>
             <nav aria-label="내 프로필 바로가기" className={styles.myShortcuts}>
               <Link href="/my/reports">내 성향 상세</Link>
-              <Link href="/feed/perspectives?from=my">놀이터 기록</Link>
               <Link href="/my/events">참여한 이벤트</Link>
               <Link href="/my/feedback?from=%2Fmy">의견 보내기</Link>
             </nav>

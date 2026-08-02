@@ -17,6 +17,13 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
   listLocalAttempts: vi.fn(async () => myOverviewMocks.localAttempts),
 }));
 
+vi.mock("@/features/assessment/assessment-account-sync", () => ({
+  synchronizeAccountAssessmentAttempts: vi.fn(async () => ({
+    attempts: [],
+    status: "unauthenticated",
+  })),
+}));
+
 vi.mock("@/lib/supabase/browser", () => ({
   createBrowserSupabaseClient: () =>
     myOverviewMocks.authUser

@@ -9,6 +9,7 @@ import {
   deleteLocalAttempt,
   listLocalAttempts,
 } from "@/features/assessment/assessment-storage";
+import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import { CoreResultReportTemplate } from "./CoreResultReportTemplate";
 import type {
@@ -41,6 +42,7 @@ export function MyLatestCoreReportView() {
     setFallbackOpen(false);
     setDeleteState("idle");
 
+    await synchronizeAccountAssessmentAttempts();
     const [localRead, accountRead] = await Promise.all([
       listLocalAttempts()
         .then((attempts) => ({ attempts, state: "ready" as const }))

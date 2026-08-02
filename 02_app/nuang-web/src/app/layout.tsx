@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { GlobalRouteTransition } from "@/components/navigation/GlobalRouteTransition";
+import { AssessmentSyncCoordinator } from "@/features/assessment/AssessmentSyncCoordinator";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -19,6 +20,7 @@ export default function RootLayout({
         <Suspense fallback={null}>
           <GlobalRouteTransition />
         </Suspense>
+        <AssessmentSyncCoordinator />
         {children}
       </body>
     </html>

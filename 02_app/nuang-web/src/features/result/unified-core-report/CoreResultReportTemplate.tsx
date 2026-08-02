@@ -4,6 +4,7 @@ import {
   ArrowLeft,
   ArrowRight,
   ChevronDown,
+  RotateCcw,
   Share2,
   Trash2,
 } from "lucide-react";
@@ -26,6 +27,14 @@ import {
 } from "@/features/nuang-code/candidate-profile-names";
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import { ReportShareSheet } from "@/features/share/ReportShareSheet";
+import { AssessmentRestartSheet } from "@/features/assessment/AssessmentRestartSheet";
+import {
+  createFreshLocalAttempt,
+  listLocalAttempts,
+} from "@/features/assessment/assessment-storage";
+import { queueAccountAssessmentAttemptSync } from "@/features/assessment/assessment-account-sync";
+import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
+import { candidateQuickCoreAssessment } from "@/features/assessment/candidate-quick-core-seed";
 import {
   buildCoreReportShareContent,
   type ReportShareContent,
@@ -92,6 +101,9 @@ export function CoreResultReportTemplate({
   surface,
 }: CoreResultReportTemplateProps) {
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isRestartOpen, setIsRestartOpen] = useState(false);
+  const [isRestarting, setIsRestarting] = useState(false);
+  const [hasActiveRestartAttempt, setHasActiveRestartAttempt] = useState(false);
   const [selectedShareContent, setSelectedShareContent] =
     useState<ReportShareContent | null>(null);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
@@ -127,6 +139,9 @@ export function CoreResultReportTemplate({
   const resolvedSecondary =
     secondaryAction ??
     (isOwner ? { href: "/home", label: "다른 검사 둘러보기" } : null);
+  const heroSummary = content.heroSummary
+    ? formatHeroSummary(content.heroSummary, model.result.code)
+    : null;
   const shareContent = buildCoreReportShareContent({
     code: model.result.code,
     highlights: content.overview
@@ -135,9 +150,15 @@ export function CoreResultReportTemplate({
     profileName: model.result.currentProfileName,
     resultLabel: kindLabel,
     summary:
-      content.heroSummary ??
+      heroSummary ??
       "이번 답에서 더 자주 나타난 다섯 가지 성향 방향을 정리했어요.",
   });
+  const restartAssessment = isPrecision
+    ? candidateFullCoreAssessment
+    : candidateQuickCoreAssessment;
+  const restartHref = isPrecision
+    ? "/assessments/nu-core-full?from=home&backTo=%2Fhome&returnTo=%2Fhome"
+    : "/assessments/nu-core-quick?returnTo=%2Fhome";
   const navigationItems = useMemo(
     () =>
       buildReportNavigationItems({
@@ -163,6 +184,36 @@ export function CoreResultReportTemplate({
       active = false;
     };
   }, [openShareOnMount, shareEnabled]);
+
+  async function openRestartSheet() {
+    const attempts = await listLocalAttempts().catch(() => []);
+    setHasActiveRestartAttempt(
+      attempts.some(
+        (attempt) =>
+          attempt.assessmentId === restartAssessment.assessmentId &&
+          attempt.releaseId === restartAssessment.releaseId &&
+          attempt.state === "in_progress",
+      ),
+    );
+    setIsRestartOpen(true);
+  }
+
+  async function restartFromBeginning() {
+    if (isRestarting) return;
+    setIsRestarting(true);
+
+    try {
+      const freshAttempt = await createFreshLocalAttempt(
+        restartAssessment,
+        "/home",
+      );
+      queueAccountAssessmentAttemptSync(freshAttempt);
+      setIsRestartOpen(false);
+      window.location.assign(restartHref);
+    } finally {
+      setIsRestarting(false);
+    }
+  }
 
   if (model.completeness.state === "unsupported") {
     return <CoreResultUnavailableState backHref={backHref} />;
@@ -217,7 +268,11 @@ export function CoreResultReportTemplate({
               className={styles.code}
             >
               {model.result.code.split("").map((letter, index) => (
-                <span aria-hidden="true" key={`${letter}-${index}`}>
+                <span
+                  aria-hidden="true"
+                  data-code-position={index + 1}
+                  key={`${letter}-${index}`}
+                >
                   {letter}
                 </span>
               ))}
@@ -225,10 +280,8 @@ export function CoreResultReportTemplate({
             <h1 aria-label={content.profileAccessibleName}>
               {model.result.currentProfileName}
             </h1>
-            {content.heroSummary ? (
-              <p className={styles.heroSummary}>
-                {formatGuideText(content.heroSummary)}
-              </p>
+            {heroSummary ? (
+              <p className={styles.heroSummary}>{heroSummary}</p>
             ) : null}
             {isOwner ? (
               <p className={styles.completedAt}>
@@ -565,23 +618,43 @@ export function CoreResultReportTemplate({
           ) : null}
         </section>
 
-        {isOwner && onDelete ? (
+        {isOwner && (onDelete || surface !== "profile") ? (
           <details className={styles.management}>
             <summary>
               <span>결과 관리</span>
               <ChevronDown aria-hidden="true" size={19} strokeWidth={1.8} />
             </summary>
             <div>
-              <p>삭제하면 이 결과와 연결된 공유 주소를 다시 열 수 없어요.</p>
+              <p>
+                다시 검사해도 이 결과는 내 기록에 그대로 남아요. 새 답으로
+                새로운 리포트를 만들 수 있어요.
+              </p>
               <button
-                aria-busy={deletePending}
-                disabled={deletePending}
-                onClick={onDelete}
+                className={styles.restartButton}
+                onClick={() => void openRestartSheet()}
                 type="button"
               >
-                <Trash2 aria-hidden="true" size={16} strokeWidth={1.8} />
-                {deletePending ? "삭제 중" : "이 결과 삭제"}
+                <RotateCcw aria-hidden="true" size={16} strokeWidth={1.8} />
+                {isPrecision
+                  ? "정밀 성향 검사 다시하기"
+                  : "첫 성향 검사 다시하기"}
               </button>
+              {onDelete ? (
+                <>
+                  <p className={styles.deleteGuide}>
+                    삭제하면 이 결과와 연결된 공유 주소를 다시 열 수 없어요.
+                  </p>
+                  <button
+                    aria-busy={deletePending}
+                    disabled={deletePending}
+                    onClick={onDelete}
+                    type="button"
+                  >
+                    <Trash2 aria-hidden="true" size={16} strokeWidth={1.8} />
+                    {deletePending ? "삭제 중" : "이 결과 삭제"}
+                  </button>
+                </>
+              ) : null}
               {deleteError ? <p role="alert">{deleteError}</p> : null}
             </div>
           </details>
@@ -604,6 +677,20 @@ export function CoreResultReportTemplate({
           }}
           originalReportKey={originalReportKey}
           returnFocusRef={activeShareButtonRef}
+        />
+      ) : null}
+
+      {isRestartOpen ? (
+        <AssessmentRestartSheet
+          assessmentLabel={isPrecision ? "정밀 성향 검사" : "첫 성향 검사"}
+          hasActiveAttempt={hasActiveRestartAttempt}
+          isWorking={isRestarting}
+          onClose={() => setIsRestartOpen(false)}
+          onRestart={() => void restartFromBeginning()}
+          onResume={() => {
+            setIsRestartOpen(false);
+            window.location.assign(restartHref);
+          }}
         />
       ) : null}
     </main>
@@ -1307,4 +1394,21 @@ export function formatGuideText(value?: string | null) {
     .replace(/요$/, "요.")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+/**
+ * 완료 시점의 가이드 원문은 바꾸지 않고, 결과 상단에서만 코드나 편집용
+ * 설명을 덜어 내 한국어 사용자가 바로 이해할 수 있는 문장으로 보여 줍니다.
+ */
+export function formatHeroSummary(value: string, code: string) {
+  const escapedCode = code.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const customerFacingText = value
+    .replace(new RegExp(`^\\s*${escapedCode}\\s*(?:은|는)\\s*`), "")
+    .replace(
+      /\s*이런 흐름이 함께 나타나\s*[\u2018'][^\u2019']+[\u2019'](?:이)?라는 별칭으로 설명해요\.?\s*$/,
+      "",
+    )
+    .replace(/별칭/g, "이름");
+
+  return formatGuideText(customerFacingText);
 }

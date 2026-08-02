@@ -33,6 +33,14 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
   saveLocalAttemptReturnDestination: mocks.saveLocalAttemptReturnDestination,
 }));
 
+vi.mock("@/features/assessment/assessment-account-sync", () => ({
+  queueAccountAssessmentAttemptSync: vi.fn(),
+  synchronizeAccountAssessmentAttempts: vi.fn(async () => ({
+    attempts: [],
+    status: "unauthenticated",
+  })),
+}));
+
 vi.mock("@/features/assessment/precision-entry", async (importOriginal) => {
   const original =
     await importOriginal<

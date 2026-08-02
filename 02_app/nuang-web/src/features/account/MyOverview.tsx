@@ -17,6 +17,7 @@ import type { NuangCharacterMotif } from "@/components/character/nuang-character
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { readJsonResponse } from "@/features/account/response-json";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
+import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { selectRepresentativeCoreResult } from "@/features/result/unified-core-report/core-result-report-selector";
@@ -79,6 +80,7 @@ export function MyOverview({
     let isMounted = true;
 
     async function load() {
+      await synchronizeAccountAssessmentAttempts();
       const [nextLocalAttempts, nextAccountResults] = await Promise.all([
         listLocalAttempts(),
         listAccountResults(),

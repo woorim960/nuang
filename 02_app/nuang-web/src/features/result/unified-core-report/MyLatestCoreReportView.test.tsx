@@ -14,6 +14,13 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
   listLocalAttempts: vi.fn().mockResolvedValue([]),
 }));
 
+vi.mock("@/features/assessment/assessment-account-sync", () => ({
+  synchronizeAccountAssessmentAttempts: vi.fn(async () => ({
+    attempts: [],
+    status: "unauthenticated",
+  })),
+}));
+
 vi.mock("./validated-core-result-candidates", () => ({
   collectValidatedCoreResultCandidates: vi.fn(() => ({
     accountReadState: "not_requested",

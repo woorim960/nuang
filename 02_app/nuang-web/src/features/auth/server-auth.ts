@@ -52,21 +52,31 @@ export async function requireAuthenticatedUser() {
       ),
     };
   }
-  if (access.status === "suspended" || access.status === "deleted") {
+  if (
+    access.status === "conflict" ||
+    access.status === "deleted" ||
+    access.status === "merged" ||
+    access.status === "suspended"
+  ) {
+    const isSuspended = access.status === "suspended";
+    const isConflict = access.status === "conflict";
     return {
       ok: false as const,
       response: NextResponse.json(
         {
-          error:
-            access.status === "suspended"
-              ? "account_suspended"
+          error: isSuspended
+            ? "account_suspended"
+            : isConflict
+              ? "identity_conflict"
               : "account_deleted",
           message:
-            access.status === "suspended"
+            isSuspended
               ? "운영 정책에 따라 계정 활동이 일시 정지되었습니다."
+              : isConflict
+                ? "로그인 연결 상태를 안전하게 확인하고 있어요. 잠시 후 다시 시도해 주세요."
               : "사용할 수 없는 계정입니다.",
         },
-        { status: 403 },
+        { status: isConflict ? 409 : 403 },
       ),
     };
   }

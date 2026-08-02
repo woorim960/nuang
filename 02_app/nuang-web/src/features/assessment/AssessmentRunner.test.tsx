@@ -56,6 +56,14 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
   startLocalAdaptiveFollowUp: vi.fn(),
 }));
 
+vi.mock("@/features/assessment/assessment-account-sync", () => ({
+  queueAccountAssessmentAttemptSync: vi.fn(),
+  synchronizeAccountAssessmentAttempts: vi.fn(async () => ({
+    attempts: [],
+    status: "unauthenticated",
+  })),
+}));
+
 describe("AssessmentRunner", () => {
   beforeEach(() => {
     const attempt = createAttempt(quickCoreAssessment);
@@ -392,6 +400,36 @@ describe("AssessmentRunner", () => {
         }),
       );
     });
+  });
+
+  it("resumes a stored submitting state with the same completion request", async () => {
+    const attempt = createAttempt(candidateQuickCoreAssessment, {
+      answeredItemCount: candidateQuickCoreAssessment.items.length,
+      currentIndex: candidateQuickCoreAssessment.items.length - 1,
+    });
+    const submittingAttempt: LocalAssessmentAttempt = {
+      ...attempt,
+      completionRequestId: "completion_resume_saved",
+      completionStatus: "submitting",
+      responseSnapshotHash: "saved_response_snapshot",
+    };
+    vi.mocked(getOrCreateLocalAttempt).mockResolvedValue(submittingAttempt);
+    vi.mocked(completeLocalAttempt).mockReturnValue(
+      new Promise<LocalAssessmentAttempt>(() => undefined),
+    );
+
+    render(<AssessmentRunner assessment={candidateQuickCoreAssessment} />);
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "첫 성향 결과를 준비하고 있어요",
+      }),
+    ).toBeInTheDocument();
+    expect(beginLocalAttemptCompletion).toHaveBeenCalledWith(
+      submittingAttempt,
+      "completion_resume_saved",
+      expect.any(String),
+    );
   });
 
   it("reveals the completion surface after 300ms and holds ready for 400ms", async () => {

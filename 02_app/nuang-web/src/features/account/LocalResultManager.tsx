@@ -26,6 +26,7 @@ import {
 } from "@/features/assessment/free-topic-storage";
 import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
+import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
 import { labAssessments } from "@/features/lab/lab-assessments";
 import {
   deleteLabResult,
@@ -124,6 +125,7 @@ export function LocalResultManager() {
     let isMounted = true;
 
     async function loadResults() {
+      await synchronizeAccountAssessmentAttempts();
       const [nextCoreAttempts, nextAccountResults, nextTopicResults] =
         await Promise.all([
           listLocalAttempts(),

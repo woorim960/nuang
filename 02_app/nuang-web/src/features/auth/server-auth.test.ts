@@ -69,4 +69,19 @@ describe("requireAuthenticatedUser", () => {
 
     expect(result.ok).toBe(true);
   });
+
+  it("fails closed when one auth user is mapped to multiple accounts", async () => {
+    mocks.readAccountAccessStatus.mockResolvedValue({
+      ok: true,
+      status: "conflict",
+    });
+
+    const result = await requireAuthenticatedUser();
+
+    expect(result.ok).toBe(false);
+    expect(!result.ok && result.response.status).toBe(409);
+    await expect(!result.ok && result.response.json()).resolves.toMatchObject({
+      error: "identity_conflict",
+    });
+  });
 });

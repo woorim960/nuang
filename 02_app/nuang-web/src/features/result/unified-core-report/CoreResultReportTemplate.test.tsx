@@ -2,10 +2,15 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { candidateFullScoringRelease } from "@/features/assessment/candidate-full-core-seed";
 import { candidateProfileNarrativeVersion } from "@/features/nuang-code/candidate-profile-names";
+import {
+  getPublishedTraitMapCustomerGuide,
+  getPublishedTraitMapCustomerGuideCodes,
+} from "@/features/nuang-code/trait-map-customer-guide-registry";
 import { precisionFacetInsightCopyVersion } from "@/features/result/precision-report-insights";
 import {
   CoreResultReportTemplate,
   formatGuideText,
+  formatHeroSummary,
 } from "./CoreResultReportTemplate";
 import type { CoreResultReportModel } from "./core-result-report-model";
 import {
@@ -27,6 +32,9 @@ describe("CoreResultReportTemplate", () => {
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "이번 답에서 특히 눈에 띈 모습" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "정밀 성향 검사 다시하기" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "내 다섯 글자 풀이" }),
@@ -93,6 +101,9 @@ describe("CoreResultReportTemplate", () => {
         name: "이번 답에서 특히 눈에 띈 모습",
       }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "첫 성향 검사 다시하기" }),
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "생활 속의 나" }),
     ).toBeInTheDocument();
@@ -214,7 +225,9 @@ describe("CoreResultReportTemplate", () => {
       within(dialog).getByText(model.result.currentProfileName),
     ).toBeInTheDocument();
     expect(
-      within(dialog).getAllByText(/사람이 움직이게 만드는 연결력|낯선 사람 사이에 공통점/).length,
+      within(dialog).getAllByText(
+        /사람이 움직이게 만드는 연결력|낯선 사람 사이에 공통점/,
+      ).length,
     ).toBeGreaterThan(0);
     expect(
       within(dialog).queryByText("이번 답에서 선명한 방향"),
@@ -242,6 +255,54 @@ describe("CoreResultReportTemplate", () => {
     ).toBe(
       "깊이 생각해요. 새로운 가능성을 찾아봐요. 다섯 가지 성향이 함께 움직여요.",
     );
+  });
+
+  it("상단 설명에서 코드와 편집용 별칭 문구를 덜어 낸다", () => {
+    expect(
+      formatHeroSummary(
+        "INGMC는 혼자 생각을 정리하며 회복해요. 새로운 가능성을 더 찾아봐요. 이런 흐름이 함께 나타나 ‘새 가능성을 찾는 탐험가’라는 별칭으로 설명해요.",
+        "INGMC",
+      ),
+    ).toBe("혼자 생각을 정리하며 회복해요. 새로운 가능성을 더 찾아봐요.");
+  });
+
+  it("게시된 32개 코드의 상단 설명을 쉽게 읽히는 문장으로 정리한다", () => {
+    const codes = getPublishedTraitMapCustomerGuideCodes();
+
+    expect(codes).toHaveLength(32);
+    for (const code of codes) {
+      const guide = getPublishedTraitMapCustomerGuide(code);
+      const summary = formatHeroSummary(guide!.heroSummary, code);
+
+      expect(summary, code).toBeTruthy();
+      expect(summary, code).not.toMatch(new RegExp(`^${code}(?:은|는)`));
+      expect(summary, code).not.toMatch(/별칭|이런 흐름이 함께 나타나/);
+    }
+  });
+
+  it("다섯 글자를 같은 순서의 독립된 셀로 렌더링한다", () => {
+    const model = createModel("full");
+    model.result.code = "INGMC";
+    model.result.currentProfileName = "새 가능성을 찾는 탐험가";
+
+    render(<CoreResultReportTemplate model={model} surface="completion" />);
+
+    const code = screen.getByLabelText("뉴앙 코드 INGMC");
+    expect(
+      Array.from(code.querySelectorAll("[data-code-position]")).map(
+        (letter) => [
+          letter.getAttribute("data-code-position"),
+          letter.textContent,
+        ],
+      ),
+    ).toEqual([
+      ["1", "I"],
+      ["2", "N"],
+      ["3", "G"],
+      ["4", "M"],
+      ["5", "C"],
+    ]);
+    expect(screen.queryByText(/별칭/)).not.toBeInTheDocument();
   });
 });
 

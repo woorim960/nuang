@@ -280,19 +280,16 @@ export async function confirmPrivateEmailVerification({
   }
 
   const verifiedAt = new Date().toISOString();
-  const verifiedContact = await client
-    .schema("identity")
-    .from("contact_profile")
-    .update({
-      email_status: "verified",
-      email_updated_at: verifiedAt,
-      email_verified_at: verifiedAt,
-      updated_at: verifiedAt,
-    })
-    .eq("account_id", accountId)
-    .eq("email_hash", row.email_hash)
-    .select("account_id")
-    .single();
+  const verifiedContact = await client.schema("identity").rpc(
+    "finalize_verified_account_identifier",
+    {
+      p_account_id: accountId,
+      p_kind: "email",
+      p_lookup_hmac: row.email_hash,
+      p_verification_method: "email_otp",
+      p_verified_at: verifiedAt,
+    },
+  );
   if (verifiedContact.error) {
     return { code: "verification_write_failed" as const, ok: false as const };
   }
@@ -307,6 +304,16 @@ export async function confirmPrivateEmailVerification({
     })
     .eq("id", challengeId)
     .eq("account_id", accountId);
+
+  if (verifiedContact.data === "existing_account_candidate") {
+    return {
+      code: "verified_identifier_conflict" as const,
+      ok: false as const,
+    };
+  }
+  if (verifiedContact.data !== "verified") {
+    return { code: "verification_write_failed" as const, ok: false as const };
+  }
 
   return {
     data: {

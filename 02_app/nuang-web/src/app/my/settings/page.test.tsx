@@ -14,10 +14,12 @@ describe("MySettingsPage", () => {
       "href",
       "/my/settings/visibility",
     );
-    expect(screen.getByRole("link", { name: /로그인 계정/ })).toHaveAttribute(
-      "href",
-      "/my/settings/account",
-    );
+    expect(
+      screen.getByRole("link", { name: /로그인 및 보안/ }),
+    ).toHaveAttribute("href", "/my/settings/account");
+    expect(
+      screen.getByRole("link", { name: /알림 및 마케팅/ }),
+    ).toHaveAttribute("href", "/my/settings/notifications");
     expect(screen.getByRole("link", { name: /차단한 프로필/ })).toHaveAttribute(
       "href",
       "/my/settings/blocked",

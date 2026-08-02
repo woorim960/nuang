@@ -12,10 +12,6 @@ vi.mock("next/navigation", () => ({
   useRouter: () => navigationMock,
 }));
 
-vi.mock("@/features/account/PrivateContactEditor", () => ({
-  PrivateContactEditor: () => <section>비공개 정보</section>,
-}));
-
 const profile = {
   avatar: {
     alt: "여름 프로필",
@@ -65,6 +61,9 @@ describe("ProfileEditForm", () => {
       "120",
     );
     expect(screen.getByRole("button", { name: "저장" })).toBeDisabled();
+    expect(screen.queryByText("비공개 정보")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("이메일")).not.toBeInTheDocument();
+    expect(screen.queryByLabelText("휴대전화번호")).not.toBeInTheDocument();
 
     fireEvent.change(nameInput, { target: { value: "새여름" } });
     fireEvent.click(screen.getByRole("button", { name: "저장" }));

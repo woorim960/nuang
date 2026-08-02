@@ -49,6 +49,10 @@ import {
   saveLocalProgress,
   startLocalAdaptiveFollowUp,
 } from "@/features/assessment/assessment-storage";
+import {
+  queueAccountAssessmentAttemptSync,
+  synchronizeAccountAssessmentAttempts,
+} from "@/features/assessment/assessment-account-sync";
 import { responseOptions } from "@/features/assessment/quick-core-seed";
 import type {
   AssessmentAnswer,
@@ -115,12 +119,15 @@ export function AssessmentRunner({
     useState<QuestionDirection>("forward");
   const [completionState, setCompletionState] =
     useState<AssessmentCompletionViewState>("preparing");
+  const startCompletionRef = useRef(startCompletion);
+  startCompletionRef.current = startCompletion;
 
   useEffect(() => {
     let isMounted = true;
 
     async function loadAttempt() {
       try {
+        await synchronizeAccountAssessmentAttempts();
         const reusableQuickAttempt =
           assessment.mode === "full"
             ? await getLatestCompletedAttempt("nu-core-quick")
@@ -177,6 +184,7 @@ export function AssessmentRunner({
         }
 
         if (!isMounted) return;
+        queueAccountAssessmentAttemptSync(nextAttempt);
         persistedAttemptRef.current = nextAttempt;
         setAttempt(nextAttempt);
         if (nextAttempt.adaptiveStatus === "intro") {
@@ -195,7 +203,9 @@ export function AssessmentRunner({
           completionRequestIdRef.current =
             nextAttempt.completionRequestId ?? null;
         }
-        if (nextAttempt.completionStatus === "insufficient_evidence") {
+        if (nextAttempt.completionStatus === "submitting") {
+          void startCompletionRef.current(nextAttempt, true);
+        } else if (nextAttempt.completionStatus === "insufficient_evidence") {
           setCompletionState(
             needsResponseReview
               ? "response-review"
@@ -321,6 +331,7 @@ export function AssessmentRunner({
       : null;
 
   function setPersistedAttempt(nextAttempt: LocalAssessmentAttempt) {
+    queueAccountAssessmentAttemptSync(nextAttempt);
     persistedAttemptRef.current = nextAttempt;
     setAttempt(
       pendingAnswer
@@ -412,6 +423,7 @@ export function AssessmentRunner({
         );
 
         if (completionRunIdRef.current !== runId) return;
+        queueAccountAssessmentAttemptSync(adaptiveAttempt);
         clearCompletionTimers();
         completionRequestIdRef.current = null;
         persistedAttemptRef.current = adaptiveAttempt;
@@ -437,6 +449,7 @@ export function AssessmentRunner({
       if (completionRunIdRef.current !== runId) return;
 
       persistedAttemptRef.current = submittingAttempt;
+      queueAccountAssessmentAttemptSync(submittingAttempt);
       completionRequestIdRef.current =
         submittingAttempt.completionRequestId ?? requestedCompletionId;
 
@@ -480,6 +493,7 @@ export function AssessmentRunner({
 
       clearCompletionTimers();
       persistedAttemptRef.current = completed;
+      queueAccountAssessmentAttemptSync(completed);
       setAttempt(completed);
 
       if (readiness.evidenceStatus === "insufficient_evidence") {
@@ -543,6 +557,7 @@ export function AssessmentRunner({
 
       try {
         const nextAttempt = await beginLocalAdaptiveFollowUp(sourceAttempt);
+        queueAccountAssessmentAttemptSync(nextAttempt);
         persistedAttemptRef.current = nextAttempt;
         setAttempt(nextAttempt);
         setSurface("question");
@@ -565,6 +580,7 @@ export function AssessmentRunner({
 
       try {
         const nextAttempt = await reopenLocalAttemptForReview(sourceAttempt, 0);
+        queueAccountAssessmentAttemptSync(nextAttempt);
         persistedAttemptRef.current = nextAttempt;
         setAttempt(nextAttempt);
         setCompletionState("preparing");
@@ -598,6 +614,7 @@ export function AssessmentRunner({
 
     try {
       const nextAttempt = await saveLocalProgress(sourceAttempt, reviewIndex);
+      queueAccountAssessmentAttemptSync(nextAttempt);
       persistedAttemptRef.current = nextAttempt;
       setAttempt(nextAttempt);
     } catch {
@@ -654,6 +671,7 @@ export function AssessmentRunner({
         answer,
         currentAttempt.currentIndex,
       );
+      queueAccountAssessmentAttemptSync(nextAttempt);
       persistedAttemptRef.current = nextAttempt;
       setAttempt(nextAttempt);
       setPendingAnswer(null);
@@ -680,6 +698,7 @@ export function AssessmentRunner({
           pendingAnswer,
           currentAttempt.currentIndex,
         );
+        queueAccountAssessmentAttemptSync(nextAttempt);
         persistedAttemptRef.current = nextAttempt;
         setAttempt(nextAttempt);
         setPendingAnswer(null);
@@ -716,6 +735,7 @@ export function AssessmentRunner({
         action.status,
         action.currentIndex,
       );
+      queueAccountAssessmentAttemptSync(nextAttempt);
       persistedAttemptRef.current = nextAttempt;
       setAttempt(nextAttempt);
       setPendingMilestone(null);
@@ -805,6 +825,7 @@ export function AssessmentRunner({
         persistedAttempt,
         currentAttempt.currentIndex - 1,
       );
+      queueAccountAssessmentAttemptSync(nextAttempt);
       persistedAttemptRef.current = nextAttempt;
       setAttempt(
         pendingAnswer

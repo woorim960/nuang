@@ -331,6 +331,9 @@ describe("CommunityProfileScreen", () => {
       "/my/feedback?from=%2Fmy",
     );
     expect(
+      screen.queryByRole("link", { name: "놀이터 기록" }),
+    ).not.toBeInTheDocument();
+    expect(
       screen.queryByRole("link", { name: "내 리포트" }),
     ).not.toBeInTheDocument();
     expect(screen.queryByText("내 프로필 관리")).not.toBeInTheDocument();

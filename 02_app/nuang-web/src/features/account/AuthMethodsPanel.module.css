@@ -1,0 +1,336 @@
+.section {
+  padding: 1.35rem 1rem 1.2rem;
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  background: var(--nu-color-surface);
+}
+
+.sectionHeading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sectionHeading p {
+  margin: 0 0 0.2rem;
+  color: var(--nu-info-500);
+  font-size: 0.65rem;
+  font-weight: var(--nu-weight-bold);
+  letter-spacing: 0.12em;
+}
+
+.sectionHeading h2 {
+  margin: 0;
+  font-size: var(--nu-text-body-lg);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.025em;
+}
+
+.methodCount {
+  flex: none;
+  padding: 0.34rem 0.58rem;
+  border: 1px solid var(--nu-brand-100);
+  border-radius: 999px;
+  color: var(--nu-info-600);
+  background: var(--nu-brand-50);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.sectionDescription {
+  margin: 0.45rem 0 1.1rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
+}
+
+.methodList {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.methodCard {
+  display: grid;
+  min-height: 82px;
+  grid-template-columns: 42px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 0.8rem;
+  border: 1px solid var(--nu-neutral-150);
+  border-radius: 18px;
+  background: var(--nu-neutral-0);
+  box-shadow: 0 7px 22px
+    color-mix(in srgb, var(--nu-neutral-900) 4%, transparent);
+}
+
+.providerLogo {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border: 1px solid var(--nu-neutral-150);
+  border-radius: 14px;
+  background: var(--nu-neutral-0);
+}
+
+.providerLogo svg {
+  width: 23px;
+  height: 23px;
+}
+
+.providerLogo[data-provider="kakao"] {
+  border-color: #f5dd00;
+  background: #fee500;
+}
+
+.providerLogo[data-provider="kakao"] svg {
+  width: 25px;
+  fill: #191919;
+}
+
+.methodCopy {
+  display: grid;
+  min-width: 0;
+  gap: 0.13rem;
+}
+
+.methodCopy strong {
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.methodMeta {
+  overflow: hidden;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.connectedStatus {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.22rem;
+  width: fit-content;
+  margin-top: 0.1rem;
+  color: var(--nu-color-success);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.connectButton {
+  display: inline-flex;
+  min-width: 70px;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0 0.7rem;
+  border: 1px solid var(--nu-brand-200);
+  border-radius: 13px;
+  color: var(--nu-info-600);
+  background: var(--nu-brand-50);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.unlinkButton {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 13px;
+  color: var(--nu-color-text-subtle);
+}
+
+.protectedIcon {
+  color: var(--nu-neutral-400);
+}
+
+.connectButton:disabled,
+.unlinkButton:disabled,
+.logoutButton:disabled {
+  opacity: 0.48;
+}
+
+.featureNotice,
+.notice {
+  margin: 0.8rem 0 0;
+  padding: 0.72rem 0.8rem;
+  border-radius: 13px;
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
+}
+
+.featureNotice {
+  color: var(--nu-color-text-muted);
+  background: var(--nu-neutral-75);
+}
+
+.notice[data-tone="success"] {
+  color: var(--nu-info-700);
+  background: var(--nu-brand-50);
+}
+
+.notice[data-tone="error"] {
+  color: var(--nu-reaction-600);
+  background: var(--nu-reaction-50);
+}
+
+.logoutButton {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.8rem;
+  padding: 0 0.45rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.skeleton {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.skeleton > span:not(.sr-only) {
+  min-height: 82px;
+  border-radius: 18px;
+  background: var(--nu-brand-50);
+  animation: auth-method-pulse 1.2s ease-in-out infinite alternate;
+}
+
+.spinner {
+  animation: auth-method-spin 800ms linear infinite;
+}
+
+.backdrop {
+  position: fixed;
+  z-index: 90;
+  inset: 0;
+  display: grid;
+  place-items: end center;
+  padding: 0.8rem;
+  background: var(--nu-color-overlay);
+  backdrop-filter: blur(2px);
+}
+
+.dialog {
+  width: min(100%, 406px);
+  padding: 1.2rem 1rem 1rem;
+  border-radius: 24px;
+  background: var(--nu-color-surface);
+  box-shadow: var(--nu-shadow-lg);
+  animation: auth-dialog-in 180ms ease-out both;
+}
+
+.dialogIcon {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 14px;
+  color: var(--nu-reaction-600);
+  background: var(--nu-reaction-50);
+}
+
+.dialog h3 {
+  margin: 0.9rem 0 0;
+  font-size: var(--nu-text-callout);
+}
+
+.dialog p {
+  margin: 0.4rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
+}
+
+.dialogActions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 1.1rem;
+}
+
+.dialogActions button {
+  min-height: 48px;
+  border-radius: 14px;
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.dialogActions button:first-child {
+  color: var(--nu-color-text-muted);
+  background: var(--nu-neutral-75);
+}
+
+.dialogActions button:last-child {
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-reaction-600);
+}
+
+.methodCard button:focus-visible,
+.logoutButton:focus-visible,
+.dialog button:focus-visible {
+  outline: 2px solid var(--nu-info-300);
+  outline-offset: 2px;
+}
+
+@keyframes auth-method-pulse {
+  from {
+    opacity: 0.52;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes auth-method-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes auth-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (max-width: 350px) {
+  .section {
+    padding-right: 0.875rem;
+    padding-left: 0.875rem;
+  }
+
+  .methodCard {
+    grid-template-columns: 38px minmax(0, 1fr) auto;
+    gap: 0.65rem;
+    padding: 0.72rem;
+  }
+
+  .providerLogo {
+    width: 38px;
+    height: 38px;
+  }
+
+  .methodMeta {
+    white-space: normal;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .skeleton > span,
+  .spinner,
+  .dialog {
+    animation-duration: 1ms;
+    animation-iteration-count: 1;
+  }
+}

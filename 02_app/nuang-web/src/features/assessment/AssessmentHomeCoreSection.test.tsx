@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import {
   AssessmentHomeCoreSection,
@@ -17,22 +17,52 @@ import { coreResultCopyVersion } from "@/features/result/report-copy";
 const coreMocks = vi.hoisted(() => ({
   accountResults: [] as AccountResultSummary[],
   attempts: [] as LocalAssessmentAttempt[],
+  createFreshLocalAttempt: vi.fn(async () => undefined),
+  listLocalAttempts: vi.fn(async () => [] as LocalAssessmentAttempt[]),
+  push: vi.fn(),
+  readClientAccountResults: vi.fn(async () => ({
+    results: [] as AccountResultSummary[],
+    state: "ready" as const,
+  })),
+  synchronizeAccountAssessmentAttempts: vi.fn<() => Promise<unknown>>(
+    async () => undefined,
+  ),
 }));
 
-vi.mock("@/components/character/NuangCharacter", () => ({
-  NuangCharacter: () => <span aria-label="뉴앙 캐릭터" />,
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: coreMocks.push }),
 }));
 
 vi.mock("@/features/account/client-account-results", () => ({
-  readClientAccountResults: vi.fn(async () => ({
-    results: coreMocks.accountResults,
-    state: "ready",
-  })),
+  readClientAccountResults: coreMocks.readClientAccountResults,
+}));
+
+vi.mock("@/features/assessment/assessment-account-sync", () => ({
+  synchronizeAccountAssessmentAttempts:
+    coreMocks.synchronizeAccountAssessmentAttempts,
 }));
 
 vi.mock("@/features/assessment/assessment-storage", () => ({
-  listLocalAttempts: vi.fn(async () => coreMocks.attempts),
+  createFreshLocalAttempt: coreMocks.createFreshLocalAttempt,
+  listLocalAttempts: coreMocks.listLocalAttempts,
 }));
+
+beforeEach(() => {
+  coreMocks.accountResults = [];
+  coreMocks.attempts = [];
+  coreMocks.createFreshLocalAttempt.mockClear();
+  coreMocks.listLocalAttempts.mockClear();
+  coreMocks.listLocalAttempts.mockImplementation(async () =>
+    Promise.resolve(coreMocks.attempts),
+  );
+  coreMocks.push.mockClear();
+  coreMocks.readClientAccountResults.mockClear();
+  coreMocks.readClientAccountResults.mockImplementation(async () =>
+    Promise.resolve({ results: coreMocks.accountResults, state: "ready" }),
+  );
+  coreMocks.synchronizeAccountAssessmentAttempts.mockClear();
+  coreMocks.synchronizeAccountAssessmentAttempts.mockResolvedValue(undefined);
+});
 
 describe("buildCoreJourneyState", () => {
   it("prioritizes an in-progress precision assessment over every result", () => {
@@ -45,8 +75,14 @@ describe("buildCoreJourneyState", () => {
       [createAccountResult("full")],
     );
 
-    expect(journey.cta).toBe("정밀 검사 이어하기");
+    expect(journey.cta).toBe("3번부터 이어하기");
     expect(journey.progress).toBe(50);
+    expect(journey).toMatchObject({
+      answeredCount: 2,
+      resumeOrdinal: 3,
+      resumeSurface: "question",
+      totalCount: 4,
+    });
     expect(journey.href).toContain("backTo=%2Fhome");
     expect(journey.href).toContain("returnTo=%2Fhome");
   });
@@ -60,7 +96,7 @@ describe("buildCoreJourneyState", () => {
       [],
     );
 
-    expect(journey.cta).toBe("첫 성향 검사 이어하기");
+    expect(journey.cta).toBe("4번부터 이어하기");
     expect(journey.href).toBe("/assessments/nu-core-quick?returnTo=%2Fhome");
     expect(journey.progress).toBe(75);
   });
@@ -74,6 +110,11 @@ describe("buildCoreJourneyState", () => {
     expect(journey.cta).toBe("내 성향 결과 보기");
     expect(journey.eyebrow).toBe("정밀 성향 검사 완료");
     expect(journey.href).toBe("/results/account/account-full?backTo=%2Fhome");
+    expect(journey.secondaryAction).toMatchObject({
+      assessmentKind: "full",
+      label: "정밀 검사 다시하기",
+      type: "restart",
+    });
   });
 
   it("moves a first-result user into precision with the home return contract", () => {
@@ -94,6 +135,95 @@ describe("buildCoreJourneyState", () => {
       title: "3분이면 내 성향의 첫 단서를 만나요",
     });
   });
+
+  it("describes midpoint, adaptive, and completion surfaces in everyday language", () => {
+    const midpoint = createAttempt(
+      "midpoint",
+      "nu-core-full",
+      "in_progress",
+      2,
+    );
+    midpoint.milestones = {
+      HALFWAY_BREAK_V1: {
+        contentVersion: "v1",
+        id: "HALFWAY_BREAK_V1",
+        shownAt: midpoint.updatedAt,
+        status: "shown",
+      },
+    };
+    expect(buildCoreJourneyState([midpoint], [])).toMatchObject({
+      cta: "계속 이어하기",
+      resumeSurface: "midpoint",
+      title: "중간 쉼표부터 이어가요",
+    });
+
+    const adaptiveIntro = createAttempt(
+      "adaptive-intro",
+      "nu-core-full",
+      "in_progress",
+      4,
+    );
+    adaptiveIntro.adaptiveItemIds = ["adaptive-1", "adaptive-2"];
+    adaptiveIntro.adaptiveStatus = "intro";
+    adaptiveIntro.currentIndex = 4;
+    expect(buildCoreJourneyState([adaptiveIntro], [])).toMatchObject({
+      cta: "확인 질문 이어가기",
+      resumeSurface: "adaptive_intro",
+      title: "마지막 확인 질문을 이어가요",
+    });
+
+    const adaptiveQuestion = {
+      ...adaptiveIntro,
+      adaptiveStatus: "in_progress" as const,
+      currentIndex: 5,
+      responses: {
+        ...adaptiveIntro.responses,
+        "adaptive-1": {
+          answeredAt: adaptiveIntro.updatedAt,
+          itemId: "adaptive-1",
+          value: 4 as const,
+        },
+      },
+    };
+    expect(buildCoreJourneyState([adaptiveQuestion], [])).toMatchObject({
+      cta: "확인 질문 2번부터 이어하기",
+      progress: 83,
+      resumeOrdinal: 2,
+      resumeSurface: "adaptive_question",
+      title: "확인 질문 2번부터 이어가요",
+    });
+
+    const completionPending = {
+      ...adaptiveIntro,
+      adaptiveStatus: undefined,
+      completionStatus: "submitting" as const,
+    };
+    expect(buildCoreJourneyState([completionPending], [])).toMatchObject({
+      cta: "결과 준비 이어가기",
+      resumeSurface: "completion_pending",
+      title: "답변은 모두 끝났어요",
+    });
+  });
+
+  it("never lets unknown responses push progress above 100 percent", () => {
+    const attempt = createAttempt(
+      "bounded-progress",
+      "nu-core-quick",
+      "in_progress",
+      4,
+    );
+    attempt.responses.unknown = {
+      answeredAt: attempt.updatedAt,
+      itemId: "unknown",
+      value: 5,
+    };
+
+    expect(buildCoreJourneyState([attempt], [])).toMatchObject({
+      answeredCount: 4,
+      progress: 100,
+      totalCount: 4,
+    });
+  });
 });
 
 describe("AssessmentHomeCoreSection", () => {
@@ -112,6 +242,97 @@ describe("AssessmentHomeCoreSection", () => {
     expect(
       screen.getByRole("link", { name: "첫 성향 검사 시작하기" }),
     ).toHaveAttribute("href", "/assessments/nu-core-quick?returnTo=%2Fhome");
+    expect(
+      coreMocks.synchronizeAccountAssessmentAttempts.mock
+        .invocationCallOrder[0],
+    ).toBeLessThan(coreMocks.listLocalAttempts.mock.invocationCallOrder[0]);
+  });
+
+  it("keeps the assessment copy before the right-side illustration slot", async () => {
+    const { container } = render(<AssessmentHomeCoreSection />);
+    const heading = await screen.findByRole("heading", {
+      level: 2,
+      name: "3분이면 내 성향의 첫 단서를 만나요",
+    });
+    const illustration = container.querySelector(
+      '[data-illustration-slot="core-assessment-hero"]',
+    );
+
+    expect(illustration).not.toBeNull();
+    expect(
+      heading.compareDocumentPosition(illustration!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(illustration).toHaveAttribute("aria-hidden", "true");
+    expect(illustration?.querySelector("img")).toHaveAttribute(
+      "src",
+      expect.stringContaining("nuang-home-assessment-mascot-v1.webp"),
+    );
+  });
+
+  it("starts a fresh precision round only after the preservation sheet", async () => {
+    coreMocks.accountResults = [createAccountResult("full")];
+
+    render(<AssessmentHomeCoreSection />);
+
+    fireEvent.click(
+      await screen.findByRole("button", { name: "정밀 검사 다시하기" }),
+    );
+    expect(
+      screen.getByRole("dialog", { name: "새 결과를 만들어볼까요?" }),
+    ).toBeVisible();
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "처음부터 다시 검사하기" }),
+    );
+
+    await waitFor(() =>
+      expect(coreMocks.createFreshLocalAttempt).toHaveBeenCalledWith(
+        candidateFullCoreAssessment,
+        "/home",
+      ),
+    );
+    expect(coreMocks.push).toHaveBeenCalledWith(
+      expect.stringContaining("/assessments/nu-core-full?"),
+    );
+  });
+
+  it("groups the primary and restart actions without changing their behavior", async () => {
+    coreMocks.accountResults = [createAccountResult("full")];
+
+    render(<AssessmentHomeCoreSection />);
+
+    const actionGroup = await screen.findByRole("group", {
+      name: "성향 검사 바로가기",
+    });
+    expect(actionGroup).toHaveAttribute("data-split", "true");
+    expect(
+      screen.getByRole("link", { name: "내 성향 결과 보기" }),
+    ).toHaveAttribute("href", "/results/account/account-full?backTo=%2Fhome");
+    expect(
+      screen.getByRole("button", { name: "정밀 검사 다시하기" }),
+    ).toBeVisible();
+  });
+
+  it("announces a restored cross-device attempt once in the journey card", async () => {
+    coreMocks.attempts = [
+      createAttempt("restored", "nu-core-quick", "in_progress", 2),
+    ];
+    coreMocks.synchronizeAccountAssessmentAttempts.mockResolvedValue({
+      accountId: "account-1",
+      attempts: coreMocks.attempts,
+      restoredCount: 1,
+      status: "synced",
+      uploadedCount: 0,
+    });
+
+    render(<AssessmentHomeCoreSection />);
+
+    expect(
+      await screen.findByRole("status", {
+        name: "",
+      }),
+    ).toHaveTextContent("다른 기기에서 답하던 내용까지 불러왔어요");
   });
 });
 

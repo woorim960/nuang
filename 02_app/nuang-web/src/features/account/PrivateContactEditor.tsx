@@ -1,11 +1,19 @@
 "use client";
 
-import { BadgeCheck, Check, MailCheck, Trash2 } from "lucide-react";
+import {
+  BadgeCheck,
+  Check,
+  LockKeyhole,
+  Mail,
+  MailCheck,
+  Phone,
+  ShieldCheck,
+  Trash2,
+} from "lucide-react";
 import { useEffect, useId, useState } from "react";
 import {
   type PrivateContactPayload,
   privateContactConsentVersion,
-  privateContactMarketingConsentVersion,
   privateEmailRegistrationVersion,
 } from "@/features/account/private-contact-contract";
 import { readJsonResponse } from "@/features/account/response-json";
@@ -53,8 +61,6 @@ export function PrivateContactEditor() {
   const [deleteField, setDeleteField] = useState<ContactField | null>(null);
   const [email, setEmail] = useState("");
   const [mobilePhone, setMobilePhone] = useState("");
-  const [marketingOptIn, setMarketingOptIn] = useState(false);
-  const [marketingSaving, setMarketingSaving] = useState(false);
   const [verificationChallengeId, setVerificationChallengeId] = useState("");
   const [verificationCode, setVerificationCode] = useState("");
   const [verificationMessage, setVerificationMessage] = useState("");
@@ -93,7 +99,6 @@ export function PrivateContactEditor() {
           return;
         }
         setContact(payload.contact);
-        setMarketingOptIn(payload.contact.marketingOptIn);
         if (payload.contact.emailStatus === "verified") {
           setVerificationState("verified");
         }
@@ -118,12 +123,10 @@ export function PrivateContactEditor() {
   }, [verificationResendIn]);
 
   const digits = mobilePhone.replace(/\D/g, "");
-  const canSavePhone =
-    digits.length === 11 && state !== "saving" && !marketingSaving;
+  const canSavePhone = digits.length === 11 && state !== "saving";
   const canSaveEmail =
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
-    state !== "saving" &&
-    !marketingSaving;
+    state !== "saving";
 
   async function saveContact(field: ContactField) {
     if (
@@ -142,12 +145,12 @@ export function PrivateContactEditor() {
           ? {
               consentVersion: privateEmailRegistrationVersion,
               email,
-              source: "profile",
+              source: "account_security",
             }
           : {
               consentVersion: privateContactConsentVersion,
               mobilePhone,
-              source: "profile",
+              source: "account_security",
             },
       ),
       headers: { "content-type": "application/json" },
@@ -168,7 +171,6 @@ export function PrivateContactEditor() {
     setContact(payload.contact);
     setEmail("");
     setMobilePhone("");
-    setMarketingOptIn(payload.contact.marketingOptIn);
     setVerificationChallengeId("");
     setVerificationCode("");
     setVerificationMessage("");
@@ -178,8 +180,8 @@ export function PrivateContactEditor() {
     setEditingField(null);
     setMessage(
       field === "email"
-        ? "이메일을 비공개로 저장했어요."
-        : "휴대전화번호를 비공개로 저장했어요.",
+        ? "이메일을 저장했어요. 인증을 마치면 복구에 사용할 수 있어요."
+        : "휴대전화번호를 안전하게 저장했어요.",
     );
     setState("success");
   }
@@ -242,18 +244,21 @@ export function PrivateContactEditor() {
       await readJsonResponse<VerificationConfirmResponse>(response);
 
     if (!response.ok || !payload || payload.ok !== true) {
+      const terminalFailure =
+        payload?.ok === false &&
+        (payload.code === "verification_expired" ||
+          payload.code === "verification_locked" ||
+          payload.code === "verified_identifier_conflict");
       setVerificationMessage(
         payload?.ok === false && payload.message
           ? payload.message
           : "인증번호를 확인하지 못했어요.",
       );
-      setVerificationState(
-        payload?.ok === false &&
-          (payload.code === "verification_expired" ||
-            payload.code === "verification_locked")
-          ? "error"
-          : "code",
-      );
+      if (terminalFailure) {
+        setVerificationChallengeId("");
+        setVerificationCode("");
+      }
+      setVerificationState(terminalFailure ? "error" : "code");
       return;
     }
 
@@ -269,46 +274,6 @@ export function PrivateContactEditor() {
     setVerificationCode("");
     setVerificationMessage("이메일 인증이 완료됐어요.");
     setVerificationState("verified");
-  }
-
-  async function saveMarketingPreference(nextValue: boolean) {
-    const previousValue = marketingOptIn;
-    setMarketingOptIn(nextValue);
-    setMarketingSaving(true);
-    setMessage("");
-
-    const response = await fetch("/api/me/contact", {
-      body: JSON.stringify({
-        consentVersion: privateContactMarketingConsentVersion,
-        marketingOptIn: nextValue,
-        preference: "marketing",
-      }),
-      headers: { "content-type": "application/json" },
-      method: "PATCH",
-    });
-    const payload = await readJsonResponse<ContactResponse>(response);
-
-    if (!response.ok || !payload || payload.ok !== true) {
-      setMarketingOptIn(previousValue);
-      setMessage(
-        payload?.ok === false && payload.message
-          ? payload.message
-          : "광고성 소식 설정을 저장하지 못했어요.",
-      );
-      setState("error");
-      setMarketingSaving(false);
-      return;
-    }
-
-    setContact(payload.contact);
-    setMarketingOptIn(payload.contact.marketingOptIn);
-    setMessage(
-      payload.contact.marketingOptIn
-        ? "광고성 소식을 받도록 설정했어요."
-        : "광고성 소식을 받지 않도록 설정했어요.",
-    );
-    setState("success");
-    setMarketingSaving(false);
   }
 
   async function deleteContact(cancelActiveEntries: boolean) {
@@ -392,19 +357,38 @@ export function PrivateContactEditor() {
   return (
     <section aria-labelledby="private-contact-title" className={styles.section}>
       <div className={styles.heading}>
-        <strong id="private-contact-title">비공개 정보</strong>
-        <span>나만 확인할 수 있어요</span>
+        <div>
+          <p>RECOVERY CONTACT</p>
+          <strong id="private-contact-title">복구 연락처</strong>
+        </div>
+        <span>
+          <LockKeyhole aria-hidden="true" size={14} />
+          비공개
+        </span>
       </div>
+      <p className={styles.headingCopy}>
+        로그인 방법을 모두 사용할 수 없을 때 이전 기록을 찾는 데 사용해요.
+        등록은 선택이며 프로필에는 공개되지 않아요.
+      </p>
 
       {state === "loading" ? (
         <div aria-live="polite" className={styles.loading} role="status">
-          비공개 정보를 불러오는 중
+          복구 연락처를 확인하는 중
         </div>
       ) : (
         <>
           <div className={styles.fields}>
-            <div className={styles.fieldBlock}>
-              <span className={styles.fieldHeading}>이메일</span>
+            <article className={styles.fieldBlock}>
+              <div className={styles.fieldTitle}>
+                <span aria-hidden="true">
+                  <Mail size={18} strokeWidth={1.8} />
+                </span>
+                <div>
+                  <strong>복구용 이메일</strong>
+                  <small>인증 후 이전 기록 찾기와 계정 복구에 사용</small>
+                </div>
+                <i>선택</i>
+              </div>
               {contact?.hasEmail && editingField !== "email" ? (
                 <>
                   <div className={styles.contactRow}>
@@ -429,11 +413,20 @@ export function PrivateContactEditor() {
                         size={16}
                         strokeWidth={1.8}
                       />
-                      인증 완료
+                      <span>
+                        <strong>인증 완료</strong>
+                        <small>계정 복구에 사용할 수 있어요</small>
+                      </span>
                     </div>
                   ) : (
-                    <div className={styles.verificationStatus}>
-                      <span>인증이 필요해요</span>
+                    <div
+                      className={styles.verificationStatus}
+                      data-verified="false"
+                    >
+                      <span>
+                        <strong>인증이 필요해요</strong>
+                        <small>메일로 받은 6자리 번호를 확인해 주세요</small>
+                      </span>
                       <button
                         disabled={verificationState === "requesting"}
                         onClick={() => void requestEmailVerification()}
@@ -448,7 +441,7 @@ export function PrivateContactEditor() {
                           ? "보내는 중"
                           : verificationChallengeId
                             ? "다시 받기"
-                            : "인증하기"}
+                            : "이메일 인증"}
                       </button>
                     </div>
                   )}
@@ -456,9 +449,21 @@ export function PrivateContactEditor() {
                   (verificationState === "code" ||
                     verificationState === "confirming" ||
                     Boolean(verificationChallengeId)) ? (
-                    <div className={styles.verificationPanel}>
+                    <div
+                      aria-labelledby="email-verification-title"
+                      className={styles.verificationPanel}
+                    >
+                      <div className={styles.verificationHeading}>
+                        <MailCheck aria-hidden="true" size={18} />
+                        <span>
+                          <strong id="email-verification-title">
+                            인증번호를 입력해 주세요
+                          </strong>
+                          <small>메일로 보낸 6자리 번호예요</small>
+                        </span>
+                      </div>
                       <label>
-                        <span>인증번호</span>
+                        <span className="sr-only">인증번호</span>
                         <input
                           aria-label="이메일 인증번호"
                           autoComplete="one-time-code"
@@ -469,7 +474,7 @@ export function PrivateContactEditor() {
                               event.target.value.replace(/\D/g, "").slice(0, 6),
                             )
                           }
-                          placeholder="6자리 숫자"
+                          placeholder="000000"
                           type="text"
                           value={verificationCode}
                         />
@@ -485,7 +490,7 @@ export function PrivateContactEditor() {
                       >
                         {verificationState === "confirming"
                           ? "확인 중"
-                          : "인증 확인"}
+                          : "확인"}
                       </button>
                       <button
                         className={styles.resendButton}
@@ -507,31 +512,41 @@ export function PrivateContactEditor() {
                       aria-live="polite"
                       className={styles.verificationMessage}
                       data-error={verificationState === "error"}
+                      role={verificationState === "error" ? "alert" : "status"}
                     >
                       {verificationMessage}
                     </p>
                   ) : null}
-                  <button
-                    className={styles.deleteLink}
-                    onClick={() => openDelete("email")}
-                    type="button"
-                  >
-                    <Trash2 aria-hidden="true" size={14} strokeWidth={1.7} />
-                    이메일 삭제
-                  </button>
+                  <div className={styles.destructiveActions}>
+                    <button
+                      className={styles.deleteLink}
+                      onClick={() => openDelete("email")}
+                      type="button"
+                    >
+                      <Trash2 aria-hidden="true" size={14} strokeWidth={1.7} />
+                      이메일 삭제
+                    </button>
+                  </div>
                 </>
               ) : (
                 <div className={styles.editor}>
-                  <input
-                    aria-label="이메일"
-                    autoComplete="email"
-                    inputMode="email"
-                    maxLength={254}
-                    onChange={(event) => setEmail(event.target.value)}
-                    placeholder="name@example.com"
-                    type="email"
-                    value={email}
-                  />
+                  <label>
+                    <span>이메일</span>
+                    <input
+                      aria-describedby="recovery-email-help"
+                      aria-label="복구용 이메일"
+                      autoComplete="email"
+                      inputMode="email"
+                      maxLength={254}
+                      onChange={(event) => setEmail(event.target.value)}
+                      placeholder="name@example.com"
+                      type="email"
+                      value={email}
+                    />
+                  </label>
+                  <p id="recovery-email-help">
+                    저장 후 인증 메일을 보내드려요.
+                  </p>
                   <div className={styles.actions}>
                     {contact?.hasEmail ? (
                       <button
@@ -550,15 +565,26 @@ export function PrivateContactEditor() {
                     >
                       {state === "saving" && editingField === "email"
                         ? "저장 중"
-                        : "이메일 저장"}
+                        : contact?.hasEmail
+                          ? "변경 저장"
+                          : "이메일 등록"}
                     </button>
                   </div>
                 </div>
               )}
-            </div>
+            </article>
 
-            <div className={styles.fieldBlock}>
-              <span className={styles.fieldHeading}>휴대전화번호</span>
+            <article className={styles.fieldBlock}>
+              <div className={styles.fieldTitle}>
+                <span aria-hidden="true">
+                  <Phone size={18} strokeWidth={1.8} />
+                </span>
+                <div>
+                  <strong>복구용 휴대전화</strong>
+                  <small>SMS 인증 기능이 준비되면 복구 수단으로 사용</small>
+                </div>
+                <i>선택</i>
+              </div>
               {contact?.hasMobilePhone && editingField !== "mobile_phone" ? (
                 <>
                   <div className={styles.contactRow}>
@@ -573,29 +599,66 @@ export function PrivateContactEditor() {
                       변경
                     </button>
                   </div>
-                  <button
-                    className={styles.deleteLink}
-                    onClick={() => openDelete("mobile_phone")}
-                    type="button"
+                  <div
+                    className={styles.phonePendingStatus}
+                    data-verified={contact.mobilePhoneStatus === "verified"}
                   >
-                    <Trash2 aria-hidden="true" size={14} strokeWidth={1.7} />
-                    번호 삭제
-                  </button>
+                    {contact.mobilePhoneStatus === "verified" ? (
+                      <BadgeCheck aria-hidden="true" size={17} />
+                    ) : (
+                      <ShieldCheck aria-hidden="true" size={17} />
+                    )}
+                    <span>
+                      <strong>
+                        {contact.mobilePhoneStatus === "verified"
+                          ? "인증 완료"
+                          : "안전하게 보관 중"}
+                      </strong>
+                      <small>
+                        {contact.mobilePhoneStatus === "verified"
+                          ? "계정 복구에 사용할 수 있어요"
+                          : "현재는 이벤트 안내용이며, 본인 인증에는 사용하지 않아요"}
+                      </small>
+                    </span>
+                  </div>
+                  <div className={styles.destructiveActions}>
+                    <button
+                      className={styles.deleteLink}
+                      onClick={() => openDelete("mobile_phone")}
+                      type="button"
+                    >
+                      <Trash2 aria-hidden="true" size={14} strokeWidth={1.7} />
+                      번호 삭제
+                    </button>
+                  </div>
                 </>
               ) : (
                 <div className={styles.editor}>
-                  <input
-                    aria-label="휴대전화번호"
-                    autoComplete="tel"
-                    inputMode="tel"
-                    maxLength={13}
-                    onChange={(event) =>
-                      setMobilePhone(formatKoreanMobile(event.target.value))
-                    }
-                    placeholder="010-0000-0000"
-                    type="tel"
-                    value={mobilePhone}
-                  />
+                  <label>
+                    <span>휴대전화번호</span>
+                    <div className={styles.phoneInput}>
+                      <span aria-hidden="true">+82</span>
+                      <input
+                        aria-describedby="recovery-phone-help"
+                        aria-label="복구용 휴대전화번호"
+                        autoComplete="tel-national"
+                        inputMode="tel"
+                        maxLength={13}
+                        onChange={(event) =>
+                          setMobilePhone(
+                            formatKoreanMobile(event.target.value),
+                          )
+                        }
+                        placeholder="010-0000-0000"
+                        type="tel"
+                        value={mobilePhone}
+                      />
+                    </div>
+                  </label>
+                  <p id="recovery-phone-help">
+                    SMS 인증 도입 전에는 동일 사용자 확인이나 계정 복구에
+                    사용하지 않아요.
+                  </p>
                   <div className={styles.actions}>
                     {contact?.hasMobilePhone ? (
                       <button
@@ -614,37 +677,15 @@ export function PrivateContactEditor() {
                     >
                       {state === "saving" && editingField === "mobile_phone"
                         ? "저장 중"
-                        : "번호 저장"}
+                        : contact?.hasMobilePhone
+                          ? "변경 저장"
+                          : "번호 등록"}
                     </button>
                   </div>
                 </div>
               )}
-            </div>
+            </article>
           </div>
-
-          <p className={styles.contactHelp}>
-            외부에 공개되지 않으며 계정과 중요한 안내에만 사용합니다.
-          </p>
-          <label className={styles.marketing}>
-            <input
-              checked={marketingOptIn}
-              disabled={marketingSaving || state === "saving"}
-              onChange={(event) =>
-                void saveMarketingPreference(event.target.checked)
-              }
-              type="checkbox"
-            />
-            <span>
-              광고성 소식 받기
-              <small>
-                {marketingSaving
-                  ? "저장 중"
-                  : marketingOptIn
-                    ? "수신 중"
-                    : "수신 안 함"}
-              </small>
-            </span>
-          </label>
         </>
       )}
 
@@ -653,6 +694,7 @@ export function PrivateContactEditor() {
           aria-live="polite"
           className={styles.message}
           data-error={state === "error"}
+          role={state === "error" ? "alert" : "status"}
         >
           {state === "success" ? (
             <Check aria-hidden="true" size={15} strokeWidth={2} />

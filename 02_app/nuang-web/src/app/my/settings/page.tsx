@@ -1,6 +1,7 @@
 import {
   ArrowLeft,
   Ban,
+  BellRing,
   ChevronRight,
   FileCheck2,
   Gift,
@@ -36,7 +37,12 @@ const accountItems = [
   {
     href: "/my/settings/account",
     icon: KeyRound,
-    title: "로그인 계정",
+    title: "로그인 및 보안",
+  },
+  {
+    href: "/my/settings/notifications",
+    icon: BellRing,
+    title: "알림 및 마케팅",
   },
   {
     href: "/my/settings/blocked",

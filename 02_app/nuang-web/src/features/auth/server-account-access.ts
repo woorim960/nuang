@@ -9,31 +9,29 @@ export async function readAccountAccessStatus({
   client: SupabaseClient;
   supabaseUserId: string;
 }) {
-  const identity = await client
+  const access = await client
     .schema("identity")
-    .from("auth_identity")
-    .select("account_id")
-    .eq("supabase_user_id", supabaseUserId)
-    .is("revoked_at", null)
-    .order("provider_linked_at", { ascending: true })
-    .limit(1)
-    .maybeSingle();
+    .rpc("read_auth_user_access_status", {
+      p_supabase_user_id: supabaseUserId,
+    });
 
-  if (identity.error) return { ok: false as const };
-  if (!identity.data?.account_id) {
-    return { ok: true as const, status: "new" as const };
+  if (access.error || typeof access.data !== "string") {
+    return { ok: false as const };
   }
 
-  const account = await client
-    .schema("identity")
-    .from("account")
-    .select("status")
-    .eq("id", identity.data.account_id)
-    .maybeSingle();
-  if (account.error || !account.data) return { ok: false as const };
+  if (
+    access.data !== "active" &&
+    access.data !== "conflict" &&
+    access.data !== "deleted" &&
+    access.data !== "merged" &&
+    access.data !== "new" &&
+    access.data !== "suspended"
+  ) {
+    return { ok: false as const };
+  }
 
   return {
     ok: true as const,
-    status: account.data.status as "active" | "deleted" | "suspended",
+    status: access.data,
   };
 }

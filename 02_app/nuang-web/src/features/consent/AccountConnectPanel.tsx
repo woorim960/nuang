@@ -19,6 +19,7 @@ import {
 import { createApiClosedPayload } from "@/lib/api/closed-state-data";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import styles from "./AccountConnectPanel.module.css";
+import { clearAccountOwnedLocalAttempts } from "@/features/assessment/assessment-account-sync";
 
 type ClosedState = ReturnType<typeof createApiClosedPayload>;
 type ConnectedAccount = {
@@ -175,6 +176,7 @@ export function AccountConnectPanel({
       return;
     }
 
+    await clearAccountOwnedLocalAttempts();
     setConnectedAccount(null);
     setPendingProviderId(null);
     setMessage("로그아웃했어요.");

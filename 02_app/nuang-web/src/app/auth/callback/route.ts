@@ -67,14 +67,31 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const account = await ensureAccountForUser(serviceClient, data.user);
+    const account = await ensureAccountForUser(serviceClient, data.user, {
+      auditEvent: true,
+    });
+
+    if (!account.ok) {
+      const status =
+        account.code === "account_conflict"
+          ? "identity_conflict"
+          : account.code === "identity_deleted"
+            ? "account_deleted"
+            : account.code === "identity_missing" ||
+                account.code === "provider_not_allowed" ||
+                account.code === "duplicate_identity"
+              ? "identity_unsupported"
+              : "identity_error";
+
+      return clearConsentCookie(redirectWithAuthStatus(request, status));
+    }
+
     const consent =
-      account.ok &&
-      (await persistAccountConsent(
+      await persistAccountConsent(
         serviceClient,
         account.accountId,
         consentDraft,
-      ));
+      );
 
     if (!consent || !consent.ok) {
       return clearConsentCookie(

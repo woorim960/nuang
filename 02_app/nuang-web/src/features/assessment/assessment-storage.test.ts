@@ -4,12 +4,16 @@ import {
   attachLocalReportContentSnapshot,
   beginLocalAdaptiveFollowUp,
   beginLocalAttemptCompletion,
+  cacheLocalAssessmentAttempt,
   completeLocalAttempt,
+  createFreshLocalAttempt,
   getLocalAttempt,
   getOrCreateLocalAttempt,
+  listLocalAttempts,
   reopenLocalAttemptForReview,
   saveLocalAnswer,
   saveLocalAttemptReturnDestination,
+  setLocalAssessmentAccountScope,
   startLocalAdaptiveFollowUp,
 } from "@/features/assessment/assessment-storage";
 import { betaCoreAssessment } from "@/features/assessment/beta-core-seed";
@@ -57,6 +61,7 @@ describe("assessment completion storage", () => {
   beforeEach(() => {
     memoryDb.records.clear();
     memoryDb.failNextPut = false;
+    setLocalAssessmentAccountScope(null);
   });
 
   it("stores one versioned result atomically and returns it idempotently", async () => {
@@ -293,6 +298,65 @@ describe("assessment completion storage", () => {
 
     expect(next.id).not.toBe(original.id);
     expect(next.releaseId).toBe("NUANG-CORE-QUICK-1.0");
+  });
+
+  it("starts an explicit zero-answer retest while preserving completed results", async () => {
+    const active = await getOrCreateLocalAttempt(quickCoreAssessment);
+    const readiness = prepareAssessmentCompletion(
+      quickCoreAssessment,
+      buildReadyAttempt(),
+    );
+    const completed = {
+      ...buildReadyAttempt(),
+      completionStatus: "completed" as const,
+      completedAt: "2026-07-18T00:00:01.000Z",
+      expiresAt: "2099-07-18T00:00:01.000Z",
+      id: "local_completed_kept",
+      responseSnapshotHash: readiness.responseSnapshotHash,
+      resultEvidenceStatus: readiness.evidenceStatus,
+      resultSnapshot: {
+        ...readiness.versionBundle,
+        createdAt: "2026-07-18T00:00:01.000Z",
+        responseSnapshotHash: readiness.responseSnapshotHash,
+        resultCopyVersion: "core-result-copy.v0.1",
+        resultStatus: "ready" as const,
+        scoreResult: readiness.result,
+      },
+      state: "completed" as const,
+    };
+    await cacheLocalAssessmentAttempt(completed);
+
+    const fresh = await createFreshLocalAttempt(quickCoreAssessment, "/home");
+    const visible = await listLocalAttempts();
+
+    expect(fresh.id).not.toBe(active.id);
+    expect(fresh.responses).toEqual({});
+    expect(fresh.currentIndex).toBe(0);
+    expect(fresh.returnDestination).toBe("/home");
+    expect(fresh.accountSync).toEqual({ status: "local_only" });
+    expect(visible.some((attempt) => attempt.id === active.id)).toBe(false);
+    expect(visible.some((attempt) => attempt.id === completed.id)).toBe(true);
+  });
+
+  it("never exposes another account's cached attempts through product reads", async () => {
+    const guest = await getOrCreateLocalAttempt(quickCoreAssessment);
+    await cacheLocalAssessmentAttempt({
+      ...guest,
+      accountSync: {
+        accountId: "account-a",
+        revision: 2,
+        status: "synced",
+      },
+    });
+
+    expect(await listLocalAttempts()).toEqual([]);
+    expect(await getLocalAttempt(guest.id)).toBeUndefined();
+
+    setLocalAssessmentAccountScope("account-a");
+    expect((await listLocalAttempts()).map((attempt) => attempt.id)).toEqual([
+      guest.id,
+    ]);
+    expect((await getLocalAttempt(guest.id))?.id).toBe(guest.id);
   });
 
   it("stores only an approved internal return destination on a precision attempt", async () => {

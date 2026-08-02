@@ -170,6 +170,54 @@ describe("private member contact API", () => {
     expect(mocks.savePrivateMobilePhone).not.toHaveBeenCalled();
   });
 
+  it("accepts account security as the recovery-contact provenance", async () => {
+    const response = await PATCH(
+      new Request("http://localhost/api/me/contact", {
+        body: JSON.stringify({
+          consentVersion: privateEmailRegistrationVersion,
+          email: "woorim.prog@gmail.com",
+          source: "account_security",
+        }),
+        headers: {
+          "content-type": "application/json",
+          "sec-fetch-site": "same-origin",
+        },
+        method: "PATCH",
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(mocks.savePrivateEmail).toHaveBeenCalledWith(
+      expect.objectContaining({ source: "account_security" }),
+    );
+  });
+
+  it("does not reveal whether an unverified contact belongs to another account", async () => {
+    mocks.savePrivateEmail.mockResolvedValueOnce({
+      code: "email_in_use",
+      ok: false,
+    });
+    const response = await PATCH(
+      new Request("http://localhost/api/me/contact", {
+        body: JSON.stringify({
+          consentVersion: privateEmailRegistrationVersion,
+          email: "target@example.com",
+          source: "account_security",
+        }),
+        headers: {
+          "content-type": "application/json",
+          "sec-fetch-site": "same-origin",
+        },
+        method: "PATCH",
+      }),
+    );
+    const payload = await response.json();
+
+    expect(response.status).toBe(409);
+    expect(payload.code).toBe("contact_unavailable");
+    expect(JSON.stringify(payload)).not.toMatch(/다른 뉴앙 계정|등록된 이메일/);
+  });
+
   it("updates marketing preference without rewriting either contact", async () => {
     const response = await PATCH(
       new Request("http://localhost/api/me/contact", {

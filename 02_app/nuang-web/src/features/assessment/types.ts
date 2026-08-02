@@ -40,6 +40,23 @@ export type AssessmentUnsureReason =
 
 export type LocalPersistStatus = "idle" | "saving" | "saved" | "failed";
 
+export type AssessmentAccountSyncStatus =
+  | "failed"
+  | "local_only"
+  | "queued"
+  | "rejected"
+  | "synced"
+  | "syncing";
+
+export type AssessmentAccountSyncMetadata = {
+  accountId?: string;
+  lastAttemptedAt?: string;
+  lastSyncedAt?: string;
+  restoredAt?: string;
+  revision?: number;
+  status: AssessmentAccountSyncStatus;
+};
+
 export type AssessmentMilestoneId = "HALFWAY_BREAK_V1";
 
 export type AssessmentMilestoneStatus = "shown" | "completed" | "deferred";
@@ -82,6 +99,7 @@ export type LocalAssessmentAttempt = {
   responses: Record<string, AssessmentAnswer>;
   currentIndex: number;
   state: LocalAttemptState;
+  accountSync?: AssessmentAccountSyncMetadata;
   localPersistStatus?: LocalPersistStatus;
   milestones?: Partial<Record<AssessmentMilestoneId, AssessmentMilestone>>;
   adaptiveItemIds?: string[];

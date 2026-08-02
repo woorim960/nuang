@@ -22,6 +22,7 @@ import type { ReportContentSnapshot } from "@/features/result/unified-core-repor
 const DB_NAME = "nuang-local";
 const DB_VERSION = 1;
 const ATTEMPT_STORE = "assessmentAttempts";
+let visibleAccountId: string | null = null;
 
 interface NuangLocalDb extends DBSchema {
   assessmentAttempts: {
@@ -56,6 +57,7 @@ export async function getOrCreateLocalAttempt(
   const active = existing
     .filter(
       (attempt) =>
+        isAttemptVisibleToCurrentScope(attempt) &&
         attempt.releaseId === assessment.releaseId &&
         attempt.itemIds.length === assessment.items.length &&
         attempt.itemIds.every(
@@ -84,34 +86,50 @@ export async function getOrCreateLocalAttempt(
     return active;
   }
 
-  const now = new Date();
   const reusableResponses = getApprovedReusableResponses(
     reuseSourceAttempt,
     assessment,
   );
-  const currentIndex = assessment.items.findIndex(
-    (item) => !reusableResponses[item.itemId],
+  const attempt = buildNewLocalAttempt(
+    assessment,
+    reusableResponses,
+    safeReturnDestination,
   );
-  const attempt: LocalAssessmentAttempt = {
-    id: `local_${crypto.randomUUID()}`,
-    assessmentId: assessment.assessmentId,
-    releaseId: assessment.releaseId,
-    mode: assessment.mode,
-    itemIds: assessment.items.map((item) => item.itemId),
-    responses: reusableResponses,
-    currentIndex:
-      currentIndex === -1 ? assessment.items.length - 1 : currentIndex,
-    state: "in_progress",
-    localPersistStatus: "saved",
-    milestones: {},
-    ...(safeReturnDestination
-      ? { returnDestination: safeReturnDestination }
-      : {}),
-    createdAt: now.toISOString(),
-    updatedAt: now.toISOString(),
-    expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
-  };
 
+  await db.put(ATTEMPT_STORE, attempt);
+  return attempt;
+}
+
+/**
+ * Starts an explicitly fresh run. Completed reports remain immutable while any
+ * visible draft for the same release is removed from this device cache.
+ */
+export async function createFreshLocalAttempt(
+  assessment: AssessmentDefinition,
+  returnDestination?: string | null,
+) {
+  const db = await getDb();
+  const existing = await db.getAllFromIndex(
+    ATTEMPT_STORE,
+    "by-assessment-state",
+    [assessment.assessmentId, "in_progress"],
+  );
+
+  await Promise.all(
+    existing
+      .filter(
+        (attempt) =>
+          isAttemptVisibleToCurrentScope(attempt) &&
+          attempt.releaseId === assessment.releaseId,
+      )
+      .map((attempt) => db.delete(ATTEMPT_STORE, attempt.id)),
+  );
+
+  const attempt = buildNewLocalAttempt(
+    assessment,
+    {},
+    sanitizePrecisionDestination(returnDestination),
+  );
   await db.put(ATTEMPT_STORE, attempt);
   return attempt;
 }
@@ -408,7 +426,38 @@ export async function beginLocalAttemptCompletion(
 
 export async function getLocalAttempt(id: string) {
   const db = await getDb();
+  const attempt = await db.get(ATTEMPT_STORE, id);
+  return attempt && isAttemptVisibleToCurrentScope(attempt)
+    ? attempt
+    : undefined;
+}
+
+/** Internal account-sync cache access. Product surfaces should use the scoped read. */
+export async function getStoredLocalAttempt(id: string) {
+  const db = await getDb();
   return db.get(ATTEMPT_STORE, id);
+}
+
+export async function cacheLocalAssessmentAttempt(
+  attempt: LocalAssessmentAttempt,
+) {
+  const db = await getDb();
+  await db.put(ATTEMPT_STORE, attempt);
+  return attempt;
+}
+
+export async function listStoredLocalAttempts() {
+  const db = await getDb();
+  return db.getAll(ATTEMPT_STORE);
+}
+
+export async function removeStoredLocalAttempt(id: string) {
+  const db = await getDb();
+  await db.delete(ATTEMPT_STORE, id);
+}
+
+export function setLocalAssessmentAccountScope(accountId: string | null) {
+  visibleAccountId = accountId;
 }
 
 export async function saveLocalAttemptReturnDestination(
@@ -436,7 +485,11 @@ export async function listLocalAttempts() {
   const now = Date.now();
 
   return attempts
-    .filter((attempt) => new Date(attempt.expiresAt).getTime() > now)
+    .filter(
+      (attempt) =>
+        isAttemptVisibleToCurrentScope(attempt) &&
+        new Date(attempt.expiresAt).getTime() > now,
+    )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
@@ -456,7 +509,11 @@ export async function getLatestCompletedAttempt(
   );
 
   return completed
-    .filter((attempt) => new Date(attempt.expiresAt).getTime() > Date.now())
+    .filter(
+      (attempt) =>
+        isAttemptVisibleToCurrentScope(attempt) &&
+        new Date(attempt.expiresAt).getTime() > Date.now(),
+    )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
 }
 
@@ -464,6 +521,41 @@ function addDays(date: Date, days: number) {
   const next = new Date(date);
   next.setDate(next.getDate() + days);
   return next;
+}
+
+function buildNewLocalAttempt(
+  assessment: AssessmentDefinition,
+  responses: LocalAssessmentAttempt["responses"],
+  returnDestination: string | null,
+): LocalAssessmentAttempt {
+  const now = new Date();
+  const currentIndex = assessment.items.findIndex(
+    (item) => !responses[item.itemId],
+  );
+
+  return {
+    id: `local_${crypto.randomUUID()}`,
+    assessmentId: assessment.assessmentId,
+    releaseId: assessment.releaseId,
+    mode: assessment.mode,
+    itemIds: assessment.items.map((item) => item.itemId),
+    responses,
+    currentIndex:
+      currentIndex === -1 ? assessment.items.length - 1 : currentIndex,
+    state: "in_progress",
+    accountSync: { status: "local_only" },
+    localPersistStatus: "saved",
+    milestones: {},
+    ...(returnDestination ? { returnDestination } : {}),
+    createdAt: now.toISOString(),
+    updatedAt: now.toISOString(),
+    expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
+  };
+}
+
+function isAttemptVisibleToCurrentScope(attempt: LocalAssessmentAttempt) {
+  const ownerAccountId = attempt.accountSync?.accountId;
+  return !ownerAccountId || ownerAccountId === visibleAccountId;
 }
 
 function withoutCompletionResult(

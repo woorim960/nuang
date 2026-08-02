@@ -7,7 +7,11 @@ export const privateEmailRegistrationVersion =
 export const privateContactMarketingConsentVersion =
   "NUANG-MARKETING-PREFERENCE-2026-07-27";
 
-export const privateContactSources = ["profile", "event_entry"] as const;
+export const privateContactSources = [
+  "account_security",
+  "profile",
+  "event_entry",
+] as const;
 export type PrivateContactSource = (typeof privateContactSources)[number];
 
 export const privateMobilePhoneWriteSchema = z.object({

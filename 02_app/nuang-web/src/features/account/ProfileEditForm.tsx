@@ -18,7 +18,6 @@ import {
 } from "@/components/character/nuang-character-assets";
 import { readJsonResponse } from "@/features/account/response-json";
 import type { PublicProfileImage } from "@/features/public-profile/profile-image";
-import { PrivateContactEditor } from "@/features/account/PrivateContactEditor";
 import styles from "./ProfileEditForm.module.css";
 
 const MAX_AVATAR_BYTES = 5 * 1024 * 1024;
@@ -475,8 +474,6 @@ export function ProfileEditForm() {
               />
             </ProfileField>
           </section>
-
-          <PrivateContactEditor />
 
           <section className={styles.traitSection}>
             <div>

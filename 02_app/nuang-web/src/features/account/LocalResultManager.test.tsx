@@ -18,6 +18,13 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
   listLocalAttempts: vi.fn(),
 }));
 
+vi.mock("@/features/assessment/assessment-account-sync", () => ({
+  synchronizeAccountAssessmentAttempts: vi.fn(async () => ({
+    attempts: [],
+    status: "unauthenticated",
+  })),
+}));
+
 vi.mock("@/features/assessment/free-topic-storage", () => ({
   deleteFreeTopicResult: vi.fn(),
   listFreeTopicResultsLocalFirst: vi.fn(),

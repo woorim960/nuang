@@ -25,6 +25,10 @@ import {
   saveLocalAttemptReturnDestination,
 } from "@/features/assessment/assessment-storage";
 import {
+  queueAccountAssessmentAttemptSync,
+  synchronizeAccountAssessmentAttempts,
+} from "@/features/assessment/assessment-account-sync";
+import {
   type LocalPrecisionEntryDecision,
   type PrecisionEntrySource,
   resolveLocalPrecisionEntry,
@@ -96,6 +100,7 @@ export function PrecisionAssessmentIntro({
       setErrorMessage(null);
 
       try {
+        await synchronizeAccountAssessmentAttempts();
         const [attempts, accountResults] = await Promise.all([
           listLocalAttempts(),
           listClientAccountResults(),
@@ -131,11 +136,6 @@ export function PrecisionAssessmentIntro({
           return;
         }
 
-        if (latestAccountFull) {
-          router.replace(`/results/account/${latestAccountFull.resultReportId}`);
-          return;
-        }
-
         if (nextDecision.action === "redirect_report") {
           const updated = await saveLocalAttemptReturnDestination(
             nextDecision.attempt,
@@ -154,13 +154,19 @@ export function PrecisionAssessmentIntro({
         }
 
         if (nextDecision.action === "redirect_attempt") {
-          await getOrCreateLocalAttempt(
+          const resumedAttempt = await getOrCreateLocalAttempt(
             assessment,
             undefined,
             returnDestination,
           );
+          queueAccountAssessmentAttemptSync(resumedAttempt);
           if (!isMounted) return;
           setSurface("runner");
+          return;
+        }
+
+        if (latestAccountFull) {
+          router.replace(`/results/account/${latestAccountFull.resultReportId}`);
           return;
         }
 
@@ -196,11 +202,12 @@ export function PrecisionAssessmentIntro({
     setErrorMessage(null);
 
     try {
-      await getOrCreateLocalAttempt(
+      const startedAttempt = await getOrCreateLocalAttempt(
         assessment,
         decision.sourceAttempt,
         returnDestination,
       );
+      queueAccountAssessmentAttemptSync(startedAttempt);
       setSurface("runner");
     } catch {
       setErrorMessage(

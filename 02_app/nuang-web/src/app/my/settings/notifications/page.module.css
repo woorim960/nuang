@@ -1,0 +1,44 @@
+.page {
+  width: 100%;
+  max-width: 430px;
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding-bottom: calc(2.5rem + env(safe-area-inset-bottom));
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface);
+}
+
+.header {
+  position: sticky;
+  z-index: 20;
+  top: 0;
+  display: grid;
+  min-height: calc(56px + env(safe-area-inset-top));
+  grid-template-columns: 42px minmax(0, 1fr) 42px;
+  align-items: center;
+  padding: env(safe-area-inset-top) 0.875rem 0;
+  border-bottom: 1px solid var(--nu-color-border);
+  background: color-mix(in srgb, var(--nu-neutral-0) 96%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.header a {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-neutral-800);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
+  text-align: center;
+}
+
+.header a:focus-visible {
+  outline: 2px solid var(--nu-color-brand-border);
+  outline-offset: -2px;
+}

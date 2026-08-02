@@ -77,6 +77,12 @@ export async function POST(request: Request) {
         "사용할 수 없는 인증번호예요. 새 번호를 받아 주세요.",
         409,
       );
+    case "verified_identifier_conflict":
+      return failure(
+        result.code,
+        "같은 이메일로 사용한 기록을 찾았어요. 기록을 안전하게 확인할 수 있도록 연결 절차를 준비하고 있어요.",
+        409,
+      );
     default:
       return failure(
         result.code,
