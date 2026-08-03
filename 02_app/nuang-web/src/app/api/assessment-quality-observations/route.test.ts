@@ -2,9 +2,21 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getFreeTopicInstrumentVersion } from "@/features/assessment/free-topic-result-version";
 
 const mocks = vi.hoisted(() => ({
+  ensureAccount: vi.fn(),
+  readPermission: vi.fn(),
+  requireAuth: vi.fn(),
   serviceClient: vi.fn(),
 }));
 
+vi.mock("@/features/account/server-writes", () => ({
+  ensureAccountForUser: mocks.ensureAccount,
+}));
+vi.mock("@/features/auth/server-auth", () => ({
+  requireAuthenticatedUser: mocks.requireAuth,
+}));
+vi.mock("@/features/consent/server-optional-consent", () => ({
+  readAnalyticsCollectionPermission: mocks.readPermission,
+}));
 vi.mock("@/lib/supabase/service", () => ({
   createSupabaseServiceClient: mocks.serviceClient,
   getSupabaseServiceEnv: () => ({
@@ -17,6 +29,15 @@ import { POST } from "@/app/api/assessment-quality-observations/route";
 describe("assessment quality observation API", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    mocks.requireAuth.mockResolvedValue({
+      ok: true,
+      user: { id: "10000000-0000-4000-8000-000000000002" },
+    });
+    mocks.ensureAccount.mockResolvedValue({
+      accountId: "10000000-0000-4000-8000-000000000003",
+      ok: true,
+    });
+    mocks.readPermission.mockResolvedValue({ allowed: true, ok: true });
   });
 
   it("rejects cross-site submissions before opening the service client", async () => {
@@ -39,6 +60,7 @@ describe("assessment quality observation API", () => {
     expect(body).toEqual({ accepted: 1, ok: true });
     expect(mock.rows).toHaveLength(1);
     expect(mock.rows[0]).toMatchObject({
+      account_id: "10000000-0000-4000-8000-000000000003",
       assessment_slug: "comfort-style",
       instrument_version: getFreeTopicInstrumentVersion("comfort-style"),
       observation_index: 0,
@@ -85,6 +107,38 @@ describe("assessment quality observation API", () => {
 
     expect(response.status).toBe(429);
     expect(mock.rows).toHaveLength(0);
+  });
+
+  it("does not store observations for a signed-out or non-consenting viewer", async () => {
+    mocks.requireAuth.mockResolvedValueOnce({ ok: false });
+    const signedOut = await POST(request(validPayload()));
+
+    mocks.requireAuth.mockResolvedValueOnce({
+      ok: true,
+      user: { id: "10000000-0000-4000-8000-000000000002" },
+    });
+    mocks.readPermission.mockResolvedValueOnce({ allowed: false, ok: true });
+    const client = createClient();
+    mocks.serviceClient.mockReturnValue(client.client);
+    const revoked = await POST(request(validPayload()));
+
+    expect(signedOut.status).toBe(403);
+    expect(revoked.status).toBe(403);
+    expect(client.rows).toHaveLength(0);
+  });
+
+  it("fails closed when canonical consent cannot be read", async () => {
+    const client = createClient();
+    mocks.serviceClient.mockReturnValue(client.client);
+    mocks.readPermission.mockResolvedValueOnce({
+      code: "analytics_consent_check_failed",
+      ok: false,
+    });
+
+    const response = await POST(request(validPayload()));
+
+    expect(response.status).toBe(503);
+    expect(client.rows).toHaveLength(0);
   });
 });
 

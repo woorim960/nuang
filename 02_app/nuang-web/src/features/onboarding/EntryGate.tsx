@@ -2,21 +2,28 @@
 
 import { useRouter } from "next/navigation";
 import { type ReactNode, useEffect, useState } from "react";
-import {
-  hasCompletedOnboarding,
-  onboardingEntryContract,
-} from "@/features/onboarding/onboarding-storage";
+import { onboardingEntryContract } from "@/features/onboarding/onboarding-storage";
+import { resolveHasSeenOnboarding } from "@/features/onboarding/onboarding-sync";
 import styles from "@/features/onboarding/EntryGate.module.css";
 
 export function EntryGate() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(
-      hasCompletedOnboarding()
-        ? onboardingEntryContract.completedDestination
-        : onboardingEntryContract.firstVisitDestination,
-    );
+    let active = true;
+
+    void resolveHasSeenOnboarding().then((hasSeen) => {
+      if (!active) return;
+      router.replace(
+        hasSeen
+          ? onboardingEntryContract.completedDestination
+          : onboardingEntryContract.firstVisitDestination,
+      );
+    });
+
+    return () => {
+      active = false;
+    };
   }, [router]);
 
   return <EntryLoadingState />;
@@ -29,13 +36,14 @@ export function OnboardingHomeGate({ children }: { children: ReactNode }) {
   useEffect(() => {
     let active = true;
 
-    if (hasCompletedOnboarding()) {
-      queueMicrotask(() => {
-        if (active) setReady(true);
-      });
-    } else {
-      router.replace(onboardingEntryContract.firstVisitDestination);
-    }
+    void resolveHasSeenOnboarding().then((hasSeen) => {
+      if (!active) return;
+      if (hasSeen) {
+        setReady(true);
+      } else {
+        router.replace(onboardingEntryContract.firstVisitDestination);
+      }
+    });
 
     return () => {
       active = false;

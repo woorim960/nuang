@@ -22,15 +22,15 @@ const resultPreviewSlots: Array<{
   label: string;
   slot: TraitMapCustomerGuideChapter["slot"];
 }> = [
-  { label: "생각에서 행동까지", slot: "thought_and_response" },
-  { label: "평소 생활", slot: "daily_life" },
-  { label: "마음 가는 사람 앞에서", slot: "person_of_interest" },
-  { label: "연인과 함께할 때", slot: "partner" },
-  { label: "가족 안에서", slot: "family" },
-  { label: "친구 사이에서", slot: "friend" },
-  { label: "일과 공부를 할 때", slot: "work" },
-  { label: "지치거나 긴장할 때", slot: "stress_and_recovery" },
-];
+    { label: "생각에서 행동까지", slot: "thought_and_response" },
+    { label: "평소 생활", slot: "daily_life" },
+    { label: "마음 가는 사람 앞에서", slot: "person_of_interest" },
+    { label: "연인과 함께할 때", slot: "partner" },
+    { label: "가족 안에서", slot: "family" },
+    { label: "친구 사이에서", slot: "friend" },
+    { label: "일과 공부를 할 때", slot: "work" },
+    { label: "지치거나 긴장할 때", slot: "stress_and_recovery" },
+  ];
 
 /** 결과 리포트와 성향지도를 잇는 공통 장문 요약 블록입니다. */
 export function TraitMapResultBridge({
@@ -63,7 +63,7 @@ export function TraitMapResultBridge({
 
       {fiveLetters ? (
         <article className={styles.letterStory}>
-          <p className={styles.topicLabel}>다섯 글자가 함께 말해주는 것</p>
+          <p className={styles.topicLabel}>뉴앙 코드가 함께 말해주는 것</p>
           <p className={styles.topicSummary}>{fiveLetters.summary}</p>
           <div className={styles.letterList}>
             {fiveLetters.sections.slice(0, 5).map((section) => {
@@ -109,20 +109,20 @@ export function TraitMapResultBridge({
       {previewChapters.length > 0 ? (
         <div className={styles.storyList}>
           {previewChapters.map(({ chapter, label }) => (
-          <article className={styles.story} key={chapter.id}>
-            <p className={styles.topicLabel}>{label}</p>
-            <h3>{chapter.summary}</h3>
-            <div className={styles.storyBody}>
-              {chapter.sections.slice(0, 2).map((section) => (
-                <div className={styles.storySection} key={section.title}>
-                  <h4>{section.title}</h4>
-                  {section.paragraphs.slice(0, 2).map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </article>
+            <article className={styles.story} key={chapter.id}>
+              <p className={styles.topicLabel}>{label}</p>
+              <h3>{chapter.summary}</h3>
+              <div className={styles.storyBody}>
+                {chapter.sections.slice(0, 2).map((section) => (
+                  <div className={styles.storySection} key={section.title}>
+                    <h4>{section.title}</h4>
+                    {section.paragraphs.slice(0, 2).map((paragraph) => (
+                      <p key={paragraph}>{paragraph}</p>
+                    ))}
+                  </div>
+                ))}
+              </div>
+            </article>
           ))}
         </div>
       ) : null}
@@ -159,9 +159,9 @@ export function countTraitMapResultPreviewCharacters(
   );
   const fiveLetterText = fiveLetters
     ? [
-        fiveLetters.summary,
-        ...fiveLetters.sections.slice(0, 5).map((section) => section.title),
-      ].join("")
+      fiveLetters.summary,
+      ...fiveLetters.sections.slice(0, 5).map((section) => section.title),
+    ].join("")
     : "";
   const chapterText = getTraitMapResultPreviewChapters(guide)
     .flatMap(({ chapter }) => [

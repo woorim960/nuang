@@ -365,14 +365,14 @@ function buildFiveLettersChapter(context: GuideContext): ChapterDraft {
     );
   });
   return {
-    label: "다섯 글자",
-    title: `${code} 다섯 글자를 한 글자씩 알아봐요`,
+    label: "뉴앙 코드",
+    title: `${code} 뉴앙 코드를 한 글자씩 알아봐요`,
     summary: `${code}는 ${code
       .split("")
       .map((symbol, index) => `${symbol} ${profile.codeTypeNames[index]}`)
       .join(" · ")}의 다섯 방향으로 이루어져요.`,
     checkQuestion:
-      "다섯 글자 가운데 최근 내 생각과 행동에서 가장 선명하게 드러난 글자는 무엇인가요?",
+      "뉴앙 코드 가운데 최근 내 생각과 행동에서 가장 선명하게 드러난 글자는 무엇인가요?",
     sections,
   };
 }
@@ -759,7 +759,7 @@ function buildEvidenceChapter(context: GuideContext): ChapterDraft {
       section(
         "어떤 성향을 살펴보나요?",
         `뉴앙은 한 가지 질문으로 ${code}를 정하지 않아요. 사람과 함께할 때의 활력, 관심이 머무는 곳, 관계에서 먼저 살피는 것, 일을 이어가는 방식, 걱정과 감정이 커지는 속도를 여러 장면에서 나누어 물어요.`,
-        `다섯 글자는 능력이나 좋고 나쁨의 점수가 아니에요. 각 방향이 최근 여러 달의 평소 생각과 행동에서 얼마나 반복됐는지를 함께 살펴 현재 더 가까운 쪽을 보여줘요.`,
+        `뉴앙 코드는 능력이나 좋고 나쁨의 점수가 아니에요. 각 방향이 최근 여러 달의 평소 생각과 행동에서 얼마나 반복됐는지를 함께 살펴 현재 더 가까운 쪽을 보여줘요.`,
       ),
       section(
         "반복되는 모습을 확인해요",

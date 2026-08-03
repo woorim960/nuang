@@ -28,6 +28,7 @@ import {
   isRequiredConsentComplete,
   type ConsentDraft,
 } from "@/features/consent/consent-draft";
+import { optionalConsentVersions } from "@/features/consent/optional-consent-contract";
 import { buildTrustedOAuthIdentities } from "@/features/auth/oauth-identity-policy";
 import { getAppOrigin } from "@/lib/supabase/env";
 import { getSupabaseServiceEnv } from "@/lib/supabase/service";
@@ -368,15 +369,14 @@ export async function ensureAccountForUser(
     };
   }
 
-  const resolver = await client.schema("identity").rpc(
-    "resolve_account_for_auth_user",
-    {
+  const resolver = await client
+    .schema("identity")
+    .rpc("resolve_account_for_auth_user", {
       p_correlation_id: options.auditEvent ? randomUUID() : null,
       p_identities: trustedIdentities.identities,
       p_linked_via: "same_auth_user",
       p_supabase_user_id: user.id,
-    },
-  );
+    });
 
   if (resolver.error || !Array.isArray(resolver.data)) {
     return { code: "resolver_failed" as const, ok: false as const };
@@ -419,66 +419,27 @@ export async function persistAccountConsent(
   accountId: string,
   consentDraft: ConsentDraft,
 ) {
-  const declaredAt = new Date().toISOString();
-
-  const statusResponse = await client
-    .schema("consent")
-    .from("age_and_consent_status")
-    .upsert(
-      {
-        account_id: accountId,
-        age_band: null,
-        age_source: "self_declared",
-        analytics_opt_in: consentDraft.analytics,
-        declared_at: declaredAt,
-        is_14_or_older: true,
-        marketing_opt_in: consentDraft.marketing,
-        policy_version: consentPolicyVersion,
-        required_privacy_version: privacyVersion,
-        required_terms_version: termsVersion,
-        updated_at: declaredAt,
-      },
-      { onConflict: "account_id" },
-    )
-    .select("account_id")
-    .single();
-
-  if (statusResponse.error) {
+  if (!isRequiredConsentComplete(consentDraft)) {
     return { ok: false as const };
   }
 
-  const consentRows = [
-    {
-      account_id: accountId,
-      consent_type: "terms",
-      consent_version: termsVersion,
-      metadata: {},
-      recorded_at: declaredAt,
-      source: "account_gate",
-      status: "granted",
-    },
-    {
-      account_id: accountId,
-      consent_type: "privacy",
-      consent_version: privacyVersion,
-      metadata: {},
-      recorded_at: declaredAt,
-      source: "account_gate",
-      status: "granted",
-    },
-  ];
-
-  const recordResponse = await client
+  const response = await client
     .schema("consent")
-    .from("consent_record")
-    .insert(consentRows)
-    .select("id");
+    .rpc("persist_account_consent", {
+      p_account_id: accountId,
+      p_analytics_requested: consentDraft.analytics,
+      p_analytics_version: optionalConsentVersions.analytics,
+      p_is_14_or_older: consentDraft.is14OrOlder,
+      p_marketing_requested: consentDraft.marketing,
+      p_marketing_version: optionalConsentVersions.marketing,
+      p_policy_version: consentPolicyVersion,
+      p_privacy_version: privacyVersion,
+      p_terms_version: termsVersion,
+    });
 
-  if (recordResponse.error) {
-    return { ok: false as const };
-  }
-
-  return { ok: true as const };
+  return response.error || response.data !== true
+    ? { ok: false as const }
+    : { ok: true as const };
 }
 
 async function writeContactProfile(

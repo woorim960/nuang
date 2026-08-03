@@ -251,8 +251,8 @@ export async function generateDerivedLongformResearchDraft(config) {
         lines.push(
           ...(validation?.validationFocus?.length
             ? [
-                `- 이 설명을 확인할 때 볼 점: ${validation.validationFocus.join(" / ")}`,
-              ]
+              `- 이 설명을 확인할 때 볼 점: ${validation.validationFocus.join(" / ")}`,
+            ]
             : []),
           `- 연결 근거: ${[...evidenceIds].map((id) => `\`${id}\``).join(", ")}`,
           "",
@@ -509,7 +509,7 @@ function enrichEditorialWithCanonicalScenes({
     ],
     five_code_positions: [
       `${code}는 ${tokenLabels} 순서로 읽는다. 앞의 두 자리는 에너지와 정보 탐색의 출발점, 셋째 자리는 관계에서 처음 살피는 곳, 넷째 자리는 실행을 이어가는 조건, 다섯째 자리는 걱정과 불편한 감정이 시작되는 속도를 보여 준다.`,
-      `다섯 글자는 서로 떨어진 설명이 아니다. 의견이 다를 때 ${sceneText("general", "disagreement", "first_thought")} 실제로는 ${sceneText("general", "disagreement", "actual_response")}처럼 한 장면 안에서 여러 자리가 함께 작동한다. 그래서 한 글자의 뜻과 전체 조합의 흐름을 모두 확인해야 한다.`,
+      `뉴앙 코드는 서로 떨어진 설명이 아니다. 의견이 다를 때 ${sceneText("general", "disagreement", "first_thought")} 실제로는 ${sceneText("general", "disagreement", "actual_response")}처럼 한 장면 안에서 여러 자리가 함께 작동한다. 그래서 한 글자의 뜻과 전체 조합의 흐름을 모두 확인해야 한다.`,
     ],
     code_interactions: [
       `평소 선택 장면을 네 단계로 나누면 상호작용이 선명해진다. 먼저 ${sceneText("general", "ordinary_choice", "attention")} 처음에는 ${sceneText("general", "ordinary_choice", "first_thought")} 실제로는 ${sceneText("general", "ordinary_choice", "actual_response")} 말할 때는 ${sceneText("general", "ordinary_choice", "communication")}`,

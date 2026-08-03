@@ -342,7 +342,7 @@ describe("CommunityFeed", () => {
           authorName: "도윤",
           body: "괜찮은지 한 번 묻고 기다리는 편이에요.",
           id: "reply-001",
-          timeLabel: "3분",
+          timeLabel: "3~5분",
         },
       ],
       title: "뉴앙에게 물어봐",

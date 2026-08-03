@@ -133,13 +133,13 @@ export function AssessmentHomeCoreSection() {
     () =>
       readError
         ? {
-            cta: "내 결과 확인하기",
-            description:
-              "저장된 결과 일부를 불러오지 못했어요. 결과 화면에서 다시 확인해 주세요.",
-            eyebrow: "결과 확인 필요",
-            href: "/my/reports",
-            title: "내 결과를 다시 확인해 주세요",
-          }
+          cta: "내 결과 확인하기",
+          description:
+            "저장된 결과 일부를 불러오지 못했어요. 결과 화면에서 다시 확인해 주세요.",
+          eyebrow: "결과 확인 필요",
+          href: "/my/reports",
+          title: "내 결과를 다시 확인해 주세요",
+        }
         : buildCoreJourneyState(attempts, accountResults),
     [accountResults, attempts, readError],
   );
@@ -344,16 +344,16 @@ export function buildCoreJourneyState(
   if (representative?.identity.kind === "full") {
     const href = representative.identity.accountResultReportId
       ? buildAccountCoreResultHref({
-          backHref: "/home",
-          resultReportId: representative.identity.accountResultReportId,
-        })
+        backHref: "/home",
+        resultReportId: representative.identity.accountResultReportId,
+      })
       : buildLocalCoreResultHref({
-          backHref: "/home",
-          localResultId: representative.identity.localResultId!,
-        });
+        backHref: "/home",
+        localResultId: representative.identity.localResultId!,
+      });
     return {
       cta: "내 성향 결과 보기",
-      description: "내 다섯 글자와 자세한 성향 해석을 다시 볼 수 있어요.",
+      description: "내 뉴앙 코드와 자세한 성향 해석을 다시 볼 수 있어요.",
       eyebrow: "정밀 성향 검사 완료",
       href,
       secondaryAction: {
@@ -392,10 +392,10 @@ export function buildCoreJourneyState(
 
   return {
     cta: "첫 성향 검사 시작하기",
-    description: "약 3분이면 나를 설명하는 첫 다섯 글자를 만날 수 있어요.",
+    description: "약 3~5분이면 나를 설명하는 첫 뉴앙 코드를 만날 수 있어요.",
     eyebrow: "뉴앙이 처음이라면",
     href: "/assessments/nu-core-quick?returnTo=%2Fhome",
-    title: "3분이면 내 성향의 첫 단서를 만나요",
+    title: "빠르게 뉴앙 코드 알아보기",
   };
 }
 
@@ -580,10 +580,10 @@ function getProgressAriaText(journey: CoreJourneyState) {
 function getAssessmentHref(kind: CoreAssessmentKind) {
   return kind === "full"
     ? buildPrecisionIntroHref({
-        backDestination: "/home",
-        entrySource: "home",
-        returnDestination: "/home",
-      })
+      backDestination: "/home",
+      entrySource: "home",
+      returnDestination: "/home",
+    })
     : "/assessments/nu-core-quick?returnTo=%2Fhome";
 }
 

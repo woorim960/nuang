@@ -89,7 +89,7 @@ describe("CandidateCoreResultView", () => {
       screen.queryByRole("navigation", { name: "결과 리포트 바로가기" }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByText("다섯 글자가 함께 말해주는 것"),
+      screen.getByText("뉴앙 코드가 함께 말해주는 것"),
     ).toBeInTheDocument();
     expect(
       screen.getByText("이번 답에서 특히 눈에 띈 모습"),
@@ -189,11 +189,11 @@ describe("CandidateCoreResultView", () => {
           domains: result.domains.map((domain) =>
             domain.domainId === "SE"
               ? {
-                  ...domain,
-                  isBoundary: false,
-                  score: 30,
-                  symbol: "I",
-                }
+                ...domain,
+                isBoundary: false,
+                score: 30,
+                symbol: "I",
+              }
               : domain,
           ),
         }}

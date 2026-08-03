@@ -34,7 +34,7 @@
     },
     {
       "chapterId": "five_code_positions",
-      "title": "I·R·A·M·C 다섯 글자의 실제 뜻",
+      "title": "I·R·A·M·C 뉴앙 코드의 실제 뜻",
       "nonWhitespaceCharacters": 1666,
       "sourceFiles": [
         "src/features/nuang-code/iramc-longform-editorial-v2.ts",

@@ -105,7 +105,7 @@ const validityClaims = [
   {
     claimId: "VA-04-THIRTY-TWO-ROLE-NAME",
     productClaim:
-      "다섯 글자 조합을 짧고 기억하기 쉬운 역할형 별칭으로 부를 수 있다.",
+      "뉴앙 코드 조합을 짧고 기억하기 쉬운 역할형 별칭으로 부를 수 있다.",
     claimClass: "mnemonic_naming_not_measurement",
     allowedCustomerWording:
       "코드를 기억하고 대화하기 쉽게 돕는 이름이다.",

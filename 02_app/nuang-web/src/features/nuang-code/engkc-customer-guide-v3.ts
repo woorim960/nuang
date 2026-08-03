@@ -124,7 +124,7 @@ const chapters: TraitMapCustomerGuideChapter[] = [
     checkQuestion:
       "E·N·G·K·C 중 내 일상에서 가장 자주 드러나는 글자는 무엇인가요?",
     id: "chapter-03",
-    label: "다섯 글자",
+    label: "뉴앙 코드",
     number: 3,
     slot: "five_letters",
     summary:
@@ -176,7 +176,7 @@ const chapters: TraitMapCustomerGuideChapter[] = [
     number: 4,
     slot: "combined_pattern",
     summary:
-      "다섯 글자가 함께 움직이면 ENGKC는 사람들과 아이디어를 넓히고, 핵심 원인을 찾아, 실행할 수 있는 계획으로 정리한 뒤 차분하게 이어가요.",
+      "뉴앙 코드가 함께 움직이면 ENGKC는 사람들과 아이디어를 넓히고, 핵심 원인을 찾아, 실행할 수 있는 계획으로 정리한 뒤 차분하게 이어가요.",
     title: "다섯 경향이 함께 움직이는 방식을 살펴봐요",
     sections: [
       {
@@ -599,7 +599,7 @@ const chapters: TraitMapCustomerGuideChapter[] = [
         title: "전문 연구를 생활 언어로 바꿔요",
         paragraphs: [
           "성향의 넓은 구조는 Big Five와 BFI-2 같은 성격 연구를 참고하고, 한 사람이 여러 장면에서 보이는 행동은 성향과 일상 행동의 관계를 살펴본 연구를 참고해요. 감정과 표현의 차이도 감정 조절 연구를 바탕으로 나누어 설명해요.",
-          "전문 연구의 문장을 그대로 옮기지 않고 ENGKC의 다섯 글자와 실제 생활 장면에 연결되는 내용만 사용해요. 연구 용어보다 가족과 대화할 때, 친구의 고민을 들을 때, 일을 마친 뒤처럼 누구나 떠올릴 수 있는 말로 안내해요.",
+          "전문 연구의 문장을 그대로 옮기지 않고 ENGKC의 뉴앙 코드와 실제 생활 장면에 연결되는 내용만 사용해요. 연구 용어보다 가족과 대화할 때, 친구의 고민을 들을 때, 일을 마친 뒤처럼 누구나 떠올릴 수 있는 말로 안내해요.",
         ],
       },
     ],

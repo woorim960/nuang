@@ -30,7 +30,10 @@
     {
       "sourceId": "SRC-BFI2-2017",
       "title": "The Next Big Five Inventory (BFI-2): Developing and Assessing a Hierarchical Model With 15 Facets",
-      "authors": ["Christopher J. Soto", "Oliver P. John"],
+      "authors": [
+        "Christopher J. Soto",
+        "Oliver P. John"
+      ],
       "year": 2017,
       "doi": "10.1037/pspp0000096",
       "sourceType": "measurement_study",
@@ -59,7 +62,10 @@
     {
       "sourceId": "SRC-STATE-MEASUREMENT-2020",
       "title": "Assessing Personality States: What to Consider When Constructing Personality State Measures",
-      "authors": ["Kai T. Horstmann", "Matthias Ziegler"],
+      "authors": [
+        "Kai T. Horstmann",
+        "Matthias Ziegler"
+      ],
       "year": 2020,
       "doi": "10.1002/per.2266",
       "sourceType": "peer_reviewed_study",
@@ -88,7 +94,9 @@
     {
       "sourceId": "SRC-SITUATION-CONTINGENCY-2007",
       "title": "Situation-Based Contingencies Underlying Trait-Content Manifestation in Behavior",
-      "authors": ["William Fleeson"],
+      "authors": [
+        "William Fleeson"
+      ],
       "year": 2007,
       "doi": "10.1111/j.1467-6494.2007.00458.x",
       "sourceType": "experience_sampling_study",
@@ -117,7 +125,10 @@
     {
       "sourceId": "SRC-INTENTION-BEHAVIOR-2016",
       "title": "The Intention–Behavior Gap",
-      "authors": ["Paschal Sheeran", "Thomas L. Webb"],
+      "authors": [
+        "Paschal Sheeran",
+        "Thomas L. Webb"
+      ],
       "year": 2016,
       "doi": "10.1111/spc3.12265",
       "sourceType": "peer_reviewed_study",
@@ -180,7 +191,9 @@
     {
       "sourceId": "SRC-EMOTION-PROCESS-1998",
       "title": "Antecedent- and Response-Focused Emotion Regulation",
-      "authors": ["James J. Gross"],
+      "authors": [
+        "James J. Gross"
+      ],
       "year": 1998,
       "doi": "10.1037/0022-3514.74.1.224",
       "sourceType": "peer_reviewed_study",
@@ -209,7 +222,10 @@
     {
       "sourceId": "SRC-TRAIT-ENACTMENT-2015",
       "title": "Trait Enactments as Density Distributions: The Role of Actors, Situations, and Observers in Explaining Stability and Variability",
-      "authors": ["William Fleeson", "Mary Kate Law"],
+      "authors": [
+        "William Fleeson",
+        "Mary Kate Law"
+      ],
       "year": 2015,
       "doi": "10.1037/a0039517",
       "sourceType": "peer_reviewed_study",
@@ -272,7 +288,10 @@
     {
       "sourceId": "SRC-RELATIONAL-UNCERTAINTY-2011",
       "title": "Relational Uncertainty and Relationship Talk within Courtship: A Longitudinal Actor–Partner Interdependence Model",
-      "authors": ["Leanne K. Knobloch", "Jennifer A. Theiss"],
+      "authors": [
+        "Leanne K. Knobloch",
+        "Jennifer A. Theiss"
+      ],
       "year": 2011,
       "doi": "10.1080/03637751.2010.542471",
       "sourceType": "longitudinal_study",
@@ -301,7 +320,11 @@
     {
       "sourceId": "SRC-FRIEND-DAILY-2015",
       "title": "Personality and Friendship Satisfaction in Daily Life: Do Everyday Social Interactions Account for Individual Differences in Friendship Satisfaction?",
-      "authors": ["Robert E. Wilson", "Kelci Harris", "Simine Vazire"],
+      "authors": [
+        "Robert E. Wilson",
+        "Kelci Harris",
+        "Simine Vazire"
+      ],
       "year": 2015,
       "doi": "10.1002/per.1996",
       "sourceType": "experience_sampling_study",
@@ -432,7 +455,10 @@
     {
       "sourceId": "SRC-PERSON-SITUATION-WORK-2015",
       "title": "The Person–Situation Debate Revisited: Effect of Situation Strength and Trait Activation on the Validity of the Big Five Personality Traits in Predicting Job Performance",
-      "authors": ["Timothy A. Judge", "Cindy P. Zapata"],
+      "authors": [
+        "Timothy A. Judge",
+        "Cindy P. Zapata"
+      ],
       "year": 2015,
       "doi": "10.5465/amj.2010.0837",
       "sourceType": "meta_analysis",
@@ -461,7 +487,11 @@
     {
       "sourceId": "SRC-EXTRAVERSION-PA-2015",
       "title": "Clarifying the Relation Between Extraversion and Positive Affect",
-      "authors": ["Luke D. Smillie", "Colin G. DeYoung", "Philip J. Hall"],
+      "authors": [
+        "Luke D. Smillie",
+        "Colin G. DeYoung",
+        "Philip J. Hall"
+      ],
       "year": 2015,
       "doi": "10.1111/jopy.12138",
       "sourceType": "peer_reviewed_study",
@@ -490,7 +520,9 @@
     {
       "sourceId": "SRC-STATE-DISTRIBUTION-2001",
       "title": "Toward a Structure- and Process-Integrated View of Personality: Traits as Density Distributions of States",
-      "authors": ["William Fleeson"],
+      "authors": [
+        "William Fleeson"
+      ],
       "year": 2001,
       "doi": "10.1037/0022-3514.80.6.1011",
       "sourceType": "experience_sampling_study",
@@ -519,7 +551,10 @@
     {
       "sourceId": "SRC-TRAIT-ACTIVATION-2003",
       "title": "A Personality Trait-Based Interactionist Model of Job Performance",
-      "authors": ["Robert P. Tett", "Dawn D. Burnett"],
+      "authors": [
+        "Robert P. Tett",
+        "Dawn D. Burnett"
+      ],
       "year": 2003,
       "doi": "10.1037/0021-9010.88.3.500",
       "sourceType": "peer_reviewed_study",
@@ -669,7 +704,7 @@
       "screeningStatus": "included",
       "directness": "indirect",
       "replication": "single_sample",
-      "populationSummary": "18~28세 이성애 독신자 397명이 참여한 실제 3분 스피드데이트 940건",
+      "populationSummary": "18~28세 이성애 독신자 397명이 참여한 실제 3~5분 스피드데이트 940건",
       "sampleSize": 397,
       "sourceFile": "src/features/nuang-code/trait-map-relationship-evidence-v2.ts",
       "usage": {
@@ -691,7 +726,9 @@
     {
       "sourceId": "SRC-SOKA-2010",
       "title": "Who Knows What About a Person? The Self–Other Knowledge Asymmetry Model",
-      "authors": ["Simine Vazire"],
+      "authors": [
+        "Simine Vazire"
+      ],
       "year": 2010,
       "doi": "10.1037/a0017908",
       "sourceType": "measurement_study",
@@ -720,7 +757,10 @@
     {
       "sourceId": "SRC-FRIEND-DYAD-2023",
       "title": "Personality Is Related to Satisfaction in Friendship Dyads, but Similarity Is Not: Understanding the Links Between the Big Five and Friendship Satisfaction Using Actor-Partner Interdependence Models",
-      "authors": ["Robert Körner", "Tobias Altmann"],
+      "authors": [
+        "Robert Körner",
+        "Tobias Altmann"
+      ],
       "year": 2023,
       "doi": "10.1016/j.jrp.2023.104436",
       "sourceType": "peer_reviewed_study",
@@ -749,7 +789,10 @@
     {
       "sourceId": "SRC-SELF-KNOWLEDGE-2010",
       "title": "Self-Knowledge of Personality: Do People Know Themselves?",
-      "authors": ["Simine Vazire", "Erika N. Carlson"],
+      "authors": [
+        "Simine Vazire",
+        "Erika N. Carlson"
+      ],
       "year": 2010,
       "doi": "10.1111/j.1751-9004.2010.00280.x",
       "sourceType": "peer_reviewed_study",
@@ -778,7 +821,10 @@
     {
       "sourceId": "SRC-JOB-META-1991",
       "title": "The Big Five Personality Dimensions and Job Performance: A Meta-Analysis",
-      "authors": ["Murray R. Barrick", "Michael K. Mount"],
+      "authors": [
+        "Murray R. Barrick",
+        "Michael K. Mount"
+      ],
       "year": 1991,
       "doi": "10.1111/j.1744-6570.1991.tb00688.x",
       "sourceType": "meta_analysis",
@@ -807,7 +853,11 @@
     {
       "sourceId": "SRC-BFAS-2007",
       "title": "Between Facets and Domains: 10 Aspects of the Big Five",
-      "authors": ["Colin G. DeYoung", "Lena C. Quilty", "Jordan B. Peterson"],
+      "authors": [
+        "Colin G. DeYoung",
+        "Lena C. Quilty",
+        "Jordan B. Peterson"
+      ],
       "year": 2007,
       "doi": "10.1037/0022-3514.93.5.880",
       "sourceType": "measurement_study",
@@ -874,7 +924,11 @@
     {
       "sourceId": "SRC-CREATIVITY-DISTINCTION-2014",
       "title": "The Road to Creative Achievement: A Latent Variable Model of Ability and Personality Predictors",
-      "authors": ["Emanuel Jauk", "Mathias Benedek", "Aljoscha C. Neubauer"],
+      "authors": [
+        "Emanuel Jauk",
+        "Mathias Benedek",
+        "Aljoscha C. Neubauer"
+      ],
       "year": 2014,
       "doi": "10.1002/per.1941",
       "sourceType": "peer_reviewed_study",
@@ -939,7 +993,11 @@
     {
       "sourceId": "SRC-DIAMONDS-2014",
       "title": "The Situational Eight DIAMONDS: A Taxonomy of Major Dimensions of Situation Characteristics",
-      "authors": ["John F. Rauthmann", "Ry Ry Sherman", "David C. Funder"],
+      "authors": [
+        "John F. Rauthmann",
+        "Ry Ry Sherman",
+        "David C. Funder"
+      ],
       "year": 2014,
       "doi": "10.1037/a0037250",
       "sourceType": "measurement_study",
@@ -1112,7 +1170,9 @@
     {
       "sourceId": "SRC-ITC-2017",
       "title": "ITC Guidelines for Translating and Adapting Tests, Second Edition",
-      "authors": ["International Test Commission"],
+      "authors": [
+        "International Test Commission"
+      ],
       "year": 2017,
       "doi": null,
       "sourceType": "standard",
@@ -1141,7 +1201,9 @@
     {
       "sourceId": "SRC-KOREA-SITUATION-2024",
       "title": "Cultural Validation of Situational DIAMONDS in South Korea",
-      "authors": ["source_authors_pending_bibliographic_verification"],
+      "authors": [
+        "source_authors_pending_bibliographic_verification"
+      ],
       "year": 2024,
       "doi": "10.1016/j.paid.2024.112616",
       "sourceType": "cross_cultural_study",
@@ -1170,7 +1232,9 @@
     {
       "sourceId": "SRC-PERSONAL-VALIDATION-1949",
       "title": "The Fallacy of Personal Validation: A Classroom Demonstration of Gullibility",
-      "authors": ["Bertram R. Forer"],
+      "authors": [
+        "Bertram R. Forer"
+      ],
       "year": 1949,
       "doi": "10.1037/h0059240",
       "sourceType": "peer_reviewed_study",
@@ -1303,7 +1367,10 @@
     {
       "sourceId": "SRC-WHOLE-TRAIT-2015",
       "title": "Whole Trait Theory",
-      "authors": ["William Fleeson", "Eranda Jayawickreme"],
+      "authors": [
+        "William Fleeson",
+        "Eranda Jayawickreme"
+      ],
       "year": 2015,
       "doi": "10.1016/j.jrp.2014.10.009",
       "sourceType": "peer_reviewed_study",
@@ -1491,7 +1558,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-IPC-2013",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-IPC-2013"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-IPC-2013"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
@@ -1623,7 +1693,10 @@
     },
     {
       "pairId": "SRC-STATE-MEASUREMENT-2020::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-STATE-MEASUREMENT-2020", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-STATE-MEASUREMENT-2020",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-FAMILY-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -1755,7 +1828,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-R",
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-N",
@@ -1879,7 +1955,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-SITUATION-CONTINGENCY-2007",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-SITUATION-CONTINGENCY-2007"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-SITUATION-CONTINGENCY-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-R",
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-N",
@@ -2085,14 +2164,19 @@
       ],
       "highRiskVariantCount": 91,
       "sameDoi": false,
-      "sharedAuthors": ["William Fleeson"],
+      "sharedAuthors": [
+        "William Fleeson"
+      ],
       "exactAuthorTeam": false,
       "bothSubstantive": true,
       "independenceState": "unresolved_missing_dataset_sample_and_study_family_registry"
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
@@ -2184,7 +2268,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-EMOTION-PROCESS-1998",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-EMOTION-PROCESS-1998"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-EMOTION-PROCESS-1998"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-N-ER-C",
@@ -2274,7 +2361,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-INTENTION-BEHAVIOR-2016",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-INTENTION-BEHAVIOR-2016"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
@@ -2364,7 +2454,10 @@
     },
     {
       "pairId": "SRC-INTENTION-BEHAVIOR-2016::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-SETBACK-ATTENTION-COMMON",
         "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
@@ -2453,7 +2546,10 @@
     },
     {
       "pairId": "SRC-INTENTION-BEHAVIOR-2016::SRC-IPC-2013",
-      "sourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-IPC-2013"],
+      "sourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-IPC-2013"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
@@ -2540,7 +2636,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-OPENNESS-INTELLECT-2009",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-OPENNESS-INTELLECT-2009"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-OPENNESS-INTELLECT-2009"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-R",
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-N",
@@ -2884,7 +2983,10 @@
     },
     {
       "pairId": "SRC-INTENTION-BEHAVIOR-2016::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-FAMILY-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -2967,7 +3069,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-RELATIONAL-UNCERTAINTY-2011",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-RELATIONAL-UNCERTAINTY-2011"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-RELATIONAL-UNCERTAINTY-2011"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-PARTNER-UNCERTAINTY-ATTENTION-OE-N-ER-C",
@@ -3122,7 +3227,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-IPC-2013", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
@@ -3198,7 +3306,10 @@
     },
     {
       "pairId": "SRC-STATE-MEASUREMENT-2020::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-STATE-MEASUREMENT-2020", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-STATE-MEASUREMENT-2020",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-K",
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-M",
@@ -3271,7 +3382,10 @@
     },
     {
       "pairId": "SRC-STRESS-STATE-2026::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-STRESS-STATE-2026", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-STRESS-STATE-2026",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-K",
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-M",
@@ -3344,7 +3458,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-EXTRAVERSION-PA-2015",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-EXTRAVERSION-PA-2015"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-EXTRAVERSION-PA-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -3412,7 +3529,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-STATE-DISTRIBUTION-2001",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-STATE-DISTRIBUTION-2001"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-STATE-DISTRIBUTION-2001"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -3480,7 +3600,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-N-ER-C",
@@ -3548,7 +3671,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-N-ER-C",
@@ -3616,7 +3742,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-N-ER-C",
@@ -3684,7 +3813,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-IPC-2013",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-IPC-2013"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-IPC-2013"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -3745,14 +3877,19 @@
       ],
       "highRiskVariantCount": 56,
       "sameDoi": false,
-      "sharedAuthors": ["Colin G. DeYoung"],
+      "sharedAuthors": [
+        "Colin G. DeYoung"
+      ],
       "exactAuthorTeam": false,
       "bothSubstantive": true,
       "independenceState": "unresolved_missing_dataset_sample_and_study_family_registry"
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-STATE-DISTRIBUTION-2001",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-STATE-DISTRIBUTION-2001"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-STATE-DISTRIBUTION-2001"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -3820,7 +3957,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-STATE-DISTRIBUTION-2001",
-      "sourceIds": ["SRC-IPC-2013", "SRC-STATE-DISTRIBUTION-2001"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-STATE-DISTRIBUTION-2001"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -3888,7 +4028,10 @@
     },
     {
       "pairId": "SRC-SITUATION-CONTINGENCY-2007::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-SITUATION-CONTINGENCY-2007", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-SITUATION-CONTINGENCY-2007",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-K",
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-M",
@@ -4072,7 +4215,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-INTENTION-BEHAVIOR-2016",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-INTENTION-BEHAVIOR-2016"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
@@ -4120,7 +4266,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-INTENTION-BEHAVIOR-2016",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-INTENTION-BEHAVIOR-2016"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -4168,7 +4317,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-RELATIONAL-UNCERTAINTY-2011",
-      "sourceIds": ["SRC-IPC-2013", "SRC-RELATIONAL-UNCERTAINTY-2011"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-RELATIONAL-UNCERTAINTY-2011"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-ATTENTION-SE-E",
         "CAN-SCN-PERSON-OF-INTEREST-NEW-ENCOUNTER-ATTENTION-SE-I",
@@ -4309,7 +4461,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-INITIAL-ATTRACTION-2023",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-INITIAL-ATTRACTION-2023"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-INITIAL-ATTRACTION-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -4353,7 +4508,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-RESPONSIVENESS-2017",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-RESPONSIVENESS-2017"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-RESPONSIVENESS-2017"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -4397,7 +4555,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-SETBACK-ATTENTION-ER-C",
         "CAN-SCN-WORK-SETBACK-ATTENTION-ER-Q",
@@ -4488,7 +4649,10 @@
     },
     {
       "pairId": "SRC-INTENTION-BEHAVIOR-2016::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-K",
         "CAN-SCN-FAMILY-PLAN-CHANGE-ATTENTION-SM-M",
@@ -4532,7 +4696,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-RESPONSIVENESS-2017",
-      "sourceIds": ["SRC-IPC-2013", "SRC-RESPONSIVENESS-2017"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-RESPONSIVENESS-2017"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -4576,7 +4743,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-SITUATION-CONTINGENCY-2007",
-      "sourceIds": ["SRC-IPC-2013", "SRC-SITUATION-CONTINGENCY-2007"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-SITUATION-CONTINGENCY-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -4801,7 +4971,9 @@
       ],
       "highRiskVariantCount": 32,
       "sameDoi": false,
-      "sharedAuthors": ["William Fleeson"],
+      "sharedAuthors": [
+        "William Fleeson"
+      ],
       "exactAuthorTeam": true,
       "bothSubstantive": true,
       "independenceState": "unresolved_missing_dataset_sample_and_study_family_registry"
@@ -4899,7 +5071,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-IPC-2013",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-IPC-2013"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-IPC-2013"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -4941,7 +5116,10 @@
     },
     {
       "pairId": "SRC-RELATIONAL-UNCERTAINTY-2011::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-RELATIONAL-UNCERTAINTY-2011", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-RELATIONAL-UNCERTAINTY-2011",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-N-ER-Q",
@@ -4983,7 +5161,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -5024,7 +5205,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -5065,7 +5249,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-AFTERMATH-RESPONSE-COMMON",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
@@ -5106,7 +5293,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-SETBACK-ATTENTION-RO-G",
         "CAN-SCN-FRIEND-SETBACK-ATTENTION-RO-A",
@@ -5185,7 +5375,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-FRIEND-DAILY-2015",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-FRIEND-DAILY-2015"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-FRIEND-DAILY-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -5221,7 +5414,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-PERSON-SITUATION-WORK-2015",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-PERSON-SITUATION-WORK-2015"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-NEW-ENCOUNTER-ATTENTION-OE-R",
         "CAN-SCN-WORK-NEW-ENCOUNTER-ATTENTION-OE-N",
@@ -5257,7 +5453,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-REALTIME-PERSON-SITUATION-2015",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-REALTIME-PERSON-SITUATION-2015"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-REALTIME-PERSON-SITUATION-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-R",
         "CAN-SCN-FAMILY-NEW-ENCOUNTER-ATTENTION-OE-N",
@@ -5293,7 +5492,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-IPC-2013",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-IPC-2013"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-IPC-2013"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-DISAGREEMENT-ATTENTION-RO-A",
@@ -5329,7 +5531,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-INITIAL-ATTRACTION-2023",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-INITIAL-ATTRACTION-2023"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-INITIAL-ATTRACTION-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -5365,7 +5570,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-SITUATION-CONTINGENCY-2007",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-SITUATION-CONTINGENCY-2007"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-SITUATION-CONTINGENCY-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -5401,7 +5609,10 @@
     },
     {
       "pairId": "SRC-INITIAL-ATTRACTION-2023::SRC-IPC-2013",
-      "sourceIds": ["SRC-INITIAL-ATTRACTION-2023", "SRC-IPC-2013"],
+      "sourceIds": [
+        "SRC-INITIAL-ATTRACTION-2023",
+        "SRC-IPC-2013"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -5593,7 +5804,10 @@
     },
     {
       "pairId": "SRC-INTENTION-BEHAVIOR-2016::SRC-RESPONSIVENESS-2017",
-      "sourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-RESPONSIVENESS-2017"],
+      "sourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-RESPONSIVENESS-2017"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-PARTNER-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -5668,7 +5882,10 @@
     },
     {
       "pairId": "SRC-STATE-MEASUREMENT-2020::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-STATE-MEASUREMENT-2020", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-STATE-MEASUREMENT-2020",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-WORK-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -5742,7 +5959,10 @@
     },
     {
       "pairId": "SRC-DAILY-STRESS-STATES-2024::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-DAILY-STRESS-STATES-2024", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-DAILY-STRESS-STATES-2024",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-N-ER-C",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -5777,7 +5997,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-DAILY-STRESS-STATES-2024",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-DAILY-STRESS-STATES-2024"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-DAILY-STRESS-STATES-2024"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-N-ER-C",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -5847,7 +6070,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-RESPONSIVENESS-2017",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-RESPONSIVENESS-2017"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-RESPONSIVENESS-2017"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-SUCCESS-ATTENTION-COMMON",
         "CAN-SCN-PARTNER-SUCCESS-PROCESS-COMMON",
@@ -5879,7 +6105,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-IPC-2013", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -5908,7 +6137,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-FRIEND-DYAD-2023",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-FRIEND-DYAD-2023"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-FRIEND-DYAD-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -5936,7 +6168,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-SOKA-2010",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-SOKA-2010"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-SOKA-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -5995,7 +6230,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-OPENNESS-INTELLECT-2009",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-OPENNESS-INTELLECT-2009"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-OPENNESS-INTELLECT-2009"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -6023,7 +6261,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-SOKA-2010",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-SOKA-2010"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-SOKA-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -6051,7 +6292,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-SETBACK-ATTENTION-ER-C",
         "CAN-SCN-WORK-SETBACK-ATTENTION-ER-Q",
@@ -6079,7 +6323,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-FRIEND-DYAD-2023",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-FRIEND-DYAD-2023"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-FRIEND-DYAD-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6107,7 +6354,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-OPENNESS-INTELLECT-2009",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-OPENNESS-INTELLECT-2009"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-OPENNESS-INTELLECT-2009"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6128,7 +6378,9 @@
       ],
       "highRiskVariantCount": 16,
       "sameDoi": false,
-      "sharedAuthors": ["Colin G. DeYoung"],
+      "sharedAuthors": [
+        "Colin G. DeYoung"
+      ],
       "exactAuthorTeam": false,
       "bothSubstantive": true,
       "independenceState": "unresolved_missing_dataset_sample_and_study_family_registry"
@@ -6166,7 +6418,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6194,7 +6449,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -6222,7 +6480,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-FRIEND-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -6250,7 +6511,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DYAD-2023::SRC-INITIAL-ATTRACTION-2023",
-      "sourceIds": ["SRC-FRIEND-DYAD-2023", "SRC-INITIAL-ATTRACTION-2023"],
+      "sourceIds": [
+        "SRC-FRIEND-DYAD-2023",
+        "SRC-INITIAL-ATTRACTION-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6278,7 +6542,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DYAD-2023::SRC-IPC-2013",
-      "sourceIds": ["SRC-FRIEND-DYAD-2023", "SRC-IPC-2013"],
+      "sourceIds": [
+        "SRC-FRIEND-DYAD-2023",
+        "SRC-IPC-2013"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6306,7 +6573,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DYAD-2023::SRC-OPENNESS-INTELLECT-2009",
-      "sourceIds": ["SRC-FRIEND-DYAD-2023", "SRC-OPENNESS-INTELLECT-2009"],
+      "sourceIds": [
+        "SRC-FRIEND-DYAD-2023",
+        "SRC-OPENNESS-INTELLECT-2009"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6334,7 +6604,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DYAD-2023::SRC-SITUATION-CONTINGENCY-2007",
-      "sourceIds": ["SRC-FRIEND-DYAD-2023", "SRC-SITUATION-CONTINGENCY-2007"],
+      "sourceIds": [
+        "SRC-FRIEND-DYAD-2023",
+        "SRC-SITUATION-CONTINGENCY-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6362,7 +6635,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DYAD-2023::SRC-STATE-DISTRIBUTION-2001",
-      "sourceIds": ["SRC-FRIEND-DYAD-2023", "SRC-STATE-DISTRIBUTION-2001"],
+      "sourceIds": [
+        "SRC-FRIEND-DYAD-2023",
+        "SRC-STATE-DISTRIBUTION-2001"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6390,7 +6666,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DYAD-2023::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-FRIEND-DYAD-2023", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-FRIEND-DYAD-2023",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6480,7 +6759,10 @@
     },
     {
       "pairId": "SRC-INTENTION-BEHAVIOR-2016::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-WORK-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -6508,7 +6790,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-OPENNESS-INTELLECT-2009",
-      "sourceIds": ["SRC-IPC-2013", "SRC-OPENNESS-INTELLECT-2009"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-OPENNESS-INTELLECT-2009"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6529,14 +6814,19 @@
       ],
       "highRiskVariantCount": 16,
       "sameDoi": false,
-      "sharedAuthors": ["Colin G. DeYoung"],
+      "sharedAuthors": [
+        "Colin G. DeYoung"
+      ],
       "exactAuthorTeam": false,
       "bothSubstantive": true,
       "independenceState": "unresolved_missing_dataset_sample_and_study_family_registry"
     },
     {
       "pairId": "SRC-IPC-2013::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-IPC-2013", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-R",
         "CAN-SCN-FRIEND-NEW-ENCOUNTER-ATTENTION-SE-E-OE-N",
@@ -6626,7 +6916,10 @@
     },
     {
       "pairId": "SRC-OPENNESS-INTELLECT-2009::SRC-SOKA-2010",
-      "sourceIds": ["SRC-OPENNESS-INTELLECT-2009", "SRC-SOKA-2010"],
+      "sourceIds": [
+        "SRC-OPENNESS-INTELLECT-2009",
+        "SRC-SOKA-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -6685,7 +6978,10 @@
     },
     {
       "pairId": "SRC-OPENNESS-INTELLECT-2009::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-OPENNESS-INTELLECT-2009", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-OPENNESS-INTELLECT-2009",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -6713,7 +7009,10 @@
     },
     {
       "pairId": "SRC-OPENNESS-INTELLECT-2009::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-OPENNESS-INTELLECT-2009", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-OPENNESS-INTELLECT-2009",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -6803,7 +7102,10 @@
     },
     {
       "pairId": "SRC-RELATIONAL-UNCERTAINTY-2011::SRC-SOKA-2010",
-      "sourceIds": ["SRC-RELATIONAL-UNCERTAINTY-2011", "SRC-SOKA-2010"],
+      "sourceIds": [
+        "SRC-RELATIONAL-UNCERTAINTY-2011",
+        "SRC-SOKA-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -6893,7 +7195,10 @@
     },
     {
       "pairId": "SRC-RESPONSIVENESS-2017::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-RESPONSIVENESS-2017", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-RESPONSIVENESS-2017",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-PARTNER-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -6921,7 +7226,10 @@
     },
     {
       "pairId": "SRC-RESPONSIVENESS-2017::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-RESPONSIVENESS-2017", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-RESPONSIVENESS-2017",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-PARTNER-DISAGREEMENT-ATTENTION-RO-A",
@@ -6949,7 +7257,10 @@
     },
     {
       "pairId": "SRC-RESPONSIVENESS-2017::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-RESPONSIVENESS-2017", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-RESPONSIVENESS-2017",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-PARTNER-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -6977,7 +7288,10 @@
     },
     {
       "pairId": "SRC-SITUATION-CONTINGENCY-2007::SRC-SOKA-2010",
-      "sourceIds": ["SRC-SITUATION-CONTINGENCY-2007", "SRC-SOKA-2010"],
+      "sourceIds": [
+        "SRC-SITUATION-CONTINGENCY-2007",
+        "SRC-SOKA-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -7036,7 +7350,10 @@
     },
     {
       "pairId": "SRC-SOKA-2010::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-SOKA-2010", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-SOKA-2010",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -7064,7 +7381,10 @@
     },
     {
       "pairId": "SRC-SOKA-2010::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-SOKA-2010", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-SOKA-2010",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -7092,7 +7412,10 @@
     },
     {
       "pairId": "SRC-SOKA-2010::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-SOKA-2010", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-SOKA-2010",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -7151,7 +7474,10 @@
     },
     {
       "pairId": "SRC-STATE-MEASUREMENT-2020::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-STATE-MEASUREMENT-2020", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-STATE-MEASUREMENT-2020",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-SETBACK-ATTENTION-ER-C",
         "CAN-SCN-PARTNER-SETBACK-ATTENTION-ER-Q",
@@ -7179,7 +7505,10 @@
     },
     {
       "pairId": "SRC-TRAIT-ACTIVATION-2003::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-TRAIT-ACTIVATION-2003", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-ORDINARY-CHOICE-ATTENTION-SM-K",
         "CAN-SCN-WORK-ORDINARY-CHOICE-ATTENTION-SM-M",
@@ -7207,7 +7536,10 @@
     },
     {
       "pairId": "SRC-DAILY-STRESS-STATES-2024::SRC-EMOTION-PROCESS-1998",
-      "sourceIds": ["SRC-DAILY-STRESS-STATES-2024", "SRC-EMOTION-PROCESS-1998"],
+      "sourceIds": [
+        "SRC-DAILY-STRESS-STATES-2024",
+        "SRC-EMOTION-PROCESS-1998"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-N-ER-C",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -7234,7 +7566,10 @@
     },
     {
       "pairId": "SRC-DAILY-STRESS-STATES-2024::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-DAILY-STRESS-STATES-2024", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-DAILY-STRESS-STATES-2024",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-Q",
@@ -7260,7 +7595,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-REACTIVITY-RECOVERY-2023",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-REACTIVITY-RECOVERY-2023"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-REACTIVITY-RECOVERY-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-AFTERMATH-ATTENTION-RO-G",
         "CAN-SCN-FAMILY-AFTERMATH-PROCESS-RO-G",
@@ -7315,7 +7653,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-PERSON-SITUATION-WORK-2015",
-      "sourceIds": ["SRC-IPC-2013", "SRC-PERSON-SITUATION-WORK-2015"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7366,7 +7707,10 @@
     },
     {
       "pairId": "SRC-SUPPORT-MATCHING-2007::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-SUPPORT-MATCHING-2007", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-SUPPORT-MATCHING-2007",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-DISAGREEMENT-ATTENTION-RO-G",
         "CAN-SCN-WORK-DISAGREEMENT-ATTENTION-RO-A",
@@ -7439,7 +7783,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-FRIEND-DAILY-2015",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-FRIEND-DAILY-2015"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-FRIEND-DAILY-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7505,7 +7852,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-RESPONSIVENESS-2017",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-RESPONSIVENESS-2017"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-RESPONSIVENESS-2017"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7525,7 +7875,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7545,7 +7898,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-STATE-DISTRIBUTION-2001",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-STATE-DISTRIBUTION-2001"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-STATE-DISTRIBUTION-2001"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-FRIEND-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7565,7 +7921,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-PLAN-CHANGE-ATTENTION-SM-K",
         "CAN-SCN-FRIEND-PLAN-CHANGE-ATTENTION-SM-M",
@@ -7585,7 +7944,10 @@
     },
     {
       "pairId": "SRC-IPC-2013::SRC-REALTIME-PERSON-SITUATION-2015",
-      "sourceIds": ["SRC-IPC-2013", "SRC-REALTIME-PERSON-SITUATION-2015"],
+      "sourceIds": [
+        "SRC-IPC-2013",
+        "SRC-REALTIME-PERSON-SITUATION-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7605,7 +7967,10 @@
     },
     {
       "pairId": "SRC-OPENNESS-INTELLECT-2009::SRC-SUPPORT-MATCHING-2007",
-      "sourceIds": ["SRC-OPENNESS-INTELLECT-2009", "SRC-SUPPORT-MATCHING-2007"],
+      "sourceIds": [
+        "SRC-OPENNESS-INTELLECT-2009",
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-NEW-ENCOUNTER-ATTENTION-OE-R",
         "CAN-SCN-PARTNER-NEW-ENCOUNTER-ATTENTION-OE-N",
@@ -7625,7 +7990,10 @@
     },
     {
       "pairId": "SRC-OPENNESS-INTELLECT-2009::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-OPENNESS-INTELLECT-2009", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-OPENNESS-INTELLECT-2009",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-NEW-ENCOUNTER-ATTENTION-OE-R",
         "CAN-SCN-WORK-NEW-ENCOUNTER-ATTENTION-OE-N",
@@ -7668,7 +8036,10 @@
     },
     {
       "pairId": "SRC-PERSON-SITUATION-WORK-2015::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-PERSON-SITUATION-WORK-2015", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-PLAN-CHANGE-ATTENTION-SM-K",
         "CAN-SCN-WORK-PLAN-CHANGE-ATTENTION-SM-M",
@@ -7780,7 +8151,10 @@
     },
     {
       "pairId": "SRC-RESPONSIVENESS-2017::SRC-STATE-DISTRIBUTION-2001",
-      "sourceIds": ["SRC-RESPONSIVENESS-2017", "SRC-STATE-DISTRIBUTION-2001"],
+      "sourceIds": [
+        "SRC-RESPONSIVENESS-2017",
+        "SRC-STATE-DISTRIBUTION-2001"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-PARTNER-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7800,7 +8174,10 @@
     },
     {
       "pairId": "SRC-SELF-KNOWLEDGE-2010::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-SELF-KNOWLEDGE-2010", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-SELF-KNOWLEDGE-2010",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-C",
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
@@ -7843,7 +8220,10 @@
     },
     {
       "pairId": "SRC-STATE-DISTRIBUTION-2001::SRC-TRAIT-ACTIVATION-2003",
-      "sourceIds": ["SRC-STATE-DISTRIBUTION-2001", "SRC-TRAIT-ACTIVATION-2003"],
+      "sourceIds": [
+        "SRC-STATE-DISTRIBUTION-2001",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-E",
         "CAN-SCN-WORK-GROUP-PARTICIPATION-ATTENTION-SE-I",
@@ -7863,7 +8243,10 @@
     },
     {
       "pairId": "SRC-SUPPORT-MATCHING-2007::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-SUPPORT-MATCHING-2007", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-SUPPORT-MATCHING-2007",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-SETBACK-ATTENTION-ER-C",
         "CAN-SCN-PARTNER-SETBACK-ATTENTION-ER-Q",
@@ -7883,7 +8266,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-SELF-KNOWLEDGE-2010",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-SELF-KNOWLEDGE-2010"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-SELF-KNOWLEDGE-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -7924,7 +8310,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-EXTRAVERSION-PA-2015",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-EXTRAVERSION-PA-2015"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-EXTRAVERSION-PA-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
         "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
@@ -7943,7 +8332,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-FRIEND-DAILY-2015",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-FRIEND-DAILY-2015"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-FRIEND-DAILY-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-SUCCESS-ATTENTION-OE-R",
         "CAN-SCN-FRIEND-SUCCESS-ATTENTION-OE-N",
@@ -7962,7 +8354,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-SELF-KNOWLEDGE-2010",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-SELF-KNOWLEDGE-2010"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-SELF-KNOWLEDGE-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -7981,7 +8376,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-STATE-DISTRIBUTION-2001",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-STATE-DISTRIBUTION-2001"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-STATE-DISTRIBUTION-2001"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-N",
         "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
@@ -8000,7 +8398,10 @@
     },
     {
       "pairId": "SRC-EXTRAVERSION-PA-2015::SRC-INTENTION-BEHAVIOR-2016",
-      "sourceIds": ["SRC-EXTRAVERSION-PA-2015", "SRC-INTENTION-BEHAVIOR-2016"],
+      "sourceIds": [
+        "SRC-EXTRAVERSION-PA-2015",
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-E-OE-R",
         "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-PROCESS-SE-E",
@@ -8041,7 +8442,10 @@
     },
     {
       "pairId": "SRC-SELF-KNOWLEDGE-2010::SRC-STATE-MEASUREMENT-2020",
-      "sourceIds": ["SRC-SELF-KNOWLEDGE-2010", "SRC-STATE-MEASUREMENT-2020"],
+      "sourceIds": [
+        "SRC-SELF-KNOWLEDGE-2010",
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -8060,7 +8464,10 @@
     },
     {
       "pairId": "SRC-SELF-KNOWLEDGE-2010::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-SELF-KNOWLEDGE-2010", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-SELF-KNOWLEDGE-2010",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
@@ -8079,7 +8486,10 @@
     },
     {
       "pairId": "SRC-BFI2-2017::SRC-REACTIVITY-RECOVERY-2023",
-      "sourceIds": ["SRC-BFI2-2017", "SRC-REACTIVITY-RECOVERY-2023"],
+      "sourceIds": [
+        "SRC-BFI2-2017",
+        "SRC-REACTIVITY-RECOVERY-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-Q",
@@ -8097,7 +8507,10 @@
     },
     {
       "pairId": "SRC-DAILY-STRESS-STATES-2024::SRC-SELF-KNOWLEDGE-2010",
-      "sourceIds": ["SRC-DAILY-STRESS-STATES-2024", "SRC-SELF-KNOWLEDGE-2010"],
+      "sourceIds": [
+        "SRC-DAILY-STRESS-STATES-2024",
+        "SRC-SELF-KNOWLEDGE-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-C",
         "CAN-SCN-FAMILY-UNCERTAINTY-PROCESS-ER-Q",
@@ -8115,7 +8528,10 @@
     },
     {
       "pairId": "SRC-EMOTION-PROCESS-1998::SRC-JOB-META-1991",
-      "sourceIds": ["SRC-EMOTION-PROCESS-1998", "SRC-JOB-META-1991"],
+      "sourceIds": [
+        "SRC-EMOTION-PROCESS-1998",
+        "SRC-JOB-META-1991"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-WORK-SUCCESS-ATTENTION-OE-R",
         "CAN-SCN-WORK-SUCCESS-ATTENTION-OE-N",
@@ -8133,7 +8549,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-REACTIVITY-RECOVERY-2023",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-REACTIVITY-RECOVERY-2023"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-REACTIVITY-RECOVERY-2023"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-AFTERMATH-ATTENTION-RO-G",
         "CAN-SCN-FRIEND-AFTERMATH-ATTENTION-RO-A",
@@ -8193,7 +8612,10 @@
     },
     {
       "pairId": "SRC-REACTIVITY-RECOVERY-2023::SRC-TRAIT-ENACTMENT-2015",
-      "sourceIds": ["SRC-REACTIVITY-RECOVERY-2023", "SRC-TRAIT-ENACTMENT-2015"],
+      "sourceIds": [
+        "SRC-REACTIVITY-RECOVERY-2023",
+        "SRC-TRAIT-ENACTMENT-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-ATTENTION-OE-R-ER-Q",
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-PROCESS-OE-R-ER-Q",
@@ -8232,7 +8654,10 @@
     },
     {
       "pairId": "SRC-DAILY-STRESS-STATES-2024::SRC-FRIEND-DAILY-2015",
-      "sourceIds": ["SRC-DAILY-STRESS-STATES-2024", "SRC-FRIEND-DAILY-2015"],
+      "sourceIds": [
+        "SRC-DAILY-STRESS-STATES-2024",
+        "SRC-FRIEND-DAILY-2015"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-UNCERTAINTY-ATTENTION-COMMON",
         "CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-N",
@@ -8286,7 +8711,10 @@
     },
     {
       "pairId": "SRC-FRIEND-DAILY-2015::SRC-SOKA-2010",
-      "sourceIds": ["SRC-FRIEND-DAILY-2015", "SRC-SOKA-2010"],
+      "sourceIds": [
+        "SRC-FRIEND-DAILY-2015",
+        "SRC-SOKA-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-UNCERTAINTY-ATTENTION-COMMON",
         "CAN-SCN-FRIEND-UNCERTAINTY-PROCESS-OE-R",
@@ -8295,14 +8723,19 @@
       ],
       "highRiskVariantCount": 4,
       "sameDoi": false,
-      "sharedAuthors": ["Simine Vazire"],
+      "sharedAuthors": [
+        "Simine Vazire"
+      ],
       "exactAuthorTeam": false,
       "bothSubstantive": true,
       "independenceState": "unresolved_missing_dataset_sample_and_study_family_registry"
     },
     {
       "pairId": "SRC-REACTIVITY-RECOVERY-2023::SRC-RESPONSIVENESS-2017",
-      "sourceIds": ["SRC-REACTIVITY-RECOVERY-2023", "SRC-RESPONSIVENESS-2017"],
+      "sourceIds": [
+        "SRC-REACTIVITY-RECOVERY-2023",
+        "SRC-RESPONSIVENESS-2017"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PARTNER-AFTERMATH-ATTENTION-RO-A",
         "CAN-SCN-PARTNER-AFTERMATH-PROCESS-RO-A",
@@ -8318,7 +8751,10 @@
     },
     {
       "pairId": "SRC-REACTIVITY-RECOVERY-2023::SRC-STRESS-STATE-2026",
-      "sourceIds": ["SRC-REACTIVITY-RECOVERY-2023", "SRC-STRESS-STATE-2026"],
+      "sourceIds": [
+        "SRC-REACTIVITY-RECOVERY-2023",
+        "SRC-STRESS-STATE-2026"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-RESPONSE-ER-C",
         "CAN-SCN-PERSON-OF-INTEREST-SETBACK-RESPONSE-ER-Q",
@@ -8391,7 +8827,10 @@
     },
     {
       "pairId": "SRC-DAILY-STRESS-STATES-2024::SRC-SOKA-2010",
-      "sourceIds": ["SRC-DAILY-STRESS-STATES-2024", "SRC-SOKA-2010"],
+      "sourceIds": [
+        "SRC-DAILY-STRESS-STATES-2024",
+        "SRC-SOKA-2010"
+      ],
       "highRiskVariantIds": [
         "CAN-SCN-FRIEND-UNCERTAINTY-ATTENTION-COMMON",
         "CAN-SCN-FRIEND-UNCERTAINTY-RESPONSE-COMMON",
@@ -12091,391 +12530,589 @@
     {
       "priority": 1,
       "canonicalVariantId": "CAN-SCN-FAMILY-SETBACK-PROCESS-RO-G",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-SUPPORT-MATCHING-2007"
       ],
-      "substantiveSourceIds": ["SRC-SUPPORT-MATCHING-2007"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 2,
       "canonicalVariantId": "CAN-SCN-FAMILY-UNCERTAINTY-ATTENTION-OE-R-ER-C",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-SELF-KNOWLEDGE-2010",
         "SRC-STRESS-STATE-2026"
       ],
-      "substantiveSourceIds": ["SRC-STRESS-STATE-2026"],
-      "nonSubstantiveSourceIds": ["SRC-SELF-KNOWLEDGE-2010"],
+      "substantiveSourceIds": [
+        "SRC-STRESS-STATE-2026"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-SELF-KNOWLEDGE-2010"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 3,
       "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-ATTENTION-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 4,
       "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-PROCESS-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 5,
       "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-RESPONSE-SE-E",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 6,
       "canonicalVariantId": "CAN-SCN-FAMILY-NEED-EXPRESSION-COMMUNICATION-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 7,
       "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-G",
-      "riskDomains": ["relationship_outcome"],
-      "registeredSourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-IPC-2013"],
-      "substantiveSourceIds": ["SRC-IPC-2013"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
+      "registeredSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-IPC-2013"
+      ],
+      "substantiveSourceIds": [
+        "SRC-IPC-2013"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 8,
       "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-ATTENTION-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 9,
       "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-G",
-      "riskDomains": ["relationship_outcome"],
-      "registeredSourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-IPC-2013"],
-      "substantiveSourceIds": ["SRC-IPC-2013"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
+      "registeredSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-IPC-2013"
+      ],
+      "substantiveSourceIds": [
+        "SRC-IPC-2013"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 10,
       "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-PROCESS-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 11,
       "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-RESPONSE-RO-G",
-      "riskDomains": ["relationship_outcome"],
-      "registeredSourceIds": ["SRC-INTENTION-BEHAVIOR-2016", "SRC-IPC-2013"],
-      "substantiveSourceIds": ["SRC-IPC-2013"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
+      "registeredSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016",
+        "SRC-IPC-2013"
+      ],
+      "substantiveSourceIds": [
+        "SRC-IPC-2013"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 12,
       "canonicalVariantId": "CAN-SCN-FAMILY-BOUNDARY-RESPONSE-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 13,
       "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-ATTENTION-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-FRIEND-DAILY-2015",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-FRIEND-DAILY-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-FRIEND-DAILY-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 14,
       "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-RESPONSE-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-FRIEND-DAILY-2015",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-FRIEND-DAILY-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-FRIEND-DAILY-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 15,
       "canonicalVariantId": "CAN-SCN-FRIEND-NEED-EXPRESSION-COMMUNICATION-RO-A",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-FRIEND-DAILY-2015",
         "SRC-INTENTION-BEHAVIOR-2016"
       ],
-      "substantiveSourceIds": ["SRC-FRIEND-DAILY-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-FRIEND-DAILY-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 16,
       "canonicalVariantId": "CAN-SCN-PARTNER-SETBACK-RESPONSE-RO-G-ER-C",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-SUPPORT-MATCHING-2007"
       ],
-      "substantiveSourceIds": ["SRC-SUPPORT-MATCHING-2007"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 17,
       "canonicalVariantId": "CAN-SCN-PERSON-OF-INTEREST-NEED-EXPRESSION-ATTENTION-SE-I-OE-R",
-      "riskDomains": ["relationship_outcome"],
+      "riskDomains": [
+        "relationship_outcome"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-RELATIONAL-UNCERTAINTY-2011"
       ],
-      "substantiveSourceIds": ["SRC-RELATIONAL-UNCERTAINTY-2011"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-RELATIONAL-UNCERTAINTY-2011"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 18,
       "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-E-SM-K",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-PERSON-SITUATION-WORK-2015",
         "SRC-TRAIT-ACTIVATION-2003"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 19,
       "canonicalVariantId": "CAN-SCN-WORK-GROUP-PARTICIPATION-RESPONSE-SE-I-SM-M",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-PERSON-SITUATION-WORK-2015",
         "SRC-TRAIT-ACTIVATION-2003"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 20,
       "canonicalVariantId": "CAN-SCN-WORK-UNCERTAINTY-RESPONSE-OE-R-SM-M",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-PERSON-SITUATION-WORK-2015",
         "SRC-STATE-MEASUREMENT-2020"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-STATE-MEASUREMENT-2020"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-STATE-MEASUREMENT-2020"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 21,
       "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-G-SM-M",
-      "riskDomains": ["work_performance"],
-      "registeredSourceIds": ["SRC-IPC-2013", "SRC-TRAIT-ACTIVATION-2003"],
-      "substantiveSourceIds": ["SRC-IPC-2013"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "riskDomains": [
+        "work_performance"
+      ],
+      "registeredSourceIds": [
+        "SRC-IPC-2013",
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
+      "substantiveSourceIds": [
+        "SRC-IPC-2013"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 22,
       "canonicalVariantId": "CAN-SCN-WORK-DISAGREEMENT-RESPONSE-RO-A-SM-K",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-EMOTION-PROCESS-1998",
         "SRC-TRAIT-ACTIVATION-2003"
       ],
-      "substantiveSourceIds": ["SRC-EMOTION-PROCESS-1998"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "substantiveSourceIds": [
+        "SRC-EMOTION-PROCESS-1998"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 23,
       "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-ATTENTION-COMMON",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-SUPPORT-MATCHING-2007",
         "SRC-TRAIT-ACTIVATION-2003"
       ],
-      "substantiveSourceIds": ["SRC-SUPPORT-MATCHING-2007"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "substantiveSourceIds": [
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 24,
       "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-PROCESS-COMMON",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-SUPPORT-MATCHING-2007",
         "SRC-TRAIT-ACTIVATION-2003"
       ],
-      "substantiveSourceIds": ["SRC-SUPPORT-MATCHING-2007"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "substantiveSourceIds": [
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 25,
       "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-RESPONSE-COMMON",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-SUPPORT-MATCHING-2007",
         "SRC-TRAIT-ACTIVATION-2003"
       ],
-      "substantiveSourceIds": ["SRC-SUPPORT-MATCHING-2007"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "substantiveSourceIds": [
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 26,
       "canonicalVariantId": "CAN-SCN-WORK-SUPPORT-REQUESTED-COMMUNICATION-COMMON",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-SUPPORT-MATCHING-2007",
         "SRC-TRAIT-ACTIVATION-2003"
       ],
-      "substantiveSourceIds": ["SRC-SUPPORT-MATCHING-2007"],
-      "nonSubstantiveSourceIds": ["SRC-TRAIT-ACTIVATION-2003"],
+      "substantiveSourceIds": [
+        "SRC-SUPPORT-MATCHING-2007"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-TRAIT-ACTIVATION-2003"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 27,
       "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-ATTENTION-COMMON",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-PERSON-SITUATION-WORK-2015"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 28,
       "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-PROCESS-COMMON",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-PERSON-SITUATION-WORK-2015"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 29,
       "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-RESPONSE-SE-E",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-PERSON-SITUATION-WORK-2015"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 30,
       "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-RESPONSE-SE-I",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-PERSON-SITUATION-WORK-2015"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     },
     {
       "priority": 31,
       "canonicalVariantId": "CAN-SCN-WORK-NEED-EXPRESSION-COMMUNICATION-COMMON",
-      "riskDomains": ["work_performance"],
+      "riskDomains": [
+        "work_performance"
+      ],
       "registeredSourceIds": [
         "SRC-INTENTION-BEHAVIOR-2016",
         "SRC-PERSON-SITUATION-WORK-2015"
       ],
-      "substantiveSourceIds": ["SRC-PERSON-SITUATION-WORK-2015"],
-      "nonSubstantiveSourceIds": ["SRC-INTENTION-BEHAVIOR-2016"],
+      "substantiveSourceIds": [
+        "SRC-PERSON-SITUATION-WORK-2015"
+      ],
+      "nonSubstantiveSourceIds": [
+        "SRC-INTENTION-BEHAVIOR-2016"
+      ],
       "requiredAction": "ADD_INDEPENDENT_SUBSTANTIVE_SOURCE_OR_NARROW_CLAIM",
       "publicationState": "blocked"
     }

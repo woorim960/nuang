@@ -1,48 +1,91 @@
 "use client";
 
-import { ArrowLeftRight, ArrowRight } from "lucide-react";
-import Image from "next/image";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   type KeyboardEvent,
   type PointerEvent as ReactPointerEvent,
+  type ReactNode,
   type UIEvent,
   useEffect,
   useRef,
   useState,
 } from "react";
-import styles from "@/features/onboarding/OnboardingGuideCarousel.module.css";
 import {
-  markOnboardingCompleted,
-  onboardingEntryContract,
-} from "@/features/onboarding/onboarding-storage";
+  type GuideScene,
+  OnboardingGuideScene,
+} from "@/features/onboarding/OnboardingGuideScenes";
+import styles from "@/features/onboarding/OnboardingGuideCarousel.module.css";
+import { onboardingEntryContract } from "@/features/onboarding/onboarding-storage";
+import {
+  recordOnboardingCompleted,
+  recordOnboardingSeen,
+} from "@/features/onboarding/onboarding-sync";
 
 const guideSlides = [
   {
-    alt: "나를 이해하고 서로를 이해하는 성향 놀이터. 간단한 질문에 답하면 나의 성향과 특징을 쉽게 확인할 수 있어요.",
+    body: "네 글자만으로는 아쉬웠던 나를, 다섯 글자 뉴앙코드로 더 자세히 알아봐요.",
+    eyebrow: "성향 놀이터, 뉴앙",
     id: "G01",
-    label: "성향 놀이터 소개",
-    src: "/assets/onboarding/nuang-guide-01-playground-v3.jpg",
+    label: "뉴앙 소개",
+    scene: "welcome",
+    title: (
+      <>
+        나를 이해하고,
+        <br />
+        서로를 이해하는 시작
+      </>
+    ),
   },
   {
-    alt: "내 성향을 5글자 뉴앙 코드로 확인해요. 검사를 진행할수록 결과가 쌓이고, 모인 결과를 종합해 내 성향을 더 자세히 알려드려요. 예시 코드는 ENAKQ예요.",
+    body: "다섯 가지 성향을 조합해 내 코드를 만들고, 생활에서 드러나는 특징까지 알려드려요.",
+    eyebrow: "한 가지 유형보다 자세하게",
     id: "G02",
-    label: "5글자 뉴앙 코드 소개",
-    src: "/assets/onboarding/nuang-guide-02-code-v2.png",
+    label: "다섯 글자 뉴앙코드 소개",
+    scene: "code",
+    title: (
+      <>
+        생각·감정·관계 속
+        <br />내 모습을 한눈에
+      </>
+    ),
   },
   {
-    alt: "원하는 사람들과 성향을 비교하고 더 좋은 관계를 만들어가요. 가족, 친구, 연인과의 공통점과 차이점을 살펴볼 수 있어요.",
+    body: "친구·연인·가족과 결과를 비교해, 잘 맞는 점과 서로 배려할 점을 알아봐요.",
+    eyebrow: "다름을 알면 오해가 줄어요",
     id: "G03",
-    label: "성향 비교 소개",
-    src: "/assets/onboarding/nuang-guide-03-relationships-v1.jpg",
+    label: "관계 비교 소개",
+    scene: "together",
+    title: (
+      <>
+        가까운 사람과
+        <br />
+        더 잘 지내는 방법
+      </>
+    ),
   },
   {
-    alt: "3분 빠른 코어 검사로 시작해요. 로그인 없이 간단한 질문에 답하면 나의 첫 성향 결과를 바로 확인할 수 있어요.",
+    body: "로그인 없이 바로 시작할 수 있어요. 로그인하면 다른 기기에서도 결과를 이어볼 수 있어요.",
+    eyebrow: "첫 결과까지 약 3~5분",
     id: "G04",
-    label: "빠른 코어 검사 안내",
-    src: "/assets/onboarding/nuang-guide-04-quick-core-v1.jpg",
+    label: "첫 검사 시작 안내",
+    scene: "start",
+    title: (
+      <>
+        가볍게 답하고,
+        <br />
+        내 첫 결과를 확인해요
+      </>
+    ),
   },
-] as const;
+] as const satisfies readonly {
+  body: string;
+  eyebrow: string;
+  id: string;
+  label: string;
+  scene: GuideScene;
+  title: ReactNode;
+}[];
 
 type MouseDragState = {
   pointerId: number;
@@ -56,7 +99,12 @@ export function OnboardingGuideCarousel() {
   const animationFrameRef = useRef<number | null>(null);
   const mouseDragRef = useRef<MouseDragState | null>(null);
   const [activeIndex, setActiveIndex] = useState(0);
+  const isFirstSlide = activeIndex === 0;
   const isLastSlide = activeIndex === guideSlides.length - 1;
+
+  useEffect(() => {
+    recordOnboardingSeen();
+  }, []);
 
   useEffect(
     () => () => {
@@ -134,31 +182,45 @@ export function OnboardingGuideCarousel() {
     }
   }
 
-  function startQuickCore() {
+  function completeOnboarding(destination: string) {
     try {
-      markOnboardingCompleted();
+      recordOnboardingCompleted();
     } catch {
-      // Storage availability should not prevent the assessment from starting.
+      // First-party storage availability must not block the next destination.
     }
-
-    router.replace(onboardingEntryContract.quickCoreDestination);
+    router.replace(destination);
   }
 
   return (
     <main className={styles.root}>
       <header className={styles.header}>
         <span className={styles.wordmark}>NUANG</span>
-        <span
-          aria-label={`전체 ${guideSlides.length}개 중 ${activeIndex + 1}번째 가이드`}
-          aria-live="polite"
-          className={styles.count}
+        <button
+          className={styles.skipButton}
+          onClick={() =>
+            completeOnboarding(onboardingEntryContract.completedDestination)
+          }
+          type="button"
         >
-          {activeIndex + 1} / {guideSlides.length}
-        </span>
+          건너뛰기
+        </button>
       </header>
 
+      <nav aria-label="온보딩 진행" className={styles.progress}>
+        {guideSlides.map((slide, index) => (
+          <button
+            aria-current={activeIndex === index ? "step" : undefined}
+            aria-label={`${index + 1}번째 ${slide.label} 보기`}
+            key={slide.id}
+            onClick={() => goToSlide(index)}
+            type="button"
+          >
+            <span aria-hidden="true" />
+          </button>
+        ))}
+      </nav>
+
       <section aria-label="뉴앙 서비스 가이드" className={styles.stage}>
-        <div className={styles.glow} />
         <div
           aria-label="좌우 방향키 또는 손가락으로 넘기는 서비스 가이드"
           className={styles.track}
@@ -172,59 +234,67 @@ export function OnboardingGuideCarousel() {
           role="region"
           tabIndex={0}
         >
-          {guideSlides.map((slide, index) => (
-            <article
-              aria-label={`${index + 1}. ${slide.label}`}
-              aria-roledescription="슬라이드"
-              className={styles.slide}
-              key={slide.id}
-            >
-              <div className={styles.imageFrame}>
-                <Image
-                  alt={slide.alt}
-                  className={styles.image}
-                  draggable={false}
-                  fill
-                  priority={index <= 1}
-                  sizes="(max-width: 520px) calc(100vw - 32px), 488px"
-                  src={slide.src}
-                />
-              </div>
-            </article>
-          ))}
+          {guideSlides.map((slide, index) => {
+            const active = activeIndex === index;
+            return (
+              <article
+                aria-hidden={!active}
+                aria-label={`${index + 1}. ${slide.label}`}
+                aria-roledescription="슬라이드"
+                className={styles.slide}
+                data-scene={slide.scene}
+                inert={!active}
+                key={slide.id}
+              >
+                <OnboardingGuideScene active={active} scene={slide.scene} />
+                <div className={styles.copy}>
+                  <p className={styles.eyebrow}>{slide.eyebrow}</p>
+                  {active ? <h1>{slide.title}</h1> : <h2>{slide.title}</h2>}
+                  <p className={styles.body}>{slide.body}</p>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
 
+      <p aria-live="polite" className={styles.srOnly} role="status">
+        전체 {guideSlides.length}개 중 {activeIndex + 1}번째 가이드
+      </p>
+
       <footer className={styles.footer}>
-        <div aria-label="가이드 진행 위치" className={styles.pagination}>
-          {guideSlides.map((slide, index) => (
+        <div className={styles.actions} data-first={isFirstSlide}>
+          {!isFirstSlide ? (
             <button
-              aria-current={activeIndex === index ? "step" : undefined}
-              aria-label={`${index + 1}번째 ${slide.label} 보기`}
-              className={activeIndex === index ? styles.activeDot : undefined}
-              key={slide.id}
-              onClick={() => goToSlide(index)}
+              className={styles.previousButton}
+              onClick={() => goToSlide(activeIndex - 1)}
               type="button"
             >
-              <span aria-hidden="true" />
+              <ArrowLeft aria-hidden="true" size={18} strokeWidth={1.9} />
+              이전
             </button>
-          ))}
-        </div>
-        <div className={styles.actionSlot}>
+          ) : null}
+
           {isLastSlide ? (
             <button
-              className={styles.startButton}
-              onClick={startQuickCore}
+              className={styles.primaryButton}
+              onClick={() =>
+                completeOnboarding(onboardingEntryContract.quickCoreDestination)
+              }
               type="button"
             >
-              빠른 코어 검사 시작하기
+              내 뉴앙코드 알아보기
               <ArrowRight aria-hidden="true" size={18} strokeWidth={1.9} />
             </button>
           ) : (
-            <p className={styles.swipeHint}>
-              <ArrowLeftRight aria-hidden="true" size={16} strokeWidth={1.8} />
-              좌우로 넘겨보세요
-            </p>
+            <button
+              className={styles.primaryButton}
+              onClick={() => goToSlide(activeIndex + 1)}
+              type="button"
+            >
+              다음
+              <ArrowRight aria-hidden="true" size={18} strokeWidth={1.9} />
+            </button>
           )}
         </div>
       </footer>

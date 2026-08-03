@@ -37,7 +37,7 @@ describe("CoreResultReportTemplate", () => {
       screen.getByRole("button", { name: "정밀 성향 검사 다시하기" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "내 다섯 글자 풀이" }),
+      screen.getByRole("heading", { name: "내 뉴앙 코드 풀이" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "생활 속의 나" }),
@@ -136,10 +136,10 @@ describe("CoreResultReportTemplate", () => {
       screen.queryByRole("img", { name: /함께 활력.*혼자 회복/ }),
     ).not.toBeInTheDocument();
     expect(
-      screen.getByRole("heading", { name: "다섯 글자 풀이" }),
+      screen.getByRole("heading", { name: "뉴앙 코드 풀이" }),
     ).toBeInTheDocument();
     expect(
-      screen.queryByRole("heading", { name: "내 다섯 글자 풀이" }),
+      screen.queryByRole("heading", { name: "내 뉴앙 코드 풀이" }),
     ).not.toBeInTheDocument();
     expect(screen.queryByText("검사 버전")).not.toBeInTheDocument();
     expect(screen.queryByText("채점 버전")).not.toBeInTheDocument();
@@ -280,7 +280,7 @@ describe("CoreResultReportTemplate", () => {
     }
   });
 
-  it("다섯 글자를 같은 순서의 독립된 셀로 렌더링한다", () => {
+  it("뉴앙 코드를 같은 순서의 독립된 셀로 렌더링한다", () => {
     const model = createModel("full");
     model.result.code = "INGMC";
     model.result.currentProfileName = "새 가능성을 찾는 탐험가";

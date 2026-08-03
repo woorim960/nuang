@@ -3,8 +3,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { OnboardingGuideCarousel } from "@/features/onboarding/OnboardingGuideCarousel";
 import { onboardingEntryContract } from "@/features/onboarding/onboarding-storage";
 
-const { markOnboardingCompleted, replace } = vi.hoisted(() => ({
-  markOnboardingCompleted: vi.fn(),
+const { recordOnboardingCompleted, recordOnboardingSeen, replace } = vi.hoisted(() => ({
+  recordOnboardingCompleted: vi.fn(),
+  recordOnboardingSeen: vi.fn(),
   replace: vi.fn(),
 }));
 
@@ -12,52 +13,62 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace }),
 }));
 
-vi.mock("@/features/onboarding/onboarding-storage", async (importOriginal) => {
-  const actual =
-    await importOriginal<
-      typeof import("@/features/onboarding/onboarding-storage")
-    >();
-
-  return { ...actual, markOnboardingCompleted };
+vi.mock("@/features/onboarding/onboarding-sync", () => {
+  return { recordOnboardingCompleted, recordOnboardingSeen };
 });
 
 describe("OnboardingGuideCarousel", () => {
   beforeEach(() => {
-    markOnboardingCompleted.mockReset();
+    recordOnboardingCompleted.mockReset();
+    recordOnboardingSeen.mockReset();
     replace.mockReset();
+    vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({ matches: false }));
   });
 
-  it("shows all four approved guides and starts at G01", () => {
-    render(<OnboardingGuideCarousel />);
+  it("renders all four approved guides as accessible HTML and starts at G01", () => {
+    const { container } = render(<OnboardingGuideCarousel />);
 
     expect(
-      screen.getByRole("img", {
-        name: /나를 이해하고 서로를 이해하는 성향 놀이터/,
-      }),
-    ).toHaveAttribute(
-      "src",
-      expect.stringContaining("nuang-guide-01-playground-v3.jpg"),
-    );
+      [...container.querySelectorAll("h1,h2")].map((heading) =>
+        heading.textContent?.replace(/\s+/g, ""),
+      ),
+    ).toEqual([
+      "나를이해하고,서로를이해하는시작",
+      "생각·감정·관계속내모습을한눈에",
+      "가까운사람과더잘지내는방법",
+      "가볍게답하고,내첫결과를확인해요",
+    ]);
+    expect(container.querySelectorAll("h1")).toHaveLength(1);
+    expect(container.querySelectorAll("[data-guide-scene]")).toHaveLength(4);
     expect(
-      screen.getByRole("img", { name: /예시 코드는 ENAKQ/ }),
-    ).toHaveAttribute(
-      "src",
-      expect.stringContaining("nuang-guide-02-code-v2.png"),
-    );
-    expect(screen.getAllByRole("img")).toHaveLength(4);
-    expect(screen.getByLabelText("전체 4개 중 1번째 가이드")).toHaveTextContent(
-      "1 / 4",
+      [...container.querySelectorAll("img")].every((image) =>
+        decodeURIComponent(image.getAttribute("src") ?? "").includes(
+          "/assets/onboarding-v3/",
+        ),
+      ),
+    ).toBe(true);
+    expect(
+      screen.getByRole("article", { name: "1. 뉴앙 소개" }),
+    ).not.toHaveAttribute("aria-hidden", "true");
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "전체 4개 중 1번째 가이드",
     );
   });
 
-  it("moves with pagination controls and keyboard arrows", () => {
+  it("moves with next, previous, pagination, and keyboard controls", () => {
     render(<OnboardingGuideCarousel />);
+
+    fireEvent.click(screen.getByRole("button", { name: "다음" }));
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "전체 4개 중 2번째 가이드",
+    );
+    expect(screen.getByRole("button", { name: "이전" })).toBeInTheDocument();
 
     fireEvent.click(
-      screen.getByRole("button", { name: "3번째 성향 비교 소개 보기" }),
+      screen.getByRole("button", { name: "3번째 관계 비교 소개 보기" }),
     );
-    expect(screen.getByLabelText("전체 4개 중 3번째 가이드")).toHaveTextContent(
-      "3 / 4",
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "전체 4개 중 3번째 가이드",
     );
 
     fireEvent.keyDown(
@@ -66,8 +77,13 @@ describe("OnboardingGuideCarousel", () => {
       }),
       { key: "ArrowRight" },
     );
-    expect(screen.getByLabelText("전체 4개 중 4번째 가이드")).toHaveTextContent(
-      "4 / 4",
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "전체 4개 중 4번째 가이드",
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "이전" }));
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "전체 4개 중 3번째 가이드",
     );
   });
 
@@ -88,9 +104,9 @@ describe("OnboardingGuideCarousel", () => {
     fireEvent.scroll(track);
 
     await waitFor(() => {
-      expect(
-        screen.getByLabelText("전체 4개 중 2번째 가이드"),
-      ).toHaveTextContent("2 / 4");
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "전체 4개 중 2번째 가이드",
+      );
     });
   });
 
@@ -130,8 +146,19 @@ describe("OnboardingGuideCarousel", () => {
       pointerType: "mouse",
     });
 
-    expect(screen.getByLabelText("전체 4개 중 2번째 가이드")).toHaveTextContent(
-      "2 / 4",
+    expect(screen.getByRole("status")).toHaveTextContent(
+      "전체 4개 중 2번째 가이드",
+    );
+  });
+
+  it("stores onboarding completion and opens home when skipped", () => {
+    render(<OnboardingGuideCarousel />);
+
+    fireEvent.click(screen.getByRole("button", { name: "건너뛰기" }));
+
+    expect(recordOnboardingCompleted).toHaveBeenCalledTimes(1);
+    expect(replace).toHaveBeenCalledWith(
+      onboardingEntryContract.completedDestination,
     );
   });
 
@@ -139,17 +166,70 @@ describe("OnboardingGuideCarousel", () => {
     render(<OnboardingGuideCarousel />);
     fireEvent.click(
       screen.getByRole("button", {
-        name: "4번째 빠른 코어 검사 안내 보기",
+        name: "4번째 첫 검사 시작 안내 보기",
       }),
     );
 
     fireEvent.click(
-      screen.getByRole("button", { name: "빠른 코어 검사 시작하기" }),
+      screen.getByRole("button", { name: "내 뉴앙코드 알아보기" }),
     );
 
-    expect(markOnboardingCompleted).toHaveBeenCalledTimes(1);
+    expect(recordOnboardingCompleted).toHaveBeenCalledTimes(1);
     expect(replace).toHaveBeenCalledWith(
       onboardingEntryContract.quickCoreDestination,
     );
+  });
+
+  it("does not block quick core when local completion storage fails", () => {
+    recordOnboardingCompleted.mockImplementationOnce(() => {
+      throw new Error("storage unavailable");
+    });
+    render(<OnboardingGuideCarousel />);
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "4번째 첫 검사 시작 안내 보기",
+      }),
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "내 뉴앙코드 알아보기" }),
+    );
+
+    expect(replace).toHaveBeenCalledWith(
+      onboardingEntryContract.quickCoreDestination,
+    );
+  });
+
+  it("switches slides without smooth scrolling for reduced-motion users", () => {
+    vi.stubGlobal("matchMedia", vi.fn().mockReturnValue({ matches: true }));
+    render(<OnboardingGuideCarousel />);
+    const track = screen.getByRole("region", {
+      name: "좌우 방향키 또는 손가락으로 넘기는 서비스 가이드",
+    });
+    const scrollTo = vi.fn();
+    Object.defineProperty(track, "scrollTo", {
+      configurable: true,
+      value: scrollTo,
+    });
+    Object.defineProperty(track, "clientWidth", {
+      configurable: true,
+      value: 320,
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "2번째 다섯 글자 뉴앙코드 소개 보기",
+      }),
+    );
+
+    expect(scrollTo).toHaveBeenCalledWith({ behavior: "auto", left: 320 });
+  });
+
+  it("records first exposure without showing a warning or changing routes", () => {
+    render(<OnboardingGuideCarousel />);
+
+    expect(recordOnboardingSeen).toHaveBeenCalledTimes(1);
+    expect(replace).not.toHaveBeenCalled();
+    expect(screen.queryByText(/다시.*볼 수/)).not.toBeInTheDocument();
   });
 });

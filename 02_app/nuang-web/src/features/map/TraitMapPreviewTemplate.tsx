@@ -47,7 +47,7 @@ export function TraitMapPreviewTemplate({
 
       <section className={styles.letterGuide} aria-labelledby="letter-title">
         <div className={styles.sectionHeading}>
-          <h2 id="letter-title">다섯 글자가 보여주는 핵심 모습</h2>
+          <h2 id="letter-title">뉴앙 코드가 보여주는 핵심 모습</h2>
         </div>
         <ol>
           {profile.code.split("").map((symbol, index) => {

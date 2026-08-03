@@ -152,9 +152,9 @@ const report = {
   reportId: `TRAIT-MAP-32-PROFILE-CANONICAL-REBASE.${versionConfig.artifactVersion}`,
   status:
     profiles.length === 32 &&
-    allClaimRefs.length === 9_216 &&
-    referencedCanonicalVariantIds.size === expectedCanonicalVariants &&
-    profilesWithInvalidRefShape.length === 0
+      allClaimRefs.length === 9_216 &&
+      referencedCanonicalVariantIds.size === expectedCanonicalVariants &&
+      profilesWithInvalidRefShape.length === 0
       ? "CANONICAL_REFERENCE_BASELINE_READY_CONTENT_APPROVAL_PENDING"
       : "CANONICAL_REFERENCE_BASELINE_FAILED",
   publicationState: "research_only",
@@ -266,7 +266,7 @@ canonical 콘텐츠 ID 참조로 전환할 manifest를 만들었다.
 - 고유 긴 별칭: ${result.summary.uniqueDisplayNames}
 - 공식 10글자 언어 적용: ${result.summary.profilesUsingOfficialTenSymbolLanguage}/32
 
-| 코드 | 짧은 별칭 | 긴 별칭 | 다섯 글자 공식 이름 | 참조 |
+| 코드 | 짧은 별칭 | 긴 별칭 | 뉴앙 코드 공식 이름 | 참조 |
 | --- | --- | --- | --- | ---: |
 ${rows}
 

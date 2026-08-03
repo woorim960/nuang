@@ -233,7 +233,7 @@ function HomeHero({ hero }: { hero: HomeHeroModel }) {
         </>
       }
     >
-      <h1>3분이면 내 성향의 첫 단서를 만나요</h1>
+      <h1>빠르게 뉴앙 코드 알아보기</h1>
     </HeroLayout>
   );
 }

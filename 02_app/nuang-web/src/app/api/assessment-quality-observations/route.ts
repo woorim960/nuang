@@ -1,5 +1,6 @@
 import { createHmac } from "node:crypto";
 import { NextResponse } from "next/server";
+import { ensureAccountForUser } from "@/features/account/server-writes";
 import {
   assessmentQualityObservationSchema,
   classifyAssessmentQualityPriority,
@@ -9,6 +10,8 @@ import {
   getFreeTopicQuestions,
 } from "@/features/assessment/free-topic-assessments";
 import { getFreeTopicInstrumentVersion } from "@/features/assessment/free-topic-result-version";
+import { requireAuthenticatedUser } from "@/features/auth/server-auth";
+import { readAnalyticsCollectionPermission } from "@/features/consent/server-optional-consent";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { readValidatedJson } from "@/lib/api/request";
 import { isSameOriginBrowserRequest } from "@/lib/api/request-origin";
@@ -55,11 +58,41 @@ export async function POST(request: Request) {
   ) {
     return NextResponse.json({ error: "unknown_question" }, { status: 422 });
   }
+
+  const auth = await requireAuthenticatedUser();
+  if (!auth.ok) return analyticsConsentDenied();
+
   const client = createSupabaseServiceClient();
   const serviceEnv = getSupabaseServiceEnv();
   if (!client || !serviceEnv) {
     return createApiClosedResponse("supabase_env_missing");
   }
+
+  const account = await ensureAccountForUser(client, auth.user);
+  if (!account.ok) {
+    return NextResponse.json(
+      { error: "analytics_consent_check_failed" },
+      {
+        headers: { "cache-control": "private, no-store" },
+        status: 503,
+      },
+    );
+  }
+  const permission = await readAnalyticsCollectionPermission({
+    accountId: account.accountId,
+    client,
+  });
+  if (!permission.ok) {
+    return NextResponse.json(
+      { error: "analytics_consent_check_failed" },
+      {
+        headers: { "cache-control": "private, no-store" },
+        status: 503,
+      },
+    );
+  }
+  if (!permission.allowed) return analyticsConsentDenied();
+
   const requestFingerprint = createRequestFingerprint({
     clientSessionId: payload.data.clientSessionId,
     pepper: serviceEnv.shareTokenPepper,
@@ -87,6 +120,7 @@ export async function POST(request: Request) {
   }
 
   const rows = payload.data.observations.map((item, observationIndex) => ({
+    account_id: account.accountId,
     assessment_slug: assessment.slug,
     instrument_version: payload.data.instrumentVersion,
     local_result_id: payload.data.localResultId ?? null,
@@ -113,6 +147,16 @@ export async function POST(request: Request) {
   return NextResponse.json(
     { accepted: rows.length, ok: true },
     { headers: { "cache-control": "private, no-store" }, status: 201 },
+  );
+}
+
+function analyticsConsentDenied() {
+  return NextResponse.json(
+    { error: "analytics_consent_required" },
+    {
+      headers: { "cache-control": "private, no-store" },
+      status: 403,
+    },
   );
 }
 

@@ -6,79 +6,105 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+const preferences = {
+  analytics: {
+    enabled: false,
+    updatedAt: "2026-08-03T00:00:00.000Z",
+    version: "NUANG-ANALYTICS-PREFERENCE-2026-08-03",
+  },
+  marketing: {
+    enabled: false,
+    updatedAt: "2026-08-03T00:00:00.000Z",
+    version: "NUANG-MARKETING-PREFERENCE-2026-07-27",
+  },
+};
+
 describe("MarketingPreferenceEditor", () => {
-  it("loads and saves marketing separately from recovery contacts", async () => {
-    const contact = {
-      emailMasked: "wo***@gmail.com",
-      emailStatus: "verified",
-      emailVerifiedAt: "2026-08-02T00:00:00.000Z",
-      hasEmail: true,
-      hasMobilePhone: false,
-      marketingOptIn: false,
-      mobilePhoneMasked: null,
-      mobilePhoneStatus: "missing",
-      updatedAt: "2026-08-02T00:00:00.000Z",
-    };
+  it("loads both optional preferences and saves marketing independently", async () => {
     const fetchMock = vi
       .fn()
-      .mockResolvedValueOnce(Response.json({ contact, ok: true }))
+      .mockResolvedValueOnce(Response.json({ ok: true, preferences }))
       .mockResolvedValueOnce(
         Response.json({
-          contact: { ...contact, marketingOptIn: true },
           ok: true,
+          preferences: {
+            ...preferences,
+            marketing: { ...preferences.marketing, enabled: true },
+          },
         }),
       );
     vi.stubGlobal("fetch", fetchMock);
 
     render(<MarketingPreferenceEditor />);
 
-    const preference = await screen.findByRole("checkbox", {
-      name: /광고성 소식 받기/,
+    expect(
+      await screen.findByRole("checkbox", {
+        name: /서비스 개선을 위한 이용 데이터/,
+      }),
+    ).not.toBeChecked();
+    const marketing = screen.getByRole("checkbox", {
+      name: /새 검사·이벤트 소식/,
     });
-    expect(preference).not.toBeChecked();
-    expect(screen.queryByLabelText("복구용 이메일")).not.toBeInTheDocument();
-
-    fireEvent.click(preference);
+    fireEvent.click(marketing);
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
-    expect(
-      JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body)),
-    ).toMatchObject({
-      marketingOptIn: true,
+    expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toEqual({
+      consentVersion: "NUANG-MARKETING-PREFERENCE-2026-07-27",
+      enabled: true,
       preference: "marketing",
     });
     expect(
-      await screen.findByText(/새로운 소식을 받을 수 있도록 설정했어요/),
+      await screen.findByText(/새 검사와 이벤트 소식을 받도록 설정했어요/),
     ).toBeInTheDocument();
+  });
+
+  it("saves analytics without sending content or result data", async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(Response.json({ ok: true, preferences }))
+      .mockResolvedValueOnce(
+        Response.json({
+          ok: true,
+          preferences: {
+            ...preferences,
+            analytics: { ...preferences.analytics, enabled: true },
+          },
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    render(<MarketingPreferenceEditor />);
+
+    fireEvent.click(
+      await screen.findByRole("checkbox", {
+        name: /서비스 개선을 위한 이용 데이터/,
+      }),
+    );
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
+    const body = String(fetchMock.mock.calls[1]?.[1]?.body);
+    expect(JSON.parse(body)).toEqual({
+      consentVersion: "NUANG-ANALYTICS-PREFERENCE-2026-08-03",
+      enabled: true,
+      preference: "analytics",
+    });
+    expect(body).not.toMatch(/code|answer|post|result/i);
   });
 
   it("rolls back an optimistic switch when saving fails", async () => {
     const fetchMock = vi
       .fn()
+      .mockResolvedValueOnce(Response.json({ ok: true, preferences }))
       .mockResolvedValueOnce(
-        Response.json({
-          contact: {
-            emailMasked: null,
-            emailStatus: "missing",
-            emailVerifiedAt: null,
-            hasEmail: false,
-            hasMobilePhone: false,
-            marketingOptIn: false,
-            mobilePhoneMasked: null,
-            mobilePhoneStatus: "missing",
-            updatedAt: null,
-          },
-          ok: true,
-        }),
-      )
-      .mockResolvedValueOnce(
-        Response.json({ message: "저장할 수 없어요.", ok: false }, { status: 503 }),
+        Response.json(
+          { message: "저장할 수 없어요.", ok: false },
+          { status: 503 },
+        ),
       );
     vi.stubGlobal("fetch", fetchMock);
 
     render(<MarketingPreferenceEditor />);
     const preference = await screen.findByRole("checkbox", {
-      name: /광고성 소식 받기/,
+      name: /새 검사·이벤트 소식/,
     });
     fireEvent.click(preference);
 

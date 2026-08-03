@@ -13,7 +13,10 @@
     {
       "sourceId": "SRC-BFI2-2017",
       "doi": "10.1037/pspp0000096",
-      "authors": ["Christopher J. Soto", "Oliver P. John"],
+      "authors": [
+        "Christopher J. Soto",
+        "Oliver P. John"
+      ],
       "populationSummary": "세 연구와 독립 검증 표본에서 5개 domain과 15개 facet의 위계적 성격 측정을 개발·평가",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -27,7 +30,10 @@
     {
       "sourceId": "SRC-STATE-MEASUREMENT-2020",
       "doi": "10.1002/per.2266",
-      "authors": ["Kai T. Horstmann", "Matthias Ziegler"],
+      "authors": [
+        "Kai T. Horstmann",
+        "Matthias Ziegler"
+      ],
       "populationSummary": "성격 상태 측정의 목적과 문항·회상 기간·상황·행동 표현 설계 고려사항을 정리",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -41,7 +47,9 @@
     {
       "sourceId": "SRC-SITUATION-CONTINGENCY-2007",
       "doi": "10.1111/j.1467-6494.2007.00458.x",
-      "authors": ["William Fleeson"],
+      "authors": [
+        "William Fleeson"
+      ],
       "populationSummary": "두 연구에서 2주 또는 5주 동안 하루 여러 차례 성향 상태와 동시 상황 특성을 보고한 표본",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -55,7 +63,10 @@
     {
       "sourceId": "SRC-INTENTION-BEHAVIOR-2016",
       "doi": "10.1111/spc3.12265",
-      "authors": ["Paschal Sheeran", "Thomas L. Webb"],
+      "authors": [
+        "Paschal Sheeran",
+        "Thomas L. Webb"
+      ],
       "populationSummary": "의도와 행동의 관계, 방해 조건, 행동으로 옮기는 전략을 종합한 동료평가 검토 논문",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -88,7 +99,9 @@
     {
       "sourceId": "SRC-EMOTION-PROCESS-1998",
       "doi": "10.1037/0022-3514.74.1.224",
-      "authors": ["James J. Gross"],
+      "authors": [
+        "James J. Gross"
+      ],
       "populationSummary": "감정 조절 시점에 따라 경험·표현·생리 반응을 구분해 검토",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -102,7 +115,10 @@
     {
       "sourceId": "SRC-TRAIT-ENACTMENT-2015",
       "doi": "10.1037/a0039517",
-      "authors": ["William Fleeson", "Mary Kate Law"],
+      "authors": [
+        "William Fleeson",
+        "Mary Kate Law"
+      ],
       "populationSummary": "통제된 반복 상호작용에 참여한 대상자 97명과 관찰자 183명의 성향 행동 자료",
       "sampleSize": 280,
       "studyFamilyId": null,
@@ -135,7 +151,10 @@
     {
       "sourceId": "SRC-RELATIONAL-UNCERTAINTY-2011",
       "doi": "10.1080/03637751.2010.542471",
-      "authors": ["Leanne K. Knobloch", "Jennifer A. Theiss"],
+      "authors": [
+        "Leanne K. Knobloch",
+        "Jennifer A. Theiss"
+      ],
       "populationSummary": "연인 135쌍이 6주 동안 매주 응답한 관계 불확실성과 관계 대화 자료",
       "sampleSize": 270,
       "studyFamilyId": null,
@@ -149,7 +168,11 @@
     {
       "sourceId": "SRC-FRIEND-DAILY-2015",
       "doi": "10.1002/per.1996",
-      "authors": ["Robert E. Wilson", "Kelci Harris", "Simine Vazire"],
+      "authors": [
+        "Robert E. Wilson",
+        "Kelci Harris",
+        "Simine Vazire"
+      ],
       "populationSummary": "학생 434명의 자기·친구 성격 보고와 일상 상호작용 경험표집 자료",
       "sampleSize": 434,
       "studyFamilyId": null,
@@ -220,7 +243,10 @@
     {
       "sourceId": "SRC-PERSON-SITUATION-WORK-2015",
       "doi": "10.5465/amj.2010.0837",
-      "authors": ["Timothy A. Judge", "Cindy P. Zapata"],
+      "authors": [
+        "Timothy A. Judge",
+        "Cindy P. Zapata"
+      ],
       "populationSummary": "기존 Big Five–직무 성과 문헌을 상황 강도와 성향 활성화 단서로 코딩해 재검토한 메타분석",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -234,7 +260,11 @@
     {
       "sourceId": "SRC-EXTRAVERSION-PA-2015",
       "doi": "10.1111/jopy.12138",
-      "authors": ["Luke D. Smillie", "Colin G. DeYoung", "Philip J. Hall"],
+      "authors": [
+        "Luke D. Smillie",
+        "Colin G. DeYoung",
+        "Philip J. Hall"
+      ],
       "populationSummary": "외향성·주도성·열정과 긍정 정서의 관계를 구분해 검토",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -248,7 +278,9 @@
     {
       "sourceId": "SRC-STATE-DISTRIBUTION-2001",
       "doi": "10.1037/0022-3514.80.6.1011",
-      "authors": ["William Fleeson"],
+      "authors": [
+        "William Fleeson"
+      ],
       "populationSummary": "세 경험표집 연구에서 일상 성향 상태의 개인 내 변산과 개인 간 중심 경향을 함께 검토",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -262,7 +294,10 @@
     {
       "sourceId": "SRC-TRAIT-ACTIVATION-2003",
       "doi": "10.1037/0021-9010.88.3.500",
-      "authors": ["Robert P. Tett", "Dawn D. Burnett"],
+      "authors": [
+        "Robert P. Tett",
+        "Dawn D. Burnett"
+      ],
       "populationSummary": "업무의 과업·사회·조직 수준에서 성향 단서와 직무 행동·성과를 구분한 상호작용 이론 모형",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -346,7 +381,7 @@
         "Katharina Geukes",
         "Mitja D. Back"
       ],
-      "populationSummary": "18~28세 이성애 독신자 397명이 참여한 실제 3분 스피드데이트 940건",
+      "populationSummary": "18~28세 이성애 독신자 397명이 참여한 실제 3~5분 스피드데이트 940건",
       "sampleSize": 397,
       "studyFamilyId": null,
       "datasetIds": [],
@@ -359,7 +394,9 @@
     {
       "sourceId": "SRC-SOKA-2010",
       "doi": "10.1037/a0017908",
-      "authors": ["Simine Vazire"],
+      "authors": [
+        "Simine Vazire"
+      ],
       "populationSummary": "본인 평가와 친구 4명·낯선 사람 최대 4명의 평가, 행동 준거를 비교한 참여자 165명",
       "sampleSize": 165,
       "studyFamilyId": null,
@@ -373,7 +410,10 @@
     {
       "sourceId": "SRC-FRIEND-DYAD-2023",
       "doi": "10.1016/j.jrp.2023.104436",
-      "authors": ["Robert Körner", "Tobias Altmann"],
+      "authors": [
+        "Robert Körner",
+        "Tobias Altmann"
+      ],
       "populationSummary": "친구 190쌍의 Big Five와 우정 만족 자료",
       "sampleSize": 380,
       "studyFamilyId": null,
@@ -387,7 +427,10 @@
     {
       "sourceId": "SRC-SELF-KNOWLEDGE-2010",
       "doi": "10.1111/j.1751-9004.2010.00280.x",
-      "authors": ["Simine Vazire", "Erika N. Carlson"],
+      "authors": [
+        "Simine Vazire",
+        "Erika N. Carlson"
+      ],
       "populationSummary": "자기 성격 지각의 정확성을 객관 준거·타인 지각·메타지각의 세 흐름으로 검토한 논문",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -401,7 +444,10 @@
     {
       "sourceId": "SRC-JOB-META-1991",
       "doi": "10.1111/j.1744-6570.1991.tb00688.x",
-      "authors": ["Murray R. Barrick", "Michael K. Mount"],
+      "authors": [
+        "Murray R. Barrick",
+        "Michael K. Mount"
+      ],
       "populationSummary": "Big Five와 여러 직군·직무 성과 준거의 관련을 종합한 메타분석",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -415,7 +461,11 @@
     {
       "sourceId": "SRC-BFAS-2007",
       "doi": "10.1037/0022-3514.93.5.880",
-      "authors": ["Colin G. DeYoung", "Lena C. Quilty", "Jordan B. Peterson"],
+      "authors": [
+        "Colin G. DeYoung",
+        "Lena C. Quilty",
+        "Jordan B. Peterson"
+      ],
       "populationSummary": "Big Five domain과 더 구체적인 facet 사이에서 10개 aspect 구조를 평가",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -452,7 +502,11 @@
     {
       "sourceId": "SRC-CREATIVITY-DISTINCTION-2014",
       "doi": "10.1002/per.1941",
-      "authors": ["Emanuel Jauk", "Mathias Benedek", "Aljoscha C. Neubauer"],
+      "authors": [
+        "Emanuel Jauk",
+        "Mathias Benedek",
+        "Aljoscha C. Neubauer"
+      ],
       "populationSummary": "성인 297명의 개방성·지능·아이디어 유창성·독창성·일상 창의 활동·창의 성취를 구분해 측정한 자료",
       "sampleSize": 297,
       "studyFamilyId": null,
@@ -487,7 +541,11 @@
     {
       "sourceId": "SRC-DIAMONDS-2014",
       "doi": "10.1037/a0037250",
-      "authors": ["John F. Rauthmann", "Ry Ry Sherman", "David C. Funder"],
+      "authors": [
+        "John F. Rauthmann",
+        "Ry Ry Sherman",
+        "David C. Funder"
+      ],
       "populationSummary": "여러 연구에서 주요 상황 특성의 분류와 행동 예측에서의 활용을 검토",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -585,7 +643,9 @@
     {
       "sourceId": "SRC-ITC-2017",
       "doi": null,
-      "authors": ["International Test Commission"],
+      "authors": [
+        "International Test Commission"
+      ],
       "populationSummary": "검사를 다른 언어와 문화 환경에 옮길 때 필요한 사전 조건, 개발, 경험적 확인, 시행, 해석과 문서화 지침",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -599,7 +659,9 @@
     {
       "sourceId": "SRC-KOREA-SITUATION-2024",
       "doi": "10.1016/j.paid.2024.112616",
-      "authors": ["source_authors_pending_bibliographic_verification"],
+      "authors": [
+        "source_authors_pending_bibliographic_verification"
+      ],
       "populationSummary": "한국의 25~39세 성인 445명을 대상으로 상황 특성 분류의 문화적 적용 가능성을 검토",
       "sampleSize": 445,
       "studyFamilyId": null,
@@ -613,7 +675,9 @@
     {
       "sourceId": "SRC-PERSONAL-VALIDATION-1949",
       "doi": "10.1037/h0059240",
-      "authors": ["Bertram R. Forer"],
+      "authors": [
+        "Bertram R. Forer"
+      ],
       "populationSummary": "모든 참여자에게 같은 일반적 성격 설명을 제시한 고전적 교실 시연",
       "sampleSize": null,
       "studyFamilyId": null,
@@ -686,7 +750,10 @@
     {
       "sourceId": "SRC-WHOLE-TRAIT-2015",
       "doi": "10.1016/j.jrp.2014.10.009",
-      "authors": ["William Fleeson", "Eranda Jayawickreme"],
+      "authors": [
+        "William Fleeson",
+        "Eranda Jayawickreme"
+      ],
       "populationSummary": "성향의 기술적 분포와 행동을 설명하는 사회인지 과정을 구분하고 연결한 통합 이론",
       "sampleSize": null,
       "studyFamilyId": null,

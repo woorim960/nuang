@@ -90,13 +90,35 @@
 }
 
 .consentLabel {
+  display: grid;
   min-width: 0;
   flex: 1;
+  gap: 0.18rem;
 }
 
-.consentRow small {
+.consentLabel > small {
+  max-width: 27rem;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-medium);
+  line-height: var(--nu-leading-label);
+  word-break: keep-all;
+}
+
+.consentRow > small {
   color: var(--nu-neutral-400);
   font-size: var(--nu-text-caption);
+}
+
+.optionalConsent .consentRow {
+  min-height: 68px;
+  align-items: flex-start;
+  padding-block: 0.75rem;
+}
+
+.optionalConsent .checkmark,
+.optionalConsent .consentRow > small {
+  margin-top: 0.08rem;
 }
 
 .optionalConsent {
@@ -105,12 +127,14 @@
 }
 
 .optionalConsent summary {
-  min-height: 42px;
+  box-sizing: border-box;
+  min-height: 44px;
+  padding-block: 0.8125rem;
   cursor: pointer;
   color: var(--nu-color-text-muted);
   font-size: var(--nu-text-label);
   font-weight: var(--nu-weight-semibold);
-  line-height: var(--nu-leading-display);
+  line-height: var(--nu-leading-label);
 }
 
 .policyCopy {

@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import { MyOverview } from "@/features/account/MyOverview";
-import { resolveAdminIdentityForUser } from "@/features/admin/server-admin-access";
 import {
-  createServerCommunityProfilePayload,
-  resolveCurrentCommunityProfileId,
-} from "@/features/feed/server-read";
-import { readCommunityProfileSocialState } from "@/features/feed/server-community-social";
-import { CommunityProfileScreen } from "@/features/public-profile/CommunityProfileScreen";
+  SelfProfileScreen,
+  SelfProfileUnavailable,
+} from "@/features/account/SelfProfileScreen";
+import { readSelfProfilePayload } from "@/features/account/server-self-profile";
+import { resolveAdminIdentityForUser } from "@/features/admin/server-admin-access";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import styles from "./page.module.css";
@@ -37,35 +36,37 @@ export default async function MyPage({
       : null;
   const showAdminEntry = Boolean(adminIdentity);
 
-  if (!data.user || !serviceClient) {
+  if (!data.user) {
     return <MyOverview showAdminEntry={showAdminEntry} />;
   }
 
-  const communityProfileId = await resolveCurrentCommunityProfileId();
-  if (!communityProfileId) {
-    return <MyOverview showAdminEntry={showAdminEntry} />;
+  if (!serviceClient) {
+    return (
+      <div className={styles.fullBleedProfile}>
+        <SelfProfileUnavailable />
+      </div>
+    );
   }
 
-  const payload = await createServerCommunityProfilePayload(communityProfileId);
-  if (!payload) return <MyOverview showAdminEntry={showAdminEntry} />;
-
-  const socialState = await readCommunityProfileSocialState({
+  const result = await readSelfProfilePayload({
     client: serviceClient,
-    publicSnapshotId: payload.profile.source.publicSnapshotId,
+    showAdminEntry,
     user: data.user,
   });
 
+  if (result.state === "profile_unavailable") {
+    return (
+      <div className={styles.fullBleedProfile}>
+        <SelfProfileUnavailable />
+      </div>
+    );
+  }
+
   return (
     <div className={styles.fullBleedProfile}>
-      <CommunityProfileScreen
+      <SelfProfileScreen
         initialContent={query.tab === "reports" ? "reports" : "posts"}
-        initialSocialState={{ ...socialState, isOwnProfile: true }}
-        mode="self"
-        posts={payload.posts}
-        profile={payload.profile}
-        reports={payload.reports}
-        showAdminEntry={showAdminEntry}
-        viewerCode={payload.viewerCode}
+        payload={result.payload}
       />
     </div>
   );

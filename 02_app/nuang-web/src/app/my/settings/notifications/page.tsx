@@ -5,7 +5,7 @@ import { MarketingPreferenceEditor } from "@/features/account/MarketingPreferenc
 import styles from "./page.module.css";
 
 export const metadata: Metadata = {
-  title: "알림 및 마케팅 | NUANG",
+  title: "데이터 및 알림 | NUANG",
 };
 
 export default function NotificationSettingsPage() {
@@ -15,7 +15,7 @@ export default function NotificationSettingsPage() {
         <Link aria-label="설정으로 돌아가기" href="/my/settings">
           <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.7} />
         </Link>
-        <h1>알림 및 마케팅</h1>
+        <h1>데이터 및 알림</h1>
         <span aria-hidden="true" />
       </header>
       <MarketingPreferenceEditor />

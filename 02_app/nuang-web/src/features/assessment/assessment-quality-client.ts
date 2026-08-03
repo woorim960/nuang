@@ -67,7 +67,12 @@ export async function flushAssessmentQualityObservationQueue() {
         method: "POST",
       });
 
-      if (!response.ok && response.status !== 409) {
+      if (
+        !response.ok &&
+        response.status !== 401 &&
+        response.status !== 403 &&
+        response.status !== 409
+      ) {
         remaining.push(submission);
       }
     } catch {

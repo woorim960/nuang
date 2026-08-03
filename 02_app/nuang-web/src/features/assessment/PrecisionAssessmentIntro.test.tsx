@@ -113,7 +113,7 @@ describe("PrecisionAssessmentIntro", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "내 성향을 다섯 글자로 알아볼까요?",
+        name: "내 성향을 뉴앙 코드로 알아볼까요?",
       }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("뉴앙 코드 예시 ENAKQ")).toBeInTheDocument();
@@ -195,7 +195,7 @@ describe("PrecisionAssessmentIntro", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "다섯 글자 속 내 모습을 더 자세히 알아볼까요?",
+        name: "뉴앙 코드 속 내 모습을 더 자세히 알아볼까요?",
       }),
     ).toBeInTheDocument();
     expect(screen.getByLabelText("방금 확인한 코드 ENAKQ")).toBeInTheDocument();

@@ -186,7 +186,7 @@ export function TraitMapDetailTemplate({
       </section>
 
       <section
-        aria-label={`${guide.code} 다섯 글자의 성향 이름`}
+        aria-label={`${guide.code} 뉴앙 코드의 성향 이름`}
         className={styles.codeLanguage}
       >
         {guide.code.split("").map((symbol, index) => {
@@ -348,10 +348,10 @@ function GuideChapter({
                 }
                 savedValue={
                   savedFeedback[
-                    createSectionFeedbackKey(
-                      chapter.id,
-                      createSectionKey(sectionIndex),
-                    )
+                  createSectionFeedbackKey(
+                    chapter.id,
+                    createSectionKey(sectionIndex),
+                  )
                   ]
                 }
                 sectionKey={createSectionKey(sectionIndex)}
@@ -562,11 +562,11 @@ const sectionFitOptions: ReadonlyArray<{
   label: string;
   value: SectionFitRating;
 }> = [
-  { label: "매우 비슷해요", value: "very_close" },
-  { label: "대체로 비슷해요", value: "mostly_close" },
-  { label: "조금 달라요", value: "partly_different" },
-  { label: "많이 달라요", value: "very_different" },
-];
+    { label: "매우 비슷해요", value: "very_close" },
+    { label: "대체로 비슷해요", value: "mostly_close" },
+    { label: "조금 달라요", value: "partly_different" },
+    { label: "많이 달라요", value: "very_different" },
+  ];
 
 function createSectionKey(sectionIndex: number) {
   return `section-${String(sectionIndex + 1).padStart(2, "0")}`;

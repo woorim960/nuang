@@ -9,7 +9,7 @@ describe("TraitMapDetailTemplate", () => {
     render(<TraitMapDetailTemplate guide={guide} />);
 
     expect(
-      screen.getByLabelText("ENAKQ 다섯 글자의 성향 이름"),
+      screen.getByLabelText("ENAKQ 뉴앙 코드의 성향 이름"),
     ).toHaveTextContent("E외향형N가능성형A마음형K꾸준형Q빠른반응형");
 
     expect(

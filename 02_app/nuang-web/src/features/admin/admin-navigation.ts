@@ -2,6 +2,7 @@ import {
   BadgeDollarSign,
   BookOpenText,
   ClipboardList,
+  FileCheck2,
   FlaskConical,
   LayoutDashboard,
   MessageSquareMore,
@@ -99,6 +100,12 @@ export const adminNavigation: readonly AdminNavigationGroup[] = [
   {
     label: "거버넌스",
     items: [
+      {
+        href: "/admin/consents",
+        icon: FileCheck2,
+        keywords: ["동의", "이용 데이터", "마케팅", "알림", "개인정보"],
+        label: "동의 관리",
+      },
       {
         href: "/admin/audit",
         icon: ShieldCheck,

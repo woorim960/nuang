@@ -131,7 +131,7 @@ const report = {
     {
       id: "R3_CODE_TRACEABILITY",
       requirement:
-        "별칭 옆의 다섯 글자 설명으로 이름이 가리키는 큰 방향을 거슬러 확인할 수 있어야 한다.",
+        "별칭 옆의 뉴앙 코드 설명으로 이름이 가리키는 큰 방향을 거슬러 확인할 수 있어야 한다.",
     },
     {
       id: "R4_NEIGHBOR_DIFFERENTIATION",
@@ -150,7 +150,7 @@ const report = {
     },
   ],
   interpretationRules: [
-    "별칭은 다섯 글자를 외우고 이야기하기 쉽게 만든 활동명이지 직업·능력·등급이 아니다.",
+    "별칭은 뉴앙 코드를 외우고 이야기하기 쉽게 만든 활동명이지 직업·능력·등급이 아니다.",
     "별칭만 보고 개인의 실제 행동을 확정하지 않고 다섯 축 비율과 상세 성향지도를 함께 본다.",
     "같은 코드라도 세부 반응과 상황 경험이 다를 수 있으므로 비교 리포트는 실제 검사 데이터를 우선한다.",
     "사용자 이해도·회상·공유 의향 검증에서 반복 오해가 나오면 코드와 점수는 유지하고 별칭만 다시 바꾼다.",
@@ -222,7 +222,7 @@ function buildNameAudit(profile) {
     previousDisplayName: history?.previousDisplayName ?? null,
     decisionReason:
       history?.reason ??
-      "현재 별칭은 같은 성향군 안에서 고유하고 짧으며, 다섯 글자의 큰 방향과 정면으로 어긋나는 능력·진단 표현이 없어 유지했어요.",
+      "현재 별칭은 같은 성향군 안에서 고유하고 짧으며, 뉴앙 코드의 큰 방향과 정면으로 어긋나는 능력·진단 표현이 없어 유지했어요.",
     checks: {
       uniqueShortName:
         structuralAudit.profiles.filter(

@@ -300,7 +300,7 @@ export const feedItems: ReadonlyArray<FeedItem> = [
         authorName: "도윤",
         body: "상대가 지금 원하는 대화가 무엇인지 먼저 물어보면 서로 조금 더 편해지는 것 같아요.",
         id: "daily_question_reply_001",
-        timeLabel: "3분",
+        timeLabel: "3~5분",
       },
       {
         authorCode: "IRGMQ",

@@ -60,7 +60,7 @@ export const traitMapRelationshipEvidenceSourcesV2 = [
     languages: ["German", "English_report"],
     countries: ["Germany"],
     populationSummary:
-      "18~28세 이성애 독신자 397명이 참여한 실제 3분 스피드데이트 940건",
+      "18~28세 이성애 독신자 397명이 참여한 실제 3~5분 스피드데이트 940건",
     sampleSize: 397,
     screeningStatus: "included",
     quality: {
@@ -250,7 +250,7 @@ export const traitMapRelationshipEvidenceFindingsV2 = [
     direction: "null_finding",
     evidenceGrade: "C",
     populationSummary:
-      "독일의 18~28세 이성애 독신자 397명, 실제 3분 스피드데이트 940건",
+      "독일의 18~28세 이성애 독신자 397명, 실제 3~5분 스피드데이트 940건",
     resultSummary:
       "이 첫 만남 표본에서는 Big Five의 실제 유사성과 지각된 유사성 모두 초기 호감과 관련되지 않았다.",
     limitations: [

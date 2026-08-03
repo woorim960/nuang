@@ -42,7 +42,7 @@ describe("HomeDashboard", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "3분이면 내 성향의 첫 단서를 만나요",
+        name: "빠르게 뉴앙 코드 알아보기",
       }),
     ).toBeInTheDocument();
     expect(screen.getAllByText("NUANG").length).toBeGreaterThan(0);
@@ -332,7 +332,7 @@ describe("HomeDashboard", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "3분이면 내 성향의 첫 단서를 만나요",
+        name: "빠르게 뉴앙 코드 알아보기",
       }),
     ).toBeInTheDocument();
     expect(

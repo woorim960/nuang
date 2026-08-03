@@ -1,5 +1,12 @@
 import { type NextRequest, NextResponse } from "next/server";
 import {
+  isAllowedOAuthOrigin,
+  safeSignInReturnPath,
+  signInIntentCookieName,
+  type SignInIntentPayload,
+} from "@/features/auth/sign-in-intent-contract";
+import { verifySignInIntent } from "@/features/auth/sign-in-intent-security";
+import {
   ensureAccountForUser,
   persistAccountConsent,
 } from "@/features/account/server-writes";
@@ -11,106 +18,198 @@ import {
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
-function safeNextPath(value: string | null) {
-  if (!value || !value.startsWith("/") || value.startsWith("//")) {
-    return "/my";
-  }
-
-  return value;
-}
-
-function redirectWithAuthStatus(request: NextRequest, status: string) {
-  const nextPath = safeNextPath(request.nextUrl.searchParams.get("next"));
-  const redirectUrl = new URL(nextPath, request.nextUrl.origin);
-  redirectUrl.searchParams.set("auth", status);
-  return NextResponse.redirect(redirectUrl);
-}
+export const runtime = "nodejs";
 
 export async function GET(request: NextRequest) {
-  const code = request.nextUrl.searchParams.get("code");
+  const callbackOrigin = request.nextUrl.origin;
+  if (!isAllowedOAuthOrigin(callbackOrigin)) {
+    return NextResponse.json(
+      {
+        code: "origin_not_allowed",
+        message: "로그인 주소를 확인하지 못했어요.",
+        ok: false,
+      },
+      { headers: privateNoStoreHeaders, status: 400 },
+    );
+  }
 
-  if (!code) {
-    return redirectWithAuthStatus(request, "missing_code");
+  let verifiedIntent: ReturnType<typeof verifySignInIntent>;
+  try {
+    verifiedIntent = verifySignInIntent({
+      callbackOrigin,
+      token: request.cookies.get(signInIntentCookieName)?.value,
+    });
+  } catch {
+    return clearSignInIntentCookie(
+      redirectToLogin(callbackOrigin, "/my", "env_missing"),
+      callbackOrigin,
+    );
+  }
+  if (!verifiedIntent.ok) {
+    return clearSignInIntentCookie(
+      redirectToLogin(callbackOrigin, "/my", verifiedIntent.code),
+      callbackOrigin,
+    );
+  }
+
+  const intent = verifiedIntent.intent;
+  const code = request.nextUrl.searchParams.get("code");
+  if (!code || request.nextUrl.searchParams.has("error")) {
+    return clearSignInIntentCookie(
+      redirectToLogin(
+        callbackOrigin,
+        intent.returnPath,
+        request.nextUrl.searchParams.has("error")
+          ? "oauth_cancelled"
+          : "missing_code",
+      ),
+      callbackOrigin,
+    );
   }
 
   const supabase = await createServerSupabaseClient();
-
   if (!supabase) {
-    return redirectWithAuthStatus(request, "env_missing");
+    return clearSignInIntentCookie(
+      redirectToLogin(callbackOrigin, intent.returnPath, "env_missing"),
+      callbackOrigin,
+    );
   }
 
   const { error } = await supabase.auth.exchangeCodeForSession(code);
-
   if (error) {
-    return redirectWithAuthStatus(request, "error");
+    return clearSignInIntentCookie(
+      redirectToLogin(callbackOrigin, intent.returnPath, "session_error"),
+      callbackOrigin,
+    );
   }
 
   const [{ data }, serviceClient] = await Promise.all([
     supabase.auth.getUser(),
     Promise.resolve(createSupabaseServiceClient()),
   ]);
-
-  if (!data.user) {
-    return clearConsentCookie(redirectWithAuthStatus(request, "error"));
+  if (!data.user || !matchesIntentProvider(data.user, intent.provider)) {
+    const status = (await discardFailedSession(supabase))
+      ? "identity_unsupported"
+      : "session_cleanup_error";
+    return clearTemporaryCookies(
+      redirectToLogin(callbackOrigin, intent.returnPath, status),
+      callbackOrigin,
+    );
   }
-
   if (!serviceClient) {
-    return clearConsentCookie(redirectWithAuthStatus(request, "env_missing"));
+    return clearTemporaryCookies(
+      redirectToReturnPath(callbackOrigin, intent.returnPath, "env_missing"),
+      callbackOrigin,
+    );
   }
 
-  if (data.user) {
-    const consentDraft = readConsentIntent(request);
+  const consentDraft = readConsentIntent(request);
+  if (!consentDraft) {
+    const status = (await discardFailedSession(supabase))
+      ? "consent_required"
+      : "session_cleanup_error";
+    return clearTemporaryCookies(
+      redirectToLogin(callbackOrigin, intent.returnPath, status),
+      callbackOrigin,
+    );
+  }
 
-    if (!consentDraft) {
-      return clearConsentCookie(
-        redirectWithAuthStatus(request, "consent_required"),
-      );
-    }
+  const account = await ensureAccountForUser(serviceClient, data.user, {
+    auditEvent: true,
+  });
+  if (!account.ok) {
+    const accountStatus =
+      account.code === "account_conflict"
+        ? "identity_conflict"
+        : account.code === "identity_deleted"
+          ? "account_deleted"
+          : account.code === "identity_missing" ||
+              account.code === "provider_not_allowed" ||
+              account.code === "duplicate_identity"
+            ? "identity_unsupported"
+            : "identity_error";
+    const status = (await discardFailedSession(supabase))
+      ? accountStatus
+      : "session_cleanup_error";
 
-    const account = await ensureAccountForUser(serviceClient, data.user, {
-      auditEvent: true,
-    });
+    return clearTemporaryCookies(
+      redirectToLogin(callbackOrigin, intent.returnPath, status),
+      callbackOrigin,
+    );
+  }
 
-    if (!account.ok) {
-      const status =
-        account.code === "account_conflict"
-          ? "identity_conflict"
-          : account.code === "identity_deleted"
-            ? "account_deleted"
-            : account.code === "identity_missing" ||
-                account.code === "provider_not_allowed" ||
-                account.code === "duplicate_identity"
-              ? "identity_unsupported"
-              : "identity_error";
+  const consent = await persistAccountConsent(
+    serviceClient,
+    account.accountId,
+    consentDraft,
+  );
+  if (!consent.ok) {
+    const status = (await discardFailedSession(supabase))
+      ? "consent_error"
+      : "session_cleanup_error";
+    return clearTemporaryCookies(
+      redirectToLogin(callbackOrigin, intent.returnPath, status),
+      callbackOrigin,
+    );
+  }
 
-      return clearConsentCookie(redirectWithAuthStatus(request, status));
-    }
-
-    const consent =
-      await persistAccountConsent(
-        serviceClient,
-        account.accountId,
-        consentDraft,
-      );
-
-    if (!consent || !consent.ok) {
-      return clearConsentCookie(
-        redirectWithAuthStatus(request, "consent_error"),
-      );
-    }
-
-    // A signed-in user must be able to follow, block and edit their profile
-    // before completing an assessment. Bootstrap failures do not invalidate
-    // the successful OAuth session; the profile API retries this operation.
+  // Profile bootstrap is retryable and must not invalidate a valid session.
+  try {
     await ensureCommunityProfile({ client: serviceClient, user: data.user });
+  } catch {
+    // The authenticated profile APIs retry this non-security bootstrap.
   }
 
-  return clearConsentCookie(redirectWithAuthStatus(request, "connected"));
+  return clearTemporaryCookies(
+    redirectToReturnPath(callbackOrigin, intent.returnPath, "connected"),
+    callbackOrigin,
+  );
+}
+
+function matchesIntentProvider(
+  user: {
+    app_metadata?: Record<string, unknown>;
+    identities?: Array<{ provider?: string }> | null;
+  },
+  provider: SignInIntentPayload["provider"],
+) {
+  return Boolean(
+    user.identities?.some((identity) => identity.provider === provider),
+  );
+}
+
+async function discardFailedSession(supabase: {
+  auth: {
+    signOut(options: { scope: "local" }): Promise<{ error: unknown }>;
+  };
+}) {
+  try {
+    const result = await supabase.auth.signOut({ scope: "local" });
+    return !result.error;
+  } catch {
+    return false;
+  }
+}
+
+function redirectToLogin(origin: string, returnPath: string, status: string) {
+  const redirectUrl = new URL("/login", origin);
+  redirectUrl.searchParams.set("next", safeSignInReturnPath(returnPath));
+  redirectUrl.searchParams.set("auth", status);
+  return NextResponse.redirect(redirectUrl, { headers: privateNoStoreHeaders });
+}
+
+function redirectToReturnPath(
+  origin: string,
+  returnPath: string,
+  status: string,
+) {
+  const redirectUrl = new URL(safeSignInReturnPath(returnPath), origin);
+  redirectUrl.searchParams.set("auth", status);
+  return NextResponse.redirect(redirectUrl, { headers: privateNoStoreHeaders });
 }
 
 function readConsentIntent(request: NextRequest) {
   const encoded = request.cookies.get(consentIntentCookieName)?.value;
-
   if (!encoded) return null;
 
   try {
@@ -123,7 +222,21 @@ function readConsentIntent(request: NextRequest) {
   }
 }
 
-function clearConsentCookie(response: NextResponse) {
+function clearTemporaryCookies(response: NextResponse, origin: string) {
   response.cookies.delete(consentIntentCookieName);
+  return clearSignInIntentCookie(response, origin);
+}
+
+function clearSignInIntentCookie(response: NextResponse, origin: string) {
+  response.cookies.set(signInIntentCookieName, "", {
+    expires: new Date(0),
+    httpOnly: true,
+    maxAge: 0,
+    path: "/auth/callback",
+    sameSite: "lax",
+    secure: origin.startsWith("https://"),
+  });
   return response;
 }
+
+const privateNoStoreHeaders = { "cache-control": "private, no-store" };

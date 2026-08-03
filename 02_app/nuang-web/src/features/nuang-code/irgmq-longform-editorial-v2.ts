@@ -26,7 +26,7 @@ const sixWNotes = {
     "친구·가족·연인·동료처럼 친밀도와 책임이 다른 사람에게도 다섯 방향의 출발점이 유지되는지를 비교한다.",
     "정보가 충분한 장소와 단서가 적은 온라인 공간, 자신이 결정할 수 있는 곳과 권한이 제한된 곳을 나누어 본다.",
     "I의 정리, R의 사실 출발, G의 원인 주의, M의 상황 조건, Q의 감정 시작 속도를 서로 다른 문항으로 확인한다.",
-    "다섯 글자는 사람의 능력이나 정신건강을 재는 등급이 아니라 반복되는 주의와 실행 조건을 기억하게 하는 좌표이기 때문이다.",
+    "뉴앙 코드는 사람의 능력이나 정신건강을 재는 등급이 아니라 반복되는 주의와 실행 조건을 기억하게 하는 좌표이기 때문이다.",
     "각 자리의 반대 방향 문장을 코드 없이 비교하고, 실제 장면과 더 가까운 설명을 구체적인 이유와 함께 고르게 한다.",
   ],
   code_interactions: [
@@ -167,14 +167,14 @@ const chapterOverrides = {
     ],
   },
   five_code_positions: {
-    title: "I·R·G·M·Q 다섯 글자의 실제 뜻",
+    title: "I·R·G·M·Q 뉴앙 코드의 실제 뜻",
     body: [
       "첫째 자리 I는 에너지를 다시 채우고 생각을 정리하는 방식이다. 사람들과 잘 지낼 수 있어도 활동 뒤에는 혼자 있는 시간이 필요하고, 말하기 전 주변 상황과 자신의 생각을 먼저 살핀다. I는 수줍음·사회 불안·친구 수를 뜻하지 않는다.",
       "둘째 자리 R은 이미 확인된 사실, 직접 겪은 경험, 지금 적용할 수 있는 구체적인 정보에서 생각을 시작하는 방향이다. 가능성을 넓히기 전 현재 무엇을 알고 있는지와 실제로 쓸 수 있는지를 확인한다. R은 창의성이나 지적 능력의 높낮이가 아니다.",
       "셋째 자리 G는 관계에서 문제가 생기면 어떤 일이 있었고 왜 생겼는지, 무엇을 바꾸면 풀리는지에 주의가 먼저 가는 방향이다. 상대 마음도 살피지만 생각의 출발점은 원인과 해결할 부분에 가깝다. G는 공감 능력이 부족하다는 뜻이 아니다.",
       "넷째 자리 M은 실행이 현재의 흥미·마감·에너지·주변 도움 같은 상황 조건에 민감한 방향이다. 조건이 맞으면 집중이 빠르게 올라가고, 조건이 달라지면 방법도 함께 바뀐다. M은 게으름이나 책임감 부족이 아니다.",
       "다섯째 자리 Q는 결과가 불확실하거나 관계에 이상 신호가 보일 때 걱정과 불편한 감정이 비교적 빠르게 올라오는 방향이다. 놓치면 안 될 위험과 좋지 않은 가능성을 일찍 알아차려 대비하려 한다. Q는 정신건강 상태나 회복력을 판정하지 않는다.",
-      "다섯 글자가 함께 움직이면 I가 관찰과 정리 시간을 만들고, R이 확인된 단서를 고르며, G가 원인과 해결 지점을 찾는다. M은 현재 조건에 맞는 실행 방식을 고르고, Q는 놓친 위험을 빠르게 알려 확인 질문과 대비 행동을 시작하게 한다.",
+      "뉴앙 코드가 함께 움직이면 I가 관찰과 정리 시간을 만들고, R이 확인된 단서를 고르며, G가 원인과 해결 지점을 찾는다. M은 현재 조건에 맞는 실행 방식을 고르고, Q는 놓친 위험을 빠르게 알려 확인 질문과 대비 행동을 시작하게 한다.",
     ],
   },
   code_interactions: {
@@ -265,10 +265,10 @@ export const irgmqLongformEditorialV2 = irgmcLongformEditorialV2.map(
     const selected = override
       ? override
       : {
-          ...chapter,
-          title: replaceIdentity(chapter.title),
-          body: chapter.body.map(replaceIdentity),
-        };
+        ...chapter,
+        title: replaceIdentity(chapter.title),
+        body: chapter.body.map(replaceIdentity),
+      };
     return {
       chapterId: chapter.chapterId,
       ...selected,
@@ -276,8 +276,8 @@ export const irgmqLongformEditorialV2 = irgmcLongformEditorialV2.map(
         ...selected.body,
         ...(sixWDeepDiveChapterIds.has(chapter.chapterId)
           ? buildLongformSixWResearchLensV2(
-              sixWNotes[chapter.chapterId as keyof typeof sixWNotes],
-            )
+            sixWNotes[chapter.chapterId as keyof typeof sixWNotes],
+          )
           : []),
       ],
     };

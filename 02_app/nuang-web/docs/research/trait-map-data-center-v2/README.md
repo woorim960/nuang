@@ -53,7 +53,7 @@
 - [`03_EVIDENCE_CLAIM_APPROVAL_STANDARD_V2.md`](./03_EVIDENCE_CLAIM_APPROVAL_STANDARD_V2.md):
   근거 수집, 등급, claim 승인, 전문 검토와 정량 검증 기준
 - [`04_PROFILE_NAMING_SYSTEM_V2.md`](./04_PROFILE_NAMING_SYSTEM_V2.md):
-  다섯 글자의 쉬운 뜻, 네 가지 성향군, 32개 고유 짧은 별칭·긴 별칭과
+  뉴앙 코드의 쉬운 뜻, 네 가지 성향군, 32개 고유 짧은 별칭·긴 별칭과
   이름 이해도 검증 기준
 - [`05_32_PROFILE_CONTENT_QUALITY_AUDIT_V2.md`](./05_32_PROFILE_CONTENT_QUALITY_AUDIT_V2.md):
   5만 자 충족 여부와 별개로 근거 장을 제외한 실제 본문, 핵심 해설 장,

@@ -57,8 +57,8 @@ export function BalanceGameLanding({
       activeShelf === "all"
         ? PUBLIC_BALANCE_PACKS
         : PUBLIC_BALANCE_PACKS.filter(
-            (pack) => packShelfBySlug[pack.slug] === activeShelf,
-          ),
+          (pack) => packShelfBySlug[pack.slug] === activeShelf,
+        ),
     [activeShelf],
   );
 
@@ -73,7 +73,7 @@ export function BalanceGameLanding({
           <p>2~8명이 함께</p>
           <h2>우리, 얼마나 비슷하게 고를까?</h2>
           <span>
-            같은 질문을 고르고 둘만의 결과와 모임 전체 궁합을 확인해요.
+            간단한 게임을 통해 서로의 궁합을 확인할 수 있어요!
           </span>
           <div className={styles.heroPair} aria-hidden="true">
             <span>산</span>
@@ -293,9 +293,9 @@ function RoomCreationSheet({
     const overlay = dialog.parentElement;
     const backgroundSiblings = overlay?.parentElement
       ? Array.from(overlay.parentElement.children).filter(
-          (element): element is HTMLElement =>
-            element instanceof HTMLElement && element !== overlay,
-        )
+        (element): element is HTMLElement =>
+          element instanceof HTMLElement && element !== overlay,
+      )
       : [];
     const previousOverflow = document.body.style.overflow;
     const previousInert = backgroundSiblings.map((element) =>

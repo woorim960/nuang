@@ -1,7 +1,9 @@
 # NUANG S00O First-run Onboarding Design Specification
 
+> **대체됨:** 이 문서는 과거 합성 이미지형 온보딩의 설계 기록입니다. 현재 제품과 구현의 기준은 [`NUANG_CODED_ONBOARDING_V2_PRODUCT_SPEC.md`](./NUANG_CODED_ONBOARDING_V2_PRODUCT_SPEC.md)입니다.
+
 작성일: 2026-07-17 KST  
-상태: 여정 v2 확정, G01~G04 이미지 승인, 스와이프 시뮬레이션 v1 검토  
+상태: V2 코드형 온보딩으로 대체됨
 기준: `NUANG_APP_FUNCTIONAL_REQUIREMENTS.md`, `NUANG_UI_UX_MASTER_DESIGN_BLUEPRINT.md`
 
 ## 1. 변경 결정
@@ -13,7 +15,7 @@
 1. 뉴앙은 간단한 질문을 통해 나의 성향과 특징을 알아보는 서비스다.
 2. 첫 결과는 기억하기 쉬운 뉴앙 코드와 생활 장면으로 제공된다.
 3. 결과 뒤에는 다른 사람의 생각과 선택을 살펴보는 성향 커뮤니티가 열린다.
-4. 빠른 코어는 무료이고 로그인 없이 약 3분 안에 시작할 수 있다.
+4. 빠른 코어는 무료이고 로그인 없이 약 3~5분 안에 시작할 수 있다.
 
 ## 2. 첫 가치 여정
 
@@ -45,11 +47,11 @@ flowchart LR
 | G01  | 나와 서로의 성향을 이해하는 서비스다                                     | `나를 이해하고, 서로를 이해하는 성향 놀이터`                | 캐릭터가 설문 카드와 정돈된 성향 결과 보드를 설명                             | 이미지 v3 승인·앱 셸 v4 검토                          |
 | G02  | 여러 검사 결과가 쌓이면 5글자 뉴앙 코드와 더 자세한 성향 안내로 종합된다 | `내 성향을 5글자 뉴앙 코드로 확인해요`                      | 캐릭터가 여러 검사 결과 카드를 5글자 코드와 상세 성향 보드로 종합             | 이미지 v1 승인·legacy 코드 표기는 최종 asset에서 교체 |
 | G03  | 원하는 상대와 성향을 비교해 공통점과 차이점을 이해하고 관계를 발전시킨다 | `원하는 사람들과 성향을 비교하고 더 좋은 관계를 만들어가요` | 캐릭터가 가족·친구·연인 타일에서 원하는 상대를 선택하고 관계 비교 보드를 설명 | 이미지 v1 승인                                        |
-| G04  | 로그인 없이 3분 빠른 코어 검사를 진행하고 첫 성향 결과를 확인한다        | `3분 빠른 코어 검사로 시작해요`                             | 캐릭터가 `3:00` 타이머와 질문→답변→첫 결과 흐름을 안내                        | 이미지 v1 승인                                        |
+| G04  | 로그인 없이 3~5분 빠른 코어 검사를 진행하고 첫 성향 결과를 확인한다      | `3~5분 빠른 코어 검사로 시작해요`                           | 캐릭터가 `3:00` 타이머와 질문→답변→첫 결과 흐름을 안내                        | 이미지 v1 승인                                        |
 
 G04가 승인되면 네 장의 이미지와 앱 셸 v4를 결합해 실제 좌우 스와이프 캐러셀을 구현한다.
 
-최종 앱 asset에서는 legacy 예시 코드와 검증 전 문항 수를 사용하지 않는다. 3분 약속은 최종 빠른 코어 문항 수와 사용성 테스트의 실제 완료시간이 뒷받침할 때 유지하고, 그렇지 않으면 쉬운 시간 안내로 교체한다.
+최종 앱 asset에서는 legacy 예시 코드와 검증 전 문항 수를 사용하지 않는다. 3~5분 약속은 최종 빠른 코어 문항 수와 사용성 테스트의 실제 완료시간이 뒷받침할 때 유지하고, 그렇지 않으면 쉬운 시간 안내로 교체한다.
 
 ## 4. G01 화면 명세
 
@@ -234,8 +236,8 @@ G04가 승인되면 네 장의 이미지와 앱 셸 v4를 결합해 실제 좌�
 
 - 생성 방식: built-in image generation
 - 기존 캐릭터 역할: identity·재질·비율 reference
-- 프로젝트 master asset: `public/assets/onboarding/nuang-guide-01-playground-v3-master.png`
-- 프로젝트 최적화 asset: `public/assets/onboarding/nuang-guide-01-playground-v3.jpg`
+- 프로젝트 master asset: 과거 합성 원본(현재 삭제됨)
+- 프로젝트 최적화 asset: 과거 화면용 사본(현재 삭제됨)
 - 크기: 1024×1536px
 - 최종 프롬프트 요약: `승인된 캐릭터·설문 카드·성향 결과 보드·배경·조명을 그대로 유지하고, 제목만 “나를 이해하고, 서로를 이해하는 성향 놀이터”로 정확히 교체한다. 제목은 세 줄로 배치하며 기존 설명 문구와 다른 시각 요소는 변경하지 않는다.`
 
@@ -243,8 +245,8 @@ G04가 승인되면 네 장의 이미지와 앱 셸 v4를 결합해 실제 좌�
 
 - 생성 방식: built-in image generation
 - G01 역할: 캐릭터 identity·재질·조명·색감·편집 그리드 reference
-- 프로젝트 master asset: `public/assets/onboarding/nuang-guide-02-code-v1-master.png`
-- 프로젝트 최적화 asset: `public/assets/onboarding/nuang-guide-02-code-v1.jpg`
+- 프로젝트 master asset: 과거 합성 원본(현재 삭제됨)
+- 프로젝트 최적화 asset: 과거 화면용 사본(현재 삭제됨)
 - 크기: 1024×1536px
 - 이미지 문구: `내 성향을 5글자 뉴앙 코드로 확인해요` / `검사를 진행할수록 결과가 쌓이고 모인 결과를 종합해 내 성향을 더 자세히 알려드려요`
 - 코드 예시: 제작 당시 legacy v0.1의 유효 fixture `SVODE`; 신규 코드 release 확정 후 같은 시각 언어로 교체
@@ -253,8 +255,8 @@ G04가 승인되면 네 장의 이미지와 앱 셸 v4를 결합해 실제 좌�
 
 - 생성 방식: built-in image generation
 - G01·G02 역할: 캐릭터 identity·재질·조명·색감·편집 그리드·구조화된 카드 reference
-- 프로젝트 master asset: `public/assets/onboarding/nuang-guide-03-relationships-v1-master.png`
-- 프로젝트 최적화 asset: `public/assets/onboarding/nuang-guide-03-relationships-v1.jpg`
+- 프로젝트 master asset: 과거 합성 원본(현재 삭제됨)
+- 프로젝트 최적화 asset: 과거 화면용 사본(현재 삭제됨)
 - 크기: 1024×1536px
 - 이미지 문구: `원하는 사람들과 성향을 비교하고 더 좋은 관계를 만들어가요` / `가족, 친구, 연인과의 공통점과 차이점을 살펴보며 더 편하게 대화하고 가까워지는 방법을 찾아봐요`
 - 선택 표현: 가족·친구·연인 프로필 타일 중 사용자가 고른 타일에만 check 표시
@@ -264,10 +266,10 @@ G04가 승인되면 네 장의 이미지와 앱 셸 v4를 결합해 실제 좌�
 
 - 생성 방식: built-in image generation
 - G01·G03 역할: 캐릭터 identity·재질·조명·색감·편집 그리드·구조화된 카드 reference
-- 프로젝트 master asset: `public/assets/onboarding/nuang-guide-04-quick-core-v1-master.png`
-- 프로젝트 최적화 asset: `public/assets/onboarding/nuang-guide-04-quick-core-v1.jpg`
+- 프로젝트 master asset: 과거 합성 원본(현재 삭제됨)
+- 프로젝트 최적화 asset: 과거 화면용 사본(현재 삭제됨)
 - 크기: 1024×1536px
-- 이미지 문구: `3분 빠른 코어 검사로 시작해요` / `로그인 없이 간단한 질문에 답하면 나의 첫 성향 결과를 바로 확인할 수 있어요`
+- 이미지 문구: `3~5분 빠른 코어 검사로 시작해요` / `로그인 없이 간단한 질문에 답하면 나의 첫 성향 결과를 바로 확인할 수 있어요`
 - 핵심 시각: 부담감 없는 `3:00` 원형 타이머와 질문→선택 완료→첫 성향 결과 카드
 - 제외: 로그인 폼, 시험지, 압박감을 주는 stopwatch, 이미지 안의 가짜 CTA
 

@@ -34,7 +34,7 @@
     },
     {
       "chapterId": "five_code_positions",
-      "title": "INAKC 다섯 글자의 실제 뜻",
+      "title": "INAKC 뉴앙 코드의 실제 뜻",
       "nonWhitespaceCharacters": 1977,
       "sourceFiles": [
         "src/features/nuang-code/remaining-batch1-longform-editorial-v2.ts",

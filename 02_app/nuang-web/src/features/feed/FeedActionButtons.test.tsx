@@ -306,7 +306,7 @@ describe("FeedActionButtons", () => {
             authorName: "도윤",
             body: "괜찮은지 묻고 조금 기다려요.",
             id: "reply-001",
-            timeLabel: "3분",
+            timeLabel: "3~5분",
           },
         ]}
       />,

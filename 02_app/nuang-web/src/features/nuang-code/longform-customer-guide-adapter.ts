@@ -42,7 +42,7 @@ const sourceChapterIds = [
 const chapterLabels = [
   "핵심 모습",
   "이름 뜻",
-  "다섯 글자",
+  "뉴앙 코드",
   "조합의 모습",
   "생각과 반응",
   "평소 모습",
@@ -60,7 +60,7 @@ const chapterLabels = [
 const chapterQuestions = [
   "이 성향의 핵심 모습 중 내 일상에서 가장 자주 나타나는 것은 무엇인가요?",
   "이 역할 이름이 나와 잘 맞는다고 느꼈던 최근 장면은 무엇인가요?",
-  "다섯 글자 중 내 생각과 행동에서 가장 선명하게 보이는 글자는 무엇인가요?",
+  "뉴앙 코드 중 내 생각과 행동에서 가장 선명하게 보이는 글자는 무엇인가요?",
   "다섯 방향이 함께 움직였던 최근 경험을 하나 떠올려 볼까요?",
   "최근 상황에서 처음 든 생각과 실제로 보인 반응은 어떻게 달랐나요?",
   "평소 선택하거나 계획을 바꿀 때 반복되는 내 방식은 무엇인가요?",
@@ -168,7 +168,7 @@ const chapterTitleBuilders = [
   (code: string) => `${code}의 생각과 행동을 한눈에 알아봐요`,
   (_code: string, displayName: string) =>
     `‘${displayName}’에 담긴 뜻을 알아봐요`,
-  (code: string) => `${code} 다섯 글자를 한 글자씩 알아봐요`,
+  (code: string) => `${code} 뉴앙 코드를 한 글자씩 알아봐요`,
   (code: string) => `${code}의 다섯 경향이 함께 움직이는 방식을 알아봐요`,
   () => "처음 드는 생각과 실제 나타나는 반응을 나누어 봐요",
   () => "선택하고 움직이고 쉬는 평소 모습을 알아봐요",
@@ -260,27 +260,27 @@ export function buildCustomerGuideFromLongform({
           ? buildFiveLetterParagraphs(profile)
           : index === 14
             ? buildEvidenceParagraphs(profile)
-          : source.body
+            : source.body
               .map((paragraph) => prepareSourceParagraph(paragraph, index))
               .filter((paragraph): paragraph is string => Boolean(paragraph));
       const supportingParagraphs =
         index === 2
           ? []
           : [
-              ...(index === 0 ? [buildCorePatternParagraph(profile)] : []),
-              ...(index === 14
-                ? [
-                    buildEvidenceReadingParagraph(profile),
-                    buildRelationshipReadingParagraph(profile),
-                  ]
-                : []),
-              buildEverydayExampleParagraph(index, profile),
-              ...([0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].includes(
-                index,
-              )
-                ? [buildPracticalReadingParagraph(index, profile)]
-                : []),
-            ];
+            ...(index === 0 ? [buildCorePatternParagraph(profile)] : []),
+            ...(index === 14
+              ? [
+                buildEvidenceReadingParagraph(profile),
+                buildRelationshipReadingParagraph(profile),
+              ]
+              : []),
+            buildEverydayExampleParagraph(index, profile),
+            ...([0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14].includes(
+              index,
+            )
+              ? [buildPracticalReadingParagraph(index, profile)]
+              : []),
+          ];
       const paragraphs = deduplicateParagraphs(
         normalizeParagraphs([...sourceParagraphs, ...supportingParagraphs]),
         usedParagraphs,
@@ -391,7 +391,7 @@ function buildCorePatternParagraph(profile: CandidateProfile) {
 }
 
 function buildEvidenceReadingParagraph(profile: CandidateProfile) {
-  return `${profile.code} 안내를 읽을 때는 먼저 다섯 글자의 뜻을 확인하고, 가족·친구·연인·일처럼 서로 다른 장면에서 같은 흐름이 반복되는지 살펴보세요. 한 번의 특별한 경험보다 최근 여러 달 동안 되풀이된 생각과 행동을 함께 볼 때 ‘${profile.displayName}’의 설명을 내 생활과 더 정확하게 연결할 수 있어요.`;
+  return `${profile.code} 안내를 읽을 때는 먼저 뉴앙 코드의 뜻을 확인하고, 가족·친구·연인·일처럼 서로 다른 장면에서 같은 흐름이 반복되는지 살펴보세요. 한 번의 특별한 경험보다 최근 여러 달 동안 되풀이된 생각과 행동을 함께 볼 때 ‘${profile.displayName}’의 설명을 내 생활과 더 정확하게 연결할 수 있어요.`;
 }
 
 function buildRelationshipReadingParagraph(profile: CandidateProfile) {
@@ -401,7 +401,7 @@ function buildRelationshipReadingParagraph(profile: CandidateProfile) {
 function buildEvidenceParagraphs(profile: CandidateProfile) {
   return [
     `뉴앙은 한 가지 질문이나 한 번의 인상으로 ${profile.code}를 정하지 않아요. 같은 성향을 일상, 관계, 선택, 변화, 부담처럼 서로 다른 장면에서 여러 번 물어보고 반복해서 나타나는 흐름을 함께 살펴봐요.`,
-    `다섯 글자는 사람의 능력이나 좋고 나쁨을 매기는 점수가 아니에요. 에너지가 돌아오는 곳, 관심이 먼저 머무는 곳, 관계에서 먼저 살피는 것, 일을 이어가는 방식, 걱정과 감정이 커지는 속도를 각각 나누어 확인해요.`,
+    `뉴앙 코드는 사람의 능력이나 좋고 나쁨을 매기는 점수가 아니에요. 에너지가 돌아오는 곳, 관심이 먼저 머무는 곳, 관계에서 먼저 살피는 것, 일을 이어가는 방식, 걱정과 감정이 커지는 속도를 각각 나누어 확인해요.`,
     `질문을 만들 때는 어느 한쪽 답이 더 좋아 보이지 않는지, 같은 뜻이 겹쳐 묻히지 않는지, 어린 사람과 나이 든 사람 모두 같은 장면을 떠올릴 수 있는지 살펴봐요. 답하기 어려운 문장은 사용자 의견을 모아 다시 다듬어요.`,
     `처음 드는 생각과 실제 나타나는 반응도 따로 살펴봐요. 머릿속에는 해결 방법이 먼저 떠올라도 상대의 마음을 고려해 공감부터 표현할 수 있기 때문에, 생각과 행동을 나누어 봐야 한 사람의 모습을 더 자세히 이해할 수 있어요.`,
     `성향의 넓은 구조는 Big Five와 BFI-2 같은 성격 연구를 참고하고, 일상에서 행동이 달라지는 모습은 여러 상황에서 반복되는 행동을 살펴본 연구를 참고해요. 감정 경험과 실제 표현을 구분하는 과정도 전문 연구를 바탕으로 설계해요.`,
@@ -527,7 +527,7 @@ function buildChapterSummary(
       .join(" · ")}의 다섯 방향으로 이루어져요.`,
     `${profile.code}의 다섯 방향은 따로 움직이지 않고, 주의를 기울이는 곳부터 실제 행동과 감정의 속도까지 하나의 흐름을 만들어요.`,
     `${profile.code}는 머릿속에 처음 떠오른 생각과 관계와 상황을 살핀 뒤 실제로 보여주는 반응이 서로 다르게 나타날 때가 있어요.`,
-    `${profile.code}가 선택하고 계획을 바꾸고 일을 이어가며 쉬는 방식에는 다섯 글자의 특징이 함께 나타나요.`,
+    `${profile.code}가 선택하고 계획을 바꾸고 일을 이어가며 쉬는 방식에는 뉴앙 코드의 특징이 함께 나타나요.`,
     `가족 안에서 ${profile.code}는 자신의 에너지, 관계를 살피는 방식, 일을 이어가는 흐름을 바탕으로 반복해서 맡는 역할이 있어요.`,
     `친구 관계에서 ${profile.code}는 가까워지는 속도, 고민을 듣는 방식, 연락과 약속을 이어가는 모습으로 성향이 드러나요.`,
     `연인 관계에서 ${profile.code}는 애정을 표현하고 서운함을 다루며 갈등 뒤 다시 가까워지는 과정에서 고유한 흐름을 보여요.`,
@@ -672,7 +672,7 @@ function areParagraphsTooSimilar(left: string, right: string) {
     normalizedLeft.length < 70 ||
     normalizedRight.length < 70 ||
     Math.abs(normalizedLeft.length - normalizedRight.length) >
-      Math.max(normalizedLeft.length, normalizedRight.length) * 0.3
+    Math.max(normalizedLeft.length, normalizedRight.length) * 0.3
   ) {
     return false;
   }
@@ -742,7 +742,7 @@ function buildEverydayExampleParagraph(
     `예를 들어 갑자기 새로운 모임이나 공동 과제가 생긴 장면을 떠올려 보세요. ${profile.code}는 ${profile.summary} 이때 가장 먼저 눈에 들어온 것과 실제로 꺼낸 첫 행동을 나란히 보면 ‘${profile.shortName}’의 핵심 흐름을 생활 속 경험과 연결할 수 있어요.`,
     `역할 이름이 잘 맞는지는 멋있게 들리는지보다 실제로 반복됐는지로 확인해요. 가까운 사람에게 내가 자주 맡는 역할을 물어보고, 그 답이 ${profile.shortName}의 설명과 어느 장면에서 이어지는지 이야기하면 혼자 읽을 때 놓친 모습도 발견할 수 있어요.`,
     `코드를 외울 때는 ${profile.code.split("").map((symbol, position) => `${symbol}${getTopicParticle(symbol)} ${profile.codeTypeNames[position]}`).join(", ")}이라고 읽어 보세요. 글자와 쉬운 이름을 함께 기억한 뒤 최근 경험을 하나 붙이면, 다른 사람에게도 내 성향을 짧고 정확하게 설명하기 좋아요.`,
-    `예상과 다른 일이 생긴 장면에서는 다섯 글자의 순서가 더 잘 보여요. 누가 함께 있었는지, 무엇을 먼저 알아차렸는지, 관계에서 무엇이 신경 쓰였는지, 어떤 방식으로 일을 이어갔는지, 걱정과 감정은 언제 커졌는지를 차례로 되짚어 보세요.`,
+    `예상과 다른 일이 생긴 장면에서는 뉴앙 코드의 순서가 더 잘 보여요. 누가 함께 있었는지, 무엇을 먼저 알아차렸는지, 관계에서 무엇이 신경 쓰였는지, 어떤 방식으로 일을 이어갔는지, 걱정과 감정은 언제 커졌는지를 차례로 되짚어 보세요.`,
     `누군가 고민을 말했을 때 머릿속에 먼저 떠오른 말과 입 밖으로 실제 건넨 말을 적어 보세요. 둘 사이가 달랐다면 상대의 마음, 관계, 책임, 시간 가운데 무엇을 고려해 반응을 바꾸었는지도 함께 살펴보세요. 그 차이가 ${profile.code}의 조절 방식을 보여줘요.`,
     `주말 계획이 갑자기 바뀌었거나 해야 할 일이 예상보다 늘어난 하루를 떠올려 보세요. 계획을 그대로 이어갔는지, 다른 방법으로 바꿨는지보다 왜 그렇게 움직였고 무엇이 다시 시작하게 했는지를 살피는 것이 평소 성향을 이해하는 데 더 도움이 돼요.`,
     `가족이 힘든 일을 말한 장면에서는 곧바로 도왔는지보다 먼저 무엇이 떠올랐는지를 보세요. 그 뒤 실제로는 들어주기, 질문하기, 해결 방법 찾기, 역할 나누기 중 무엇을 했는지 확인하면 가족 안에서 ${profile.code}가 쓰이는 순서를 구체적으로 알 수 있어요.`,
@@ -769,7 +769,7 @@ function buildPracticalReadingParagraph(
   const paragraphs = [
     `${profile.code}의 핵심 모습을 확인하려면 최근 6개월 동안 반복된 장면을 떠올려 보세요. ${energy} ${relationship} 한 번의 인상보다 여러 사람과 여러 장소에서 되풀이된 생각과 행동을 함께 보면 이 성향의 중심이 더 선명해져요.`,
     `역할 이름 ‘${profile.displayName}’에는 ${profile.code}의 반복되는 모습이 담겨 있어요. 잘했던 순간뿐 아니라 힘들었던 순간에도 어떤 가치를 먼저 지켰는지 살펴보면, 이 이름이 실제 생활 방식과 어떻게 이어지는지 이해하기 쉬워요.`,
-    `${profile.code}의 다섯 글자는 ${profile.codeTypeNames.join("·")}을 뜻해요. 각 글자는 능력이나 사람의 좋고 나쁨을 평가하지 않아요. 같은 장면에서 무엇이 먼저 눈에 들어왔고 어떤 생각과 행동이 반복됐는지를 비교해 현재 더 가까운 방향을 보여줘요.`,
+    `${profile.code}의 뉴앙 코드는 ${profile.codeTypeNames.join("·")}을 뜻해요. 각 글자는 능력이나 사람의 좋고 나쁨을 평가하지 않아요. 같은 장면에서 무엇이 먼저 눈에 들어왔고 어떤 생각과 행동이 반복됐는지를 비교해 현재 더 가까운 방향을 보여줘요.`,
     `다섯 방향은 따로 움직이지 않아요. ${energy} 이어서 ${relationship} ${emotion} 이런 순서가 대화와 선택에서 어떻게 이어지는지 살피면, 한 글자 설명만 읽을 때보다 ${profile.code}의 실제 모습을 더 구체적으로 이해할 수 있어요.`,
     `처음 드는 생각은 자동으로 떠오른 관심과 해석이고, 실제 나타나는 반응은 관계·목표·규칙·현재 상태를 고려한 행동이에요. 최근 장면에서 ‘먼저 떠오른 생각, 실제로 한 말과 행동, 그렇게 조절한 이유, 뒤에 남은 감정’을 나누어 적으면 두 층을 쉽게 구분할 수 있어요.`,
     `평소 모습을 확인할 때는 혼자 선택한 일과 다른 사람과 약속한 일을 하나씩 비교해 보세요. 시작한 계기, 방법을 바꾼 이유, 끝까지 이어간 조건, 일이 끝난 뒤의 기분을 살피면 ${profile.code}가 일상의 흐름을 만드는 방식이 구체적으로 보여요.`,

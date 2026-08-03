@@ -26,7 +26,7 @@ const sixWNotes = {
     "같은 사람이라도 친구와 동료, 가족과 연인에게 표현과 책임이 달라지므로 각 글자의 방향이 유지되는지를 비교한다.",
     "혼자 선택할 수 있는 공간과 다른 사람의 동의가 필요한 공간을 나누어 코드와 상황 권한의 영향을 구분한다.",
     "E의 참여, N의 가능성, A의 관계 주의, K의 지속 기준, C의 감정 시작 속도를 서로 다른 질문으로 확인한다.",
-    "다섯 글자는 사람 전체의 등급이 아니라 반복되는 주의와 실행 조건을 기억하기 쉽게 묶은 좌표이기 때문이다.",
+    "뉴앙 코드는 사람 전체의 등급이 아니라 반복되는 주의와 실행 조건을 기억하기 쉽게 묶은 좌표이기 때문이다.",
     "각 자리의 반대 방향 설명과 이름을 가린 쌍 비교를 하고, 어느 문장이 실제 경험을 더 정확히 설명하는지 묻는다.",
   ],
   code_interactions: [
@@ -167,14 +167,14 @@ const chapterOverrides = {
     ],
   },
   five_code_positions: {
-    title: "E·N·A·K·C 다섯 글자의 실제 뜻",
+    title: "E·N·A·K·C 뉴앙 코드의 실제 뜻",
     body: [
       "첫째 자리 E는 사람들과 말하고 움직이는 과정에서 에너지와 생각이 살아나는 방향이다. 새로운 자리에서 대화를 열고, 떠오른 생각을 밖으로 표현하며 정리한다. E는 인기·친구 수·발표 능력이 아니라 상호작용이 사고와 에너지를 깨우는 편한 방향을 뜻한다.",
       "둘째 자리 N은 지금 보이는 사실에서 멈추지 않고 앞으로 펼쳐질 가능성, 숨어 있는 의미, 서로 다른 생각의 연결을 먼저 살피는 방향이다. 하나의 답보다 여러 관점을 탐색할 때 생각이 넓어진다. N은 지능이나 창의 능력의 높낮이가 아니다.",
       "셋째 자리 A는 관계에서 일이 생기면 상대가 어떤 마음이었는지와 그 경험이 관계에 어떤 흔적을 남길지를 먼저 살피는 방향이다. 사람의 경험을 알아준 뒤 함께할 방법을 찾는다. A는 언제나 양보하거나 해결보다 감정만 본다는 뜻이 아니다.",
       "넷째 자리 K는 목표와 다음 순서가 정해지면 시작한 흐름을 이어가고, 약속한 일을 다시 확인해 마무리하려는 방향이다. 함께 정한 계획을 행동과 일정으로 연결할 때 실행이 안정된다. K는 책임감이나 생산성의 점수가 아니다.",
       "다섯째 자리 C는 불편한 일이 생겨도 걱정과 감정이 비교적 천천히 커지는 방향이다. 감정이 크게 올라오기 전 사실과 대응 방법을 살필 여유가 생기고, 겉으로도 차분한 반응이 이어지기 쉽다. C는 감정이 없거나 회복이 항상 빠르다는 뜻이 아니다.",
-      "다섯 글자가 함께 움직이면 E가 대화를 열고, N이 가능성을 펼치며, A가 사람에게 미칠 영향을 살핀다. K는 함께 정한 방향을 계획과 행동으로 이어가고, C는 예상 밖의 순간에도 사실과 대응을 먼저 정리할 시간을 만든다.",
+      "뉴앙 코드가 함께 움직이면 E가 대화를 열고, N이 가능성을 펼치며, A가 사람에게 미칠 영향을 살핀다. K는 함께 정한 방향을 계획과 행동으로 이어가고, C는 예상 밖의 순간에도 사실과 대응을 먼저 정리할 시간을 만든다.",
     ],
   },
   code_interactions: {
@@ -268,10 +268,10 @@ export const enakcLongformEditorialV2 = enakqLongformEditorialV2.map(
     const selected = override
       ? override
       : {
-          ...chapter,
-          title: replaceIdentity(chapter.title),
-          body: chapter.body.map(replaceIdentity),
-        };
+        ...chapter,
+        title: replaceIdentity(chapter.title),
+        body: chapter.body.map(replaceIdentity),
+      };
     return {
       chapterId: chapter.chapterId,
       ...selected,
@@ -279,8 +279,8 @@ export const enakcLongformEditorialV2 = enakqLongformEditorialV2.map(
         ...selected.body,
         ...(sixWDeepDiveChapterIds.has(chapter.chapterId)
           ? buildLongformSixWResearchLensV2(
-              sixWNotes[chapter.chapterId as keyof typeof sixWNotes],
-            )
+            sixWNotes[chapter.chapterId as keyof typeof sixWNotes],
+          )
           : []),
       ],
     };

@@ -16,7 +16,7 @@ describe("TraitMapPreviewTemplate", () => {
     expect(screen.queryByText(/업데이트|준비 중/)).not.toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
-        name: "다섯 글자가 보여주는 핵심 모습",
+        name: "뉴앙 코드가 보여주는 핵심 모습",
       }),
     ).toBeInTheDocument();
     expect(

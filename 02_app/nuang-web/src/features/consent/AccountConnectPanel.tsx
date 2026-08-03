@@ -40,12 +40,8 @@ export function AccountConnectPanel({
   );
   const [terms, setTerms] = useState(savedConsentDraft?.terms ?? false);
   const [privacy, setPrivacy] = useState(savedConsentDraft?.privacy ?? false);
-  const [analytics, setAnalytics] = useState(
-    savedConsentDraft?.analytics ?? false,
-  );
-  const [marketing, setMarketing] = useState(
-    savedConsentDraft?.marketing ?? false,
-  );
+  const [analytics, setAnalytics] = useState(false);
+  const [marketing, setMarketing] = useState(false);
   const [message, setMessage] = useState("");
   const [closedState, setClosedState] = useState<ClosedState | null>(null);
   const [pendingProviderId, setPendingProviderId] = useState<string | null>(
@@ -67,17 +63,10 @@ export function AccountConnectPanel({
   );
 
   useEffect(() => {
+    clearOptionalConsentFromSavedDraft(savedConsentDraft);
     const authStatus = new URLSearchParams(window.location.search).get("auth");
-    let nextMessage = "";
+    let nextMessage = authReturnMessage(authStatus);
     let nextClosedState: ClosedState | null = null;
-
-    if (authStatus === "connected") {
-      nextMessage = "로그인이 완료됐어요.";
-    }
-
-    if (authStatus === "missing_code" || authStatus === "error") {
-      nextMessage = "로그인을 마치지 못했어요. 다시 시도해 주세요.";
-    }
 
     if (authStatus === "env_missing") {
       nextClosedState = createApiClosedPayload("supabase_env_missing");
@@ -112,7 +101,7 @@ export function AccountConnectPanel({
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [savedConsentDraft]);
 
   async function handleProviderClick(
     provider: (typeof socialAuthProviders)[number],
@@ -135,10 +124,7 @@ export function AccountConnectPanel({
       typeof localStorage !== "undefined" &&
       typeof localStorage.setItem === "function"
     ) {
-      localStorage.setItem(
-        "nuang-consent-draft",
-        JSON.stringify(consentSummary),
-      );
+      saveRequiredConsentDraft(consentSummary);
     }
 
     setPendingProviderId(provider.id);
@@ -177,6 +163,7 @@ export function AccountConnectPanel({
     }
 
     await clearAccountOwnedLocalAttempts();
+    clearSavedConsentDraft();
     setConnectedAccount(null);
     setPendingProviderId(null);
     setMessage("로그아웃했어요.");
@@ -266,13 +253,15 @@ export function AccountConnectPanel({
           <summary>선택 동의 보기</summary>
           <ConsentCheck
             checked={analytics}
+            description="어떤 화면과 기능을 이용했는지만 모아 더 편하게 개선해요. 검사 답변과 작성한 내용은 포함하지 않아요."
             label="서비스 개선을 위한 이용 데이터 수집"
             onChange={setAnalytics}
             optional
           />
           <ConsentCheck
             checked={marketing}
-            label="새로운 검사와 소식 알림"
+            description="새 검사와 함께하기, 이벤트 소식을 받을 수 있어요. 설정에서 언제든 바꿀 수 있어요."
+            label="새 검사·이벤트 소식 받기"
             onChange={setMarketing}
             optional
           />
@@ -311,6 +300,36 @@ export function AccountConnectPanel({
       ) : null}
     </section>
   );
+}
+
+function authReturnMessage(status: string | null) {
+  const messages: Record<string, string> = {
+    account_deleted:
+      "삭제된 계정의 로그인 정보예요. 다른 로그인 방법을 이용해 주세요.",
+    connected: "로그인이 완료됐어요.",
+    consent_error:
+      "필수 동의를 저장하지 못했어요. 확인 후 다시 로그인해 주세요.",
+    consent_required: "필수 동의를 확인한 뒤 다시 로그인해 주세요.",
+    error: "로그인을 마치지 못했어요. 다시 시도해 주세요.",
+    identity_conflict:
+      "같은 사용자로 보이는 기록을 안전하게 확인하지 못했어요. 다른 로그인 방법으로 다시 시도해 주세요.",
+    identity_error:
+      "로그인 정보를 확인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    identity_unsupported:
+      "이 로그인 정보를 확인하지 못했어요. 다른 로그인 방법으로 다시 시도해 주세요.",
+    intent_expired:
+      "로그인 시간이 지나 다시 확인이 필요해요. 다시 로그인해 주세요.",
+    intent_invalid: "로그인 확인 정보가 올바르지 않아요. 다시 로그인해 주세요.",
+    intent_missing: "로그인 확인 정보가 없어 다시 시작이 필요해요.",
+    missing_code: "로그인을 마치지 못했어요. 다시 시도해 주세요.",
+    oauth_cancelled: "로그인을 취소했어요. 원할 때 다시 시도해 주세요.",
+    origin_mismatch:
+      "로그인을 시작한 주소로 돌아오지 못했어요. 현재 주소에서 다시 로그인해 주세요.",
+    session_cleanup_error:
+      "로그인 정보를 정리하지 못했어요. 새로고침한 뒤 다시 시도해 주세요.",
+    session_error: "로그인 정보를 저장하지 못했어요. 다시 시도해 주세요.",
+  };
+  return status ? (messages[status] ?? "") : "";
 }
 
 function AccountSkeleton() {
@@ -446,12 +465,14 @@ function readCurrentUserWithTimeout(
 
 function ConsentCheck({
   checked,
+  description,
   emphasis = false,
   label,
   onChange,
   optional = false,
 }: {
   checked: boolean;
+  description?: string;
   emphasis?: boolean;
   label: string;
   onChange: (checked: boolean) => void;
@@ -470,7 +491,10 @@ function ConsentCheck({
       <span aria-hidden="true" className={styles.checkmark}>
         {checked ? <Check size={14} strokeWidth={2.5} /> : null}
       </span>
-      <span className={styles.consentLabel}>{label}</span>
+      <span className={styles.consentLabel}>
+        <span>{label}</span>
+        {description ? <small>{description}</small> : null}
+      </span>
       {optional ? <small>선택</small> : null}
     </label>
   );
@@ -518,6 +542,44 @@ function readSavedConsentDraft(): ConsentDraft | null {
     return parsedDraft.success ? parsedDraft.data : null;
   } catch {
     return null;
+  }
+}
+
+function clearOptionalConsentFromSavedDraft(draft: ConsentDraft | null) {
+  if (!draft) return;
+  saveRequiredConsentDraft(draft);
+}
+
+function saveRequiredConsentDraft(
+  draft: { is14OrOlder: boolean; privacy: boolean; terms: boolean },
+) {
+  if (
+    typeof localStorage === "undefined" ||
+    typeof localStorage.setItem !== "function"
+  ) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(
+      "nuang-consent-draft",
+      JSON.stringify({
+        is14OrOlder: draft.is14OrOlder,
+        privacy: draft.privacy,
+        terms: draft.terms,
+      }),
+    );
+  } catch {
+    // Browser storage is a convenience only. The signed-in consent intent is
+    // kept in the short-lived HttpOnly cookie instead.
+  }
+}
+
+function clearSavedConsentDraft() {
+  try {
+    localStorage.removeItem("nuang-consent-draft");
+  } catch {
+    // A blocked storage area must not prevent sign-out.
   }
 }
 

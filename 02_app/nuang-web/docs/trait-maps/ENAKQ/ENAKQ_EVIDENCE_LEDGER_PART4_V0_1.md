@@ -25,10 +25,10 @@ Part 4는 호감이 시작되는 관계, 업무·학업, 부담과 회복처럼 
 
 - Humberg, S., Gerlach, T. M., Franke-Prasse, T., Geukes, K., & Back, M. D. (2023). *Is (Actual or Perceptual) Personality Similarity Associated With Attraction in Initial Romantic Encounters? A Dyadic Response Surface Analysis*.
 - DOI: [10.5964/ps.7551](https://doi.org/10.5964/ps.7551)
-- 설계: 독일의 이성애 독신자 397명이 참여한 실제 3분 스피드데이트 940건에서 Big Five의 실제·지각 유사성과 초기 호감·만남의 질을 dyadic response surface analysis로 검토했다.
+- 설계: 독일의 이성애 독신자 397명이 참여한 실제 3~5분 스피드데이트 940건에서 Big Five의 실제·지각 유사성과 초기 호감·만남의 질을 dyadic response surface analysis로 검토했다.
 - 확인 범위: 이 표본과 첫 만남에서는 실제 유사성과 지각 유사성이 초기 호감과 관련되지 않았다.
 - Part 4 사용: 코드 유사성을 끌림·호감·좋은 짝 확률로 바꾸지 않는 경계.
-- 제한: 18–28세 중심, 학생 다수, 독일, 이성애, 3분 첫 만남이다. 장기 관계와 다양한 성별·성적 지향·문화에 일반화하지 않는다. 이 결과로 `성향은 호감과 무관하다`고 넓히지 않는다.
+- 제한: 18–28세 중심, 학생 다수, 독일, 이성애, 3~5분 첫 만남이다. 장기 관계와 다양한 성별·성적 지향·문화에 일반화하지 않는다. 이 결과로 `성향은 호감과 무관하다`고 넓히지 않는다.
 
 ### `SRC-RELATIONAL-UNCERTAINTY-2011`
 

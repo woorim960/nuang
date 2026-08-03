@@ -34,7 +34,7 @@
     },
     {
       "chapterId": "five_code_positions",
-      "title": "IRAKC 다섯 글자의 실제 뜻",
+      "title": "IRAKC 뉴앙 코드의 실제 뜻",
       "nonWhitespaceCharacters": 1982,
       "sourceFiles": [
         "src/features/nuang-code/remaining-batch3-longform-editorial-v2.ts",

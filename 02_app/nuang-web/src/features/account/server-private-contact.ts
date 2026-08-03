@@ -2,10 +2,13 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import {
+  readOptionalConsentPreferences,
+  saveOptionalConsentPreference,
+} from "@/features/consent/server-optional-consent";
+import {
   type PrivateContactPayload,
   type PrivateContactSource,
   privateContactConsentVersion,
-  privateContactMarketingConsentVersion,
   privateEmailRegistrationVersion,
 } from "@/features/account/private-contact-contract";
 import {
@@ -329,22 +332,16 @@ export async function readPrivateContactMarketingPreference({
   accountId: string;
   client: SupabaseClient;
 }) {
-  const response = await client
-    .schema("consent")
-    .from("consent_record")
-    .select("status")
-    .eq("account_id", accountId)
-    .eq("consent_type", "marketing")
-    .order("recorded_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  if (response.error) {
-    return { code: "marketing_preference_read_failed" as const, ok: false as const };
+  const response = await readOptionalConsentPreferences({ accountId, client });
+  if (!response.ok) {
+    return {
+      code: "marketing_preference_read_failed" as const,
+      ok: false as const,
+    };
   }
 
   return {
-    data: response.data?.status === "granted",
+    data: response.data.marketing.enabled,
     ok: true as const,
   };
 }
@@ -358,29 +355,29 @@ export async function savePrivateContactMarketingPreference({
   client: SupabaseClient;
   marketingOptIn: boolean;
 }) {
-  const recordedAt = new Date().toISOString();
-  const response = await client.schema("consent").from("consent_record").insert({
-    account_id: accountId,
-    consent_type: "marketing",
-    consent_version: privateContactMarketingConsentVersion,
-    metadata: { channel: "profile_contact", surface: "profile_edit" },
-    recorded_at: recordedAt,
-    revoked_at: marketingOptIn ? null : recordedAt,
-    source: "profile_edit",
-    status: marketingOptIn ? "granted" : "revoked",
+  const response = await saveOptionalConsentPreference({
+    accountId,
+    client,
+    enabled: marketingOptIn,
+    preference: "marketing",
+    source: "my_settings",
   });
 
-  if (response.error) {
-    return { code: "marketing_preference_write_failed" as const, ok: false as const };
+  if (!response.ok) {
+    return {
+      code: "marketing_preference_write_failed" as const,
+      ok: false as const,
+    };
   }
-  return { data: marketingOptIn, ok: true as const };
+  return { data: response.data.marketing.enabled, ok: true as const };
 }
 
 function normalizePrivateContact(
   accountId: string,
   value: unknown,
 ): PrivateContactRecord {
-  if (!value || typeof value !== "object") return emptyPrivateContact(accountId);
+  if (!value || typeof value !== "object")
+    return emptyPrivateContact(accountId);
   const row = value as Record<string, unknown>;
   const emailStatus =
     row.email_status === "verified" || row.email_status === "unverified"
@@ -405,9 +402,7 @@ function normalizePrivateContact(
     emailUpdatedAt:
       typeof row.email_updated_at === "string" ? row.email_updated_at : null,
     emailVerifiedAt:
-      typeof row.email_verified_at === "string"
-        ? row.email_verified_at
-        : null,
+      typeof row.email_verified_at === "string" ? row.email_verified_at : null,
     mobilePhoneCiphertext:
       typeof row.mobile_phone_ciphertext === "string"
         ? row.mobile_phone_ciphertext

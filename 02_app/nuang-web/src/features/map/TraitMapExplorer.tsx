@@ -73,10 +73,10 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
         localRead.state === "error" || accountRead.state === "error"
           ? null
           : buildMapViewerProfile({
-              accountReadState: accountRead.state,
-              accountResults: accountRead.results,
-              localAttempts: localRead.attempts,
-            });
+            accountReadState: accountRead.state,
+            accountResults: accountRead.results,
+            localAttempts: localRead.attempts,
+          });
 
       if (!isMounted) return;
       setViewerProfile(profile);
@@ -163,15 +163,15 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
       : matchingProfiles.slice(0, INITIAL_PROFILE_COUNT);
   const startProfile = selectedProfile
     ? {
-        code: selectedProfile.code,
-        displayName: selectedProfile.displayName,
-        sourceLabel:
-          viewerProfile?.code === selectedProfile.code
-            ? viewerProfile.sourceLabel
-            : savedCodes.includes(selectedProfile.code)
-              ? "최근 관심 코드"
-              : "지금 선택한 성향",
-      }
+      code: selectedProfile.code,
+      displayName: selectedProfile.displayName,
+      sourceLabel:
+        viewerProfile?.code === selectedProfile.code
+          ? viewerProfile.sourceLabel
+          : savedCodes.includes(selectedProfile.code)
+            ? "최근 관심 코드"
+            : "지금 선택한 성향",
+    }
     : null;
 
   const moveToBuilder = () => {
@@ -572,7 +572,7 @@ function ProfileResult({
       <p className={styles.profileSummary}>{profile.summary}</p>
 
       <details className={styles.codeDetails}>
-        <summary>다섯 글자 한눈에 보기</summary>
+        <summary>뉴앙 코드 한눈에 보기</summary>
         <ol>
           {profile.code.split("").map((symbol, index) => {
             const direction = candidateAxisCopy[index].directions[symbol];

@@ -49,7 +49,7 @@ type EntrySurface = "error" | "intro" | "loading" | "runner";
 const benefits = [
   {
     icon: ScanSearch,
-    title: "다섯 글자의 의미가 더 분명해져요",
+    title: "뉴앙 코드의 의미가 더 분명해져요",
   },
   {
     icon: Layers3,
@@ -64,7 +64,7 @@ const benefits = [
 const candidateBenefits = [
   {
     icon: ScanSearch,
-    title: "다섯 글자의 의미가 더 분명해져요",
+    title: "뉴앙 코드의 의미가 더 분명해져요",
   },
   {
     icon: Layers3,
@@ -126,11 +126,11 @@ export function PrecisionAssessmentIntro({
             nextDecision.action === "show_intro"
               ? nextDecision
               : {
-                  action: "show_intro",
-                  provisionalCode: null,
-                  reusableAnswerCount: 0,
-                  sourceAttempt: undefined,
-                },
+                action: "show_intro",
+                provisionalCode: null,
+                reusableAnswerCount: 0,
+                sourceAttempt: undefined,
+              },
           );
           setSurface("intro");
           return;
@@ -280,8 +280,8 @@ export function PrecisionAssessmentIntro({
           <h1>
             {isCandidateAssessment
               ? hasQuickResult
-                ? "다섯 글자 속 내 모습을 더 자세히 알아볼까요?"
-                : "내 성향을 다섯 글자로 알아볼까요?"
+                ? "뉴앙 코드 속 내 모습을 더 자세히 알아볼까요?"
+                : "내 성향을 뉴앙 코드로 알아볼까요?"
               : "내 성향을 더 자세히 알아볼까요?"}
           </h1>
 

@@ -13,7 +13,7 @@ claim_id,decision,construct_fit_rating_1_4,evidence_fit_rating_1_4,inference_sco
 "ENAKQ.stress.clinical_boundary","accept","4","4","4","4","none","","INTERNAL_AGENT_CRITIQUE: 성향지도가 정신건강 선별과 상담을 대신하지 않음을 밝히고 진단과 원인 추정을 금지한다.","high"
 "ENAKQ.stress.safety","revise","4","4","3","2","clinical_overreach;other","자해와 타해와 폭력과 즉각 위험 신호에는 성향 콘텐츠를 중단하고 위치에 맞는 응급 번호와 위기 상담과 신뢰할 수 있는 사람 연결을 우선하는 실행 계약을 둔다.","INTERNAL_AGENT_CRITIQUE: 안전 우선 원칙은 옳지만 필요한 안전 자원이라는 추상 표현만으로는 실제 위기 상황의 즉시 행동을 보장하지 못한다.","high"
 "ENAKQ.work.boundary","accept","4","4","4","4","none","","INTERNAL_AGENT_CRITIQUE: 직업 적합성과 성과를 예측하지 않고 고용 의사결정과 동의 없는 동료 조회를 금지해 차별 위험을 줄인다.","high"
-"ENAKQ.boundary.variability","accept","4","3","4","4","none","","INTERNAL_AGENT_CRITIQUE: 다섯 글자를 고정 행동이나 가치 서열로 합치지 않고 상황과 점수와 별도 측정 정보의 순서를 명확히 한다.","high"
+"ENAKQ.boundary.variability","accept","4","3","4","4","none","","INTERNAL_AGENT_CRITIQUE: 뉴앙 코드를 고정 행동이나 가치 서열로 합치지 않고 상황과 점수와 별도 측정 정보의 순서를 명확히 한다.","high"
 "ENAKQ.conversation.A","accept","3","3","4","4","none","","INTERNAL_AGENT_CRITIQUE: A를 친절과 공감 능력으로 평가하지 않고 현재 필요한 지원을 직접 묻는 선택형 대화로 바꾼다.","high"
 "ENAKQ.conversation.E","accept","3","3","4","4","none","","INTERNAL_AGENT_CRITIQUE: E를 사교성 우열과 연락 책임으로 만들지 않고 참여 방식과 현재 상태를 확인하게 한다.","high"
 "ENAKQ.conversation.K","accept","3","3","4","4","none","","INTERNAL_AGENT_CRITIQUE: K와 M을 도덕성과 신뢰도의 서열로 만들지 않고 환경과 분담을 함께 확인한다.","high"

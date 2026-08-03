@@ -132,7 +132,7 @@ describe("buildCoreJourneyState", () => {
     expect(buildCoreJourneyState([], [])).toMatchObject({
       cta: "첫 성향 검사 시작하기",
       href: "/assessments/nu-core-quick?returnTo=%2Fhome",
-      title: "3분이면 내 성향의 첫 단서를 만나요",
+      title: "빠르게 뉴앙 코드 알아보기",
     });
   });
 
@@ -236,7 +236,7 @@ describe("AssessmentHomeCoreSection", () => {
     expect(
       await screen.findByRole("heading", {
         level: 2,
-        name: "3분이면 내 성향의 첫 단서를 만나요",
+        name: "빠르게 뉴앙 코드 알아보기",
       }),
     ).toBeVisible();
     expect(
@@ -252,7 +252,7 @@ describe("AssessmentHomeCoreSection", () => {
     const { container } = render(<AssessmentHomeCoreSection />);
     const heading = await screen.findByRole("heading", {
       level: 2,
-      name: "3분이면 내 성향의 첫 단서를 만나요",
+      name: "빠르게 뉴앙 코드 알아보기",
     });
     const illustration = container.querySelector(
       '[data-illustration-slot="core-assessment-hero"]',
@@ -261,7 +261,7 @@ describe("AssessmentHomeCoreSection", () => {
     expect(illustration).not.toBeNull();
     expect(
       heading.compareDocumentPosition(illustration!) &
-        Node.DOCUMENT_POSITION_FOLLOWING,
+      Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(illustration).toHaveAttribute("aria-hidden", "true");
     expect(illustration?.querySelector("img")).toHaveAttribute(

@@ -103,7 +103,7 @@ export const togetherAssessmentCatalog: AssessmentCatalogItem[] = [
   {
     accent: "violet",
     ageAccessPolicy: "all_ages",
-    caption: "같은 질문을 고르고 둘만의 결과와 모임 전체의 취향 궁합을 확인해요.",
+    caption: "간단한 게임을 통해 서로의 궁합을 확인할 수 있어요!",
     estimatedMinutes: 2,
     href: "/assessments/together/balance-game",
     iconKey: "compare",

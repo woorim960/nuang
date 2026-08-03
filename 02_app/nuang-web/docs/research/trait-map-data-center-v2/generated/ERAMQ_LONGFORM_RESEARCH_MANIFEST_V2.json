@@ -34,7 +34,7 @@
     },
     {
       "chapterId": "five_code_positions",
-      "title": "ERAMQ 다섯 글자의 실제 뜻",
+      "title": "ERAMQ 뉴앙 코드의 실제 뜻",
       "nonWhitespaceCharacters": 2031,
       "sourceFiles": [
         "src/features/nuang-code/remaining-batch2-longform-editorial-v2.ts",

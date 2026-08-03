@@ -398,15 +398,15 @@ export function CoreResultReportTemplate({
         ) : null}
 
         {content.showFiveLetterExplorer &&
-        model.result.code.length === 5 &&
-        (hasCompleteDomains || !surfacePolicy.showMeasurementDetails) ? (
+          model.result.code.length === 5 &&
+          (hasCompleteDomains || !surfacePolicy.showMeasurementDetails) ? (
           <ReportSection
             id="report-code"
             intro={
               content.fiveLettersChapter?.summary ??
               "다섯 자리를 눌러 이번 답이 어떤 모습에 더 가까웠는지 살펴보세요."
             }
-            title={isOwner ? "내 다섯 글자 풀이" : "다섯 글자 풀이"}
+            title={isOwner ? "내 뉴앙 코드 풀이" : "뉴앙 코드 풀이"}
           >
             {surfacePolicy.showMeasurementDetails ? (
               <CodeExplorer model={model} />

@@ -3,7 +3,7 @@ export const coreAssessments = [
     assessmentId: "nu-core-quick",
     title: "빠른 코어",
     caption: "간단한 첫 검사",
-    duration: "3분",
+    duration: "3~5분",
     href: "/assessments/nu-core-quick",
     mapImpact: "첫 성향 결과",
     motif: "water" as const,

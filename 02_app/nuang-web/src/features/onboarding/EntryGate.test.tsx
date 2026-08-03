@@ -6,31 +6,27 @@ import {
 } from "@/features/onboarding/EntryGate";
 import { onboardingEntryContract } from "@/features/onboarding/onboarding-storage";
 
-const { hasCompletedOnboarding, replace } = vi.hoisted(() => ({
-  hasCompletedOnboarding: vi.fn(),
+const { replace, resolveHasSeenOnboarding } = vi.hoisted(() => ({
   replace: vi.fn(),
+  resolveHasSeenOnboarding: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace }),
 }));
 
-vi.mock("@/features/onboarding/onboarding-storage", async (importOriginal) => {
-  const actual = await importOriginal<
-    typeof import("@/features/onboarding/onboarding-storage")
-  >();
-
-  return { ...actual, hasCompletedOnboarding };
+vi.mock("@/features/onboarding/onboarding-sync", () => {
+  return { resolveHasSeenOnboarding };
 });
 
 describe("EntryGate", () => {
   beforeEach(() => {
     replace.mockReset();
-    hasCompletedOnboarding.mockReset();
+    resolveHasSeenOnboarding.mockReset();
   });
 
   it("routes a first visit into onboarding", async () => {
-    hasCompletedOnboarding.mockReturnValue(false);
+    resolveHasSeenOnboarding.mockResolvedValue(false);
     render(<EntryGate />);
 
     expect(screen.getByRole("status")).toHaveTextContent(
@@ -44,7 +40,7 @@ describe("EntryGate", () => {
   });
 
   it("routes a completed guide visit into home", async () => {
-    hasCompletedOnboarding.mockReturnValue(true);
+    resolveHasSeenOnboarding.mockResolvedValue(true);
 
     render(<EntryGate />);
 
@@ -56,7 +52,7 @@ describe("EntryGate", () => {
   });
 
   it("protects direct home entry until onboarding is complete", async () => {
-    hasCompletedOnboarding.mockReturnValue(false);
+    resolveHasSeenOnboarding.mockResolvedValue(false);
 
     render(
       <OnboardingHomeGate>
@@ -73,7 +69,7 @@ describe("EntryGate", () => {
   });
 
   it("shows home content immediately after onboarding completion is confirmed", async () => {
-    hasCompletedOnboarding.mockReturnValue(true);
+    resolveHasSeenOnboarding.mockResolvedValue(true);
 
     render(
       <OnboardingHomeGate>

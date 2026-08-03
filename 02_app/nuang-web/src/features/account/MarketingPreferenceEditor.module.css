@@ -44,6 +44,16 @@
   cursor: pointer;
 }
 
+.preferenceList {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.preference[data-tone="marketing"] .preferenceIcon {
+  color: var(--nu-reaction-600);
+  background: var(--nu-reaction-50);
+}
+
 .preferenceIcon {
   display: grid;
   width: 40px;
@@ -123,7 +133,7 @@
   display: flex;
   align-items: flex-start;
   gap: 0.45rem;
-  margin-top: 0.7rem;
+  margin-top: 0.05rem;
   padding: 0 0.25rem;
   color: var(--nu-color-text-subtle);
   font-size: var(--nu-text-caption);

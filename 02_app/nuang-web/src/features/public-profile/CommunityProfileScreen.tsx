@@ -14,7 +14,6 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
-import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
 import type { CommunityProfileSocialState } from "@/features/feed/community-social-contract";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import {
@@ -29,16 +28,14 @@ import {
 } from "@/features/feed/feed-topic";
 import type { PublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import type { PublicProfileSearchIntent } from "@/features/public-profile/public-profile-search-contract";
+import { ProfileIdentitySurface } from "@/features/public-profile/ProfileIdentitySurface";
 import { ProfileReportCollection } from "@/features/public-profile/ProfileReportCollection";
 import type { OriginalProfileReportSummary } from "@/features/public-profile/profile-report-contract";
-import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import { profileVisibilityPolicyVersion } from "@/features/together/profile-visibility-policy";
 import styles from "./CommunityProfileScreen.module.css";
 
 type ProfilePostFormatFilter = "all" | FeedPostFormat;
-type ProfilePostTopicFilter =
-  | "all"
-  | (typeof feedPostTopicCategories)[number];
+type ProfilePostTopicFilter = "all" | (typeof feedPostTopicCategories)[number];
 
 export function CommunityProfileScreen({
   initialSocialState,
@@ -108,8 +105,7 @@ export function CommunityProfileScreen({
         activePostFormat === "all" ||
         getFeedPostFormat(post) === activePostFormat;
       const topicMatches =
-        activePostTopic === "all" ||
-        post.topic?.category === activePostTopic;
+        activePostTopic === "all" || post.topic?.category === activePostTopic;
       return formatMatches && topicMatches;
     });
   }, [activePostFormat, activePostTopic, posts]);
@@ -328,110 +324,86 @@ export function CommunityProfileScreen({
       }
     >
       <section className={styles.hero}>
-        <div className={styles.profileOverview}>
-          <PublicProfileImageView
-            className={styles.profileImage}
-            image={profile.display.profileImage}
-            priority
-            size="lg"
-          />
-          <div className={styles.profileIdentity}>
-            <div className={styles.identityNameRow}>
-              <h2>{profile.display.displayName}</h2>
-              {profile.operator || (isSelf && showAdminEntry) ? (
-                <NuangOperatorBadge />
-              ) : null}
-            </div>
-            {profile.display.handle ? (
-              <span className={styles.handle}>@{profile.display.handle}</span>
-            ) : null}
-            {codeIsVisible ? (
-              <div className={styles.roleRow}>
-                <span>{profile.display.code}</span>
-                <strong>{profile.display.profileName}</strong>
+        <ProfileIdentitySurface
+          actions={
+            isSelf ? (
+              <div className={styles.actions}>
+                <Link
+                  className={styles.editProfileButton}
+                  href="/my/profile/edit"
+                >
+                  <Pencil aria-hidden="true" size={16} strokeWidth={1.7} />
+                  프로필 편집
+                </Link>
+                <button
+                  className={styles.ownProfileButton}
+                  onClick={shareProfile}
+                  type="button"
+                >
+                  <Share2 aria-hidden="true" size={16} strokeWidth={1.7} />
+                  프로필 공유
+                </button>
               </div>
+            ) : isPreview ? (
+              <Link
+                className={styles.previewCloseButton}
+                href="/my/settings/visibility"
+              >
+                미리보기 닫기
+              </Link>
             ) : (
-              <span className={styles.privateCode}>성향 정보 비공개</span>
-            )}
-          </div>
-        </div>
-
-        <p className={styles.bio}>
-          {profile.display.profileMessage ||
-            (isSelf
+              <div className={styles.actions}>
+                <button
+                  aria-pressed={following}
+                  className={styles.followButton}
+                  data-following={following}
+                  disabled={followPending}
+                  onClick={toggleFollow}
+                  type="button"
+                >
+                  {followPending ? "저장 중" : following ? "팔로잉" : "팔로우"}
+                </button>
+                <button
+                  className={styles.compareButton}
+                  disabled={comparePending || !comparisonAvailable}
+                  onClick={compareWithMe}
+                  type="button"
+                >
+                  {comparePending
+                    ? "비교 중"
+                    : comparisonAvailable
+                      ? isCompareIntent
+                        ? "이 사람과 비교하기"
+                        : "나와 비교"
+                      : "비교 비공개"}
+                </button>
+              </div>
+            )
+          }
+          bio={profile.display.profileMessage}
+          connectionsHrefBase={`/feed/profiles/${profile.source.publicSnapshotId}/connections`}
+          displayName={profile.display.displayName}
+          emptyBio={
+            isSelf
               ? "나를 소개하는 한마디를 프로필에 남겨보세요."
-              : "아직 프로필 메시지를 작성하지 않았어요.")}
-        </p>
-
-        <div className={styles.stats}>
-          <span>
-            <strong>{posts.length.toLocaleString("ko-KR")}</strong>게시물
-          </span>
-          <Link
-            href={`/feed/profiles/${profile.source.publicSnapshotId}/connections?tab=followers`}
-          >
-            <strong>{followerCount.toLocaleString("ko-KR")}</strong>팔로워
-          </Link>
-          <Link
-            href={`/feed/profiles/${profile.source.publicSnapshotId}/connections?tab=following`}
-          >
-            <strong>
-              {initialSocialState.followingCount.toLocaleString("ko-KR")}
-            </strong>
-            팔로잉
-          </Link>
-        </div>
-
-        {isSelf ? (
-          <div className={styles.actions}>
-            <Link className={styles.editProfileButton} href="/my/profile/edit">
-              <Pencil aria-hidden="true" size={16} strokeWidth={1.7} />
-              프로필 편집
-            </Link>
-            <button
-              className={styles.ownProfileButton}
-              onClick={shareProfile}
-              type="button"
-            >
-              <Share2 aria-hidden="true" size={16} strokeWidth={1.7} />
-              프로필 공유
-            </button>
-          </div>
-        ) : isPreview ? (
-          <Link
-            className={styles.previewCloseButton}
-            href="/my/settings/visibility"
-          >
-            미리보기 닫기
-          </Link>
-        ) : (
-          <div className={styles.actions}>
-            <button
-              aria-pressed={following}
-              className={styles.followButton}
-              data-following={following}
-              disabled={followPending}
-              onClick={toggleFollow}
-              type="button"
-            >
-              {followPending ? "저장 중" : following ? "팔로잉" : "팔로우"}
-            </button>
-            <button
-              className={styles.compareButton}
-              disabled={comparePending || !comparisonAvailable}
-              onClick={compareWithMe}
-              type="button"
-            >
-              {comparePending
-                ? "비교 중"
-                : comparisonAvailable
-                  ? isCompareIntent
-                    ? "이 사람과 비교하기"
-                    : "나와 비교"
-                  : "비교 비공개"}
-            </button>
-          </div>
-        )}
+              : "아직 프로필 메시지를 작성하지 않았어요."
+          }
+          followerCount={followerCount}
+          followingCount={initialSocialState.followingCount}
+          handle={profile.display.handle}
+          image={profile.display.profileImage}
+          operator={Boolean(profile.operator || (isSelf && showAdminEntry))}
+          postCount={posts.length}
+          trait={
+            codeIsVisible
+              ? {
+                  code: profile.display.code,
+                  label: profile.display.profileName,
+                  type: "code",
+                }
+              : { label: "성향 정보 비공개", type: "status" }
+          }
+        />
 
         {isSelf ? (
           <>

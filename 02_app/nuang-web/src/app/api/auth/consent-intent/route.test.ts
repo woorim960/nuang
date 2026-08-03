@@ -41,4 +41,27 @@ describe("POST /api/auth/consent-intent", () => {
 
     expect(response.status).toBe(422);
   });
+
+  it("rejects cross-site attempts without setting the intent cookie", async () => {
+    const response = await POST(
+      new Request("http://localhost:3000/api/auth/consent-intent", {
+        body: JSON.stringify({
+          analytics: true,
+          is14OrOlder: true,
+          marketing: true,
+          privacy: true,
+          terms: true,
+        }),
+        headers: {
+          "content-type": "application/json",
+          origin: "https://malicious.example",
+          "sec-fetch-site": "cross-site",
+        },
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(403);
+    expect(response.headers.get("set-cookie")).toBeNull();
+  });
 });

@@ -51,7 +51,7 @@ describe("AssessmentCompletionState", () => {
     expect(screen.getByRole("status")).toHaveTextContent(
       "결과를 준비하고 있어요",
     );
-    expect(screen.queryByText(/다섯 글자/)).not.toBeInTheDocument();
+    expect(screen.queryByText(/뉴앙 코드/)).not.toBeInTheDocument();
   });
 
   it("offers the correct recovery and failure actions", () => {

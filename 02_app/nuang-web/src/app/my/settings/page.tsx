@@ -9,18 +9,12 @@ import {
   KeyRound,
   LockKeyhole,
   ShieldCheck,
-  UserRoundPen,
 } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import styles from "./page.module.css";
 
 const profileItems = [
-  {
-    href: "/my/profile/edit",
-    icon: UserRoundPen,
-    title: "프로필 편집",
-  },
   {
     href: "/my/settings/visibility",
     icon: LockKeyhole,
@@ -42,7 +36,7 @@ const accountItems = [
   {
     href: "/my/settings/notifications",
     icon: BellRing,
-    title: "알림 및 마케팅",
+    title: "데이터 및 알림",
   },
   {
     href: "/my/settings/blocked",
