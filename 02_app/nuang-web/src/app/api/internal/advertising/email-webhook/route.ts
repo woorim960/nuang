@@ -50,10 +50,26 @@ export async function POST(request: Request) {
     target_occurred_at: occurredAt,
     target_provider_message_id: parsed.data.data.email_id,
   };
-  const [advertisingResult, marketingResult] = await Promise.all([
+  const svixId = request.headers.get("svix-id")?.trim();
+  if (!svixId) {
+    return response({ message: "이벤트 식별자가 없습니다.", ok: false }, 422);
+  }
+  const [advertisingResult, marketingV2Result] = await Promise.all([
     client.rpc("record_advertising_mail_webhook", eventInput),
-    client.schema("consent").rpc("record_marketing_email_webhook", eventInput),
+    client.schema("consent").rpc("record_marketing_email_webhook_v2", {
+      target_event_type: parsed.data.type,
+      target_occurred_at: occurredAt,
+      target_provider_message_id: parsed.data.data.email_id,
+      target_svix_id: svixId,
+    }),
   ]);
+  const marketingResult =
+    marketingV2Result.error &&
+    isMissingMarketingRpc(marketingV2Result.error.code)
+      ? await client
+          .schema("consent")
+          .rpc("record_marketing_email_webhook", eventInput)
+      : marketingV2Result;
   if (
     advertisingResult.error ||
     (marketingResult.error &&

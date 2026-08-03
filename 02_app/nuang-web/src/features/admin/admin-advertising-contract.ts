@@ -57,6 +57,8 @@ export type AdminAdvertisingModule<T> = {
   available: boolean;
   items: T[];
   message: string | null;
+  totalCount?: number;
+  truncated?: boolean;
 };
 
 export type AdminAdvertisingInquiry = {
@@ -73,6 +75,7 @@ export type AdminAdvertisingInquiry = {
   id: string;
   inquiryType: string;
   mailStatus: "failed" | "pending" | "sent" | "unknown";
+  mailRetryableCount: number;
   nextActionAt: string | null;
   preferredPlacement: string;
   priority: "high" | "low" | "normal" | "urgent";
@@ -179,10 +182,38 @@ export type AdminAdvertisingData = {
   inquiries: AdminAdvertisingModule<AdminAdvertisingInquiry>;
   inventory: AdminAdvertisingModule<AdminAdvertisingInventory>;
   killSwitches: AdminAdvertisingModule<AdminAdvertisingKillSwitch>;
+  mailOperations: {
+    available: boolean;
+    message: string | null;
+    queue: {
+      dead: number;
+      pending: number;
+      retry: number;
+      sending: number;
+      stale: number;
+    };
+    worker: {
+      claimed: number;
+      completionFailed: number;
+      errorCode: string | null;
+      failed: number;
+      finishedAt: string | null;
+      sent: number;
+      source: string | null;
+      status: string | null;
+    };
+  };
   metrics: AdminAdvertisingModule<AdminAdvertisingMetric>;
 };
 
 const adminReasonSchema = z.string().trim().min(2).max(500);
+
+export const adminAdvertisingMailRetrySchema = z
+  .object({
+    inquiryId: z.string().uuid(),
+    reason: z.string().trim().min(5).max(500),
+  })
+  .strict();
 
 export const adminAdvertisingInquiryActionSchema = z.object({
   inquiryId: z.string().uuid(),

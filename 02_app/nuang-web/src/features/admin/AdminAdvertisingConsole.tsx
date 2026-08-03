@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 
 import {
@@ -14,7 +15,6 @@ import { useRouter } from "next/navigation";
 import { useMemo, useState, type FormEvent, type ReactNode } from "react";
 import {
   advertisingAdminTabs,
-  advertisingCampaignStatuses,
   advertisingInquiryStatuses,
   type AdminAdvertisingCampaign,
   type AdminAdvertisingCreative,
@@ -93,9 +93,37 @@ export function AdminAdvertisingConsole({
     data.metrics,
     data.killSwitches,
   ].filter((module) => module.available).length;
+  const globalSwitch = data.killSwitches.items.find(
+    (item) => item.scope === "global" && item.key === "advertising",
+  );
 
   return (
     <>
+      {globalSwitch ? (
+        <section
+          className={styles.safetyBar}
+          data-suspended={globalSwitch.suspended}
+        >
+          <div>
+            <ShieldAlert aria-hidden="true" size={19} strokeWidth={1.7} />
+            <span>
+              <strong>
+                {globalSwitch.suspended
+                  ? "전체 광고 송출 중지"
+                  : "전체 광고 송출 제어 정상"}
+              </strong>
+              <small>
+                {globalSwitch.reason ??
+                  "공급자·슬롯별 안전 설정과 승인 상태를 함께 적용합니다."}
+              </small>
+            </span>
+          </div>
+          <KillSwitchForm
+            endpoint="/api/admin/advertising/kill-switch"
+            item={globalSwitch}
+          />
+        </section>
+      ) : null}
       <section
         className={styles.overview}
         aria-labelledby="advertising-overview-title"
@@ -211,6 +239,12 @@ function InquiryPanel({ data }: { data: AdminAdvertisingData }) {
       title="광고 문의 큐"
       description="미응답과 SLA 초과를 먼저 정렬했습니다."
     >
+      <DataScope
+        shown={data.inquiries.items.length}
+        total={data.inquiries.totalCount}
+        truncated={data.inquiries.truncated}
+      />
+      <AdvertisingMailHealth data={data} />
       <div className={styles.list}>
         {[...data.inquiries.items].sort(sortInquiries).map((item) => (
           <InquiryRow item={item} key={item.id} />
@@ -232,6 +266,9 @@ function InquiryRow({ item }: { item: AdminAdvertisingInquiry }) {
   const [sensitiveConfirmOpen, setSensitiveConfirmOpen] = useState(false);
   const [sensitivePending, setSensitivePending] = useState(false);
   const [sensitiveMessage, setSensitiveMessage] = useState("");
+  const [mailRetryReason, setMailRetryReason] = useState("");
+  const [mailRetryPending, setMailRetryPending] = useState(false);
+  const [mailRetryMessage, setMailRetryMessage] = useState("");
   const [sensitiveDetail, setSensitiveDetail] =
     useState<SensitiveInquiryDetail | null>(null);
   const overdue = isOverdue(item.firstResponseDueAt, item.status);
@@ -295,6 +332,25 @@ function InquiryRow({ item }: { item: AdminAdvertisingInquiry }) {
     setSensitiveConfirmOpen(false);
   }
 
+  async function retryFailedMail() {
+    if (mailRetryReason.trim().length < 5) {
+      setMailRetryMessage("재시도 사유를 5자 이상 입력해 주세요.");
+      return;
+    }
+    setMailRetryPending(true);
+    setMailRetryMessage("");
+    const outcome = await postAdminAction(
+      "/api/admin/advertising/mail-operations",
+      { inquiryId: item.id, reason: mailRetryReason },
+    );
+    setMailRetryPending(false);
+    setMailRetryMessage(outcome.message);
+    if (outcome.ok) {
+      setMailRetryReason("");
+      router.refresh();
+    }
+  }
+
   return (
     <article className={styles.row} data-overdue={overdue}>
       <div className={styles.rowMain}>
@@ -340,6 +396,39 @@ function InquiryRow({ item }: { item: AdminAdvertisingInquiry }) {
           }
         />
       </dl>
+      {item.mailStatus === "failed" ? (
+        <section className={styles.mailRecovery}>
+          <div>
+            <strong>문의 확인 메일 점검 필요</strong>
+            <p>
+              {item.mailRetryableCount > 0
+                ? `공급자에 접수되지 않은 ${item.mailRetryableCount}건만 안전하게 다시 처리할 수 있습니다.`
+                : "반송·신고 또는 공급자 접수 이력이 있어 자동 재전송하지 않습니다."}
+            </p>
+          </div>
+          {item.mailRetryableCount > 0 ? (
+            <div>
+              <input
+                aria-label="문의 메일 재시도 사유"
+                maxLength={500}
+                onChange={(event) => setMailRetryReason(event.target.value)}
+                placeholder="확인한 원인과 재시도 사유"
+                value={mailRetryReason}
+              />
+              <button
+                disabled={mailRetryPending || mailRetryReason.trim().length < 5}
+                onClick={() => void retryFailedMail()}
+                type="button"
+              >
+                {mailRetryPending ? "처리 중" : "안전 재시도"}
+              </button>
+            </div>
+          ) : null}
+          {mailRetryMessage ? (
+            <p aria-live="polite">{mailRetryMessage}</p>
+          ) : null}
+        </section>
+      ) : null}
       <details className={styles.inquiryDetails}>
         <summary>제출 내용과 동의 기록</summary>
         <dl>
@@ -499,6 +588,49 @@ function InquiryRow({ item }: { item: AdminAdvertisingInquiry }) {
   );
 }
 
+function AdvertisingMailHealth({ data }: { data: AdminAdvertisingData }) {
+  if (!data.mailOperations.available) {
+    return (
+      <div className={styles.mailHealth} data-warning>
+        <AlertTriangle aria-hidden="true" size={17} />
+        <div>
+          <strong>문의 메일 운영 상태 연결 필요</strong>
+          <span>{data.mailOperations.message}</span>
+        </div>
+      </div>
+    );
+  }
+  const unhealthy =
+    data.mailOperations.queue.dead > 0 ||
+    data.mailOperations.queue.stale > 0 ||
+    data.mailOperations.worker.status === "failed" ||
+    data.mailOperations.worker.status === "degraded";
+  return (
+    <div className={styles.mailHealth} data-warning={unhealthy}>
+      {unhealthy ? (
+        <AlertTriangle aria-hidden="true" size={17} />
+      ) : (
+        <CheckCircle2 aria-hidden="true" size={17} />
+      )}
+      <div>
+        <strong>
+          {data.mailOperations.worker.status
+            ? `문의 메일 작업 ${workerLabel(data.mailOperations.worker.status)}`
+            : "첫 문의 메일 작업을 기다리고 있습니다"}
+        </strong>
+        <span>
+          대기 {data.mailOperations.queue.pending} · 재시도{" "}
+          {data.mailOperations.queue.retry} · 실패{" "}
+          {data.mailOperations.queue.dead}
+          {data.mailOperations.worker.finishedAt
+            ? ` · 마지막 ${formatDateTime(data.mailOperations.worker.finishedAt)}`
+            : ""}
+        </span>
+      </div>
+    </div>
+  );
+}
+
 function CampaignPanel({ data }: { data: AdminAdvertisingData }) {
   if (!data.campaigns.available)
     return <Unavailable message={data.campaigns.message} />;
@@ -507,6 +639,11 @@ function CampaignPanel({ data }: { data: AdminAdvertisingData }) {
       title="캠페인"
       description="정책 승인, 일정, 소재 연결 상태를 함께 확인합니다."
     >
+      <DataScope
+        shown={data.campaigns.items.length}
+        total={data.campaigns.totalCount}
+        truncated={data.campaigns.truncated}
+      />
       <CampaignCreateForm inquiries={data.inquiries.items} />
       {data.campaigns.items.length === 0 ? (
         <Empty
@@ -692,6 +829,7 @@ function CampaignRow({ item }: { item: AdminAdvertisingCampaign }) {
   const [pending, setPending] = useState(false);
   const [message, setMessage] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const allowedStatuses = campaignNextStatuses(item.status);
 
   async function performUpdate() {
     setPending(true);
@@ -749,40 +887,45 @@ function CampaignRow({ item }: { item: AdminAdvertisingCampaign }) {
       {!["active", "ended"].includes(item.status) ? (
         <CampaignEditForm item={item} />
       ) : null}
-      <details className={styles.actionDetails}>
-        <summary>캠페인 상태 변경</summary>
-        <form className={styles.actionForm} onSubmit={submit}>
-          <label>
-            상태
-            <select
-              onChange={(event) =>
-                setStatus(event.target.value as AdvertisingCampaignStatus)
-              }
-              value={status}
-            >
-              {advertisingCampaignStatuses.map((value) => (
-                <option key={value} value={value}>
-                  {campaignStatusLabels[value]}
+      {allowedStatuses.length ? (
+        <details className={styles.actionDetails}>
+          <summary>캠페인 상태 변경</summary>
+          <form className={styles.actionForm} onSubmit={submit}>
+            <label>
+              상태
+              <select
+                onChange={(event) =>
+                  setStatus(event.target.value as AdvertisingCampaignStatus)
+                }
+                value={status}
+              >
+                <option value={item.status}>
+                  현재 · {campaignStatusLabels[item.status]}
                 </option>
-              ))}
-            </select>
-          </label>
-          <label className={styles.reason}>
-            변경 사유
-            <textarea
-              maxLength={500}
-              minLength={2}
-              onChange={(event) => setReason(event.target.value)}
-              required
-              value={reason}
-            />
-          </label>
-          <button disabled={pending || status === item.status} type="submit">
-            {pending ? "저장 중" : "상태 저장"}
-          </button>
-          {message ? <p aria-live="polite">{message}</p> : null}
-        </form>
-      </details>
+                {allowedStatuses.map((value) => (
+                  <option key={value} value={value}>
+                    {campaignStatusLabels[value]}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className={styles.reason}>
+              변경 사유
+              <textarea
+                maxLength={500}
+                minLength={5}
+                onChange={(event) => setReason(event.target.value)}
+                required
+                value={reason}
+              />
+            </label>
+            <button disabled={pending || status === item.status} type="submit">
+              {pending ? "저장 중" : "상태 저장"}
+            </button>
+            {message ? <p aria-live="polite">{message}</p> : null}
+          </form>
+        </details>
+      ) : null}
       <AdminConfirmDialog
         confirmLabel={`${campaignStatusLabels[status]}으로 변경`}
         description={`${item.name} 캠페인을 ${campaignStatusLabels[status]} 상태로 변경합니다. 연결된 슬롯의 송출 상태와 일정을 다시 확인해 주세요.`}
@@ -1117,6 +1260,11 @@ function CreativePanel({ data }: { data: AdminAdvertisingData }) {
       title="소재 검수"
       description="쿠팡 링크와 표시 문구는 승인 전에 반드시 실제 화면에서 확인합니다."
     >
+      <DataScope
+        shown={data.creatives.items.length}
+        total={data.creatives.totalCount}
+        truncated={data.creatives.truncated}
+      />
       <CreativeCreateForm campaigns={data.campaigns.items} />
       {data.creatives.items.length === 0 ? (
         <Empty
@@ -1265,6 +1413,7 @@ function CreativeRow({ item }: { item: AdminAdvertisingCreative }) {
     useState<AdvertisingCreativeReviewStatus | null>(null);
   const [message, setMessage] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const approvalIssues = creativeApprovalIssues(item);
 
   async function performUpdate(
     reviewStatus: "approved" | "changes_requested" | "rejected",
@@ -1306,6 +1455,51 @@ function CreativeRow({ item }: { item: AdminAdvertisingCreative }) {
           {creativeStatusLabels[item.reviewStatus]}
         </Status>
       </div>
+      <div className={styles.creativeReviewPreview}>
+        <div className={styles.creativeArtwork}>
+          {item.imageUrl ? (
+            <img
+              alt={item.altText ?? "광고 소재 미리보기"}
+              loading="lazy"
+              src={item.imageUrl}
+            />
+          ) : (
+            <span>이미지 미등록</span>
+          )}
+        </div>
+        <dl>
+          <Meta
+            label="광고 표시 문구"
+            value={item.disclosureText ?? "미등록"}
+          />
+          <Meta label="대체 텍스트" value={item.altText ?? "미등록"} />
+          <Meta label="전체 목적지" value={item.destinationUrl ?? "미등록"} />
+          <Meta label="설명" value={item.description ?? "미등록"} />
+        </dl>
+        {item.destinationUrl ? (
+          <a
+            href={item.destinationUrl}
+            rel="noreferrer noopener"
+            target="_blank"
+          >
+            목적지 새 창에서 검토
+          </a>
+        ) : null}
+      </div>
+      {approvalIssues.length ? (
+        <div className={styles.approvalBlockers} role="status">
+          <strong>승인 전 {approvalIssues.length}개 확인 필요</strong>
+          <ul>
+            {approvalIssues.map((issue) => (
+              <li key={issue}>{issue}</li>
+            ))}
+          </ul>
+        </div>
+      ) : (
+        <div className={styles.approvalReady}>
+          이미지·표시 문구·대체 텍스트·목적지·사실 확인 조건을 충족했습니다.
+        </div>
+      )}
       <dl className={styles.metaGrid}>
         <Meta
           label="사실 확인"
@@ -1334,7 +1528,7 @@ function CreativeRow({ item }: { item: AdminAdvertisingCreative }) {
         </label>
         <div>
           <button
-            disabled={Boolean(pending)}
+            disabled={Boolean(pending) || approvalIssues.length > 0}
             onClick={() => update("approved")}
             type="button"
           >
@@ -1526,6 +1720,11 @@ function PerformancePanel({ data }: { data: AdminAdvertisingData }) {
       title="성과·품질"
       description="실제 집계만 표시하며 보호 지표를 수익보다 먼저 확인합니다."
     >
+      <DataScope
+        shown={data.metrics.items.length}
+        total={data.metrics.totalCount}
+        truncated={data.metrics.truncated}
+      />
       <div className={styles.metricGrid}>
         <Metric label="노출" value={formatNumber(totals.impressions)} />
         <Metric label="조회 가능 노출" value={formatNumber(totals.viewable)} />
@@ -1751,6 +1950,24 @@ function Panel({
     </div>
   );
 }
+
+function DataScope({
+  shown,
+  total,
+  truncated,
+}: {
+  shown: number;
+  total?: number;
+  truncated?: boolean;
+}) {
+  return (
+    <p className={styles.dataScope} data-truncated={Boolean(truncated)}>
+      {truncated
+        ? `전체 ${formatNumber(total ?? shown)}건 중 최근 ${formatNumber(shown)}건을 표시합니다. 상단 업무 수치는 현재 표시 범위 기준입니다.`
+        : `전체 ${formatNumber(total ?? shown)}건 · 최신순`}
+    </p>
+  );
+}
 function Unavailable({ message }: { message: string | null }) {
   return (
     <div className={styles.unavailable}>
@@ -1932,6 +2149,16 @@ function mailStatusLabel(value: AdminAdvertisingInquiry["mailStatus"]) {
         ? "전송 완료"
         : "연결 확인";
 }
+function workerLabel(value: string) {
+  return (
+    {
+      degraded: "일부 확인 필요",
+      failed: "실패",
+      running: "실행 중",
+      succeeded: "정상",
+    }[value] ?? value
+  );
+}
 function inquiryTypeLabel(value: string) {
   return labelFrom(
     value,
@@ -1969,6 +2196,46 @@ function campaignObjectiveLabel(value: string) {
     },
     "목적 미입력",
   );
+}
+
+function campaignNextStatuses(
+  status: AdvertisingCampaignStatus,
+): AdvertisingCampaignStatus[] {
+  const transitions: Record<
+    AdvertisingCampaignStatus,
+    AdvertisingCampaignStatus[]
+  > = {
+    active: ["paused", "ended"],
+    approved: ["scheduled", "policy_review"],
+    draft: ["policy_review"],
+    ended: [],
+    paused: ["policy_review", "ended"],
+    policy_review: ["approved", "draft"],
+    scheduled: ["active", "paused", "ended", "policy_review"],
+  };
+  return transitions[status];
+}
+
+function creativeApprovalIssues(item: AdminAdvertisingCreative) {
+  if (item.provider === "direct")
+    return ["직접 광고 송출 기능은 아직 잠겨 있습니다."];
+  if (item.provider === "adsense") return [];
+  const issues: string[] = [];
+  if (!item.imageUrl) issues.push("실제 소재 이미지가 필요합니다.");
+  if (!item.destinationUrl) issues.push("검토할 목적지 URL이 필요합니다.");
+  if (!item.altText || item.altText.trim().length < 2)
+    issues.push("접근성 대체 텍스트가 필요합니다.");
+  if (
+    !item.disclosureText ||
+    !item.disclosureText.includes("일정액의 수수료")
+  ) {
+    issues.push("쿠팡 파트너스 대가성 표시 문구가 필요합니다.");
+  }
+  if (!item.factCheckedAt)
+    issues.push("상품·문구 사실 확인 시각이 필요합니다.");
+  if (item.expiresAt && new Date(item.expiresAt).getTime() <= Date.now())
+    issues.push("만료된 소재는 다시 확인해야 합니다.");
+  return issues;
 }
 function preferredPlacementLabel(value: string) {
   return labelFrom(

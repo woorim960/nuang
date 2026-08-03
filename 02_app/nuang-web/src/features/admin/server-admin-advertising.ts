@@ -23,6 +23,8 @@ type TableRead = {
   available: boolean;
   message: string | null;
   rows: Row[];
+  totalCount: number;
+  truncated: boolean;
 };
 
 export async function readAdminAdvertising({
@@ -40,14 +42,28 @@ export async function readAdminAdvertising({
     creativesRead,
     metricsRead,
     killSwitchRead,
+    mailOperationsRead,
   ] = await Promise.all([
-    readTable(client, "advertising_inquiry", 300),
-    readTable(client, "advertising_mail_outbox", 600),
-    readTable(client, "advertising_campaign", 300),
-    readTable(client, "advertising_inventory", 100),
-    readTable(client, "advertising_creative", 500),
-    readTable(client, "advertising_metric_daily", 1000),
-    readTable(client, "advertising_kill_switch", 100),
+    readTable(
+      client,
+      "advertising_inquiry",
+      "id,public_reference,company_name,contact_email_masked,website_url,inquiry_type,campaign_objective,preferred_placement,budget_band,schedule_mode,desired_start_date,desired_end_date,target_audience,creative_readiness,status,priority,assigned_admin_account_id,first_response_due_at,next_action_at,privacy_consented_at,risk_flags,created_at,updated_at",
+      300,
+      "created_at",
+    ),
+    readTable(
+      client,
+      "advertising_mail_outbox",
+      "inquiry_id,status,provider_message_id,created_at,updated_at",
+      600,
+      "created_at",
+    ),
+    readTable(client, "advertising_campaign", "*", 300, "created_at"),
+    readTable(client, "advertising_inventory", "*", 100, "updated_at"),
+    readTable(client, "advertising_creative", "*", 500, "updated_at"),
+    readTable(client, "advertising_metric_daily", "*", 1000, "metric_date"),
+    readTable(client, "advertising_kill_switch", "*", 100, "updated_at"),
+    client.rpc("admin_advertising_mail_operations_snapshot"),
   ]);
 
   const outboxByInquiry = groupRows(outboxRead.rows, "inquiry_id");
@@ -73,6 +89,7 @@ export async function readAdminAdvertising({
     ),
     inventory: mapModule(inventoryRead, mapInventory),
     killSwitches: mapModule(killSwitchRead, mapKillSwitch),
+    mailOperations: mapAdvertisingMailOperations(mailOperationsRead),
     metrics: mapModule(metricsRead, mapMetric),
   };
 }
@@ -244,9 +261,15 @@ function readiness(
 async function readTable(
   client: SupabaseClient,
   table: string,
+  columns: string,
   limit: number,
+  orderBy: string,
 ): Promise<TableRead> {
-  const response = await client.from(table).select("*").limit(limit);
+  const response = await client
+    .from(table)
+    .select(columns, { count: "exact" })
+    .order(orderBy, { ascending: false })
+    .limit(limit);
   if (response.error) {
     return {
       available: false,
@@ -254,12 +277,16 @@ async function readTable(
         ? "광고 운영 데이터베이스를 준비해야 합니다. 최신 마이그레이션을 적용해 주세요."
         : "이 운영 데이터를 불러오지 못했습니다. 연결 상태를 확인해 주세요.",
       rows: [],
+      totalCount: 0,
+      truncated: false,
     };
   }
   return {
     available: true,
     message: null,
-    rows: (response.data ?? []) as Row[],
+    rows: (response.data ?? []) as unknown as Row[],
+    totalCount: response.count ?? response.data?.length ?? 0,
+    truncated: (response.count ?? 0) > (response.data?.length ?? 0),
   };
 }
 
@@ -289,6 +316,9 @@ function mapInquiry(
     firstResponseDueAt: text(row.first_response_due_at),
     id,
     inquiryType: text(row.inquiry_type) ?? "기타 문의",
+    mailRetryableCount: outbox.filter(
+      (item) => text(item.status) === "dead" && !text(item.provider_message_id),
+    ).length,
     mailStatus: resolveMailStatus(outboxAvailable, outbox),
     nextActionAt: text(row.next_action_at),
     preferredPlacement: text(row.preferred_placement) ?? "미입력",
@@ -421,6 +451,8 @@ function mapModule<T>(
       return item ? [item] : [];
     }),
     message: read.message,
+    totalCount: read.totalCount,
+    truncated: read.truncated,
   };
 }
 
@@ -451,6 +483,38 @@ function resolveMailStatus(
     return "sent";
   }
   return statuses.length > 0 ? "pending" : "unknown";
+}
+
+function mapAdvertisingMailOperations(response: {
+  data: unknown;
+  error: { code?: string; message?: string } | null;
+}): AdminAdvertisingData["mailOperations"] {
+  const root = object(response.data);
+  const queue = object(root.queue);
+  const worker = object(root.worker);
+  return {
+    available: !response.error,
+    message: response.error
+      ? "004 운영 제어 마이그레이션을 적용해 문의 메일 상태를 연결해 주세요."
+      : null,
+    queue: {
+      dead: number(queue.dead),
+      pending: number(queue.pending),
+      retry: number(queue.retry),
+      sending: number(queue.sending),
+      stale: number(queue.stale),
+    },
+    worker: {
+      claimed: number(worker.claimed),
+      completionFailed: number(worker.completionFailed),
+      errorCode: text(worker.errorCode),
+      failed: number(worker.failed),
+      finishedAt: text(worker.finishedAt),
+      sent: number(worker.sent),
+      source: text(worker.source),
+      status: text(worker.status),
+    },
+  };
 }
 
 function inquiryStatus(value: unknown) {
@@ -530,6 +594,16 @@ function numberOrNull(value: unknown) {
 
 function boolean(value: unknown) {
   return value === true;
+}
+
+function number(value: unknown) {
+  return numberOrNull(value) ?? 0;
+}
+
+function object(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
 }
 
 function text(value: unknown) {

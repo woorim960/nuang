@@ -5,6 +5,7 @@ import {
   marketingTestEmailSchema,
 } from "@/features/marketing/marketing-email-contract";
 import { sendMarketingTestEmail } from "@/features/marketing/server-marketing-email-outbox";
+import { marketingEmailReadiness } from "@/features/marketing/server-marketing-email-config";
 import { resolveAdminContext } from "@/features/admin/server-admin-access";
 import { readValidatedJson } from "@/lib/api/request";
 import { isSameOriginBrowserRequest } from "@/lib/api/request-origin";
@@ -50,6 +51,15 @@ export async function POST(request: Request) {
   );
   if (!payload.ok)
     return failure("캠페인 상태와 예약 시각을 확인해 주세요.", 422);
+  if (
+    ["queue", "resume"].includes(payload.data.action) &&
+    !marketingEmailReadiness().ready
+  ) {
+    return failure(
+      "실제 발송 준비가 끝나지 않아 대상 확정과 재개가 잠겨 있습니다.",
+      409,
+    );
+  }
   const response = await context.client
     .schema("consent")
     .rpc("admin_manage_marketing_campaign", {
@@ -77,34 +87,47 @@ export async function PATCH(request: Request) {
       403,
     );
   }
+  const campaign = await context.client
+    .schema("consent")
+    .from("marketing_campaign")
+    .select("id,subject,eyebrow,heading,body,cta_label,cta_url,status")
+    .eq("id", payload.data.campaignId)
+    .maybeSingle();
+  if (campaign.error || !campaign.data) {
+    return failure("저장된 캠페인 초안을 찾지 못했습니다.", 404);
+  }
+  if (campaign.data.status !== "draft") {
+    return failure("작성 중인 캠페인만 다시 테스트할 수 있습니다.", 409);
+  }
   const delivery = await sendMarketingTestEmail({
     content: {
-      body: payload.data.body,
-      ctaLabel: payload.data.ctaLabel,
-      ctaUrl: payload.data.ctaUrl,
-      eyebrow: payload.data.eyebrow,
-      heading: payload.data.heading,
-      subject: payload.data.subject,
+      body: campaign.data.body,
+      ctaLabel: campaign.data.cta_label,
+      ctaUrl: campaign.data.cta_url,
+      eyebrow: campaign.data.eyebrow,
+      heading: campaign.data.heading,
+      subject: campaign.data.subject,
     },
     recipient: context.email,
   });
-  if (!delivery.ok)
+  if (!delivery.ok || !delivery.messageId)
     return failure(
       "테스트 메일을 보내지 못했습니다. 발신 설정을 확인해 주세요.",
       503,
     );
-  await context.client
-    .schema("audit")
-    .from("admin_audit_log")
-    .insert({
-      action: "marketing_test_email_sent",
-      admin_account_id: context.accountId,
-      metadata: {
-        channel: "email",
-        providerMessageId: delivery.messageId ?? null,
-      },
-      target_table: "consent.marketing_campaign",
+  const recorded = await context.client
+    .schema("consent")
+    .rpc("admin_record_marketing_campaign_test", {
+      target_admin_account_id: context.accountId,
+      target_campaign_id: payload.data.campaignId,
+      target_provider_message_id: delivery.messageId,
     });
+  if (recorded.error) {
+    return failure(
+      "테스트 메일은 발송됐지만 검증 기록을 저장하지 못했습니다. 승인하지 말고 다시 시도해 주세요.",
+      503,
+    );
+  }
   return NextResponse.json({ ok: true });
 }
 

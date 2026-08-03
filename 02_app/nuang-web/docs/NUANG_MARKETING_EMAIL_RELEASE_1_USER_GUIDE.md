@@ -5,7 +5,7 @@
 
 ## 지금까지 완료된 것
 
-- 발신 표시: `뉴앙 <news@nuang.app>`
+- 발신 표시: `뉴앙 <news@notice.nuang.app>`
 - 답장·고객 문의: `woorimprog@gmail.com`
 - 문의 연락처: `010-2515-0939`
 - 이메일 채널만 사용하고 SMS는 잠금
@@ -20,35 +20,29 @@
 - Vercel 운영 환경에 발신 정보 등록
 - 실제 대량 발송 스위치는 `false`로 안전하게 잠금
 
-`news@nuang.app` 받은편지함을 별도로 만들 필요는 없다. 인증된 `nuang.app` 도메인의 발신 전용 주소로 사용하며, 사용자가 답장하면 `woorimprog@gmail.com`으로 전달된다.
+`news@notice.nuang.app` 받은편지함을 별도로 만들 필요는 없다. Resend에서 인증된 `notice.nuang.app`의 발신 전용 주소로 사용하며, 사용자가 답장하면 `woorimprog@gmail.com`으로 전달된다. Resend 무료 플랜의 1개 도메인 한도에도 맞는다.
 
-## 운영자가 지금 한 번만 할 일
+## 현재 적용 상태
 
-Supabase SQL Editor에서 아래 파일 전체를 실행한다.
+- `202608030003_marketing_email_release1.sql`: 운영 DB 적용 완료
+- `202608030004_business_operations_control_plane.sql`: 운영 DB 적용 완료
+- 운영자 시험 메일: 발송·전달 완료
+- Resend Webhook: `email.delivered` 수신·DB 매칭 완료
+- DB 긴급 중지: 중지·재개·감사 기록 확인 후 정상 상태로 복구
+- 안전 재시도: 공급자 미접수 실패가 없을 때 마케팅·광고 모두 실행 거부 확인
+- 실제 대량 발송 Gate: 계속 안전 잠금
 
-`supabase/migrations/202608030003_marketing_email_release1.sql`
+## 운영자가 지금 해야 할 일
 
-실행 순서:
+필수 작업은 없다. `woorimprog@gmail.com` 받은편지함에서 제목이 `(광고) 뉴앙 이메일 운영 점검`인 시험 메일을 눈으로 한 번 확인하면 된다. 시스템은 이미 해당 메일의 전달 완료를 확인했다.
 
-1. Supabase 프로젝트를 연다.
-2. 왼쪽 메뉴에서 `SQL Editor`를 연다.
-3. `New query`를 누른다.
-4. 위 파일의 내용을 처음부터 끝까지 복사해 붙여넣는다.
-5. `Run`을 누른다.
-6. 오류 없이 완료되면 Codex에게 `202608030003 실행 완료`라고 알려준다.
+실제 회원 대상 캠페인을 시작하기 전에는 아래 순서만 지킨다.
 
-직접 DB 연결은 현재 저장된 비밀번호와 맞지 않아 Codex가 대신 실행할 수 없었다. 이 작업은 데이터 삭제가 아니라 캠페인·발송 상태 테이블과 안전 함수를 추가하는 마이그레이션이다.
-
-## SQL 실행 뒤 Codex가 마무리할 일
-
-1. 운영센터 `/admin/marketing` 데이터 연결 확인
-2. 현재 로그인한 운영자 이메일로 실제 테스트 메일 1건 발송
-3. 제목 `(광고)`, 발신자, Reply-To, 본문, 모바일 레이아웃, 수신거부 링크 확인
-4. 원클릭 수신거부와 suppression 기록 확인
-5. Resend 전달 webhook과 운영센터 집계 확인
-6. 테스트용 동의를 원상 복구
-7. 모든 Gate 통과 후 `MARKETING_EMAIL_SEND_ENABLED=true` 적용
-8. 마지막 운영 재배포와 smoke test
+1. 운영센터에서 실제 캠페인 초안과 운영자 테스트를 완료한다.
+2. 현재 버전의 `전달 확인` 표시를 확인한다.
+3. 첫 발송 규모와 시각을 정한다.
+4. 그때만 `MARKETING_EMAIL_SEND_ENABLED=true`로 전환하고 재배포한다.
+5. 첫 소규모 발송의 전달·반송·수신거부 지표를 확인한 뒤 확대한다.
 
 ## 첫 실제 캠페인 운영 순서
 

@@ -51,17 +51,26 @@ describe("readAdminAdvertising", () => {
       },
     };
     const client = {
+      async rpc() {
+        return { data: null, error: { code: "42883" } };
+      },
       from(table: string) {
         return {
           select() {
             return {
-              async limit() {
-                return (
-                  responses[table] ?? {
-                    data: [],
-                    error: { code: "42P01" },
-                  }
-                );
+              order() {
+                return {
+                  async limit() {
+                    const response = responses[table] ?? {
+                      data: [],
+                      error: { code: "42P01" },
+                    };
+                    return {
+                      ...response,
+                      count: response.data.length,
+                    };
+                  },
+                };
               },
             };
           },
@@ -77,6 +86,7 @@ describe("readAdminAdvertising", () => {
     expect(result.inquiries.available).toBe(true);
     expect(result.inquiries.items[0]).toMatchObject({
       companyName: "뉴앙 파트너",
+      mailRetryableCount: 0,
       mailStatus: "sent",
       priority: "urgent",
       websiteHost: "example.com",

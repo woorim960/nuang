@@ -8,6 +8,7 @@ const routeFiles = [
   "inventory",
   "creatives",
   "kill-switch",
+  "mail-operations",
 ];
 
 describe("admin advertising routes", () => {

@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { readMarketingEmailConfig } from "@/features/marketing/server-marketing-email-config";
 
 export type AdminSystemCheck = {
   action: string;
@@ -12,6 +13,7 @@ export type AdminSystemCheck = {
 };
 
 export async function readAdminSystem(client: SupabaseClient) {
+  const marketingEmail = readMarketingEmailConfig();
   const environment: AdminSystemCheck[] = [
     envCheck("origin", "앱 공개 주소", "NEXT_PUBLIC_APP_ORIGIN"),
     envCheck("supabase-url", "Supabase 주소", "NEXT_PUBLIC_SUPABASE_URL"),
@@ -30,20 +32,41 @@ export async function readAdminSystem(client: SupabaseClient) {
     envCheck("share-security", "보안 토큰 서명", "SHARE_TOKEN_PEPPER"),
     envCheck("admin", "관리자 계정", "ADMIN_BOOTSTRAP_EMAILS"),
     envCheck("email-api", "인증 이메일 발송", "RESEND_API_KEY"),
-    envCheck(
+    runtimeCheck(
       "marketing-email-gate",
-      "마케팅 이메일 발송 잠금",
-      "MARKETING_EMAIL_SEND_ENABLED",
+      "마케팅 이메일 실제 발송",
+      marketingEmail.enabled,
+      marketingEmail.enabled ? "허용됨" : "안전 잠금 중",
+      "시험 발송과 Webhook 확인을 마친 뒤 MARKETING_EMAIL_SEND_ENABLED=true로 전환하세요.",
+      "warning",
     ),
-    envCheck(
+    runtimeCheck(
       "marketing-email-from",
       "마케팅 이메일 발신자",
-      "MARKETING_EMAIL_FROM",
+      marketingEmail.fromReady,
+      marketingEmail.fromReady ? "nuang.app 발신 주소 사용" : "nuang.app 발신 주소 필요",
+      "MARKETING_EMAIL_FROM을 인증된 뉴앙 발신 도메인 주소로 설정하세요.",
     ),
-    envCheck(
+    runtimeCheck(
       "marketing-email-reply",
       "마케팅 이메일 답장 주소",
-      "MARKETING_EMAIL_REPLY_TO",
+      isEmailAddress(marketingEmail.replyTo),
+      isEmailAddress(marketingEmail.replyTo) ? "답장 주소 설정됨" : "유효한 답장 주소 필요",
+      "MARKETING_EMAIL_REPLY_TO에 운영자가 확인할 이메일을 설정하세요.",
+    ),
+    runtimeCheck(
+      "marketing-email-webhook",
+      "Resend 상태 수신 서명",
+      marketingEmail.webhookReady,
+      marketingEmail.webhookReady ? "설정됨" : "Webhook 서명 키 필요",
+      "Resend Webhook의 signing secret을 AD_RESEND_WEBHOOK_SECRET에 등록하세요.",
+    ),
+    runtimeCheck(
+      "marketing-email-cron",
+      "이메일 예약 작업 인증",
+      marketingEmail.cronReady,
+      marketingEmail.cronReady ? "설정됨" : "32자 이상 인증 키 필요",
+      "32자 이상의 임의 문자열을 AD_OUTBOX_CRON_SECRET에 등록하세요.",
     ),
     envCheck("email-from", "인증 이메일 발신 주소", "EMAIL_VERIFICATION_FROM"),
     envAnyCheck("admin-notification-recipients", "운영 검토 알림 수신자", [
@@ -157,6 +180,48 @@ export async function readAdminSystem(client: SupabaseClient) {
       "marketing_campaign_recipient",
       "이메일 발송 대기열",
       "마케팅 이메일 대상과 발송 상태를 관리할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "consent",
+      "marketing_channel_control",
+      "이메일 긴급 제어",
+      "운영센터에서 전체 마케팅 이메일을 즉시 중지할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "consent",
+      "marketing_worker_run",
+      "이메일 작업 상태",
+      "예약 작업의 성공·실패·지연을 진단할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "consent",
+      "marketing_test_delivery",
+      "캠페인 시험 발송 증빙",
+      "실제로 시험한 캠페인 버전만 승인하도록 보장할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "consent",
+      "marketing_webhook_receipt",
+      "이메일 전달 상태 수신",
+      "Resend 전달 상태의 중복·미연결 이벤트를 진단할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "consent",
+      "marketing_campaign_operations_summary",
+      "이메일 운영 집계",
+      "캠페인의 실제 전체 발송 상태를 정확히 집계할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "advertising_mail_worker_run",
+      "광고 문의 메일 작업 상태",
+      "광고 문의 확인 메일의 작업 실패와 지연을 진단할 수 없습니다.",
     ),
     dbCheck(
       client,
@@ -350,6 +415,28 @@ function envAnyCheck(
     ok: Boolean(activeVariable),
     severity: "blocker",
   };
+}
+
+function runtimeCheck(
+  key: string,
+  label: string,
+  ok: boolean,
+  detail: string,
+  action: string,
+  severity: AdminSystemCheck["severity"] = "blocker",
+): AdminSystemCheck {
+  return {
+    action: ok ? "" : action,
+    detail,
+    key,
+    label,
+    ok,
+    severity,
+  };
+}
+
+function isEmailAddress(value: string) {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
 }
 
 async function dbCheck(

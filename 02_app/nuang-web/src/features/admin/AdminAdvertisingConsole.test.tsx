@@ -45,33 +45,7 @@ describe("AdminAdvertisingConsole", () => {
     });
     vi.stubGlobal("fetch", fetchMock);
     const data = createData(true);
-    data.inquiries.items = [
-      {
-        assignedToCurrentAdmin: false,
-        budgetBand: "500만~1,000만원",
-        campaignObjective: "신규 브랜드 인지도",
-        companyName: "뉴앙 파트너",
-        contactEmailMasked: "he***@example.com",
-        createdAt: "2026-08-01T01:00:00.000Z",
-        creativeReadiness: "준비됨",
-        desiredEnd: null,
-        desiredStart: "2026-09-01",
-        firstResponseDueAt: "2026-08-01T09:00:00.000Z",
-        id: "22222222-2222-4222-8222-222222222222",
-        inquiryType: "브랜드 캠페인",
-        mailStatus: "sent",
-        nextActionAt: null,
-        preferredPlacement: "홈",
-        priority: "urgent",
-        privacyConsentedAt: "2026-08-01T01:00:00.000Z",
-        publicReference: "AD-20260801-0001",
-        riskFlags: [],
-        scheduleMode: "희망 일정",
-        status: "received",
-        targetAudience: "20대 일반 사용자",
-        websiteHost: "example.com",
-      },
-    ];
+    data.inquiries.items = [createInquiry()];
 
     render(<AdminAdvertisingConsole data={data} />);
     expect(screen.getByText("뉴앙 파트너")).toBeInTheDocument();
@@ -95,6 +69,33 @@ describe("AdminAdvertisingConsole", () => {
       status: "reviewing",
     });
     expect(refresh).toHaveBeenCalled();
+  });
+
+  it("retries only a provider-unaccepted inquiry mail with an audited reason", async () => {
+    const fetchMock = vi.fn().mockResolvedValue({
+      json: async () => ({ ok: true }),
+      ok: true,
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const data = createData(true);
+    data.inquiries.items = [
+      createInquiry({ mailRetryableCount: 1, mailStatus: "failed" }),
+    ];
+
+    render(<AdminAdvertisingConsole data={data} />);
+    fireEvent.change(screen.getByLabelText("문의 메일 재시도 사유"), {
+      target: { value: "발신 설정 복구를 확인했습니다." },
+    });
+    fireEvent.click(screen.getByRole("button", { name: "안전 재시도" }));
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    expect(fetchMock.mock.calls[0][0]).toBe(
+      "/api/admin/advertising/mail-operations",
+    );
+    expect(JSON.parse(fetchMock.mock.calls[0][1].body)).toMatchObject({
+      inquiryId: "22222222-2222-4222-8222-222222222222",
+      reason: "발신 설정 복구를 확인했습니다.",
+    });
   });
 
   it("registers a new campaign through the audited admin write API", async () => {
@@ -154,6 +155,53 @@ function createData(available: boolean): AdminAdvertisingData {
     inquiries: { ...moduleState, items: [] },
     inventory: { ...moduleState, items: [] },
     killSwitches: { ...moduleState, items: [] },
+    mailOperations: {
+      available,
+      message: available ? null : "004 운영 제어 마이그레이션이 필요합니다.",
+      queue: { dead: 0, pending: 0, retry: 0, sending: 0, stale: 0 },
+      worker: {
+        claimed: 0,
+        completionFailed: 0,
+        errorCode: null,
+        failed: 0,
+        finishedAt: null,
+        sent: 0,
+        source: null,
+        status: null,
+      },
+    },
     metrics: { ...moduleState, items: [] },
+  };
+}
+
+function createInquiry(
+  overrides: Partial<AdminAdvertisingData["inquiries"]["items"][number]> = {},
+): AdminAdvertisingData["inquiries"]["items"][number] {
+  return {
+    assignedToCurrentAdmin: false,
+    budgetBand: "500만~1,000만원",
+    campaignObjective: "신규 브랜드 인지도",
+    companyName: "뉴앙 파트너",
+    contactEmailMasked: "he***@example.com",
+    createdAt: "2026-08-01T01:00:00.000Z",
+    creativeReadiness: "준비됨",
+    desiredEnd: null,
+    desiredStart: "2026-09-01",
+    firstResponseDueAt: "2026-08-01T09:00:00.000Z",
+    id: "22222222-2222-4222-8222-222222222222",
+    inquiryType: "브랜드 캠페인",
+    mailRetryableCount: 0,
+    mailStatus: "sent",
+    nextActionAt: null,
+    preferredPlacement: "홈",
+    priority: "urgent",
+    privacyConsentedAt: "2026-08-01T01:00:00.000Z",
+    publicReference: "AD-20260801-0001",
+    riskFlags: [],
+    scheduleMode: "희망 일정",
+    status: "received",
+    targetAudience: "20대 일반 사용자",
+    websiteHost: "example.com",
+    ...overrides,
   };
 }

@@ -31,30 +31,47 @@ type CampaignRow = {
   eyebrow: string;
   heading: string;
   id: string;
+  status: string;
   subject: string;
 };
 
 type SendResult = { code?: string; messageId?: string; ok: boolean };
 
-export async function drainMarketingEmailOutbox({ limit = 20 } = {}) {
+export async function drainMarketingEmailOutbox({
+  limit = 20,
+  source = "cron",
+}: {
+  limit?: number;
+  source?: "cron" | "manual";
+} = {}) {
   const config = readMarketingEmailConfig();
-  if (!config.ready) {
-    return {
-      claimed: 0,
-      confirmations: 0,
-      failed: 0,
-      locked: true,
-      ok: false as const,
-      sent: 0,
-    };
-  }
   const client = createSupabaseServiceClient();
+  const runId = randomUUID();
+  const startedAt = Date.now();
   if (!client) {
     return {
       claimed: 0,
       confirmations: 0,
       failed: 0,
       locked: false,
+      ok: false as const,
+      sent: 0,
+    };
+  }
+  await startWorkerRun({ client, runId, source });
+  if (!config.ready) {
+    await finishWorkerRun({
+      client,
+      errorCode: "runtime_gate_locked",
+      runId,
+      startedAt,
+      status: "locked",
+    });
+    return {
+      claimed: 0,
+      confirmations: 0,
+      failed: 0,
+      locked: true,
       ok: false as const,
       sent: 0,
     };
@@ -67,21 +84,30 @@ export async function drainMarketingEmailOutbox({ limit = 20 } = {}) {
     });
 
   const workerToken = randomUUID();
-  const [campaignClaim, confirmationClaim] = await Promise.all([
-    client.schema("consent").rpc("claim_marketing_email_outbox", {
+  const campaignClaim = await client
+    .schema("consent")
+    .rpc("claim_marketing_email_outbox", {
       target_batch_size: Math.min(Math.max(limit, 1), 50),
       target_worker_token: workerToken,
-    }),
-    client.schema("consent").rpc("claim_marketing_consent_confirmations", {
+    });
+  const confirmationClaim = await client
+    .schema("consent")
+    .rpc("claim_marketing_consent_confirmations", {
       target_batch_size: Math.min(Math.max(Math.ceil(limit / 2), 1), 25),
       target_worker_token: workerToken,
-    }),
-  ]);
+    });
 
-  if (campaignClaim.error || confirmationClaim.error) {
+  if (campaignClaim.error && confirmationClaim.error) {
     console.error("Unable to claim marketing email outbox", {
       campaignCode: campaignClaim.error?.code ?? null,
       confirmationCode: confirmationClaim.error?.code ?? null,
+    });
+    await finishWorkerRun({
+      client,
+      errorCode: campaignClaim.error.code || confirmationClaim.error.code,
+      runId,
+      startedAt,
+      status: "failed",
     });
     return {
       claimed: 0,
@@ -93,35 +119,83 @@ export async function drainMarketingEmailOutbox({ limit = 20 } = {}) {
     };
   }
 
-  const campaignRows = Array.isArray(campaignClaim.data)
-    ? (campaignClaim.data as ClaimedCampaignRecipient[])
-    : [];
-  const confirmationRows = Array.isArray(confirmationClaim.data)
-    ? (confirmationClaim.data as ClaimedConfirmation[])
-    : [];
+  const campaignRows =
+    !campaignClaim.error && Array.isArray(campaignClaim.data)
+      ? (campaignClaim.data as ClaimedCampaignRecipient[])
+      : [];
+  const confirmationRows =
+    !confirmationClaim.error && Array.isArray(confirmationClaim.data)
+      ? (confirmationClaim.data as ClaimedConfirmation[])
+      : [];
   let sent = 0;
   let failed = 0;
+  let completionFailed = 0;
 
   for (const row of campaignRows) {
-    const result = await deliverCampaignRecipient({ client, row });
-    await completeCampaignRecipient({ client, result, row, workerToken });
+    const result = await deliverCampaignRecipient({
+      client,
+      row,
+      workerToken,
+    }).catch(() => ({
+      code: "campaign_delivery_exception",
+      ok: false as const,
+      outcome: "retry" as const,
+    }));
+    const completed = await completeCampaignRecipient({
+      client,
+      result,
+      row,
+      workerToken,
+    });
+    if (!completed) completionFailed += 1;
     if (result.ok) sent += 1;
     else if (result.outcome === "retry") failed += 1;
   }
 
   for (const row of confirmationRows) {
-    const result = await deliverConsentConfirmation({ client, row });
-    await completeConsentConfirmation({ client, result, row, workerToken });
+    const result = await deliverConsentConfirmation({
+      client,
+      row,
+      workerToken,
+    }).catch(() => ({
+      code: "confirmation_delivery_exception",
+      ok: false as const,
+      outcome: "retry" as const,
+    }));
+    const completed = await completeConsentConfirmation({
+      client,
+      result,
+      row,
+      workerToken,
+    });
+    if (!completed) completionFailed += 1;
     if (result.ok) sent += 1;
     else if (result.outcome === "retry") failed += 1;
   }
 
+  const degraded =
+    completionFailed > 0 ||
+    Boolean(campaignClaim.error || confirmationClaim.error);
+  await finishWorkerRun({
+    claimed: campaignRows.length,
+    client,
+    completionFailed,
+    confirmations: confirmationRows.length,
+    errorCode: degraded ? "partial_worker_failure" : null,
+    failed,
+    runId,
+    sent,
+    startedAt,
+    status: degraded ? "degraded" : "succeeded",
+  });
+
   return {
     claimed: campaignRows.length,
+    completionFailed,
     confirmations: confirmationRows.length,
     failed,
     locked: false,
-    ok: true as const,
+    ok: !degraded,
     sent,
   };
 }
@@ -133,16 +207,44 @@ type DeliveryOutcome = SendResult & {
 async function deliverCampaignRecipient({
   client,
   row,
+  workerToken,
 }: {
   client: SupabaseClient;
   row: ClaimedCampaignRecipient;
+  workerToken: string;
 }): Promise<DeliveryOutcome> {
+  const authorization = await client
+    .schema("consent")
+    .rpc("authorize_marketing_email_delivery", {
+      target_outbox_id: row.id,
+      target_worker_token: workerToken,
+    });
+  const decision = authorization.data as {
+    code?: unknown;
+    ok?: unknown;
+    outcome?: unknown;
+  } | null;
+  if (authorization.error || decision?.ok !== true) {
+    const outcome = ["retry", "skipped", "suppressed", "unsubscribed"].includes(
+      String(decision?.outcome),
+    )
+      ? (decision?.outcome as DeliveryOutcome["outcome"])
+      : "retry";
+    return {
+      code:
+        typeof decision?.code === "string"
+          ? decision.code
+          : "delivery_authorization_failed",
+      ok: false,
+      outcome,
+    };
+  }
   const [audience, campaign] = await Promise.all([
     readEligibleRecipient(client, row.account_id),
     client
       .schema("consent")
       .from("marketing_campaign")
-      .select("id,subject,eyebrow,heading,body,cta_label,cta_url")
+      .select("id,subject,eyebrow,heading,body,cta_label,cta_url,status")
       .eq("id", row.campaign_id)
       .maybeSingle(),
   ]);
@@ -151,6 +253,12 @@ async function deliverCampaignRecipient({
   }
   if (campaign.error || !campaign.data) {
     return { code: "campaign_not_found", ok: false, outcome: "retry" };
+  }
+  if (campaign.data.status === "paused") {
+    return { code: "campaign_paused", ok: false, outcome: "retry" };
+  }
+  if (!["queued", "sending"].includes(campaign.data.status)) {
+    return { code: "campaign_not_sendable", ok: false, outcome: "skipped" };
   }
 
   const campaignRow = campaign.data as CampaignRow;
@@ -172,10 +280,38 @@ async function deliverCampaignRecipient({
 async function deliverConsentConfirmation({
   client,
   row,
+  workerToken,
 }: {
   client: SupabaseClient;
   row: ClaimedConfirmation;
+  workerToken: string;
 }): Promise<DeliveryOutcome> {
+  const authorization = await client
+    .schema("consent")
+    .rpc("authorize_marketing_confirmation_delivery", {
+      target_outbox_id: row.id,
+      target_worker_token: workerToken,
+    });
+  const decision = authorization.data as {
+    code?: unknown;
+    ok?: unknown;
+    outcome?: unknown;
+  } | null;
+  if (authorization.error || decision?.ok !== true) {
+    const outcome = ["retry", "skipped", "suppressed", "unsubscribed"].includes(
+      String(decision?.outcome),
+    )
+      ? (decision?.outcome as DeliveryOutcome["outcome"])
+      : "retry";
+    return {
+      code:
+        typeof decision?.code === "string"
+          ? decision.code
+          : "confirmation_authorization_failed",
+      ok: false,
+      outcome,
+    };
+  }
   const audience = await readEligibleRecipient(client, row.account_id);
   if (!audience.eligible) {
     return { code: audience.code, ok: false, outcome: audience.outcome };
@@ -279,7 +415,9 @@ async function completeCampaignRecipient({
       code: completion.error.code ?? "database_error",
       outboxId: row.id,
     });
+    return false;
   }
+  return true;
 }
 
 async function completeConsentConfirmation({
@@ -307,7 +445,9 @@ async function completeConsentConfirmation({
       code: completion.error.code ?? "database_error",
       outboxId: row.id,
     });
+    return false;
   }
+  return true;
 }
 
 export async function sendMarketingTestEmail({
@@ -318,22 +458,26 @@ export async function sendMarketingTestEmail({
   recipient: string;
 }) {
   const config = readMarketingEmailConfig();
-  if (!config.apiKey || !config.from.includes("@nuang.app")) {
+  if (!config.apiKey || !config.fromReady || !config.encryptionReady) {
     return { code: "mail_not_configured", ok: false as const };
   }
-  const previewToken = createMarketingUnsubscribeToken(
-    "00000000-0000-4000-8000-000000000000",
-  );
-  const mail = renderMarketingEmail({
-    content,
-    oneClickUnsubscribeUrl: `${config.origin}/api/marketing/unsubscribe?token=${encodeURIComponent(previewToken)}&preview=1`,
-    unsubscribeUrl: `${config.origin}/email/unsubscribe?token=${encodeURIComponent(previewToken)}&preview=1`,
-  });
-  return sendResendEmail({
-    idempotencyKey: `nuang-marketing-test-${randomUUID()}`,
-    mail,
-    to: recipient,
-  });
+  try {
+    const previewToken = createMarketingUnsubscribeToken(
+      "00000000-0000-4000-8000-000000000000",
+    );
+    const mail = renderMarketingEmail({
+      content,
+      oneClickUnsubscribeUrl: `${config.origin}/api/marketing/unsubscribe?token=${encodeURIComponent(previewToken)}&preview=1`,
+      unsubscribeUrl: `${config.origin}/email/unsubscribe?token=${encodeURIComponent(previewToken)}&preview=1`,
+    });
+    return sendResendEmail({
+      idempotencyKey: `nuang-marketing-test-${randomUUID()}`,
+      mail,
+      to: recipient,
+    });
+  } catch {
+    return { code: "marketing_test_render_failed", ok: false as const };
+  }
 }
 
 async function sendResendEmail({
@@ -364,6 +508,7 @@ async function sendResendEmail({
       "idempotency-key": idempotencyKey.slice(0, 240),
     },
     method: "POST",
+    signal: AbortSignal.timeout(10_000),
   }).catch(() => null);
   if (!response?.ok) {
     return {
@@ -398,4 +543,75 @@ function normalizeCampaignContent(row: CampaignRow): MarketingEmailContent {
     heading: row.heading,
     subject: row.subject,
   };
+}
+
+async function startWorkerRun({
+  client,
+  runId,
+  source,
+}: {
+  client: SupabaseClient;
+  runId: string;
+  source: "cron" | "manual";
+}) {
+  const result = await client
+    .schema("consent")
+    .from("marketing_worker_run")
+    .insert({ id: runId, source, status: "running" });
+  if (result.error && !isMissingOperationsTable(result.error.code)) {
+    console.error("Unable to start marketing worker health record", {
+      code: result.error.code,
+    });
+  }
+}
+
+async function finishWorkerRun({
+  claimed = 0,
+  client,
+  completionFailed = 0,
+  confirmations = 0,
+  errorCode = null,
+  failed = 0,
+  runId,
+  sent = 0,
+  startedAt,
+  status,
+}: {
+  claimed?: number;
+  client: SupabaseClient;
+  completionFailed?: number;
+  confirmations?: number;
+  errorCode?: string | null;
+  failed?: number;
+  runId: string;
+  sent?: number;
+  startedAt: number;
+  status: "degraded" | "failed" | "locked" | "succeeded";
+}) {
+  const finishedAt = new Date().toISOString();
+  const result = await client
+    .schema("consent")
+    .from("marketing_worker_run")
+    .update({
+      claimed_count: claimed,
+      completion_failed_count: completionFailed,
+      confirmation_count: confirmations,
+      error_code: errorCode,
+      failed_count: failed,
+      finished_at: finishedAt,
+      sent_count: sent,
+      status,
+      updated_at: finishedAt,
+    })
+    .eq("id", runId);
+  if (result.error && !isMissingOperationsTable(result.error.code)) {
+    console.error("Unable to complete marketing worker health record", {
+      code: result.error.code,
+      durationMs: Date.now() - startedAt,
+    });
+  }
+}
+
+function isMissingOperationsTable(code: string | undefined) {
+  return ["42P01", "PGRST204", "PGRST205"].includes(code ?? "");
 }

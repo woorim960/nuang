@@ -29,7 +29,7 @@ describe("advertising inquiry mail outbox", () => {
     );
     vi.stubEnv("AD_INQUIRY_FROM", "NUANG <business@example.com>");
     vi.stubEnv("RESEND_API_KEY", "re_test");
-    vi.stubEnv("NEXT_PUBLIC_APP_ORIGIN", "https://nuang.example");
+    vi.stubEnv("NEXT_PUBLIC_APP_ORIGIN", "https://nuang.app");
   });
 
   it("delivers the two atomic intents with privacy-minimized escaped templates", async () => {
@@ -88,7 +88,13 @@ describe("advertising inquiry mail outbox", () => {
 
     await expect(
       drainAdvertisingMailOutbox({ inquiryId, limit: 2 }),
-    ).resolves.toEqual({ claimed: 2, failed: 0, ok: true, sent: 2 });
+    ).resolves.toEqual({
+      claimed: 2,
+      completionFailed: 0,
+      failed: 0,
+      ok: true,
+      sent: 2,
+    });
     expect(fetchMock).toHaveBeenCalledTimes(2);
     const operatorRequest = fetchMock.mock.calls[0]?.[1] as RequestInit;
     const operatorMail = JSON.parse(String(operatorRequest.body)) as {
@@ -109,7 +115,7 @@ describe("advertising inquiry mail outbox", () => {
     );
   });
 
-  it("records a retryable failure instead of throwing when mail is unconfigured", async () => {
+  it("does not claim an outbox row when mail delivery is unconfigured", async () => {
     vi.stubEnv("RESEND_API_KEY", "");
     vi.stubEnv("AD_INQUIRY_FROM", "");
     vi.stubEnv("ADMIN_NOTIFICATION_FROM", "");
@@ -140,18 +146,13 @@ describe("advertising inquiry mail outbox", () => {
     );
 
     await expect(drainAdvertisingMailOutbox()).resolves.toEqual({
-      claimed: 1,
-      failed: 1,
-      ok: true,
+      claimed: 0,
+      failed: 0,
+      locked: true,
+      ok: false,
       sent: 0,
     });
-    expect(mocks.client.rpc).toHaveBeenCalledWith(
-      "complete_advertising_mail_outbox",
-      expect.objectContaining({
-        target_error_code: "mail_not_configured",
-        target_succeeded: false,
-      }),
-    );
+    expect(mocks.client.rpc).not.toHaveBeenCalled();
   });
 
   it("escapes every HTML meta-character and deduplicates recipients", () => {

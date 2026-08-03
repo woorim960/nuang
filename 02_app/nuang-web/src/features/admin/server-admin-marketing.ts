@@ -6,36 +6,28 @@ import type {
   AdminMarketingCampaign,
   AdminMarketingCampaignStatus,
   AdminMarketingDashboard,
+  AdminMarketingOperationsSnapshot,
 } from "./admin-marketing-contract";
 
-type RawCampaign = Record<string, unknown>;
-type RawRecipient = Record<string, unknown>;
+type Row = Record<string, unknown>;
 
 export async function readAdminMarketingDashboard(
   client: SupabaseClient,
 ): Promise<AdminMarketingDashboard> {
   const readiness = marketingEmailReadiness();
-  const campaignsResult = await client
-    .schema("consent")
-    .from("marketing_campaign")
-    .select(
-      "id,internal_name,subject,eyebrow,heading,body,cta_label,cta_url,status,scheduled_at,audience_count,approved_at,created_at,updated_at",
-    )
-    .order("created_at", { ascending: false })
-    .limit(50);
-  if (campaignsResult.error) return unavailableDashboard(readiness);
-
-  const campaignIds = (campaignsResult.data ?? [])
-    .map((row) => (typeof row.id === "string" ? row.id : null))
-    .filter((value): value is string => Boolean(value));
-  const [recipientsResult, audienceResult, eventsResult] = await Promise.all([
-    campaignIds.length
-      ? client
-          .schema("consent")
-          .from("marketing_campaign_recipient")
-          .select("campaign_id,status")
-          .in("campaign_id", campaignIds)
-      : Promise.resolve({ data: [], error: null }),
+  const [
+    campaignsResult,
+    audienceResult,
+    eventsResult,
+    operationsResult,
+    auditResult,
+  ] = await Promise.all([
+    client
+      .schema("consent")
+      .from("marketing_campaign_operations_summary")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(100),
     client
       .schema("consent")
       .rpc(
@@ -46,39 +38,61 @@ export async function readAdminMarketingDashboard(
     client
       .schema("consent")
       .from("marketing_email_event")
-      .select("event_type,occurred_at")
+      .select("campaign_id,event_type,occurred_at")
       .order("occurred_at", { ascending: false })
-      .limit(20),
+      .limit(40),
+    client.schema("consent").rpc("admin_marketing_operations_snapshot"),
+    client
+      .schema("audit")
+      .from("admin_audit_log")
+      .select("action,target_id,created_at")
+      .like("action", "marketing_%")
+      .order("created_at", { ascending: false })
+      .limit(30),
   ]);
-  const countsByCampaign = countRecipientsByCampaign(
-    (recipientsResult.data ?? []) as RawRecipient[],
-  );
-  const campaigns = (campaignsResult.data ?? [])
-    .map((row) =>
-      normalizeCampaign(
-        row as RawCampaign,
-        countsByCampaign.get(String(row.id)),
-      ),
-    )
-    .filter((row): row is AdminMarketingCampaign => row !== null);
-  const totals = countAll(campaigns);
 
+  if (campaignsResult.error || operationsResult.error) {
+    return unavailableDashboard(readiness);
+  }
+
+  const campaigns = ((campaignsResult.data ?? []) as Row[])
+    .map(normalizeCampaign)
+    .filter((row): row is AdminMarketingCampaign => row !== null);
+
+  const operations = normalizeOperationsSnapshot(operationsResult.data);
   return {
     audienceAvailable: !audienceResult.error,
     audienceCount: audienceResult.count ?? 0,
     campaigns,
     databaseAvailable: true,
     generatedAt: new Date().toISOString(),
+    operations,
     readiness,
     recentEvents: eventsResult.error
       ? []
-      : (eventsResult.data ?? []).flatMap((row) =>
-          typeof row.event_type === "string" &&
-          typeof row.occurred_at === "string"
-            ? [{ eventType: row.event_type, occurredAt: row.occurred_at }]
-            : [],
-        ),
-    totals,
+      : ((eventsResult.data ?? []) as Row[]).flatMap((row) => {
+          const eventType = text(row.event_type);
+          const occurredAt = text(row.occurred_at);
+          return eventType && occurredAt
+            ? [
+                {
+                  campaignId: text(row.campaign_id),
+                  eventType,
+                  occurredAt,
+                },
+              ]
+            : [];
+        }),
+    recentOperations: auditResult.error
+      ? []
+      : ((auditResult.data ?? []) as Row[]).flatMap((row) => {
+          const action = text(row.action);
+          const createdAt = text(row.created_at);
+          return action && createdAt
+            ? [{ action, createdAt, targetId: text(row.target_id) }]
+            : [];
+        }),
+    totals: operations.deliveryTotals,
   };
 }
 
@@ -91,64 +105,142 @@ function unavailableDashboard(
     campaigns: [],
     databaseAvailable: false,
     generatedAt: new Date().toISOString(),
+    operations: emptyOperations(),
     readiness,
     recentEvents: [],
+    recentOperations: [],
     totals: emptyTotals(),
   };
 }
 
-function countRecipientsByCampaign(rows: RawRecipient[]) {
-  const result = new Map<string, Record<string, number>>();
-  for (const row of rows) {
-    if (typeof row.campaign_id !== "string" || typeof row.status !== "string")
-      continue;
-    const counts = result.get(row.campaign_id) ?? {};
-    counts[row.status] = (counts[row.status] ?? 0) + 1;
-    result.set(row.campaign_id, counts);
-  }
-  return result;
-}
-
-function normalizeCampaign(
-  row: RawCampaign,
-  counts: Record<string, number> = {},
-): AdminMarketingCampaign | null {
-  const status = row.status;
+function normalizeCampaign(row: Row): AdminMarketingCampaign | null {
+  const status = text(row.status);
+  const campaignId = text(row.id);
+  const internalName = text(row.internal_name);
+  const subject = text(row.subject);
+  const eyebrow = text(row.eyebrow);
+  const heading = text(row.heading);
+  const body = text(row.body);
+  const createdAt = text(row.created_at);
+  const updatedAt = text(row.updated_at);
   if (
-    typeof row.id !== "string" ||
-    typeof row.internal_name !== "string" ||
-    typeof row.subject !== "string" ||
-    typeof row.eyebrow !== "string" ||
-    typeof row.heading !== "string" ||
-    typeof row.body !== "string" ||
+    !campaignId ||
+    !internalName ||
+    !subject ||
+    !eyebrow ||
+    !heading ||
+    !body ||
+    !status ||
     !isCampaignStatus(status) ||
-    typeof row.created_at !== "string" ||
-    typeof row.updated_at !== "string"
+    !createdAt ||
+    !updatedAt
   ) {
     return null;
   }
   return {
-    approvedAt: typeof row.approved_at === "string" ? row.approved_at : null,
-    audienceCount:
-      typeof row.audience_count === "number" ? row.audience_count : 0,
-    body: row.body,
-    campaignId: row.id,
-    counts,
-    createdAt: row.created_at,
-    ctaLabel: typeof row.cta_label === "string" ? row.cta_label : null,
-    ctaUrl: typeof row.cta_url === "string" ? row.cta_url : null,
-    eyebrow: row.eyebrow,
-    heading: row.heading,
-    internalName: row.internal_name,
-    scheduledAt: typeof row.scheduled_at === "string" ? row.scheduled_at : null,
+    approvedAt: text(row.approved_at),
+    audienceCount: number(row.audience_count),
+    body,
+    campaignId,
+    counts: {
+      bounced: number(row.bounced_count),
+      complained: number(row.complained_count),
+      delivered: number(row.delivered_count),
+      failed: number(row.failed_count),
+      queued: number(row.queued_count),
+      retry: number(row.retry_count),
+      sending: number(row.sending_count),
+      sent: number(row.sent_count),
+      skipped: number(row.skipped_count),
+      suppressed: number(row.suppressed_count),
+      unsubscribed: number(row.unsubscribed_count),
+    },
+    createdAt,
+    ctaLabel: text(row.cta_label),
+    ctaUrl: text(row.cta_url),
+    currentTestStatus: text(row.current_test_status),
+    eyebrow,
+    heading,
+    internalName,
+    lastTestedAt: text(row.last_tested_at),
+    oldestPendingAt: text(row.oldest_pending_at),
+    scheduledAt: text(row.scheduled_at),
     status,
-    subject: row.subject,
-    updatedAt: row.updated_at,
+    subject,
+    updatedAt,
+  };
+}
+
+function normalizeOperationsSnapshot(
+  value: unknown,
+): AdminMarketingOperationsSnapshot {
+  const root = object(value);
+  const channel = object(root.channelControl);
+  const queue = object(root.queue);
+  const deliveryTotals = object(root.deliveryTotals);
+  const confirmations = object(root.confirmations);
+  const suppressions = object(root.suppressions);
+  const webhook = object(root.webhook);
+  const worker = object(root.worker);
+  return {
+    channelControl: {
+      paused: channel.paused === true,
+      reason: text(channel.reason),
+      updatedAt: text(channel.updatedAt),
+    },
+    confirmations: {
+      dueWithin30Days: number(confirmations.dueWithin30Days),
+      failed: number(confirmations.failed),
+      queued: number(confirmations.queued),
+      retry: number(confirmations.retry),
+      sent: number(confirmations.sent),
+    },
+    deliveryTotals: {
+      bounced: number(deliveryTotals.bounced),
+      complained: number(deliveryTotals.complained),
+      delayed: number(deliveryTotals.delayed),
+      delivered: number(deliveryTotals.delivered),
+      failed: number(deliveryTotals.failed),
+      queued: number(deliveryTotals.queued),
+      retry: number(deliveryTotals.retry),
+      sending: number(deliveryTotals.sending),
+      sent: number(deliveryTotals.sent),
+      skipped: number(deliveryTotals.skipped),
+      suppressed: number(deliveryTotals.suppressed),
+      unsubscribed: number(deliveryTotals.unsubscribed),
+    },
+    queue: {
+      failed: number(queue.failed),
+      oldestPendingAt: text(queue.oldestPendingAt),
+      queued: number(queue.queued),
+      retry: number(queue.retry),
+      sending: number(queue.sending),
+      stale: number(queue.stale),
+    },
+    suppressions: {
+      active: number(suppressions.active),
+      memberUnsubscribed: number(suppressions.memberUnsubscribed),
+      providerRisk: number(suppressions.providerRisk),
+    },
+    webhook: {
+      lastReceivedAt: text(webhook.lastReceivedAt),
+      unmatched24h: number(webhook.unmatched24h),
+    },
+    worker: {
+      claimed: number(worker.claimed),
+      completionFailed: number(worker.completionFailed),
+      errorCode: text(worker.errorCode),
+      failed: number(worker.failed),
+      finishedAt: text(worker.finishedAt),
+      sent: number(worker.sent),
+      startedAt: text(worker.startedAt),
+      status: text(worker.status),
+    },
   };
 }
 
 function isCampaignStatus(
-  value: unknown,
+  value: string,
 ): value is AdminMarketingCampaignStatus {
   return [
     "approved",
@@ -159,27 +251,71 @@ function isCampaignStatus(
     "paused",
     "queued",
     "sending",
-  ].includes(String(value));
-}
-
-function countAll(campaigns: AdminMarketingCampaign[]) {
-  const totals = emptyTotals();
-  for (const campaign of campaigns) {
-    for (const key of Object.keys(totals) as Array<keyof typeof totals>) {
-      totals[key] += campaign.counts[key] ?? 0;
-    }
-  }
-  return totals;
+  ].includes(value);
 }
 
 function emptyTotals() {
   return {
     bounced: 0,
     complained: 0,
+    delayed: 0,
     delivered: 0,
     failed: 0,
     queued: 0,
+    retry: 0,
+    sending: 0,
     sent: 0,
+    skipped: 0,
+    suppressed: 0,
     unsubscribed: 0,
   };
+}
+
+function emptyOperations(): AdminMarketingOperationsSnapshot {
+  return {
+    channelControl: { paused: true, reason: null, updatedAt: null },
+    confirmations: {
+      dueWithin30Days: 0,
+      failed: 0,
+      queued: 0,
+      retry: 0,
+      sent: 0,
+    },
+    deliveryTotals: emptyTotals(),
+    queue: {
+      failed: 0,
+      oldestPendingAt: null,
+      queued: 0,
+      retry: 0,
+      sending: 0,
+      stale: 0,
+    },
+    suppressions: { active: 0, memberUnsubscribed: 0, providerRisk: 0 },
+    webhook: { lastReceivedAt: null, unmatched24h: 0 },
+    worker: {
+      claimed: 0,
+      completionFailed: 0,
+      errorCode: null,
+      failed: 0,
+      finishedAt: null,
+      sent: 0,
+      startedAt: null,
+      status: null,
+    },
+  };
+}
+
+function object(value: unknown): Record<string, unknown> {
+  return value && typeof value === "object" && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {};
+}
+
+function text(value: unknown) {
+  return typeof value === "string" && value.trim() ? value.trim() : null;
+}
+
+function number(value: unknown) {
+  const parsed = typeof value === "number" ? value : Number(value);
+  return Number.isFinite(parsed) ? parsed : 0;
 }

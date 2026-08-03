@@ -13,14 +13,14 @@ SMS와 앱 푸시는 Release 1 범위에서 발송·대상 계산을 모두 잠�
 ## 2. 확정 발신 정보
 
 - 표시 명칭: `뉴앙`
-- 발신 주소: `뉴앙 <news@nuang.app>`
+- 발신 주소: `뉴앙 <news@notice.nuang.app>`
 - 답장 주소: `woorimprog@gmail.com`
 - 고객 문의: `woorimprog@gmail.com`
 - 연락처: `010-2515-0939`
 - 사업자 주소: Release 1 국내 이메일에서는 노출하지 않는다.
 - 지원 언어·법역: 한국어·대한민국
 
-`news@nuang.app`은 받은편지함을 따로 만들지 않아도 인증된 `nuang.app` 도메인의 Resend 발신 주소로 사용할 수 있다. 실제 회신은 Reply-To 주소로 전달한다.
+`news@notice.nuang.app`은 받은편지함을 따로 만들지 않아도 인증된 `notice.nuang.app` 도메인의 Resend 발신 주소로 사용할 수 있다. 실제 회신은 Reply-To 주소로 전달한다.
 
 ## 3. 고객 동의 문구
 

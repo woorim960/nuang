@@ -39,15 +39,37 @@ type DeliveryResult = {
 export async function drainAdvertisingMailOutbox({
   inquiryId = null,
   limit = 10,
+  source = inquiryId ? "submission" : "cron",
 }: {
   inquiryId?: string | null;
   limit?: number;
+  source?: "cron" | "manual" | "submission";
 } = {}) {
   const client = createSupabaseServiceClient();
   if (!client) {
     return { claimed: 0, failed: 0, ok: false as const, sent: 0 };
   }
+  const readiness = readAdvertisingMailReadiness();
+  if (!readiness.ready) {
+    console.error("Advertising mail outbox is blocked by configuration", {
+      missing: readiness.missing,
+    });
+    return {
+      claimed: 0,
+      failed: 0,
+      locked: true as const,
+      ok: false as const,
+      sent: 0,
+    };
+  }
 
+  const runId = randomUUID();
+  await recordAdvertisingWorkerRun({
+    client,
+    runId,
+    source,
+    status: "running",
+  });
   const workerToken = randomUUID();
   const claim = await client.rpc("claim_advertising_mail_outbox", {
     target_batch_size: Math.min(Math.max(limit, 1), 50),
@@ -59,6 +81,13 @@ export async function drainAdvertisingMailOutbox({
     console.error("Unable to claim advertising mail outbox", {
       code: claim.error.code ?? "database_error",
     });
+    await recordAdvertisingWorkerRun({
+      client,
+      errorCode: claim.error.code ?? "database_error",
+      runId,
+      source,
+      status: "failed",
+    });
     return { claimed: 0, failed: 0, ok: false as const, sent: 0 };
   }
 
@@ -67,6 +96,7 @@ export async function drainAdvertisingMailOutbox({
     : [];
   let sent = 0;
   let failed = 0;
+  let completionFailed = 0;
 
   for (const row of rows) {
     const delivery = await deliverClaimedMessage(row);
@@ -84,17 +114,73 @@ export async function drainAdvertisingMailOutbox({
         code: completion.error.code ?? "database_error",
         outboxId: row.id,
       });
+      completionFailed += 1;
     }
     if (delivery.ok) sent += 1;
     else failed += 1;
   }
 
+  await recordAdvertisingWorkerRun({
+    claimed: rows.length,
+    client,
+    completionFailed,
+    errorCode: completionFailed > 0 ? "completion_failed" : null,
+    failed,
+    runId,
+    sent,
+    source,
+    status: completionFailed > 0 ? "degraded" : "succeeded",
+  });
+
   return {
     claimed: rows.length,
+    completionFailed,
     failed,
-    ok: true as const,
+    ok: completionFailed === 0,
     sent,
   };
+}
+
+async function recordAdvertisingWorkerRun({
+  claimed = 0,
+  client,
+  completionFailed = 0,
+  errorCode = null,
+  failed = 0,
+  runId,
+  sent = 0,
+  source,
+  status,
+}: {
+  claimed?: number;
+  client: NonNullable<ReturnType<typeof createSupabaseServiceClient>>;
+  completionFailed?: number;
+  errorCode?: string | null;
+  failed?: number;
+  runId: string;
+  sent?: number;
+  source: "cron" | "manual" | "submission";
+  status: "degraded" | "failed" | "running" | "succeeded";
+}) {
+  const result = await client.rpc("record_advertising_mail_worker_run", {
+    target_claimed_count: claimed,
+    target_completion_failed_count: completionFailed,
+    target_error_code: errorCode,
+    target_failed_count: failed,
+    target_run_id: runId,
+    target_sent_count: sent,
+    target_source: source,
+    target_status: status,
+  });
+  if (result.error && !isMissingOperationsFunction(result.error.code)) {
+    console.error("Unable to record advertising mail worker health", {
+      code: result.error.code ?? "database_error",
+    });
+  }
+}
+
+function isMissingOperationsFunction(code: string | undefined) {
+  return ["42883", "PGRST202", "PGRST204"].includes(code ?? "");
 }
 
 async function deliverClaimedMessage(
@@ -136,6 +222,7 @@ async function deliverClaimedMessage(
       "idempotency-key": row.event_key.slice(0, 240),
     },
     method: "POST",
+    signal: AbortSignal.timeout(10_000),
   }).catch(() => null);
 
   if (!response?.ok) {
@@ -261,6 +348,29 @@ export function readAdvertisingNotificationRecipients() {
   ];
 }
 
+export function readAdvertisingMailReadiness() {
+  const apiKey = Boolean(process.env.RESEND_API_KEY?.trim());
+  const from =
+    process.env.AD_INQUIRY_FROM?.trim() ||
+    process.env.ADMIN_NOTIFICATION_FROM?.trim() ||
+    process.env.EMAIL_VERIFICATION_FROM?.trim() ||
+    "";
+  const fromReady = isMailbox(from);
+  const recipientsReady = readAdvertisingNotificationRecipients().length > 0;
+  const encryptionReady = isEncryptionKey(
+    process.env.FIELD_ENCRYPTION_KEY?.trim(),
+  );
+  const originReady = isAllowedOrigin(resolveAppOrigin());
+  const missing = [
+    !apiKey ? "RESEND_API_KEY" : null,
+    !fromReady ? "AD_INQUIRY_FROM" : null,
+    !recipientsReady ? "AD_INQUIRY_NOTIFICATION_EMAILS" : null,
+    !encryptionReady ? "FIELD_ENCRYPTION_KEY" : null,
+    !originReady ? "APP_ORIGIN" : null,
+  ].filter((value): value is string => Boolean(value));
+  return { missing, ready: missing.length === 0 };
+}
+
 export function escapeAdvertisingEmailHtml(value: string) {
   return value
     .replaceAll("&", "&amp;")
@@ -350,6 +460,36 @@ function sanitizeEmailSubject(value: string) {
 
 function isEmailAddress(value: string) {
   return value.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value);
+}
+
+function isMailbox(value: string) {
+  const match = value.match(/<([^<>]+)>$/);
+  return isEmailAddress((match?.[1] ?? value).trim());
+}
+
+function isEncryptionKey(value: string | undefined) {
+  if (!value) return false;
+  try {
+    return Buffer.from(value, "base64").length === 32;
+  } catch {
+    return false;
+  }
+}
+
+function isAllowedOrigin(value: string) {
+  try {
+    const url = new URL(value);
+    return (
+      (url.protocol === "https:" &&
+        (url.hostname === "nuang.app" ||
+          url.hostname.endsWith(".nuang.app"))) ||
+      (process.env.NODE_ENV !== "production" &&
+        url.protocol === "http:" &&
+        url.hostname === "localhost")
+    );
+  } catch {
+    return false;
+  }
 }
 
 function formatKoreanDateTime(value: string) {
