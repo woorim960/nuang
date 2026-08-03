@@ -31,35 +31,46 @@ export async function readAdminSystem(client: SupabaseClient) {
     envCheck("admin", "관리자 계정", "ADMIN_BOOTSTRAP_EMAILS"),
     envCheck("email-api", "인증 이메일 발송", "RESEND_API_KEY"),
     envCheck(
-      "email-from",
-      "인증 이메일 발신 주소",
+      "marketing-email-gate",
+      "마케팅 이메일 발송 잠금",
+      "MARKETING_EMAIL_SEND_ENABLED",
+    ),
+    envCheck(
+      "marketing-email-from",
+      "마케팅 이메일 발신자",
+      "MARKETING_EMAIL_FROM",
+    ),
+    envCheck(
+      "marketing-email-reply",
+      "마케팅 이메일 답장 주소",
+      "MARKETING_EMAIL_REPLY_TO",
+    ),
+    envCheck("email-from", "인증 이메일 발신 주소", "EMAIL_VERIFICATION_FROM"),
+    envAnyCheck("admin-notification-recipients", "운영 검토 알림 수신자", [
+      "ADMIN_REVIEW_NOTIFICATION_EMAILS",
+      "ADMIN_BOOTSTRAP_EMAILS",
+    ]),
+    envAnyCheck("admin-notification-from", "운영 검토 알림 발신 주소", [
+      "ADMIN_NOTIFICATION_FROM",
       "EMAIL_VERIFICATION_FROM",
-    ),
-    envAnyCheck(
-      "admin-notification-recipients",
-      "운영 검토 알림 수신자",
-      ["ADMIN_REVIEW_NOTIFICATION_EMAILS", "ADMIN_BOOTSTRAP_EMAILS"],
-    ),
-    envAnyCheck(
-      "admin-notification-from",
-      "운영 검토 알림 발신 주소",
-      ["ADMIN_NOTIFICATION_FROM", "EMAIL_VERIFICATION_FROM"],
-    ),
+    ]),
     envCheck("legal-name", "서비스 운영자 이름", "LEGAL_OPERATOR_NAME"),
     envCheck(
       "privacy-contact",
       "개인정보 문의 이메일",
       "PRIVACY_CONTACT_EMAIL",
     ),
-    envCheck(
-      "data-region",
-      "개인정보 저장 지역",
-      "SUPABASE_DATA_REGION",
-    ),
+    envCheck("data-region", "개인정보 저장 지역", "SUPABASE_DATA_REGION"),
   ];
 
   const database = await Promise.all([
-    dbCheck(client, "identity", "account", "회원 계정", "회원가입과 로그인이 중단됩니다."),
+    dbCheck(
+      client,
+      "identity",
+      "account",
+      "회원 계정",
+      "회원가입과 로그인이 중단됩니다.",
+    ),
     dbCheck(
       client,
       "identity",
@@ -132,6 +143,20 @@ export async function readAdminSystem(client: SupabaseClient) {
       "admin_audit_log",
       "운영 기록",
       "관리자 조치 이력을 남길 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "consent",
+      "marketing_campaign",
+      "이메일 캠페인",
+      "마케팅 이메일 캠페인을 운영할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "consent",
+      "marketing_campaign_recipient",
+      "이메일 발송 대기열",
+      "마케팅 이메일 대상과 발송 상태를 관리할 수 없습니다.",
     ),
     dbCheck(
       client,

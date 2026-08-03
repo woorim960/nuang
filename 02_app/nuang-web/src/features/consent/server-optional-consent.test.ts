@@ -71,6 +71,28 @@ describe("optional consent server boundary", () => {
     });
   });
 
+  it("does not present an older marketing consent as current permission", async () => {
+    const client = readClient({
+      analytics_consent_version: optionalConsentVersions.analytics,
+      analytics_opt_in: false,
+      marketing_consent_version: "NUANG-MARKETING-PREFERENCE-2026-07-27",
+      marketing_opt_in: true,
+    });
+    const response = await readOptionalConsentPreferences({
+      accountId: "account-1",
+      client: client as never,
+    });
+    expect(response).toMatchObject({
+      data: {
+        marketing: {
+          enabled: false,
+          version: optionalConsentVersions.marketing,
+        },
+      },
+      ok: true,
+    });
+  });
+
   it("fails closed when active-account or analytics state cannot be read", async () => {
     const client = permissionClient({
       account: { data: null, error: { message: "unavailable" } },

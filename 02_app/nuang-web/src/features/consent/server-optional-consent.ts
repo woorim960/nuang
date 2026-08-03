@@ -144,20 +144,22 @@ export async function recordProductScreenView({
 }
 
 function normalizePreferences(row: PreferenceRow): OptionalConsentPreferences {
+  const analyticsVersion = stringOrNull(row.analytics_consent_version);
+  const marketingVersion = stringOrNull(row.marketing_consent_version);
   return {
     analytics: {
-      enabled: row.analytics_opt_in === true,
+      enabled:
+        row.analytics_opt_in === true &&
+        analyticsVersion === optionalConsentVersions.analytics,
       updatedAt: stringOrNull(row.analytics_consent_updated_at),
-      version:
-        stringOrNull(row.analytics_consent_version) ??
-        optionalConsentVersions.analytics,
+      version: optionalConsentVersions.analytics,
     },
     marketing: {
-      enabled: row.marketing_opt_in === true,
+      enabled:
+        row.marketing_opt_in === true &&
+        marketingVersion === optionalConsentVersions.marketing,
       updatedAt: stringOrNull(row.marketing_consent_updated_at),
-      version:
-        stringOrNull(row.marketing_consent_version) ??
-        optionalConsentVersions.marketing,
+      version: optionalConsentVersions.marketing,
     },
   };
 }

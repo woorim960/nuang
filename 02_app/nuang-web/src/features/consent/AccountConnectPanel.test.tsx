@@ -38,8 +38,7 @@ describe("AccountConnectPanel", () => {
       value: {
         getItem: (key: string) => consentStorage.get(key) ?? null,
         removeItem: (key: string) => consentStorage.delete(key),
-        setItem: (key: string, value: string) =>
-          consentStorage.set(key, value),
+        setItem: (key: string, value: string) => consentStorage.set(key, value),
       },
     });
     window.history.replaceState({}, "", "/login");
@@ -154,7 +153,7 @@ describe("AccountConnectPanel", () => {
       }),
     ).not.toBeChecked();
     expect(
-      screen.getByRole("checkbox", { name: /새 검사·이벤트 소식 받기/ }),
+      screen.getByRole("checkbox", { name: /광고성 이메일 수신 동의/ }),
     ).not.toBeChecked();
     expect(window.localStorage.getItem("nuang-consent-draft")).not.toContain(
       "analytics",

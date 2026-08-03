@@ -132,16 +132,18 @@ export function MarketingPreferenceEditor() {
           />
           <PreferenceRow
             checked={preferences.marketing.enabled}
-            description="새 검사, 함께하기와 이벤트 소식을 받아볼 수 있어요. 외부 알림은 인증한 연락처가 있을 때만 보내요."
+            description="뉴앙의 새 검사, 함께하기, 이벤트, 혜택과 제휴 소식을 이메일로 받아봐요. 동의하지 않아도 모든 서비스를 이용할 수 있고 언제든 철회할 수 있어요."
             disabled={saving !== null}
             icon={BellRing}
-            label="새 검사·이벤트 소식"
+            label="광고성 이메일 수신 동의 (선택)"
             onChange={(enabled) => void updatePreference("marketing", enabled)}
             tone="marketing"
           />
           <div className={styles.examples}>
             <MailCheck aria-hidden="true" size={16} />
-            <span>선택하지 않아도 검사와 커뮤니티는 똑같이 이용할 수 있어요.</span>
+            <span>
+              선택하지 않아도 검사와 커뮤니티는 똑같이 이용할 수 있어요.
+            </span>
           </div>
         </div>
       ) : null}
@@ -207,6 +209,6 @@ function successMessage(
       : "앞으로 선택형 이용 데이터를 저장하지 않아요.";
   }
   return enabled
-    ? "새 검사와 이벤트 소식을 받도록 설정했어요."
+    ? "뉴앙의 새 소식을 이메일로 받도록 설정했어요."
     : "광고성 소식을 받지 않도록 설정했어요.";
 }

@@ -9,6 +9,7 @@ import {
   MessagesSquare,
   Settings2,
   ShieldCheck,
+  Send,
   Users,
   type LucideIcon,
 } from "lucide-react";
@@ -77,6 +78,12 @@ export const adminNavigation: readonly AdminNavigationGroup[] = [
           "성과",
         ],
         label: "광고·제휴",
+      },
+      {
+        href: "/admin/marketing",
+        icon: Send,
+        keywords: ["이메일", "마케팅", "캠페인", "수신거부", "발송"],
+        label: "이메일 캠페인",
       },
     ],
   },

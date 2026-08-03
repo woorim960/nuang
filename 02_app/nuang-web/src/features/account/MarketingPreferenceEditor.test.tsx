@@ -15,7 +15,7 @@ const preferences = {
   marketing: {
     enabled: false,
     updatedAt: "2026-08-03T00:00:00.000Z",
-    version: "NUANG-MARKETING-PREFERENCE-2026-07-27",
+    version: "NUANG-MARKETING-EMAIL-KO-2026-08-03",
   },
 };
 
@@ -43,18 +43,18 @@ describe("MarketingPreferenceEditor", () => {
       }),
     ).not.toBeChecked();
     const marketing = screen.getByRole("checkbox", {
-      name: /새 검사·이벤트 소식/,
+      name: /광고성 이메일 수신 동의/,
     });
     fireEvent.click(marketing);
 
     await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(2));
     expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toEqual({
-      consentVersion: "NUANG-MARKETING-PREFERENCE-2026-07-27",
+      consentVersion: "NUANG-MARKETING-EMAIL-KO-2026-08-03",
       enabled: true,
       preference: "marketing",
     });
     expect(
-      await screen.findByText(/새 검사와 이벤트 소식을 받도록 설정했어요/),
+      await screen.findByText(/뉴앙의 새 소식을 이메일로 받도록 설정했어요/),
     ).toBeInTheDocument();
   });
 
@@ -104,7 +104,7 @@ describe("MarketingPreferenceEditor", () => {
 
     render(<MarketingPreferenceEditor />);
     const preference = await screen.findByRole("checkbox", {
-      name: /새 검사·이벤트 소식/,
+      name: /광고성 이메일 수신 동의/,
     });
     fireEvent.click(preference);
 

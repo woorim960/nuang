@@ -260,8 +260,8 @@ export function AccountConnectPanel({
           />
           <ConsentCheck
             checked={marketing}
-            description="새 검사와 함께하기, 이벤트 소식을 받을 수 있어요. 설정에서 언제든 바꿀 수 있어요."
-            label="새 검사·이벤트 소식 받기"
+            description="뉴앙의 새 검사, 함께하기, 이벤트, 혜택과 제휴 소식을 이메일로 받아봐요. 동의하지 않아도 모든 서비스를 이용할 수 있고, 설정이나 이메일의 수신거부에서 언제든 철회할 수 있어요."
+            label="광고성 이메일 수신 동의"
             onChange={setMarketing}
             optional
           />
@@ -550,9 +550,11 @@ function clearOptionalConsentFromSavedDraft(draft: ConsentDraft | null) {
   saveRequiredConsentDraft(draft);
 }
 
-function saveRequiredConsentDraft(
-  draft: { is14OrOlder: boolean; privacy: boolean; terms: boolean },
-) {
+function saveRequiredConsentDraft(draft: {
+  is14OrOlder: boolean;
+  privacy: boolean;
+  terms: boolean;
+}) {
   if (
     typeof localStorage === "undefined" ||
     typeof localStorage.setItem !== "function"

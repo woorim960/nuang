@@ -5,7 +5,7 @@ export const privateContactConsentVersion =
 export const privateEmailRegistrationVersion =
   "NUANG-PRIVATE-CONTACT-EMAIL-2026-07-27";
 export const privateContactMarketingConsentVersion =
-  "NUANG-MARKETING-PREFERENCE-2026-07-27";
+  "NUANG-MARKETING-EMAIL-KO-2026-08-03";
 
 export const privateContactSources = [
   "account_security",

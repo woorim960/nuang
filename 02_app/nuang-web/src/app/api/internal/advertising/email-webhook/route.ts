@@ -45,18 +45,30 @@ export async function POST(request: Request) {
     parsed.data.created_at && !Number.isNaN(Date.parse(parsed.data.created_at))
       ? parsed.data.created_at
       : new Date().toISOString();
-  const result = await client.rpc("record_advertising_mail_webhook", {
+  const eventInput = {
     target_event_type: parsed.data.type,
     target_occurred_at: occurredAt,
     target_provider_message_id: parsed.data.data.email_id,
-  });
-  if (result.error) {
+  };
+  const [advertisingResult, marketingResult] = await Promise.all([
+    client.rpc("record_advertising_mail_webhook", eventInput),
+    client.schema("consent").rpc("record_marketing_email_webhook", eventInput),
+  ]);
+  if (
+    advertisingResult.error ||
+    (marketingResult.error &&
+      !isMissingMarketingRpc(marketingResult.error.code))
+  ) {
     return response(
       { message: "이벤트를 기록하지 못했습니다.", ok: false },
       503,
     );
   }
   return response({ ok: true }, 200);
+}
+
+function isMissingMarketingRpc(code: string | undefined) {
+  return ["42883", "PGRST202", "PGRST204"].includes(code ?? "");
 }
 
 function response(body: Record<string, unknown>, status: number) {

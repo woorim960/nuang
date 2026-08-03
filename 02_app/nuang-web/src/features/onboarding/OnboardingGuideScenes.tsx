@@ -1,3 +1,4 @@
+import { Sparkles } from "lucide-react";
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import styles from "@/features/onboarding/OnboardingGuideCarousel.module.css";
@@ -73,7 +74,11 @@ function CodePulse() {
 }
 
 function ConnectionSpark() {
-  return <span className={styles.connectionSpark}>✦</span>;
+  return (
+    <span className={styles.connectionSpark}>
+      <Sparkles aria-hidden="true" size={27} strokeWidth={1.9} />
+    </span>
+  );
 }
 
 function StartTrail() {

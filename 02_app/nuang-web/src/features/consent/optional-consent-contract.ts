@@ -2,7 +2,7 @@ import { z } from "zod";
 
 export const optionalConsentVersions = {
   analytics: "NUANG-ANALYTICS-PREFERENCE-2026-08-03",
-  marketing: "NUANG-MARKETING-PREFERENCE-2026-07-27",
+  marketing: "NUANG-MARKETING-EMAIL-KO-2026-08-03",
 } as const;
 
 export const optionalConsentPreferenceNames = [
