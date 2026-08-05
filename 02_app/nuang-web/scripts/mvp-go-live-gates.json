@@ -1,0 +1,147 @@
+{
+  "asOf": "2026-08-05",
+  "release": "NUANG Beta",
+  "track": "value_validation_beta",
+  "candidateResultPolicy": {
+    "customerClaim": "exploratory_beta_only",
+    "humanValidationState": "deferred_not_approved",
+    "publicIdentityPropagation": "blocked_until_human_validation"
+  },
+  "gates": [
+    {
+      "id": "ai_measurement_prereview",
+      "name": "AI 측정 사전검토와 베타 주장 범위",
+      "required": true,
+      "status": "passed",
+      "evidence": [
+        "AI 사전검토와 사람 검증을 분리한 NUANG-AI-MEASUREMENT-PREREVIEW-1.0 계약",
+        "후보 결과 화면의 검증 중·자기이해 참고 고지",
+        "4개 AI 사전검토 트랙 실행·16개 이슈 원장·SHA-256 재현 패킷",
+        "candidate·beta 코어 결과의 공개 프로필·공유·피드·비교 서버 차단과 회귀 테스트"
+      ],
+      "requiredEvidence": [
+        "네 AI 사전검토 트랙 실행 결과와 SHA-256 재현 패킷",
+        "AI가 안전하게 고칠 수 있는 blocker 조치와 공개 전파 차단 테스트",
+        "사람 전용 blocker를 검증 완료로 승격하지 않고 인계한 기록"
+      ]
+    },
+    {
+      "id": "minimum_legal_privacy",
+      "name": "AI 법률·개인정보 사전대조와 최소 운영정책",
+      "required": true,
+      "status": "passed",
+      "evidence": [
+        "실제 운영자·문의·도메인 정보 반영",
+        "만 14세 이상 회원 정책과 19세 콘텐츠 베타 비공개 정책",
+        "브라우저·API·DB·Storage·외부 처리·삭제 흐름 개인정보 인벤토리",
+        "정책 보유기간과 자동 물리 삭제를 맞춘 202608050009 마이그레이션",
+        "가입 화면·요청 스키마·OAuth callback·DB RPC의 만 14세 이상 자기확인 차단과 성인 전용 콘텐츠 public runtime 차단 회귀 테스트",
+        "필수·선택 동의 분리, 현재 분석 동의 확인, 동의 철회, 결과·계정 삭제와 동일 OAuth 재가입 회귀 테스트",
+        "외부 법률 검토는 별도 유예 게이트이며 이 통과를 법률 자문이나 변호사 승인으로 표시하지 않는 NUANG Beta 운영 기준"
+      ],
+      "requiredEvidence": [
+        "실제 데이터 흐름과 정책 문서 대조",
+        "필수·선택 동의 및 철회·삭제 회귀 테스트",
+        "만 14세 미만 회원 처리의 비용·확인수단 결정"
+      ]
+    },
+    {
+      "deferredAt": "2026-08-05",
+      "deferredReason": "뉴앙의 사용가치를 먼저 확인하는 제한 공개 베타로 운영",
+      "id": "human_measurement_validation",
+      "name": "독립 사람 연구와 실제 정량 타당화",
+      "required": false,
+      "revisitTrigger": "정식 검사를 표방하거나 후보 결과를 공개 프로필·공유·비교에 연결하기 전",
+      "status": "deferred",
+      "evidence": [
+        "AI 사전검토 issue ledger 16건과 HUMAN_HANDOFF",
+        "적응형 동점 문항 강제응답·실제 표본·DIF·EFA/CFA·omega·재검사 미완료 기록",
+        "운영 DB 콘텐츠가 fallback과 다르면 새 run으로 잠가야 한다는 재실행 조건"
+      ],
+      "requiredEvidence": []
+    },
+    {
+      "deferredAt": "2026-08-05",
+      "deferredReason": "AI 사전대조와 운영자 확인으로 제한 공개 베타를 먼저 운영",
+      "id": "external_legal_review",
+      "name": "외부 법률 전문가 검토",
+      "required": false,
+      "revisitTrigger": "유료화·광고 본운영·만 14세 미만 가입·정식 공개 확대 중 가장 이른 시점 전",
+      "status": "deferred",
+      "evidence": [],
+      "requiredEvidence": []
+    },
+    {
+      "id": "production_oauth",
+      "name": "Google·Kakao 운영 OAuth 왕복",
+      "required": true,
+      "status": "passed",
+      "evidence": [
+        "Google OAuth 외부 사용자 프로덕션 공개와 운영 도메인·약관·처리방침·callback 설정 완료",
+        "Google 신규 동의 → 운영 callback → 마이 화면, 로그아웃 → 보호화면 차단, 재로그인 → 원래 화면 복귀 E2E 통과",
+        "Supabase manual linking 및 Google·Kakao provider link feature flag 활성, 운영 DB 무결성 차단 항목 0건",
+        "Kakao 비즈 앱 로그인 ON, nuang.app 대표 도메인, Supabase callback, 닉네임·이메일·선택 프로필 사진 최소 동의항목 확인",
+        "사용하지 않는 Kakao talk_message 동의항목 비활성화, client secret 교체 및 Supabase 반영",
+        "Kakao 운영 로그인 → callback → 기존 프로필, 로그아웃 → 보호화면 차단, 재로그인 → 동일 handle·게시물 14개·검사 결과 26개 유지 E2E 통과",
+        "기존 Google·Kakao identity가 데이터가 있는 서로 다른 계정에 귀속된 양방향 연결은 안전하게 거부되고 기존 기록 유지 확인",
+        "사용자 승인 아래 기존 Google·Kakao 계정 완전 삭제 후 Google 새 계정에 Kakao 연결, 동일 account·Auth user 확인",
+        "Kakao 재로그인과 Google 재로그인 모두 동일한 새 handle·게시물 0개·검사 결과 0개 확인",
+        "상세 증빙: docs/NUANG_VENDOR_OAUTH_OPERATIONS_EVIDENCE_2026-08-05.md, docs/NUANG_ACCOUNT_DELETION_REREGISTRATION_EVIDENCE_2026-08-05.md"
+      ],
+      "requiredEvidence": [
+        "Google 로그인·연결·로그아웃",
+        "Kakao 로그인·연결·로그아웃",
+        "운영 callback과 시험 계정 정리"
+      ]
+    },
+    {
+      "id": "security_privacy",
+      "name": "보안·개인정보 P0와 운영 마이그레이션",
+      "required": true,
+      "status": "passed",
+      "evidence": [
+        "로컬 전체 Vitest 479파일·2213테스트 통과 기준선",
+        "계정 삭제·공개 범위·차단 fail-closed·원자적 쓰기 회귀 테스트 통과",
+        "운영자가 보안 migration 쿼리 적용 완료를 알림",
+        "운영 Supabase readiness 전체 PASS: 민감 테이블 anon 차단, 삭제·공개 비교·차단·검사 저장·밸런스게임 원자 RPC 확인"
+      ],
+      "requiredEvidence": [
+        "P0 회귀 테스트",
+        "운영 migration 재검증 기록",
+        "운영 readiness smoke"
+      ]
+    },
+    {
+      "id": "product_value_observability",
+      "name": "비방해형 사용자 가치 검증과 운영 가시성",
+      "required": true,
+      "status": "passed",
+      "evidence": [
+        "beta-analytics-v1.0 제품 분석 운영 기획",
+        "분석 선택 동의와 원본 답변·경로·식별자 금지 원칙",
+        "DNT·GPC 요청 0건, idle 비동기 전송, 현재 동의 버전 확인 회귀 테스트",
+        "운영자 전용 7·30·90일 집계 RPC와 제품 분석 운영 화면",
+        "운영 DB consent.product_analytics_event와 consent.admin_product_analytics_snapshot 적용·호출 PASS"
+      ],
+      "requiredEvidence": [
+        "DNT·선택 동의·idle 전송 회귀 테스트",
+        "운영자 전용 집계 RPC 권한 테스트",
+        "분석 장애가 사용자 흐름을 막지 않는 E2E"
+      ]
+    },
+    {
+      "id": "release_candidate",
+      "name": "단일 커밋 출시 후보와 전체 QA",
+      "required": true,
+      "status": "passed",
+      "evidence": [
+        "18개 도메인·176개 앱 진입 표면·480개 테스트 파일 출시 인벤토리 동기화 통과",
+        "Vitest 479파일·2213테스트, TypeScript, ESLint, theme, Next.js 16.2.12 production build 통과",
+        "모바일·데스크톱 Playwright E2E 12개 통과",
+        "운영 Supabase 전체 readiness와 임시 데이터 완전 삭제 인증 커뮤니티 smoke 통과",
+        "npm audit --omit=dev 취약점 0개"
+      ],
+      "requiredEvidence": ["clean commit SHA", "전체 QA 결과", "배포 SHA 일치"]
+    }
+  ]
+}

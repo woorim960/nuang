@@ -2,28 +2,26 @@
 
 import {
   ChevronRight,
-  FileText,
+  Compass,
+  LockKeyhole,
   LogIn,
-  MessagesSquare,
-  MessageSquarePlus,
   Settings,
   ShieldCheck,
-  SlidersHorizontal,
 } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { NuangCharacter } from "@/components/character/NuangCharacter";
+import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
-import type { AccountResultSummary } from "@/features/account/account-result-contract";
-import { readJsonResponse } from "@/features/account/response-json";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
-import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
-import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
+import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
+import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
+import { ProfileIdentitySurface } from "@/features/public-profile/ProfileIdentitySurface";
 import { selectRepresentativeCoreResult } from "@/features/result/unified-core-report/core-result-report-selector";
 import { collectValidatedCoreResultCandidates } from "@/features/result/unified-core-report/validated-core-result-candidates";
-import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
+import profileStyles from "./SelfProfileScreen.module.css";
 import styles from "./MyOverview.module.css";
+
+type ContentTab = "posts" | "reports";
 
 type MyProfileSummary = {
   code: string;
@@ -35,60 +33,27 @@ type MyProfileSummary = {
 };
 
 export function MyOverview({
+  initialContent = "posts",
   showAdminEntry = false,
 }: {
+  initialContent?: ContentTab;
   showAdminEntry?: boolean;
 }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [activeContent, setActiveContent] =
+    useState<ContentTab>(initialContent);
   const [localAttempts, setLocalAttempts] = useState<LocalAssessmentAttempt[]>(
-    [],
-  );
-  const [accountResults, setAccountResults] = useState<AccountResultSummary[]>(
     [],
   );
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
-    const supabase = createBrowserSupabaseClient();
-
-    if (!supabase) {
-      void Promise.resolve().then(() => {
-        if (isMounted) setIsCheckingAuth(false);
-      });
-
-      return () => {
-        isMounted = false;
-      };
-    }
-
-    void supabase.auth
-      .getUser()
-      .then((result: { data: { user: unknown | null } }) => {
-        if (!isMounted) return;
-        setIsLoggedIn(Boolean(result.data.user));
-        setIsCheckingAuth(false);
-      });
-
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    let isMounted = true;
 
     async function load() {
-      await synchronizeAccountAssessmentAttempts();
-      const [nextLocalAttempts, nextAccountResults] = await Promise.all([
-        listLocalAttempts(),
-        listAccountResults(),
-      ]);
+      const nextLocalAttempts = await listLocalAttempts();
 
       if (!isMounted) return;
       setLocalAttempts(nextLocalAttempts);
-      setAccountResults(nextAccountResults);
       setLoaded(true);
     }
 
@@ -100,227 +65,300 @@ export function MyOverview({
   }, []);
 
   const profile = useMemo(
-    () => buildProfileSummary({ accountResults, localAttempts }),
-    [accountResults, localAttempts],
+    () => buildProfileSummary(localAttempts),
+    [localAttempts],
   );
-  const completedLocalCount = localAttempts.filter(
+  const reportCount = localAttempts.filter(
     (attempt) => attempt.state === "completed",
   ).length;
-  const reportCount = Math.max(accountResults.length, completedLocalCount);
+  const profileImage = useMemo(
+    () =>
+      createCharacterProfileImage({
+        alt: "나의 뉴앙 프로필 이미지",
+        motif: profile?.motif ?? "purple",
+      }),
+    [profile?.motif],
+  );
+
+  function moveTabWithKeyboard(
+    event: KeyboardEvent<HTMLButtonElement>,
+    current: ContentTab,
+  ) {
+    let next: ContentTab | null = null;
+    if (event.key === "Home") next = "posts";
+    if (event.key === "End") next = "reports";
+    if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+      next = current === "posts" ? "reports" : "posts";
+    }
+    if (!next) return;
+
+    event.preventDefault();
+    setActiveContent(next);
+    document.getElementById(`guest-my-${next}-tab`)?.focus();
+  }
 
   return (
-    <div className={styles.page}>
-      <header className={styles.header}>
-        <div className={styles.wordmark}>
-          <span>NUANG</span>
-          <h1>마이</h1>
-        </div>
+    <CommunityScreenShell
+      backHref={null}
+      title="마이"
+      trailing={
         <Link aria-label="설정 열기" href="/my/settings">
-          <Settings aria-hidden="true" size={21} strokeWidth={1.75} />
+          <Settings aria-hidden="true" size={20} strokeWidth={1.7} />
         </Link>
-      </header>
-
+      }
+    >
       {!loaded ? (
         <MyLoadingState />
-      ) : profile ? (
+      ) : (
         <>
-          <section className={styles.hero}>
-            <div className={styles.profileOverview}>
-              <div className={styles.characterWrap}>
-                <NuangCharacter motif={profile.motif} size="md" />
-              </div>
-              <div className={styles.profileIdentity}>
-                <small>{profile.source} 검사 기준</small>
-                <h2>{profile.code}</h2>
-                <strong>{profile.name}</strong>
-              </div>
-            </div>
-            <div className={styles.profileStats}>
-              <span>
-                <strong>{reportCount.toLocaleString("ko-KR")}</strong>
-                저장된 리포트
-              </span>
-              <span>
-                <strong>{formatDate(profile.completedAt)}</strong>
-                최근 업데이트
-              </span>
-            </div>
+          <section className={profileStyles.hero}>
+            <ProfileIdentitySurface
+              actions={
+                <div className={profileStyles.actions} data-single="true">
+                  <Link
+                    className={profileStyles.editProfileButton}
+                    href="/login?next=/my"
+                  >
+                    <LogIn aria-hidden="true" size={16} strokeWidth={1.7} />
+                    로그인 또는 가입
+                  </Link>
+                </div>
+              }
+              bio={
+                profile
+                  ? "검사 결과는 지금 이 기기에 저장돼 있어요. 로그인하면 어디서나 이어볼 수 있어요."
+                  : "로그인하면 프로필과 활동을 한곳에서 관리할 수 있어요."
+              }
+              displayName="나의 뉴앙"
+              emptyBio="로그인하면 프로필과 활동을 한곳에서 관리할 수 있어요."
+              followerCount={0}
+              followingCount={0}
+              handle={null}
+              image={profileImage}
+              operator={showAdminEntry}
+              postCount={0}
+              trait={
+                profile
+                  ? {
+                      code: profile.code,
+                      label: profile.name,
+                      type: "code",
+                    }
+                  : { label: "첫 검사 전", type: "status" }
+              }
+            />
 
-            <div className={styles.profileActions}>
-              <Link href="/my/reports">내 성향 보기</Link>
-              <Link href="/my/reports">최신 리포트</Link>
-            </div>
+            <GuestAssessmentAction profile={profile} />
+
+            <nav
+              aria-label="내 프로필 바로가기"
+              className={profileStyles.shortcuts}
+            >
+              <Link href="/my/reports">내 성향 상세</Link>
+              <Link href="/my/events">참여한 이벤트</Link>
+              <Link href="/my/feedback?from=%2Fmy">의견 보내기</Link>
+            </nav>
+
+            {showAdminEntry ? (
+              <Link className={profileStyles.adminEntry} href="/admin">
+                <span>
+                  <ShieldCheck
+                    aria-hidden="true"
+                    size={18}
+                    strokeWidth={1.65}
+                  />
+                </span>
+                <strong>관리자 운영 센터</strong>
+                <ChevronRight
+                  aria-hidden="true"
+                  size={17}
+                  strokeWidth={1.65}
+                />
+              </Link>
+            ) : null}
           </section>
 
-          <NextStep profile={profile} />
+          <div
+            aria-label="프로필 콘텐츠"
+            className={profileStyles.contentTabs}
+            role="tablist"
+          >
+            <button
+              aria-controls="guest-my-posts-panel"
+              aria-selected={activeContent === "posts"}
+              id="guest-my-posts-tab"
+              onClick={() => setActiveContent("posts")}
+              onKeyDown={(event) => moveTabWithKeyboard(event, "posts")}
+              role="tab"
+              tabIndex={activeContent === "posts" ? 0 : -1}
+              type="button"
+            >
+              게시물
+              <span>0</span>
+            </button>
+            <button
+              aria-controls="guest-my-reports-panel"
+              aria-selected={activeContent === "reports"}
+              id="guest-my-reports-tab"
+              onClick={() => setActiveContent("reports")}
+              onKeyDown={(event) => moveTabWithKeyboard(event, "reports")}
+              role="tab"
+              tabIndex={activeContent === "reports" ? 0 : -1}
+              type="button"
+            >
+              검사 결과
+              <span>{reportCount.toLocaleString("ko-KR")}</span>
+            </button>
+          </div>
+
+          <section
+            aria-labelledby={`guest-my-${activeContent}-tab`}
+            id={`guest-my-${activeContent}-panel`}
+            role="tabpanel"
+          >
+            {activeContent === "posts" ? (
+              <GuestPostCollection />
+            ) : (
+              <GuestReportCollection
+                profile={profile}
+                reportCount={reportCount}
+              />
+            )}
+          </section>
         </>
-      ) : (
-        <EmptyProfile isCheckingAuth={isCheckingAuth} isLoggedIn={isLoggedIn} />
       )}
-
-      <section className={styles.mySpace}>
-        <div className={styles.sectionHeading}>
-          <h2>나의 활동</h2>
-        </div>
-        <nav aria-label="나의 활동 메뉴" className={styles.activityList}>
-          <MyMenuLink
-            href="/feed/me"
-            icon={MessagesSquare}
-            title="내 게시물"
-            tone="conversation"
-          />
-          <MyMenuLink
-            href="/my/reports/history"
-            icon={FileText}
-            title="내 기록"
-            tone="brand"
-          />
-        </nav>
-      </section>
-
-      <nav aria-label="계정 메뉴" className={styles.accountMenu}>
-        {showAdminEntry ? (
-          <MyMenuLink
-            href="/admin"
-            icon={ShieldCheck}
-            title="관리자 운영 센터"
-            tone="brand"
-          />
-        ) : null}
-        <MyMenuLink
-          href="/my/feedback?from=%2Fmy"
-          icon={MessageSquarePlus}
-          title="의견 보내기"
-          tone="conversation"
-        />
-        <MyMenuLink
-          href="/my/settings"
-          icon={SlidersHorizontal}
-          title="설정과 개인정보"
-          tone="neutral"
-        />
-        {!isLoggedIn && !isCheckingAuth ? (
-          <MyMenuLink
-            href="/login?next=/my"
-            icon={LogIn}
-            title="로그인 또는 가입"
-            tone="neutral"
-          />
-        ) : null}
-      </nav>
-    </div>
+    </CommunityScreenShell>
   );
 }
 
 function MyLoadingState() {
   return (
     <section aria-live="polite" className={styles.loading} role="status">
-      <div className={styles.loadingAvatar} />
-      <div>
+      <div className={styles.loadingIdentity}>
+        <span className={styles.loadingAvatar} />
+        <div>
+          <span />
+          <span />
+        </div>
+      </div>
+      <span className={styles.loadingLine} />
+      <div className={styles.loadingStats}>
         <span />
         <span />
         <span />
       </div>
+      <span className={styles.loadingAction} />
       <p>내 프로필을 불러오는 중</p>
     </section>
   );
 }
 
-function EmptyProfile({
-  isCheckingAuth,
-  isLoggedIn,
+function GuestAssessmentAction({
+  profile,
 }: {
-  isCheckingAuth: boolean;
-  isLoggedIn: boolean;
+  profile: MyProfileSummary | null;
 }) {
+  const isFullResult = profile?.source === "정밀 코어";
+  const href = profile
+    ? isFullResult
+      ? profile.href
+      : "/assessments/nu-core-full?from=my&backTo=%2Fmy&returnTo=%2Fmy%3Ftab%3Dreports"
+    : "/assessments/nu-core-quick?returnTo=%2Fmy%3Ftab%3Dreports";
+
   return (
-    <section className={styles.emptyHero}>
-      <div className={styles.profileOverview}>
-        <div className={styles.characterWrap}>
-          <NuangCharacter motif="purple" size="md" />
-        </div>
-        <div className={styles.profileIdentity}>
-          <small>
-            {isCheckingAuth
-              ? "프로필 확인 중"
-              : isLoggedIn
-                ? "아직 검사 결과 없음"
-                : "처음 만나는 나의 성향"}
-          </small>
-          <h2 className={styles.emptyTitle}>내 뉴앙 코드를 만나보세요</h2>
-        </div>
+    <section className={profileStyles.assessmentAction}>
+      <div className={profileStyles.assessmentCopy}>
+        <small>
+          {profile
+            ? `${profile.source} 검사 완료`
+            : "첫 검사 전"}
+        </small>
+        <strong>
+          {profile
+            ? isFullResult
+              ? "나를 설명하는 성향 리포트가 준비됐어요"
+              : "내 성향을 더 깊이 알아볼 차례예요"
+            : "첫 성향 검사로 내 뉴앙 코드를 만나보세요"}
+        </strong>
+        <p>
+          {profile
+            ? isFullResult
+              ? `${profile.code} · ${profile.name} · ${formatDate(profile.completedAt)}`
+              : "여러 상황에서 보이는 내 모습을 더 자세히 살펴봐요."
+            : "3~5분이면 나를 설명하는 첫 뉴앙 코드를 만날 수 있어요."}
+        </p>
       </div>
-      <p className={styles.profileDescription}>
-        첫 성향 검사로 대표 성향을 확인하고, 준비된 검사를 더할수록 나를 더
-        자세히 이해할 수 있어요.
-      </p>
-      <Link className={styles.startAssessment} href="/home">
-        첫 성향 검사 시작하기
-        <ChevronRight aria-hidden="true" size={17} strokeWidth={1.8} />
+      <Link className={profileStyles.assessmentButton} href={href}>
+        {profile
+          ? isFullResult
+            ? "내 결과 보기"
+            : "정밀 검사 시작하기"
+          : "첫 성향 검사 시작하기"}
+        <ChevronRight aria-hidden="true" size={18} strokeWidth={1.8} />
       </Link>
+      {profile && !isFullResult ? (
+        <Link
+          className={profileStyles.secondaryAssessmentLink}
+          href={profile.href}
+        >
+          지금 결과 보기
+        </Link>
+      ) : null}
     </section>
   );
 }
 
-function NextStep({ profile }: { profile: MyProfileSummary }) {
-  const isFullResult = profile.source === "정밀 코어";
-  const href = isFullResult
-    ? "/home?view=self"
-    : "/assessments/nu-core-full?from=my&backTo=%2Fmy&returnTo=%2Fmy";
-
+function GuestPostCollection() {
   return (
-    <Link className={styles.nextStep} href={href}>
-      <span>
-        <strong>
-          {isFullResult
-            ? "새로운 주제 검사로 나를 더 알아봐요"
-            : "정밀 검사로 내 성향을 더 선명하게 봐요"}
-        </strong>
+    <section className={profileStyles.empty}>
+      <span aria-hidden="true">
+        <LockKeyhole size={23} strokeWidth={1.65} />
       </span>
-      <ChevronRight aria-hidden="true" size={18} strokeWidth={1.8} />
-    </Link>
+      <strong>로그인하면 내 게시물을 모아볼 수 있어요</strong>
+      <Link href="/login?next=/my">로그인하고 시작하기</Link>
+    </section>
   );
 }
 
-function MyMenuLink({
-  href,
-  icon: Icon,
-  title,
-  tone,
+function GuestReportCollection({
+  profile,
+  reportCount,
 }: {
-  href: string;
-  icon: typeof FileText;
-  title: string;
-  tone: "brand" | "conversation" | "neutral";
+  profile: MyProfileSummary | null;
+  reportCount: number;
 }) {
+  if (!profile) {
+    return (
+      <section className={profileStyles.empty}>
+        <span aria-hidden="true">
+          <Compass size={23} strokeWidth={1.65} />
+        </span>
+        <strong>아직 완료한 검사 결과가 없어요</strong>
+        <Link href="/assessments/nu-core-quick?returnTo=%2Fmy%3Ftab%3Dreports">
+          첫 검사 시작하기
+        </Link>
+      </section>
+    );
+  }
+
   return (
-    <Link className={styles.menuLink} href={href}>
-      <span className={styles.menuIcon} data-tone={tone}>
-        <Icon aria-hidden="true" size={18} strokeWidth={1.8} />
+    <section className={profileStyles.empty}>
+      <span aria-hidden="true">
+        <Compass size={23} strokeWidth={1.65} />
       </span>
-      <span className={styles.menuCopy}>
-        <strong>{title}</strong>
-      </span>
-      <ChevronRight
-        aria-hidden="true"
-        className={styles.menuChevron}
-        size={17}
-        strokeWidth={1.7}
-      />
-    </Link>
+      <strong>
+        이 기기에 검사 결과 {reportCount.toLocaleString("ko-KR")}개가 있어요
+      </strong>
+      <Link href={profile.href}>검사 결과 보기</Link>
+    </section>
   );
 }
 
-function buildProfileSummary({
-  accountResults,
-  localAttempts,
-}: {
-  accountResults: AccountResultSummary[];
-  localAttempts: LocalAssessmentAttempt[];
-}): MyProfileSummary | null {
+function buildProfileSummary(
+  localAttempts: LocalAssessmentAttempt[],
+): MyProfileSummary | null {
   const collection = collectValidatedCoreResultCandidates({
-    accountReadState: "ready",
-    accountResults,
+    accountReadState: "not_requested",
     localAttempts,
   });
   const representative = selectRepresentativeCoreResult(collection);
@@ -330,17 +368,10 @@ function buildProfileSummary({
     code: representative.result.code,
     completedAt: representative.identity.completedAt,
     href: "/my/reports",
-    motif: getMotif(representative.result.code),
+    motif: "purple",
     name: representative.result.currentProfileName,
-    source:
-      representative.identity.kind === "full"
-        ? "정밀 코어"
-        : "빠른 코어",
+    source: representative.identity.kind === "full" ? "정밀 코어" : "빠른 코어",
   };
-}
-
-function getMotif(code: string): NuangCharacterMotif {
-  return getCandidateProfileDefinition(code) ? "purple" : "purple";
 }
 
 function formatDate(value: string) {
@@ -351,24 +382,4 @@ function formatDate(value: string) {
     day: "numeric",
     month: "short",
   }).format(date);
-}
-
-async function listAccountResults(): Promise<AccountResultSummary[]> {
-  try {
-    const response = await fetch("/api/account-results", {
-      cache: "no-store",
-      method: "GET",
-    });
-
-    if (!response.ok) return [];
-
-    const body = await readJsonResponse<{
-      ok?: boolean;
-      results?: AccountResultSummary[];
-    }>(response);
-
-    return body?.ok && Array.isArray(body.results) ? body.results : [];
-  } catch {
-    return [];
-  }
 }

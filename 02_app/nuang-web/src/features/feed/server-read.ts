@@ -367,7 +367,7 @@ async function createFeedReadPayloadForViewer(
   });
   const [
     hiddenTargets,
-    blockedAccountIds,
+    blockedAccountIdsResult,
     authorProfilesByAccountId,
     engagementByPostId,
     pollByPostId,
@@ -412,6 +412,14 @@ async function createFeedReadPayloadForViewer(
       postIds: mergedRows.map((row) => row.id),
     }),
   ]);
+  if (blockedAccountIdsResult.state === "unavailable") {
+    return {
+      ...basePayload,
+      items: [],
+      stories: [],
+    };
+  }
+  const { blockedAccountIds } = blockedAccountIdsResult;
   const inaccessibleOriginalReportPostIds =
     await readInaccessibleOriginalReportPostIds({
       blockedAccountIds,
@@ -482,10 +490,12 @@ export async function createServerCommunityProfilePayload(
   });
 
   const accountId = await getCurrentAccountId(serviceClient);
-  const blockedAccountIds = await readBlockedCommunityAccountIds({
+  const blockedAccountIdsResult = await readBlockedCommunityAccountIds({
     accountId,
     client: serviceClient,
   });
+  if (blockedAccountIdsResult.state === "unavailable") return null;
+  const { blockedAccountIds } = blockedAccountIdsResult;
   if (blockedAccountIds.has(source.snapshot.account_id)) return null;
 
   const operatorAccountIds = await readOperatorAccountIds({
@@ -575,7 +585,7 @@ export async function createServerCommunityProfilePayload(
   };
 }
 
-async function readCommunityProfileSource({
+export async function readCommunityProfileSource({
   client,
   profileId,
 }: {
@@ -591,7 +601,9 @@ async function readCommunityProfileSource({
     .is("deleted_at", null)
     .maybeSingle();
 
-  if (!communityResponse.error && communityResponse.data?.account_id) {
+  if (communityResponse.error) return null;
+
+  if (communityResponse.data?.account_id) {
     const accountId = String(communityResponse.data.account_id);
     const snapshotResponse = await client
       .schema("profile")
@@ -604,15 +616,18 @@ async function readCommunityProfileSource({
       .limit(1)
       .maybeSingle();
 
-    if (!snapshotResponse.error && snapshotResponse.data) {
-      return {
-        communityProfile: await readCommunityProfileForAccount({
-          accountId,
-          client,
-        }),
-        snapshot: snapshotResponse.data as PublicProfileSnapshotRow,
-      };
-    }
+    if (snapshotResponse.error || !snapshotResponse.data) return null;
+
+    const communityProfile = await readCommunityProfileForAccount({
+      accountId,
+      client,
+    });
+    if (!communityProfile) return null;
+
+    return {
+      communityProfile,
+      snapshot: snapshotResponse.data as PublicProfileSnapshotRow,
+    };
   }
 
   const snapshotResponse = await client
@@ -626,12 +641,14 @@ async function readCommunityProfileSource({
 
   if (snapshotResponse.error || !snapshotResponse.data) return null;
   const snapshot = snapshotResponse.data as PublicProfileSnapshotRow;
+  const communityProfile = await readCommunityProfileForAccount({
+    accountId: snapshot.account_id,
+    client,
+  });
+  if (!communityProfile) return null;
 
   return {
-    communityProfile: await readCommunityProfileForAccount({
-      accountId: snapshot.account_id,
-      client,
-    }),
+    communityProfile,
     snapshot,
   };
 }
@@ -733,10 +750,12 @@ export async function createServerFeedPostDetailPayload(
 
   const row = normalizeFeedPostRow(response.data);
   const accountId = await getCurrentAccountId(serviceClient);
-  const blockedAccountIds = await readBlockedCommunityAccountIds({
+  const blockedAccountIdsResult = await readBlockedCommunityAccountIds({
     accountId,
     client: serviceClient,
   });
+  if (blockedAccountIdsResult.state === "unavailable") return null;
+  const { blockedAccountIds } = blockedAccountIdsResult;
   if (blockedAccountIds.has(row.author_account_id)) return null;
   const isOwnPost = row.author_account_id === accountId;
   const isPublicPost =
@@ -1253,10 +1272,12 @@ export async function createServerFeedReportSharePayload(
     visibility: FeedPostRow["visibility"];
   };
   const accountId = await getCurrentAccountId(serviceClient);
-  const blockedAccountIds = await readBlockedCommunityAccountIds({
+  const blockedAccountIdsResult = await readBlockedCommunityAccountIds({
     accountId,
     client: serviceClient,
   });
+  if (blockedAccountIdsResult.state === "unavailable") return null;
+  const { blockedAccountIds } = blockedAccountIdsResult;
   if (blockedAccountIds.has(row.author_account_id)) return null;
   const isOwnPost = row.author_account_id === accountId;
   const isPublicPost =

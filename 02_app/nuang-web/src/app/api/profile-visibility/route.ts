@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import type { User } from "@supabase/supabase-js";
+import { readPublicSnapshotPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import {
   communityProfileVisibilitySchema,
   type CommunityProfileVisibilityPayload,
@@ -122,6 +123,37 @@ async function persistVisibility({
   };
   profile: NonNullable<Awaited<ReturnType<typeof ensureCommunityProfile>>>;
 }) {
+  if (data.codeVisible || data.detailsVisible || data.comparisonEnabled) {
+    const snapshot = await client
+      .schema("profile")
+      .from("profile_public_snapshot")
+      .select("id")
+      .eq("account_id", profile.accountId)
+      .eq("status", "active")
+      .is("deleted_at", null)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+    const snapshotId = snapshot.data?.id ? String(snapshot.data.id) : null;
+    const publication = snapshotId
+      ? await readPublicSnapshotPublicationDecision({
+          client,
+          ownerAccountId: profile.accountId,
+          publicSnapshotId: snapshotId,
+        })
+      : null;
+
+    if (snapshot.error || !publication?.eligible) {
+      return NextResponse.json(
+        {
+          error: "result_release_not_publicable",
+          message: "검토가 끝난 코어 결과만 프로필과 비교에 공개할 수 있어요.",
+        },
+        { status: 409 },
+      );
+    }
+  }
+
   const response = await client
     .schema("profile")
     .rpc("save_community_profile_visibility", {

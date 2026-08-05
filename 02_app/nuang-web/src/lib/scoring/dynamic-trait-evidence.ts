@@ -12,10 +12,7 @@ export type TraitEvidenceSourceKind =
   | "group";
 
 export type TraitEvidenceApprovalStatus =
-  | "approved"
-  | "provisional"
-  | "experimental"
-  | "blocked";
+  "approved" | "provisional" | "experimental" | "blocked";
 
 export type TraitEvidenceTarget = {
   kind: "domain" | "facet";
@@ -93,11 +90,14 @@ export type DynamicTraitEvidenceOptions = {
   minMeaningfulDelta: number;
 };
 
-export const dynamicTraitSourceWeights: Record<TraitEvidenceSourceKind, number> = {
+export const dynamicTraitSourceWeights: Record<
+  TraitEvidenceSourceKind,
+  number
+> = {
   quick_core: 0.2,
   full_core: 1,
   free_topic: 0.35,
-  odd_lab: 0.1,
+  odd_lab: 0,
   detailed: 0.8,
   help: 0,
   group: 0,
@@ -164,7 +164,9 @@ export function calculateDynamicTraitSnapshot({
       }))
       .filter((evidence) => evidence.score !== null && evidence.weight > 0);
 
-    const evidenceWeight = sum(domainEvidence.map((evidence) => evidence.weight));
+    const evidenceWeight = sum(
+      domainEvidence.map((evidence) => evidence.weight),
+    );
     const score =
       evidenceWeight > 0
         ? sum(
@@ -348,7 +350,9 @@ function buildAlternativeCodes(
           : definition.highSymbol;
       return `${code.slice(0, index)}${nextSymbol}${code.slice(index + 1)}`;
     })
-    .filter((alternativeCode, index, list) => list.indexOf(alternativeCode) === index);
+    .filter(
+      (alternativeCode, index, list) => list.indexOf(alternativeCode) === index,
+    );
 }
 
 function clampScore(score: number | null) {

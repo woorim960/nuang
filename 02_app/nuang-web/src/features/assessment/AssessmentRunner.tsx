@@ -11,18 +11,12 @@ import {
 import { AssessmentLoadingState } from "@/features/assessment/AssessmentLoadingState";
 import {
   AssessmentBottomSheet,
-  AssessmentQuestionContent,
-  AssessmentQuestionDock,
-  AssessmentQuestionGuideButton,
   AssessmentQuestionHeader,
-  AssessmentQuestionPrompt,
   AssessmentQuestionScreen,
-  AssessmentScaleResponseOptions,
-  AssessmentUnsureControl,
   AssessmentUnsureSheet,
-  assessmentUnsureReasons,
   useAssessmentQuestionScroll,
 } from "@/features/assessment/AssessmentQuestionControls";
+import { CoreAssessmentQuestionSurface } from "@/features/assessment/CoreAssessmentQuestionSurface";
 import {
   hasUniformCoreResponses,
   prepareAssessmentCompletion,
@@ -119,6 +113,7 @@ export function AssessmentRunner({
     useState<QuestionDirection>("forward");
   const [completionState, setCompletionState] =
     useState<AssessmentCompletionViewState>("preparing");
+  const activeAssessment = attempt?.assessmentSnapshot ?? assessment;
   const startCompletionRef = useRef(startCompletion);
   startCompletionRef.current = startCompletion;
 
@@ -137,8 +132,9 @@ export function AssessmentRunner({
           reusableQuickAttempt,
           returnDestination,
         );
+        const loadedAssessment = nextAttempt.assessmentSnapshot ?? assessment;
         const needsResponseReview = hasUniformCoreResponses(
-          assessment,
+          loadedAssessment,
           nextAttempt,
         );
         if (
@@ -149,7 +145,7 @@ export function AssessmentRunner({
           isCoreResultUndetermined(nextAttempt.resultSnapshot.scoreResult)
         ) {
           const adaptiveItems = getAdaptiveItemsForDomains(
-            assessment,
+            loadedAssessment,
             nextAttempt.resultSnapshot.scoreResult.domains
               .filter(
                 (domain) =>
@@ -169,7 +165,7 @@ export function AssessmentRunner({
         }
         const needsMidpoint =
           !nextAttempt.adaptiveItemIds?.length &&
-          shouldShowHalfwayCheckpoint(nextAttempt, assessment);
+          shouldShowHalfwayCheckpoint(nextAttempt, loadedAssessment);
 
         if (needsMidpoint && !nextAttempt.milestones?.[halfwayCheckpointId]) {
           try {
@@ -241,16 +237,19 @@ export function AssessmentRunner({
 
   const runItems = useMemo(
     () =>
-      attempt ? getAssessmentRunItems(assessment, attempt) : assessment.items,
-    [assessment, attempt],
+      attempt
+        ? getAssessmentRunItems(activeAssessment, attempt)
+        : activeAssessment.items,
+    [activeAssessment, attempt],
   );
   const currentItem = useMemo(() => {
     if (!attempt) return null;
     return runItems[attempt.currentIndex] ?? null;
   }, [attempt, runItems]);
   const adaptiveAxisLabels = useMemo(
-    () => (attempt ? getAttemptAdaptiveAxisLabels(assessment, attempt) : []),
-    [assessment, attempt],
+    () =>
+      attempt ? getAttemptAdaptiveAxisLabels(activeAssessment, attempt) : [],
+    [activeAssessment, attempt],
   );
   useAssessmentQuestionScroll(
     surface === "question" ? (currentItem?.itemId ?? null) : null,
@@ -258,7 +257,7 @@ export function AssessmentRunner({
 
   if (!attempt || !currentItem) {
     if (!runnerError) {
-      return <AssessmentLoadingState mode={assessment.mode} />;
+      return <AssessmentLoadingState mode={activeAssessment.mode} />;
     }
 
     return (
@@ -282,9 +281,9 @@ export function AssessmentRunner({
     return (
       <AssessmentCompletionState
         adaptiveAxisLabels={adaptiveAxisLabels}
-        adaptiveQuestionCount={runItems.length - assessment.items.length}
+        adaptiveQuestionCount={runItems.length - activeAssessment.items.length}
         isWorking={isActionSaving}
-        mode={assessment.mode}
+        mode={activeAssessment.mode}
         onLeave={leaveCompletion}
         onReviewAnswers={() => void reviewInsufficientAnswers()}
         onRetry={() =>
@@ -293,7 +292,7 @@ export function AssessmentRunner({
         state={completionState}
         totalItems={
           completionState === "adaptive"
-            ? assessment.items.length
+            ? activeAssessment.items.length
             : runItems.length
         }
       />
@@ -303,10 +302,12 @@ export function AssessmentRunner({
   const currentAnswer = attempt.responses[currentItem.itemId];
   const isAdaptiveQuestion =
     currentItem.responseFormat === "forced_direction_4";
-  const phaseStartIndex = isAdaptiveQuestion ? assessment.items.length : 0;
+  const phaseStartIndex = isAdaptiveQuestion
+    ? activeAssessment.items.length
+    : 0;
   const phaseItemCount = isAdaptiveQuestion
-    ? runItems.length - assessment.items.length
-    : assessment.items.length;
+    ? runItems.length - activeAssessment.items.length
+    : activeAssessment.items.length;
   const phaseCurrentIndex = attempt.currentIndex - phaseStartIndex;
   const isPersisting = persistStatus === "saving";
   const hasPendingAnswerHere = pendingAnswer?.itemId === currentItem.itemId;
@@ -318,11 +319,6 @@ export function AssessmentRunner({
   const isChoiceDisabled =
     isPersisting || isActionSaving || hasPendingAnswerElsewhere;
   const canGoNext = Boolean(currentAnswer) && !isCurrentAnswerBlocked;
-  const selectedUnsureReason = currentAnswer?.unsureReason
-    ? assessmentUnsureReasons.find(
-        (reason) => reason.id === currentAnswer.unsureReason,
-      )
-    : undefined;
   const visibleRecoveryStatus =
     persistStatus === "failed" ||
     persistStatus === "saving" ||
@@ -405,11 +401,14 @@ export function AssessmentRunner({
     }, completionRecoveryDelayMs);
 
     try {
-      const readiness = prepareAssessmentCompletion(assessment, sourceAttempt);
+      const readiness = prepareAssessmentCompletion(
+        activeAssessment,
+        sourceAttempt,
+      );
 
       if (readiness.needsAdaptiveFollowUp) {
         const adaptiveItems = getAdaptiveItemsForDomains(
-          assessment,
+          activeAssessment,
           readiness.adaptiveDomainIds,
         );
 
@@ -481,7 +480,7 @@ export function AssessmentRunner({
               readiness.responseSnapshotHash,
               buildReportContentSnapshot({
                 code: readiness.result.code!,
-                kind: assessment.mode,
+                kind: activeAssessment.mode,
                 measurementVersion: coreResultCopyVersion,
               }),
             ),
@@ -597,7 +596,7 @@ export function AssessmentRunner({
 
     const reviewIndex = Math.max(
       0,
-      assessment.items.findIndex(
+      activeAssessment.items.findIndex(
         (item) => sourceAttempt.responses[item.itemId]?.isUnsure === true,
       ),
     );
@@ -771,7 +770,7 @@ export function AssessmentRunner({
 
     if (
       !isAdaptiveQuestion &&
-      shouldShowHalfwayCheckpoint(currentAttempt, assessment)
+      shouldShowHalfwayCheckpoint(currentAttempt, activeAssessment)
     ) {
       await persistMilestone({
         currentIndex: currentAttempt.currentIndex,
@@ -849,7 +848,7 @@ export function AssessmentRunner({
 
     const nextIndex = Math.min(
       currentAttempt.currentIndex + 1,
-      assessment.items.length - 1,
+      activeAssessment.items.length - 1,
     );
     setQuestionDirection("forward");
     await persistMilestone({
@@ -868,101 +867,70 @@ export function AssessmentRunner({
 
   return (
     <AssessmentQuestionScreen>
-      <AssessmentQuestionHeader
-        closeLabel="검사 닫기"
-        countLabel={
-          isAdaptiveQuestion
-            ? `추가 질문 ${phaseItemCount}개 중 ${phaseCurrentIndex + 1}번째`
-            : `전체 ${assessment.items.length}개 중 ${attempt.currentIndex + 1}번째 문항`
-        }
-        current={phaseCurrentIndex + 1}
-        onClose={() => setIsExitOpen(true)}
-        progressLabel="검사 진행률"
-        title={isAdaptiveQuestion ? "코드 추가 확인" : assessment.title}
-        total={phaseItemCount}
-      />
-
       {isMidpoint ? (
-        <AssessmentMidpointCheckpoint
-          isSaving={isActionSaving || isPersisting}
-          onContinue={() => void resolveMidpoint("completed")}
-          onDefer={() => void resolveMidpoint("deferred")}
-        />
-      ) : (
         <>
-          <AssessmentQuestionContent>
-            <AssessmentQuestionGuideButton onClick={() => setIsHelpOpen(true)}>
-              {isAdaptiveQuestion
-                ? "비슷하게 나온 코드만 다시 확인해요"
-                : "최근 6개월을 기준으로"}
-            </AssessmentQuestionGuideButton>
-
-            <AssessmentQuestionPrompt
-              contextLabel={currentItem.contextLabel}
-              direction={questionDirection}
-              key={currentItem.itemId}
-              text={currentItem.text}
-            />
-
-            <AssessmentScaleResponseOptions
-              disabled={isChoiceDisabled}
-              guide={
-                isAdaptiveQuestion
-                  ? "두 방향 중 조금이라도 더 가까운 쪽을 선택해 주세요."
-                  : "최근 6개월의 평소 모습을 떠올리며, 비슷한 상황에서 이 모습이 얼마나 자주 나타나는지 하나 선택해 주세요."
-              }
-              legend={
-                isAdaptiveQuestion
-                  ? "반반보다 조금이라도 더 가까운 쪽은?"
-                  : "이럴 때 내 모습은?"
-              }
-              name={`response-${currentItem.itemId}`}
-              onChange={(value) => void handleAnswer(value)}
-              options={
-                isAdaptiveQuestion ? adaptiveResponseOptions : responseOptions
-              }
-              selectedValue={
-                currentAnswer?.isUnsure ? undefined : currentAnswer?.value
-              }
-            />
-
-            {!isAdaptiveQuestion ? (
-              <AssessmentUnsureControl
-                disabled={isChoiceDisabled}
-                onOpen={() => setIsUnsureOpen(true)}
-                selectedReason={selectedUnsureReason?.id}
-              />
-            ) : null}
-
-            {hasPendingAnswerElsewhere ? (
-              <p className={styles.inlineNotice}>
-                보관되지 않은 답이 있는 문항으로 돌아가 다시 시도해 주세요.
-              </p>
-            ) : null}
-            {runnerError ? (
-              <p className={styles.inlineError} role="alert">
-                {runnerError}
-              </p>
-            ) : null}
-          </AssessmentQuestionContent>
-
-          <AssessmentQuestionDock
-            nextDisabled={!canGoNext || isPersisting || isActionSaving}
-            nextLabel={
-              attempt.currentIndex === runItems.length - 1
-                ? "결과 보기"
-                : "다음"
-            }
-            onNext={() => void goNext()}
-            onPrevious={() => void goPrevious()}
-            previousDisabled={
-              attempt.currentIndex === phaseStartIndex ||
-              isPersisting ||
-              isActionSaving ||
-              Boolean(pendingMilestone)
-            }
+          <AssessmentQuestionHeader
+            closeLabel="검사 닫기"
+            countLabel={`전체 ${activeAssessment.items.length}개 중 ${attempt.currentIndex + 1}번째 문항`}
+            current={attempt.currentIndex + 1}
+            onClose={() => setIsExitOpen(true)}
+            progressLabel="검사 진행률"
+            title={activeAssessment.title}
+            total={activeAssessment.items.length}
+          />
+          <AssessmentMidpointCheckpoint
+            isSaving={isActionSaving || isPersisting}
+            onContinue={() => void resolveMidpoint("completed")}
+            onDefer={() => void resolveMidpoint("deferred")}
           />
         </>
+      ) : (
+        <CoreAssessmentQuestionSurface
+          answer={currentAnswer}
+          countLabel={
+            isAdaptiveQuestion
+              ? `추가 질문 ${phaseItemCount}개 중 ${phaseCurrentIndex + 1}번째`
+              : `전체 ${activeAssessment.items.length}개 중 ${attempt.currentIndex + 1}번째 문항`
+          }
+          current={phaseCurrentIndex + 1}
+          currentItem={currentItem}
+          disabled={isChoiceDisabled}
+          embedded
+          error={runnerError}
+          guideLabel={
+            isAdaptiveQuestion
+              ? "비슷하게 나온 코드만 다시 확인해요"
+              : "최근 6개월을 기준으로"
+          }
+          isAdaptiveQuestion={isAdaptiveQuestion}
+          nextDisabled={!canGoNext || isPersisting || isActionSaving}
+          nextLabel={
+            attempt.currentIndex === runItems.length - 1 ? "결과 보기" : "다음"
+          }
+          onAnswer={(value) => void handleAnswer(value)}
+          onClose={() => setIsExitOpen(true)}
+          onGuideOpen={() => setIsHelpOpen(true)}
+          onNext={() => void goNext()}
+          onPrevious={() => void goPrevious()}
+          onUnsureOpen={() => setIsUnsureOpen(true)}
+          options={
+            isAdaptiveQuestion ? adaptiveResponseOptions : responseOptions
+          }
+          pendingAnswerNotice={
+            hasPendingAnswerElsewhere
+              ? "보관되지 않은 답이 있는 문항으로 돌아가 다시 시도해 주세요."
+              : null
+          }
+          previousDisabled={
+            attempt.currentIndex === phaseStartIndex ||
+            isPersisting ||
+            isActionSaving ||
+            Boolean(pendingMilestone)
+          }
+          questionDirection={questionDirection}
+          title={isAdaptiveQuestion ? "코드 추가 확인" : activeAssessment.title}
+          total={phaseItemCount}
+        />
       )}
 
       {showRecovery && visibleRecoveryStatus ? (

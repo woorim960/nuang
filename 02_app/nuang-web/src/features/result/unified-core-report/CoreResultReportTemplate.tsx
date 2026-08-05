@@ -113,6 +113,8 @@ export function CoreResultReportTemplate({
   const content = assembleCoreResultContent(model);
   const isOwner = surfacePolicy.isOwner;
   const isPrecision = model.identity.kind === "full";
+  const isCandidateMeasurement =
+    model.measurement.codeSchemeVersion === nextNuangCodeScheme.version;
   const resolvedFeedbackResultReportId =
     feedbackResultReportId ?? model.identity.accountResultReportId;
   const feedbackSurface =
@@ -300,6 +302,14 @@ export function CoreResultReportTemplate({
           />
         </section>
 
+        {isCandidateMeasurement ? (
+          <div className={styles.partialNotice} role="note">
+            현재 코어 측정 모형은 검증 중인 후보 버전이에요. 이번 답을
+            돌아보기 위한 참고이며, 사람 연구·집단별 공정성 검토·정량 검증을
+            마친 확정 판정이 아니에요.
+          </div>
+        ) : null}
+
         {model.completeness.state === "partial" && isOwner ? (
           <div className={styles.partialNotice} role="status">
             이번 결과에서 확인할 수 있는 코드 해설을 중심으로 보여드려요.
@@ -370,7 +380,7 @@ export function CoreResultReportTemplate({
         {content.canonicalInsights.length > 0 && isOwner ? (
           <ReportSection
             id="report-canonical"
-            intro="고객 공개 승인을 마친 데이터센터 문장만 보여드려요."
+            intro="현재 게시 중인 데이터센터 문장만 보여드려요."
             title="내 성향을 더 선명하게 읽으면"
           >
             <ApprovedClaimList claims={content.canonicalInsights} />

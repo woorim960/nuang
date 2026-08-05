@@ -16,6 +16,24 @@ describe("readGateCReviewRewardCampaign", () => {
     });
   });
 
+  it.each([undefined, "", "enabled", "1"])(
+    "fails closed when the production switch is %s",
+    (configured) => {
+      if (configured === undefined) {
+        vi.stubEnv("GATE_C_REVIEW_EVENT_ENTRY_ENABLED", undefined);
+      } else {
+        vi.stubEnv("GATE_C_REVIEW_EVENT_ENTRY_ENABLED", configured);
+      }
+
+      expect(
+        readGateCReviewRewardCampaign(new Date("2026-08-05T00:00:00.000Z")),
+      ).toMatchObject({
+        entryEnabled: false,
+        status: "details_pending",
+      });
+    },
+  );
+
   it.each([
     ["active", "2026-09-30T14:59:59.999Z", true],
     ["closed", "2026-09-30T15:00:00.000Z", false],

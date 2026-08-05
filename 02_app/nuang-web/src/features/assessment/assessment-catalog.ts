@@ -1,4 +1,7 @@
-import { openFreeTopicAssessments } from "@/features/assessment/free-topic-assessments";
+import {
+  getFreeTopicQuestions,
+  openFreeTopicAssessments,
+} from "@/features/assessment/free-topic-assessments";
 import type { AssessmentAgeAccessPolicy } from "@/features/assessment/assessment-age-access-policy";
 import {
   assessmentExperienceSections,
@@ -39,6 +42,7 @@ export type AssessmentCatalogItem = {
   lifecycle: AssessmentLifecycle;
   publicationStatus: AssessmentPublicationStatus;
   privacyPolicy: "private" | "summary_shareable" | "invite_only";
+  questionCount?: number;
   resultPolicy: "result_only" | "play_only" | "invite_only";
   sensitivity: "general" | "caution";
   themes: AssessmentHubFilter[];
@@ -91,6 +95,7 @@ export const topicAssessmentCatalog: AssessmentCatalogItem[] =
       lifecycle: publicLifecycle ?? "research_only",
       publicationStatus: publicLifecycle ? "published" : "paused",
       privacyPolicy: "private",
+      questionCount: getFreeTopicQuestions(assessment.slug).length,
       resultPolicy: "result_only",
       sensitivity:
         assessment.slug === "conflict-repair" ? "caution" : "general",
@@ -113,6 +118,7 @@ export const togetherAssessmentCatalog: AssessmentCatalogItem[] = [
     lifecycle: "released",
     publicationStatus: "published",
     privacyPolicy: "invite_only",
+    questionCount: 8,
     resultPolicy: "invite_only",
     sensitivity: "general",
     themes: ["together"],
@@ -131,6 +137,7 @@ export const togetherAssessmentCatalog: AssessmentCatalogItem[] = [
     lifecycle: "released",
     publicationStatus: "published",
     privacyPolicy: "invite_only",
+    questionCount: 1,
     resultPolicy: "invite_only",
     sensitivity: "general",
     themes: ["together"],
@@ -152,6 +159,7 @@ export const labAssessmentCatalog: AssessmentCatalogItem[] = labAssessments.map(
     lifecycle: "pilot",
     publicationStatus: "published",
     privacyPolicy: "private",
+    questionCount: assessment.questions.length,
     resultPolicy: "play_only",
     sensitivity: assessment.sensitivity === "S2" ? "caution" : "general",
     themes: ["lab"],

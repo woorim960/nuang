@@ -77,4 +77,26 @@ describe("DELETE /api/account", () => {
 
     expect(response.status).toBe(403);
   });
+
+  it("returns 503 when media cleanup fails and never reports success", async () => {
+    mocks.deleteOwnAccount.mockResolvedValue({
+      code: "media_cleanup_failed",
+      ok: false,
+    });
+
+    const response = await DELETE(
+      new Request("http://localhost/api/account", {
+        body: JSON.stringify({ confirmation: "계정 삭제" }),
+        headers: { "content-type": "application/json" },
+        method: "DELETE",
+      }),
+    );
+
+    expect(response.status).toBe(503);
+    await expect(response.json()).resolves.toEqual({
+      code: "media_cleanup_failed",
+      message: "업로드한 사진을 안전하게 정리하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      ok: false,
+    });
+  });
 });

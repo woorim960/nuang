@@ -7,8 +7,44 @@
 
 .latestSection,
 .reportGroup,
-.empty {
+.empty,
+.exportSection {
   background: var(--nu-color-surface);
+}
+
+.exportSection {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.15rem;
+}
+
+.exportSection strong {
+  color: var(--nu-neutral-800);
+  font-size: var(--nu-text-label);
+}
+
+.exportSection p {
+  margin: 0.35rem 0 0;
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+}
+
+.exportSection button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  gap: 0.35rem;
+  border: 1px solid var(--nu-brand-100);
+  border-radius: 12px;
+  padding: 0.58rem 0.75rem;
+  color: var(--nu-info-500);
+  background: var(--nu-brand-50);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
 }
 
 .latestSection {

@@ -9,7 +9,8 @@ import userEvent from "@testing-library/user-event";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { BALANCE_ANSWER_REVEAL_CONSENT_VERSION } from "./api-contract";
 import type { BalanceRoomState } from "./api-contract";
-import { BalanceGameRoom } from "./BalanceGameRoom";
+import { BalanceGameRoom, QuestionRunner } from "./BalanceGameRoom";
+import { getResultGuestCharacterMotif } from "./BalanceResultArtwork";
 import {
   BalanceApiClientError,
   clearParticipantSession,
@@ -21,6 +22,12 @@ import {
   removeBalanceParticipant,
   saveBalanceResponse,
 } from "./client";
+
+const replace = vi.fn();
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ replace }),
+}));
 
 vi.mock("./client", async () => {
   const actual = await vi.importActual<typeof import("./client")>("./client");
@@ -146,6 +153,17 @@ function createDeferred<T>() {
   return { promise, reject, resolve };
 }
 
+function createSavedResponse(questionId: string, optionId: string) {
+  return {
+    ok: true as const,
+    saved: {
+      clientSequence: 1,
+      optionId,
+      questionId,
+    },
+  };
+}
+
 describe("BalanceGameRoom", () => {
   afterEach(() => {
     vi.useRealTimers();
@@ -153,6 +171,8 @@ describe("BalanceGameRoom", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    replace.mockReset();
+    vi.mocked(readBalanceRoom).mockReset();
     window.sessionStorage.clear();
     vi.mocked(readParticipantSession).mockReturnValue({
       participantId: "participant-me",
@@ -164,31 +184,67 @@ describe("BalanceGameRoom", () => {
       room: answeredRoom,
     });
     vi.mocked(completeBalanceRoom).mockResolvedValue({
+      completed: {
+        participantId: "participant-me",
+      },
       ok: true,
       room: {
         ...answeredRoom,
-        participants: [
-          {
-            ...answeredRoom.participants[0],
-            completedAt: "2026-07-31T00:00:00.000Z",
-            status: "completed",
-          },
-        ],
+        participants: answeredRoom.participants.map((participant) => ({
+          ...participant,
+          completedAt: "2026-07-31T00:00:02.000Z",
+          status: "completed" as const,
+        })),
       },
     });
   });
 
+  it("assigns the five guest characters in participation order and cycles safely", () => {
+    expect(
+      Array.from({ length: 6 }, (_, index) =>
+        getResultGuestCharacterMotif(index),
+      ),
+    ).toEqual(["purple", "flame", "sun", "water", "forest", "purple"]);
+  });
+
+  it("keeps an assessment-studio preview choice in memory without saving a response", () => {
+    vi.useFakeTimers();
+    const onRoomChange = vi.fn();
+
+    render(
+      <QuestionRunner
+        onRoomChange={onRoomChange}
+        previewMode
+        room={createQuestionRoom([null, null])}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "후라이드 치킨" }));
+
+    expect(saveBalanceResponse).not.toHaveBeenCalled();
+    expect(onRoomChange).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole("button", { name: "후라이드 치킨" }),
+    ).toHaveAttribute("aria-pressed", "true");
+
+    act(() => {
+      vi.advanceTimersByTime(180);
+    });
+    expect(
+      screen.getByRole("heading", { name: "중식 메뉴 하나를 고른다면?" }),
+    ).toBeInTheDocument();
+    expect(saveBalanceResponse).not.toHaveBeenCalled();
+  });
+
   it("accepts only the first choice when both sides are tapped rapidly", async () => {
     const room = createQuestionRoom([null, null]);
-    const savedRoom = createQuestionRoom(["food_001_a", null]);
     vi.mocked(readBalanceRoom).mockResolvedValue({
       ok: true,
       room,
     });
-    vi.mocked(saveBalanceResponse).mockResolvedValue({
-      ok: true,
-      room: savedRoom,
-    });
+    vi.mocked(saveBalanceResponse).mockResolvedValue(
+      createSavedResponse("food_001", "food_001_a"),
+    );
 
     render(<BalanceGameRoom roomCode="ABC234" />);
 
@@ -208,15 +264,13 @@ describe("BalanceGameRoom", () => {
   it("selects a choice with the keyboard and advances without a next button", async () => {
     const user = userEvent.setup();
     const room = createQuestionRoom([null, null]);
-    const savedRoom = createQuestionRoom(["food_001_a", null]);
     vi.mocked(readBalanceRoom).mockResolvedValue({
       ok: true,
       room,
     });
-    vi.mocked(saveBalanceResponse).mockResolvedValue({
-      ok: true,
-      room: savedRoom,
-    });
+    vi.mocked(saveBalanceResponse).mockResolvedValue(
+      createSavedResponse("food_001", "food_001_a"),
+    );
 
     render(<BalanceGameRoom roomCode="ABC234" />);
 
@@ -239,7 +293,6 @@ describe("BalanceGameRoom", () => {
 
   it("shows the next question within 250ms while the previous save is still pending", async () => {
     const room = createQuestionRoom([null, null]);
-    const savedRoom = createQuestionRoom(["food_001_a", null]);
     const deferred =
       createDeferred<Awaited<ReturnType<typeof saveBalanceResponse>>>();
     vi.mocked(readBalanceRoom).mockResolvedValue({
@@ -271,21 +324,20 @@ describe("BalanceGameRoom", () => {
 
     vi.useRealTimers();
     await act(async () => {
-      deferred.resolve({ ok: true, room: savedRoom });
+      deferred.resolve(createSavedResponse("food_001", "food_001_a"));
       await deferred.promise;
     });
   });
 
   it("does not complete after the last save fails and retries that choice", async () => {
     const room = createQuestionRoom(["food_001_a", null]);
-    const savedRoom = createQuestionRoom(["food_001_a", "food_002_a"]);
     vi.mocked(readBalanceRoom).mockResolvedValue({
       ok: true,
       room,
     });
     vi.mocked(saveBalanceResponse)
       .mockRejectedValueOnce(new Error("저장 실패"))
-      .mockResolvedValueOnce({ ok: true, room: savedRoom });
+      .mockResolvedValueOnce(createSavedResponse("food_002", "food_002_a"));
 
     render(<BalanceGameRoom roomCode="ABC234" />);
 
@@ -299,9 +351,11 @@ describe("BalanceGameRoom", () => {
 
     await waitFor(() => expect(saveBalanceResponse).toHaveBeenCalledTimes(2));
     await waitFor(() => expect(completeBalanceRoom).toHaveBeenCalledTimes(1));
-    expect(
-      await screen.findByText("한 명만 더 끝내면 결과가 열려요"),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(replace).toHaveBeenCalledWith(
+        "/assessments/together/balance-game/rooms/ABC234/result",
+      ),
+    );
   });
 
   it("recovers with the same completion request after result preparation fails", async () => {
@@ -327,29 +381,19 @@ describe("BalanceGameRoom", () => {
     expect(vi.mocked(completeBalanceRoom).mock.calls[1]?.[1]).toBe(
       vi.mocked(completeBalanceRoom).mock.calls[0]?.[1],
     );
-    expect(
-      await screen.findByText("한 명만 더 끝내면 결과가 열려요"),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(replace).toHaveBeenCalledWith(
+        "/assessments/together/balance-game/rooms/ABC234/result",
+      ),
+    );
   });
 
-  it("moves an answering participant to the removed terminal state during polling", async () => {
+  it("does not poll the full room state while a participant is answering", async () => {
     const room = createQuestionRoom([null, null]);
-    vi.mocked(readBalanceRoom)
-      .mockResolvedValueOnce({
-        ok: true,
-        room,
-      })
-      .mockRejectedValueOnce(
-        new BalanceApiClientError(
-          {
-            code: "participant_removed",
-            message: "이 방에는 더 이상 참여할 수 없어요.",
-            ok: false,
-            retryable: false,
-          },
-          403,
-        ),
-      );
+    vi.mocked(readBalanceRoom).mockResolvedValue({
+      ok: true,
+      room,
+    });
 
     render(<BalanceGameRoom roomCode="ABC234" />);
 
@@ -363,15 +407,36 @@ describe("BalanceGameRoom", () => {
       await Promise.resolve();
     });
 
+    expect(readBalanceRoom).toHaveBeenCalledTimes(1);
     expect(
-      await screen.findByText("이 방에는 더 이상 참여할 수 없어요."),
+      screen.getByRole("button", { name: "후라이드 치킨" }),
     ).toBeInTheDocument();
-    expect(
-      screen.queryByRole("button", { name: "후라이드 치킨" }),
-    ).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("link", { name: "다른 주제 보기" }),
-    ).toBeInTheDocument();
+  });
+
+  it("stops polling after the result becomes final", async () => {
+    vi.useFakeTimers();
+    vi.mocked(readBalanceRoom).mockResolvedValue({
+      ok: true,
+      room: {
+        ...answeredRoom,
+        participants: answeredRoom.participants.map((participant) => ({
+          ...participant,
+          completedAt: "2026-07-31T00:00:02.000Z",
+          status: "completed" as const,
+        })),
+        resultStatus: "final",
+      },
+    });
+
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(readBalanceRoom).toHaveBeenCalledTimes(1);
+
+    act(() => vi.advanceTimersByTime(10_000));
+    expect(readBalanceRoom).toHaveBeenCalledTimes(1);
   });
 
   it("recovers an all-answered reload with an explicit completion retry", async () => {
@@ -388,9 +453,11 @@ describe("BalanceGameRoom", () => {
         expect.any(String),
       ),
     );
-    expect(
-      await screen.findByText("한 명만 더 끝내면 결과가 열려요"),
-    ).toBeInTheDocument();
+    await waitFor(() =>
+      expect(replace).toHaveBeenCalledWith(
+        "/assessments/together/balance-game/rooms/ABC234/result",
+      ),
+    );
   });
 
   it("clears an invalid participant token and falls back to the join preview", async () => {
@@ -479,28 +546,13 @@ describe("BalanceGameRoom", () => {
       questionCount: 9,
       questions,
     };
-    const savedRoom: BalanceRoomState = {
-      ...checkpointRoom,
-      participants: [
-        {
-          ...checkpointRoom.participants[0],
-          answeredCount: 8,
-        },
-      ],
-      questions: checkpointRoom.questions.map((question, index) =>
-        index === 7
-          ? { ...question, responseOptionId: question.options[0].id }
-          : question,
-      ),
-    };
     vi.mocked(readBalanceRoom).mockResolvedValue({
       ok: true,
       room: checkpointRoom,
     });
-    vi.mocked(saveBalanceResponse).mockResolvedValue({
-      ok: true,
-      room: savedRoom,
-    });
+    vi.mocked(saveBalanceResponse).mockResolvedValue(
+      createSavedResponse("food_8", "food_8_a"),
+    );
 
     render(<BalanceGameRoom roomCode="ABC234" />);
 
@@ -552,6 +604,11 @@ describe("BalanceGameRoom", () => {
         {
           ...answeredRoom.participants[0],
           completedAt: "2026-07-31T00:00:00.000Z",
+          profileImage: {
+            alt: "민지 프로필 이미지",
+            source: "user_uploaded",
+            src: "https://example.com/minji-profile.webp",
+          },
           status: "completed",
         },
         {
@@ -620,17 +677,58 @@ describe("BalanceGameRoom", () => {
       room: resultRoom,
     });
 
-    render(<BalanceGameRoom roomCode="ABC234" />);
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
 
     expect(await screen.findByText("75")).toBeInTheDocument();
+    expect(
+      Array.from(document.querySelectorAll("[data-result-hero-character]")).map(
+        (node) => node.getAttribute("data-result-hero-character"),
+      ),
+    ).toEqual(["purple", "water", "sun"]);
+    expect(
+      document.querySelectorAll("[data-result-scene-character]"),
+    ).toHaveLength(2);
+    const allProfileTab = screen.getByRole("tab", {
+      name: "모두의 결과 보기",
+    });
+    expect(allProfileTab.querySelectorAll("img")).toHaveLength(3);
+    expect(
+      screen.getByRole("tab", { name: "나의 선택 보기" }).querySelector("img"),
+    ).toHaveAttribute("src", "https://example.com/minji-profile.webp");
+    expect(
+      screen
+        .getByRole("tab", { name: "하린과 비교" })
+        .querySelector("img")
+        ?.getAttribute("src"),
+    ).toContain("nuang-character-flame.webp");
     expect(screen.getByText("2문항씩 · 1개 1:1 조합 평균")).toBeInTheDocument();
     fireEvent.click(
       screen.getByRole("button", { name: /치킨 한 마리를 고른다면/ }),
     );
     expect(screen.getByText("나 · 하린")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /하린 님과 나.*50점/ }));
-    expect(screen.getByText("2개 중 1개가 같아요")).toBeInTheDocument();
-    expect(screen.getByText("둘 다")).toBeInTheDocument();
+    const fullProgress = screen.getByRole("progressbar", {
+      name: "후라이드 치킨, 완료자 2명 중 2명, 100퍼센트",
+    });
+    expect(fullProgress).toHaveAttribute("aria-valuenow", "2");
+    expect(
+      fullProgress.querySelector('[data-wave-boundary="vertical"]'),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("progressbar", {
+        name: "양념 치킨, 완료자 2명 중 0명, 0퍼센트",
+      }).firstElementChild,
+    ).toHaveAttribute("data-empty", "true");
+
+    fireEvent.click(screen.getByRole("tab", { name: "하린과 비교" }));
+
+    expect(
+      screen.getByRole("heading", {
+        name: "하린과 2개 중 1개가 같아요",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("같이 얘기해 볼 것")).toBeInTheDocument();
+    expect(screen.getByText("둘의 선택")).toBeInTheDocument();
+    expect(screen.getByText(/둘 다/)).toBeInTheDocument();
     expect(screen.getByText("후라이드 치킨")).toBeInTheDocument();
   });
 
@@ -672,7 +770,7 @@ describe("BalanceGameRoom", () => {
       room: currentResultRoom,
     });
 
-    render(<BalanceGameRoom roomCode="ABC234" />);
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
 
     expect(
       await screen.findByText("아직 자리가 남아 있어요"),
@@ -719,7 +817,7 @@ describe("BalanceGameRoom", () => {
     });
     const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
 
-    render(<BalanceGameRoom roomCode="ABC234" />);
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
 
     fireEvent.click(
       await screen.findByRole("button", { name: "방해자 내보내기" }),
@@ -784,7 +882,7 @@ describe("BalanceGameRoom", () => {
       room: nonOwnerRoom,
     });
 
-    render(<BalanceGameRoom roomCode="ABC234" />);
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
 
     expect(await screen.findByText("하린")).toBeInTheDocument();
     expect(
@@ -822,7 +920,7 @@ describe("BalanceGameRoom", () => {
     );
     const confirm = vi.spyOn(window, "confirm").mockReturnValue(true);
 
-    render(<BalanceGameRoom roomCode="ABC234" />);
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
 
     fireEvent.click(
       await screen.findByRole("button", { name: "하린 내보내기" }),
@@ -872,12 +970,12 @@ describe("BalanceGameRoom", () => {
       },
     });
 
-    render(<BalanceGameRoom roomCode="ABC234" />);
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
 
     fireEvent.click(
       (
         await screen.findAllByRole("button", {
-          name: "결과 공유하기",
+          name: "결과 이미지 공유",
         })
       )[0],
     );

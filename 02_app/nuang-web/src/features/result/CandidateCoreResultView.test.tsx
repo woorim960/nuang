@@ -78,6 +78,9 @@ describe("CandidateCoreResultView", () => {
     );
     expect(screen.getByText(/생활 상황에 대한 답변/)).toBeInTheDocument();
     expect(
+      screen.getByText(/현재 코어 측정 모형은 검증 중인 후보 버전/),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("link", { name: "뉴앙 코드 소개 보기" }),
     ).toHaveAttribute("href", "/map?view=code-guide");
     expect(

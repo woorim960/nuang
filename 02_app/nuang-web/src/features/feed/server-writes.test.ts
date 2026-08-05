@@ -1,11 +1,27 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { writeFeedRequestForAccount } from "@/features/feed/server-writes";
 
 const originalReportMocks = vi.hoisted(() => ({
   readOriginalProfileReport: vi.fn(),
   resolveProfileOwnerAccountId: vi.fn(),
+}));
+const publicationMocks = vi.hoisted(() => ({
+  readCoreResultPublicationDecision: vi.fn(
+    async (): Promise<
+      | { eligible: true; resultReportId: string }
+      | { eligible: false; reason: string }
+    > => ({
+      eligible: true,
+      resultReportId: "44444444-4444-4444-8444-444444444444",
+    }),
+  ),
+}));
+
+vi.mock("@/features/assessment/server-core-result-publication-policy", () => ({
+  readCoreResultPublicationDecision:
+    publicationMocks.readCoreResultPublicationDecision,
 }));
 
 vi.mock("@/features/public-profile/server-profile-reports", () => ({
@@ -45,6 +61,7 @@ const user = {
   identities: [
     {
       id: "kakao-user-001",
+      identity_id: "supabase-identity-kakao-001",
       provider: "kakao",
     },
   ],
@@ -54,6 +71,8 @@ const user = {
 } as unknown as User;
 
 describe("feed server writes", () => {
+  beforeEach(() => vi.clearAllMocks());
+
   it("stores an original topic report as a verified canonical reference", async () => {
     const reportId = "44444444-4444-4444-8444-444444444444";
     const reportKey = `topic_${reportId}`;
@@ -166,6 +185,107 @@ describe("feed server writes", () => {
 
     expect(result).toEqual({ code: "feed_target_invalid", ok: false });
     expect(operations.some((item) => item.table === "feed_post")).toBe(false);
+  });
+
+  it("rejects a candidate core result attachment before writing a feed post", async () => {
+    publicationMocks.readCoreResultPublicationDecision.mockResolvedValueOnce({
+      eligible: false,
+      reason: "release_not_publicable",
+    });
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "create_post",
+        attachments: [
+          {
+            id: "44444444-4444-4444-8444-444444444444",
+            type: "result_summary",
+          },
+        ],
+        body: "코어 결과를 공유해요.",
+        source: "report_share",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      code: "feed_result_release_not_publicable",
+      ok: false,
+    });
+    expect(operations.some((operation) => operation.table === "feed_post")).toBe(
+      false,
+    );
+  });
+
+  it("allows a validated core result attachment", async () => {
+    const reportId = "44444444-4444-4444-8444-444444444444";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "report" &&
+        operation.table === "result_report"
+      ) {
+        return {
+          data: {
+            id: reportId,
+            profile_code: "ENAKQ",
+            profile_name: "관계를 여는 선도자",
+            report_kind: "full",
+            share_summary: {
+              completedAt: "2026-08-05T00:00:00.000Z",
+              domains: [],
+              profileCode: "ENAKQ",
+              profileName: "관계를 여는 선도자",
+              resultLabel: "현재 대표 성향",
+            },
+          },
+          error: null,
+        };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        return {
+          data: {
+            id: "22222222-2222-4222-8222-222222222222",
+            moderation_status: "published",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "create_post",
+        attachments: [{ id: reportId, type: "result_summary" }],
+        body: "검증된 코어 결과를 공유해요.",
+        source: "report_share",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result.ok).toBe(true);
+    expect(operations.some((operation) => operation.table === "feed_post")).toBe(
+      true,
+    );
   });
 
   it("stores new feed posts with public projection only", async () => {
@@ -594,6 +714,7 @@ describe("feed server writes", () => {
     expect(
       operations.some((operation) => operation.table === "feed_poll_vote"),
     ).toBe(false);
+    expect(publicationMocks.readCoreResultPublicationDecision).not.toHaveBeenCalled();
   });
 
   it("removes a partially created balance post when its choices fail to save", async () => {
@@ -1853,6 +1974,21 @@ function createMockClient(
         rpc(name: string, params: Record<string, unknown>) {
           const operation = { name, params, schema };
           rpcOperations.push(structuredClone(operation));
+          if (
+            schema === "identity" &&
+            name === "resolve_account_for_auth_user"
+          ) {
+            return Promise.resolve({
+              data: [
+                {
+                  account_id: accountId,
+                  identities_synced: 1,
+                  resolution: "existing",
+                },
+              ],
+              error: null,
+            });
+          }
           return Promise.resolve(rpcResponder(operation));
         },
         from(table: string) {

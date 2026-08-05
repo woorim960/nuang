@@ -44,6 +44,22 @@ npm run env:check:auth
 npm run env:check:server
 ```
 
+카카오톡 공식 공유는 `NEXT_PUBLIC_KAKAO_JAVASCRIPT_KEY`가 필수다. 이 값은
+브라우저에 전달되는 Kakao Developers의 **공개 JavaScript 키**로,
+Admin key나 REST API key를 입력하면 안 된다. `NEXT_PUBLIC_*` 환경값은
+빌드 시점에 번들에 포함되므로 Vercel에 추가·변경한 뒤에는 반드시
+Production을 재빌드·재배포한다.
+
+현재 Kakao Developers 운영 앱에서 공개 JavaScript 키가 활성 상태이고,
+JavaScript SDK 도메인에 `http://localhost:3000`과 `https://nuang.app`이
+등록된 것을 확인했다. 키 원문은 문서·로그·캡처에 남기지 않는다.
+
+공유 이미지는 현재 빌드의 `public/images/share` 에셋을 브라우저에서
+Kakao CDN에 올리고, Kakao가 발급한 HTTPS URL로 카드를 보낸다. 로컬
+파일 업로드가 막히면 같은 운영 에셋 URL을 Kakao가 스크랩하도록 한 번
+더 시도한다. 두 방법이 모두 실패하면 이미지 없는 카카오 카드를
+보내지 않고 재시도 안내를 보여준다.
+
 현재 단계에서는 local/auth/server env check를 모두 확인한 뒤 실제 브라우저 세션 smoke와 RLS 검증을 진행한다. 공개 출시는 법률·개인정보 최종 승인 전까지 `NO-GO`다.
 
 서버 readiness smoke:
@@ -479,7 +495,7 @@ unavailable 응답:
 
 ```json
 {
-  "policyVersion": "profile-visibility.v0.1",
+  "policyVersion": "profile-visibility.v0.2",
   "settings": [
     { "fieldId": "display_profile", "visibility": "public" },
     { "fieldId": "representative_profile", "visibility": "public" },
@@ -541,7 +557,7 @@ unavailable 응답:
 ```json
 {
   "viewerResultReportId": "11111111-1111-4111-8111-111111111111",
-  "policyVersion": "profile-visibility.v0.1",
+  "policyVersion": "profile-visibility.v0.2",
   "target": {
     "publicSnapshotId": "22222222-2222-4222-8222-222222222222"
   },

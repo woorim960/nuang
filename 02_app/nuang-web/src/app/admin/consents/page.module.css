@@ -1,3 +1,10 @@
+.headerActions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem;
+}
+
 .readOnlyNotice {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -7,6 +14,12 @@
   border-left: 3px solid var(--admin-accent, var(--nu-color-brand));
   color: var(--admin-muted, var(--nu-color-text-muted));
   background: var(--admin-surface, var(--nu-color-surface));
+}
+
+@media (max-width: 520px) {
+  .headerActions {
+    justify-content: flex-start;
+  }
 }
 
 .readOnlyNotice > svg {
@@ -31,6 +44,223 @@
 
 .readOnlyNotice time {
   grid-column: 2;
+}
+
+.guidePanel {
+  overflow: hidden;
+}
+
+.guideHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.guideHeader span {
+  color: var(--admin-accent-strong, var(--nu-color-brand-strong));
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.guideHeader h2,
+.guideHeader p {
+  margin: 0;
+}
+
+.guideHeader h2 {
+  margin-top: 0.2rem;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-title-sm);
+  letter-spacing: -0.025em;
+}
+
+.guideHeader p {
+  margin-top: 0.3rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.guideHeader > a {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+  padding: 0 0.6rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 5px;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.guideGrid {
+  display: grid;
+  gap: 1px;
+  background: var(--admin-border, var(--nu-color-border));
+}
+
+.guideCard {
+  display: grid;
+  align-content: start;
+  gap: 0.75rem;
+  padding: 1rem;
+  background: var(--admin-surface, var(--nu-color-surface));
+}
+
+.guideCard header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.guideCard header > span {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--admin-accent-strong, var(--nu-color-brand-strong));
+  background: var(--admin-accent-soft, var(--nu-color-brand-surface));
+}
+
+.guideCard[data-tone="analytics"] header > span {
+  color: var(--nu-community-700);
+  background: var(--nu-community-50);
+}
+
+.guideCard[data-tone="marketing"] header > span {
+  color: var(--nu-reaction-700);
+  background: var(--nu-reaction-50);
+}
+
+.guideCard header div {
+  display: grid;
+  justify-items: start;
+  gap: 0.15rem;
+}
+
+.guideCard em {
+  display: inline-flex;
+  min-height: 21px;
+  align-items: center;
+  padding: 0 0.35rem;
+  border-radius: 3px;
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+  font-size: var(--nu-text-admin-overline);
+  font-style: normal;
+  font-weight: var(--nu-weight-heavy);
+}
+
+.guideCard h3 {
+  margin: 0;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+}
+
+.guideCard > p,
+.guideCard footer p {
+  margin: 0;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.guideCard dl {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border: 1px solid var(--admin-border-soft, var(--nu-color-border));
+  border-radius: 6px;
+}
+
+.guideCard dl > div {
+  display: grid;
+  gap: 0.2rem;
+  padding: 0.65rem 0.7rem;
+}
+
+.guideCard dl > div + div {
+  border-top: 1px solid var(--admin-border-soft, var(--nu-color-border));
+}
+
+.guideCard dt,
+.guideCard dd {
+  margin: 0;
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.5;
+}
+
+.guideCard dt {
+  color: var(--admin-text, var(--nu-color-text));
+  font-weight: var(--nu-weight-bold);
+}
+
+.guideCard dd {
+  color: var(--admin-muted, var(--nu-color-text-muted));
+}
+
+.guideCard footer {
+  padding: 0.7rem;
+  border-left: 3px solid
+    var(--admin-border-strong, var(--nu-color-border-strong));
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+}
+
+.guideCard footer strong {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.guideCard footer p {
+  font-size: var(--nu-text-admin-micro);
+}
+
+.guideScope {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  padding: 0.85rem 1rem;
+  border-top: 1px solid var(--admin-border, var(--nu-color-border));
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+}
+
+.guideScope > svg {
+  margin-top: 0.15rem;
+  color: var(--admin-accent-strong, var(--nu-color-brand-strong));
+}
+
+.guideScope p {
+  margin: 0;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.55;
+}
+
+.guideScope p strong {
+  display: block;
+  color: var(--admin-text, var(--nu-color-text));
+}
+
+.guideScope > div {
+  display: flex;
+  grid-column: 2;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+}
+
+.guideScope a {
+  color: var(--admin-accent-strong, var(--nu-color-brand-strong));
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
 }
 
 .metricGrid {
@@ -265,6 +495,23 @@
   }
 }
 
+@media (min-width: 760px) {
+  .guideGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 620px) {
+  .guideHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .guideHeader > a {
+    align-self: flex-start;
+  }
+}
+
 @media (min-width: 700px) {
   .readOnlyNotice {
     grid-template-columns: auto minmax(0, 1fr) auto;
@@ -301,10 +548,9 @@
   .tableHead,
   .changeList article {
     display: grid;
-    grid-template-columns: minmax(145px, 1.25fr) minmax(100px, 0.9fr) minmax(
-        105px,
-        0.9fr
-      ) minmax(70px, 0.65fr) minmax(110px, 1fr) minmax(100px, 0.9fr);
+    grid-template-columns:
+      minmax(145px, 1.25fr) minmax(100px, 0.9fr) minmax(105px, 0.9fr)
+      minmax(70px, 0.65fr) minmax(110px, 1fr) minmax(100px, 0.9fr);
     gap: 1rem;
     align-items: center;
   }

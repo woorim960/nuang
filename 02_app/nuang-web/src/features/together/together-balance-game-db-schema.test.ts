@@ -5,6 +5,10 @@ const migration = readFileSync(
   "supabase/migrations/202607310001_together_balance_game_foundation.sql",
   "utf8",
 );
+const performanceMigration = readFileSync(
+  "supabase/migrations/202608050001_together_balance_performance.sql",
+  "utf8",
+);
 const serverImplementation = readFileSync(
   "src/features/together-balance/server.ts",
   "utf8",
@@ -124,7 +128,8 @@ describe("together balance game database contract", () => {
     expect(serverImplementation).toContain(
       "balance:room:${roomId}:round:${round.roundNumber}",
     );
-    expect(serverImplementation).toContain('onConflict: "round_id,item_id"');
+    expect(serverImplementation).toContain("const expectedItems");
+    expect(serverImplementation).toContain(".insert(missingItems)");
   });
 
   it("stores only token digests and makes raw answer tables server-only", () => {
@@ -159,6 +164,13 @@ describe("together balance game database contract", () => {
       "together_balance.response.client_sequence < excluded.client_sequence",
     );
     expect(migration).toContain("together_balance_completed_response_locked");
+    expect(performanceMigration).toContain(
+      "create or replace function together_balance.save_response_by_item_key",
+    );
+    expect(performanceMigration).toContain(
+      "v_response_id := together_balance.save_response",
+    );
+    expect(serverImplementation).toContain('.rpc("save_response_by_item_key"');
   });
 
   it("opens current results at two completers and supports explicit finalization", () => {
@@ -182,6 +194,15 @@ describe("together balance game database contract", () => {
       "together_balance_not_enough_completed_participants",
     );
     expect(migration).toContain("result_status = 'final'");
+    expect(performanceMigration).toContain(
+      "create or replace function together_balance.complete_participant_game",
+    );
+    expect(performanceMigration).toContain(
+      "perform together_balance.complete_round",
+    );
+    expect(performanceMigration).toContain(
+      "perform together_balance.complete_game",
+    );
   });
 
   it("stores reproducible group and pair result snapshots", () => {
@@ -212,10 +233,11 @@ describe("together balance game database contract", () => {
     expect(serverImplementation).toContain("applyStoredSnapshotToResult");
     expect(serverImplementation).toContain("loadBalancePackFromDatabase");
     expect(serverImplementation).toContain(
-      "version:${pack.contentPoolVersion}:recipe:",
+      "version:${release?.releaseId ?? pack.contentPoolVersion}:recipe:",
     );
+    expect(serverImplementation).toContain("assessment_content_release_id");
     expect(serverImplementation).toContain(
-      "version:${pack.contentPoolVersion}:item:",
+      "balance:template-version:${templateVersionId}:item:",
     );
     expect(migration).toContain(
       "create or replace function together_balance.sync_result_feed_snapshot",
@@ -245,12 +267,28 @@ describe("together balance game database contract", () => {
     );
     expect(migration).toContain("response.participant_id = p_participant_id");
     expect(migration).not.toContain("'participantResponses'");
-    expect(serverImplementation).toContain(
-      'participant.status !== "completed"',
+    expect(serverImplementation).toContain('resultStatus !== "waiting"');
+    expect(performanceMigration).toContain(
+      "v_participant_status <> 'completed'",
     );
     expect(migration).toContain("pair_visibility_consent = true");
     expect(migration).toContain("other_participant.pair_visibility_consent");
     expect(migration).toContain("and status = 'completed'");
+    expect(performanceMigration).toContain("'packDescription'");
+    expect(performanceMigration).toContain(
+      "template_version.description_snapshot",
+    );
+  });
+
+  it("keeps performance RPCs server-only and indexes hot room lookups", () => {
+    expect(performanceMigration).toContain(
+      "together_balance_round_item_room_order_idx",
+    );
+    expect(performanceMigration).toContain(
+      "together_balance_round_completion_room_participant_idx",
+    );
+    expect(performanceMigration).toContain("from public, anon, authenticated");
+    expect(performanceMigration).toContain("to service_role");
   });
 
   it("lets only the owner remove unfinished participants and blocks re-entry", () => {

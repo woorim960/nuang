@@ -2,6 +2,7 @@
 
 import {
   ChevronRight,
+  Download,
   FileText,
   FlaskConical,
   Trash2,
@@ -14,6 +15,7 @@ import type {
   AccountResultSummary,
 } from "@/features/account/account-result-contract";
 import { readJsonResponse } from "@/features/account/response-json";
+import { buildLocalExportPayload } from "@/features/account/local-export";
 import {
   deleteLocalAttempt,
   listLocalAttempts,
@@ -363,6 +365,26 @@ export function LocalResultManager() {
     );
   }
 
+  function handleExport() {
+    const payload = buildLocalExportPayload({
+      accountResults,
+      comparisonReports,
+      coreAttempts,
+      exportedAt: new Date().toISOString(),
+      labResults,
+      topicResults,
+    });
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {
+      type: "application/json;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.download = `nuang-data-${new Date().toISOString().slice(0, 10)}.json`;
+    anchor.href = url;
+    anchor.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 0);
+  }
+
   const latestAssessmentEntry = entries.find(
     (entry): entry is Exclude<ResultEntry, { kind: "comparison" }> =>
       entry.kind !== "comparison" && entry.state === "completed",
@@ -438,6 +460,22 @@ export function LocalResultManager() {
         <p className={styles.deleteMessage} role="alert">
           {deleteMessage}
         </p>
+      ) : null}
+
+      {loaded ? (
+        <section className={styles.exportSection}>
+          <div>
+            <strong>내 데이터 파일</strong>
+            <p>
+              현재 볼 수 있는 검사·비교 기록을 JSON 파일로 저장해요. 문항 응답이
+              포함될 수 있으니 공유에 주의해 주세요.
+            </p>
+          </div>
+          <button onClick={handleExport} type="button">
+            <Download aria-hidden="true" size={17} strokeWidth={1.7} />
+            내보내기
+          </button>
+        </section>
       ) : null}
     </section>
   );

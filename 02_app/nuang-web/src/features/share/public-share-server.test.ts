@@ -50,6 +50,8 @@ describe("public share server read", () => {
         profile_code: "ENAKQ",
         profile_name: "예전 저장 이름",
         report_kind: "full",
+        measurement_release_id: "ITEM-1",
+        code_scheme_version: "CODE-1",
       },
       share: {
         account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
@@ -95,6 +97,25 @@ describe("public share server read", () => {
     });
   });
 
+  it("hides an existing share token when its result release is still candidate", async () => {
+    serviceMocks.client = createMockShareClient({
+      attempt: null,
+      itemStatus: "candidate",
+      report: {
+        account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+        code_scheme_version: "CODE-1",
+        id: "22222222-2222-4222-8222-222222222222",
+        measurement_release_id: "ITEM-1",
+        report_kind: "full",
+      },
+      share: createShare(),
+    });
+
+    await expect(readPublicShareToken("public-token")).resolves.toEqual({
+      status: "not_found",
+    });
+  });
+
   it("denies a signed-in viewer when either account blocked the other", async () => {
     browserAuthMocks.userId = "viewer-user";
     serviceMocks.client = createMockShareClient({
@@ -131,6 +152,8 @@ function createMockShareClient({
   block = null,
   blockError = null,
   identity = null,
+  itemStatus = "active",
+  codeStatus = "active",
   report,
   share,
 }: {
@@ -138,6 +161,8 @@ function createMockShareClient({
   block?: unknown;
   blockError?: unknown;
   identity?: unknown;
+  itemStatus?: string;
+  codeStatus?: string;
   report: unknown;
   share: unknown;
 }) {
@@ -151,6 +176,23 @@ function createMockShareClient({
               ? { data: share, error: null }
               : key === "report.result_report"
                 ? { data: report, error: null }
+                : key === "assessment.item_bank_release"
+                  ? {
+                      data: {
+                        code_scheme_version: "CODE-1",
+                        item_bank_release_id: "ITEM-1",
+                        status: itemStatus,
+                      },
+                      error: null,
+                    }
+                  : key === "scoring.code_scheme_release"
+                    ? {
+                        data: {
+                          code_scheme_version: "CODE-1",
+                          status: codeStatus,
+                        },
+                        error: null,
+                      }
                 : key === "assessment.assessment_attempt"
                   ? { data: attempt, error: null }
                   : key === "identity.auth_identity"

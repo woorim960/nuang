@@ -1,0 +1,11 @@
+facet_id,measured_behavior,claim_boundary,change_status
+SE-RE,energy change around time with people,do not infer popularity or social skill,unchanged_review_required
+SE-AI,initiating opinions choices or conversation,do not infer leadership or communication ability,narrowed
+OE-AE,attention duration for sensory atmosphere,do not infer practical information preference or artistic ability,narrowed
+OE-CI,elaborating scenes possibilities or stories,do not infer epistemic accuracy or creativity ability,narrowed
+OE-IE,continuing inquiry after a sufficient answer,do not infer intelligence education or proven-method preference,narrowed
+RO-EC,first attention to feelings versus causes and solutions,do not infer kindness empathy ability or problem-solving ability,unchanged_human_blocker
+SM-EP,starting resuming and continuing low-reward tasks,do not infer responsibility morality or performance,narrowed
+SM-OS,preselecting places order and timing,do not infer flexibility executive ability or life competence,narrowed
+ER-IR,speed and size of uncomfortable emotion change,do not infer visible expression regulation ability or diagnosis,narrowed
+ER-WD,repetition of negative possibilities and delayed choice,do not infer risk-detection ability diagnosis or prudence,narrowed

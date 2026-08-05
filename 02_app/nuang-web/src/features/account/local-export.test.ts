@@ -40,9 +40,9 @@ describe("local export payload", () => {
               resultId: "spark",
             },
           },
-        completedAt: "2026-07-08T00:00:00.000Z",
-        localResultId: "lab_export_test_1",
-        result: {
+          completedAt: "2026-07-08T00:00:00.000Z",
+          localResultId: "lab_export_test_1",
+          result: {
             profile: {
               id: "spark",
               relationTip: "대화 전 짧게 확인해요.",
@@ -61,6 +61,7 @@ describe("local export payload", () => {
           slug: "conversation-temperature",
         },
       ],
+      topicResults: [],
     });
 
     expect(payload.schema).toBe(localExportSchemaVersion);
@@ -68,5 +69,8 @@ describe("local export payload", () => {
     expect(payload.note).toContain("검사 응답이 포함될 수 있으니 공유에 주의");
     expect(payload.coreAttempts[0]?.responses["item-1"]?.value).toBe(4);
     expect(payload.labResults[0]?.expiresAt).toBe("2026-08-07T00:00:00.000Z");
+    expect(payload.accountResults).toEqual([]);
+    expect(payload.comparisonReports).toEqual([]);
+    expect(payload.topicResults).toEqual([]);
   });
 });

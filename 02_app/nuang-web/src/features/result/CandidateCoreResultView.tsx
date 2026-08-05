@@ -514,6 +514,11 @@ export function CandidateCoreResultView({
                   : "생활 상황에 대한 답변을 다섯 영역으로 나눠 더 가까운 방향을 정리했어요."}
               </p>
               <p>능력, 좋고 나쁨, 정신건강을 판단하는 결과는 아니에요.</p>
+              <p>
+                현재 코어 측정 모형은 검증 중인 후보 버전이에요. 이 결과는
+                자기이해를 위한 참고 자료이며, 사람 연구와 정량 검증이 끝난
+                확정 판정이 아니에요.
+              </p>
               <Link
                 className={styles.codeIntroLink}
                 href="/map?view=code-guide"

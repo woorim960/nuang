@@ -72,7 +72,7 @@ const candidateBenefits = [
   },
   {
     icon: MessagesSquare,
-    title: "원하는 사람과 성향을 비교할 수 있어요",
+    title: "내 답을 생활 장면별로 돌아볼 수 있어요",
   },
 ] as const;
 
@@ -365,6 +365,13 @@ export function PrecisionAssessmentIntro({
         </section>
 
         <section aria-label="시작하기 전 안내" className={styles.assurance}>
+          {isCandidateAssessment ? (
+            <p className={styles.candidateNotice} role="note">
+              현재 코어 측정 모형은 검증 중인 후보 버전이에요. 결과는 사람
+              연구·집단별 공정성 검토·정량 검증을 마친 확정 판정이 아니라,
+              이번 답을 돌아보기 위한 참고로 제공돼요.
+            </p>
+          ) : null}
           {decision && decision.reusableAnswerCount > 0 ? (
             <p className={styles.assuranceRow}>
               <Clock3 aria-hidden="true" size={17} strokeWidth={1.9} />

@@ -10,6 +10,7 @@ import {
 import { readAccountResults } from "@/features/account/server-reads";
 import { deleteResultForAccount } from "@/features/account/server-writes";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
+import { rebuildAccountTraitProfile } from "@/features/assessment/server-account-trait-profile";
 import { listPublicComparisonsForUser } from "@/features/together/server-public-comparisons";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
@@ -45,7 +46,27 @@ export async function GET(request: Request) {
     return createApiClosedResponse("supabase_env_missing");
   }
 
-  const [result, comparisonReports] = await Promise.all([
+  const accountResponse = await serviceClient
+    .schema("identity")
+    .from("auth_identity")
+    .select("account_id")
+    .eq("supabase_user_id", auth.user.id)
+    .is("revoked_at", null)
+    .order("provider_linked_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (accountResponse.error) {
+    return NextResponse.json(
+      createAccountResultsFailurePayload("account_results_read_failed"),
+      { status: 500 },
+    );
+  }
+
+  const accountId = accountResponse.data
+    ? (accountResponse.data as { account_id: string }).account_id
+    : null;
+  const [result, comparisonReports, currentTraitProfile] = await Promise.all([
     readAccountResults({
       client: serviceClient,
       resultReportId: parsedQuery.data.resultReportId,
@@ -57,6 +78,9 @@ export async function GET(request: Request) {
           client: serviceClient,
           user: auth.user,
         }),
+    accountId && !parsedQuery.data.resultReportId
+      ? rebuildAccountTraitProfile({ accountId, client: serviceClient })
+      : Promise.resolve(null),
   ]);
 
   if (!result.ok) {
@@ -73,7 +97,11 @@ export async function GET(request: Request) {
   }
 
   return NextResponse.json(
-    createAccountResultsPayload(result.data, [...comparisonReports.data]),
+    createAccountResultsPayload(
+      result.data,
+      [...comparisonReports.data],
+      currentTraitProfile,
+    ),
   );
 }
 

@@ -9,6 +9,7 @@ export type FriendTraitMatchInviteState =
       expiresAt: number;
       guess: FriendTraitMatchChoiceId;
       mine: FriendTraitMatchChoiceId;
+      releaseId?: string;
       status: "ready";
     }
   | { status: "expired" }
@@ -29,19 +30,24 @@ export function createFriendTraitMatchInviteUrl({
   mine,
   now = Date.now(),
   origin,
+  releaseId,
+  slug = "friend-match",
 }: {
   guess: FriendTraitMatchChoiceId;
   mine: FriendTraitMatchChoiceId;
   now?: number;
   origin: string;
+  releaseId?: string | null;
+  slug?: string;
 }) {
-  const inviteUrl = new URL("/assessments/friend-match", origin);
+  const inviteUrl = new URL(`/assessments/${encodeURIComponent(slug)}`, origin);
   inviteUrl.searchParams.set("invite", inviteKind);
   inviteUrl.searchParams.set("v", inviteVersion);
   inviteUrl.searchParams.set("mine", mine);
   inviteUrl.searchParams.set("guess", guess);
   inviteUrl.searchParams.set("issued", String(now));
   inviteUrl.searchParams.set("expires", String(now + inviteLifetimeMs));
+  if (releaseId) inviteUrl.searchParams.set("release", releaseId);
   return inviteUrl.toString();
 }
 
@@ -51,7 +57,7 @@ export function parseFriendTraitMatchInvite(
 ): FriendTraitMatchInviteState {
   const invite = readSingleValue(searchParams.invite);
   if (!invite) {
-    const hasInviteData = ["v", "mine", "guess", "issued", "expires"].some(
+    const hasInviteData = ["v", "mine", "guess", "issued", "expires", "release"].some(
       (key) => searchParams[key] !== undefined,
     );
     return hasInviteData ? { status: "invalid" } : { status: "sender" };
@@ -62,6 +68,7 @@ export function parseFriendTraitMatchInvite(
   const guess = readChoice(searchParams.guess);
   const issuedAt = readTimestamp(searchParams.issued);
   const expiresAt = readTimestamp(searchParams.expires);
+  const releaseId = readOptionalUuid(searchParams.release);
 
   if (
     invite !== inviteKind ||
@@ -71,7 +78,8 @@ export function parseFriendTraitMatchInvite(
     issuedAt === null ||
     expiresAt === null ||
     issuedAt > now + allowedClockSkewMs ||
-    expiresAt - issuedAt !== inviteLifetimeMs
+    expiresAt - issuedAt !== inviteLifetimeMs ||
+    releaseId === "invalid"
   ) {
     return { status: "invalid" };
   }
@@ -84,6 +92,7 @@ export function parseFriendTraitMatchInvite(
     expiresAt,
     guess,
     mine,
+    ...(releaseId ? { releaseId } : {}),
     status: "ready",
   };
 }
@@ -103,4 +112,12 @@ function readTimestamp(value: string | string[] | undefined) {
 
   const timestamp = Number(singleValue);
   return Number.isSafeInteger(timestamp) ? timestamp : null;
+}
+
+function readOptionalUuid(value: string | string[] | undefined) {
+  const singleValue = readSingleValue(value);
+  if (!singleValue) return null;
+  return /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(singleValue)
+    ? singleValue
+    : "invalid";
 }

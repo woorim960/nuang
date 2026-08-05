@@ -1,4 +1,5 @@
 import { hashShareToken } from "@/features/account/server-writes";
+import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import { adaptPublicCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
 import type { CoreResultReportModel } from "@/features/result/unified-core-report/core-result-report-model";
 import {
@@ -65,6 +66,13 @@ export async function readPublicShareToken(
   ) {
     return { status: "expired" };
   }
+
+  const publication = await readCoreResultPublicationDecision({
+    client,
+    ownerAccountId: share.account_id,
+    resultReportId: share.result_report_id,
+  });
+  if (!publication.eligible) return { status: "not_found" };
 
   const reportResponse = await client
     .schema("report")

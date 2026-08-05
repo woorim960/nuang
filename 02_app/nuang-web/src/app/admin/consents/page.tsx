@@ -1,4 +1,13 @@
-import { RefreshCw, ShieldCheck } from "lucide-react";
+import {
+  BarChart3,
+  BellRing,
+  ExternalLink,
+  RefreshCw,
+  Scale,
+  ShieldCheck,
+  UserRoundCheck,
+  type LucideIcon,
+} from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { resolveAdminContext } from "@/features/admin/server-admin-access";
@@ -43,10 +52,16 @@ export default async function AdminConsentsPage({
           <p>회원 선택과 서비스 사용 원칙</p>
           <h1>동의 관리</h1>
         </div>
-        <a className={shared.headerAction} href={refreshHref}>
-          <RefreshCw aria-hidden="true" size={15} strokeWidth={1.8} />
-          새로고침
-        </a>
+        <div className={styles.headerActions}>
+          <Link className={shared.headerAction} href="/admin/legal">
+            <Scale aria-hidden="true" size={15} strokeWidth={1.8} />
+            법률·정책 검토
+          </Link>
+          <a className={shared.headerAction} href={refreshHref}>
+            <RefreshCw aria-hidden="true" size={15} strokeWidth={1.8} />
+            새로고침
+          </a>
+        </div>
       </header>
 
       <section aria-label="동의 운영 원칙" className={styles.readOnlyNotice}>
@@ -61,6 +76,78 @@ export default async function AdminConsentsPage({
         <time dateTime={dashboard.generatedAt}>
           {formatDateTime(dashboard.generatedAt)} 집계
         </time>
+      </section>
+
+      <section
+        aria-labelledby="consent-impact-guide-title"
+        className={`${shared.panel} ${styles.guidePanel}`}
+      >
+        <div className={styles.guideHeader}>
+          <div>
+            <span>동의 항목별 실제 차이</span>
+            <h2 id="consent-impact-guide-title">
+              회원에게 무엇이 달라지는지 먼저 확인하세요
+            </h2>
+            <p>
+              필수 동의는 계정 이용의 근거이고, 두 선택 동의는 서비스 개선
+              기록과 광고성 이메일만 각각 허용합니다.
+            </p>
+          </div>
+          <Link href="/my/settings/notifications">
+            회원 설정 화면 확인
+            <ExternalLink aria-hidden="true" size={14} strokeWidth={1.7} />
+          </Link>
+        </div>
+
+        <div className={styles.guideGrid}>
+          <ConsentImpactCard
+            denied="계정 생성과 로그인을 완료할 수 없습니다. 로그인 없이 공개된 화면이나 비회원용 기능만 이용할 수 있습니다."
+            enabled="계정 생성·로그인과 계정에 연결되는 결과 저장, 설정, 커뮤니티 참여 같은 회원 기능을 이용할 수 있습니다."
+            icon={UserRoundCheck}
+            operator="연령 확인, 이용약관과 개인정보 처리방침 버전이 모두 현재 버전인지 확인합니다. 필수 동의를 분석·광고 동의로 해석하면 안 됩니다."
+            stable="이 동의만으로 선택형 이용 기록이나 광고성 이메일이 허용되지는 않습니다."
+            summary="만 14세 이상 확인, 이용약관, 개인정보 처리방침은 계정을 만들고 운영하기 위한 필수 조건입니다."
+            title="가입 필수 동의"
+            tone="required"
+            type="필수"
+          />
+          <ConsentImpactCard
+            denied="철회 이후에는 새로운 선택형 화면 이용 기록과 서버의 검사 품질 의견을 저장하지 않습니다. 검사와 커뮤니티 등 핵심 서비스는 그대로 이용합니다."
+            enabled="방문한 서비스 영역과 이용 시각을 최소 단위로 기록하고, 회원이 남긴 결과 적합도 같은 검사 품질 의견을 서비스 개선에 활용할 수 있습니다."
+            icon={BarChart3}
+            operator="동의율과 최근 이용 이벤트를 서비스 개선 범위에서만 봅니다. 기존 최소 이용 기록은 처리방침의 보관기간에 따라 관리되고 계정 삭제 시 함께 삭제됩니다."
+            stable="검사 답변, 뉴앙코드, 게시글 내용, 검색어와 동적 주소 식별자는 수집 대상이 아닙니다."
+            summary="화면과 기능의 전반적인 이용 흐름을 확인해 불편한 구간과 검사 품질을 개선하기 위한 선택 동의입니다."
+            title="서비스 개선 이용 데이터"
+            tone="analytics"
+            type="선택"
+          />
+          <ConsentImpactCard
+            denied="광고성 이메일 대상에서 제외됩니다. 인증, 보안, 계정 변경과 서비스 운영에 꼭 필요한 안내는 계속 받을 수 있고 모든 핵심 서비스도 그대로 이용합니다."
+            enabled="새 검사, 함께하기, 이벤트, 혜택과 제휴 소식을 이메일로 받을 수 있습니다. 실제 발송 대상은 활성 계정·현재 동의 버전·인증된 이메일·수신거부 여부를 다시 확인해 정합니다."
+            icon={BellRing}
+            operator="동의율과 실제 발송 준비 인원은 다릅니다. 캠페인에는 ‘이메일 발송 준비’ 인원만 사용하고 회원 설정이나 이메일 수신거부를 즉시 우선합니다."
+            stable="전화·문자·푸시 알림 동의, 개인정보 판매, 성향 기반 맞춤 광고 동의가 아닙니다."
+            summary="뉴앙의 새 소식과 혜택을 이메일로 보내기 위한 선택 동의이며, 현재 범위는 광고성 이메일뿐입니다."
+            title="광고성 이메일 수신"
+            tone="marketing"
+            type="선택"
+          />
+        </div>
+
+        <div className={styles.guideScope}>
+          <ShieldCheck aria-hidden="true" size={17} strokeWidth={1.7} />
+          <p>
+            <strong>아래 지표와 최근 변경 기록의 범위</strong>
+            이용 데이터와 광고성 이메일 두 선택 동의만 집계합니다. 가입 필수
+            동의의 법률 문구와 버전 승인은 법률·정책 검토에서 관리하고, 운영자는
+            이 화면에서 회원 선택을 대신 변경하지 않습니다.
+          </p>
+          <div>
+            <Link href="/admin/legal">법률·정책 검토</Link>
+            <Link href="/policies/privacy">개인정보 처리방침</Link>
+          </div>
+        </div>
       </section>
 
       <section aria-label="동의 현황" className={styles.metricGrid}>
@@ -176,6 +263,61 @@ export default async function AdminConsentsPage({
         )}
       </section>
     </main>
+  );
+}
+
+function ConsentImpactCard({
+  denied,
+  enabled,
+  icon: Icon,
+  operator,
+  stable,
+  summary,
+  title,
+  tone,
+  type,
+}: {
+  denied: string;
+  enabled: string;
+  icon: LucideIcon;
+  operator: string;
+  stable: string;
+  summary: string;
+  title: string;
+  tone: "analytics" | "marketing" | "required";
+  type: "선택" | "필수";
+}) {
+  return (
+    <article className={styles.guideCard} data-tone={tone}>
+      <header>
+        <span aria-hidden="true">
+          <Icon size={19} strokeWidth={1.7} />
+        </span>
+        <div>
+          <em>{type}</em>
+          <h3>{title}</h3>
+        </div>
+      </header>
+      <p>{summary}</p>
+      <dl>
+        <div>
+          <dt>동의하면</dt>
+          <dd>{enabled}</dd>
+        </div>
+        <div>
+          <dt>거부·철회하면</dt>
+          <dd>{denied}</dd>
+        </div>
+        <div>
+          <dt>동의와 무관한 것</dt>
+          <dd>{stable}</dd>
+        </div>
+      </dl>
+      <footer>
+        <strong>운영 확인</strong>
+        <p>{operator}</p>
+      </footer>
+    </article>
   );
 }
 

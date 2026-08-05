@@ -42,4 +42,24 @@ describe("LoginPage", () => {
       "account",
     );
   });
+
+  it("explains research access and keeps the exact return path", async () => {
+    render(
+      await LoginPage({
+        searchParams: Promise.resolve({
+          next: "/research?from=assessments",
+          reason: "research",
+        }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "검사 질문 리뷰는 로그인 후 참여할 수 있어요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "이전 화면으로 돌아가기" }),
+    ).toHaveAttribute("href", "/research?from=assessments");
+  });
 });

@@ -8,7 +8,7 @@ describe("customer-facing policy pages", () => {
     render(<TermsPolicyPage />);
 
     expect(screen.getByText("이용약관")).toBeInTheDocument();
-    expect(screen.getByText("시행일 2026년 8월 1일")).toBeInTheDocument();
+    expect(screen.getByText("시행일 2026년 8월 5일")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "서비스 이용" }),
     ).toBeInTheDocument();
@@ -20,6 +20,16 @@ describe("customer-facing policy pages", () => {
     expect(
       screen.getByText(
         "다른 사람의 권리와 개인정보를 존중하고, 동의 없이 민감한 내용을 올리지 않습니다.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByText("상호: 딱좋은라이프")).toBeInTheDocument();
+    expect(screen.getByText("대표자: 박우림")).toBeInTheDocument();
+    expect(
+      screen.getByText("사업자등록번호: 768-75-00424"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "만 14세 미만 이용자의 회원가입은 현재 제공하지 않습니다. 로그인 없이 브라우저에만 저장하는 일반 검사 콘텐츠는 이용할 수 있습니다.",
       ),
     ).toBeInTheDocument();
     expect(
@@ -63,6 +73,17 @@ describe("customer-facing policy pages", () => {
     expect(
       screen.getByText(
         "프로필과 게시물, 비교 정보는 사용자가 선택한 공개 범위에 따라 보여줍니다.",
+      ),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("개인정보 보호 담당자: 박우림 (딱좋은라이프)"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("답변 안내: 접수 후 1~3일 이내"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "현재 회원가입과 계정 저장 기능은 만 14세 이상인 이용자에게만 제공합니다.",
       ),
     ).toBeInTheDocument();
     expect(document.body).not.toHaveTextContent("준비 중");

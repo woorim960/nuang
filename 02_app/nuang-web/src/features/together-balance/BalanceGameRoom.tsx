@@ -3,7 +3,6 @@
 import {
   ArrowLeft,
   Check,
-  ChevronDown,
   ChevronRight,
   Copy,
   QrCode,
@@ -13,21 +12,24 @@ import {
   X,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type {
   BalanceApiError,
   BalancePairResultView,
   BalanceRoomPreview,
+  BalanceRoomParticipantView,
   BalanceRoomQuestionView,
   BalanceRoomState,
 } from "@/features/together-balance/api-contract";
-import { BALANCE_ANSWER_REVEAL_CONSENT_VERSION } from "@/features/together-balance/api-contract";
+import { BALANCE_ANSWER_REVEAL_CONSENT_VERSION } from "@/features/together-balance/constants";
 import {
   BalanceApiClientError,
   clearParticipantSession,
   completeBalanceRoom,
   finalizeBalanceRoom,
   joinBalanceRoom,
+  readCachedBalanceRoom,
   readBalanceRoom,
   readBalanceRoomPreview,
   readParticipantSession,
@@ -35,6 +37,18 @@ import {
   saveBalanceResponse,
   shareBalanceRoomToFeed,
 } from "@/features/together-balance/client";
+import {
+  ResultAvatar,
+  ResultBackIcon,
+  ResultCheckIcon,
+  ResultChevronIcon,
+  ResultCopyIcon,
+  ResultDuoArtwork,
+  ResultGroupAvatar,
+  ResultQrIcon,
+  ResultSceneBadge,
+  ResultShareIcon,
+} from "./BalanceResultArtwork";
 import styles from "./BalanceGameRoom.module.css";
 
 type ScreenState =
@@ -48,9 +62,19 @@ type ScreenState =
       recoverable: boolean;
     };
 
-export function BalanceGameRoom({ roomCode }: { roomCode: string }) {
+export function BalanceGameRoom({
+  resultView = false,
+  roomCode,
+}: {
+  resultView?: boolean;
+  roomCode: string;
+}) {
+  const router = useRouter();
   const normalizedCode = roomCode.trim().toUpperCase();
   const [screen, setScreen] = useState<ScreenState>({ kind: "loading" });
+  const handleRoomChange = useCallback((room: BalanceRoomState) => {
+    setScreen({ kind: "room", room });
+  }, []);
   const handleRoomError = useCallback((error: unknown) => {
     if (!(error instanceof BalanceApiClientError) || error.retryable) {
       return;
@@ -73,6 +97,10 @@ export function BalanceGameRoom({ roomCode }: { roomCode: string }) {
     async function load() {
       try {
         if (readParticipantSession(normalizedCode)) {
+          const cachedRoom = readCachedBalanceRoom(normalizedCode);
+          if (cachedRoom && active) {
+            setScreen({ kind: "room", room: cachedRoom });
+          }
           const result = await readBalanceRoom(normalizedCode);
           if (active) setScreen({ kind: "room", room: result.room });
         } else {
@@ -113,6 +141,24 @@ export function BalanceGameRoom({ roomCode }: { roomCode: string }) {
     }
   }, [normalizedCode]);
 
+  const activeParticipant =
+    screen.kind === "room"
+      ? screen.room.participants.find((participant) => participant.isMe)
+      : null;
+  const participantCompleted = activeParticipant?.status === "completed";
+
+  useEffect(() => {
+    if (screen.kind !== "room") return;
+    const roomPath = `/assessments/together/balance-game/rooms/${encodeURIComponent(
+      normalizedCode,
+    )}`;
+    if (!resultView && participantCompleted) {
+      router.replace(`${roomPath}/result`);
+    } else if (resultView && !participantCompleted) {
+      router.replace(roomPath);
+    }
+  }, [normalizedCode, participantCompleted, resultView, router, screen.kind]);
+
   if (screen.kind === "loading") return <RoomLoading />;
   if (screen.kind === "error") {
     return (
@@ -135,7 +181,7 @@ export function BalanceGameRoom({ roomCode }: { roomCode: string }) {
   return (
     <ActiveRoom
       onRoomError={handleRoomError}
-      onRoomChange={(room) => setScreen({ kind: "room", room })}
+      onRoomChange={handleRoomChange}
       room={screen.room}
     />
   );
@@ -195,7 +241,9 @@ function JoinRoom({
             </strong>
             <p>같은 주제로 새 방을 만들면 바로 이어서 즐길 수 있어요.</p>
             <Link
-              href={`/assessments/together/balance-game?pack=${preview.pack.slug}`}
+              href={`/assessments/together/balance-game/setup?pack=${encodeURIComponent(
+                preview.pack.slug,
+              )}`}
             >
               같은 주제로 방 만들기
             </Link>
@@ -301,7 +349,13 @@ function ActiveRoom({
     room.isOwner && (me?.answeredCount ?? 0) === 0 && !ownerStarted;
 
   useRoomPolling({
-    active: true,
+    active:
+      ownerIsInviting || (completed && room.resultStatus !== "final"),
+    intervalMs: completed
+      ? room.resultStatus === "waiting"
+        ? 1_500
+        : 2_500
+      : 3_000,
     onError: onRoomError,
     onRoomChange,
     roomCode: room.roomCode,
@@ -363,11 +417,13 @@ function RoomStart({
   );
 }
 
-function QuestionRunner({
+export function QuestionRunner({
   onRoomChange,
+  previewMode = false,
   room,
 }: {
   onRoomChange: (room: BalanceRoomState) => void;
+  previewMode?: boolean;
   room: BalanceRoomState;
 }) {
   const firstUnanswered = room.questions.findIndex(
@@ -399,6 +455,13 @@ function QuestionRunner({
   const completionQueuedRef = useRef(false);
   const completionRequestRef = useRef<string | null>(null);
   const transitionTimersRef = useRef<number[]>([]);
+  const confirmedSelectionsRef = useRef<Record<string, string>>(
+    Object.fromEntries(
+      room.questions.flatMap((item) =>
+        item.responseOptionId ? [[item.id, item.responseOptionId]] : [],
+      ),
+    ),
+  );
   const question = room.questions[index];
   const selectedId = question
     ? (optimisticSelections[question.id] ?? question.responseOptionId ?? null)
@@ -421,6 +484,14 @@ function QuestionRunner({
       transitionTimers.forEach((timer) => window.clearTimeout(timer));
     };
   }, []);
+
+  useEffect(() => {
+    for (const item of room.questions) {
+      if (item.responseOptionId) {
+        confirmedSelectionsRef.current[item.id] = item.responseOptionId;
+      }
+    }
+  }, [room.questions]);
 
   if (!question) {
     return (
@@ -468,16 +539,19 @@ function QuestionRunner({
       <section
         aria-labelledby={questionHeadingId}
         className={styles.questionStage}
+        key={question.id}
         role="group"
       >
         <div className={styles.questionMeta}>
-          <span>
-            {index + 1}/{room.questionCount}
+          <span className={styles.questionTopic}>
+            {question.subtopic || "밸런스 선택"}
           </span>
           <small>
             {pendingCount > 0
-              ? `${pendingCount}개 저장 중`
-              : getProgressCopy(index, room.questionCount)}
+              ? "선택 저장 중"
+              : `${String(index + 1).padStart(2, "0")} / ${String(
+                  room.questionCount,
+                ).padStart(2, "0")}`}
           </small>
         </div>
         <h1 id={questionHeadingId} ref={headingRef} tabIndex={-1}>
@@ -555,6 +629,34 @@ function QuestionRunner({
     }
     const selectedQuestion = question;
     const selectedIndex = index;
+
+    if (previewMode) {
+      setOptimisticSelections((current) => ({
+        ...current,
+        [selectedQuestion.id]: optionId,
+      }));
+      setFailedSelection(null);
+      setCompletionFailed(false);
+      setStatus("");
+      if (selectedIndex < room.questions.length - 1) {
+        const reduceMotion =
+          window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ??
+          false;
+        const timer = window.setTimeout(
+          () => {
+            if (!mountedRef.current) return;
+            setIndex(selectedIndex + 1);
+            requestAnimationFrame(() => headingRef.current?.focus());
+          },
+          reduceMotion ? 0 : 180,
+        );
+        transitionTimersRef.current.push(timer);
+      } else {
+        setStatus("마지막 선택이에요. 실제 서비스에서는 바로 결과를 준비해요.");
+      }
+      return;
+    }
+
     const generation = queueGenerationRef.current;
     lockedQuestionIdsRef.current.add(selectedQuestion.id);
     setLockedQuestionIds((current) => {
@@ -582,7 +684,7 @@ function QuestionRunner({
           setIndex(selectedIndex + 1);
           requestAnimationFrame(() => headingRef.current?.focus());
         },
-        reduceMotion ? 0 : 140,
+        reduceMotion ? 0 : 180,
       );
       transitionTimersRef.current.push(timer);
     } else {
@@ -603,21 +705,30 @@ function QuestionRunner({
         if (!mountedRef.current || generation !== queueGenerationRef.current) {
           return;
         }
-        const savedQuestion = saved.room.questions.find(
-          (item) => item.id === selectedQuestion.id,
-        );
-        if (savedQuestion?.responseOptionId !== optionId) {
+        if (
+          saved.saved.questionId !== selectedQuestion.id ||
+          saved.saved.optionId !== optionId
+        ) {
           throw new Error("선택 저장을 확인하지 못했어요. 다시 눌러 주세요.");
         }
-        onRoomChange(saved.room);
+        confirmedSelectionsRef.current[selectedQuestion.id] = optionId;
+        const locallySavedRoom: BalanceRoomState = {
+          ...room,
+          questions: room.questions.map((item) => ({
+            ...item,
+            responseOptionId:
+              confirmedSelectionsRef.current[item.id] ?? item.responseOptionId,
+          })),
+        };
+        onRoomChange(locallySavedRoom);
         lockedQuestionIdsRef.current.delete(selectedQuestion.id);
         setLockedQuestionIds((current) => {
           const next = new Set(current);
           next.delete(selectedQuestion.id);
           return next;
         });
-        if (saved.room.questions.every((item) => item.responseOptionId)) {
-          await finish(saved.room);
+        if (locallySavedRoom.questions.every((item) => item.responseOptionId)) {
+          await finish(locallySavedRoom);
         }
       } catch (error) {
         if (!mountedRef.current || generation !== queueGenerationRef.current) {
@@ -697,14 +808,30 @@ function ChoiceButton({
 }) {
   return (
     <button
+      aria-label={option.text}
       aria-pressed={selected}
       className={styles.option}
+      data-position={option.position}
       disabled={disabled}
       onClick={onSelect}
       type="button"
     >
-      <span>{option.text}</span>
-      <b>{selected ? <Check aria-hidden="true" size={20} /> : null}</b>
+      <span aria-hidden="true" className={styles.choiceMarker}>
+        {option.position === "left" ? "A" : "B"}
+      </span>
+      {selected ? (
+        <span aria-hidden="true" className={styles.choiceSelected}>
+          내 선택
+        </span>
+      ) : null}
+      <span aria-hidden="true" className={styles.choiceVisual}>
+        <span className={styles.choiceOrbit} />
+        <span className={styles.choiceCore} />
+      </span>
+      <span className={styles.choiceText}>{option.text}</span>
+      <span aria-hidden="true" className={styles.choiceTap}>
+        탭해서 선택
+      </span>
     </button>
   );
 }
@@ -748,125 +875,153 @@ function RoomWaiting({
   );
 }
 
-function RoomResult({
+export function RoomResult({
   onRoomChange,
+  previewMode = false,
   room,
 }: {
   onRoomChange: (room: BalanceRoomState) => void;
+  previewMode?: boolean;
   room: BalanceRoomState;
 }) {
   const result = room.result;
-  const [selectedPairId, setSelectedPairId] = useState<string | null>(null);
+  const [selectedProfileId, setSelectedProfileId] = useState<string | null>(
+    null,
+  );
   const [finalizing, setFinalizing] = useState(false);
   const [feedSharing, setFeedSharing] = useState(false);
   const [status, setStatus] = useState("");
   if (!result) return null;
+  const me = room.participants.find((participant) => participant.isMe) ?? null;
   const selectedPair =
     result.pairResults.find(
-      (pair) => pair.otherParticipantId === selectedPairId,
+      (pair) => pair.otherParticipantId === selectedProfileId,
     ) ?? null;
-
-  if (selectedPair) {
-    return (
-      <PairResult
-        onBack={() => setSelectedPairId(null)}
-        pair={selectedPair}
-        resultLabel={room.pack.resultLabel}
-      />
-    );
-  }
+  const selectedSelf = selectedProfileId === room.myParticipantId;
+  const heroValue = selectedSelf
+    ? (me?.answeredCount ?? room.questionCount)
+    : (selectedPair?.score ?? result.groupScore);
+  const heroUnit = selectedSelf ? "개" : "%";
+  const heroTitle = selectedSelf
+    ? `내가 고른 ${heroValue}개 답이에요`
+    : selectedPair
+      ? `${selectedPair.otherParticipantNickname}과 ${selectedPair.comparedCount}개 중 ${selectedPair.matchCount}개가 같아요`
+      : `전체 선택 중 ${result.groupScore}%가 같았어요`;
 
   return (
     <RoomShell
+      backIcon={<ResultBackIcon />}
       backHref="/assessments/together/balance-game"
-      title={room.roomName}
+      title="우리의 선택"
     >
       <main className={styles.resultPage}>
         <section className={styles.resultHero}>
-          <small>{result.isFinal ? "최종 결과" : "현재 결과"}</small>
-          <p>{room.pack.resultLabel}</p>
-          <strong>
-            {result.groupScore}
-            <em>점</em>
-          </strong>
-          <h2>{result.groupLabel}</h2>
-          <span>
-            {room.targetParticipantCount}명 정원 ·{" "}
-            {result.completedParticipantCount}명 완료
-          </span>
+          <ResultDuoArtwork
+            mode={selectedSelf ? "self" : selectedPair ? "pair" : "group"}
+          />
+          <small>우리의 선택 · {result.completedParticipantCount}명 완료</small>
+          <h2>{heroTitle}</h2>
+          <div className={styles.resultScore}>
+            <strong>
+              {heroValue}
+              <em>{heroUnit}</em>
+            </strong>
+            <span>{selectedSelf ? "내 선택" : room.pack.resultLabel}</span>
+          </div>
           {!result.isFinal ? (
-            <aside>새 사람이 완료하면 현재 결과가 달라질 수 있어요.</aside>
+            <aside>
+              {room.currentParticipantCount - result.completedParticipantCount >
+              0
+                ? `${room.currentParticipantCount - result.completedParticipantCount}명 선택 중 · 완료하면 결과가 업데이트돼요.`
+                : "친구가 더 참여하면 결과가 업데이트돼요."}
+            </aside>
           ) : null}
         </section>
 
-        {result.pairResults.length > 0 ? (
-          <section className={`${styles.resultSection} ${styles.pairSection}`}>
-            <header>
-              <h2>한 명씩 비교해 보기</h2>
-              <p>누구와 어디서 통했는지 확인해 보세요.</p>
-            </header>
-            <div className={styles.pairList}>
-              {result.pairResults.map((pair) => (
-                <button
-                  key={pair.otherParticipantId}
-                  onClick={() => setSelectedPairId(pair.otherParticipantId)}
-                  type="button"
-                >
-                  <span>
-                    <strong>{pair.otherParticipantNickname} 님과 나</strong>
-                    <small>
-                      {pair.comparedCount}개 중 {pair.matchCount}개 같은 선택
-                    </small>
-                  </span>
-                  <span>
-                    {pair.score}점
-                    <ChevronRight
-                      aria-hidden="true"
-                      size={17}
-                      strokeWidth={1.8}
-                    />
-                  </span>
-                </button>
-              ))}
-            </div>
-          </section>
-        ) : null}
+        <ResultProfileSelector
+          onSelect={setSelectedProfileId}
+          room={room}
+          selectedProfileId={selectedProfileId}
+        />
 
-        {result.unanimousQuestions.length > 0 ? (
-          <ResultQuestionSection
-            description="모두 같은 쪽을 고른 선택이에요."
-            pairResults={result.pairResults}
-            questions={result.unanimousQuestions}
-            title="다 같이 통했어요"
-          />
-        ) : null}
+        {selectedPair ? (
+          <>
+            <PairRelationshipPanel pair={selectedPair} room={room} />
+            <ConversationStarter pair={selectedPair} />
+            <PairComparison pair={selectedPair} />
+          </>
+        ) : (
+          <>
+            {selectedSelf ? (
+              <section className={styles.selfResultNotice} role="tabpanel">
+                <ResultAvatar
+                  label={me?.nickname ?? "나"}
+                  participantIndex={room.participants.findIndex(
+                    (participant) => participant.id === room.myParticipantId,
+                  )}
+                  profileImage={me?.profileImage}
+                  seed={me?.avatarSeed ?? room.myParticipantId}
+                  size="small"
+                />
+                <p>
+                  내가 고른 답은 게이지 아래에서 <strong>내 선택</strong>으로
+                  표시했어요.
+                </p>
+              </section>
+            ) : null}
 
-        {result.splitQuestions.length > 0 ? (
-          <ResultQuestionSection
-            description="함께 정하기 전에 한 번 얘기해 보면 좋아요."
-            pairResults={result.pairResults}
-            questions={result.splitQuestions}
-            title="여기서는 갈렸어요"
-          />
-        ) : null}
+            {result.unanimousQuestions.length > 0 ? (
+              <ResultQuestionSection
+                description="모두가 같은 답을 선택했어요."
+                questions={result.unanimousQuestions}
+                room={room}
+                scene="unanimous"
+                selectedParticipantId={
+                  selectedSelf ? room.myParticipantId : null
+                }
+                title="모두의 선택"
+              />
+            ) : null}
+
+            {result.splitQuestions.length > 0 ? (
+              <ResultQuestionSection
+                description="서로 왜 골랐는지 이야기해 보세요."
+                questions={result.splitQuestions}
+                room={room}
+                scene="different"
+                selectedParticipantId={
+                  selectedSelf ? room.myParticipantId : null
+                }
+                title="서로 다른 선택"
+              />
+            ) : null}
+          </>
+        )}
 
         {!result.isFinal &&
         room.currentParticipantCount < room.targetParticipantCount ? (
           <div className={styles.resultRecruit}>
-            <h2>아직 자리가 남아 있어요</h2>
-            <p>초대받은 사람이 완료하면 현재 결과가 새로 계산돼요.</p>
-            <InviteActions room={room} />
+            <div className={styles.resultRecruitHeading}>
+              <div>
+                <h2>아직 자리가 남아 있어요</h2>
+                <p>친구가 선택을 마치면 결과에 바로 반영돼요.</p>
+              </div>
+              <ResultSceneBadge scene="invite" />
+            </div>
+            <InviteActions resultIcons room={room} />
           </div>
         ) : null}
 
         <section className={styles.resultActions}>
           <button
             className={styles.primaryResultAction}
-            onClick={() => void handleResultShare()}
+            onClick={() => {
+              if (!previewMode) void handleResultShare();
+            }}
             type="button"
           >
-            <Share2 aria-hidden="true" size={18} />
-            결과 공유하기
+            <ResultShareIcon />
+            결과 이미지 공유
           </button>
           <Link href="/assessments/together/balance-game">
             다른 주제로 한 판 더
@@ -886,7 +1041,7 @@ function RoomResult({
               onClick={() => void handleFinalize()}
               type="button"
             >
-              {finalizing ? "마감하고 있어요…" : "이 인원으로 마감"}
+              {finalizing ? "마감하고 있어요…" : "지금 결과로 마감"}
             </button>
           ) : null}
           {status ? (
@@ -965,15 +1120,241 @@ function RoomResult({
   }
 }
 
-function PairResult({
-  onBack,
-  pair,
-  resultLabel,
+function ResultProfileSelector({
+  onSelect,
+  room,
+  selectedProfileId,
 }: {
-  onBack: () => void;
-  pair: BalancePairResultView;
-  resultLabel: string;
+  onSelect: (participantId: string | null) => void;
+  room: BalanceRoomState;
+  selectedProfileId: string | null;
 }) {
+  const tabsRef = useRef<Array<HTMLButtonElement | null>>([]);
+  const pairByParticipantId = new Map(
+    (room.result?.pairResults ?? []).map((pair) => [
+      pair.otherParticipantId,
+      pair,
+    ]),
+  );
+  const options = [
+    { available: true, id: null, participant: null },
+    ...room.participants.map((participant) => ({
+      available: participant.isMe || pairByParticipantId.has(participant.id),
+      id: participant.id,
+      participant,
+    })),
+  ];
+
+  return (
+    <section className={styles.resultProfiles}>
+      <header>
+        <h2>누구와 비교할까요?</h2>
+        <p>프로필을 눌러 선택을 비교해 보세요.</p>
+      </header>
+      <div aria-label="결과 비교 대상" role="tablist">
+        {options.map((option, index) => {
+          const selected = selectedProfileId === option.id;
+          const participant = option.participant;
+          const unavailableCopy =
+            participant?.status === "completed" ? "비교 비공개" : "선택 중";
+          return (
+            <button
+              aria-controls="balance-result-comparison"
+              aria-disabled={!option.available}
+              aria-label={
+                participant
+                  ? participant.isMe
+                    ? "나의 선택 보기"
+                    : option.available
+                      ? `${participant.nickname}과 비교`
+                      : `${participant.nickname} ${unavailableCopy}`
+                  : "모두의 결과 보기"
+              }
+              aria-selected={selected}
+              disabled={!option.available}
+              key={option.id ?? "all"}
+              onClick={() => onSelect(option.id)}
+              onKeyDown={(event) => handleProfileArrow(event, index)}
+              ref={(node) => {
+                tabsRef.current[index] = node;
+              }}
+              role="tab"
+              tabIndex={selected ? 0 : -1}
+              type="button"
+            >
+              {participant ? (
+                <ResultAvatar
+                  label={participant.nickname}
+                  participantIndex={index - 1}
+                  profileImage={participant.profileImage}
+                  seed={participant.avatarSeed ?? participant.id}
+                />
+              ) : (
+                <ResultGroupAvatar />
+              )}
+              <strong>
+                {participant
+                  ? participant.isMe
+                    ? "나"
+                    : participant.nickname
+                  : "모두"}
+              </strong>
+              <small>
+                {participant
+                  ? participant.isMe
+                    ? "내 선택"
+                    : option.available
+                      ? "비교하기"
+                      : unavailableCopy
+                  : `${room.result?.completedParticipantCount ?? 0}명`}
+              </small>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+
+  function handleProfileArrow(
+    event: React.KeyboardEvent<HTMLButtonElement>,
+    currentIndex: number,
+  ) {
+    if (!["ArrowLeft", "ArrowRight", "Home", "End"].includes(event.key)) {
+      return;
+    }
+    event.preventDefault();
+    const direction = event.key === "ArrowLeft" ? -1 : 1;
+    let nextIndex =
+      event.key === "Home"
+        ? 0
+        : event.key === "End"
+          ? options.length - 1
+          : currentIndex;
+    for (let offset = 0; offset < options.length; offset += 1) {
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        nextIndex = (nextIndex + direction + options.length) % options.length;
+      }
+      const next = options[nextIndex];
+      if (next?.available) {
+        onSelect(next.id);
+        tabsRef.current[nextIndex]?.focus();
+        return;
+      }
+      if (event.key === "Home") nextIndex += 1;
+      if (event.key === "End") nextIndex -= 1;
+    }
+  }
+}
+
+function PairRelationshipPanel({
+  pair,
+  room,
+}: {
+  pair: BalancePairResultView;
+  room: BalanceRoomState;
+}) {
+  const me = room.participants.find((participant) => participant.isMe) ?? null;
+  const otherParticipant =
+    room.participants.find(
+      (participant) => participant.id === pair.otherParticipantId,
+    ) ?? null;
+  const myParticipantIndex = room.participants.findIndex(
+    (participant) => participant.isMe,
+  );
+  const otherParticipantIndex = room.participants.findIndex(
+    (participant) => participant.id === pair.otherParticipantId,
+  );
+  const differenceCount = pair.comparedCount - pair.matchCount;
+  return (
+    <section
+      className={styles.relationshipPanel}
+      id="balance-result-comparison"
+      role="tabpanel"
+    >
+      <div className={styles.relationshipPeople}>
+        <span>
+          <ResultAvatar
+            label={me?.nickname ?? "나"}
+            participantIndex={myParticipantIndex}
+            profileImage={me?.profileImage}
+            seed={me?.avatarSeed ?? room.myParticipantId}
+          />
+          <small>나</small>
+        </span>
+        <i aria-hidden="true" />
+        <span>
+          <ResultAvatar
+            label={pair.otherParticipantNickname}
+            participantIndex={otherParticipantIndex}
+            profileImage={otherParticipant?.profileImage}
+            seed={
+              otherParticipant?.avatarSeed ??
+              pair.otherParticipantAvatarSeed ??
+              pair.otherParticipantId
+            }
+          />
+          <small>{pair.otherParticipantNickname}</small>
+        </span>
+      </div>
+      <div className={styles.relationshipStats}>
+        <p>
+          <span>같은 선택</span>
+          <strong>{pair.matchCount}</strong>
+        </p>
+        <p>
+          <span>다른 선택</span>
+          <strong>{differenceCount}</strong>
+        </p>
+      </div>
+      <a href="#pair-comparison">
+        둘의 선택 자세히 보기
+        <ResultChevronIcon />
+      </a>
+    </section>
+  );
+}
+
+function ConversationStarter({ pair }: { pair: BalancePairResultView }) {
+  const same = pair.answers.find((answer) => answer.isMatch);
+  const different = pair.answers.find((answer) => !answer.isMatch);
+  const starters = [
+    same
+      ? {
+          prompt: same.prompt,
+          question: "“왜 이걸 골랐어?”",
+          title: "같은 답에서 시작하기",
+        }
+      : null,
+    different
+      ? {
+          prompt: different.prompt,
+          question: "“왜 그 답을 골랐어?”",
+          title: "다른 답에서 시작하기",
+        }
+      : null,
+  ].filter((item): item is NonNullable<typeof item> => item !== null);
+  if (starters.length === 0) return null;
+
+  return (
+    <section className={styles.conversationSection}>
+      <header>
+        <h2>같이 얘기해 볼 것</h2>
+        <p>답을 고른 이유부터 가볍게 물어보세요.</p>
+      </header>
+      <div>
+        {starters.map((starter) => (
+          <article key={starter.title}>
+            <small>{starter.title}</small>
+            <strong>{starter.question}</strong>
+            <p>{starter.prompt}</p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function PairComparison({ pair }: { pair: BalancePairResultView }) {
   const [filter, setFilter] = useState<"all" | "match" | "difference">("all");
   const answers = pair.answers.filter((answer) => {
     if (filter === "match") return answer.isMatch;
@@ -982,128 +1363,207 @@ function PairResult({
   });
 
   return (
-    <RoomShell
-      backAction={onBack}
-      title={`${pair.otherParticipantNickname} 님과 나`}
-    >
-      <main className={styles.pairPage}>
-        <section className={styles.pairHero}>
-          <small>{resultLabel}</small>
-          <strong>
-            {pair.score}
-            <em>점</em>
-          </strong>
-          <h2>
-            {pair.comparedCount}개 중 {pair.matchCount}개가 같아요
-          </h2>
-        </section>
-        <div aria-label="답변 비교 필터" className={styles.pairFilters}>
-          {[
-            ["all", "전체"],
-            ["match", "같은 선택"],
-            ["difference", "다른 선택"],
-          ].map(([id, label]) => (
-            <button
-              aria-pressed={filter === id}
-              key={id}
-              onClick={() => setFilter(id as "all" | "match" | "difference")}
-              type="button"
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <section className={styles.answerList}>
-          {answers.map((answer) => (
-            <article data-match={answer.isMatch} key={answer.id}>
-              <small>{answer.subtopic}</small>
-              <h3>{answer.prompt}</h3>
-              {answer.isMatch ? (
+    <section className={styles.pairComparison} id="pair-comparison">
+      <header>
+        <h2>둘의 선택</h2>
+        <p>{pair.comparedCount}개 답을 나란히 비교했어요.</p>
+      </header>
+      <div aria-label="답변 비교 필터" className={styles.pairFilters}>
+        {[
+          ["all", "전체"],
+          ["match", "같은 답"],
+          ["difference", "다른 답"],
+        ].map(([id, label]) => (
+          <button
+            aria-pressed={filter === id}
+            key={id}
+            onClick={() => setFilter(id as "all" | "match" | "difference")}
+            type="button"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      <div className={styles.answerList}>
+        {answers.map((answer) => (
+          <article data-match={answer.isMatch} key={answer.id}>
+            <small>{answer.subtopic}</small>
+            <h3>{answer.prompt}</h3>
+            {answer.isMatch ? (
+              <p>
+                <ResultCheckIcon />둘 다 <strong>{answer.myOptionText}</strong>
+              </p>
+            ) : (
+              <div>
                 <p>
-                  <Check aria-hidden="true" size={17} />둘 다{" "}
+                  <span>나</span>
                   <strong>{answer.myOptionText}</strong>
                 </p>
-              ) : (
-                <div>
-                  <p>
-                    <span>나</span>
-                    <strong>{answer.myOptionText}</strong>
-                  </p>
-                  <p>
-                    <span>{pair.otherParticipantNickname}</span>
-                    <strong>{answer.otherOptionText}</strong>
-                  </p>
-                </div>
-              )}
-            </article>
-          ))}
-        </section>
-      </main>
-    </RoomShell>
+                <p>
+                  <span>{pair.otherParticipantNickname}</span>
+                  <strong>{answer.otherOptionText}</strong>
+                </p>
+              </div>
+            )}
+          </article>
+        ))}
+      </div>
+    </section>
   );
 }
 
 function ResultQuestionSection({
   description,
-  pairResults,
   questions,
+  room,
+  scene,
+  selectedParticipantId,
   title,
 }: {
   description: string;
-  pairResults: BalancePairResultView[];
   questions: NonNullable<BalanceRoomState["result"]>["splitQuestions"];
+  room: BalanceRoomState;
+  scene: "different" | "unanimous";
+  selectedParticipantId: string | null;
   title: string;
 }) {
   const [openId, setOpenId] = useState<string | null>(null);
   const [showAll, setShowAll] = useState(false);
   const visibleQuestions = showAll ? questions : questions.slice(0, 3);
+  const completedCount = room.result?.completedParticipantCount ?? 0;
   return (
     <section className={styles.resultSection}>
-      <header>
-        <h2>{title}</h2>
-        <p>{description}</p>
+      <header className={styles.resultSectionHeader}>
+        <div>
+          <h2>{title}</h2>
+          <p>{description}</p>
+        </div>
+        <ResultSceneBadge scene={scene} />
       </header>
       <div className={styles.questionResultList}>
-        {visibleQuestions.map((question) => (
-          <article key={question.id}>
-            <button
-              aria-expanded={openId === question.id}
-              onClick={() =>
-                setOpenId((current) =>
-                  current === question.id ? null : question.id,
-                )
-              }
-              type="button"
-            >
-              <span>
-                <small>{question.subtopic}</small>
-                <strong>{question.prompt}</strong>
-              </span>
-              <ChevronDown aria-hidden="true" size={18} />
-            </button>
-            <div className={styles.countBars}>
-              {question.counts.map((count) => (
-                <p key={count.optionId}>
-                  <span>{count.optionText}</span>
-                  <b>{count.count}명</b>
-                </p>
-              ))}
-            </div>
-            {openId === question.id ? (
-              <div className={styles.choicePeople}>
-                {getQuestionChoicePeople(question, pairResults).map(
-                  (choice) => (
-                    <p key={choice.optionText}>
-                      <strong>{choice.optionText}</strong>
-                      <span>{choice.people.join(" · ")}</span>
-                    </p>
-                  ),
-                )}
-                <small>왜 이쪽을 골랐는지 서로 물어보세요.</small>
+        {visibleQuestions.map((question) => {
+          const choices = getQuestionChoicePeople(question, room);
+          const expanded = openId === question.id;
+          return (
+            <article key={question.id}>
+              <button
+                aria-expanded={expanded}
+                onClick={() =>
+                  setOpenId((current) =>
+                    current === question.id ? null : question.id,
+                  )
+                }
+                type="button"
+              >
+                <span>
+                  <small>{question.subtopic}</small>
+                  <strong>{question.prompt}</strong>
+                </span>
+                <ResultChevronIcon className={styles.resultChevron} />
+              </button>
+              <div className={styles.countBars}>
+                {question.counts.map((count, countIndex) => {
+                  const choice = choices.find(
+                    (item) => item.optionText === count.optionText,
+                  );
+                  const percentage =
+                    completedCount > 0
+                      ? Math.round((count.count / completedCount) * 100)
+                      : 0;
+                  const selectedHere = Boolean(
+                    selectedParticipantId &&
+                    choice?.people.some(
+                      (person) => person.id === selectedParticipantId,
+                    ),
+                  );
+                  return (
+                    <div
+                      className={styles.countBarItem}
+                      data-selected={selectedHere}
+                      data-tone={
+                        scene === "different" && countIndex === 1
+                          ? "water"
+                          : "purple"
+                      }
+                      key={count.optionId}
+                    >
+                      <div className={styles.countBarLabel}>
+                        <span>{count.optionText}</span>
+                        <b>
+                          {count.count}/{completedCount}명
+                        </b>
+                      </div>
+                      <div
+                        aria-label={`${count.optionText}, 완료자 ${completedCount}명 중 ${count.count}명, ${percentage}퍼센트`}
+                        aria-valuemax={completedCount}
+                        aria-valuemin={0}
+                        aria-valuenow={count.count}
+                        className={styles.distributionTrack}
+                        role="progressbar"
+                      >
+                        <span
+                          className={styles.distributionFill}
+                          data-empty={percentage === 0}
+                          data-full={percentage === 100}
+                          style={{ width: `${percentage}%` }}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className={styles.distributionWaveEdge}
+                            data-wave-boundary="vertical"
+                          >
+                            <svg preserveAspectRatio="none" viewBox="0 0 20 72">
+                              <rect
+                                className={styles.distributionWaveSurface}
+                                height="72"
+                                width="20"
+                              />
+                              <path
+                                className={styles.distributionWaveShape}
+                                d="M0 0H10C12 2 12 4 10 6C8 8 8 10 10 12C12 14 12 16 10 18C8 20 8 22 10 24C12 26 12 28 10 30C8 32 8 34 10 36C12 38 12 40 10 42C8 44 8 46 10 48C12 50 12 52 10 54C8 56 8 58 10 60C12 62 12 64 10 66C8 68 8 70 10 72H0Z"
+                              />
+                            </svg>
+                          </span>
+                        </span>
+                      </div>
+                      <div className={styles.countBarPeople}>
+                        <ResultPeopleStack
+                          hiddenCount={choice?.hiddenCount ?? count.count}
+                          people={choice?.people ?? []}
+                        />
+                        {selectedHere ? <small>내 선택</small> : null}
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ) : null}
-          </article>
-        ))}
+              {expanded ? (
+                <div className={styles.choicePeople}>
+                  {choices.map((choice) => (
+                    <div key={choice.optionText}>
+                      <strong>{choice.optionText}</strong>
+                      <span>
+                        {choice.people.length > 0
+                          ? choice.people
+                              .map((person) =>
+                                person.isMe ? "나" : person.nickname,
+                              )
+                              .join(" · ")
+                          : choice.hiddenCount > 0
+                            ? ""
+                            : "선택한 사람 없음"}
+                        {choice.hiddenCount > 0
+                          ? `${choice.people.length > 0 ? " · " : ""}이름 미표시 ${choice.hiddenCount}명`
+                          : ""}
+                      </span>
+                    </div>
+                  ))}
+                  <small>왜 골랐는지 이야기해 보세요.</small>
+                </div>
+              ) : null}
+            </article>
+          );
+        })}
       </div>
       {questions.length > 3 ? (
         <button
@@ -1118,36 +1578,98 @@ function ResultQuestionSection({
   );
 }
 
+function ResultPeopleStack({
+  hiddenCount,
+  people,
+}: {
+  hiddenCount: number;
+  people: ResultChoicePerson[];
+}) {
+  const visiblePeople = people.slice(0, 5);
+  const overflowCount = hiddenCount + Math.max(0, people.length - 5);
+  if (visiblePeople.length === 0 && overflowCount === 0) {
+    return <span className={styles.emptyPeople}>선택한 사람 없음</span>;
+  }
+  return (
+    <span aria-hidden="true" className={styles.resultPeopleStack}>
+      {visiblePeople.map((person) => (
+        <ResultAvatar
+          key={person.id}
+          label={person.nickname}
+          participantIndex={person.participantIndex}
+          profileImage={person.profileImage}
+          seed={person.avatarSeed}
+          size="small"
+        />
+      ))}
+      {overflowCount > 0 ? <b>+{overflowCount}</b> : null}
+    </span>
+  );
+}
+
+type ResultChoicePerson = {
+  avatarSeed: string;
+  id: string;
+  isMe: boolean;
+  nickname: string;
+  participantIndex: number;
+  profileImage?: BalanceRoomParticipantView["profileImage"];
+};
+
 function getQuestionChoicePeople(
   question: NonNullable<BalanceRoomState["result"]>["splitQuestions"][number],
-  pairResults: BalancePairResultView[],
+  room: BalanceRoomState,
 ) {
   const peopleByOptionText = new Map(
-    question.counts.map((count) => [count.optionText, [] as string[]]),
+    question.counts.map((count) => [
+      count.optionText,
+      [] as ResultChoicePerson[],
+    ]),
   );
-  const firstAnswer = pairResults
-    .flatMap((pair) => pair.answers)
-    .find((answer) => answer.id === question.id);
-  if (firstAnswer) {
-    peopleByOptionText.get(firstAnswer.myOptionText)?.push("나");
+  const me = room.participants.find((participant) => participant.isMe);
+  const ownQuestion = room.questions.find((item) => item.id === question.id);
+  const ownOption = ownQuestion?.options.find(
+    (option) => option.id === ownQuestion.responseOptionId,
+  );
+  if (me && ownOption) {
+    peopleByOptionText.get(ownOption.text)?.push({
+      avatarSeed: me.avatarSeed ?? me.id,
+      id: me.id,
+      isMe: true,
+      nickname: me.nickname,
+      participantIndex: room.participants.findIndex(
+        (participant) => participant.id === me.id,
+      ),
+      profileImage: me.profileImage,
+    });
   }
-  for (const pair of pairResults) {
+  for (const pair of room.result?.pairResults ?? []) {
     const answer = pair.answers.find((item) => item.id === question.id);
     if (!answer) continue;
-    peopleByOptionText
-      .get(answer.otherOptionText)
-      ?.push(pair.otherParticipantNickname);
+    const participant = room.participants.find(
+      (item) => item.id === pair.otherParticipantId,
+    );
+    if (!participant) continue;
+    peopleByOptionText.get(answer.otherOptionText)?.push({
+      avatarSeed:
+        participant.avatarSeed ??
+        pair.otherParticipantAvatarSeed ??
+        participant.id,
+      id: participant.id,
+      isMe: false,
+      nickname: participant.nickname,
+      participantIndex: room.participants.findIndex(
+        (item) => item.id === participant.id,
+      ),
+      profileImage: participant.profileImage,
+    });
   }
   return question.counts.map((count) => {
     const people = peopleByOptionText.get(count.optionText) ?? [];
     return {
+      hiddenCount: Math.max(0, count.count - people.length),
       optionText: count.optionText,
-      people:
-        count.count === 0
-          ? ["선택한 사람 없음"]
-          : people.length === count.count
-            ? people
-            : [...people, `이름 미표시 ${count.count - people.length}명`],
+      people,
     };
   });
 }
@@ -1253,7 +1775,13 @@ function ParticipantList({
   }
 }
 
-function InviteActions({ room }: { room: BalanceRoomState }) {
+function InviteActions({
+  resultIcons = false,
+  room,
+}: {
+  resultIcons?: boolean;
+  room: BalanceRoomState;
+}) {
   const [status, setStatus] = useState("");
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const [qrLoading, setQrLoading] = useState(false);
@@ -1267,11 +1795,19 @@ function InviteActions({ room }: { room: BalanceRoomState }) {
         </button>
       </div>
       <button onClick={() => void shareInvite()} type="button">
-        <Share2 aria-hidden="true" size={19} />
+        {resultIcons ? (
+          <ResultShareIcon size={19} />
+        ) : (
+          <Share2 aria-hidden="true" size={19} />
+        )}
         초대 링크 보내기
       </button>
       <button onClick={() => void copyInvite()} type="button">
-        <Copy aria-hidden="true" size={18} />
+        {resultIcons ? (
+          <ResultCopyIcon size={18} />
+        ) : (
+          <Copy aria-hidden="true" size={18} />
+        )}
         링크 복사
       </button>
       <button
@@ -1279,7 +1815,11 @@ function InviteActions({ room }: { room: BalanceRoomState }) {
         onClick={() => void toggleQr()}
         type="button"
       >
-        <QrCode aria-hidden="true" size={18} />
+        {resultIcons ? (
+          <ResultQrIcon size={18} />
+        ) : (
+          <QrCode aria-hidden="true" size={18} />
+        )}
         {qrLoading ? "QR 만드는 중…" : qrDataUrl ? "QR 닫기" : "QR로 초대"}
       </button>
       {qrDataUrl ? (
@@ -1370,26 +1910,28 @@ function InviteActions({ room }: { room: BalanceRoomState }) {
 function RoomShell({
   backAction,
   backHref,
+  backIcon,
   children,
   title,
   trailing,
 }: {
   backAction?: () => void;
   backHref?: string;
+  backIcon?: React.ReactNode;
   children: React.ReactNode;
   title: string;
   trailing?: React.ReactNode;
 }) {
   const back = backAction ? (
     <button aria-label="이전 화면" onClick={backAction} type="button">
-      <ArrowLeft aria-hidden="true" size={23} />
+      {backIcon ?? <ArrowLeft aria-hidden="true" size={23} />}
     </button>
   ) : (
     <Link
       aria-label="밸런스 게임으로 돌아가기"
       href={backHref ?? "/home?view=together"}
     >
-      <ArrowLeft aria-hidden="true" size={23} />
+      {backIcon ?? <ArrowLeft aria-hidden="true" size={23} />}
     </Link>
   );
   return (
@@ -1440,11 +1982,13 @@ function RoomError({
 
 function useRoomPolling({
   active,
+  intervalMs,
   onError,
   onRoomChange,
   roomCode,
 }: {
   active: boolean;
+  intervalMs: number;
   onError?: (error: unknown) => void;
   onRoomChange: (room: BalanceRoomState) => void;
   roomCode: string;
@@ -1452,18 +1996,23 @@ function useRoomPolling({
   useEffect(() => {
     if (!active) return;
     let stopped = false;
+    let inFlight = false;
 
     async function refresh() {
-      if (document.visibilityState === "hidden") return;
+      if (document.visibilityState === "hidden" || inFlight) return;
+      inFlight = true;
       try {
         const response = await readBalanceRoom(roomCode);
         if (!stopped) onRoomChange(response.room);
       } catch (error) {
         onError?.(error);
+      } finally {
+        inFlight = false;
       }
     }
 
-    const interval = window.setInterval(() => void refresh(), 5_000);
+    void refresh();
+    const interval = window.setInterval(() => void refresh(), intervalMs);
     const handleVisibility = () => void refresh();
     document.addEventListener("visibilitychange", handleVisibility);
     return () => {
@@ -1471,7 +2020,7 @@ function useRoomPolling({
       window.clearInterval(interval);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
-  }, [active, onError, onRoomChange, roomCode]);
+  }, [active, intervalMs, onError, onRoomChange, roomCode]);
 }
 
 function getRoomErrorGuidance(code?: BalanceApiError["code"]) {
@@ -1490,15 +2039,6 @@ function getRoomErrorGuidance(code?: BalanceApiError["code"]) {
   return "초대 링크를 다시 확인하거나 새 방을 시작해 보세요.";
 }
 
-function getProgressCopy(index: number, total: number) {
-  const remaining = total - index - 1;
-  if (remaining === 0) return "마지막 선택이에요";
-  if (remaining <= 4) return `이제 ${remaining}번만 더 고르면 돼요`;
-  if (index + 1 === Math.ceil(total / 2))
-    return "서로 통할지 슬슬 궁금해지네요";
-  return "둘 중 하나만 고르면 돼요";
-}
-
 function getEstimatedPlayMinutes(questionCount: number) {
   if (questionCount <= 8) return 1;
   if (questionCount <= 16) return 2;
@@ -1509,7 +2049,7 @@ function getEstimatedPlayMinutes(questionCount: number) {
 async function shareResult(room: BalanceRoomState) {
   if (!room.result) return "";
   const text = `${room.roomName}의 ${room.pack.resultLabel}는 ${room.result.groupScore}점! 우리도 얼마나 비슷한지 해볼래?`;
-  const url = `${window.location.origin}/assessments/together/balance-game?pack=${encodeURIComponent(
+  const url = `${window.location.origin}/assessments/together/balance-game/setup?pack=${encodeURIComponent(
     room.pack.slug,
   )}`;
   if (navigator.share) {

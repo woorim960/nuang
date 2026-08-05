@@ -116,6 +116,34 @@ describe("FreeTopicResultView", () => {
     expect(storageMock.syncFreeTopicResult).not.toHaveBeenCalled();
   });
 
+  it("keeps the personalized copy frozen for a released result", async () => {
+    const stored = createStoredResult({ syncStatus: "synced" });
+    stored.productReleaseId = "11111111-1111-4111-8111-111111111111";
+    stored.reportSnapshot.personalizedSummary = {
+      body: "이 문장은 검사를 마친 시점에 확정된 설명이에요.",
+      eyebrow: "완료 당시 결과",
+      steps: [],
+      title: "완료 당시의 내 대화 성향",
+    };
+
+    render(
+      <FreeTopicResultView
+        initialResult={stored}
+        localResultId={stored.localResultId}
+        slug="conversation-temperature"
+      />,
+    );
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "완료 당시의 내 대화 성향",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("이 문장은 검사를 마친 시점에 확정된 설명이에요."),
+    ).toBeInTheDocument();
+  });
+
   it("shares a free topic report to the feed without exposing raw answers", async () => {
     vi.stubGlobal(
       "fetch",
@@ -156,8 +184,9 @@ describe("FreeTopicResultView", () => {
     fireEvent.click(
       await screen.findByRole("button", { name: "커뮤니티에 공유" }),
     );
+    await screen.findByRole("dialog", { name: "커뮤니티에 공유" });
     fireEvent.click(
-      await screen.findByRole("button", { name: "커뮤니티에 공유" }),
+      screen.getByRole("button", { name: "커뮤니티에 공유" }),
     );
 
     await waitFor(() => {
@@ -234,6 +263,56 @@ describe("FreeTopicResultView", () => {
     expect(
       document.body.textContent?.replace(/\s/g, "").length,
     ).toBeGreaterThan(2_000);
+  });
+
+  it("renders the published operator strength, caution, and action for the scored level", async () => {
+    const assessment = structuredClone(
+      getFreeTopicAssessment("apology-style")!,
+    );
+    const scale = assessment.reportScales?.find(
+      (item) => item.id === "responsibility_acknowledgement",
+    );
+    expect(scale).toBeDefined();
+    scale!.highStrength = "책임을 구체적으로 인정해 대화의 출발점을 만들어요.";
+    scale!.highWatch = "모든 책임을 혼자 떠안는 방식으로 흐르지 않도록 살펴보세요.";
+    scale!.highAction = "인정한 내용과 다음 행동을 한 문장씩 나눠 말해 보세요.";
+    const stored = createStoredResult({ syncStatus: "synced" });
+    stored.assessment = {
+      categoryId: assessment.categoryId,
+      categoryLabel: assessment.categoryLabel,
+      slug: assessment.slug,
+      title: assessment.title,
+    };
+    stored.result.scoresByScaleId = {
+      impact_listening: 50,
+      repair_planning: 50,
+      responsibility_acknowledgement: 75,
+    };
+    stored.reportSnapshot = buildFreeTopicResultReport({
+      assessment,
+      result: stored.result,
+    });
+
+    render(
+      <FreeTopicResultView
+        assessmentOverride={assessment}
+        initialResult={stored}
+        localResultId="topic_operator_copy_123"
+        questionsOverride={getFreeTopicQuestions(assessment.slug)}
+        slug={assessment.slug}
+      />,
+    );
+
+    const detail = await screen.findByRole("heading", {
+      name: "내가 놓친 점 인정하기에서 보이는 강점과 보완점",
+    });
+    fireEvent.click(detail);
+    expect(
+      screen.getByText("책임을 구체적으로 인정해 대화의 출발점을 만들어요."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("인정한 내용과 다음 행동을 한 문장씩 나눠 말해 보세요."),
+    ).toBeInTheDocument();
   });
 
   it("uses the recharge recall period and score meaning on the result", async () => {

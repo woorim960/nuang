@@ -55,12 +55,15 @@ export async function searchServerPublicProfiles(rawQuery: string) {
 
   try {
     const viewerAccountId = await readViewerAccountId(client);
-    const blockedAccountIds = await readBlockedCommunityAccountIds({
+    const blockedAccountIdsResult = await readBlockedCommunityAccountIds({
       accountId: viewerAccountId,
       client,
     });
+    if (blockedAccountIdsResult.state === "unavailable") {
+      return { code: "search_unavailable" as const, ok: false as const };
+    }
     const profiles = await searchPublicProfiles({
-      blockedAccountIds,
+      blockedAccountIds: blockedAccountIdsResult.blockedAccountIds,
       client,
       query: normalized.value,
       viewerAccountId,

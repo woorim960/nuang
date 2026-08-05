@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Compass } from "lucide-react";
+import { ChevronRight, Compass, Eye } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import {
@@ -93,6 +93,16 @@ export function ProfileReportCollection({
 
   return (
     <section className={styles.collection}>
+      {isSelf ? (
+        <div className={styles.visibilityGuide}>
+          <Eye aria-hidden="true" size={18} strokeWidth={1.75} />
+          <p>
+            <strong>검사 결과는 기본으로 프로필에 공개돼요.</strong>
+            공개하고 싶지 않은 결과는 아래 스위치를 끄면 바로 비공개로 바뀌어요.
+            검사에서 고른 답과 원점수는 공개되지 않아요.
+          </p>
+        </div>
+      ) : null}
       {isSelf && items.some((report) => report.type === "core") ? (
         <Link className={styles.latestCoreLink} href="/my/reports">
           <span>
@@ -126,7 +136,7 @@ export function ProfileReportCollection({
           {visibleReports.map((report) => {
             const isPublic = report.visibility === "profile_public";
             const visibilityStatus = isPublic
-              ? "다른 사람이 이 결과를 볼 수 있어요"
+              ? "프로필 방문자와 공유 링크를 받은 사람이 볼 수 있어요"
               : "나만 볼 수 있어요";
 
             return (

@@ -1,0 +1,14 @@
+{
+  "status": "software_edge_cases_executed_not_psychometric_evidence",
+  "testFile": "src/lib/scoring/core-ai-prereview-safety.test.ts",
+  "containsSyntheticData": true,
+  "containsParticipantData": false,
+  "checks": [
+    "60 full items: six per facet and three direct/three reverse",
+    "22 quick items: every configured public facet covered",
+    "empty and all-unsure responses produce no code",
+    "direct and reverse scoring are monotonic in their keyed direction",
+    "neutral straightline responses are exposed as boundary/undetermined"
+  ],
+  "prohibitedInterpretation": "Passing software tests does not estimate reliability, validity, DIF, invariance, response distributions, completion, or sample representativeness."
+}

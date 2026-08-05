@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import { readClientAccountResults } from "@/features/account/client-account-results";
 import { AssessmentRestartSheet } from "@/features/assessment/AssessmentRestartSheet";
 import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
@@ -69,6 +70,8 @@ export function AssessmentHomeCoreSection() {
   const [accountResults, setAccountResults] = useState<AccountResultSummary[]>(
     [],
   );
+  const [currentTraitProfile, setCurrentTraitProfile] =
+    useState<AccountTraitProfile | null>(null);
   const [loaded, setLoaded] = useState(false);
   const [readError, setReadError] = useState(false);
   const [restartIntent, setRestartIntent] = useState<RestartIntent | null>(
@@ -109,6 +112,7 @@ export function AssessmentHomeCoreSection() {
         if (!isMounted) return;
         setAttempts(localRead.nextAttempts);
         setAccountResults(accountRead.results);
+        setCurrentTraitProfile(accountRead.currentTraitProfile);
         setRestoredFromAnotherDevice(restoredCount > 0);
         setReadError(
           localRead.state === "error" || accountRead.state === "error",
@@ -118,6 +122,7 @@ export function AssessmentHomeCoreSection() {
         if (!isMounted) return;
         setAttempts([]);
         setAccountResults([]);
+        setCurrentTraitProfile(null);
         setReadError(true);
       })
       .finally(() => {
@@ -133,15 +138,15 @@ export function AssessmentHomeCoreSection() {
     () =>
       readError
         ? {
-          cta: "내 결과 확인하기",
-          description:
-            "저장된 결과 일부를 불러오지 못했어요. 결과 화면에서 다시 확인해 주세요.",
-          eyebrow: "결과 확인 필요",
-          href: "/my/reports",
-          title: "내 결과를 다시 확인해 주세요",
-        }
-        : buildCoreJourneyState(attempts, accountResults),
-    [accountResults, attempts, readError],
+            cta: "내 결과 확인하기",
+            description:
+              "저장된 결과 일부를 불러오지 못했어요. 결과 화면에서 다시 확인해 주세요.",
+            eyebrow: "결과 확인 필요",
+            href: "/my/reports",
+            title: "내 결과를 다시 확인해 주세요",
+          }
+        : buildCoreJourneyState(attempts, accountResults, currentTraitProfile),
+    [accountResults, attempts, currentTraitProfile, readError],
   );
 
   async function restartAssessment(intent: RestartIntent) {
@@ -301,6 +306,7 @@ export function AssessmentHomeCoreSection() {
 export function buildCoreJourneyState(
   attempts: LocalAssessmentAttempt[],
   accountResults: AccountResultSummary[],
+  currentTraitProfile: AccountTraitProfile | null = null,
 ): CoreJourneyState {
   const fullInProgress = getLatestAttempt(
     attempts,
@@ -342,19 +348,29 @@ export function buildCoreJourneyState(
   const latest = selectLatestCompletedCoreReport(collection);
 
   if (representative?.identity.kind === "full") {
+    const currentCode = currentTraitProfile?.code ?? representative.result.code;
+    const currentName =
+      currentTraitProfile?.profileName ??
+      representative.result.currentProfileName;
     const href = representative.identity.accountResultReportId
       ? buildAccountCoreResultHref({
-        backHref: "/home",
-        resultReportId: representative.identity.accountResultReportId,
-      })
+          backHref: "/home",
+          resultReportId: representative.identity.accountResultReportId,
+        })
       : buildLocalCoreResultHref({
-        backHref: "/home",
-        localResultId: representative.identity.localResultId!,
-      });
+          backHref: "/home",
+          localResultId: representative.identity.localResultId!,
+        });
     return {
       cta: "내 성향 결과 보기",
-      description: "내 뉴앙 코드와 자세한 성향 해석을 다시 볼 수 있어요.",
-      eyebrow: "정밀 성향 검사 완료",
+      description:
+        currentTraitProfile?.source === "core_and_topics"
+          ? `${currentTraitProfile.topicCount}개의 주제 검사까지 반영해 내 성향이 더 구체적으로 자리 잡았어요.`
+          : "내 뉴앙 코드와 자세한 성향 해석을 다시 볼 수 있어요.",
+      eyebrow:
+        currentTraitProfile?.source === "core_and_topics"
+          ? "검사할수록 선명해지는 현재 코드"
+          : "정밀 성향 검사 완료",
       href,
       secondaryAction: {
         assessmentKind: "full",
@@ -362,7 +378,7 @@ export function buildCoreJourneyState(
         label: "정밀 검사 다시하기",
         type: "restart",
       },
-      title: `${representative.result.code} · ${representative.result.currentProfileName}`,
+      title: `${currentCode} · ${currentName}`,
     };
   }
 
@@ -580,10 +596,10 @@ function getProgressAriaText(journey: CoreJourneyState) {
 function getAssessmentHref(kind: CoreAssessmentKind) {
   return kind === "full"
     ? buildPrecisionIntroHref({
-      backDestination: "/home",
-      entrySource: "home",
-      returnDestination: "/home",
-    })
+        backDestination: "/home",
+        entrySource: "home",
+        returnDestination: "/home",
+      })
     : "/assessments/nu-core-quick?returnTo=%2Fhome";
 }
 

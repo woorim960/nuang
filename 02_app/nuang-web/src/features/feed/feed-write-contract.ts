@@ -31,6 +31,7 @@ export type FeedWriteFailureCode =
   | "feed_write_guard_unavailable"
   | "feed_duplicate_content"
   | "feed_external_link_blocked"
+  | "feed_result_release_not_publicable"
   | "feed_already_reported"
   | "feed_post_insert_failed"
   | "feed_post_update_failed"
@@ -138,6 +139,12 @@ export const feedWriteFailures: Record<
   feed_external_link_blocked: {
     httpStatus: 400,
     message: "안전이 확인되지 않은 링크가 포함되어 있어 등록할 수 없어요.",
+    retryable: false,
+    step: "validate_target",
+  },
+  feed_result_release_not_publicable: {
+    httpStatus: 409,
+    message: "검토가 끝난 코어 결과만 피드에 공유할 수 있어요.",
     retryable: false,
     step: "validate_target",
   },

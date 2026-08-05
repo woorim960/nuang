@@ -90,7 +90,7 @@ export async function readAnalyticsCollectionPermission({
     client
       .schema("consent")
       .from("age_and_consent_status")
-      .select("analytics_opt_in")
+      .select("analytics_opt_in,analytics_consent_version")
       .eq("account_id", accountId)
       .maybeSingle(),
   ]);
@@ -105,7 +105,9 @@ export async function readAnalyticsCollectionPermission({
   return {
     allowed:
       account.data?.status === "active" &&
-      preference.data?.analytics_opt_in === true,
+      preference.data?.analytics_opt_in === true &&
+      preference.data?.analytics_consent_version ===
+        optionalConsentVersions.analytics,
     ok: true as const,
   };
 }

@@ -39,6 +39,9 @@ describe("CoreResultReportTemplate", () => {
     expect(
       screen.getByRole("heading", { name: "내 뉴앙 코드 풀이" }),
     ).toBeInTheDocument();
+    expect(screen.getByRole("note")).toHaveTextContent(
+      /검증 중인 후보 버전.*사람 연구·집단별 공정성 검토·정량 검증.*확정 판정이 아니에요/,
+    );
     expect(
       screen.getByRole("heading", { name: "생활 속의 나" }),
     ).toBeInTheDocument();
@@ -84,6 +87,14 @@ describe("CoreResultReportTemplate", () => {
         .length,
     ).toBeGreaterThan(0);
     expect(screen.queryByText(/성향일 확률 70%/)).not.toBeInTheDocument();
+  });
+
+  it("does not label a different historical scheme as the current candidate", () => {
+    const model = createModel("full");
+    model.measurement.codeSchemeVersion = "NUANG-CODE-5AXIS-PROVISIONAL-0.9";
+
+    render(<CoreResultReportTemplate model={model} surface="my" />);
+    expect(screen.queryByRole("note")).not.toBeInTheDocument();
   });
 
   it("gives a quick result a substantial code guide without precision facets", () => {

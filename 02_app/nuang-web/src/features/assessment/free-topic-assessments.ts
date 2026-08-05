@@ -14,6 +14,7 @@ import {
   buildFreeTopicPersonalizedSummary,
 } from "@/features/assessment/free-topic-long-report";
 import type { AssessmentUnsureReason } from "@/features/assessment/types";
+import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 
 export type FreeTopicCategoryId =
   | "relationship"
@@ -64,8 +65,17 @@ export type FreeTopicReportScale = {
   id: string;
   lowCopy: string;
   lowLabel: string;
+  lowAction?: string;
+  lowStrength?: string;
+  lowWatch?: string;
   midCopy: string;
   midLabel: string;
+  midAction?: string;
+  midStrength?: string;
+  midWatch?: string;
+  highAction?: string;
+  highStrength?: string;
+  highWatch?: string;
 };
 
 export type FreeTopicQuestion = {
@@ -75,6 +85,13 @@ export type FreeTopicQuestion = {
   reportScaleId?: string;
   target: TraitEvidenceTarget;
   text: string;
+  /**
+   * Controls only the representative NUANG-code evidence direction.
+   * Topic-report scoring continues to use `isReverse` so a report dimension
+   * can keep its natural wording while contributing the opposite core-axis
+   * direction (or no core evidence at all).
+   */
+  traitScoring?: "same" | "reverse" | "excluded";
 };
 
 export type FreeTopicAnswer = {
@@ -596,7 +613,6 @@ export const freeTopicAssessments: FreeTopicAssessment[] = [
     caption: "공간에서 편안함을 찾는 감각",
     categoryId: "preference",
     categoryLabel: "취향형 성향",
-    impactGrade: "B",
     mappings: [
       primaryFacet("OE-AS", 0.6),
       primaryFacet("SE-RE", 0.45),
@@ -1339,12 +1355,14 @@ export function calculateFreeTopicResult({
   answers,
   assessment,
   observedAt,
+  questions: suppliedQuestions,
 }: {
   answers: Record<string, FreeTopicAnswer>;
   assessment: FreeTopicAssessment;
   observedAt: string;
+  questions?: FreeTopicQuestion[];
 }): FreeTopicScoreResult {
-  const questions = getFreeTopicQuestions(assessment.slug);
+  const questions = suppliedQuestions ?? getFreeTopicQuestions(assessment.slug);
   const scoresByTarget: Record<string, number[]> = {};
   const scoresByScale: Record<string, number[]> = {};
   const scoresByQuestionId: Record<string, number> = {};
@@ -1372,19 +1390,37 @@ export function calculateFreeTopicResult({
       return;
     }
 
-    const targetKey = buildTargetKey(question.target);
     const score = scoreResponse(answer.value, Boolean(question.isReverse));
     scoresByQuestionId[question.id] = score;
-    if (assessment.reportMode !== "independent_dimensions") {
-      scoresByTarget[targetKey] = [...(scoresByTarget[targetKey] ?? []), score];
-    }
-
     if (question.reportScaleId) {
       scoresByScale[question.reportScaleId] = [
         ...(scoresByScale[question.reportScaleId] ?? []),
         score,
       ];
     }
+  });
+
+  const validScaleIds = new Set(
+    Object.entries(scoresByScale)
+      .filter(([, scores]) => scores.length >= 3)
+      .map(([scaleId]) => scaleId),
+  );
+
+  questions.forEach((question) => {
+    const score = scoresByQuestionId[question.id];
+    if (!Number.isFinite(score)) return;
+    if (question.reportScaleId && !validScaleIds.has(question.reportScaleId)) {
+      return;
+    }
+
+    const traitRule = resolveFreeTopicTraitRule(assessment.slug, question);
+    if (traitRule.scoring === "excluded") return;
+    const targetKey = buildTargetKey(traitRule.target);
+    const traitScore = traitRule.scoring === "reverse" ? 100 - score : score;
+    scoresByTarget[targetKey] = [
+      ...(scoresByTarget[targetKey] ?? []),
+      traitScore,
+    ];
   });
 
   const scoresByTargetId = Object.fromEntries(
@@ -1443,9 +1479,11 @@ export function calculateFreeTopicResult({
 
 export function buildFreeTopicResultReport({
   assessment,
+  questions,
   result,
 }: {
   assessment: FreeTopicAssessment;
+  questions?: FreeTopicQuestion[];
   result: Pick<
     FreeTopicScoreResult,
     | "observations"
@@ -1463,13 +1501,7 @@ export function buildFreeTopicResultReport({
       if (score === undefined) return null;
 
       const boundedScore = Math.max(0, Math.min(100, Math.round(score)));
-      const level =
-        assessment.reportMode === "independent_dimensions"
-          ? getIndependentSignalLevel(
-              boundedScore,
-              assessment.responseScale ?? "frequency_5",
-            )
-          : getSignalLevel(boundedScore);
+      const level = getFreeTopicReportScaleLevel(assessment, boundedScore);
       const independentMiddleCopy =
         assessment.reportMode === "independent_dimensions" &&
         level.kind === "middle" &&
@@ -1535,7 +1567,7 @@ export function buildFreeTopicResultReport({
         : null;
   const reportInput = {
     assessment,
-    questions: getFreeTopicQuestions(assessment.slug),
+    questions: questions ?? getFreeTopicQuestions(assessment.slug),
     scaleStatisticsById: result.scaleStatisticsById,
     scoresByQuestionId: result.scoresByQuestionId,
     scoresByScaleId: result.scoresByScaleId,
@@ -1550,7 +1582,13 @@ export function buildFreeTopicResultReport({
     headline:
       personalizedSummary?.title ??
       buildReportHeadline({ assessment, signals }),
-    longReportSections: buildFreeTopicLongReportSections(reportInput),
+    longReportSections: [
+      ...buildOperatorFreeTopicReportSections({
+        assessment,
+        scoresByScaleId: result.scoresByScaleId,
+      }),
+      ...buildFreeTopicLongReportSections(reportInput),
+    ],
     personalizedSummary,
     signals,
   };
@@ -1571,6 +1609,42 @@ export function getFreeTopicTargetDisplay(targetKey: string) {
   );
 }
 
+export function buildOperatorFreeTopicReportSections({
+  assessment,
+  scoresByScaleId,
+}: {
+  assessment: FreeTopicAssessment;
+  scoresByScaleId?: Record<string, number>;
+}): FreeTopicLongReportSection[] {
+  return (assessment.reportScales ?? []).flatMap((scale) => {
+    const score = scoresByScaleId?.[scale.id];
+    if (score === undefined) return [];
+    const level = getFreeTopicReportScaleLevel(
+      assessment,
+      Math.max(0, Math.min(100, Math.round(score))),
+    ).kind;
+    const levelKey = level === "middle" ? "mid" : level;
+    const strength = scale[`${levelKey}Strength`];
+    const watch = scale[`${levelKey}Watch`];
+    const action = scale[`${levelKey}Action`];
+    const body = scale[`${levelKey}Copy`];
+    const items = [
+      strength ? { label: "드러나는 강점", text: strength } : null,
+      watch ? { label: "주의할 점", text: watch } : null,
+      action ? { label: "바로 해볼 행동", text: action } : null,
+    ].filter((item): item is { label: string; text: string } => item !== null);
+    if (items.length === 0) return [];
+    return [
+      {
+        blocks: [{ items, kind: "labeled_list" }],
+        body,
+        claimIds: [`studio:${assessment.slug}:${scale.id}:${levelKey}`],
+        title: `${scale.areaLabel}에서 보이는 강점과 보완점`,
+      },
+    ];
+  });
+}
+
 export function buildFreeTopicEvidenceObservations({
   assessment,
   observedAt,
@@ -1582,28 +1656,34 @@ export function buildFreeTopicEvidenceObservations({
   responseQuality?: number;
   scoresByTargetId: Record<string, number | null | undefined>;
 }): TraitEvidenceObservation[] {
-  if (assessment.impactGrade !== "A") return [];
+  if (assessment.evidenceUse === "blocked") return [];
 
-  return assessment.mappings
-    .map((mapping) => {
-      const targetKey = buildTargetKey(mapping.target);
-      const score =
-        scoresByTargetId[targetKey] ?? scoresByTargetId[mapping.target.id];
+  const mappingByTarget = new Map(
+    assessment.mappings.map((mapping) => [
+      buildTargetKey(mapping.target),
+      mapping,
+    ]),
+  );
 
+  return Object.entries(scoresByTargetId)
+    .map(([targetKey, score]) => {
       if (score === undefined || score === null) return null;
+      const target = parseTargetKey(targetKey);
+      if (!target || !isRepresentativeTraitTarget(target)) return null;
+      const mapping = mappingByTarget.get(targetKey);
 
       const observation: TraitEvidenceObservation = {
         approvalStatus: "approved",
-        constructDirectness: mapping.constructDirectness,
+        constructDirectness: mapping?.constructDirectness ?? 0.75,
         id: `${assessment.slug}:${targetKey}`,
-        measurementAmount: mapping.measurementAmount,
+        measurementAmount: mapping?.measurementAmount ?? 0.75,
         observedAt,
         recency: 1,
         repetitionDiscount: 1,
         responseQuality,
         score,
         sourceKind: "free_topic",
-        target: mapping.target,
+        target,
       };
 
       return observation;
@@ -1617,6 +1697,162 @@ export function buildFreeTopicEvidenceObservations({
 export function buildTargetKey(target: TraitEvidenceTarget) {
   return `${target.kind}:${target.id}`;
 }
+
+function parseTargetKey(value: string): TraitEvidenceTarget | null {
+  const separator = value.indexOf(":");
+  if (separator < 1) return null;
+  const kind = value.slice(0, separator);
+  const id = value.slice(separator + 1);
+  if ((kind !== "domain" && kind !== "facet") || !id) return null;
+  return { id, kind };
+}
+
+type ResolvedFreeTopicTraitRule = {
+  scoring: NonNullable<FreeTopicQuestion["traitScoring"]>;
+  target: TraitEvidenceTarget;
+};
+
+/**
+ * Older published releases do not yet carry `traitScoring`. These reviewed
+ * fallbacks keep report-only dimensions out of the core code and correct the
+ * few deep-topic scales whose report direction differs from a core axis.
+ * Once an operator publishes an explicit value, that release value wins.
+ */
+export function resolveFreeTopicTraitRule(
+  assessmentSlug: string,
+  question: FreeTopicQuestion,
+): ResolvedFreeTopicTraitRule {
+  if (question.traitScoring) {
+    return {
+      scoring:
+        question.traitScoring === "excluded" ||
+        isRepresentativeTraitTarget(question.target)
+          ? question.traitScoring
+          : "excluded",
+      target: question.target,
+    };
+  }
+
+  const scaleId = question.reportScaleId;
+  const fallback = scaleId
+    ? legacyDeepTopicTraitRules[assessmentSlug]?.[scaleId]
+    : undefined;
+
+  return (
+    fallback ?? {
+      scoring: isRepresentativeTraitTarget(question.target)
+        ? "same"
+        : "excluded",
+      target: question.target,
+    }
+  );
+}
+
+export function isRepresentativeTraitTarget(target: TraitEvidenceTarget) {
+  if (target.kind === "domain") {
+    return nextNuangCodeScheme.positions.some(
+      (position) => position.domainId === target.id,
+    );
+  }
+
+  return nextNuangCodeScheme.positions.some((position) =>
+    position.publicFacetIds.some((facetId) => facetId === target.id),
+  );
+}
+
+const legacyDeepTopicTraitRules: Record<
+  string,
+  Record<string, ResolvedFreeTopicTraitRule>
+> = {
+  "apology-style": {
+    impact_listening: {
+      scoring: "same",
+      target: { kind: "facet", id: "RO-EC" },
+    },
+    repair_planning: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-EP" },
+    },
+    responsibility_acknowledgement: {
+      scoring: "excluded",
+      target: { kind: "facet", id: "RO-EC" },
+    },
+  },
+  "recharge-routine": {
+    gentle_reactivation: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-EP" },
+    },
+    quiet_detachment: {
+      scoring: "excluded",
+      target: { kind: "facet", id: "ER-WD" },
+    },
+    supportive_connection: {
+      scoring: "same",
+      target: { kind: "facet", id: "SE-RE" },
+    },
+  },
+  "focus-switch": {
+    goal_reorientation: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-OS" },
+    },
+    resumption_cue: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-OS" },
+    },
+    small_reentry: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-EP" },
+    },
+  },
+  "organizing-style": {
+    adaptive_reset: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-OS" },
+    },
+    batch_reset: {
+      scoring: "reverse",
+      target: { kind: "facet", id: "SM-OS" },
+    },
+    stable_structure: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-OS" },
+    },
+    visible_capture: {
+      scoring: "same",
+      target: { kind: "facet", id: "SM-OS" },
+    },
+  },
+  "hurt-expression": {
+    change_request: {
+      scoring: "same",
+      target: { kind: "facet", id: "SE-AI" },
+    },
+    feeling_expression: {
+      scoring: "same",
+      target: { kind: "facet", id: "SE-AI" },
+    },
+    specific_event_expression: {
+      scoring: "same",
+      target: { kind: "facet", id: "SE-AI" },
+    },
+  },
+  "comfort-style": {
+    autonomy_pacing: {
+      scoring: "excluded",
+      target: { kind: "facet", id: "RO-RN" },
+    },
+    collaborative_problem_solving: {
+      scoring: "reverse",
+      target: { kind: "facet", id: "RO-EC" },
+    },
+    emotional_acknowledgement: {
+      scoring: "same",
+      target: { kind: "facet", id: "RO-EC" },
+    },
+  },
+};
 
 function buildFreeTopicReportSignal({
   assessment,
@@ -1669,7 +1905,19 @@ function getSignalLevel(score: number) {
   return { kind: "low" as const, label: "낮게 나타남" };
 }
 
-function getIndependentSignalLevel(
+export function getFreeTopicReportScaleLevel(
+  assessment: Pick<FreeTopicAssessment, "reportMode" | "responseScale">,
+  score: number,
+) {
+  return assessment.reportMode === "independent_dimensions"
+    ? getIndependentSignalLevel(
+        score,
+        assessment.responseScale ?? "frequency_5",
+      )
+    : getSignalLevel(score);
+}
+
+export function getIndependentSignalLevel(
   score: number,
   responseScale: NonNullable<FreeTopicAssessment["responseScale"]>,
 ) {
@@ -1828,7 +2076,7 @@ function buildConfidenceLabel({
     if (assessment.responseScale === "helpfulness_5") return "최근 도움 기록";
     return "최근 행동 기록";
   }
-  if (assessment.impactGrade !== "A") return "참고용 결과";
+  if (assessment.evidenceUse === "blocked") return "주제별 결과";
   if (result.observations.length >= 3 && signals.length >= 3)
     return "누적 반영 가능";
   return "참고 신호";
@@ -1847,16 +2095,16 @@ function buildConfidenceCopy({
     assessment.reportMode === "independent_dimensions" &&
     assessment.responseScale === "need_5"
   ) {
-    return "최근 6개월의 힘든 상황에서 어떤 도움이 필요했는지 정리한 결과예요. 대표 뉴앙 코드는 바꾸지 않아요.";
+    return "최근 6개월의 힘든 상황에서 어떤 도움이 필요했는지 정리한 결과예요. 비슷한 성향이 다른 주제에서도 반복되면 현재 뉴앙 코드에 함께 반영돼요.";
   }
   if (
     assessment.reportMode === "independent_dimensions" &&
     assessment.responseScale === "frequency_5"
   ) {
-    return `${assessment.recallPeriodLabel ?? "최근 4주"}의 실제 행동을 정리한 결과예요. 대표 뉴앙 코드는 바꾸지 않아요.`;
+    return `${assessment.recallPeriodLabel ?? "최근 4주"}의 실제 행동을 정리한 결과예요. 비슷한 성향이 다른 주제에서도 반복되면 현재 뉴앙 코드에 함께 반영돼요.`;
   }
-  if (assessment.impactGrade !== "A") {
-    return "이 주제는 대표 성향을 바꾸기보다 취향과 추천을 더 섬세하게 만드는 자료로만 사용돼요.";
+  if (assessment.evidenceUse === "blocked") {
+    return "이 결과는 이 주제 안에서 나를 이해하고 추천을 더 섬세하게 만드는 데 사용돼요.";
   }
 
   return `${signals.length}개 세부 신호와 ${result.observations.length}개 승인된 관찰값을 참고했어요. 대표 성향은 여러 검사에서 같은 방향이 반복될 때만 조심스럽게 업데이트돼요.`;
@@ -2026,9 +2274,7 @@ function topic(
       >
     >,
 ): FreeTopicAssessment {
-  // Short topic explorers are useful as their own result, but do not yet have
-  // enough repeated items to update a representative NUANG code.
-  const impactGrade = assessment.impactGrade ?? "B";
+  const impactGrade = assessment.impactGrade ?? "A";
 
   return {
     comparisonUse: false,
@@ -2119,7 +2365,7 @@ function buildResultSummary({
   assessment: FreeTopicAssessment;
   observations: TraitEvidenceObservation[];
 }) {
-  if (assessment.impactGrade !== "A" || observations.length === 0) {
+  if (assessment.evidenceUse === "blocked" || observations.length === 0) {
     return "이 결과는 취향과 추천을 더 섬세하게 만드는 참고 신호로만 사용돼요.";
   }
 

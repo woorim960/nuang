@@ -3,11 +3,13 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { OnboardingGuideCarousel } from "@/features/onboarding/OnboardingGuideCarousel";
 import { onboardingEntryContract } from "@/features/onboarding/onboarding-storage";
 
-const { recordOnboardingCompleted, recordOnboardingSeen, replace } = vi.hoisted(() => ({
-  recordOnboardingCompleted: vi.fn(),
-  recordOnboardingSeen: vi.fn(),
-  replace: vi.fn(),
-}));
+const { recordOnboardingCompleted, recordOnboardingSeen, replace } = vi.hoisted(
+  () => ({
+    recordOnboardingCompleted: vi.fn(),
+    recordOnboardingSeen: vi.fn(),
+    replace: vi.fn(),
+  }),
+);
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ replace }),
@@ -108,6 +110,49 @@ describe("OnboardingGuideCarousel", () => {
         "전체 4개 중 2번째 가이드",
       );
     });
+  });
+
+  it("waits for the real scroll destination before exposing the final action", async () => {
+    render(<OnboardingGuideCarousel />);
+    const track = screen.getByRole("region", {
+      name: "좌우 방향키 또는 손가락으로 넘기는 서비스 가이드",
+    });
+    let scrollLeft = 0;
+
+    Object.defineProperty(track, "clientWidth", {
+      configurable: true,
+      value: 320,
+    });
+    Object.defineProperty(track, "scrollLeft", {
+      configurable: true,
+      get: () => scrollLeft,
+    });
+    Object.defineProperty(track, "scrollTo", {
+      configurable: true,
+      value: vi.fn(),
+    });
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "4번째 첫 검사 시작 안내 보기",
+      }),
+    );
+
+    expect(
+      screen.queryByRole("button", { name: "내 뉴앙코드 알아보기" }),
+    ).not.toBeInTheDocument();
+
+    scrollLeft = 960;
+    fireEvent.scroll(track);
+
+    await waitFor(() => {
+      expect(screen.getByRole("status")).toHaveTextContent(
+        "전체 4개 중 4번째 가이드",
+      );
+    });
+    expect(
+      screen.getByRole("button", { name: "내 뉴앙코드 알아보기" }),
+    ).toBeInTheDocument();
   });
 
   it("supports dragging the guide surface with a mouse", () => {

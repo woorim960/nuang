@@ -17,10 +17,12 @@ export function AssessmentResultQualityPrompt({
   assessmentSlug,
   instrumentVersion,
   localResultId,
+  productReleaseId,
 }: {
   assessmentSlug: string;
   instrumentVersion: string;
   localResultId: string;
+  productReleaseId?: string;
 }) {
   const responseStorageKey = `nuang:assessment-result-fit:${instrumentVersion}:${localResultId}`;
   const subscribe = useCallback((onStoreChange: () => void) => {
@@ -43,6 +45,7 @@ export function AssessmentResultQualityPrompt({
       assessmentSlug,
       instrumentVersion,
       localResultId,
+      ...(productReleaseId ? { productReleaseId } : {}),
       observations: [{ fit: nextFit, kind: "result_fit" }],
     });
   }

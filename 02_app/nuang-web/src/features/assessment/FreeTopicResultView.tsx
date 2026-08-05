@@ -14,10 +14,12 @@ import { useEffect, useRef, useState } from "react";
 import { AssessmentEvidenceSources } from "@/features/assessment/AssessmentEvidenceSources";
 import { AssessmentReportRichText } from "@/features/assessment/AssessmentReportRichText";
 import { AssessmentResultQualityPrompt } from "@/features/assessment/AssessmentResultQualityPrompt";
+import { TopicTraitImpactCard } from "@/features/assessment/TopicTraitImpactCard";
 import {
   getFreeTopicAssessment,
   getFreeTopicQuestions,
   type FreeTopicAssessment,
+  type FreeTopicQuestion,
   type FreeTopicLongReportBlock,
   type FreeTopicLongReportSection,
   type FreeTopicPersonalizedSummary,
@@ -42,18 +44,24 @@ import styles from "./FreeTopicResultView.module.css";
 type ResultLoadState = "error" | "loading" | "missing" | "ready";
 
 export function FreeTopicResultView({
+  assessmentOverride,
   backHref = "/home?view=self",
   canonicalShareUrl,
   initialResult,
   localResultId,
+  questionsOverride,
+  previewMode = false,
   readOnly = false,
   shareEnabled = true,
   slug,
 }: {
+  assessmentOverride?: FreeTopicAssessment;
   backHref?: string;
   canonicalShareUrl?: string;
   initialResult?: StoredFreeTopicResult;
   localResultId: string;
+  questionsOverride?: FreeTopicQuestion[];
+  previewMode?: boolean;
   readOnly?: boolean;
   shareEnabled?: boolean;
   slug: string;
@@ -71,8 +79,20 @@ export function FreeTopicResultView({
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isScoreMeaningOpen, setIsScoreMeaningOpen] = useState(false);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
-  const assessment = getFreeTopicAssessment(slug);
+  const assessment =
+    result?.assessmentSnapshot ??
+    assessmentOverride ??
+    getFreeTopicAssessment(slug);
   const currentNuangCode = result?.nuangCodeContext?.code ?? null;
+  const retryTraitSync = () => {
+    if (!result || result.sync.status === "synced") return;
+    const queuedResult: StoredFreeTopicResult = {
+      ...result,
+      sync: { status: "queued" },
+    };
+    setResult(queuedResult);
+    void syncFreeTopicResult(queuedResult).then(setResult);
+  };
 
   useEffect(() => {
     if (initialResult) return;
@@ -180,7 +200,10 @@ export function FreeTopicResultView({
   }
 
   const activeAssessment = assessment;
-  const currentQuestions = getFreeTopicQuestions(activeAssessment.slug);
+  const currentQuestions =
+    result.questionsSnapshot ??
+    questionsOverride ??
+    getFreeTopicQuestions(activeAssessment.slug);
   const questionCount = getCompletedQuestionCount({
     currentQuestionCount: currentQuestions.length,
     result,
@@ -199,7 +222,9 @@ export function FreeTopicResultView({
   });
   const personalizedSummary = getPersonalizedSummaryDisplay(
     activeAssessment.slug,
-    rebuiltPersonalizedSummary ?? report.personalizedSummary,
+    result.productReleaseId
+      ? (report.personalizedSummary ?? rebuiltPersonalizedSummary)
+      : (rebuiltPersonalizedSummary ?? report.personalizedSummary),
   );
   const isIndependentReport =
     activeAssessment.reportMode === "independent_dimensions";
@@ -248,18 +273,22 @@ export function FreeTopicResultView({
         section.role !== "close_person_script" &&
         section.title !== "가까운 사람에게 보여줄 한 문장"),
   );
-  const latestDiagnosticSections = buildFreeTopicLongReportSections({
-    assessment: activeAssessment,
-    questions: currentQuestions,
-    scaleStatisticsById: result.result.scaleStatisticsById,
-    scoresByQuestionId: result.result.scoresByQuestionId,
-    scoresByScaleId: result.result.scoresByScaleId,
-    validResponsesByScaleId: result.result.validResponsesByScaleId,
-  }).filter((section) =>
-    section.claimIds.some((claimId) =>
-      /direct-feedback|direct-fit|maintenance-rhythm/.test(claimId),
-    ),
-  );
+  // 릴리스가 고정된 결과는 완료 시점의 보고서 문구도 그대로 보존합니다.
+  // 릴리스 식별자가 없던 초기 로컬 결과만 최신 진단 섹션으로 보완합니다.
+  const latestDiagnosticSections = result.productReleaseId
+    ? []
+    : buildFreeTopicLongReportSections({
+        assessment: activeAssessment,
+        questions: currentQuestions,
+        scaleStatisticsById: result.result.scaleStatisticsById,
+        scoresByQuestionId: result.result.scoresByQuestionId,
+        scoresByScaleId: result.result.scoresByScaleId,
+        validResponsesByScaleId: result.result.validResponsesByScaleId,
+      }).filter((section) =>
+        section.claimIds.some((claimId) =>
+          /direct-feedback|direct-fit|maintenance-rhythm/.test(claimId),
+        ),
+      );
   const baseClaimIds = new Set(
     baseDetailedReportSections.flatMap((section) => section.claimIds),
   );
@@ -286,13 +315,19 @@ export function FreeTopicResultView({
     summary: personalizedSummary?.body ?? report.headline,
   });
   const canShare = Boolean(
-    shareEnabled && (canonicalShareUrl || result.serverResultId),
+    !previewMode &&
+    shareEnabled &&
+    (canonicalShareUrl || result.serverResultId),
   );
 
   return (
     <main className={styles.root}>
       <header className={styles.appBar}>
-        <Link aria-label="이전 화면으로 돌아가기" href={backHref}>
+        <Link
+          aria-label="이전 화면으로 돌아가기"
+          href={backHref}
+          onClick={previewMode ? preventPreviewNavigation : undefined}
+        >
           <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.75} />
         </Link>
         <p>검사 결과</p>
@@ -434,6 +469,13 @@ export function FreeTopicResultView({
           </section>
         )}
 
+        <TopicTraitImpactCard
+          loginHref={`/login?next=${encodeURIComponent(`/assessments/topics/${slug}/result/${localResultId}`)}`}
+          onRetry={retryTraitSync}
+          snapshot={result.traitImpactSnapshot}
+          sync={result.sync}
+        />
+
         {closePersonSection ? (
           <section
             aria-labelledby="comfort-share-script"
@@ -464,6 +506,7 @@ export function FreeTopicResultView({
             <Link
               className={styles.codeDetailLink}
               href={`/map/${currentNuangCode}`}
+              onClick={previewMode ? preventPreviewNavigation : undefined}
             >
               내 성향지도에서 더 자세히 보기
             </Link>
@@ -505,26 +548,36 @@ export function FreeTopicResultView({
 
         <AssessmentEvidenceSources slug={activeAssessment.slug} />
 
-        {!readOnly ? (
+        {!readOnly && !previewMode ? (
           <AssessmentResultQualityPrompt
             assessmentSlug={activeAssessment.slug}
             instrumentVersion={result.instrumentVersion}
             localResultId={result.localResultId}
+            productReleaseId={result.productReleaseId}
           />
         ) : null}
 
         <section className={styles.actions}>
-          <Link className={styles.primaryAction} href="/home?view=self">
+          <Link
+            className={styles.primaryAction}
+            href="/home?view=self"
+            onClick={previewMode ? preventPreviewNavigation : undefined}
+          >
             {readOnly ? "나도 검사해 보기" : "다른 검사 둘러보기"}
           </Link>
           {readOnly ? (
-            <Link className={styles.secondaryAction} href={backHref}>
+            <Link
+              className={styles.secondaryAction}
+              href={backHref}
+              onClick={previewMode ? preventPreviewNavigation : undefined}
+            >
               프로필로 돌아가기
             </Link>
           ) : (
             <Link
               className={styles.secondaryAction}
               href={`/assessments/topics/${assessment.slug}`}
+              onClick={previewMode ? preventPreviewNavigation : undefined}
             >
               <RefreshCw aria-hidden="true" size={16} />
               다시 해보기
@@ -577,6 +630,10 @@ export function FreeTopicResultView({
       ) : null}
     </main>
   );
+}
+
+function preventPreviewNavigation(event: React.MouseEvent<HTMLAnchorElement>) {
+  event.preventDefault();
 }
 
 function DetailedReportAccordionItem({

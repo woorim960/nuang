@@ -17,7 +17,7 @@ describe("buildPrecisionFacetInsights", () => {
       "SE-RE",
     ]);
     expect(insights[0].copy).toContain("상대가 어떤 마음일지");
-    expect(insights[1].copy).toContain("유연하게");
+    expect(insights[1].copy).toContain("그때 쓰기 편하거나");
   });
 
   it("uses a balanced explanation near the middle", () => {
@@ -25,6 +25,29 @@ describe("buildPrecisionFacetInsights", () => {
       buildPrecisionFacetInsights([
         { facetId: "OE-IE", label: "탐구", score: 50, status: "valid" },
       ])[0].copy,
-    ).toContain("함께 참고");
+    ).toContain("상황에 따라 달라지는");
+  });
+
+  it("does not infer unmeasured ability, visible expression, or proven effectiveness", () => {
+    const copy = buildPrecisionFacetInsights(
+      [
+        "OE-AE",
+        "OE-CI",
+        "OE-IE",
+        "SM-EP",
+        "SM-OS",
+        "ER-IR",
+      ].map((facetId) => ({
+        facetId,
+        label: facetId,
+        score: 10,
+        status: "valid" as const,
+      })),
+      10,
+    )
+      .map((insight) => insight.copy)
+      .join(" ");
+
+    expect(copy).not.toMatch(/능력|효과가 확인|차분해 보|유연하게/);
   });
 });

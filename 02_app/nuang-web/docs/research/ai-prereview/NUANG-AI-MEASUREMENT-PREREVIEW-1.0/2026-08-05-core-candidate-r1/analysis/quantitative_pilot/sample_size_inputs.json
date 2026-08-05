@@ -1,0 +1,16 @@
+{
+  "status": "inputs_missing_human_design_required",
+  "observedParticipantCount": 0,
+  "targetPopulation": null,
+  "expectedOrdinalThresholds": null,
+  "targetLoadingRange": null,
+  "crossLoadingScenario": null,
+  "expectedAttritionRate": null,
+  "developmentConfirmationSplit": null,
+  "retestIntervalDays": null,
+  "retestTargetCount": null,
+  "plannedSubgroups": [],
+  "minimumSubgroupCell": null,
+  "plannedEstimator": "human must preregister after simulation",
+  "note": "No sample size is generated from AI assumptions. Lock these inputs and run a reproducible simulation before recruitment."
+}

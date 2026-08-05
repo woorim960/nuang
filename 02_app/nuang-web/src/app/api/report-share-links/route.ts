@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
+import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import {
   readOriginalProfileReport,
 } from "@/features/public-profile/server-profile-reports";
@@ -69,6 +70,23 @@ async function createOriginalReportLink(reportKey: string) {
       { error: "report_not_found", ok: false },
       { status: 404 },
     );
+  }
+  if (report.kind === "core") {
+    const publication = await readCoreResultPublicationDecision({
+      client,
+      ownerAccountId: accountId,
+      resultReportId: report.result.resultReportId,
+    });
+    if (!publication.eligible) {
+      return NextResponse.json(
+        {
+          error: "result_release_not_publicable",
+          message: "검토가 끝난 코어 결과만 링크로 공유할 수 있어요.",
+          ok: false,
+        },
+        { status: 409 },
+      );
+    }
   }
   if (report.summary.visibility !== "profile_public") {
     return NextResponse.json(

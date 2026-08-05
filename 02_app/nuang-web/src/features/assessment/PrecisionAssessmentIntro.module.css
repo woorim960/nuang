@@ -224,6 +224,16 @@
   word-break: keep-all;
 }
 
+.candidateNotice {
+  margin: 0;
+  border-left: 3px solid var(--primary);
+  padding: 0.15rem 0 0.15rem 0.8rem;
+  color: var(--muted);
+  font-size: var(--nu-text-body-sm);
+  line-height: var(--nu-leading-body);
+  word-break: keep-all;
+}
+
 .assuranceRow svg {
   margin-top: 0.05rem;
   color: var(--primary);

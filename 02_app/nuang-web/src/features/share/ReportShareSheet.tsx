@@ -2,17 +2,10 @@
 
 import {
   ArrowLeft,
-  Check,
-  ChevronRight,
   Copy,
   ExternalLink,
-  FileText,
-  FlaskConical,
   LoaderCircle,
-  LockKeyhole,
-  MessageCircle,
   MessagesSquare,
-  Share2,
   X,
 } from "lucide-react";
 import {
@@ -25,8 +18,11 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import {
+  prepareKakaoReportShareImage,
+  sendReportToKakaoTalk,
+} from "@/features/share/kakao-talk-share";
+import {
   createReportShareText,
-  reportShareActions,
   type ReportShareContent,
 } from "@/features/share/report-share-contract";
 import styles from "./ReportShareSheet.module.css";
@@ -42,23 +38,46 @@ type ReportShareSheetProps = {
   returnFocusRef?: RefObject<HTMLButtonElement | null>;
 };
 
-type ShareActionId = (typeof reportShareActions)[number]["id"];
+type ShareActionId =
+  "copy_link" | "feed_share" | "kakao_share" | "native_share";
 type ShareStatus = {
   kind: "error" | "notice" | "success";
   message: string;
 } | null;
-type ShareStep = "actions" | "community";
+type ShareStep = "actions" | "community" | "publish-confirm";
+type ReportVisibility = "private" | "profile_public";
+type PublishProgress = "preparing" | "publishing" | null;
 
-const actionDescriptions: Record<ShareActionId, string> = {
-  copy_link: "원본 결과 주소를 복사해요",
-  feed_share: "내 한마디와 함께 피드에 올려요",
-  native_share: "휴대폰의 공유창을 열어요",
-};
+class ReportShareRequestError extends Error {
+  code: string;
+
+  constructor(code: string, message: string) {
+    super(message);
+    this.code = code;
+    this.name = "ReportShareRequestError";
+  }
+}
 
 const reportTypeLabels: Record<ReportShareContent["reportType"], string> = {
   core: "코어 검사",
   lab: "별난 연구소",
   topic: "주제 검사",
+};
+
+const secondaryActions: ReadonlyArray<{
+  id: Exclude<ShareActionId, "kakao_share">;
+  label: string;
+}> = [
+  { id: "copy_link", label: "링크 복사" },
+  { id: "native_share", label: "다른 앱으로 공유" },
+  { id: "feed_share", label: "커뮤니티에 공유" },
+];
+
+const publishActionLabels: Record<ShareActionId, string> = {
+  copy_link: "공개하고 링크 복사",
+  feed_share: "공개하고 커뮤니티에 공유",
+  kakao_share: "공개하고 카카오톡 공유",
+  native_share: "공개하고 공유",
 };
 
 const subscribeToClient = () => () => undefined;
@@ -77,23 +96,69 @@ export function ReportShareSheet({
 }: ReportShareSheetProps) {
   const [activeAction, setActiveAction] = useState<ShareActionId | null>(null);
   const [communityNote, setCommunityNote] = useState("");
-  const [feedOriginalUrl, setFeedOriginalUrl] = useState<string | null>(null);
-  const [shareUrl, setShareUrl] = useState<string | null>(null);
+  const [kakaoPreparation, setKakaoPreparation] = useState<
+    "loading" | "ready" | "unavailable"
+  >("loading");
+  const [pendingPrivateAction, setPendingPrivateAction] =
+    useState<ShareActionId | null>(null);
+  const [publishProgress, setPublishProgress] = useState<PublishProgress>(null);
   const [step, setStep] = useState<ShareStep>("actions");
   const [status, setStatus] = useState<ShareStatus>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const isCriticalTransitionRef = useRef(false);
   const previousFocusRef = useRef<HTMLElement | null>(null);
+  const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const isClient = useSyncExternalStore(
     subscribeToClient,
     getClientSnapshot,
     getServerSnapshot,
   );
   const sharesOriginalReport = Boolean(canonicalUrl || originalReportKey);
+  const isCriticalTransition =
+    step === "publish-confirm" && activeAction !== null;
+
+  useEffect(() => {
+    isCriticalTransitionRef.current = isCriticalTransition;
+  }, [isCriticalTransition]);
+
+  const getFreshShareUrl = useCallback(async () => {
+    if (originalReportKey) {
+      const response = await fetch("/api/report-share-links", {
+        body: JSON.stringify({ reportKey: originalReportKey }),
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      });
+      const payload = (await response.json().catch(() => null)) as {
+        error?: string;
+        message?: string;
+        ok?: boolean;
+        url?: string;
+      } | null;
+
+      if (!response.ok || !payload?.ok || !payload.url) {
+        throw new ReportShareRequestError(
+          payload?.error ?? "share_link_failed",
+          payload?.message ?? "share_link_failed",
+        );
+      }
+
+      return payload.url;
+    }
+
+    if (canonicalUrl) {
+      return new URL(canonicalUrl, window.location.origin).toString();
+    }
+
+    throw new Error("검사 결과를 계정에 저장한 뒤 공유할 수 있어요.");
+  }, [canonicalUrl, originalReportKey]);
 
   const closeSheet = useCallback(() => {
+    if (isCriticalTransitionRef.current) return;
     setCommunityNote("");
     setStatus(null);
     setActiveAction(null);
+    setPendingPrivateAction(null);
+    setPublishProgress(null);
     setStep("actions");
     onClose();
   }, [onClose]);
@@ -123,7 +188,7 @@ export function ReportShareSheet({
 
       const focusable = Array.from(
         dialogRef.current.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), a[href], [tabindex]:not([tabindex="-1"])',
+          'button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])',
         ),
       );
       const first = focusable[0];
@@ -149,108 +214,62 @@ export function ReportShareSheet({
     };
   }, [closeSheet, isOpen, returnFocusRef]);
 
+  useEffect(() => {
+    if (!isOpen || step === "actions") return;
+    stepHeadingRef.current?.focus({ preventScroll: true });
+  }, [isOpen, step]);
+
+  useEffect(() => {
+    if (!isOpen || !sharesOriginalReport) return;
+    let cancelled = false;
+
+    void prepareKakaoReportShareImage(content.reportType)
+      .then(() => {
+        if (!cancelled) setKakaoPreparation("ready");
+      })
+      .catch(() => {
+        if (!cancelled) setKakaoPreparation("unavailable");
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [content.reportType, isOpen, sharesOriginalReport]);
+
   if (!isClient || !isOpen) return null;
 
-  async function getOrCreateShareUrl() {
-    if (shareUrl) return shareUrl;
-    if (canonicalUrl) {
-      const resolvedUrl = new URL(
-        canonicalUrl,
-        window.location.origin,
-      ).toString();
-      setShareUrl(resolvedUrl);
-      return resolvedUrl;
-    }
-
-    if (!originalReportKey) {
-      throw new Error("검사 결과를 계정에 저장한 뒤 공유할 수 있어요.");
-    }
-
-    const isCoreReport = originalReportKey.startsWith("core_");
-    const response = await fetch(
-      isCoreReport ? "/api/share-links" : "/api/report-share-links",
-      {
-        body: JSON.stringify(
-          isCoreReport
-            ? {
-                resultReportId: originalReportKey.slice("core_".length),
-                ttlDays: 30,
-                visibility: "summary",
-              }
-            : { reportKey: originalReportKey },
-        ),
-        headers: {
-          "content-type": "application/json",
-        },
-        method: "POST",
-      },
-    );
-    const payload = (await response.json().catch(() => null)) as {
-      message?: string;
-      ok?: boolean;
-      shareLink?: { url?: string };
-      url?: string;
-    } | null;
-    const resolvedUrl = payload?.shareLink?.url ?? payload?.url;
-
-    if (!response.ok || !payload?.ok || !resolvedUrl) {
-      throw new Error(payload?.message ?? "share_link_failed");
-    }
-
-    setShareUrl(resolvedUrl);
-    return resolvedUrl;
+  function requestPublication(action: ShareActionId) {
+    setPendingPrivateAction(action);
+    setStatus(null);
+    setStep("publish-confirm");
   }
 
-  async function getOrCreateFeedOriginalUrl() {
-    if (feedOriginalUrl) return feedOriginalUrl;
-    if (canonicalUrl) {
-      const resolvedUrl = new URL(
-        canonicalUrl,
-        window.location.origin,
-      ).toString();
-      setFeedOriginalUrl(resolvedUrl);
-      return resolvedUrl;
+  function handleActionError(
+    action: ShareActionId,
+    error: unknown,
+    fallback: string,
+  ) {
+    if (isPrivateReportError(error)) {
+      requestPublication(action);
+      return;
     }
-    if (!originalReportKey) {
-      throw new Error("검사 결과를 계정에 저장한 뒤 공유할 수 있어요.");
-    }
-    const response = await fetch("/api/report-share-links", {
-      body: JSON.stringify({ reportKey: originalReportKey }),
-      headers: { "content-type": "application/json" },
-      method: "POST",
+    setStatus({
+      kind: "error",
+      message: toShareErrorMessage(error, fallback),
     });
-    const payload = (await response.json().catch(() => null)) as {
-      message?: string;
-      ok?: boolean;
-      url?: string;
-    } | null;
-    if (!response.ok || !payload?.ok || !payload.url) {
-      throw new Error(payload?.message ?? "share_link_failed");
-    }
-    setFeedOriginalUrl(payload.url);
-    return payload.url;
   }
 
   async function handleCopyLink() {
     try {
       setActiveAction("copy_link");
       setStatus(null);
-      const url = await getOrCreateShareUrl();
-      await copyText(url);
-      setStatus({
-        kind: "success",
-        message: sharesOriginalReport
-          ? "원본 리포트 링크를 복사했어요."
-          : "공유 링크를 복사했어요. 30일 동안 열 수 있어요.",
-      });
+      await copyShareUrl(await getFreshShareUrl());
     } catch (error) {
-      setStatus({
-        kind: "error",
-        message: toShareErrorMessage(
-          error,
-          "링크를 복사하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
-        ),
-      });
+      handleActionError(
+        "copy_link",
+        error,
+        "링크를 복사하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
     } finally {
       setActiveAction(null);
     }
@@ -260,37 +279,204 @@ export function ReportShareSheet({
     try {
       setActiveAction("native_share");
       setStatus(null);
-      const url = await getOrCreateShareUrl();
+      await openNativeShare(await getFreshShareUrl());
+    } catch (error) {
+      if (isAbortError(error)) {
+        setStatus(null);
+        return;
+      }
+      handleActionError(
+        "native_share",
+        error,
+        "공유창을 열지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
+    } finally {
+      setActiveAction(null);
+    }
+  }
 
-      if (typeof navigator.share !== "function") {
-        await copyText(url);
+  async function handleKakaoShare() {
+    try {
+      setActiveAction("kakao_share");
+      setStatus(null);
+      await openKakaoShareOrFallback(await getFreshShareUrl());
+    } catch (error) {
+      if (isAbortError(error)) {
+        setStatus(null);
+        return;
+      }
+      handleActionError(
+        "kakao_share",
+        error,
+        "카카오톡 공유를 열지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
+    } finally {
+      setActiveAction(null);
+    }
+  }
+
+  async function handleOpenCommunity() {
+    try {
+      setActiveAction("feed_share");
+      setStatus(null);
+      await getFreshShareUrl();
+      setCommunityNote(
+        (current) => current || initialCommunityNote?.slice(0, 120) || "",
+      );
+      setStep("community");
+    } catch (error) {
+      handleActionError(
+        "feed_share",
+        error,
+        "커뮤니티 공유를 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
+    } finally {
+      setActiveAction(null);
+    }
+  }
+
+  async function handlePublishAndContinue() {
+    const action = pendingPrivateAction;
+    if (!originalReportKey || !action) {
+      setStatus({
+        kind: "error",
+        message: "공개 상태를 바꿀 원본 리포트를 찾지 못했어요.",
+      });
+      return;
+    }
+
+    let publicationCompleted = false;
+
+    try {
+      setActiveAction(action);
+      setPublishProgress("publishing");
+      setStatus(null);
+      const response = await fetch("/api/profile-report-visibility", {
+        body: JSON.stringify({
+          reportKey: originalReportKey,
+          visibility: "profile_public",
+        }),
+        headers: { "content-type": "application/json" },
+        method: "PATCH",
+      });
+      const payload = (await response.json().catch(() => null)) as {
+        message?: string;
+        visibility?: ReportVisibility;
+      } | null;
+
+      if (!response.ok || payload?.visibility !== "profile_public") {
+        throw new Error(
+          payload?.message ??
+            "공개 상태를 바꾸지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+        );
+      }
+
+      publicationCompleted = true;
+      setPublishProgress("preparing");
+      setPendingPrivateAction(null);
+
+      if (action === "feed_share") {
+        setCommunityNote(
+          (current) => current || initialCommunityNote?.slice(0, 120) || "",
+        );
+        setStep("community");
+        return;
+      }
+
+      const url = await getFreshShareUrl();
+      setStep("actions");
+      if (action === "copy_link") {
+        await copyShareUrl(url);
+      } else if (action === "native_share") {
+        await openNativeShare(url);
+      } else {
+        await openKakaoShareOrFallback(url);
+      }
+    } catch (error) {
+      if (isAbortError(error)) {
+        setStep("actions");
+        setStatus(
+          publicationCompleted
+            ? { kind: "notice", message: "결과는 공개됐고 공유는 취소했어요." }
+            : null,
+        );
+        return;
+      }
+      if (publicationCompleted) {
+        setStep("actions");
+        setStatus({
+          kind: "error",
+          message:
+            "결과는 공개됐지만 공유를 마치지 못했어요. 다시 시도해 주세요.",
+        });
+      } else {
+        setStatus({
+          kind: "error",
+          message: toShareErrorMessage(
+            error,
+            "공개 상태를 바꾸지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+          ),
+        });
+      }
+    } finally {
+      setActiveAction(null);
+      setPublishProgress(null);
+    }
+  }
+
+  async function copyShareUrl(url: string) {
+    await copyText(url);
+    setStatus({ kind: "success", message: "결과 링크를 복사했어요." });
+  }
+
+  async function openNativeShare(url: string) {
+    if (typeof navigator.share !== "function") {
+      await copyText(url);
+      setStatus({
+        kind: "notice",
+        message: "이 기기에서는 공유창을 열 수 없어 링크를 복사했어요.",
+      });
+      return;
+    }
+
+    await navigator.share({
+      text: createReportShareText(content),
+      title: `${content.title} | 뉴앙`,
+      url,
+    });
+    setStatus({ kind: "success", message: "공유할 앱을 열었어요." });
+  }
+
+  async function openKakaoShareOrFallback(url: string) {
+    try {
+      if (kakaoPreparation !== "ready") {
+        await prepareKakaoReportShareImage(content.reportType);
+      }
+      await sendReportToKakaoTalk({ content, url });
+      setStatus({
+        kind: "success",
+        message: "카카오톡에서 보낼 대상을 선택해 주세요.",
+      });
+    } catch (error) {
+      if (isKakaoImagePreparationError(error)) throw error;
+      if (typeof navigator.share === "function") {
+        await navigator.share({
+          text: createReportShareText(content),
+          title: `${content.title} | 뉴앙`,
+          url,
+        });
         setStatus({
           kind: "notice",
-          message: "이 기기에서는 공유창을 열 수 없어 링크를 복사했어요.",
+          message: "카카오톡을 열지 못해 기기의 공유창을 열었어요.",
         });
         return;
       }
 
-      await navigator.share({
-        text: createReportShareText(content),
-        title: `${content.title} | 뉴앙`,
-        url,
-      });
-      setStatus({ kind: "success", message: "공유할 앱을 열었어요." });
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") {
-        setStatus(null);
-        return;
-      }
+      await copyText(url);
       setStatus({
-        kind: "error",
-        message: toShareErrorMessage(
-          error,
-          "공유창을 열지 못했어요. 잠시 뒤 다시 시도해 주세요.",
-        ),
+        kind: "notice",
+        message: "카카오톡을 열지 못해 결과 링크를 복사했어요.",
       });
-    } finally {
-      setActiveAction(null);
     }
   }
 
@@ -298,19 +484,18 @@ export function ReportShareSheet({
     try {
       setActiveAction("feed_share");
       setStatus(null);
-      const originalUrl = await getOrCreateFeedOriginalUrl();
+      const originalUrl = await getFreshShareUrl();
       const attachment = parseOriginalReportAttachment(originalUrl);
       if (!attachment) {
         throw new Error(
           "원본 리포트를 확인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
         );
       }
-      const note = communityNote.trim();
       const response = await fetch("/api/feed", {
         body: JSON.stringify({
           action: "create_post",
           attachments: [attachment],
-          body: note,
+          body: communityNote.trim(),
           source: "report_share",
           sourceId: attachment.id,
           topic: {
@@ -320,9 +505,7 @@ export function ReportShareSheet({
           },
           visibility: "public",
         }),
-        headers: {
-          "content-type": "application/json",
-        },
+        headers: { "content-type": "application/json" },
         method: "POST",
       });
       const payload = (await response.json().catch(() => null)) as {
@@ -334,22 +517,16 @@ export function ReportShareSheet({
         navigate(`/login?next=${encodeURIComponent(nextPath)}`, onNavigate);
         return;
       }
-
       if (!response.ok || !payload?.ok) throw new Error("feed_share_failed");
 
-      setStatus({
-        kind: "success",
-        message: "커뮤니티에 결과를 공유했어요.",
-      });
+      setStatus({ kind: "success", message: "커뮤니티에 결과를 공유했어요." });
       navigate("/feed", onNavigate);
     } catch (error) {
-      setStatus({
-        kind: "error",
-        message: toShareErrorMessage(
-          error,
-          "커뮤니티에 공유하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
-        ),
-      });
+      handleActionError(
+        "feed_share",
+        error,
+        "커뮤니티에 공유하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      );
     } finally {
       setActiveAction(null);
     }
@@ -357,26 +534,31 @@ export function ReportShareSheet({
 
   const actionHandlers: Record<ShareActionId, () => Promise<void>> = {
     copy_link: handleCopyLink,
-    feed_share: async () => {
-      setStatus(null);
-      setCommunityNote(
-        (current) => current || initialCommunityNote?.slice(0, 120) || "",
-      );
-      setStep("community");
-    },
+    feed_share: handleOpenCommunity,
+    kakao_share: handleKakaoShare,
     native_share: handleNativeShare,
   };
+  const headerCopy =
+    step === "community"
+      ? "글을 덧붙여 커뮤니티에 올려요."
+      : step === "publish-confirm"
+        ? "공개 범위를 확인해 주세요."
+        : sharesOriginalReport
+          ? "저장된 결과를 공유해요."
+          : "먼저 결과를 계정에 저장해 주세요.";
 
   return createPortal(
     <div className={styles.layer}>
       <button
         aria-label="공유 창 닫기"
         className={styles.backdrop}
+        disabled={isCriticalTransition}
         onClick={closeSheet}
         tabIndex={-1}
         type="button"
       />
       <div
+        aria-describedby="report-share-description"
         aria-labelledby="report-share-title"
         aria-modal="true"
         className={styles.sheet}
@@ -388,60 +570,79 @@ export function ReportShareSheet({
       >
         <div aria-hidden="true" className={styles.handle} />
         <header className={styles.header}>
-          {step === "community" ? (
+          {step !== "actions" ? (
             <button
               aria-label="공유 방식 선택으로 돌아가기"
               className={styles.backButton}
+              disabled={isCriticalTransition}
               onClick={() => {
+                setPendingPrivateAction(null);
                 setStatus(null);
                 setStep("actions");
               }}
               type="button"
             >
-              <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.75} />
+              <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.8} />
             </button>
           ) : null}
-          <div>
-            <h2 id="report-share-title">
-              {step === "community" ? "커뮤니티에 공유" : "결과 공유"}
-            </h2>
-            <p>
+          <div className={styles.headerCopy}>
+            <h2 id="report-share-title" ref={stepHeadingRef} tabIndex={-1}>
               {step === "community"
-                ? "피드에 올라갈 내용을 확인해 주세요."
-                : sharesOriginalReport
-                  ? "검사 당시의 원본 결과 리포트를 그대로 공유해요."
-                  : "계정에 저장한 결과만 안전하게 공유할 수 있어요."}
-            </p>
+                ? "커뮤니티에 공유"
+                : step === "publish-confirm"
+                  ? "공개 후 공유"
+                  : "결과 공유"}
+            </h2>
+            <p id="report-share-description">{headerCopy}</p>
           </div>
           <button
             aria-label="공유 창 닫기"
             className={styles.closeButton}
+            disabled={isCriticalTransition}
             onClick={closeSheet}
             type="button"
           >
-            <X aria-hidden="true" size={20} strokeWidth={1.75} />
+            <X aria-hidden="true" size={20} strokeWidth={1.8} />
           </button>
         </header>
 
         {step === "actions" ? (
           <>
-            <ReportPreview content={content} />
-
-            <section
-              aria-labelledby="report-share-method-title"
-              className={styles.actionSection}
-            >
-              <h3 id="report-share-method-title">공유 방법</h3>
-              <div className={styles.actions}>
-                {reportShareActions.map((action) => {
+            <ReportIdentity content={content} />
+            <section aria-label="공유 방법" className={styles.actionSection}>
+              <button
+                aria-busy={activeAction === "kakao_share"}
+                aria-label="카카오톡으로 보내기"
+                className={styles.kakaoAction}
+                disabled={activeAction !== null || !sharesOriginalReport}
+                onClick={() => void handleKakaoShare()}
+                type="button"
+              >
+                <span className={styles.kakaoIcon}>
+                  {activeAction === "kakao_share" ? (
+                    <LoaderCircle
+                      aria-hidden="true"
+                      className={styles.spinner}
+                      size={19}
+                    />
+                  ) : (
+                    <KakaoBubbleIcon />
+                  )}
+                </span>
+                <strong>카카오톡으로 보내기</strong>
+              </button>
+              <p className={styles.kakaoHelp}>
+                카카오톡에서 보낼 대화방을 직접 선택해요.
+              </p>
+              <div className={styles.secondaryActions}>
+                {secondaryActions.map((action) => {
                   const Icon =
                     action.id === "copy_link"
                       ? Copy
                       : action.id === "native_share"
                         ? ExternalLink
-                        : MessageCircle;
+                        : MessagesSquare;
                   const isWorking = activeAction === action.id;
-
                   return (
                     <button
                       aria-busy={isWorking}
@@ -452,44 +653,25 @@ export function ReportShareSheet({
                       onClick={() => void actionHandlers[action.id]()}
                       type="button"
                     >
-                      <span className={styles.actionIcon}>
-                        {isWorking ? (
-                          <LoaderCircle
-                            aria-hidden="true"
-                            className={styles.spinner}
-                            size={19}
-                          />
-                        ) : (
-                          <Icon
-                            aria-hidden="true"
-                            size={19}
-                            strokeWidth={1.7}
-                          />
-                        )}
-                      </span>
-                      <span className={styles.actionCopy}>
-                        <strong>{action.label}</strong>
-                        <small>{actionDescriptions[action.id]}</small>
-                      </span>
-                      <ChevronRight
-                        aria-hidden="true"
-                        className={styles.actionChevron}
-                        size={18}
-                        strokeWidth={1.7}
-                      />
+                      {isWorking ? (
+                        <LoaderCircle
+                          aria-hidden="true"
+                          className={styles.spinner}
+                          size={19}
+                        />
+                      ) : (
+                        <Icon aria-hidden="true" size={19} strokeWidth={1.8} />
+                      )}
+                      <strong>{action.label}</strong>
                     </button>
                   );
                 })}
               </div>
             </section>
           </>
-        ) : (
+        ) : step === "community" ? (
           <section className={styles.communityStep}>
-            <span className={styles.sectionLabel}>피드 미리보기</span>
-            {communityNote.trim() ? (
-              <p className={styles.notePreview}>{communityNote.trim()}</p>
-            ) : null}
-            <ReportPreview compact content={content} />
+            <ReportIdentity compact content={content} />
             <label className={styles.noteField}>
               <span>
                 한마디 덧붙이기 <small>선택</small>
@@ -498,7 +680,7 @@ export function ReportShareSheet({
                 maxLength={120}
                 onChange={(event) => setCommunityNote(event.target.value)}
                 placeholder="이 결과를 보고 든 생각을 남겨보세요."
-                rows={2}
+                rows={3}
                 value={communityNote}
               />
               <small>{communityNote.length} / 120</small>
@@ -520,6 +702,65 @@ export function ReportShareSheet({
               {activeAction === "feed_share" ? "공유 중" : "커뮤니티에 공유"}
             </button>
           </section>
+        ) : (
+          <section className={styles.publishConfirm}>
+            <ReportIdentity compact content={content} />
+            <span className={styles.privateStatus}>현재 비공개</span>
+            <h3>이 결과를 공개하고 공유할까요?</h3>
+            <p className={styles.publishCopy}>
+              공개하면 프로필과 링크를 받은 사람 누구나 결과 요약을 볼 수
+              있어요.
+            </p>
+            <div className={styles.disclosure}>
+              <p>
+                <span>공개됨</span>
+                <strong>결과 이름과 요약</strong>
+              </p>
+              <p>
+                <span>공개되지 않음</span>
+                <strong>내 답변과 원점수</strong>
+              </p>
+            </div>
+            <p className={styles.publishNote}>
+              마이 &gt; 검사 결과에서 언제든 다시 비공개로 바꿀 수 있어요.
+            </p>
+            <div className={styles.publishConfirmActions}>
+              <button
+                className={styles.cancelButton}
+                disabled={isCriticalTransition}
+                onClick={() => {
+                  setPendingPrivateAction(null);
+                  setStatus(null);
+                  setStep("actions");
+                }}
+                type="button"
+              >
+                취소
+              </button>
+              <button
+                aria-busy={isCriticalTransition}
+                className={styles.publishButton}
+                disabled={isCriticalTransition}
+                onClick={() => void handlePublishAndContinue()}
+                type="button"
+              >
+                {isCriticalTransition ? (
+                  <LoaderCircle
+                    aria-hidden="true"
+                    className={styles.spinner}
+                    size={18}
+                  />
+                ) : null}
+                {publishProgress === "publishing"
+                  ? "공개 설정 중"
+                  : publishProgress === "preparing"
+                    ? "공유 준비 중"
+                    : publishActionLabels[
+                        pendingPrivateAction ?? "kakao_share"
+                      ]}
+              </button>
+            </div>
+          </section>
         )}
 
         {status ? (
@@ -529,23 +770,17 @@ export function ReportShareSheet({
             data-kind={status.kind}
             role={status.kind === "error" ? "alert" : "status"}
           >
-            {status.kind === "error" ? (
-              <Share2 aria-hidden="true" size={16} strokeWidth={1.8} />
-            ) : (
-              <Check aria-hidden="true" size={16} strokeWidth={2} />
-            )}
             {status.message}
           </p>
         ) : null}
 
-        <div className={styles.visibilityNote}>
-          <LockKeyhole aria-hidden="true" size={16} strokeWidth={1.8} />
-          <p>
+        {step === "actions" ? (
+          <p className={styles.privacyNote}>
             {sharesOriginalReport
-              ? "프로필에서 이 결과를 비공개로 바꾸면 공유 링크도 함께 닫혀요."
-              : "먼저 로그인하고 결과를 계정에 저장해 주세요."}
+              ? "답변과 원점수는 공유되지 않아요."
+              : "로그인하고 결과를 저장한 뒤 공유할 수 있어요."}
           </p>
-        </div>
+        ) : null}
       </div>
     </div>,
     document.body,
@@ -564,61 +799,87 @@ function createReportFeedTags(content: ReportShareContent) {
     .slice(0, 2);
 }
 
-function ReportPreview({
+function ReportIdentity({
   compact = false,
   content,
 }: {
   compact?: boolean;
   content: ReportShareContent;
 }) {
-  const Icon =
-    content.reportType === "core"
-      ? FileText
-      : content.reportType === "topic"
-        ? MessagesSquare
-        : FlaskConical;
-
   return (
     <section
-      aria-label={`${reportTypeLabels[content.reportType]} 결과 미리보기`}
-      className={styles.preview}
+      aria-label={`${reportTypeLabels[content.reportType]} 공유 결과`}
+      className={styles.resultIdentity}
       data-compact={compact}
       data-report-type={content.reportType}
     >
-      <div className={styles.typeMark}>
-        <Icon aria-hidden="true" size={20} strokeWidth={1.65} />
-      </div>
-      <div className={styles.previewCopy}>
-        <p>
-          {reportTypeLabels[content.reportType]} · {content.title}
-        </p>
-        <div className={styles.previewTitle}>
-          {content.code ? <strong>{content.code}</strong> : null}
-          <h3>{content.resultName}</h3>
-        </div>
-        <span>{content.summary}</span>
-        {!compact ? (
-          <ul>
-            {content.highlights.slice(0, 2).map((highlight) => (
-              <li key={highlight}>{highlight}</li>
-            ))}
-          </ul>
-        ) : null}
-      </div>
+      <p className={styles.resultMeta}>
+        {reportTypeLabels[content.reportType]} · {content.title}
+      </p>
+      <h3>
+        {content.code ? <span>{content.code}</span> : null}
+        {content.resultName}
+      </h3>
+      {!compact ? <p className={styles.resultSummary}>{content.summary}</p> : null}
     </section>
   );
 }
 
+function KakaoBubbleIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      fill="none"
+      height="20"
+      viewBox="0 0 24 24"
+      width="20"
+    >
+      <path
+        d="M12 4.25c-4.42 0-8 2.82-8 6.3 0 2.22 1.46 4.17 3.67 5.29l-.93 3.43c-.08.31.27.56.54.38l4.04-2.7c.22.02.45.03.68.03 4.42 0 8-2.82 8-6.43 0-3.48-3.58-6.3-8-6.3Z"
+        fill="currentColor"
+      />
+    </svg>
+  );
+}
+
 function toShareErrorMessage(error: unknown, fallback: string) {
+  if (error instanceof Error) {
+    const kakaoImageMessages: Record<string, string> = {
+      kakao_share_image_asset_invalid:
+        "공유 이미지 형식을 확인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      kakao_share_image_asset_unavailable:
+        "공유 이미지를 불러오지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      kakao_share_image_upload_invalid:
+        "카카오 공유 이미지를 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    };
+    if (kakaoImageMessages[error.message]) {
+      return kakaoImageMessages[error.message];
+    }
+  }
   if (
     error instanceof Error &&
-    error.message &&
-    error.message !== "share_link_failed" &&
-    error.message !== "feed_share_failed"
+    /[가-힣]/.test(error.message) &&
+    !/(failed|unavailable|fetch|clipboard|sdk)/i.test(error.message)
   ) {
     return error.message;
   }
   return fallback;
+}
+
+function isPrivateReportError(error: unknown) {
+  return (
+    error instanceof ReportShareRequestError && error.code === "report_private"
+  );
+}
+
+function isAbortError(error: unknown) {
+  return error instanceof DOMException && error.name === "AbortError";
+}
+
+function isKakaoImagePreparationError(error: unknown) {
+  return (
+    error instanceof Error && error.message.startsWith("kakao_share_image_")
+  );
 }
 
 async function copyText(value: string) {
@@ -644,7 +905,6 @@ function navigate(href: string, onNavigate?: (href: string) => void) {
     onNavigate(href);
     return;
   }
-
   window.location.assign(href);
 }
 
@@ -654,7 +914,6 @@ function parseOriginalReportAttachment(value: string) {
     const match = url.pathname.match(
       /^\/feed\/profiles\/([^/]+)\/reports\/([^/]+)\/?$/,
     );
-
     if (!match?.[1] || !match[2]) return null;
 
     return {

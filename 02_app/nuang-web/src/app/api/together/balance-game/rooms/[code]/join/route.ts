@@ -9,7 +9,6 @@ import {
   enforceBalanceRequestRateLimit,
   joinBalanceRoomOnServer,
   readBalanceRequestAccountId,
-  readBalanceRoomPreviewOnServer,
 } from "@/features/together-balance/server";
 import { readValidatedJson } from "@/lib/api/request";
 
@@ -32,10 +31,7 @@ export async function POST(
       action: "join_room",
       request,
     });
-    const preview = await readBalanceRoomPreviewOnServer(code);
-    const accountId = await readBalanceRequestAccountId(
-      preview.participationMode === "feed_group",
-    );
+    const accountId = await readBalanceRequestAccountId(false);
     const result = await joinBalanceRoomOnServer({
       accountId,
       answerRevealConsentVersion: payload.data.answerRevealConsentVersion,
@@ -43,7 +39,9 @@ export async function POST(
       nickname: payload.data.nickname,
       roomCode: code,
     });
-    revalidateBalanceFeed();
+    if (result.room.participationMode === "feed_group") {
+      revalidateBalanceFeed();
+    }
     return NextResponse.json({ ok: true, ...result }, { status: 201 });
   } catch (error) {
     return handleBalanceRouteError(error);

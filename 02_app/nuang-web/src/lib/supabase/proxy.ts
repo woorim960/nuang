@@ -7,13 +7,22 @@ export async function refreshSupabaseAuthSession(
   request: NextRequest,
   forwardedRequestHeaders?: Headers,
 ) {
-  const env = getSupabasePublicEnv();
   const createResponse = () =>
     NextResponse.next({
       request: {
         headers: forwardedRequestHeaders ?? request.headers,
       },
     });
+
+  // Anonymous traffic is the dominant path for public pages. Supabase's SSR
+  // client only has work to do when an access-token cookie is present, so avoid
+  // constructing the client (and any token verification/refresh work) for every
+  // asset, landing page, and signed-out navigation.
+  if (!hasSupabaseAuthTokenCookie(request)) {
+    return createResponse();
+  }
+
+  const env = getSupabasePublicEnv();
 
   if (!env) {
     return createResponse();
@@ -50,4 +59,11 @@ export async function refreshSupabaseAuthSession(
   await supabase.auth.getClaims();
 
   return response;
+}
+
+function hasSupabaseAuthTokenCookie(request: NextRequest) {
+  return request.cookies.getAll().some(({ name, value }) => {
+    if (!value || !name.startsWith("sb-")) return false;
+    return name.endsWith("-auth-token") || /-auth-token\.\d+$/.test(name);
+  });
 }

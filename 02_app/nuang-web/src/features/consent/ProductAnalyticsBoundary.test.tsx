@@ -2,6 +2,7 @@ import { render, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   ProductAnalyticsBoundary,
+  isProductAnalyticsTrackingDisabled,
   resolveProductAnalyticsArea,
 } from "./ProductAnalyticsBoundary";
 
@@ -15,6 +16,25 @@ describe("ProductAnalyticsBoundary", () => {
   beforeEach(() => {
     pathname.value = "/home";
     vi.stubGlobal("fetch", vi.fn(async () => new Response(null, { status: 201 })));
+    Object.defineProperty(navigator, "doNotTrack", {
+      configurable: true,
+      value: "0",
+    });
+    Object.defineProperty(navigator, "globalPrivacyControl", {
+      configurable: true,
+      value: false,
+    });
+    Object.defineProperty(window, "requestIdleCallback", {
+      configurable: true,
+      value: (callback: IdleRequestCallback) => {
+        callback({ didTimeout: false, timeRemaining: () => 10 });
+        return 1;
+      },
+    });
+    Object.defineProperty(window, "cancelIdleCallback", {
+      configurable: true,
+      value: vi.fn(),
+    });
   });
 
   it("sends only the normalized product area", async () => {
@@ -34,6 +54,35 @@ describe("ProductAnalyticsBoundary", () => {
     pathname.value = "/login";
     render(<ProductAnalyticsBoundary />);
     expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("does not send when Do Not Track or Global Privacy Control is enabled", () => {
+    Object.defineProperty(navigator, "doNotTrack", {
+      configurable: true,
+      value: "1",
+    });
+    render(<ProductAnalyticsBoundary />);
+    expect(isProductAnalyticsTrackingDisabled()).toBe(true);
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("waits for browser idle time before sending", () => {
+    let triggerIdle: () => void = () => {
+      throw new Error("idle callback was not registered");
+    };
+    Object.defineProperty(window, "requestIdleCallback", {
+      configurable: true,
+      value: (callback: IdleRequestCallback) => {
+        triggerIdle = () =>
+          callback({ didTimeout: false, timeRemaining: () => 10 });
+        return 2;
+      },
+    });
+
+    render(<ProductAnalyticsBoundary />);
+    expect(fetch).not.toHaveBeenCalled();
+    triggerIdle();
+    expect(fetch).toHaveBeenCalledTimes(1);
   });
 });
 

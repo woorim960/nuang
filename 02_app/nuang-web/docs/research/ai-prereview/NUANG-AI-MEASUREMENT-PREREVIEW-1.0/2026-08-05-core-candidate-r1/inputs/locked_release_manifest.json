@@ -1,0 +1,43 @@
+{
+  "runId": "2026-08-05-core-candidate-r1",
+  "protocolVersion": "NUANG-AI-MEASUREMENT-PREREVIEW-1.0",
+  "assessmentReleases": [
+    "NUANG-CORE-QUICK-CANDIDATE-1.0",
+    "NUANG-CORE-FULL-CANDIDATE-1.0"
+  ],
+  "itemBankRelease": "NUANG-CORE-BETA-1.0",
+  "scoringReleases": [
+    "NUANG-CORE-QUICK-CANDIDATE-SCORING-1.0",
+    "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0"
+  ],
+  "codeSchemeVersion": "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+  "profileCopyVersion": "NUANG-CANDIDATE-PROFILE-NARRATIVE-1.0",
+  "facetCopyVersion": "NUANG-PRECISION-FACET-COPY-1.0",
+  "humanValidationGatesAtLock": {
+    "cognitiveReview": "not_started",
+    "fairnessAndInvariance": "not_started",
+    "quantitativePilot": "not_started",
+    "reliabilityAndStructure": "not_started"
+  },
+  "runtimeScope": {
+    "quickItemCount": 22,
+    "fullItemCount": 60,
+    "adaptiveItemCount": 15,
+    "responseScale": [1, 2, 3, 4, 5],
+    "unsureExcludedFromScoring": true,
+    "databaseManagedReleaseExported": false
+  },
+  "inputFiles": [
+    {"path":"content-seed/items/core-beta-item-set.v1.0.json","sha256":"39748e0fdab94d28d9e5ac0a3388a0830d5234cdfc0443da1b1a9430e996ea52"},
+    {"path":"content-seed/items/core-beta-adaptive-item-set.v1.0.json","sha256":"a6584664a120d22e091e258630b07017a6bd00ca77101800ab567f4b4c5b26cb"},
+    {"path":"src/features/assessment/candidate-quick-core-seed.ts","sha256":"0674a0a5a2a92affd5f99ceb0f3afa1f7b6851ae6f14a8f46d4e46f4246444c7"},
+    {"path":"src/features/assessment/candidate-full-core-seed.ts","sha256":"9b0f793332ff5c128f72b84dd04a118e42509b123851fb07e472780b4b9feae9"},
+    {"path":"src/features/assessment/beta-core-seed.ts","sha256":"b7d6ee199d74348c7af86087af0578b693c74d409e21d3aa1444f20382160458"},
+    {"path":"src/lib/scoring/core.ts","sha256":"25f672b2bdd33263e6b492571754de464367da3a4b2087755c7df85f8e569470"},
+    {"path":"src/features/nuang-code/next-code-scheme.ts","sha256":"2e2211fe99766ba417e39335a216bc4e0e8f8875b48e6ef39e2629e5d428ddfd"},
+    {"path":"src/features/nuang-code/candidate-profile-names.ts","sha256":"cd33366613e877707a56969da2b4edd65930b7d43fc316741a1f5d5189d8faef"},
+    {"path":"src/features/result/precision-report-insights.ts","sha256":"0bf2d1c3211b077720f82a1f74735f5edb21b2196cc80c87106832451d6feb75"},
+    {"path":"docs/research/core-m04/internal-critique/v0.1/analysis/analysis_summary.json","sha256":"3314ac1503630caeb3120ba48babe11a5d2f29d692a33e2702f32657aa5c4594"},
+    {"path":"docs/research/core-m04/internal-critique/v0.1/analysis/item_metrics.csv","sha256":"c5e7f1e7cb4341aeb2285132126090d994485b5e52aaa40a9235bbadaa9db213"}
+  ]
+}

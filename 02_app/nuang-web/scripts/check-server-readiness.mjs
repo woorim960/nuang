@@ -63,9 +63,12 @@ await checkServiceTables([
   ["identity", "account", "id"],
   ["identity", "auth_identity", "id, account_id"],
   ["identity", "contact_profile", "account_id, email_status"],
+  ["identity", "operator_account", "account_id"],
   ["consent", "age_and_consent_status", "account_id"],
+  ["consent", "product_analytics_event", "id, account_id, event_name, area"],
   ["assessment", "assessment_attempt", "id, account_id"],
   ["assessment", "free_topic_result", "id, local_result_id"],
+  ["scoring", "account_trait_profile", "account_id, profile_code, version"],
   ["scoring", "score_snapshot", "id, account_id"],
   ["report", "result_report", "id, account_id"],
   ["sharing", "share_link", "id, result_report_id, status"],
@@ -94,11 +97,7 @@ await checkServiceTables([
     "research_gate_c_request_bucket",
     "subject_hash, action, bucket_kind, bucket_start, request_count",
   ],
-  [
-    "public",
-    "research_gate_c_item_decision",
-    "id, decision_state, updated_at",
-  ],
+  ["public", "research_gate_c_item_decision", "id, decision_state, updated_at"],
   [
     "public",
     "research_trait_map_section_feedback",
@@ -110,15 +109,39 @@ await checkServiceTables([
     "id, decision_state, updated_at",
   ],
   ["public", "research_gate_c_reward_entry", "id, campaign_id, status"],
+  ["public", "assessment_content_entry", "id, category, slug, status"],
+  ["public", "assessment_content_release", "id, entry_id, release_key"],
+  ["public", "admin_legal_release", "id, release_key, status"],
+  ["public", "admin_legal_review_item", "id, release_id, item_key, status"],
+  ["together_balance", "template", "id, slug, status"],
+  ["together_balance", "template_version", "id, template_id, version"],
+  ["together_balance", "session_recipe", "id, template_version_id"],
+  ["together_balance", "item", "id, template_version_id, item_key"],
+  ["together_balance", "room", "id, lifecycle_status, result_status"],
+  ["together_balance", "participant", "id, room_id, status"],
+  ["together_balance", "request_budget", "scope_hash, action"],
+  ["together_balance", "room_ban", "id, room_id"],
+  ["together_balance", "round", "id, room_id, status"],
+  ["together_balance", "round_item", "round_id, item_id, display_order"],
+  ["together_balance", "response", "id, room_id, participant_id"],
+  ["together_balance", "round_completion", "round_id, participant_id"],
+  ["together_balance", "result_snapshot", "id, room_id, result_state"],
+  ["together_balance", "pair_result", "snapshot_id, room_id"],
+  ["together_balance", "feed_share", "id, room_id, share_kind"],
 ]);
 
 await checkLegacyTableRemoved();
 await checkServiceDeleteRpcNoop();
 await checkCommunityWriteGuardRpc();
+await checkAtomicProfileBlockRpc();
 await checkAssessmentResultClaimRpc();
 await checkGateCRequestGuardRpc();
 await checkSelfAccountDeletionRpc();
+await checkAtomicPublicComparisonRpc();
 await checkAdminAtomicRpcs();
+await checkAssessmentStudioRpcs();
+await checkTogetherBalancePerformanceRpcs();
+await checkProductAnalyticsSnapshotRpc();
 await checkAnonSensitiveReads();
 await checkAnonFeedReads();
 await checkAnonDeleteRpcBlocked();
@@ -209,8 +232,10 @@ async function checkAnonSensitiveReads() {
     ["identity", "auth_identity", "id, account_id, supabase_user_id"],
     ["identity", "contact_profile", "account_id, email_hash"],
     ["consent", "age_and_consent_status", "account_id"],
+    ["consent", "product_analytics_event", "id, account_id, area"],
     ["assessment", "assessment_response", "id, item_id, value"],
     ["assessment", "free_topic_result", "id, evidence_payload"],
+    ["scoring", "account_trait_profile", "account_id, profile_code, domains"],
     ["scoring", "score_snapshot", "id, score_payload"],
     ["report", "result_report", "id, summary, share_summary"],
     ["sharing", "share_link", "id, token_hash"],
@@ -219,6 +244,14 @@ async function checkAnonSensitiveReads() {
     ["feed", "content_report", "id, reporter_account_id, details"],
     ["feed", "community_write_bucket", "account_id, request_count"],
     ["audit", "visibility_audit_event", "id, metadata"],
+    ["public", "assessment_content_entry", "id, document, review_note"],
+    ["public", "assessment_content_release", "id, document, change_note"],
+    ["public", "admin_legal_release", "id, release_key, approval_evidence_ref"],
+    ["public", "admin_legal_review_item", "id, release_id, evidence_ref, note"],
+    ["together_balance", "room", "id, join_code_hash, owner_participant_id"],
+    ["together_balance", "participant", "id, join_token_hash, account_id"],
+    ["together_balance", "response", "id, participant_id, option_key"],
+    ["together_balance", "result_snapshot", "id, room_id, highlights"],
   ];
 
   for (const [schema, table, columns] of sensitiveReads) {
@@ -295,6 +328,20 @@ async function checkCommunityWriteGuardRpc() {
   });
 }
 
+async function checkAtomicProfileBlockRpc() {
+  await checkSchemaRpcExists(
+    "feed",
+    "set_profile_block",
+    {
+      p_blocked: true,
+      p_blocked_account_id: "00000000-0000-4000-8000-000000000001",
+      p_blocker_account_id: "00000000-0000-4000-8000-000000000002",
+      p_target_public_snapshot_id: "00000000-0000-4000-8000-000000000003",
+    },
+    "profile block cleans follows and notifications atomically",
+  );
+}
+
 async function checkAssessmentResultClaimRpc() {
   await checkRpcExists(
     "claim_assessment_result_atomic",
@@ -352,6 +399,23 @@ async function checkSelfAccountDeletionRpc() {
   );
 }
 
+async function checkAtomicPublicComparisonRpc() {
+  await checkSchemaRpcExists(
+    "comparison",
+    "create_public_comparison_report",
+    {
+      p_id: "00000000-0000-4000-8000-000000000001",
+      p_policy_version: "readiness",
+      p_report_payload: {},
+      p_target_public_snapshot_id: "00000000-0000-4000-8000-000000000002",
+      p_viewer_account_id: "00000000-0000-4000-8000-000000000003",
+      p_viewer_public_snapshot_id: "00000000-0000-4000-8000-000000000004",
+      p_viewer_result_report_id: "00000000-0000-4000-8000-000000000005",
+    },
+    "public comparison creation and visibility audit are atomic",
+  );
+}
+
 async function checkAdminAtomicRpcs() {
   await checkRpcExists(
     "admin_apply_community_moderation",
@@ -393,8 +457,127 @@ async function checkAdminAtomicRpcs() {
   );
 }
 
+async function checkAssessmentStudioRpcs() {
+  await checkRpcExists(
+    "admin_manage_assessment_content",
+    {
+      target_action: "readiness_check",
+      target_admin_account_id: null,
+      target_entry_id: null,
+      target_note: null,
+    },
+    "assessment studio lifecycle mutation is atomic",
+  );
+  await checkRpcExists(
+    "admin_reorder_assessment_content",
+    {
+      target_admin_account_id: null,
+      target_ordered_entry_ids: [],
+      target_reason: null,
+    },
+    "assessment studio reorder is atomic and audited",
+  );
+}
+
+async function checkTogetherBalancePerformanceRpcs() {
+  await checkSchemaRpcExists(
+    "together_balance",
+    "get_room_join_preview",
+    { p_join_code_hash: "invalid" },
+    "balance room join preview hot path is available",
+  );
+  await checkSchemaRpcExists(
+    "together_balance",
+    "save_response_by_item_key",
+    {
+      p_client_sequence: 1,
+      p_idempotency_key: "00000000-0000-4000-8000-000000000000",
+      p_item_key: "readiness",
+      p_join_code_hash: "invalid",
+      p_join_token_hash: "invalid",
+      p_option_key: "a",
+      p_response_ms: null,
+    },
+    "balance response single-transaction hot path is available",
+  );
+  await checkSchemaRpcExists(
+    "together_balance",
+    "complete_participant_game",
+    { p_join_code_hash: "invalid", p_join_token_hash: "invalid" },
+    "balance completion single-transaction hot path is available",
+  );
+}
+
+async function checkProductAnalyticsSnapshotRpc() {
+  const operator = await serviceClient
+    .schema("identity")
+    .from("operator_account")
+    .select("account_id")
+    .limit(1)
+    .maybeSingle();
+
+  if (operator.error || !operator.data?.account_id) {
+    pushCheck({
+      detail: operator.error
+        ? describeError(operator.error)
+        : "no active operator evidence row",
+      name: "operator-only product analytics snapshot is available",
+      ok: false,
+    });
+    return;
+  }
+
+  const args = {
+    target_admin_account_id: operator.data.account_id,
+    target_days: 7,
+  };
+  const service = await serviceClient
+    .schema("consent")
+    .rpc("admin_product_analytics_snapshot", args);
+  const serviceReady =
+    !service.error &&
+    service.data?.schemaVersion === 1 &&
+    service.data?.windowDays === 7 &&
+    typeof service.data?.summary === "object";
+
+  pushCheck({
+    detail: service.error
+      ? describeError(service.error)
+      : serviceReady
+        ? `eligible=${Number(service.data.summary?.eligibleAccounts ?? 0)}`
+        : "invalid snapshot contract",
+    name: "operator-only product analytics snapshot is available",
+    ok: serviceReady,
+  });
+
+  const anon = await anonClient
+    .schema("consent")
+    .rpc("admin_product_analytics_snapshot", args);
+  pushCheck({
+    detail: anon.error
+      ? `blocked (${anon.error.code ?? "unknown"})`
+      : "rpc executed",
+    name: "anon cannot execute product analytics snapshot",
+    ok: Boolean(anon.error),
+  });
+}
+
 async function checkRpcExists(rpcName, args, label) {
   const { error } = await serviceClient.rpc(rpcName, args);
+  const missing = ["42883", "PGRST202"].includes(error?.code ?? "");
+  pushCheck({
+    detail: missing
+      ? describeError(error)
+      : error
+        ? `available (${error.code ?? "expected guard"})`
+        : "available",
+    name: label,
+    ok: !missing,
+  });
+}
+
+async function checkSchemaRpcExists(schema, rpcName, args, label) {
+  const { error } = await serviceClient.schema(schema).rpc(rpcName, args);
   const missing = ["42883", "PGRST202"].includes(error?.code ?? "");
   pushCheck({
     detail: missing

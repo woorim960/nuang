@@ -23,13 +23,13 @@ export async function PUT(
   const { code, itemId } = await context.params;
 
   try {
-    const room = await saveBalanceResponseOnServer({
+    const saved = await saveBalanceResponseOnServer({
       input: payload.data,
       itemKey: itemId,
       participantToken: readBalanceParticipantToken(request),
       roomCode: code,
     });
-    return NextResponse.json({ ok: true, room });
+    return NextResponse.json({ ok: true, saved });
   } catch (error) {
     return handleBalanceRouteError(error);
   }

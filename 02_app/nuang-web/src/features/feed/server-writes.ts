@@ -4,6 +4,7 @@ import {
   type ServerWriteResult,
 } from "@/features/account/server-writes";
 import { sendAdminReviewNotification } from "@/features/admin/server-admin-review-notification";
+import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { isUserManageableFeedPostSource } from "@/features/feed/feed-post-management";
 import {
@@ -578,6 +579,13 @@ async function writeFeedPost({
     return { code: "feed_target_invalid", ok: false };
   }
 
+  if (
+    payload.source === "report_share" &&
+    !(await canPublishCoreReportAttachment({ accountId, client, payload }))
+  ) {
+    return { code: "feed_result_release_not_publicable", ok: false };
+  }
+
   const publicProjection = await buildPostProjection({
     accountId,
     client,
@@ -702,6 +710,49 @@ async function writeFeedPost({
     },
     ok: true,
   };
+}
+
+async function canPublishCoreReportAttachment({
+  accountId,
+  client,
+  payload,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  payload: Extract<FeedWriteRequest, { action: "create_post" }>;
+}) {
+  const attachment = payload.attachments?.find(
+    (item) =>
+      item.type === "result_summary" || item.type === "original_report",
+  );
+  if (!attachment) return false;
+
+  if (attachment.type === "result_summary") {
+    const publication = await readCoreResultPublicationDecision({
+      client,
+      ownerAccountId: accountId,
+      resultReportId: attachment.id,
+    });
+    return publication.eligible;
+  }
+
+  const key = parseProfileReportKey(attachment.id);
+  if (!key) return false;
+  if (key.kind !== "core") return true;
+
+  const ownerAccountId = attachment.profileId
+    ? await resolveProfileOwnerAccountId({
+        client,
+        profileId: attachment.profileId,
+      })
+    : null;
+  if (!ownerAccountId) return false;
+  const publication = await readCoreResultPublicationDecision({
+    client,
+    ownerAccountId,
+    resultReportId: key.sourceId,
+  });
+  return publication.eligible;
 }
 
 function isMissingFeedTopicColumns(error: unknown) {

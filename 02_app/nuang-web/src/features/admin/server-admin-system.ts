@@ -44,15 +44,21 @@ export async function readAdminSystem(client: SupabaseClient) {
       "marketing-email-from",
       "마케팅 이메일 발신자",
       marketingEmail.fromReady,
-      marketingEmail.fromReady ? "nuang.app 발신 주소 사용" : "nuang.app 발신 주소 필요",
+      marketingEmail.fromReady
+        ? "nuang.app 발신 주소 사용"
+        : "nuang.app 발신 주소 필요",
       "MARKETING_EMAIL_FROM을 인증된 뉴앙 발신 도메인 주소로 설정하세요.",
+      marketingEmail.enabled ? "blocker" : "warning",
     ),
     runtimeCheck(
       "marketing-email-reply",
       "마케팅 이메일 답장 주소",
       isEmailAddress(marketingEmail.replyTo),
-      isEmailAddress(marketingEmail.replyTo) ? "답장 주소 설정됨" : "유효한 답장 주소 필요",
+      isEmailAddress(marketingEmail.replyTo)
+        ? "답장 주소 설정됨"
+        : "유효한 답장 주소 필요",
       "MARKETING_EMAIL_REPLY_TO에 운영자가 확인할 이메일을 설정하세요.",
+      marketingEmail.enabled ? "blocker" : "warning",
     ),
     runtimeCheck(
       "marketing-email-webhook",
@@ -60,6 +66,7 @@ export async function readAdminSystem(client: SupabaseClient) {
       marketingEmail.webhookReady,
       marketingEmail.webhookReady ? "설정됨" : "Webhook 서명 키 필요",
       "Resend Webhook의 signing secret을 AD_RESEND_WEBHOOK_SECRET에 등록하세요.",
+      marketingEmail.enabled ? "blocker" : "warning",
     ),
     runtimeCheck(
       "marketing-email-cron",
@@ -67,6 +74,7 @@ export async function readAdminSystem(client: SupabaseClient) {
       marketingEmail.cronReady,
       marketingEmail.cronReady ? "설정됨" : "32자 이상 인증 키 필요",
       "32자 이상의 임의 문자열을 AD_OUTBOX_CRON_SECRET에 등록하세요.",
+      marketingEmail.enabled ? "blocker" : "warning",
     ),
     envCheck("email-from", "인증 이메일 발신 주소", "EMAIL_VERIFICATION_FROM"),
     envAnyCheck("admin-notification-recipients", "운영 검토 알림 수신자", [
@@ -151,6 +159,20 @@ export async function readAdminSystem(client: SupabaseClient) {
       "assessment_attempt",
       "성향 검사",
       "검사 응답을 저장할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "assessment_content_entry",
+      "검사 스튜디오 작업본",
+      "운영센터에서 검사와 문항을 등록·수정할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "assessment_content_release",
+      "검사 스튜디오 게시 버전",
+      "검사 버전 게시·롤백과 과거 결과 재현을 보장할 수 없습니다.",
     ),
     dbCheck(
       client,
@@ -246,6 +268,33 @@ export async function readAdminSystem(client: SupabaseClient) {
       "성향지도 문구 운영 결정",
       "성향지도 피드백의 운영 결정을 저장할 수 없습니다.",
       "warning",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "admin_legal_release",
+      "법률 검토 릴리스",
+      "법률·정책 검토의 책임자, 버전과 최종 승인 근거를 저장할 수 없습니다.",
+    ),
+    dbCheck(
+      client,
+      "public",
+      "admin_legal_review_item",
+      "법률 검토 항목",
+      "약관·개인정보 처리방침의 항목별 검토 상태와 증빙을 저장할 수 없습니다.",
+    ),
+    rpcCheck(
+      client,
+      "법률 검토 상태 변경",
+      "admin_manage_legal_review",
+      {
+        target_action: "readiness_check",
+        target_admin_account_id: null,
+        target_item_key: null,
+        target_payload: {},
+        target_release_id: "00000000-0000-4000-8000-000000000000",
+      },
+      "항목별 검토와 최종 승인 기록을 안전하게 변경할 수 없습니다.",
     ),
     storageCheck(client),
     rpcCheck(

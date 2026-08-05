@@ -15,11 +15,13 @@ export const profileVisibilityFieldIds = [
 
 export type ProfileVisibilityLevel = "public" | "limited" | "private";
 
-export type ProfileFieldSensitivity = "basic" | "core" | "personal" | "sensitive";
+export type ProfileFieldSensitivity =
+  "basic" | "core" | "personal" | "sensitive";
 
 export type ProfileComparisonUse = "allowed" | "hidden" | "blocked";
 
-export type ProfileVisibilityFieldId = (typeof profileVisibilityFieldIds)[number];
+export type ProfileVisibilityFieldId =
+  (typeof profileVisibilityFieldIds)[number];
 
 export type ProfileVisibilityRule = {
   comparisonUse: ProfileComparisonUse;
@@ -40,7 +42,7 @@ export const oneToOneComparisonPolicy = {
   requiresViewerFullCore: true,
 } as const;
 
-export const profileVisibilityPolicyVersion = "profile-visibility.v0.1";
+export const profileVisibilityPolicyVersion = "profile-visibility.v0.2";
 
 export const profileVisibilityRules: ReadonlyArray<ProfileVisibilityRule> = [
   {
@@ -73,14 +75,14 @@ export const profileVisibilityRules: ReadonlyArray<ProfileVisibilityRule> = [
   },
   {
     comparisonUse: "hidden",
-    defaultVisibility: "private",
+    defaultVisibility: "public",
     fieldId: "quick_core_result",
     label: "빠른 코어 예비 결과",
     sensitivity: "core",
   },
   {
     comparisonUse: "hidden",
-    defaultVisibility: "private",
+    defaultVisibility: "public",
     fieldId: "lab_results",
     label: "별난 성향 연구소 결과",
     sensitivity: "personal",
@@ -143,11 +145,15 @@ export function getProfileVisibilityRule(fieldId: ProfileVisibilityFieldId) {
 export function isComparableByDefault(fieldId: ProfileVisibilityFieldId) {
   const rule = getProfileVisibilityRule(fieldId);
 
-  return rule?.defaultVisibility === "public" && rule.comparisonUse === "allowed";
+  return (
+    rule?.defaultVisibility === "public" && rule.comparisonUse === "allowed"
+  );
 }
 
 export function listDefaultComparableFields() {
-  return profileVisibilityRules.filter((rule) => isComparableByDefault(rule.fieldId));
+  return profileVisibilityRules.filter((rule) =>
+    isComparableByDefault(rule.fieldId),
+  );
 }
 
 export function listPrivateOrBlockedFields() {

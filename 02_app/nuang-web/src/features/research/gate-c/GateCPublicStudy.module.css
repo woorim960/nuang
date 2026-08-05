@@ -1,142 +1,202 @@
 .publicPage {
-  width: 100%;
-  max-width: 520px;
-  min-height: 100dvh;
-  margin-inline: auto;
-  background:
-    radial-gradient(
-      circle at 88% 4%,
-      color-mix(in srgb, var(--nu-community-100) 62%, transparent),
-      transparent 25rem
-    ),
-    var(--background);
-  color: var(--foreground);
+  min-height: calc(100dvh - 58px);
+  padding-bottom: calc(116px + env(safe-area-inset-bottom));
+  color: var(--nu-color-text);
+  background: var(--nu-color-app-bg);
   overflow-wrap: break-word;
   word-break: keep-all;
 }
 
 .intro {
-  padding: clamp(2rem, 7vw, 3.25rem) clamp(1.15rem, 5.5vw, 1.7rem)
-    max(2.5rem, env(safe-area-inset-bottom));
+  padding: 1.35rem var(--nu-page-gutter) 1.25rem;
+  border-bottom: 1px solid var(--nu-color-brand-border);
+  background:
+    radial-gradient(
+      circle at 94% 2%,
+      color-mix(in srgb, var(--nu-info-50) 76%, transparent),
+      transparent 13rem
+    ),
+    var(--nu-color-surface);
 }
 
 .brandRow {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
-  gap: 1rem;
-  color: var(--muted);
-  font-size: var(--nu-text-label);
-  font-weight: var(--nu-weight-semibold);
-  letter-spacing: 0.035em;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
 }
 
-.intro h1 {
-  max-width: 15ch;
-  margin: 1rem 0 0;
-  font-size: var(--nu-text-fluid-display);
-  font-weight: var(--nu-weight-bold);
-  letter-spacing: -0.045em;
-  line-height: var(--nu-leading-display);
+.brandRow strong {
+  color: var(--nu-color-brand-action);
+  font-weight: var(--nu-weight-heavy);
+}
+
+.intro h2 {
+  max-width: 17ch;
+  margin: 0.55rem 0 0;
+  font-size: var(--nu-text-title-lg);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.038em;
+  line-height: var(--nu-leading-title);
   text-wrap: balance;
 }
 
 .introCopy {
-  max-width: 31rem;
-  margin: 1rem 0 0;
-  color: var(--muted);
-  font-size: var(--nu-text-callout);
+  margin: 0.55rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-body-sm);
   line-height: var(--nu-leading-body);
 }
 
-.privacyPanel {
+.privacyPanel,
+.rewardPanel {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
+  min-height: 72px;
+  grid-template-columns: 36px minmax(0, 1fr);
   align-items: start;
-  gap: 0.75rem;
-  margin-top: 1.7rem;
-  padding: 1rem;
-  border: 1px solid var(--conversation-line);
-  border-radius: 18px;
-  background: color-mix(in srgb, var(--conversation-soft) 70%, var(--surface));
-  color: var(--conversation);
-}
-
-.privacyPanel strong {
-  display: block;
-  font-size: var(--nu-text-body-sm);
-  font-weight: var(--nu-weight-bold);
-}
-
-.privacyPanel p {
-  margin: 0.35rem 0 0;
-  font-size: var(--nu-text-label);
-  line-height: var(--nu-leading-body-sm);
+  gap: 0.7rem;
+  margin-top: 1rem;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 16px;
+  color: var(--nu-color-text);
+  background: color-mix(
+    in srgb,
+    var(--nu-color-brand-surface) 54%,
+    var(--nu-color-surface)
+  );
 }
 
 .rewardPanel {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  align-items: start;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-  padding: 1rem;
-  border: 1px solid var(--nu-warm-300);
-  border-radius: 18px;
-  background: var(--nu-warm-50);
-  color: var(--nu-warm-700);
+  margin-top: 0.55rem;
+  background: var(--nu-color-surface);
 }
 
+.noteIcon {
+  display: grid;
+  width: 36px;
+  height: 36px;
+  place-items: center;
+  border-radius: 12px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface-strong);
+}
+
+.rewardPanel .noteIcon {
+  color: var(--nu-warm-700);
+  background: var(--nu-warm-100);
+}
+
+.privacyPanel strong,
 .rewardPanel strong {
   display: block;
   font-size: var(--nu-text-body-sm);
   font-weight: var(--nu-weight-bold);
+  line-height: var(--nu-leading-label);
 }
 
+.privacyPanel p,
 .rewardPanel p,
 .rewardPanel small {
   display: block;
-  margin: 0.3rem 0 0;
+  margin: 0.35rem 0 0;
+  color: var(--nu-color-text-muted);
   font-size: var(--nu-text-label);
   line-height: var(--nu-leading-body-sm);
 }
 
 .rewardPanel small {
-  color: color-mix(in srgb, var(--nu-warm-700) 72%, var(--nu-neutral-500));
+  color: var(--nu-color-text-subtle);
   font-size: var(--nu-text-caption);
+}
+
+.setupSection,
+.consentSection {
+  margin-top: 8px;
+  padding: 1.35rem var(--nu-page-gutter);
+  background: var(--nu-color-surface);
+}
+
+.consentSection {
+  margin-top: 1px;
+}
+
+.sectionHeading small {
+  display: block;
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.sectionHeading h2 {
+  margin: 0.28rem 0 0;
+  font-size: var(--nu-text-body-lg);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.028em;
+  line-height: var(--nu-leading-title);
+}
+
+.sectionHeading p {
+  margin: 0.3rem 0 0;
+  color: var(--nu-color-text-muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .formFields {
   display: grid;
-  gap: 1rem;
-  margin-top: 1.75rem;
+  gap: 1.05rem;
+  margin-top: 1.1rem;
 }
 
 .selectField {
+  position: relative;
   display: grid;
-  gap: 0.45rem;
+  gap: 0.5rem;
 }
 
 .selectField > span {
-  padding-inline: 0.1rem;
-  font-size: var(--nu-text-body-sm);
-  font-weight: var(--nu-weight-semibold);
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.selectField::after {
+  position: absolute;
+  right: 1rem;
+  bottom: 22px;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid var(--nu-color-text-muted);
+  border-bottom: 1.5px solid var(--nu-color-text-muted);
+  content: "";
+  pointer-events: none;
+  transform: rotate(45deg) translateY(50%);
 }
 
 .selectField select {
+  appearance: none;
   width: 100%;
   min-height: 52px;
-  padding: 0.7rem 2.5rem 0.7rem 0.85rem;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: color-mix(in srgb, var(--surface) 97%, var(--background));
-  color: var(--foreground);
-  outline: none;
+  padding: 0 2.75rem 0 0.9rem;
+  border: 1px solid var(--nu-color-border-strong);
+  border-radius: 12px;
+  outline: 0;
+  color: var(--nu-color-text);
+  background: var(--nu-color-surface);
+  font-size: var(--nu-text-callout);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
 }
 
 .selectField select:focus {
-  border-color: color-mix(in srgb, var(--conversation) 48%, var(--line));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--conversation) 9%, transparent);
+  border-color: var(--nu-color-brand-action);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--nu-color-brand-action) 8%, transparent);
 }
 
 .honeypot {
@@ -149,59 +209,76 @@
 
 .consentList {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
-  padding-top: 1.2rem;
-  border-top: 1px solid var(--line);
+  margin-top: 1rem;
+  border-top: 1px solid var(--nu-color-border);
 }
 
 .consentList label {
   display: grid;
+  min-height: 58px;
   grid-template-columns: auto minmax(0, 1fr);
   align-items: start;
-  gap: 0.7rem;
-  color: var(--muted);
-  font-size: var(--nu-text-body-sm);
+  gap: 0.75rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--nu-color-border);
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-label);
   line-height: var(--nu-leading-body-sm);
   cursor: pointer;
 }
 
 .consentList input {
-  width: 18px;
-  height: 18px;
-  margin: 0.08rem 0 0;
-  accent-color: var(--conversation);
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  accent-color: var(--nu-color-brand-action);
 }
 
 .startButton,
 .homeButton {
   display: inline-flex;
   width: 100%;
-  min-height: 54px;
+  min-height: 52px;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  margin-top: 1.35rem;
+  margin-top: 0;
   border: 0;
   border-radius: 14px;
-  background: var(--foreground);
-  color: var(--surface);
+  background: var(--nu-color-brand-action);
+  color: var(--nu-color-text-on-accent);
   font-size: var(--nu-text-callout);
   font-weight: var(--nu-weight-bold);
   cursor: pointer;
 }
 
 .startButton:disabled {
+  color: var(--nu-color-text-subtle);
+  background: var(--nu-color-surface-muted);
   cursor: not-allowed;
-  opacity: 0.32;
 }
 
 .boundaryCopy {
-  margin: 0.9rem 0 0;
-  color: var(--muted);
+  margin: 0;
+  color: var(--nu-color-text-muted);
   font-size: var(--nu-text-caption);
-  line-height: var(--nu-leading-body-sm);
+  line-height: var(--nu-leading-label);
   text-align: center;
+}
+
+.actionBar {
+  position: fixed;
+  z-index: 35;
+  right: max(calc((100vw - 430px) / 2), 0px);
+  bottom: 0;
+  left: max(calc((100vw - 430px) / 2), 0px);
+  display: grid;
+  gap: 0.55rem;
+  padding: 0.65rem var(--nu-page-gutter)
+    calc(0.65rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--nu-color-border-strong);
+  background: color-mix(in srgb, var(--nu-color-surface) 97%, transparent);
+  backdrop-filter: blur(16px);
 }
 
 .feedbackToggle {
@@ -228,7 +305,7 @@
 }
 
 .feedbackToggle[aria-pressed="true"] {
-  color: var(--conversation);
+  color: var(--nu-color-brand-strong);
   font-weight: var(--nu-weight-semibold);
 }
 
@@ -259,8 +336,9 @@
 }
 
 .feedbackArea textarea:focus {
-  border-color: color-mix(in srgb, var(--conversation) 48%, var(--line));
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--conversation) 8%, transparent);
+  border-color: var(--nu-color-brand-action);
+  box-shadow: 0 0 0 3px
+    color-mix(in srgb, var(--nu-color-brand-action) 8%, transparent);
 }
 
 .errorMessage {
@@ -291,10 +369,10 @@
   height: 60px;
   margin-bottom: 1.2rem;
   place-items: center;
-  border: 1px solid var(--conversation-line);
+  border: 1px solid var(--nu-color-brand-border);
   border-radius: 20px;
-  background: var(--conversation-soft);
-  color: var(--conversation);
+  background: var(--nu-color-brand-surface-strong);
+  color: var(--nu-color-brand-strong);
   box-shadow: 0 18px 36px
     color-mix(in srgb, var(--nu-info-700) 10%, transparent);
 }
@@ -340,6 +418,93 @@
   letter-spacing: 0.035em;
 }
 
+.resultAnnouncementGuide {
+  width: 100%;
+  max-width: 28rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--line);
+  border-radius: 17px;
+  background: var(--surface);
+  text-align: left;
+}
+
+.resultAnnouncementHeading {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.7rem;
+}
+
+.resultAnnouncementHeading > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 11px;
+  background: var(--nu-warm-100);
+  color: var(--nu-warm-700);
+}
+
+.resultAnnouncementHeading h2,
+.resultAnnouncementHeading p {
+  margin: 0;
+}
+
+.resultAnnouncementHeading h2 {
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.resultAnnouncementHeading p {
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+}
+
+.resultAnnouncementList {
+  display: grid;
+  gap: 0;
+  margin: 0.9rem 0 0;
+}
+
+.resultAnnouncementList > div {
+  display: grid;
+  grid-template-columns: 5.2rem minmax(0, 1fr);
+  gap: 0.6rem;
+  padding: 0.62rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.resultAnnouncementList dt,
+.resultAnnouncementList dd {
+  margin: 0;
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
+}
+
+.resultAnnouncementList dt {
+  color: var(--muted);
+}
+
+.resultAnnouncementList dd {
+  color: var(--foreground);
+  font-weight: var(--nu-weight-semibold);
+  word-break: keep-all;
+}
+
+.resultAnnouncementNotice {
+  margin: 0.2rem 0 0;
+  padding: 0.7rem 0.75rem;
+  border-radius: 12px;
+  background: var(--conversation-soft);
+  color: var(--conversation);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
+}
+
 .rewardEntryPanel,
 .rewardEntrySuccess {
   width: 100%;
@@ -383,6 +548,55 @@
   margin-top: 0.9rem;
 }
 
+.rewardContactMethods {
+  min-width: 0;
+  margin: 0.9rem 0 0;
+  padding: 0;
+  border: 0;
+}
+
+.rewardContactMethods legend {
+  margin-bottom: 0.42rem;
+  color: var(--nu-warm-700);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.rewardContactMethods > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.rewardContactMethods button {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--nu-warm-300) 80%, var(--line));
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+  cursor: pointer;
+}
+
+.rewardContactMethods button small {
+  color: inherit;
+  font-size: var(--nu-text-micro);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.rewardContactMethods button.isSelected {
+  border-color: var(--nu-warm-500);
+  background: color-mix(in srgb, var(--nu-warm-100) 70%, var(--surface));
+  color: var(--nu-warm-700);
+  box-shadow: inset 0 0 0 1px var(--nu-warm-300);
+}
+
 .rewardContactField > span {
   font-size: var(--nu-text-label);
   font-weight: var(--nu-weight-semibold);
@@ -408,6 +622,17 @@
 .rewardConsent {
   margin: 0.55rem 0 0;
   color: color-mix(in srgb, var(--nu-warm-700) 74%, var(--nu-neutral-600));
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
+}
+
+.rewardVerificationNotice {
+  margin: 0.55rem 0 0;
+  padding: 0.65rem 0.7rem;
+  border-radius: 11px;
+  background: var(--conversation-soft);
+  color: var(--conversation);
   font-size: var(--nu-text-caption);
   line-height: var(--nu-leading-body-sm);
   word-break: keep-all;
@@ -462,6 +687,14 @@
   font-variant-numeric: tabular-nums;
 }
 
+.rewardSavedContact > small {
+  grid-column: 1;
+  margin-top: 0.18rem;
+  color: var(--muted);
+  font-size: var(--nu-text-micro);
+  line-height: 1.35;
+}
+
 .rewardSavedContact button {
   grid-row: 1 / 3;
   grid-column: 2;
@@ -504,6 +737,14 @@
   text-decoration: underline;
   text-underline-offset: 3px;
   cursor: pointer;
+}
+
+.rewardContactStatus {
+  display: block;
+  margin-top: 0.35rem;
+  color: color-mix(in srgb, var(--nu-warm-700) 70%, var(--nu-neutral-500));
+  font-size: var(--nu-text-micro);
+  line-height: var(--nu-leading-body-sm);
 }
 
 .rewardEntryWithdrawn {

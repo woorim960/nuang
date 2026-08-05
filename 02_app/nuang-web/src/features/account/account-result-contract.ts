@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import { reportContentSnapshotSchema } from "@/features/result/unified-core-report/report-content-snapshot-contract";
 
 const accountResultDomainSchema = z.object({
@@ -119,9 +120,11 @@ export function parseStoredAccountResultSummary(value: unknown) {
 export function createAccountResultsPayload(
   results: AccountResultSummary[],
   comparisonReports: AccountComparisonReportSummary[] = [],
+  currentTraitProfile: AccountTraitProfile | null = null,
 ) {
   return {
     comparisonReports,
+    currentTraitProfile,
     ok: true,
     results,
   } as const;

@@ -20,6 +20,15 @@ import type { PublicProfileSnapshotPayload } from "@/features/together/public-co
 
 type ServiceClient = SupabaseClient;
 
+export type BlockedCommunityAccountIdsResult =
+  | {
+      blockedAccountIds: Set<string>;
+      state: "ready";
+    }
+  | {
+      state: "unavailable";
+    };
+
 export async function readCommunityProfileSocialState({
   client,
   publicSnapshotId,
@@ -95,13 +104,37 @@ export async function readCommunityProfileSocialState({
 export async function readCommunityProfileConnections({
   client,
   publicSnapshotId,
+  user,
 }: {
   client: ServiceClient;
   publicSnapshotId: string;
+  user: User | null;
 }): Promise<CommunityProfileConnectionsResult> {
-  const snapshot = await readSnapshotOwner(client, publicSnapshotId);
+  const [snapshot, viewerAccount] = await Promise.all([
+    readSnapshotOwner(client, publicSnapshotId),
+    user
+      ? readAccountIdResult(client, user.id)
+      : Promise.resolve({ accountId: null, state: "ready" } as const),
+  ]);
 
   if (!snapshot) {
+    return createEmptyConnectionsResult(publicSnapshotId, "profile_not_found");
+  }
+
+  if (viewerAccount.state === "unavailable") {
+    return createEmptyConnectionsResult(publicSnapshotId, "unavailable");
+  }
+
+  const blockedAccountIdsResult = await readBlockedCommunityAccountIds({
+    accountId: viewerAccount.accountId,
+    client,
+  });
+  if (blockedAccountIdsResult.state === "unavailable") {
+    return createEmptyConnectionsResult(publicSnapshotId, "unavailable");
+  }
+
+  const { blockedAccountIds } = blockedAccountIdsResult;
+  if (blockedAccountIds.has(snapshot.accountId)) {
     return createEmptyConnectionsResult(publicSnapshotId, "profile_not_found");
   }
 
@@ -137,14 +170,18 @@ export async function readCommunityProfileConnections({
     return createEmptyConnectionsResult(publicSnapshotId, "unavailable");
   }
 
-  const followerRows = (followerResponse.data ?? []).map((row) => ({
-    accountId: String(row.follower_account_id),
-    connectedAt: String(row.created_at),
-  }));
-  const followingRows = (followingResponse.data ?? []).map((row) => ({
-    accountId: String(row.target_account_id),
-    connectedAt: String(row.created_at),
-  }));
+  const followerRows = (followerResponse.data ?? [])
+    .map((row) => ({
+      accountId: String(row.follower_account_id),
+      connectedAt: String(row.created_at),
+    }))
+    .filter((row) => !blockedAccountIds.has(row.accountId));
+  const followingRows = (followingResponse.data ?? [])
+    .map((row) => ({
+      accountId: String(row.target_account_id),
+      connectedAt: String(row.created_at),
+    }))
+    .filter((row) => !blockedAccountIds.has(row.accountId));
   const profilesByAccountId = await readConnectionProfiles({
     accountIds: [
       ...followerRows.map((row) => row.accountId),
@@ -239,13 +276,15 @@ export async function writeProfileFollow({
     return { code: "cannot_follow_self" as const, ok: false as const };
   }
 
-  if (
-    await hasBlockRelationship({
-      accountId: followerAccountId,
-      client,
-      targetAccountId: snapshot.accountId,
-    })
-  ) {
+  const blockRelationship = await readBlockRelationship({
+    accountId: followerAccountId,
+    client,
+    targetAccountId: snapshot.accountId,
+  });
+  if (blockRelationship.state === "unavailable") {
+    return { code: "follow_write_failed" as const, ok: false as const };
+  }
+  if (blockRelationship.blocked) {
     return { code: "profile_not_found" as const, ok: false as const };
   }
 
@@ -369,8 +408,10 @@ export async function readBlockedCommunityAccountIds({
 }: {
   accountId: string | null;
   client: ServiceClient;
-}) {
-  if (!accountId) return new Set<string>();
+}): Promise<BlockedCommunityAccountIdsResult> {
+  if (!accountId) {
+    return { blockedAccountIds: new Set<string>(), state: "ready" };
+  }
 
   const [blockedByMe, blockedMe] = await Promise.all([
     client
@@ -387,15 +428,24 @@ export async function readBlockedCommunityAccountIds({
       .is("deleted_at", null),
   ]);
 
-  if (blockedByMe.error || blockedMe.error) return new Set<string>();
+  if (blockedByMe.error || blockedMe.error) {
+    console.error("[community-block] relationship read failed", {
+      blockedByMeCode: blockedByMe.error?.code ?? null,
+      blockedMeCode: blockedMe.error?.code ?? null,
+    });
+    return { state: "unavailable" };
+  }
 
-  return new Set([
-    ...(blockedByMe.data ?? []).map((row) => String(row.blocked_account_id)),
-    ...(blockedMe.data ?? []).map((row) => String(row.blocker_account_id)),
-  ]);
+  return {
+    blockedAccountIds: new Set([
+      ...(blockedByMe.data ?? []).map((row) => String(row.blocked_account_id)),
+      ...(blockedMe.data ?? []).map((row) => String(row.blocker_account_id)),
+    ]),
+    state: "ready",
+  };
 }
 
-async function hasBlockRelationship({
+async function readBlockRelationship({
   accountId,
   client,
   targetAccountId,
@@ -403,7 +453,7 @@ async function hasBlockRelationship({
   accountId: string;
   client: ServiceClient;
   targetAccountId: string;
-}) {
+}): Promise<{ blocked: boolean; state: "ready" } | { state: "unavailable" }> {
   const [outgoing, incoming] = await Promise.all([
     client
       .schema("feed")
@@ -421,10 +471,14 @@ async function hasBlockRelationship({
       .is("deleted_at", null),
   ]);
 
-  return (
-    (!outgoing.error && (outgoing.count ?? 0) > 0) ||
-    (!incoming.error && (incoming.count ?? 0) > 0)
-  );
+  if (outgoing.error || incoming.error) {
+    return { state: "unavailable" };
+  }
+
+  return {
+    blocked: (outgoing.count ?? 0) > 0 || (incoming.count ?? 0) > 0,
+    state: "ready",
+  };
 }
 
 export async function writeProfileSafetyAction({
@@ -455,9 +509,8 @@ export async function writeProfileSafetyAction({
     return { code: "cannot_target_self" as const, ok: false as const };
   }
 
-  const now = new Date().toISOString();
-
   if (action === "report") {
+    const now = new Date().toISOString();
     if (!reason) {
       return { code: "report_reason_required" as const, ok: false as const };
     }
@@ -518,22 +571,14 @@ export async function writeProfileSafetyAction({
     return { data: { reported: true }, ok: true as const };
   }
 
-  const response = await client
-    .schema("feed")
-    .from("profile_block")
-    .upsert(
-      {
-        blocked_account_id: snapshot.accountId,
-        blocker_account_id: viewerAccountId,
-        created_at: now,
-        deleted_at: action === "block" ? null : now,
-        target_public_snapshot_id: publicSnapshotId,
-        updated_at: now,
-      },
-      { onConflict: "blocker_account_id,blocked_account_id" },
-    );
+  const response = await client.schema("feed").rpc("set_profile_block", {
+    p_blocked: action === "block",
+    p_blocked_account_id: snapshot.accountId,
+    p_blocker_account_id: viewerAccountId,
+    p_target_public_snapshot_id: publicSnapshotId,
+  });
 
-  return response.error
+  return response.error || response.data !== (action === "block")
     ? { code: "profile_block_failed" as const, ok: false as const }
     : { data: { blocked: action === "block" }, ok: true as const };
 }
@@ -568,6 +613,27 @@ async function readAccountId(client: ServiceClient, supabaseUserId: string) {
     .maybeSingle();
 
   return response.data ? String(response.data.account_id) : null;
+}
+
+async function readAccountIdResult(
+  client: ServiceClient,
+  supabaseUserId: string,
+): Promise<{ accountId: string; state: "ready" } | { state: "unavailable" }> {
+  const response = await client
+    .schema("identity")
+    .from("auth_identity")
+    .select("account_id")
+    .eq("supabase_user_id", supabaseUserId)
+    .is("revoked_at", null)
+    .order("provider_linked_at", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+
+  if (response.error || !response.data?.account_id) {
+    return { state: "unavailable" };
+  }
+
+  return { accountId: String(response.data.account_id), state: "ready" };
 }
 
 function createEmptyConnectionsResult(

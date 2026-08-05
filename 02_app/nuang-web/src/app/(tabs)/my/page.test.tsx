@@ -10,7 +10,9 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("@/features/account/MyOverview", () => ({
-  MyOverview: () => <section aria-label="guest-overview">로그인 안내</section>,
+  MyOverview: ({ initialContent }: { initialContent: string }) => (
+    <section aria-label="guest-overview">{initialContent}</section>
+  ),
 }));
 
 vi.mock("@/features/account/SelfProfileScreen", () => ({
@@ -51,9 +53,16 @@ describe("MyPage", () => {
   it("shows the guest overview only when there is no authenticated user", async () => {
     mocks.getUser.mockResolvedValue({ data: { user: null } });
 
-    render(await MyPage());
+    render(
+      await MyPage({
+        searchParams: Promise.resolve({ tab: "reports" }),
+      }),
+    );
 
     expect(screen.getByLabelText("guest-overview")).toBeInTheDocument();
+    expect(screen.getByLabelText("guest-overview")).toHaveTextContent(
+      "reports",
+    );
     expect(mocks.readSelfProfilePayload).not.toHaveBeenCalled();
   });
 
@@ -82,7 +91,7 @@ describe("MyPage", () => {
       state: "profile_unavailable",
     });
 
-    render(await MyPage());
+    render(await MyPage({}));
 
     expect(screen.getByLabelText("self-profile-recovery")).toBeInTheDocument();
     expect(screen.queryByLabelText("guest-overview")).not.toBeInTheDocument();

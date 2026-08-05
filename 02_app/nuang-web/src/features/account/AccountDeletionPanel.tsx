@@ -46,8 +46,11 @@ export function AccountDeletionPanel() {
       </span>
       <h1>계정을 삭제할까요?</h1>
       <p>
-        프로필, 게시물, 검사 결과, 비교 기록과 비공개 연락처가 모두
-        삭제됩니다. 삭제한 내용은 복구할 수 없습니다.
+        프로필, 게시물, 검사 결과, 비교 기록, 로그인 정보와 비공개 연락처 등
+        계정에 연결된 데이터가 영구 삭제됩니다. 같은 Google·Kakao 계정으로 다시
+        가입할 수 있지만 삭제한 내용은 복구되거나 새 계정으로 이어지지 않습니다.
+        결제나 민원 기록이 실제로 존재하고 법령상 보존 의무가 있는 경우에만 해당
+        기록을 다른 데이터와 분리해 정해진 기간 동안 보관한 뒤 삭제합니다.
       </p>
       <label>
         <span>
@@ -68,7 +71,7 @@ export function AccountDeletionPanel() {
         {pending ? (
           <LoaderCircle aria-hidden="true" className={styles.spinner} size={18} />
         ) : null}
-        {pending ? "삭제 중" : "계정과 모든 데이터 삭제"}
+        {pending ? "삭제 중" : "계정과 연결된 데이터 영구 삭제"}
       </button>
       {message ? (
         <p aria-live="polite" className={styles.message} role="alert">

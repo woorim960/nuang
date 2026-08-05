@@ -7,7 +7,8 @@ import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
-import { listClientAccountResults } from "@/features/account/client-account-results";
+import { readClientAccountResults } from "@/features/account/client-account-results";
+import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import {
   listFreeTopicResultsLocalFirst,
   syncQueuedFreeTopicResults,
@@ -56,6 +57,8 @@ export function MyTraitDetailView() {
   const [accountResults, setAccountResults] = useState<AccountResultSummary[]>(
     [],
   );
+  const [currentTraitProfile, setCurrentTraitProfile] =
+    useState<AccountTraitProfile | null>(null);
   const [attempts, setAttempts] = useState<LocalAssessmentAttempt[]>([]);
   const [topicResults, setTopicResults] = useState<StoredFreeTopicResult[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -64,16 +67,17 @@ export function MyTraitDetailView() {
     let isMounted = true;
 
     async function load() {
-      const [nextAttempts, nextAccountResults] = await Promise.all([
+      const [nextAttempts, accountRead] = await Promise.all([
         listLocalAttempts(),
-        listClientAccountResults(),
+        readClientAccountResults(),
         syncQueuedFreeTopicResults(),
       ]);
 
       const nextTopicResults = await listFreeTopicResultsLocalFirst();
 
       if (!isMounted) return;
-      setAccountResults(nextAccountResults);
+      setAccountResults(accountRead.results);
+      setCurrentTraitProfile(accountRead.currentTraitProfile);
       setAttempts(nextAttempts);
       setTopicResults(nextTopicResults);
       setLoaded(true);
@@ -93,7 +97,7 @@ export function MyTraitDetailView() {
   );
   const localDetail = localScore ? buildLocalTraitDetail(localScore) : null;
   const accountDetail = latestAccountResult
-    ? buildAccountTraitDetail(latestAccountResult)
+    ? buildAccountTraitDetail(latestAccountResult, currentTraitProfile)
     : null;
   const detail: TraitDetail | null =
     accountDetail &&
@@ -238,8 +242,8 @@ export function MyTraitDetailView() {
       </section>
 
       <p className={styles.trustNote}>
-        이 화면은 가장 최근 코어 검사 결과를 이해하기 쉽게 정리한 내용이며,
-        의료·임상 진단을 대신하지 않아요.
+        이 화면은 코어 검사와 완료한 주제 검사를 함께 살펴 현재 성향을 정리한
+        내용이며, 의료·임상 진단을 대신하지 않아요.
       </p>
     </div>
   );
@@ -421,15 +425,24 @@ function buildLocalTraitDetail({
   };
 }
 
-function buildAccountTraitDetail(result: AccountResultSummary): TraitDetail {
+function buildAccountTraitDetail(
+  result: AccountResultSummary,
+  currentTraitProfile: AccountTraitProfile | null,
+): TraitDetail {
+  const usesTopicEvidence = currentTraitProfile?.source === "core_and_topics";
+
   return {
-    code: result.profileCode,
-    completedAt: result.completedAt,
-    domains: result.domains,
+    code: currentTraitProfile?.code ?? result.profileCode,
+    completedAt: currentTraitProfile?.updatedAt ?? result.completedAt,
+    domains: currentTraitProfile?.domains ?? result.domains,
     facets: result.facets,
-    profileName: result.profileName,
-    resultHref: `/results/account/${result.resultReportId}`,
-    sourceLabel: result.kind === "full" ? "정밀 코어" : "빠른 코어",
+    profileName: currentTraitProfile?.profileName ?? result.profileName,
+    resultHref: `/results/account/${currentTraitProfile?.baseResultReportId ?? result.resultReportId}`,
+    sourceLabel: usesTopicEvidence
+      ? `코어 + 주제 ${currentTraitProfile.topicCount}개`
+      : result.kind === "full"
+        ? "정밀 코어"
+        : "빠른 코어",
   };
 }
 

@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
+
+const initialSyncFallbackDelayMs = 400;
+const initialSyncIdleTimeoutMs = 1_500;
 
 /**
  * 로그인 직후나 다른 기기에서 돌아왔을 때 검사 기록을 조용히 맞춥니다.
@@ -10,8 +12,14 @@ import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/asse
 export function AssessmentSyncCoordinator() {
   useEffect(() => {
     let active = true;
+    let idleCallbackId: number | null = null;
+    let fallbackTimerId: number | null = null;
 
-    const synchronize = () => {
+    const synchronize = async () => {
+      if (!active) return;
+      const { synchronizeAccountAssessmentAttempts } = await import(
+        "@/features/assessment/assessment-account-sync"
+      );
       if (!active) return;
       void synchronizeAccountAssessmentAttempts();
     };
@@ -20,12 +28,27 @@ export function AssessmentSyncCoordinator() {
       if (document.visibilityState === "visible") synchronize();
     };
 
-    synchronize();
+    if (typeof window.requestIdleCallback === "function") {
+      idleCallbackId = window.requestIdleCallback(() => void synchronize(), {
+        timeout: initialSyncIdleTimeoutMs,
+      });
+    } else {
+      fallbackTimerId = window.setTimeout(
+        () => void synchronize(),
+        initialSyncFallbackDelayMs,
+      );
+    }
     window.addEventListener("online", synchronize);
     document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       active = false;
+      if (idleCallbackId !== null) {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+      if (fallbackTimerId !== null) {
+        window.clearTimeout(fallbackTimerId);
+      }
       window.removeEventListener("online", synchronize);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };

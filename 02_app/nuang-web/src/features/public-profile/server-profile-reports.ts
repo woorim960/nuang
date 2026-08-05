@@ -2,8 +2,11 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import {
   getFreeTopicAssessment,
+  type FreeTopicAssessment,
+  type FreeTopicQuestion,
   type FreeTopicResultReport,
   type FreeTopicScoreResult,
 } from "@/features/assessment/free-topic-assessments";
@@ -14,8 +17,11 @@ import {
   getFreeTopicScoringVersion,
 } from "@/features/assessment/free-topic-result-version";
 import type { StoredFreeTopicResult } from "@/features/assessment/free-topic-storage";
+import { readTopicTraitImpactSnapshot } from "@/features/assessment/topic-trait-impact";
 import {
   getLabAssessment,
+  type LabAssessment,
+  type LabResultProfile,
   type LabScoreResult,
 } from "@/features/lab/lab-assessments";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
@@ -45,6 +51,7 @@ export type OriginalProfileReport =
       summary: OriginalProfileReportSummary;
     }
   | {
+      assessment: LabAssessment;
       answeredCount: number;
       kind: "lab";
       localResultId: string;
@@ -69,6 +76,20 @@ export async function readOriginalProfileReportSummaries({
     readVisibilityRows(client, ownerAccountId),
   ]);
   if (!viewerCanManage && !visibilityRead.ok) return [];
+  const corePublication = new Map(
+    await Promise.all(
+      coreRows.map(async (row) => {
+        const result = mapCoreRow(row);
+        if (!result) return [String(row.id ?? ""), false] as const;
+        const decision = await readCoreResultPublicationDecision({
+          client,
+          ownerAccountId,
+          resultReportId: result.resultReportId,
+        });
+        return [result.resultReportId, decision.eligible] as const;
+      }),
+    ),
+  );
   const visibilityBySource = new Map(
     visibilityRead.rows.map((row) => [
       `${row.source_kind}:${row.source_id}`,
@@ -95,8 +116,17 @@ export async function readOriginalProfileReportSummaries({
           type: "core" as const,
           viewerCanManage,
           visibility:
-            visibilityBySource.get(`core:${result.resultReportId}`) ??
-            "profile_public",
+            corePublication.get(result.resultReportId) === true
+              ? resolveOriginalProfileReportVisibility(
+                  visibilityRead.ok
+                    ? (visibilityBySource.get(
+                        `core:${result.resultReportId}`,
+                      ) ?? "missing")
+                    : "unavailable",
+                  "core",
+                  result.kind,
+                )
+              : "private",
         },
       ];
     }),
@@ -117,15 +147,18 @@ export async function readOriginalProfileReportSummaries({
             result.reportSnapshot.headline,
           type: "topic" as const,
           viewerCanManage,
-          visibility:
-            visibilityBySource.get(`topic:${String(row.id)}`) ??
-            "profile_public",
+          visibility: resolveOriginalProfileReportVisibility(
+            visibilityRead.ok
+              ? (visibilityBySource.get(`topic:${String(row.id)}`) ?? "missing")
+              : "unavailable",
+            "topic",
+          ),
         },
       ];
     }),
     ...labRows.flatMap((row) => {
       const result = mapLabRow(row);
-      const assessment = getLabAssessment(String(row.lab_slug));
+      const assessment = readLabAssessment(row);
       if (!result || !assessment) return [];
       return [
         {
@@ -137,9 +170,12 @@ export async function readOriginalProfileReportSummaries({
           summary: result.profile.summary,
           type: "lab" as const,
           viewerCanManage,
-          visibility:
-            visibilityBySource.get(`lab:${String(row.id)}`) ??
-            "profile_public",
+          visibility: resolveOriginalProfileReportVisibility(
+            visibilityRead.ok
+              ? (visibilityBySource.get(`lab:${String(row.id)}`) ?? "missing")
+              : "unavailable",
+            "lab",
+          ),
         },
       ];
     }),
@@ -173,9 +209,7 @@ export async function readOriginalProfileReport({
     ownerAccountId,
     sourceId: parsedKey.sourceId,
   });
-  if (!viewerCanManage && visibility !== "profile_public") return null;
-  const effectiveVisibility: ProfileReportVisibility =
-    visibility === "unavailable" ? "profile_public" : visibility;
+  if (!viewerCanManage && visibility === "unavailable") return null;
 
   if (parsedKey.kind === "core") {
     const response = await client
@@ -201,6 +235,20 @@ export async function readOriginalProfileReport({
       attempt: attemptResponse.data ?? null,
     });
     if (!result) return null;
+    const publication = await readCoreResultPublicationDecision({
+      client,
+      ownerAccountId,
+      resultReportId: result.resultReportId,
+    });
+    if (!viewerCanManage && !publication.eligible) return null;
+    const effectiveVisibility = resolveOriginalProfileReportVisibility(
+      publication.eligible ? visibility : "private",
+      "core",
+      result.kind,
+    );
+    if (!viewerCanManage && effectiveVisibility !== "profile_public") {
+      return null;
+    }
     const summary = (
       await readOriginalProfileReportSummaries({
         client,
@@ -212,6 +260,13 @@ export async function readOriginalProfileReport({
   }
 
   if (parsedKey.kind === "topic") {
+    const effectiveVisibility = resolveOriginalProfileReportVisibility(
+      visibility,
+      "topic",
+    );
+    if (!viewerCanManage && effectiveVisibility !== "profile_public") {
+      return null;
+    }
     const response = await client
       .schema("assessment")
       .from("free_topic_result")
@@ -245,6 +300,13 @@ export async function readOriginalProfileReport({
     };
   }
 
+  const effectiveVisibility = resolveOriginalProfileReportVisibility(
+    visibility,
+    "lab",
+  );
+  if (!viewerCanManage && effectiveVisibility !== "profile_public") {
+    return null;
+  }
   const response = await client
     .schema("assessment")
     .from("lab_result")
@@ -256,12 +318,11 @@ export async function readOriginalProfileReport({
     .is("deleted_at", null)
     .maybeSingle();
   const result = response.data ? mapLabRow(response.data) : null;
-  const assessment = response.data
-    ? getLabAssessment(String(response.data.lab_slug))
-    : null;
+  const assessment = response.data ? readLabAssessment(response.data) : null;
   if (!result || !assessment || !response.data) return null;
 
   return {
+    assessment,
     answeredCount: Object.keys(readRecord(response.data.answers)).length,
     kind: "lab",
     localResultId: String(response.data.local_result_id),
@@ -399,9 +460,33 @@ async function readVisibility({
     .eq("source_id", sourceId)
     .maybeSingle();
   if (response.error) return "unavailable";
-  return response.data?.visibility === "private"
-    ? "private"
-    : "profile_public";
+  if (!response.data) return "missing";
+  return response.data.visibility === "profile_public"
+    ? "profile_public"
+    : "private";
+}
+
+export type OriginalProfileReportVisibilityRead =
+  ProfileReportVisibility | "missing" | "unavailable";
+
+export function getDefaultOriginalProfileReportVisibility(
+  _kind: ProfileReportKind,
+  _coreKind?: AccountResultSummary["kind"],
+): ProfileReportVisibility {
+  void _kind;
+  void _coreKind;
+  return "profile_public";
+}
+
+export function resolveOriginalProfileReportVisibility(
+  visibility: OriginalProfileReportVisibilityRead,
+  kind: ProfileReportKind,
+  coreKind?: AccountResultSummary["kind"],
+): ProfileReportVisibility {
+  if (visibility === "unavailable") return "private";
+  return visibility === "missing"
+    ? getDefaultOriginalProfileReportVisibility(kind, coreKind)
+    : visibility;
 }
 
 function mapCoreRow(row: Record<string, unknown>) {
@@ -442,14 +527,19 @@ function mapCoreRow(row: Record<string, unknown>) {
 }
 
 function mapTopicRow(row: Record<string, unknown>) {
-  const assessment = getFreeTopicAssessment(String(row.topic_slug ?? ""));
   const evidence = readRecord(row.evidence_payload);
+  const assessment =
+    readTopicAssessment(evidence.assessmentSnapshot) ??
+    getFreeTopicAssessment(String(row.topic_slug ?? ""));
   const reportSnapshot = readReportSnapshot(evidence.reportSnapshot);
   const result = readTopicScoreResult(evidence);
   if (!assessment || !reportSnapshot || !result || typeof row.id !== "string") {
     return null;
   }
   const completedAt = String(row.completed_at);
+  const traitImpactSnapshot = readTopicTraitImpactSnapshot(
+    evidence.traitImpactSnapshot,
+  );
 
   return {
     answers: {},
@@ -459,6 +549,7 @@ function mapTopicRow(row: Record<string, unknown>) {
       slug: assessment.slug,
       title: assessment.title,
     },
+    assessmentSnapshot: assessment,
     completedAt,
     expiresAt: addDays(new Date(completedAt), 365).toISOString(),
     formatVersion: freeTopicResultFormatVersion,
@@ -466,6 +557,12 @@ function mapTopicRow(row: Record<string, unknown>) {
       stringValue(evidence.instrumentVersion) ??
       getFreeTopicInstrumentVersion(assessment.slug),
     localResultId: String(row.local_result_id),
+    ...(typeof evidence.productReleaseId === "string"
+      ? { productReleaseId: evidence.productReleaseId }
+      : {}),
+    ...(readTopicQuestions(evidence.questionsSnapshot)
+      ? { questionsSnapshot: readTopicQuestions(evidence.questionsSnapshot)! }
+      : {}),
     ...(typeof row.profile_code_at_completion === "string"
       ? {
           nuangCodeContext: {
@@ -483,6 +580,7 @@ function mapTopicRow(row: Record<string, unknown>) {
       stringValue(evidence.scoringVersion) ??
       getFreeTopicScoringVersion(assessment.slug),
     serverResultId: row.id,
+    ...(traitImpactSnapshot ? { traitImpactSnapshot } : {}),
     sync: { status: "synced", syncedAt: completedAt },
   } satisfies StoredFreeTopicResult;
 }
@@ -490,11 +588,13 @@ function mapTopicRow(row: Record<string, unknown>) {
 function mapLabRow(row: Record<string, unknown>) {
   const raw = readRecord(row.result_payload);
   const profile = readRecord(raw.profile);
-  const assessment = getLabAssessment(String(row.lab_slug ?? ""));
+  const assessment = readLabAssessment(row);
   const canonicalProfile = assessment?.profiles.find(
     (item) => item.id === profile.id,
   );
-  if (!canonicalProfile) return null;
+  const frozenProfile = readLabProfile(profile);
+  const selectedProfile = frozenProfile ?? canonicalProfile;
+  if (!selectedProfile) return null;
   const scores = readNumberRecord(raw.scores);
   const tiedProfileIds = Array.isArray(raw.tiedProfileIds)
     ? raw.tiedProfileIds.filter(
@@ -502,10 +602,63 @@ function mapLabRow(row: Record<string, unknown>) {
       )
     : [];
   return {
-    profile: canonicalProfile,
+    profile: selectedProfile,
     scores,
     tiedProfileIds,
   } satisfies LabScoreResult;
+}
+
+function readLabAssessment(row: Record<string, unknown>) {
+  const snapshot = readRecord(
+    readRecord(row.result_payload).assessmentSnapshot,
+  );
+  if (
+    typeof snapshot.slug === "string" &&
+    typeof snapshot.title === "string" &&
+    typeof snapshot.cardTitle === "string" &&
+    Array.isArray(snapshot.questions) &&
+    Array.isArray(snapshot.profiles)
+  ) {
+    return snapshot as unknown as LabAssessment;
+  }
+  return getLabAssessment(String(row.lab_slug ?? ""));
+}
+
+function readLabProfile(profile: Record<string, unknown>) {
+  return typeof profile.id === "string" &&
+    typeof profile.title === "string" &&
+    typeof profile.shortTitle === "string" &&
+    typeof profile.summary === "string" &&
+    Array.isArray(profile.strengths) &&
+    profile.strengths.every((item) => typeof item === "string") &&
+    typeof profile.watch === "string" &&
+    typeof profile.relationTip === "string" &&
+    typeof profile.smallExperiment === "string"
+    ? (profile as unknown as LabResultProfile)
+    : null;
+}
+
+function readTopicAssessment(value: unknown) {
+  const snapshot = readRecord(value);
+  return typeof snapshot.slug === "string" &&
+    typeof snapshot.title === "string" &&
+    typeof snapshot.categoryId === "string" &&
+    typeof snapshot.categoryLabel === "string"
+    ? (snapshot as unknown as FreeTopicAssessment)
+    : null;
+}
+
+function readTopicQuestions(value: unknown) {
+  if (!Array.isArray(value)) return null;
+  const questions = value.filter((item): item is FreeTopicQuestion =>
+    Boolean(
+      item &&
+      typeof item === "object" &&
+      typeof (item as { id?: unknown }).id === "string" &&
+      typeof (item as { text?: unknown }).text === "string",
+    ),
+  );
+  return questions.length === value.length ? questions : null;
 }
 
 function readTopicScoreResult(

@@ -10,6 +10,10 @@ import {
   getFreeTopicQuestions,
 } from "@/features/assessment/free-topic-assessments";
 import { getFreeTopicInstrumentVersion } from "@/features/assessment/free-topic-result-version";
+import {
+  resolveAssessmentReleaseById,
+  resolveAssessmentRuntimeContent,
+} from "@/features/assessment/server-assessment-content-runtime";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
 import { readAnalyticsCollectionPermission } from "@/features/consent/server-optional-consent";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
@@ -33,8 +37,34 @@ export async function POST(request: Request) {
   if (!payload.ok) {
     return NextResponse.json({ error: "validation_error" }, { status: 422 });
   }
-  const assessment = getFreeTopicAssessment(payload.data.assessmentSlug);
-  if (!assessment) {
+  const builtinAssessment = getFreeTopicAssessment(payload.data.assessmentSlug);
+  const runtimeContent = payload.data.productReleaseId
+    ? await resolveAssessmentReleaseById({
+        category: "topic",
+        releaseId: payload.data.productReleaseId,
+        slug: payload.data.assessmentSlug,
+        subtype: "free_topic",
+      })
+    : builtinAssessment
+      ? ({
+          document: null,
+          releaseId: null,
+          releaseNumber: null,
+          state: "fallback",
+        } as const)
+      : await resolveAssessmentRuntimeContent({
+          category: "topic",
+          slug: payload.data.assessmentSlug,
+          subtype: "free_topic",
+        });
+  const runtimePayload = runtimeContent.document?.payload as
+    | {
+        assessment?: NonNullable<ReturnType<typeof getFreeTopicAssessment>>;
+        questions?: ReturnType<typeof getFreeTopicQuestions>;
+      }
+    | undefined;
+  const assessment = runtimePayload?.assessment ?? builtinAssessment;
+  if (!assessment || runtimeContent.state === "unavailable") {
     return NextResponse.json({ error: "unknown_assessment" }, { status: 404 });
   }
   if (
@@ -47,7 +77,9 @@ export async function POST(request: Request) {
     );
   }
   const allowedQuestionIds = new Set(
-    getFreeTopicQuestions(assessment.slug).map((question) => question.id),
+    (runtimePayload?.questions ?? getFreeTopicQuestions(assessment.slug)).map(
+      (question) => question.id,
+    ),
   );
   if (
     payload.data.observations.some(
@@ -121,6 +153,7 @@ export async function POST(request: Request) {
 
   const rows = payload.data.observations.map((item, observationIndex) => ({
     account_id: account.accountId,
+    assessment_content_release_id: runtimeContent.releaseId,
     assessment_slug: assessment.slug,
     instrument_version: payload.data.instrumentVersion,
     local_result_id: payload.data.localResultId ?? null,

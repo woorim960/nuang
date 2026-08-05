@@ -2,7 +2,12 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/report-share-links/route";
 
 const mocks = vi.hoisted(() => ({
+  readCoreResultPublicationDecision: vi.fn(),
   readOriginalProfileReport: vi.fn(),
+}));
+
+vi.mock("@/features/assessment/server-core-result-publication-policy", () => ({
+  readCoreResultPublicationDecision: mocks.readCoreResultPublicationDecision,
 }));
 
 vi.mock("@/features/auth/server-auth", () => ({
@@ -66,6 +71,50 @@ describe("report share links API", () => {
       error: "report_private",
       ok: false,
     });
+  });
+
+  it("rejects a public core report while its release is still candidate", async () => {
+    mocks.readOriginalProfileReport.mockResolvedValue({
+      kind: "core",
+      result: { resultReportId: "11111111-1111-4111-8111-111111111111" },
+      summary: { visibility: "profile_public" },
+    });
+    mocks.readCoreResultPublicationDecision.mockResolvedValue({
+      eligible: false,
+      reason: "release_not_publicable",
+    });
+
+    const response = await POST(
+      jsonRequest({
+        reportKey: "core_11111111-1111-4111-8111-111111111111",
+      }),
+    );
+
+    expect(response.status).toBe(409);
+    expect(await response.json()).toMatchObject({
+      error: "result_release_not_publicable",
+      ok: false,
+    });
+  });
+
+  it("allows a public core report after its release is validated", async () => {
+    mocks.readOriginalProfileReport.mockResolvedValue({
+      kind: "core",
+      result: { resultReportId: "11111111-1111-4111-8111-111111111111" },
+      summary: { visibility: "profile_public" },
+    });
+    mocks.readCoreResultPublicationDecision.mockResolvedValue({
+      eligible: true,
+      resultReportId: "11111111-1111-4111-8111-111111111111",
+    });
+
+    const response = await POST(
+      jsonRequest({
+        reportKey: "core_11111111-1111-4111-8111-111111111111",
+      }),
+    );
+
+    expect(response.status).toBe(200);
   });
 
   it("rejects copied summary content instead of creating a separate share page", async () => {

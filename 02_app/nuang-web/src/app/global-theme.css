@@ -13,6 +13,7 @@
     "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
 
   /* Mobile-first type scale: iOS 17pt / Material body 16sp 기반 */
+  --nu-text-micro: 0.6875rem;
   --nu-text-caption: 0.8125rem;
   --nu-text-label: 0.875rem;
   --nu-text-body-sm: 0.9375rem;
@@ -41,6 +42,12 @@
   --nu-text-admin-heading: 1.0625rem;
   --nu-text-admin-metric: 1.5rem;
   --nu-text-admin-display: clamp(1.55rem, 2.4vw, 2rem);
+
+  /* Compact in-feed sponsor creative */
+  --nu-text-ad-overline: clamp(0.5rem, 1.65vw, 0.68rem);
+  --nu-text-ad-title: clamp(0.85rem, 3.6vw, 1.22rem);
+  --nu-text-ad-body: clamp(0.58rem, 2.15vw, 0.78rem);
+  --nu-text-ad-link: clamp(0.56rem, 2vw, 0.74rem);
 
   --nu-leading-caption: 1.45;
   --nu-leading-label: 1.5;
@@ -169,6 +176,17 @@
   --nu-color-focus: var(--nu-brand-500);
   --nu-color-selection: var(--nu-brand-200);
   --nu-color-surface-translucent: rgb(var(--nu-rgb-neutral-0) / 88%);
+  --nu-color-ad-sample-surface: var(--nu-neutral-150);
+  --nu-color-ad-sample-copy-surface: color-mix(
+    in srgb,
+    var(--nu-neutral-100) 91%,
+    transparent
+  );
+  --nu-color-ad-sample-overline: var(--nu-neutral-600);
+  --nu-color-ad-sample-title: var(--nu-neutral-900);
+  --nu-color-ad-sample-body: var(--nu-neutral-600);
+  --nu-color-ad-sample-link: var(--nu-neutral-700);
+  --nu-color-ad-sample-link-border: var(--nu-neutral-400);
 
   /* Official sign-in provider colors */
   --nu-provider-kakao-bg: #fee500;

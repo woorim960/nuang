@@ -19,8 +19,13 @@ export default async function AdminResearchPage({
 }) {
   const context = await resolveAdminContext();
   if (!context.ok) return null;
+  const requestedSection = (await searchParams).section;
   const section =
-    (await searchParams).section === "trait-map" ? "trait-map" : "items";
+    requestedSection === "trait-map"
+      ? "trait-map"
+      : requestedSection === "items"
+        ? "items"
+        : "validation";
   const [decisions, gateC, traitMap] = await Promise.all([
     readAdminResearchDecisions(context.client).catch(() => ({
       available: false,

@@ -11,6 +11,7 @@ import {
   type SelfProfilePayload,
 } from "@/features/account/self-profile-contract";
 import { readAccountAssessmentProgress } from "@/features/assessment/server-account-assessment-progress";
+import { rebuildAccountTraitProfile } from "@/features/assessment/server-account-trait-profile";
 import { createServerFeedReadPayload } from "@/features/feed/server-read";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { readOriginalProfileReportSummaries } from "@/features/public-profile/server-profile-reports";
@@ -50,6 +51,7 @@ export async function readSelfProfilePayload({
     reportsRead,
     statsRead,
     snapshotRead,
+    traitProfileRead,
   ] = await Promise.allSettled([
     readAccountResults({ client, user }),
     readAccountAssessmentProgress({ client, user }),
@@ -61,6 +63,7 @@ export async function readSelfProfilePayload({
     }),
     readSelfProfileStats({ accountId: profile.accountId, client }),
     readActivePublicSnapshotId({ accountId: profile.accountId, client }),
+    rebuildAccountTraitProfile({ accountId: profile.accountId, client }),
   ]);
 
   const accountResults =
@@ -93,14 +96,26 @@ export async function readSelfProfilePayload({
     accountResults.find((result) => result.kind === "full") ??
     accountResults[0] ??
     null;
-  const trait = representativeResult
+  const dynamicTraitProfile =
+    traitProfileRead.status === "fulfilled" ? traitProfileRead.value : null;
+  const trait = dynamicTraitProfile
     ? {
-        code: representativeResult.profileCode,
-        completedAt: representativeResult.completedAt,
-        profileName: representativeResult.profileName,
-        source: representativeResult.kind,
+        code: dynamicTraitProfile.code,
+        completedAt: dynamicTraitProfile.updatedAt,
+        profileName: dynamicTraitProfile.profileName,
+        source:
+          dynamicTraitProfile.source === "core_and_topics"
+            ? ("combined" as const)
+            : (representativeResult?.kind ?? "full"),
       }
-    : null;
+    : representativeResult
+      ? {
+          code: representativeResult.profileCode,
+          completedAt: representativeResult.completedAt,
+          profileName: representativeResult.profileName,
+          source: representativeResult.kind,
+        }
+      : null;
 
   const resultsAvailable =
     resultsRead.status === "fulfilled" && resultsRead.value.ok;

@@ -2,6 +2,10 @@ import "server-only";
 
 import { createHash, randomUUID } from "node:crypto";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  readCommunityProfilesForAccounts,
+  resolveCommunityProfileImage,
+} from "@/features/account/server-community-profile";
 import { ensureAccountForUser } from "@/features/account/server-writes";
 import { checkCommunityWriteGuard } from "@/features/feed/server-write-guard";
 import type {
@@ -15,10 +19,8 @@ import type {
   SaveBalanceResponseRequest,
 } from "@/features/together-balance/api-contract";
 import {
-  PUBLIC_BALANCE_PACKS,
   getBalanceResultLabel,
   getDisplayedBalanceOptions,
-  getPublicBalancePack,
   scoreBalanceGroup,
   selectBalanceQuestionSet,
 } from "@/features/together-balance";
@@ -32,8 +34,30 @@ import {
   createSupabaseServiceClient,
   getSupabaseServiceEnv,
 } from "@/lib/supabase/service";
+import { resolvePublicBalancePack } from "@/features/assessment/server-assessment-content-runtime";
+import {
+  createCharacterProfileImage,
+  type PublicProfileImage,
+} from "@/features/public-profile/profile-image";
 
 type ServiceClient = SupabaseClient;
+
+const participantProfileImageCache = new Map<
+  string,
+  { expiresAt: number; image: PublicProfileImage | null }
+>();
+const PARTICIPANT_PROFILE_IMAGE_CACHE_MS = 5 * 60 * 1_000;
+const participantActivityTouchCache = new Map<string, number>();
+const PARTICIPANT_ACTIVITY_TOUCH_INTERVAL_MS = 30_000;
+const balancePackCache = new Map<string, Promise<BalancePack | null>>();
+
+type SyncedBalancePack = {
+  itemIdByKey: Map<string, string>;
+  recipeId: string;
+  templateVersionId: string;
+};
+
+const syncedBalancePackCache = new Map<string, Promise<SyncedBalancePack>>();
 
 type RoomRow = {
   answer_reveal_policy: "after_result_open" | "never";
@@ -57,6 +81,7 @@ type RoomRow = {
 
 type ParticipantRow = {
   account_id: string | null;
+  avatar_seed: string | null;
   completed_at: string | null;
   created_at: string;
   id: string;
@@ -94,8 +119,10 @@ type StoredItemRow = ItemRow & {
   meaning_code: string | null;
   option_a_text: string;
   option_b_text: string;
+  phase: BalanceQuestion["phase"];
   prompt: string;
   prompt_role: BalanceQuestion["promptRole"];
+  relationship_audience: BalanceQuestion["audience"];
   scored: boolean;
   sensitivity_level: "general" | "personal" | "sensitive";
   subtopic_id: string;
@@ -196,17 +223,19 @@ export async function enforceBalanceRequestRateLimit({
             { action: "join_room_daily", limit: 80, windowSeconds: 86400 },
           ];
 
-  for (const policy of policies) {
-    const result = await client
-      .schema("together_balance")
-      .rpc("consume_request_budget", {
-        p_action: policy.action,
-        p_limit: policy.limit,
-        p_scope_hash: scopeHash,
-        p_window_seconds: policy.windowSeconds,
-      });
-    if (result.error) throw mapDatabaseError(result.error);
-  }
+  await Promise.all(
+    policies.map(async (policy) => {
+      const result = await client
+        .schema("together_balance")
+        .rpc("consume_request_budget", {
+          p_action: policy.action,
+          p_limit: policy.limit,
+          p_scope_hash: scopeHash,
+          p_window_seconds: policy.windowSeconds,
+        });
+      if (result.error) throw mapDatabaseError(result.error);
+    }),
+  );
 }
 
 export async function createBalanceRoomOnServer({
@@ -217,7 +246,8 @@ export async function createBalanceRoomOnServer({
   input: CreateBalanceRoomRequest;
 }) {
   const client = getBalanceServiceClient();
-  const pack = getPublicBalancePack(input.packSlug);
+  const resolvedPack = await resolvePublicBalancePack(input.packSlug);
+  const pack = resolvedPack?.pack ?? null;
   if (!pack) {
     throw new BalanceServerError(
       "pack_not_found",
@@ -240,7 +270,17 @@ export async function createBalanceRoomOnServer({
     );
   }
 
-  const synced = await syncPackToDatabase(client, pack, input.questionCount);
+  const synced = await syncPackToDatabase(
+    client,
+    pack,
+    input.questionCount,
+    resolvedPack
+      ? {
+          releaseId: resolvedPack.releaseId,
+          releaseNumber: resolvedPack.releaseNumber,
+        }
+      : null,
+  );
   const participantToken = deriveBalanceSecret(
     "create-room-participant",
     input.clientRequestId,
@@ -642,12 +682,23 @@ export async function readBalanceRoomPreviewOnServer(
     );
   }
 
+  const previewPack =
+    typeof preview.packSlug === "string" &&
+    typeof preview.packTitle === "string" &&
+    typeof preview.packDescription === "string"
+      ? {
+          description: preview.packDescription,
+          slug: preview.packSlug,
+          title: preview.packTitle,
+        }
+      : null;
   const pack =
-    typeof preview.templateVersionId === "string"
+    previewPack ??
+    (typeof preview.templateVersionId === "string"
       ? await loadBalancePackFromDatabase(client, preview.templateVersionId)
       : typeof preview.packSlug === "string"
-        ? getPublicBalancePack(preview.packSlug)
-        : null;
+        ? ((await resolvePublicBalancePack(preview.packSlug))?.pack ?? null)
+        : null);
   if (!pack) {
     throw new BalanceServerError(
       "pack_not_found",
@@ -776,27 +827,34 @@ export async function readBalanceRoomStateOnServer({
   const rounds = (roundsResult.data ?? []) as RoundRow[];
   const roundIds = rounds.map((round) => round.id);
 
-  const [roundItemsResult, participantsResult] = await Promise.all([
-    roundIds.length > 0
-      ? client
-          .schema("together_balance")
-          .from("round_item")
-          .select("round_id,item_id,display_order")
-          .in("round_id", roundIds)
-      : Promise.resolve({ data: [], error: null }),
-    client
-      .schema("together_balance")
-      .from("participant")
-      .select(
-        "id,room_id,account_id,nickname,status,joined_at,completed_at,created_at,pair_visibility_consent",
-      )
-      .eq("room_id", room.id)
-      .in("status", ["reserved", "joined", "completed"])
-      .order("created_at", { ascending: true }),
-  ]);
+  const [roundItemsResult, participantsResult, responsesResult] =
+    await Promise.all([
+      roundIds.length > 0
+        ? client
+            .schema("together_balance")
+            .from("round_item")
+            .select("round_id,item_id,display_order")
+            .in("round_id", roundIds)
+        : Promise.resolve({ data: [], error: null }),
+      client
+        .schema("together_balance")
+        .from("participant")
+        .select(
+          "id,room_id,account_id,avatar_seed,nickname,status,joined_at,completed_at,created_at,pair_visibility_consent",
+        )
+        .eq("room_id", room.id)
+        .in("status", ["reserved", "joined", "completed"])
+        .order("created_at", { ascending: true }),
+      client
+        .schema("together_balance")
+        .from("response")
+        .select("participant_id,item_id,option_key,client_sequence")
+        .eq("room_id", room.id),
+    ]);
   if (roundItemsResult.error) throw mapDatabaseError(roundItemsResult.error);
   if (participantsResult.error)
     throw mapDatabaseError(participantsResult.error);
+  if (responsesResult.error) throw mapDatabaseError(responsesResult.error);
 
   const roundItems = (roundItemsResult.data ?? []) as RoundItemRow[];
   const participants = (participantsResult.data ?? []) as ParticipantRow[];
@@ -811,17 +869,6 @@ export async function readBalanceRoomStateOnServer({
       : { data: [], error: null };
   if (itemsResult.error) throw mapDatabaseError(itemsResult.error);
   const itemRows = (itemsResult.data ?? []) as ItemRow[];
-
-  const responsesResult = await client
-    .schema("together_balance")
-    .from("response")
-    .select("participant_id,item_id,option_key,client_sequence")
-    .eq("room_id", room.id)
-    .in(
-      "participant_id",
-      participants.map((item) => item.id),
-    );
-  if (responsesResult.error) throw mapDatabaseError(responsesResult.error);
   const responseRows = (responsesResult.data ?? []) as ResponseRow[];
 
   const questionByKey = new Map(
@@ -932,6 +979,10 @@ export async function readBalanceRoomStateOnServer({
     }
   }
 
+  const participantProfileImageById = result
+    ? await resolveBalanceParticipantProfileImages({ client, participants })
+    : new Map<string, PublicProfileImage>();
+
   return {
     canFinalize:
       participant.id === room.owner_participant_id &&
@@ -952,11 +1003,13 @@ export async function readBalanceRoomStateOnServer({
     },
     participants: participants.map((item) => ({
       answeredCount: answeredCountByParticipant.get(item.id) ?? 0,
+      avatarSeed: item.avatar_seed ?? item.id,
       completedAt: item.completed_at,
       id: item.id,
       isMe: item.id === participant.id,
       isOwner: item.id === room.owner_participant_id,
       nickname: item.nickname,
+      profileImage: participantProfileImageById.get(item.id) ?? null,
       status: mapParticipantStatus(item.status),
     })),
     participationMode: room.participation_mode,
@@ -971,6 +1024,67 @@ export async function readBalanceRoomStateOnServer({
   };
 }
 
+async function resolveBalanceParticipantProfileImages({
+  client,
+  participants,
+}: {
+  client: ServiceClient;
+  participants: ParticipantRow[];
+}) {
+  const now = Date.now();
+  const resolved = new Map<string, PublicProfileImage>();
+  const uncachedAccountIds = new Set<string>();
+  for (const participant of participants) {
+    if (!participant.account_id) continue;
+    const cached = participantProfileImageCache.get(participant.account_id);
+    if (cached && cached.expiresAt > now) {
+      if (cached.image) resolved.set(participant.id, cached.image);
+      continue;
+    }
+    uncachedAccountIds.add(participant.account_id);
+  }
+  if (uncachedAccountIds.size === 0) return resolved;
+
+  const profiles = await readCommunityProfilesForAccounts({
+    accountIds: [...uncachedAccountIds],
+    client,
+  });
+  await Promise.all(
+    participants.map(async (participant) => {
+      if (
+        !participant.account_id ||
+        !uncachedAccountIds.has(participant.account_id)
+      ) {
+        return;
+      }
+      const profile = profiles.get(participant.account_id);
+      if (!profile) {
+        participantProfileImageCache.set(participant.account_id, {
+          expiresAt: now + PARTICIPANT_PROFILE_IMAGE_CACHE_MS,
+          image: null,
+        });
+        return;
+      }
+      const fallback = createCharacterProfileImage({
+        alt: `${profile.displayName} 프로필 이미지`,
+        motif: profile.avatarCharacterKey,
+      });
+      const image = await resolveCommunityProfileImage({
+        client,
+        fallback,
+        profile,
+      }).catch(() => fallback);
+      participantProfileImageCache.set(participant.account_id, {
+        expiresAt: now + PARTICIPANT_PROFILE_IMAGE_CACHE_MS,
+        image,
+      });
+      resolved.set(participant.id, image);
+    }),
+  );
+
+  return resolved;
+}
+
 export async function saveBalanceResponseOnServer({
   input,
   itemKey,
@@ -983,59 +1097,38 @@ export async function saveBalanceResponseOnServer({
   roomCode: string;
 }) {
   const client = getBalanceServiceClient();
-  const context = await readAuthorizedRoomContext({
-    client,
-    participantToken,
-    roomCode,
-  });
-  const question = context.pack.questions.find((item) => item.id === itemKey);
-  if (!question) {
-    throw new BalanceServerError(
-      "question_not_found",
-      "이 방에 없는 질문이에요.",
-      404,
-    );
-  }
-  const optionIndex = question.options.findIndex(
-    (option) => option.id === input.optionId,
-  );
-  if (optionIndex < 0) {
+  const optionKey =
+    input.optionId === `${itemKey}:a`
+      ? "a"
+      : input.optionId === `${itemKey}:b`
+        ? "b"
+        : null;
+  if (!optionKey) {
     throw new BalanceServerError(
       "option_not_found",
       "선택지를 확인하지 못했어요.",
       422,
     );
   }
-  const itemId = balanceItemId(context.pack, question.id);
-  const roundItemResult = await client
-    .schema("together_balance")
-    .from("round_item")
-    .select("round_id")
-    .eq("room_id", context.room.id)
-    .eq("item_id", itemId)
-    .maybeSingle();
-  if (roundItemResult.error || !roundItemResult.data) {
-    throw new BalanceServerError(
-      "question_not_found",
-      "이 방에 없는 질문이에요.",
-      404,
-    );
-  }
 
-  const save = await client.schema("together_balance").rpc("save_response", {
-    p_client_sequence: input.clientSequence,
-    p_idempotency_key: randomUUID(),
-    p_item_id: itemId,
-    p_join_token_hash: hashBalanceSecret(participantToken),
-    p_option_key: optionIndex === 0 ? "a" : "b",
-    p_participant_id: context.participant.id,
-    p_response_ms: input.responseMs ?? null,
-    p_room_id: context.room.id,
-    p_round_id: String(roundItemResult.data.round_id),
-  });
+  const save = await client
+    .schema("together_balance")
+    .rpc("save_response_by_item_key", {
+      p_client_sequence: input.clientSequence,
+      p_idempotency_key: randomUUID(),
+      p_item_key: itemKey,
+      p_join_code_hash: hashBalanceSecret(normalizeRoomCode(roomCode)),
+      p_join_token_hash: hashBalanceSecret(participantToken),
+      p_option_key: optionKey,
+      p_response_ms: input.responseMs ?? null,
+    });
   if (save.error) throw mapDatabaseError(save.error);
 
-  return readBalanceRoomStateOnServer({ participantToken, roomCode });
+  return {
+    clientSequence: input.clientSequence,
+    optionId: input.optionId,
+    questionId: itemKey,
+  };
 }
 
 export async function completeBalanceRoomOnServer({
@@ -1046,63 +1139,50 @@ export async function completeBalanceRoomOnServer({
   roomCode: string;
 }) {
   const client = getBalanceServiceClient();
-  const context = await readAuthorizedRoomContext({
-    client,
+  const completion = await client
+    .schema("together_balance")
+    .rpc("complete_participant_game", {
+      p_join_code_hash: hashBalanceSecret(normalizeRoomCode(roomCode)),
+      p_join_token_hash: hashBalanceSecret(participantToken),
+    });
+  if (completion.error) throw mapDatabaseError(completion.error);
+  const completed = completion.data as Record<string, unknown> | null;
+  const participantId = stringValue(completed?.participantId);
+  const roomId = stringValue(completed?.roomId);
+  const templateVersionId = stringValue(completed?.templateVersionId);
+  const resultStatus = stringValue(completed?.resultStatus);
+  if (!participantId || !roomId || !templateVersionId) {
+    throw new BalanceServerError(
+      "storage_unavailable",
+      "결과를 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      503,
+      true,
+    );
+  }
+
+  const pack = await loadBalancePackFromDatabase(client, templateVersionId);
+  if (!pack) {
+    throw new BalanceServerError(
+      "pack_not_found",
+      "이 방의 주제를 불러오지 못했어요.",
+      503,
+      true,
+    );
+  }
+
+  if (resultStatus !== "waiting") {
+    await persistLatestResultSnapshot({
+      client,
+      pack,
+      roomId,
+    });
+  }
+
+  const room = await readBalanceRoomStateOnServer({
     participantToken,
     roomCode,
   });
-  if (context.participant.status !== "completed") {
-    const roundsResult = await client
-      .schema("together_balance")
-      .from("round")
-      .select("id,round_number")
-      .eq("room_id", context.room.id)
-      .order("round_number", { ascending: true });
-    if (roundsResult.error) throw mapDatabaseError(roundsResult.error);
-
-    const completedRoundsResult = await client
-      .schema("together_balance")
-      .from("round_completion")
-      .select("round_id")
-      .eq("room_id", context.room.id)
-      .eq("participant_id", context.participant.id);
-    if (completedRoundsResult.error) {
-      throw mapDatabaseError(completedRoundsResult.error);
-    }
-    const completedRoundIds = new Set(
-      (completedRoundsResult.data ?? []).map((item) => String(item.round_id)),
-    );
-
-    for (const round of roundsResult.data ?? []) {
-      if (completedRoundIds.has(String(round.id))) continue;
-      const completeRound = await client
-        .schema("together_balance")
-        .rpc("complete_round", {
-          p_join_token_hash: hashBalanceSecret(participantToken),
-          p_participant_id: context.participant.id,
-          p_room_id: context.room.id,
-          p_round_id: String(round.id),
-        });
-      if (completeRound.error) throw mapDatabaseError(completeRound.error);
-    }
-
-    const complete = await client
-      .schema("together_balance")
-      .rpc("complete_game", {
-        p_join_token_hash: hashBalanceSecret(participantToken),
-        p_participant_id: context.participant.id,
-        p_room_id: context.room.id,
-      });
-    if (complete.error) throw mapDatabaseError(complete.error);
-  }
-
-  await persistLatestResultSnapshot({
-    client,
-    pack: context.pack,
-    roomId: context.room.id,
-  });
-
-  return readBalanceRoomStateOnServer({ participantToken, roomCode });
+  return { participantId, room };
 }
 
 export async function finalizeBalanceRoomOnServer({
@@ -1388,14 +1468,44 @@ async function syncPackToDatabase(
   client: ServiceClient,
   pack: BalancePack,
   questionCount: number,
+  release: { releaseId: string | null; releaseNumber: number | null } | null,
+): Promise<SyncedBalancePack> {
+  const cacheKey = [
+    pack.id,
+    release?.releaseId ?? pack.contentPoolVersion,
+    questionCount,
+  ].join(":");
+  const cached = syncedBalancePackCache.get(cacheKey);
+  if (cached) return cached;
+
+  const syncing = syncPackToDatabaseUncached(
+    client,
+    pack,
+    questionCount,
+    release,
+  );
+  syncedBalancePackCache.set(cacheKey, syncing);
+  try {
+    return await syncing;
+  } catch (error) {
+    syncedBalancePackCache.delete(cacheKey);
+    throw error;
+  }
+}
+
+async function syncPackToDatabaseUncached(
+  client: ServiceClient,
+  pack: BalancePack,
+  questionCount: number,
+  release: { releaseId: string | null; releaseNumber: number | null } | null,
 ) {
   const now = new Date().toISOString();
   const templateId = deterministicUuid(`balance:template:${pack.id}`);
   const templateVersionId = deterministicUuid(
-    `balance:template:${pack.id}:version:${pack.contentPoolVersion}`,
+    `balance:template:${pack.id}:version:${release?.releaseId ?? pack.contentPoolVersion}`,
   );
   const recipeId = deterministicUuid(
-    `balance:template:${pack.id}:version:${pack.contentPoolVersion}:recipe:${questionCount}:v1`,
+    `balance:template:${pack.id}:version:${release?.releaseId ?? pack.contentPoolVersion}:recipe:${questionCount}:v1`,
   );
 
   const templateResult = await client
@@ -1411,7 +1521,7 @@ async function syncPackToDatabase(
         title: pack.title,
         updated_at: now,
       },
-      { onConflict: "id" },
+      { ignoreDuplicates: true, onConflict: "id" },
     );
   if (templateResult.error) throw mapDatabaseError(templateResult.error);
 
@@ -1421,7 +1531,9 @@ async function syncPackToDatabase(
     .upsert(
       {
         content_pool_version: `content.v${pack.contentPoolVersion}`,
+        assessment_content_release_id: release?.releaseId ?? null,
         default_question_count: pack.defaultQuestionCount,
+        description_snapshot: pack.description,
         id: templateVersionId,
         max_question_count: 24,
         min_question_count: 8,
@@ -1430,9 +1542,11 @@ async function syncPackToDatabase(
         scoring_version: "together-balance-v1",
         status: "published",
         template_id: templateId,
-        version: pack.contentPoolVersion,
+        title_snapshot: pack.title,
+        result_semantics: pack.resultSemantics,
+        version: release?.releaseNumber ?? pack.contentPoolVersion,
       },
-      { onConflict: "id" },
+      { ignoreDuplicates: true, onConflict: "id" },
     );
   if (versionResult.error) throw mapDatabaseError(versionResult.error);
 
@@ -1454,7 +1568,7 @@ async function syncPackToDatabase(
         template_version_id: templateVersionId,
         version: recipeVersion,
       },
-      { onConflict: "id" },
+      { ignoreDuplicates: true, onConflict: "id" },
     );
   if (recipeResult.error) throw mapDatabaseError(recipeResult.error);
 
@@ -1462,7 +1576,7 @@ async function syncPackToDatabase(
     audience: "all_ages",
     conversation_value: question.conversationValue,
     highlight_priority: question.highlightPriority,
-    id: balanceItemId(pack, question.id),
+    id: balanceItemId(templateVersionId, question.id),
     intensity:
       question.intensity === "deep"
         ? "serious"
@@ -1476,35 +1590,71 @@ async function syncPackToDatabase(
     option_a_text: question.options[0].text,
     option_b_key: "b",
     option_b_text: question.options[1].text,
+    phase: question.phase,
     prompt: question.prompt,
     prompt_role: question.promptRole,
     published_at: now,
     retired_at: null,
+    relationship_audience: question.audience,
     scored: question.scored,
     sensitivity_level:
       question.sensitivity === "private" ? "sensitive" : question.sensitivity,
-    subtopic_id: question.subtopic,
+    subtopic_id: normalizeBalanceSubtopicId(question.subtopic),
     template_version_id: templateVersionId,
     topic_id: pack.slug,
   }));
-  const itemCountResult = await client
+  const existingItemsResult = await client
     .schema("together_balance")
     .from("item")
-    .select("id", { count: "exact", head: true })
+    .select("id,item_key,prompt,option_a_text,option_b_text")
     .eq("template_version_id", templateVersionId);
-  if (itemCountResult.error) throw mapDatabaseError(itemCountResult.error);
-  if (itemCountResult.count !== itemRows.length) {
+  if (existingItemsResult.error)
+    throw mapDatabaseError(existingItemsResult.error);
+  const existingItems = (existingItemsResult.data ?? []) as Array<{
+    id: string;
+    item_key: string;
+    option_a_text: string;
+    option_b_text: string;
+    prompt: string;
+  }>;
+  let itemIdByKey: Map<string, string>;
+  if (existingItems.length === 0) {
     const itemsResult = await client
       .schema("together_balance")
       .from("item")
       .upsert(itemRows, { onConflict: "id" });
     if (itemsResult.error) throw mapDatabaseError(itemsResult.error);
+    itemIdByKey = new Map(
+      itemRows.map((row) => [row.item_key, row.id] as const),
+    );
+  } else if (
+    existingItems.length !== itemRows.length ||
+    existingItems.some((existing) => {
+      const expected = itemRows.find(
+        (item) => item.item_key === existing.item_key,
+      );
+      return (
+        !expected ||
+        existing.prompt !== expected.prompt ||
+        existing.option_a_text !== expected.option_a_text ||
+        existing.option_b_text !== expected.option_b_text
+      );
+    })
+  ) {
+    throw new BalanceServerError(
+      "validation_error",
+      "이미 사용 중인 팩 버전과 문항 구성이 달라요. 새 버전으로 다시 게시해 주세요.",
+      409,
+    );
+  } else {
+    // 초기 버전의 ID 체계로 이미 생성된 방도 그대로 이어서 사용한다.
+    itemIdByKey = new Map(
+      existingItems.map((row) => [row.item_key, row.id] as const),
+    );
   }
 
   return {
-    itemIdByKey: new Map(
-      itemRows.map((row) => [row.item_key, row.id] as const),
-    ),
+    itemIdByKey,
     recipeId,
     templateVersionId,
   };
@@ -1521,54 +1671,29 @@ async function persistQuestionSet({
   questionSet: ReturnType<typeof selectBalanceQuestionSet>;
   roomId: string;
 }) {
-  for (const round of questionSet.rounds) {
-    const roundHash = sha256Hex(
+  const openedAt = new Date().toISOString();
+  const roundRows = questionSet.rounds.map((round) => ({
+    id: deterministicUuid(`balance:room:${roomId}:round:${round.roundNumber}`),
+    opened_at: openedAt,
+    question_count: round.questions.length,
+    question_set_hash: sha256Hex(
       round.questions.map((item) => item.question.id).join("|"),
+    ),
+    room_id: roomId,
+    round_number: round.roundNumber,
+    status: "open",
+  }));
+  const roundResult = await client
+    .schema("together_balance")
+    .from("round")
+    .upsert(roundRows, { ignoreDuplicates: true, onConflict: "id" });
+  if (roundResult.error) throw mapDatabaseError(roundResult.error);
+
+  const expectedItems = questionSet.rounds.flatMap((round) => {
+    const roundId = deterministicUuid(
+      `balance:room:${roomId}:round:${round.roundNumber}`,
     );
-    const existingRound = await client
-      .schema("together_balance")
-      .from("round")
-      .select("id,question_count,question_set_hash")
-      .eq("room_id", roomId)
-      .eq("round_number", round.roundNumber)
-      .maybeSingle();
-    if (existingRound.error) throw mapDatabaseError(existingRound.error);
-
-    let roundId: string;
-    if (existingRound.data) {
-      if (
-        Number(existingRound.data.question_count) !== round.questions.length ||
-        String(existingRound.data.question_set_hash) !== roundHash
-      ) {
-        throw new BalanceServerError(
-          "request_conflict",
-          "이미 저장된 문항 구성이 현재 요청과 달라요.",
-          409,
-        );
-      }
-      roundId = String(existingRound.data.id);
-    } else {
-      roundId = deterministicUuid(
-        `balance:room:${roomId}:round:${round.roundNumber}`,
-      );
-      const roundResult = await client
-        .schema("together_balance")
-        .from("round")
-        .insert({
-          id: roundId,
-          opened_at: new Date().toISOString(),
-          question_count: round.questions.length,
-          question_set_hash: roundHash,
-          room_id: roomId,
-          round_number: round.roundNumber,
-          status: "open",
-        });
-      if (roundResult.error && !isUniqueViolation(roundResult.error)) {
-        throw mapDatabaseError(roundResult.error);
-      }
-    }
-
-    const roundItems = round.questions.map((selected, index) => {
+    return round.questions.map((selected, index) => {
       const itemId = itemIdByKey.get(selected.question.id);
       if (!itemId) {
         throw new BalanceServerError(
@@ -1588,38 +1713,83 @@ async function persistQuestionSet({
         round_id: roundId,
       };
     });
+  });
+
+  const [storedRoundsResult, storedItemsResult] = await Promise.all([
+    client
+      .schema("together_balance")
+      .from("round")
+      .select("id,round_number,question_count,question_set_hash")
+      .eq("room_id", roomId),
+    client
+      .schema("together_balance")
+      .from("round_item")
+      .select("round_id,item_id,display_order")
+      .eq("room_id", roomId),
+  ]);
+  if (storedRoundsResult.error)
+    throw mapDatabaseError(storedRoundsResult.error);
+  if (storedItemsResult.error) throw mapDatabaseError(storedItemsResult.error);
+
+  const expectedRoundById = new Map(
+    roundRows.map((round) => [round.id, round]),
+  );
+  const storedRounds = storedRoundsResult.data ?? [];
+  if (
+    storedRounds.length !== roundRows.length ||
+    storedRounds.some((stored) => {
+      const expected = expectedRoundById.get(String(stored.id));
+      return (
+        !expected ||
+        Number(stored.round_number) !== expected.round_number ||
+        Number(stored.question_count) !== expected.question_count ||
+        String(stored.question_set_hash) !== expected.question_set_hash
+      );
+    })
+  ) {
+    throw new BalanceServerError(
+      "request_conflict",
+      "이미 저장된 문항 구성이 현재 요청과 달라요.",
+      409,
+    );
+  }
+
+  const expectedItemByKey = new Map(
+    expectedItems.map((item) => [`${item.round_id}:${item.item_id}`, item]),
+  );
+  const storedItems = storedItemsResult.data ?? [];
+  if (
+    storedItems.some((stored) => {
+      const expected = expectedItemByKey.get(
+        `${String(stored.round_id)}:${String(stored.item_id)}`,
+      );
+      return (
+        !expected || Number(stored.display_order) !== expected.display_order
+      );
+    })
+  ) {
+    throw new BalanceServerError(
+      "request_conflict",
+      "저장된 문항 순서를 복구하지 못했어요.",
+      409,
+      true,
+    );
+  }
+
+  const storedItemKeys = new Set(
+    storedItems.map(
+      (item) => `${String(item.round_id)}:${String(item.item_id)}`,
+    ),
+  );
+  const missingItems = expectedItems.filter(
+    (item) => !storedItemKeys.has(`${item.round_id}:${item.item_id}`),
+  );
+  if (missingItems.length > 0) {
     const itemResult = await client
       .schema("together_balance")
       .from("round_item")
-      .upsert(roundItems, {
-        ignoreDuplicates: true,
-        onConflict: "round_id,item_id",
-      });
+      .insert(missingItems);
     if (itemResult.error) throw mapDatabaseError(itemResult.error);
-
-    const verification = await client
-      .schema("together_balance")
-      .from("round_item")
-      .select("item_id,display_order")
-      .eq("round_id", roundId)
-      .order("display_order", { ascending: true });
-    if (verification.error) throw mapDatabaseError(verification.error);
-    const storedItems = verification.data ?? [];
-    if (
-      storedItems.length !== roundItems.length ||
-      storedItems.some(
-        (item, index) =>
-          String(item.item_id) !== roundItems[index]?.item_id ||
-          Number(item.display_order) !== roundItems[index]?.display_order,
-      )
-    ) {
-      throw new BalanceServerError(
-        "request_conflict",
-        "저장된 문항 순서를 복구하지 못했어요.",
-        409,
-        true,
-      );
-    }
   }
 }
 
@@ -1672,7 +1842,7 @@ async function readAuthorizedRoomContext({
     .schema("together_balance")
     .from("participant")
     .select(
-      "id,room_id,account_id,nickname,status,joined_at,completed_at,created_at,pair_visibility_consent",
+      "id,room_id,account_id,avatar_seed,nickname,status,joined_at,completed_at,created_at,pair_visibility_consent",
     )
     .eq("room_id", room.id)
     .eq("join_token_hash", hashBalanceSecret(participantToken))
@@ -1700,13 +1870,18 @@ async function readAuthorizedRoomContext({
       401,
     );
   }
-  const activity = await client
-    .schema("together_balance")
-    .from("participant")
-    .update({ last_active_at: new Date().toISOString() })
-    .eq("id", participant.id)
-    .eq("room_id", room.id);
-  if (activity.error) throw mapDatabaseError(activity.error);
+  const now = Date.now();
+  const lastTouchedAt = participantActivityTouchCache.get(participant.id) ?? 0;
+  if (now - lastTouchedAt >= PARTICIPANT_ACTIVITY_TOUCH_INTERVAL_MS) {
+    const activity = await client
+      .schema("together_balance")
+      .from("participant")
+      .update({ last_active_at: new Date(now).toISOString() })
+      .eq("id", participant.id)
+      .eq("room_id", room.id);
+    if (activity.error) throw mapDatabaseError(activity.error);
+    participantActivityTouchCache.set(participant.id, now);
+  }
 
   const pack = await loadBalancePackFromDatabase(
     client,
@@ -1789,6 +1964,10 @@ function createRoomResult({
           comparedCount: pair.comparedCount,
           matchCount: pair.matchCount,
           otherParticipantId,
+          otherParticipantAvatarSeed:
+            completedParticipants.find(
+              (participant) => participant.id === otherParticipantId,
+            )?.avatar_seed ?? otherParticipantId,
           otherParticipantNickname:
             participantNameById.get(otherParticipantId) ?? "참여자",
           score: pair.roundedScore,
@@ -1877,6 +2056,10 @@ function applyStoredSnapshotToResult({
           pair.comparedCount,
         ),
         matchCount: numericValue(storedPair.matchCount, pair.matchCount),
+        otherParticipantAvatarSeed: stringValue(
+          storedPair.otherAvatarSeed,
+          pair.otherParticipantAvatarSeed ?? pair.otherParticipantId,
+        ),
         score: Math.round(numericValue(storedPair.roundedScore, pair.score)),
       },
     ];
@@ -1977,7 +2160,7 @@ async function persistLatestResultSnapshot({
       .schema("together_balance")
       .from("participant")
       .select(
-        "id,room_id,account_id,nickname,status,joined_at,completed_at,created_at,pair_visibility_consent",
+        "id,room_id,account_id,avatar_seed,nickname,status,joined_at,completed_at,created_at,pair_visibility_consent",
       )
       .eq("room_id", roomId)
       .eq("status", "completed")
@@ -2360,10 +2543,32 @@ async function loadBalancePackFromDatabase(
   client: ServiceClient,
   templateVersionId: string,
 ): Promise<BalancePack | null> {
+  const cached = balancePackCache.get(templateVersionId);
+  if (cached) return cached;
+
+  const loading = loadBalancePackFromDatabaseUncached(
+    client,
+    templateVersionId,
+  );
+  balancePackCache.set(templateVersionId, loading);
+  try {
+    return await loading;
+  } catch (error) {
+    balancePackCache.delete(templateVersionId);
+    throw error;
+  }
+}
+
+async function loadBalancePackFromDatabaseUncached(
+  client: ServiceClient,
+  templateVersionId: string,
+): Promise<BalancePack | null> {
   const versionResult = await client
     .schema("together_balance")
     .from("template_version")
-    .select("template_id,version,default_question_count,scoring_template")
+    .select(
+      "template_id,version,default_question_count,scoring_template,title_snapshot,description_snapshot,result_semantics",
+    )
     .eq("id", templateVersionId)
     .maybeSingle();
   if (versionResult.error) throw mapDatabaseError(versionResult.error);
@@ -2380,7 +2585,7 @@ async function loadBalancePackFromDatabase(
       .schema("together_balance")
       .from("item")
       .select(
-        "id,item_key,subtopic_id,meaning_code,prompt_role,prompt,option_a_text,option_b_text,scored,highlight_priority,conversation_value,sensitivity_level,intensity,audience",
+        "id,item_key,subtopic_id,meaning_code,prompt_role,prompt,option_a_text,option_b_text,scored,highlight_priority,conversation_value,sensitivity_level,intensity,audience,relationship_audience,phase",
       )
       .eq("template_version_id", templateVersionId)
       .order("item_key", { ascending: true }),
@@ -2398,14 +2603,10 @@ async function loadBalancePackFromDatabase(
     versionResult.data.scoring_template,
   ) as BalancePack["scoringTemplate"];
   const storedItems = itemsResult.data as StoredItemRow[];
-  const currentPack = PUBLIC_BALANCE_PACKS.find(
-    (candidate) => candidate.slug === template.slug,
-  );
   const contentVersion = Number(versionResult.data.version);
-  const questions = storedItems.map<BalanceQuestion>((item, index) => {
-    const ratio = index / storedItems.length;
+  const questions = storedItems.map<BalanceQuestion>((item) => {
     return {
-      audience: "all",
+      audience: item.relationship_audience,
       contentVersion,
       conversationValue: item.conversation_value,
       highlightPriority: item.highlight_priority,
@@ -2422,8 +2623,7 @@ async function loadBalancePackFromDatabase(
         { id: `${item.item_key}:b`, text: item.option_b_text },
       ],
       packId: template.slug,
-      phase:
-        ratio < 0.34 ? "familiar" : ratio < 0.68 ? "everyday" : "conversation",
+      phase: item.phase,
       prompt: item.prompt,
       promptRole: item.prompt_role,
       scored: item.scored,
@@ -2440,28 +2640,18 @@ async function loadBalancePackFromDatabase(
     defaultQuestionCount: Number(
       versionResult.data.default_question_count,
     ) as BalancePack["defaultQuestionCount"],
-    description:
-      currentPack?.description ?? `${template.title} 밸런스 게임이에요.`,
+    description: String(versionResult.data.description_snapshot),
     id: template.slug,
     questions,
-    resultSemantics: resultSemanticsForScoringTemplate(scoringTemplate),
+    resultSemantics: String(
+      versionResult.data.result_semantics,
+    ) as BalancePack["resultSemantics"],
     roundSize: 8,
     scoringTemplate,
     slug: template.slug,
     supportedQuestionCounts: [8, 12, 16, 20, 24],
-    title: template.title,
+    title: String(versionResult.data.title_snapshot),
   };
-}
-
-function resultSemanticsForScoringTemplate(
-  template: BalancePack["scoringTemplate"],
-): BalancePack["resultSemantics"] {
-  if (template === "relationship_standard") {
-    return "relationship_standard_sync";
-  }
-  if (template === "ideal_preference") return "ideal_preference_similarity";
-  if (template === "dilemma_fun") return "choice_chemistry";
-  return template;
 }
 
 function optionIdForKey(
@@ -2543,9 +2733,9 @@ function hashBalanceSecret(secret: string) {
   return sha256Hex(`${env.shareTokenPepper}:${secret}`);
 }
 
-function balanceItemId(pack: BalancePack, questionId: string) {
+function balanceItemId(templateVersionId: string, questionId: string) {
   return deterministicUuid(
-    `balance:template:${pack.id}:version:${pack.contentPoolVersion}:item:${questionId}`,
+    `balance:template-version:${templateVersionId}:item:${questionId}`,
   );
 }
 
@@ -2603,6 +2793,12 @@ function sha256Hex(value: string) {
 
 function normalizeRoomCode(value: string) {
   return value.trim().toUpperCase();
+}
+
+function normalizeBalanceSubtopicId(value: string) {
+  const normalized = value.trim();
+  if (Array.from(normalized).length >= 2) return normalized;
+  return `${normalized || "기타"}류`;
 }
 
 function normalizeJoinStatus(value: unknown) {
@@ -2742,6 +2938,13 @@ function mapDatabaseError(error: unknown) {
       "option_not_found",
       "선택지를 확인하지 못했어요.",
       422,
+    );
+  }
+  if (message.includes("response_item_not_found")) {
+    return new BalanceServerError(
+      "question_not_found",
+      "이 방에 없는 질문이에요.",
+      404,
     );
   }
   return new BalanceServerError(

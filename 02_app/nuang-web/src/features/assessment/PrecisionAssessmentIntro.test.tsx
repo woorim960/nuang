@@ -120,6 +120,9 @@ describe("PrecisionAssessmentIntro", () => {
     expect(
       screen.getByText("내 뉴앙 코드와 자세한 성향 리포트"),
     ).toBeInTheDocument();
+    expect(screen.getByRole("note")).toHaveTextContent(
+      /검증 중인 후보 버전.*사람 연구·집단별 공정성 검토·정량 검증.*확정 판정이 아니라/,
+    );
     expect(
       screen.getByRole("button", { name: "정밀 검사 시작하기" }),
     ).toBeInTheDocument();
@@ -203,7 +206,7 @@ describe("PrecisionAssessmentIntro", () => {
       screen.getByText("내 생활 속 모습을 더 자세히 알려드려요"),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("원하는 사람과 성향을 비교할 수 있어요"),
+      screen.getByText("내 답을 생활 장면별로 돌아볼 수 있어요"),
     ).toBeInTheDocument();
     expect(screen.queryByText(/60문항/)).not.toBeInTheDocument();
     expect(

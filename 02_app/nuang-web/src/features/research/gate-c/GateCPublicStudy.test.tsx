@@ -36,6 +36,26 @@ describe("GateCPublicStudy", () => {
     );
   });
 
+  it("uses the shared Nuang mobile shell and separates setup from consent", () => {
+    render(<GateCPublicStudy />);
+
+    expect(
+      screen.getByRole("heading", { name: "검사 질문 리뷰" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "뉴앙 홈으로 돌아가기" }),
+    ).toHaveAttribute("href", "/home");
+    expect(
+      screen.getByRole("heading", { name: "참여 전 간단히 알려주세요" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "마지막으로 확인해 주세요" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "질문 확인 시작하기" }),
+    ).toBeDisabled();
+  });
+
   it("uses the shared assessment controls for responses and difficult situations", async () => {
     render(<GateCPublicStudy />);
     startStudy();
@@ -88,74 +108,87 @@ describe("GateCPublicStudy", () => {
     expect(push).toHaveBeenCalledWith("/home");
   });
 
-  it("offers a separate mobile reward entry only after participation completes", async () => {
+  it("explains result delivery and lets a member choose an email for entry", async () => {
     const fetchMock = vi.fn(
       async (input: RequestInfo | URL, init?: RequestInit) => {
-      const url = String(input);
-      if (url.includes("/complete")) {
+        const url = String(input);
+        if (url.includes("/complete")) {
+          return Response.json({
+            ok: true,
+            participantCode: "GC-TEST0001",
+            publicReceiptId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+            qualityStatus: "included",
+          });
+        }
+        if (url.endsWith("/reward-entries") && !init?.method) {
+          return Response.json({
+            contact: {
+              emailMasked: null,
+              emailStatus: "missing",
+              emailVerifiedAt: null,
+              hasEmail: false,
+              hasMobilePhone: false,
+              marketingOptIn: false,
+              mobilePhoneMasked: null,
+              mobilePhoneStatus: "missing",
+              updatedAt: null,
+            },
+            entry: null,
+            ok: true,
+          });
+        }
+        if (url.endsWith("/api/me/contact")) {
+          return Response.json({
+            contact: {
+              emailMasked: "te**@example.com",
+              emailStatus: "unverified",
+              emailVerifiedAt: null,
+              hasEmail: true,
+              hasMobilePhone: false,
+              marketingOptIn: false,
+              mobilePhoneMasked: null,
+              mobilePhoneStatus: "missing",
+              updatedAt: "2026-07-27T00:00:00.000Z",
+            },
+            ok: true,
+          });
+        }
+        if (url.endsWith("/reward-entries") && init?.method === "POST") {
+          return Response.json({
+            announcementLabel: "2026년 10월 1일",
+            contact: {
+              emailMasked: "te**@example.com",
+              emailStatus: "unverified",
+              emailVerifiedAt: null,
+              hasEmail: true,
+              hasMobilePhone: false,
+              marketingOptIn: false,
+              mobilePhoneMasked: null,
+              mobilePhoneStatus: "missing",
+              updatedAt: "2026-07-27T00:00:00.000Z",
+            },
+            contactMethod: "email",
+            entryId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            ok: true,
+          });
+        }
         return Response.json({
+          assignmentProof: "test-assignment-proof",
+          formId: "FORM_A",
+          items: gateCParticipantDefinitions.FORM_A.items.map((item) => ({
+            ...item,
+            domainId: "SE",
+            facetId: "SE-RE",
+            sourceKind: "quick_current",
+          })),
           ok: true,
           participantCode: "GC-TEST0001",
-          publicReceiptId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-          qualityStatus: "included",
+          poolVersion: "TEST-POOL",
+          sessionId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+          sessionToken: "session-token",
+          withdrawalCode: "withdrawal-code",
         });
-      }
-      if (url.endsWith("/reward-entries") && !init?.method) {
-        return Response.json({
-          contact: {
-            hasMobilePhone: false,
-            marketingOptIn: false,
-            mobilePhoneMasked: null,
-            mobilePhoneStatus: "missing",
-            updatedAt: null,
-          },
-          entry: null,
-          ok: true,
-        });
-      }
-      if (url.endsWith("/api/me/contact")) {
-        return Response.json({
-          contact: {
-            hasMobilePhone: true,
-            marketingOptIn: false,
-            mobilePhoneMasked: "010-****-5678",
-            mobilePhoneStatus: "unverified",
-            updatedAt: "2026-07-27T00:00:00.000Z",
-          },
-          ok: true,
-        });
-      }
-      if (url.endsWith("/reward-entries") && init?.method === "POST") {
-        return Response.json({
-          announcementLabel: "2026년 10월 1일",
-          contact: {
-            hasMobilePhone: true,
-            marketingOptIn: false,
-            mobilePhoneMasked: "010-****-5678",
-            mobilePhoneStatus: "unverified",
-            updatedAt: "2026-07-27T00:00:00.000Z",
-          },
-          entryId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
-          ok: true,
-        });
-      }
-      return Response.json({
-        assignmentProof: "test-assignment-proof",
-        formId: "FORM_A",
-        items: gateCParticipantDefinitions.FORM_A.items.map((item) => ({
-          ...item,
-          domainId: "SE",
-          facetId: "SE-RE",
-          sourceKind: "quick_current",
-        })),
-        ok: true,
-        participantCode: "GC-TEST0001",
-        poolVersion: "TEST-POOL",
-        sessionId: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-        sessionToken: "session-token",
-        withdrawalCode: "withdrawal-code",
-      });
-    },
+      },
     );
     vi.stubGlobal("fetch", fetchMock);
 
@@ -183,14 +216,21 @@ describe("GateCPublicStudy", () => {
     fireEvent.click(screen.getByRole("button", { name: "응답 제출하기" }));
 
     expect(await screen.findByText("리뷰 이벤트 응모")).toBeInTheDocument();
+    expect(screen.getByText("이벤트 결과 안내")).toBeInTheDocument();
+    expect(screen.getByText("당첨자에게만 개별 안내")).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "휴대전화" }));
+    expect(
+      screen.getByText(/베타에서는 입력한 번호를 그대로 사용/),
+    ).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "이메일" }));
     fireEvent.change(
       screen.getByRole("textbox", {
-        name: "당첨 안내를 받을 휴대전화번호",
+        name: "당첨 안내를 받을 이메일",
       }),
-      { target: { value: "01012345678" } },
+      { target: { value: "test@example.com" } },
     );
     fireEvent.click(
-      screen.getByRole("button", { name: "번호 저장하고 응모하기" }),
+      screen.getByRole("button", { name: "이메일 저장하고 응모하기" }),
     );
 
     expect(
@@ -198,7 +238,10 @@ describe("GateCPublicStudy", () => {
     ).toBeInTheDocument();
     expect(fetchMock).toHaveBeenCalledWith(
       "/api/research/gate-c/reward-entries",
-      expect.objectContaining({ method: "POST" }),
+      expect.objectContaining({
+        body: expect.stringContaining('"contactMethod":"email"'),
+        method: "POST",
+      }),
     );
   });
 });

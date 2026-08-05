@@ -32,6 +32,8 @@ import { optionalConsentVersions } from "@/features/consent/optional-consent-con
 import { buildTrustedOAuthIdentities } from "@/features/auth/oauth-identity-policy";
 import { getAppOrigin } from "@/lib/supabase/env";
 import { getSupabaseServiceEnv } from "@/lib/supabase/service";
+import { rebuildAccountTraitProfile } from "@/features/assessment/server-account-trait-profile";
+import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 
 type ServiceClient = SupabaseClient;
 type ClaimResultPayload = z.infer<typeof claimResultRequestSchema>;
@@ -125,6 +127,11 @@ export async function claimResultToAccount({
     return { code: "result_report_write_failed", ok: false };
   }
 
+  await rebuildAccountTraitProfile({
+    accountId: account.accountId,
+    client,
+  });
+
   return {
     data: {
       assessmentAttemptId: claimed.assessment_attempt_id,
@@ -154,6 +161,15 @@ export async function createShareLinkForResult({
 
   if (!account.ok) {
     return { code: "result_report_not_found", ok: false };
+  }
+
+  const publication = await readCoreResultPublicationDecision({
+    client,
+    ownerAccountId: account.accountId,
+    resultReportId: payload.resultReportId,
+  });
+  if (!publication.eligible) {
+    return { code: "result_release_not_publicable", ok: false };
   }
 
   const reportResponse = await client
@@ -334,6 +350,10 @@ export async function deleteResultForAccount({
         deleted_result_report_id: string | null;
       }
     | undefined;
+
+  if (row?.deleted) {
+    await rebuildAccountTraitProfile({ accountId, client });
+  }
 
   return {
     data: {

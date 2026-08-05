@@ -11,10 +11,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { AdminCommandMenu } from "./AdminCommandMenu";
-import {
-  adminNavigation,
-  resolveAdminNavigation,
-} from "./admin-navigation";
+import { adminNavigation, resolveAdminNavigation } from "./admin-navigation";
 import styles from "./AdminShell.module.css";
 
 export function AdminShell({
@@ -44,9 +41,7 @@ export function AdminShell({
 
       <aside className={styles.sidebar}>
         <div className={styles.brand}>
-          <span className={styles.brandMark}>
-            N
-          </span>
+          <span className={styles.brandMark}>N</span>
           <div>
             <strong>NUANG</strong>
             <span>OPERATIONS CONSOLE</span>
@@ -61,7 +56,9 @@ export function AdminShell({
             <small>{adminEmail}</small>
           </div>
         </div>
-        <AdminNavigation pathname={pathname} />
+        <div className={styles.sidebarNavigationScroll}>
+          <AdminNavigation pathname={pathname} />
+        </div>
         <footer className={styles.sidebarFooter}>
           <span>ADMIN PLATFORM V3</span>
           <Link className={styles.backToApp} href="/my">

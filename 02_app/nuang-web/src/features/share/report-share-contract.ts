@@ -23,6 +23,10 @@ export type ReportShareFeedAttachment = {
 
 export const reportShareActions = [
   {
+    id: "kakao_share",
+    label: "카카오톡으로 보내기",
+  },
+  {
     id: "copy_link",
     label: "링크 복사",
   },

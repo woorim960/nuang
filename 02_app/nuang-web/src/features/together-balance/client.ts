@@ -2,18 +2,20 @@
 
 import type {
   BalanceApiError,
-  BalanceRoomStateResponse,
   BalanceRoomPreviewResponse,
+  BalanceRoomStateResponse,
+  CompleteBalanceRoomResponse,
   CreateBalanceRoomRequest,
   CreateBalanceRoomResponse,
   JoinBalanceRoomRequest,
   JoinBalanceRoomResponse,
   SaveBalanceResponseRequest,
+  SaveBalanceResponseResponse,
 } from "@/features/together-balance/api-contract";
 import {
   BALANCE_PARTICIPANT_TOKEN_HEADER,
   balanceParticipantSessionStorageKey,
-} from "@/features/together-balance/api-contract";
+} from "@/features/together-balance/constants";
 
 type ParticipantSession = {
   lastClientSequence?: number;
@@ -33,6 +35,7 @@ const balanceExposureStorageKey = "nuang.together-balance.exposure.v1";
 const EXPOSURE_WINDOW_MS = 90 * 24 * 60 * 60 * 1_000;
 const MAX_CLIENT_SEQUENCE = 2_147_483_647;
 const inMemoryParticipantSessions: ParticipantSessions = {};
+const inMemoryRoomStates = new Map<string, BalanceRoomStateResponse["room"]>();
 
 export class BalanceApiClientError extends Error {
   code: BalanceApiError["code"];
@@ -65,6 +68,7 @@ export async function createBalanceRoom(payload: CreateBalanceRoomRequest) {
     participantToken: result.participantToken,
     savedAt: new Date().toISOString(),
   });
+  cacheBalanceRoom(result.room);
   saveBalanceExposureHistory(result.room);
   return result;
 }
@@ -86,6 +90,7 @@ export async function joinBalanceRoom(
     participantToken: result.participantToken,
     savedAt: new Date().toISOString(),
   });
+  cacheBalanceRoom(result.room);
   saveBalanceExposureHistory(result.room);
   return result;
 }
@@ -98,8 +103,12 @@ export async function readBalanceRoom(roomCode: string) {
       method: "GET",
     },
   );
-  saveBalanceExposureHistory(result.room);
+  cacheBalanceRoom(result.room);
   return result;
+}
+
+export function readCachedBalanceRoom(roomCode: string) {
+  return inMemoryRoomStates.get(normalizeRoomCode(roomCode)) ?? null;
 }
 
 export async function readBalanceRoomPreview(roomCode: string) {
@@ -116,7 +125,7 @@ export async function saveBalanceResponse(
   itemId: string,
   payload: Omit<SaveBalanceResponseRequest, "clientSequence">,
 ) {
-  return requestRoom<BalanceRoomStateResponse>(
+  return requestRoom<SaveBalanceResponseResponse>(
     roomCode,
     `responses/${encodeURIComponent(itemId)}`,
     {
@@ -133,10 +142,16 @@ export async function completeBalanceRoom(
   roomCode: string,
   clientRequestId: string,
 ) {
-  return requestRoom<BalanceRoomStateResponse>(roomCode, "complete", {
-    body: JSON.stringify({ clientRequestId }),
-    method: "POST",
-  });
+  const result = await requestRoom<CompleteBalanceRoomResponse>(
+    roomCode,
+    "complete",
+    {
+      body: JSON.stringify({ clientRequestId }),
+      method: "POST",
+    },
+  );
+  cacheBalanceRoom(result.room);
+  return result;
 }
 
 export async function finalizeBalanceRoom(
@@ -185,7 +200,12 @@ export function clearParticipantSession(roomCode: string) {
   const sessions = readParticipantSessions();
   delete sessions[normalizedCode];
   delete inMemoryParticipantSessions[normalizedCode];
+  inMemoryRoomStates.delete(normalizedCode);
   persistParticipantSessions(sessions);
+}
+
+function cacheBalanceRoom(room: BalanceRoomStateResponse["room"]) {
+  inMemoryRoomStates.set(normalizeRoomCode(room.roomCode), room);
 }
 
 function readRecentBalanceItemIds(packSlug: string) {

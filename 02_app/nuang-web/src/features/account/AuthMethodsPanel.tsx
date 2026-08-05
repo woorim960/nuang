@@ -133,7 +133,10 @@ export function AuthMethodsPanel() {
       linkNoticeTimer = window.setTimeout(
         () =>
           setNotice({
-            message: "연결을 마치지 못했어요. 기존 기록은 그대로예요.",
+            message:
+              status === "conflict"
+                ? "이 로그인 방법은 다른 뉴앙 계정에서 이미 사용 중이에요. 기존 계정으로 로그인하거나 고객 문의로 알려주세요. 현재 기록은 그대로예요."
+                : "연결을 마치지 못했어요. 다시 시도해도 같은 문제가 생기면 고객 문의로 알려주세요. 현재 기록은 그대로예요.",
             tone: "error",
           }),
         0,
@@ -195,7 +198,8 @@ export function AuthMethodsPanel() {
       });
       if (error) {
         setNotice({
-          message: "연결을 마치지 못했어요. 기존 기록은 그대로예요.",
+          message:
+            "이 로그인 방법이 다른 뉴앙 계정에서 이미 사용 중일 수 있어요. 기존 계정으로 로그인하거나 고객 문의로 알려주세요. 현재 기록은 그대로예요.",
           tone: "error",
         });
         setPending(null);

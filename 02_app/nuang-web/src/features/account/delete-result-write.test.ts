@@ -54,11 +54,28 @@ function createClient(rpc: ReturnType<typeof vi.fn>) {
     order: () => identityBuilder,
     select: () => identityBuilder,
   };
+  const emptyEvidenceBuilder = {
+    data: [],
+    error: null,
+    delete: () => emptyEvidenceBuilder,
+    eq: () => emptyEvidenceBuilder,
+    is: () => emptyEvidenceBuilder,
+    limit: () => emptyEvidenceBuilder,
+    order: () => emptyEvidenceBuilder,
+    select: () => emptyEvidenceBuilder,
+  };
 
   return {
     schema(schemaName: string) {
       if (schemaName === "report") {
-        return { rpc };
+        return {
+          from: () => emptyEvidenceBuilder,
+          rpc,
+        };
+      }
+
+      if (schemaName === "assessment" || schemaName === "scoring") {
+        return { from: () => emptyEvidenceBuilder };
       }
 
       return {

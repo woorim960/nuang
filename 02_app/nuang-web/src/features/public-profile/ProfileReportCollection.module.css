@@ -2,6 +2,38 @@
   background: var(--nu-color-surface);
 }
 
+.visibilityGuide {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: 0.6rem;
+  margin: 0.8rem 1rem 0;
+  padding: 0.85rem 0.9rem;
+  border: 1px solid var(--nu-color-brand-border);
+  border-radius: var(--nu-radius-lg);
+  color: var(--nu-color-text-muted);
+  background: var(--nu-color-brand-surface);
+}
+
+.visibilityGuide svg {
+  margin-top: 0.08rem;
+  color: var(--nu-color-brand-strong);
+}
+
+.visibilityGuide p {
+  margin: 0;
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
+  word-break: keep-all;
+}
+
+.visibilityGuide strong {
+  display: block;
+  margin-bottom: 0.15rem;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
+}
+
 .latestCoreLink {
   display: flex;
   align-items: center;
@@ -71,8 +103,7 @@
 .message {
   margin: 0.75rem 1rem 0;
   padding: 0.7rem 0.8rem;
-  border: 1px solid
-    color-mix(in srgb, var(--nu-color-danger) 16%, transparent);
+  border: 1px solid color-mix(in srgb, var(--nu-color-danger) 16%, transparent);
   border-radius: 12px;
   color: var(--nu-reaction-700);
   background: var(--nu-color-danger-soft);

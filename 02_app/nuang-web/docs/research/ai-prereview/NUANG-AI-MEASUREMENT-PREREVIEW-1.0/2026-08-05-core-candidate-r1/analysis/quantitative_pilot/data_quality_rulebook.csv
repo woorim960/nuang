@@ -1,0 +1,9 @@
+rule_id,signal,locked_action,status,human_decision_required
+DQ-01,missing_or_unsure,exclude item from score and apply facet minimum,implemented,yes_minimum_evidence
+DQ-02,all_unsure,no code,software_checked,no
+DQ-03,straightline_midpoint,flag boundary and adaptive path,software_checked,yes_exclusion_policy
+DQ-04,completion_speed,no preregistered threshold,missing,yes
+DQ-05,longstring_or_alternating,no preregistered rule,missing,yes
+DQ-06,duplicate_submission,account/local synchronization exists,partial,yes_analysis_dedup
+DQ-07,interruption_and_resume,persist local/account progress,implemented,yes_attrition_analysis
+DQ-08,subgroup_unsure_rate,no locked threshold,missing,yes

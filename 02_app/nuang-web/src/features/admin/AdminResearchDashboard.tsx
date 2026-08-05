@@ -1,9 +1,4 @@
-import {
-  ArrowUpRight,
-  BookOpenCheck,
-  ChevronDown,
-  Map,
-} from "lucide-react";
+import { ArrowUpRight, BookOpenCheck, ChevronDown, Map } from "lucide-react";
 import Link from "next/link";
 import type {
   GateCAnalysisDashboardData,
@@ -13,6 +8,7 @@ import {
   traitMapFeedbackAnalysisPolicy,
   type TraitMapSectionFeedbackMetric,
 } from "@/features/research/trait-map/trait-map-feedback-analysis";
+import { AdminMeasurementValidationGuide } from "./AdminMeasurementValidationGuide";
 import { AdminResearchDecisionActions } from "./AdminResearchDecisionActions";
 import { AdminResearchRefreshButton } from "./AdminResearchRefreshButton";
 import {
@@ -35,7 +31,7 @@ export function AdminResearchDashboard({
     traitMap: ResearchDecision[];
   };
   gateC: GateCAnalysisDashboardData | null;
-  section: "items" | "trait-map";
+  section: "items" | "trait-map" | "validation";
   traitMap: TraitMapSectionFeedbackMetric[] | null;
 }) {
   const gateCReviews = gateC?.queueCounts.reviewRequired ?? 0;
@@ -70,6 +66,13 @@ export function AdminResearchDashboard({
 
       <nav aria-label="연구 운영 구분" className={styles.tabs}>
         <Link
+          aria-current={section === "validation" ? "page" : undefined}
+          data-active={section === "validation"}
+          href="/admin/research?section=validation"
+        >
+          출시 검증
+        </Link>
+        <Link
           aria-current={section === "items" ? "page" : undefined}
           data-active={section === "items"}
           href="/admin/research?section=items"
@@ -85,9 +88,12 @@ export function AdminResearchDashboard({
           성향지도
           <span>{traitMapReviews}</span>
         </Link>
+        <Link href="/admin/research/cognitive-interview">인지 인터뷰</Link>
       </nav>
 
-      {section === "items" ? (
+      {section === "validation" ? (
+        <AdminMeasurementValidationGuide />
+      ) : section === "items" ? (
         <ItemResearch
           data={gateC}
           decisions={decisions.gateC}
@@ -126,7 +132,9 @@ function ItemResearch({
           </span>
           <div>
             <strong>문항 품질 검토 절차</strong>
-            <p>참여자가 어려움을 보인 문항을 찾아 검토 우선순위를 결정합니다.</p>
+            <p>
+              참여자가 어려움을 보인 문항을 찾아 검토 우선순위를 결정합니다.
+            </p>
           </div>
           <Link href="/research/gate-c" target="_blank">
             참여 화면
@@ -370,13 +378,14 @@ function TraitMapResearch({
                 </div>
                 <div className={styles.fitValues}>
                   <span>일치 응답 {Math.round(metric.closeRate * 100)}%</span>
-                  <span>차이 응답 {Math.round(metric.differenceRate * 100)}%</span>
+                  <span>
+                    차이 응답 {Math.round(metric.differenceRate * 100)}%
+                  </span>
                 </div>
                 <AdminResearchDecisionActions
                   available={decisionStoreAvailable}
                   current={decisions.find(
-                    (decision) =>
-                      decision.key === traitMapDecisionKey(metric),
+                    (decision) => decision.key === traitMapDecisionKey(metric),
                   )}
                   identity={{
                     chapterId: metric.chapterId,

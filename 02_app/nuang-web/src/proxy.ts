@@ -1,7 +1,13 @@
-import type { NextRequest } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { refreshSupabaseAuthSession } from "@/lib/supabase/proxy";
 
 export async function proxy(request: NextRequest) {
+  const crossOriginApiResponse = rejectCrossOriginApiMutation(request);
+  if (crossOriginApiResponse) return crossOriginApiResponse;
+
+  const oversizedApiResponse = rejectDeclaredOversizedApiRequest(request);
+  if (oversizedApiResponse) return oversizedApiResponse;
+
   if (!isAdvertisingCspRoute(request.nextUrl.pathname)) {
     return refreshSupabaseAuthSession(request);
   }
@@ -22,6 +28,67 @@ export async function proxy(request: NextRequest) {
     'nuang-csp="/api/security/csp-report"',
   );
   return response;
+}
+
+function rejectCrossOriginApiMutation(request: NextRequest) {
+  if (
+    !request.nextUrl.pathname.startsWith("/api/") ||
+    !["POST", "PUT", "PATCH", "DELETE"].includes(request.method)
+  ) {
+    return null;
+  }
+
+  const fetchSite = request.headers.get("sec-fetch-site");
+  const origin = request.headers.get("origin");
+  const originMatches = origin
+    ? safeOrigin(origin) === request.nextUrl.origin
+    : true;
+  if (fetchSite !== "cross-site" && originMatches) return null;
+
+  return NextResponse.json(
+    {
+      error: "invalid_request_origin",
+      message: "요청 출처를 확인하지 못했어요.",
+    },
+    {
+      headers: { "cache-control": "no-store" },
+      status: 403,
+    },
+  );
+}
+
+function safeOrigin(value: string) {
+  try {
+    return new URL(value).origin;
+  } catch {
+    return null;
+  }
+}
+
+function rejectDeclaredOversizedApiRequest(request: NextRequest) {
+  if (
+    !request.nextUrl.pathname.startsWith("/api/") ||
+    !["POST", "PUT", "PATCH", "DELETE"].includes(request.method) ||
+    !request.headers.get("content-type")?.includes("application/json")
+  ) {
+    return null;
+  }
+
+  const contentLength = Number(request.headers.get("content-length"));
+  if (!Number.isFinite(contentLength) || contentLength <= 1024 * 1024) {
+    return null;
+  }
+
+  return NextResponse.json(
+    {
+      error: "request_body_too_large",
+      message: "Request body must be 1 MB or smaller.",
+    },
+    {
+      headers: { "cache-control": "no-store" },
+      status: 413,
+    },
+  );
 }
 
 function isAdvertisingCspRoute(pathname: string) {

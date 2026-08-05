@@ -16,8 +16,11 @@ import {
 import {
   listFreeTopicResultsLocalFirst,
   loadFreeTopicResult,
+  loadFreeTopicResultLocalFirst,
+  syncFreeTopicResult,
   type StoredFreeTopicResult,
 } from "@/features/assessment/free-topic-storage";
+import type { TopicTraitImpactSnapshot } from "@/features/assessment/topic-trait-impact";
 
 const resultPrefix = "nuang-free-topic-result:";
 const resultIndexKey = "nuang-free-topic-result:index";
@@ -117,6 +120,70 @@ describe("free topic result storage", () => {
     expect(results[0].reportSnapshot.headline).toBe("완료 직후 확인한 결과");
   });
 
+  it("uses the canonical server snapshot for a synced local result while keeping local answers", async () => {
+    const local = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_same",
+    });
+    const server = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_same",
+      }),
+      traitImpactSnapshot: noBaselineImpactSnapshot(),
+    } satisfies StoredFreeTopicResult;
+    storeLocalResults([local]);
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          ok: true,
+          results: [{ ...server, answers: undefined, expiresAt: undefined }],
+        }),
+        { headers: { "content-type": "application/json" }, status: 200 },
+      ),
+    );
+
+    const result = await loadFreeTopicResultLocalFirst("topic_same");
+
+    expect(result?.traitImpactSnapshot).toEqual(server.traitImpactSnapshot);
+    expect(result?.answers).toEqual(local.answers);
+    expect(result?.expiresAt).toBe(local.expiresAt);
+  });
+
+  it("keeps a synced local result when the canonical server read fails", async () => {
+    const local = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_offline",
+    });
+    storeLocalResults([local]);
+    vi.mocked(fetch).mockRejectedValue(new Error("offline"));
+
+    await expect(
+      loadFreeTopicResultLocalFirst("topic_offline"),
+    ).resolves.toEqual(local);
+  });
+
+  it("does not mark a malformed success response as synced", async () => {
+    const local = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_invalid_success",
+      syncStatus: "queued",
+    });
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ ok: true }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      }),
+    );
+
+    const result = await syncFreeTopicResult(local);
+
+    expect(result.sync).toMatchObject({
+      lastError: "invalid_success_response",
+      status: "failed",
+    });
+  });
+
   it("does not reopen a legacy result built from a different question set", () => {
     storage.set(
       `${resultPrefix}topic_legacy`,
@@ -192,6 +259,66 @@ describe("free topic result storage", () => {
     );
     expect(localStorageMock.setItem).toHaveBeenCalled();
   });
+
+  it("reopens an operator-created topic from its frozen local definition", () => {
+    const base = getFreeTopicAssessment("comfort-style")!;
+    const assessment = {
+      ...structuredClone(base),
+      slug: "operator-comfort-style",
+      title: "운영자 생성 위로 검사",
+    };
+    const questions = getFreeTopicQuestions(base.slug).map((question) => ({
+      ...structuredClone(question),
+      id: `operator-${question.id}`,
+    }));
+    const completedAt = "2026-08-03T10:00:00.000Z";
+    const answers = Object.fromEntries(
+      questions.map((question) => [
+        question.id,
+        { answeredAt: completedAt, questionId: question.id, value: 4 },
+      ]),
+    ) as Record<string, FreeTopicAnswer>;
+    const result = calculateFreeTopicResult({
+      answers,
+      assessment,
+      observedAt: completedAt,
+      questions,
+    });
+    const stored = {
+      answers,
+      assessment: {
+        categoryId: assessment.categoryId,
+        categoryLabel: assessment.categoryLabel,
+        slug: assessment.slug,
+        title: assessment.title,
+      },
+      assessmentSnapshot: assessment,
+      completedAt,
+      expiresAt: "2027-08-03T10:00:00.000Z",
+      formatVersion: freeTopicResultFormatVersion,
+      instrumentVersion: "operator-release-1",
+      localResultId: "topic_operator_local",
+      questionsSnapshot: questions,
+      reportContentVersion: "operator-report-1",
+      reportSnapshot: buildFreeTopicResultReport({
+        assessment,
+        questions,
+        result,
+      }),
+      result,
+      scoringVersion: "operator-score-1",
+      sync: { status: "queued" },
+    } satisfies StoredFreeTopicResult;
+    storage.set(
+      `${resultPrefix}${stored.localResultId}`,
+      JSON.stringify(stored),
+    );
+
+    const restored = loadFreeTopicResult(stored.localResultId);
+
+    expect(restored?.assessmentSnapshot?.title).toBe("운영자 생성 위로 검사");
+    expect(restored?.questionsSnapshot).toHaveLength(questions.length);
+  });
 });
 
 function createStoredResult({
@@ -258,4 +385,18 @@ function storeLocalResults(results: StoredFreeTopicResult[]) {
     resultIndexKey,
     JSON.stringify(results.map((result) => result.localResultId)),
   );
+}
+
+function noBaselineImpactSnapshot(): TopicTraitImpactSnapshot {
+  return {
+    affectedDomains: [],
+    after: null,
+    before: null,
+    calculatedAt: "2026-07-28T09:00:00.000Z",
+    codeChanged: false,
+    degree: "none",
+    isRetest: false,
+    state: "no_baseline",
+    version: "topic-trait-impact.v1",
+  };
 }

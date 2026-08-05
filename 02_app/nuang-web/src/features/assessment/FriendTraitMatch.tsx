@@ -13,37 +13,59 @@ import {
   type FriendTraitMatchInviteState,
 } from "@/features/assessment/friend-trait-match-invite";
 import styles from "@/features/assessment/FriendTraitMatch.module.css";
-
-const choices = [
-  {
-    id: "plan",
-    label: "바뀐 일정에 맞춰 새 계획부터 정하고 싶어요",
-  },
-  {
-    id: "listen",
-    label: "왜 바뀌었는지 친구의 상황부터 충분히 듣고 싶어요",
-  },
-] as const;
+import {
+  defaultFriendTraitMatchContent,
+  type FriendTraitMatchContent,
+} from "@/features/assessment/friend-trait-match-content";
 
 type ChoiceId = FriendTraitMatchChoiceId;
 
 export function FriendTraitMatch({
+  content = defaultFriendTraitMatchContent,
   inviteState = { status: "sender" },
+  previewMode = false,
+  releaseId,
+  slug = "friend-match",
 }: {
+  content?: FriendTraitMatchContent;
   inviteState?: FriendTraitMatchInviteState;
+  previewMode?: boolean;
+  releaseId?: string | null;
+  slug?: string;
 }) {
   if (inviteState.status === "invalid" || inviteState.status === "expired") {
-    return <InviteError state={inviteState.status} />;
+    return (
+      <InviteError content={content} slug={slug} state={inviteState.status} />
+    );
   }
 
   if (inviteState.status === "ready") {
-    return <InviteReceiver invite={inviteState} />;
+    return (
+      <InviteReceiver content={content} invite={inviteState} slug={slug} />
+    );
   }
 
-  return <InviteSender />;
+  return (
+    <InviteSender
+      content={content}
+      previewMode={previewMode}
+      releaseId={releaseId}
+      slug={slug}
+    />
+  );
 }
 
-function InviteSender() {
+function InviteSender({
+  content,
+  previewMode,
+  releaseId,
+  slug,
+}: {
+  content: FriendTraitMatchContent;
+  previewMode: boolean;
+  releaseId?: string | null;
+  slug: string;
+}) {
   const [step, setStep] = useState(0);
   const [myChoice, setMyChoice] = useState<ChoiceId | null>(null);
   const [predictedChoice, setPredictedChoice] = useState<ChoiceId | null>(null);
@@ -54,7 +76,7 @@ function InviteSender() {
     <CommunityScreenShell
       backHref="/home?view=together"
       backLabel="검사로 돌아가기"
-      title="친구 성향 맞히기"
+      title={content.title}
     >
       <main className={styles.body}>
         <div aria-label={`${step + 1}/3 단계`} className={styles.progress}>
@@ -70,20 +92,18 @@ function InviteSender() {
                 {step === 0 ? "먼저 내 선택" : "이제 친구의 선택 예상"}
               </small>
               <h2>
-                {step === 0
-                  ? "같은 상황에서 나는 어떻게 반응할까요?"
-                  : "친구라면 어떤 답을 고를까요?"}
+                {step === 0 ? content.senderHeading : content.predictionHeading}
               </h2>
             </section>
 
             <AssessmentQuestionPrompt
-              contextLabel="친구와 약속한 날"
+              contextLabel={content.contextLabel}
               headingLevel={2}
               key={`friend-match-${step}`}
-              text="친구가 갑자기 일정을 바꾸자고 해요. 이때 나는?"
+              text={content.question}
             />
             <AssessmentChoiceResponseOptions
-              choices={choices}
+              choices={content.choices}
               legend={step === 0 ? "내 선택은?" : "친구라면?"}
               name={`friend-match-${step}`}
               onChange={(choiceId) => {
@@ -103,11 +123,11 @@ function InviteSender() {
             <div className={styles.summary}>
               <article>
                 <small>나의 선택</small>
-                <strong>{getChoiceLabel(myChoice)}</strong>
+                <strong>{getChoiceLabel(myChoice, content)}</strong>
               </article>
               <article>
                 <small>내가 예상한 친구의 선택</small>
-                <strong>{getChoiceLabel(predictedChoice)}</strong>
+                <strong>{getChoiceLabel(predictedChoice, content)}</strong>
               </article>
             </div>
             <p className={styles.inviteNote}>
@@ -150,18 +170,24 @@ function InviteSender() {
 
   async function createInviteLink() {
     if (!myChoice || !predictedChoice) return;
+    if (previewMode) {
+      setShareStatus("미리보기에서는 초대 링크를 만들지 않아요.");
+      return;
+    }
 
     const inviteUrl = createFriendTraitMatchInviteUrl({
       guess: predictedChoice,
       mine: myChoice,
       origin: window.location.origin,
+      releaseId,
+      slug,
     });
 
     if (window.navigator.share) {
       try {
         await window.navigator.share({
-          text: "내가 예상한 너의 선택이 맞는지 확인해 줘!",
-          title: "뉴앙 친구 성향 맞히기",
+          text: content.invitationText,
+          title: content.invitationTitle,
           url: inviteUrl,
         });
         setShareStatus("초대 화면을 열었어요.");
@@ -183,9 +209,13 @@ function InviteSender() {
 }
 
 function InviteReceiver({
+  content,
   invite,
+  slug,
 }: {
+  content: FriendTraitMatchContent;
   invite: Extract<FriendTraitMatchInviteState, { status: "ready" }>;
+  slug: string;
 }) {
   const [actualChoice, setActualChoice] = useState<ChoiceId | null>(null);
   const [showResult, setShowResult] = useState(false);
@@ -193,13 +223,17 @@ function InviteReceiver({
   if (showResult && actualChoice) {
     const predictionMatched = invite.guess === actualChoice;
     const choicesMatched = invite.mine === actualChoice;
-    const resultCopy = getResultCopy({ choicesMatched, predictionMatched });
+    const resultCopy = getResultCopy({
+      choicesMatched,
+      content,
+      predictionMatched,
+    });
 
     return (
       <CommunityScreenShell
         backHref="/home?view=together"
         backLabel="검사로 돌아가기"
-        title="친구 성향 맞히기"
+        title={content.title}
       >
         <main className={styles.body}>
           <div aria-label="결과 확인 완료" className={styles.progress}>
@@ -215,26 +249,33 @@ function InviteReceiver({
           </section>
 
           <div className={styles.resultSummary}>
-            <ResultRow label="친구의 선택" value={invite.mine} />
-            <ResultRow label="친구가 예상한 내 선택" value={invite.guess} />
-            <ResultRow emphasis label="내 실제 선택" value={actualChoice} />
+            <ResultRow
+              content={content}
+              label="친구의 선택"
+              value={invite.mine}
+            />
+            <ResultRow
+              content={content}
+              label="친구가 예상한 내 선택"
+              value={invite.guess}
+            />
+            <ResultRow
+              content={content}
+              emphasis
+              label="내 실제 선택"
+              value={actualChoice}
+            />
           </div>
 
           <section className={styles.resultInsight}>
             <strong>
               {predictionMatched ? "친구의 예상이 맞았어요" : "예상과 달랐어요"}
             </strong>
-            <p>
-              이 한 장면의 선택만으로 성향을 정하지는 않아요. 서로 왜 그렇게
-              골랐는지 이야기하면 차이를 더 재미있게 이해할 수 있어요.
-            </p>
+            <p>{content.resultInsight}</p>
           </section>
 
           <footer className={styles.footer}>
-            <Link
-              className={styles.footerAction}
-              href="/assessments/friend-match"
-            >
+            <Link className={styles.footerAction} href={`/assessments/${slug}`}>
               나도 친구 성향 맞히기
             </Link>
           </footer>
@@ -247,7 +288,7 @@ function InviteReceiver({
     <CommunityScreenShell
       backHref="/home?view=together"
       backLabel="검사로 돌아가기"
-      title="친구 성향 맞히기"
+      title={content.title}
     >
       <main className={styles.body}>
         <div aria-label="친구 답변 1/1 단계" className={styles.progress}>
@@ -256,16 +297,16 @@ function InviteReceiver({
 
         <section className={styles.stepCopy}>
           <small>친구가 내 선택을 예상했어요</small>
-          <h2>나는 실제로 어떤 답을 고를까요?</h2>
+          <h2>{content.receiverHeading}</h2>
         </section>
 
         <AssessmentQuestionPrompt
-          contextLabel="친구와 약속한 날"
+          contextLabel={content.contextLabel}
           headingLevel={2}
-          text="친구가 갑자기 일정을 바꾸자고 해요. 이때 나는?"
+          text={content.question}
         />
         <AssessmentChoiceResponseOptions
-          choices={choices}
+          choices={content.choices}
           legend="내 선택은?"
           name="friend-match-receiver"
           onChange={(choiceId) => setActualChoice(choiceId as ChoiceId)}
@@ -287,8 +328,12 @@ function InviteReceiver({
 }
 
 function InviteError({
+  content,
+  slug,
   state,
 }: {
+  content: FriendTraitMatchContent;
+  slug: string;
   state: Extract<
     FriendTraitMatchInviteState,
     { status: "expired" | "invalid" }
@@ -300,7 +345,7 @@ function InviteError({
     <CommunityScreenShell
       backHref="/home?view=together"
       backLabel="검사로 돌아가기"
-      title="친구 성향 맞히기"
+      title={content.title}
     >
       <main className={`${styles.body} ${styles.errorBody}`}>
         <section className={styles.errorState} role="alert">
@@ -309,22 +354,17 @@ function InviteError({
             {expired ? "사용 기간이 지난 초대" : "확인할 수 없는 초대"}
           </small>
           <h2>
-            {expired
-              ? "초대 링크의 사용 기간이 지났어요"
-              : "초대 링크를 확인할 수 없어요"}
+            {expired ? content.expiredInviteTitle : content.invalidInviteTitle}
           </h2>
           <p>
             {expired
-              ? "친구에게 새 링크를 보내 달라고 부탁하거나, 내가 새 게임을 시작해 보세요."
-              : "링크가 잘못되었거나 필요한 정보가 빠졌어요. 새 게임은 바로 시작할 수 있어요."}
+              ? content.expiredInviteDescription
+              : content.invalidInviteDescription}
           </p>
         </section>
 
         <footer className={styles.footer}>
-          <Link
-            className={styles.footerAction}
-            href="/assessments/friend-match"
-          >
+          <Link className={styles.footerAction} href={`/assessments/${slug}`}>
             새 게임 시작하기
           </Link>
         </footer>
@@ -334,10 +374,12 @@ function InviteError({
 }
 
 function ResultRow({
+  content,
   emphasis = false,
   label,
   value,
 }: {
+  content: FriendTraitMatchContent;
   emphasis?: boolean;
   label: string;
   value: ChoiceId;
@@ -345,45 +387,40 @@ function ResultRow({
   return (
     <article data-emphasis={emphasis ? "true" : "false"}>
       <small>{label}</small>
-      <strong>{getChoiceLabel(value)}</strong>
+      <strong>{getChoiceLabel(value, content)}</strong>
     </article>
   );
 }
 
 function getResultCopy({
   choicesMatched,
+  content,
   predictionMatched,
 }: {
   choicesMatched: boolean;
+  content: FriendTraitMatchContent;
   predictionMatched: boolean;
 }) {
   if (predictionMatched && choicesMatched) {
-    return {
-      description: "친구의 예상도 맞았고, 이번 상황에서 고른 답도 같아요.",
-      title: "서로의 선택을 정확히 알았어요",
-    };
+    return content.resultCopies.bothMatched;
   }
 
   if (predictionMatched) {
-    return {
-      description: "고른 답은 달랐지만, 친구는 내 선택을 정확히 예상했어요.",
-      title: "다른 선택까지 잘 알고 있었어요",
-    };
+    return content.resultCopies.predictionOnlyMatched;
   }
 
   if (choicesMatched) {
-    return {
-      description: "친구의 예상과는 달랐지만, 실제로 고른 답은 서로 같아요.",
-      title: "예상 밖의 공통점을 찾았어요",
-    };
+    return content.resultCopies.choiceOnlyMatched;
   }
 
-  return {
-    description: "친구의 예상과 내 실제 선택이 달랐고, 서로 고른 답도 달라요.",
-    title: "서로 다른 생각을 발견했어요",
-  };
+  return content.resultCopies.bothDifferent;
 }
 
-function getChoiceLabel(choiceId: ChoiceId | null) {
-  return choices.find((choice) => choice.id === choiceId)?.label ?? "선택 전";
+function getChoiceLabel(
+  choiceId: ChoiceId | null,
+  content: FriendTraitMatchContent,
+) {
+  return (
+    content.choices.find((choice) => choice.id === choiceId)?.label ?? "선택 전"
+  );
 }

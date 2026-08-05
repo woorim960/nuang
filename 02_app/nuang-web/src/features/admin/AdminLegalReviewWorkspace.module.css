@@ -1,0 +1,770 @@
+.releasePanel {
+  display: grid;
+}
+
+.releaseHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.releaseIcon {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+}
+
+.releaseHeader p,
+.releaseHeader h2 {
+  margin: 0;
+}
+
+.releaseHeader p {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.releaseHeader h2 {
+  margin-top: 0.15rem;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-label);
+}
+
+.releaseHeader div > span {
+  display: block;
+  margin-top: 0.25rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+}
+
+.releaseMetrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.releaseMetrics > div {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  align-items: baseline;
+  gap: 0.2rem;
+  padding: 0.75rem 1rem;
+}
+
+.releaseMetrics > div + div {
+  border-left: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.releaseMetrics span {
+  grid-column: 1 / -1;
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.releaseMetrics strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-title-sm);
+}
+
+.releaseMetrics small {
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+}
+
+.boundary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+  border-left: 3px solid var(--nu-color-warning);
+  background: var(--nu-color-warning-soft);
+}
+
+.unavailable {
+  min-width: 0;
+}
+
+.unavailable > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.unavailable code {
+  padding: 0.35rem 0.5rem;
+  border-radius: 4px;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font-size: var(--nu-text-admin-micro);
+  overflow-wrap: anywhere;
+}
+
+.setupGuide {
+  display: grid;
+  width: min(100%, 36rem);
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+  padding: 0.8rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+  text-align: left;
+  background: var(--admin-surface, var(--nu-color-surface));
+}
+
+.setupGuide strong {
+  font-size: var(--nu-text-admin-label);
+}
+
+.setupGuide ol {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.5;
+}
+
+.setupGuide a {
+  display: inline-flex;
+  align-items: center;
+  justify-self: start;
+  gap: 0.3rem;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.boundary svg {
+  color: var(--nu-reaction-700);
+}
+
+.boundary strong,
+.boundary p {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+}
+
+.boundary p {
+  margin: 0.25rem 0 0;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.workflowPanel {
+  overflow: hidden;
+}
+
+.workflow {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.8rem;
+}
+
+.workflowHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.workflowHeader span {
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.workflowHeader h2,
+.workflowHeader p {
+  margin: 0;
+}
+
+.workflowHeader h2 {
+  margin-top: 0.2rem;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-title-sm);
+}
+
+.workflowHeader p {
+  margin-top: 0.3rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.workflowHeader em {
+  display: inline-flex;
+  min-height: 26px;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 0 0.5rem;
+  border-radius: 4px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+  font-size: var(--nu-text-admin-micro);
+  font-style: normal;
+  font-weight: var(--nu-weight-bold);
+}
+
+.workflow article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 7px;
+  background: var(--admin-surface, var(--nu-color-surface));
+}
+
+.workflow article > span {
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-heavy);
+}
+
+.workflow strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+}
+
+.workflow p,
+.workflow small {
+  margin: 0.2rem 0 0;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.5;
+}
+
+.workflow small {
+  display: block;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-micro);
+}
+
+.workflowFootnote {
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-top: 1px solid var(--admin-border, var(--nu-color-border));
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.55;
+}
+
+.downloadButton,
+.formActions button,
+.itemCard button,
+.approvalActions button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 6px;
+  color: var(--nu-color-surface);
+  background: var(--nu-color-brand-action);
+  font: inherit;
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
+}
+
+.documentGrid {
+  display: grid;
+}
+
+.documentGrid article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.9rem 1rem;
+}
+
+.documentGrid article + article {
+  border-top: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.documentGrid svg {
+  color: var(--nu-color-brand-strong);
+}
+
+.documentGrid article > div {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.documentGrid strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+}
+
+.documentGrid span {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.documentGrid a,
+.references a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.packageGuide,
+.environmentNote,
+.references > p {
+  margin: 0;
+  padding: 0.8rem 1rem;
+  border-top: 1px solid var(--admin-border, var(--nu-color-border));
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.environmentGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.environmentGrid article {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.environmentGrid article:nth-child(even) {
+  border-left: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.environmentGrid article > span {
+  align-self: start;
+  padding: 0.22rem 0.4rem;
+  border-radius: 4px;
+  color: var(--nu-reaction-700);
+  background: var(--nu-reaction-100);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.environmentGrid article[data-ready="true"] > span {
+  color: var(--nu-color-success);
+  background: var(--nu-color-success-soft);
+}
+
+.environmentGrid strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-label);
+}
+
+.environmentGrid p {
+  margin: 0.2rem 0 0;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.5;
+}
+
+.releaseFormGrid,
+.itemForm {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.releaseFormGrid label,
+.itemForm label,
+.approvalInput label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.releaseFormGrid label > span,
+.itemForm label > span,
+.approvalInput label > span {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.releaseFormGrid input,
+.releaseFormGrid textarea,
+.itemForm input,
+.itemForm select,
+.itemForm textarea,
+.approvalInput input {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+  outline: none;
+  color: var(--admin-text, var(--nu-color-text));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font: inherit;
+  font-size: var(--nu-text-admin-label);
+}
+
+.releaseFormGrid textarea,
+.itemForm textarea {
+  resize: vertical;
+  line-height: 1.5;
+}
+
+.releaseFormGrid input:focus,
+.releaseFormGrid textarea:focus,
+.itemForm input:focus,
+.itemForm select:focus,
+.itemForm textarea:focus,
+.approvalInput input:focus {
+  border-color: var(--nu-color-brand-action);
+  box-shadow: 0 0 0 2px var(--nu-color-brand-surface);
+}
+
+.formActions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0 1rem 1rem;
+}
+
+.formActions p {
+  margin: 0;
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.45;
+}
+
+.downloadButton:disabled,
+.formActions button:disabled,
+.itemCard button:disabled,
+.approvalActions button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.itemSectionHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.itemSectionHeader h2,
+.itemSectionHeader p {
+  margin: 0;
+}
+
+.itemSectionHeader h2 {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-label);
+}
+
+.itemSectionHeader p {
+  margin-top: 0.25rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.5;
+}
+
+.itemSectionHeader > span {
+  flex: 0 0 auto;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.itemList {
+  display: grid;
+}
+
+.itemCard {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.itemCard + .itemCard {
+  border-top: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+.itemCard header {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.itemCard header > span {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 4px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.itemCard header div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.itemCard header strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+}
+
+.itemCard header small {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.itemCard > p {
+  margin: 0;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.itemCard dl {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.75rem;
+  border-radius: 6px;
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+}
+
+.itemCard dl div {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0.6rem;
+}
+
+.itemCard dt,
+.itemCard dd {
+  margin: 0;
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.5;
+}
+
+.itemCard dt {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-weight: var(--nu-weight-bold);
+}
+
+.itemCard dd {
+  color: var(--admin-muted, var(--nu-color-text-muted));
+}
+
+.itemForm {
+  padding: 0;
+}
+
+.itemCard footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.itemCard footer span {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.approvalPanel {
+  display: grid;
+  gap: 0.9rem;
+  padding: 1rem;
+  border-top: 3px solid var(--nu-color-brand-action);
+}
+
+.approvalPanel > div:first-child p,
+.approvalPanel h2 {
+  margin: 0;
+}
+
+.approvalPanel > div:first-child p {
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.approvalPanel h2 {
+  margin-top: 0.2rem;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-title-sm);
+}
+
+.approvalPanel > div:first-child span,
+.approvalPanel > small {
+  display: block;
+  margin-top: 0.3rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.approvalInput {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.8rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+}
+
+.approvalInput > label:last-child {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.5;
+}
+
+.approvalInput input[type="checkbox"] {
+  width: 17px;
+  min-height: 17px;
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  accent-color: var(--nu-color-brand-action);
+}
+
+.approvalActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.approvalActions .secondaryButton {
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface, var(--nu-color-surface));
+}
+
+.message {
+  margin: 0;
+  padding: 0.7rem;
+  border-left: 3px solid var(--nu-color-danger);
+  color: var(--nu-color-danger);
+  background: var(--nu-color-danger-soft);
+  font-size: var(--nu-text-admin-label);
+}
+
+.references > div:nth-child(2) {
+  display: grid;
+}
+
+.references a {
+  justify-content: space-between;
+  min-height: 46px;
+  padding: 0 1rem;
+}
+
+.references a + a {
+  border-top: 1px solid var(--admin-border, var(--nu-color-border));
+}
+
+@media (min-width: 760px) {
+  .workflow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .documentGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .documentGrid article + article {
+    border-top: 0;
+    border-left: 1px solid var(--admin-border, var(--nu-color-border));
+  }
+
+  .releaseFormGrid,
+  .itemForm {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wideField {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 620px) {
+  .releaseHeader {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .releaseHeader > em {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .releaseMetrics {
+    grid-template-columns: 1fr;
+  }
+
+  .releaseMetrics > div + div {
+    border-top: 1px solid var(--admin-border, var(--nu-color-border));
+    border-left: 0;
+  }
+
+  .documentGrid article {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .documentGrid article > a {
+    grid-column: 2;
+    justify-self: start;
+  }
+
+  .environmentGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .environmentGrid article:nth-child(even) {
+    border-left: 0;
+  }
+
+  .formActions,
+  .itemCard footer,
+  .itemSectionHeader {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .formActions button,
+  .itemCard footer button {
+    width: 100%;
+  }
+
+  .itemCard header {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .itemCard header > em {
+    grid-column: 2;
+    justify-self: start;
+  }
+}

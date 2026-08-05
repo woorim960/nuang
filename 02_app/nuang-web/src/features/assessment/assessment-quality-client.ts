@@ -18,11 +18,13 @@ export function enqueueAssessmentQualityObservations({
   instrumentVersion,
   localResultId,
   observations,
+  productReleaseId,
 }: {
   assessmentSlug: string;
   instrumentVersion: string;
   localResultId?: string;
   observations: AssessmentQualityObservation[];
+  productReleaseId?: string;
 }) {
   if (typeof window === "undefined" || observations.length === 0) return;
   const localStorage = getUsableStorage("localStorage");
@@ -34,6 +36,7 @@ export function enqueueAssessmentQualityObservations({
     clientSessionId: readOrCreateSessionId(sessionStorage),
     instrumentVersion,
     ...(localResultId ? { localResultId } : {}),
+    ...(productReleaseId ? { productReleaseId } : {}),
     observations,
     queuedAt: new Date().toISOString(),
     submissionId: crypto.randomUUID(),
@@ -89,6 +92,7 @@ function toObservationInput({
   instrumentVersion,
   localResultId,
   observations,
+  productReleaseId,
   submissionId,
 }: QueuedAssessmentQualitySubmission): AssessmentQualityObservationInput {
   return {
@@ -96,6 +100,7 @@ function toObservationInput({
     clientSessionId,
     instrumentVersion,
     ...(localResultId ? { localResultId } : {}),
+    ...(productReleaseId ? { productReleaseId } : {}),
     observations,
     submissionId,
   };

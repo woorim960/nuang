@@ -172,6 +172,18 @@ describe("feed server read model", () => {
     expect(itemIds).not.toContain("daily_mood_001");
   });
 
+  it("fails closed when the viewer's block relationships cannot be read", async () => {
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      blockReadFailure: true,
+    });
+
+    const payload = await createServerFeedReadPayload();
+
+    expect(payload.items).toEqual([]);
+    expect(payload.stories).toEqual([]);
+  });
+
   it("builds the home preview from the same filtered feed read model", async () => {
     supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient({
@@ -328,12 +340,14 @@ type MockFeedReadOperation = {
 };
 
 function createMockFeedReadClient({
+  blockReadFailure = false,
   hiddenPostIds = [],
   hiddenSeedKeys = [],
   includeOriginalReportShare = false,
   originalReportPrivate = false,
   privateReportShare = false,
 }: {
+  blockReadFailure?: boolean;
   hiddenPostIds?: string[];
   hiddenSeedKeys?: string[];
   includeOriginalReportShare?: boolean;
@@ -341,6 +355,7 @@ function createMockFeedReadClient({
   privateReportShare?: boolean;
 } = {}) {
   const options = {
+    blockReadFailure,
     hiddenPostIds,
     hiddenSeedKeys,
     includeOriginalReportShare,
@@ -406,6 +421,7 @@ function createMockFeedReadClient({
 function resolveFeedReadOperation(
   operation: MockFeedReadOperation,
   options: {
+    blockReadFailure: boolean;
     hiddenPostIds: string[];
     hiddenSeedKeys: string[];
     includeOriginalReportShare: boolean;
@@ -420,6 +436,15 @@ function resolveFeedReadOperation(
       },
       error: null,
     };
+  }
+
+  if (operation.schema === "feed" && operation.table === "profile_block") {
+    return options.blockReadFailure
+      ? {
+          data: null,
+          error: { code: "BLOCK_READ_FAILED", message: "read failed" },
+        }
+      : { data: [], error: null };
   }
 
   if (operation.schema === "feed" && operation.table === "feed_post") {

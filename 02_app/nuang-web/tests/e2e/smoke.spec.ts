@@ -12,19 +12,22 @@ test("a first visit completes onboarding before home becomes available", async (
   ).toBeVisible();
 
   await page
-    .getByRole("button", { name: "4번째 빠른 코어 검사 안내 보기" })
+    .getByRole("button", { name: "4번째 첫 검사 시작 안내 보기" })
     .click();
-  await page
-    .getByRole("button", { name: "빠른 코어 검사 시작하기" })
-    .click();
+  await page.getByRole("button", { name: "내 뉴앙코드 알아보기" }).click();
   await expect(page).toHaveURL(/\/assessments\/nu-core-quick/);
+  await expect(page.getByRole("radiogroup", { name: "응답 선택" })).toBeVisible(
+    { timeout: 15_000 },
+  );
 
   await page.goto("/home");
   await expect(
-    page.getByRole("heading", { name: "홈", exact: true }),
+    page.getByRole("heading", {
+      name: "나를 이해하고, 서로를 이해하는 성향 놀이터",
+    }),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "첫 성향 검사 시작하기" }),
+    page.getByRole("link", { name: "1번부터 이어하기" }),
   ).toBeVisible();
   await expect(
     page.getByRole("navigation", { name: "하단 주요 메뉴" }),
@@ -45,9 +48,9 @@ test("login keeps required consent before social auth entry", async ({
 
   await expect(kakaoButton).toBeDisabled();
   await expect(googleButton).toBeDisabled();
-  await page.getByLabel("만 14세 이상이에요").check();
+  await page.getByLabel("만 14세 이상이며, 사실대로 확인했어요").check();
   await page.getByLabel("이용약관에 동의해요").check();
-  await page.getByLabel("개인정보 처리방침에 동의해요").check();
+  await page.getByLabel("개인정보 수집·이용에 동의해요").check();
 
   await expect(kakaoButton).toBeEnabled();
   await expect(googleButton).toBeEnabled();
@@ -56,18 +59,21 @@ test("login keeps required consent before social auth entry", async ({
   ).not.toBeVisible();
 });
 
-test("auth callback redirects safely without an OAuth code", async ({
+test("auth callback fails closed without a signed login intent", async ({
   page,
 }) => {
   await page.goto("/auth/callback?next=/feed");
 
-  await expect(page).toHaveURL(/\/feed\?auth=missing_code$/);
+  await expect(page).toHaveURL(/\/login\?next=%2Fmy&auth=intent_missing$/);
+  await expect(
+    page.getByText("로그인 확인 정보가 없어 다시 시작이 필요해요."),
+  ).toBeVisible();
 });
 
 test("auth callback rejects protocol-relative next paths", async ({ page }) => {
   await page.goto("/auth/callback?next=//evil.example");
 
-  await expect(page).toHaveURL(/\/my\?auth=missing_code$/);
+  await expect(page).toHaveURL(/\/login\?next=%2Fmy&auth=intent_missing$/);
 });
 
 test("legacy together routes redirect to current product surfaces", async ({
@@ -86,4 +92,59 @@ test("legacy together routes redirect to current product surfaces", async ({
   await expect(page).toHaveURL(
     /\/reports\/comparison\/33333333-3333-4333-8333-333333333333$/,
   );
+});
+
+test("public and login-gated beta surfaces render without runtime or horizontal-overflow errors", async ({
+  page,
+}) => {
+  const pageErrors: string[] = [];
+  page.on("pageerror", (error) => pageErrors.push(error.message));
+  await page.addInitScript(() => {
+    window.localStorage.setItem(
+      "nuang:onboarding:experience",
+      JSON.stringify({
+        completedAt: "2026-08-05T00:00:00.000Z",
+        firstSeenAt: "2026-08-05T00:00:00.000Z",
+        lastSeenGuideVersion: 3,
+      }),
+    );
+  });
+
+  const surfaces = [
+    { path: "/home", text: "홈" },
+    { path: "/feed", text: "커뮤니티" },
+    { path: "/map", text: "성향지도" },
+    { path: "/my", text: "마이" },
+    { path: "/help", text: "도움받기" },
+    { path: "/advertise", text: "서로를 이해하는 브랜드 경험" },
+    {
+      path: "/research",
+      text: "검사 질문 리뷰는 로그인 후 참여할 수 있어요",
+    },
+    { path: "/policies/terms", text: "이용약관" },
+    { path: "/policies/privacy", text: "개인정보 처리방침" },
+    {
+      path: "/assessments/together/balance-game",
+      text: "밸런스 게임",
+    },
+    {
+      path: "/assessments/together/balance-game/setup?pack=mixed-taste",
+      text: "방 설정",
+    },
+  ] as const;
+
+  for (const surface of surfaces) {
+    const response = await page.goto(surface.path);
+    expect(response?.status(), surface.path).toBeLessThan(400);
+    await expect(page.locator("main").first()).toBeVisible();
+    await expect(
+      page.getByText(surface.text, { exact: false }).first(),
+    ).toBeVisible();
+    const hasHorizontalOverflow = await page.evaluate(
+      () => document.documentElement.scrollWidth > window.innerWidth + 1,
+    );
+    expect(hasHorizontalOverflow, surface.path).toBe(false);
+  }
+
+  expect(pageErrors).toEqual([]);
 });

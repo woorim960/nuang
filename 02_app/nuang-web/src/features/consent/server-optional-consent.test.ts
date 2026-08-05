@@ -110,6 +110,42 @@ describe("optional consent server boundary", () => {
     });
   });
 
+  it("authorizes collection only for the current analytics consent version", async () => {
+    const currentClient = permissionClient({
+      account: { data: { status: "active" }, error: null },
+      preference: {
+        data: {
+          analytics_consent_version: optionalConsentVersions.analytics,
+          analytics_opt_in: true,
+        },
+        error: null,
+      },
+    });
+    const staleClient = permissionClient({
+      account: { data: { status: "active" }, error: null },
+      preference: {
+        data: {
+          analytics_consent_version: "NUANG-ANALYTICS-OLD",
+          analytics_opt_in: true,
+        },
+        error: null,
+      },
+    });
+
+    await expect(
+      readAnalyticsCollectionPermission({
+        accountId: "account-1",
+        client: currentClient as never,
+      }),
+    ).resolves.toEqual({ allowed: true, ok: true });
+    await expect(
+      readAnalyticsCollectionPermission({
+        accountId: "account-1",
+        client: staleClient as never,
+      }),
+    ).resolves.toEqual({ allowed: false, ok: true });
+  });
+
   it("accepts only known database outcomes from screen-view recording", async () => {
     const recordedClient = rpcClient("recorded");
     const unknownClient = rpcClient("unexpected");

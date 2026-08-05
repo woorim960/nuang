@@ -2,11 +2,16 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { canAccessTopicAssessmentRoute } from "@/features/assessment/assessment-catalog";
 import {
+  buildTopicDomainObservations,
+  type TopicTraitEvidenceResult,
+} from "@/features/assessment/account-dynamic-trait-profile";
+import {
   buildFreeTopicResultReport,
   calculateFreeTopicResult,
   getFreeTopicAssessment,
   getFreeTopicQuestions,
   type FreeTopicResultReport,
+  type FreeTopicQuestion,
   type FreeTopicScaleStatistics,
   type FreeTopicScoreResult,
 } from "@/features/assessment/free-topic-assessments";
@@ -18,10 +23,23 @@ import {
   getFreeTopicScoringVersion,
 } from "@/features/assessment/free-topic-result-version";
 import { buildFreeTopicNuangCodeSection } from "@/features/assessment/free-topic-long-report";
+import {
+  buildTopicTraitImpactSnapshot,
+  readTopicTraitImpactSnapshot,
+  type TopicTraitImpactSnapshot,
+} from "@/features/assessment/topic-trait-impact";
+import {
+  resolveAssessmentReleaseById,
+  resolveAssessmentRuntimeContent,
+} from "@/features/assessment/server-assessment-content-runtime";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
 import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
+import {
+  calculateAccountTraitProfileTransition,
+  rebuildAccountTraitProfile,
+} from "@/features/assessment/server-account-trait-profile";
 
 const freeTopicResultSchema = z.object({
   answers: z.record(
@@ -59,6 +77,7 @@ const freeTopicResultSchema = z.object({
   }),
   completedAt: z.string().datetime(),
   localResultId: z.string().min(6).max(128),
+  productReleaseId: z.string().uuid().optional(),
 });
 
 const freeTopicResultsQuerySchema = z.object({
@@ -70,6 +89,7 @@ const deleteFreeTopicResultSchema = z.object({
 });
 
 type FreeTopicResultRow = {
+  assessment_content_release_id?: string | null;
   category_id: string;
   category_label: string;
   completed_at: string;
@@ -102,16 +122,42 @@ export async function POST(request: Request) {
   }
 
   const payload = parsedBody.data;
-  const assessment = getFreeTopicAssessment(payload.assessment.slug);
+  const runtime = payload.productReleaseId
+    ? await resolveAssessmentReleaseById({
+        category: "topic",
+        releaseId: payload.productReleaseId,
+        slug: payload.assessment.slug,
+        subtype: "free_topic",
+      })
+    : await resolveAssessmentRuntimeContent({
+        category: "topic",
+        slug: payload.assessment.slug,
+        subtype: "free_topic",
+      });
+  const runtimePayload = runtime.document?.payload as
+    | {
+        assessment?: NonNullable<ReturnType<typeof getFreeTopicAssessment>>;
+        questions?: ReturnType<typeof getFreeTopicQuestions>;
+      }
+    | undefined;
+  const assessment =
+    runtimePayload?.assessment ??
+    getFreeTopicAssessment(payload.assessment.slug);
 
-  if (!assessment || !canAccessTopicAssessmentRoute(payload.assessment.slug)) {
+  if (
+    !assessment ||
+    runtime.state === "unavailable" ||
+    (runtime.state === "fallback" &&
+      !canAccessTopicAssessmentRoute(payload.assessment.slug))
+  ) {
     return NextResponse.json(
       { error: "assessment_not_available" },
       { status: 404 },
     );
   }
 
-  const questions = getFreeTopicQuestions(assessment.slug);
+  const questions =
+    runtimePayload?.questions ?? getFreeTopicQuestions(assessment.slug);
   const allowedQuestionIds = new Set(questions.map((question) => question.id));
   const answerEntries = Object.entries(payload.answers);
   const hasExactQuestionSet =
@@ -136,9 +182,11 @@ export async function POST(request: Request) {
     answers: payload.answers,
     assessment,
     observedAt: payload.completedAt,
+    questions,
   });
   const baseReportSnapshot = buildFreeTopicResultReport({
     assessment,
+    questions,
     result,
   });
   const evidenceVersion = getFreeTopicEvidenceVersion(assessment.slug);
@@ -179,15 +227,58 @@ export async function POST(request: Request) {
   }
 
   const accountId = (accountResponse.data as { account_id: string }).account_id;
-  const profileCodeAtCompletion = await readProfileCodeAtCompletion({
-    accountId,
-    client: serviceClient,
+  const canonicalResultId = crypto.randomUUID();
+  const calculatedAt = new Date();
+  const candidateTopicResult: TopicTraitEvidenceResult = {
+    assessment,
     completedAt: payload.completedAt,
+    questions,
+    resultId: canonicalResultId,
+    scoresByQuestionId: result.scoresByQuestionId ?? {},
+    scoresByTargetId: result.scoresByTargetId,
+    slug: assessment.slug,
+  };
+  const transition = await calculateAccountTraitProfileTransition({
+    accountId,
+    candidateTopicResult,
+    client: serviceClient,
+    now: calculatedAt,
   });
-  const nuangCodeSection = profileCodeAtCompletion
+
+  if (!transition) {
+    return NextResponse.json(
+      { error: "account_trait_transition_read_failed" },
+      { status: 503 },
+    );
+  }
+
+  const fallbackProfileCode =
+    transition.before?.code ??
+    (await readCoreProfileCodeAtCompletion({
+      accountId,
+      client: serviceClient,
+      completedAt: payload.completedAt,
+    }));
+  const currentProfileCode = transition.after?.code ?? fallbackProfileCode;
+  const topicEvidence = buildTopicDomainObservations(
+    candidateTopicResult,
+    calculatedAt,
+  );
+  const traitImpactSnapshot = buildTopicTraitImpactSnapshot({
+    affectedDomainIds: topicEvidence.map(
+      (observation) => observation.target.id,
+    ),
+    after: transition.after,
+    before: transition.before,
+    calculatedAt: calculatedAt.toISOString(),
+    evidenceApplied: topicEvidence.length > 0,
+    isRetest: transition.isRetest,
+    selectedAsLatest: transition.selectedAsLatest,
+  });
+  const nuangCodeSection = currentProfileCode
     ? buildFreeTopicNuangCodeSection({
         assessment,
-        code: profileCodeAtCompletion,
+        code: currentProfileCode,
         scoresByScaleId: result.scoresByScaleId,
       })
     : null;
@@ -195,30 +286,37 @@ export async function POST(request: Request) {
     ...baseReportSnapshot,
     ...(nuangCodeSection ? { nuangCodeSection } : {}),
   };
+  const evidencePayload = {
+    assessmentSnapshot: assessment,
+    evidenceVersion,
+    formatVersion: freeTopicResultFormatVersion,
+    instrumentVersion,
+    productReleaseId: runtime.releaseId,
+    questionsSnapshot: questions,
+    observations: result.observations,
+    reportContentVersion,
+    reportSnapshot,
+    scaleStatisticsById: result.scaleStatisticsById,
+    scoresByScaleId: result.scoresByScaleId,
+    scoresByQuestionId: result.scoresByQuestionId,
+    scoresByTargetId: result.scoresByTargetId,
+    scoringVersion,
+    traitImpactSnapshot,
+    validResponsesByScaleId: result.validResponsesByScaleId,
+  };
   const insertResponse = await serviceClient
     .schema("assessment")
     .from("free_topic_result")
     .insert({
+      id: canonicalResultId,
       account_id: accountId,
+      assessment_content_release_id: runtime.releaseId,
       category_id: assessment.categoryId,
       category_label: assessment.categoryLabel,
       completed_at: payload.completedAt,
-      evidence_payload: {
-        evidenceVersion,
-        formatVersion: freeTopicResultFormatVersion,
-        instrumentVersion,
-        observations: result.observations,
-        reportContentVersion,
-        reportSnapshot,
-        scaleStatisticsById: result.scaleStatisticsById,
-        scoresByScaleId: result.scoresByScaleId,
-        scoresByQuestionId: result.scoresByQuestionId,
-        scoresByTargetId: result.scoresByTargetId,
-        scoringVersion,
-        validResponsesByScaleId: result.validResponsesByScaleId,
-      },
+      evidence_payload: evidencePayload,
       local_result_id: payload.localResultId,
-      profile_code_at_completion: profileCodeAtCompletion,
+      profile_code_at_completion: currentProfileCode,
       result_summary: {
         summary: result.summary,
         title: assessment.title,
@@ -233,14 +331,14 @@ export async function POST(request: Request) {
       .schema("assessment")
       .from("free_topic_result")
       .select(
-        "id, local_result_id, topic_slug, category_id, category_label, completed_at, profile_code_at_completion, result_summary, evidence_payload, updated_at",
+        "id, local_result_id, topic_slug, category_id, category_label, completed_at, profile_code_at_completion, result_summary, evidence_payload, assessment_content_release_id, updated_at",
       )
       .eq("account_id", accountId)
       .eq("local_result_id", payload.localResultId)
       .is("deleted_at", null)
       .maybeSingle();
     const existingResult = existingResponse.data
-      ? serializeStoredFreeTopicResult(
+      ? await serializeStoredFreeTopicResult(
           existingResponse.data as FreeTopicResultRow,
         )
       : null;
@@ -248,6 +346,20 @@ export async function POST(request: Request) {
     if (existingResponse.error || !existingResult) {
       return NextResponse.json(
         { error: "free_topic_result_read_after_conflict_failed" },
+        { status: 503 },
+      );
+    }
+
+    // 직전 요청이 결과 저장 뒤 중단됐더라도 현재 대표 프로필을 다시 수선합니다.
+    const repairedTraitProfile = await rebuildAccountTraitProfile({
+      accountId,
+      client: serviceClient,
+      now: calculatedAt,
+    });
+
+    if (existingResult.traitImpactSnapshot?.after && !repairedTraitProfile) {
+      return NextResponse.json(
+        { error: "account_trait_profile_write_failed" },
         { status: 503 },
       );
     }
@@ -270,6 +382,22 @@ export async function POST(request: Request) {
     );
   }
 
+  const inserted = insertResponse.data as { id: string; updated_at: string };
+  const persistedTraitProfile = await rebuildAccountTraitProfile({
+    accountId,
+    client: serviceClient,
+    now: calculatedAt,
+  });
+
+  if (transition.after && !persistedTraitProfile) {
+    return NextResponse.json(
+      { error: "account_trait_profile_write_failed" },
+      { status: 503 },
+    );
+  }
+
+  const syncedAt = inserted.updated_at;
+
   return NextResponse.json({
     ok: true,
     result: serializeFreeTopicResult({
@@ -279,16 +407,19 @@ export async function POST(request: Request) {
       formatVersion: freeTopicResultFormatVersion,
       instrumentVersion,
       localResultId: payload.localResultId,
-      profileCodeAtCompletion,
+      productReleaseId: runtime.releaseId,
+      questions,
+      profileCodeAtCompletion: currentProfileCode,
       reportContentVersion,
       reportSnapshot,
       result,
       scoringVersion,
-      serverResultId: (insertResponse.data as { id: string }).id,
-      syncedAt: (insertResponse.data as { updated_at: string }).updated_at,
+      serverResultId: inserted.id,
+      syncedAt,
+      traitImpactSnapshot,
     }),
-    resultId: (insertResponse.data as { id: string }).id,
-    syncedAt: (insertResponse.data as { updated_at: string }).updated_at,
+    resultId: inserted.id,
+    syncedAt,
   });
 }
 
@@ -347,7 +478,7 @@ export async function GET(request: Request) {
     .schema("assessment")
     .from("free_topic_result")
     .select(
-      "id, local_result_id, topic_slug, category_id, category_label, completed_at, profile_code_at_completion, result_summary, evidence_payload",
+      "id, local_result_id, topic_slug, category_id, category_label, completed_at, profile_code_at_completion, result_summary, evidence_payload, assessment_content_release_id",
     )
     .eq("account_id", accountId)
     .is("deleted_at", null)
@@ -374,14 +505,17 @@ export async function GET(request: Request) {
     );
   }
 
+  const storedResults = await Promise.all(
+    (resultResponse.data ?? []).map((row) =>
+      serializeStoredFreeTopicResult(row as FreeTopicResultRow),
+    ),
+  );
+
   return NextResponse.json({
     ok: true,
-    results: (resultResponse.data ?? []).flatMap((row) => {
-      const storedResult = serializeStoredFreeTopicResult(
-        row as FreeTopicResultRow,
-      );
-      return storedResult ? [storedResult] : [];
-    }),
+    results: storedResults.filter(
+      (result): result is NonNullable<typeof result> => Boolean(result),
+    ),
   });
 }
 
@@ -420,14 +554,12 @@ export async function DELETE(request: Request) {
   }
 
   const deletedAt = new Date().toISOString();
+  const accountId = (accountResponse.data as { account_id: string }).account_id;
   const deleteResponse = await serviceClient
     .schema("assessment")
     .from("free_topic_result")
     .update({ deleted_at: deletedAt, updated_at: deletedAt })
-    .eq(
-      "account_id",
-      (accountResponse.data as { account_id: string }).account_id,
-    )
+    .eq("account_id", accountId)
     .eq("local_result_id", parsedBody.data.localResultId)
     .is("deleted_at", null);
 
@@ -437,6 +569,8 @@ export async function DELETE(request: Request) {
       { status: 503 },
     );
   }
+
+  await rebuildAccountTraitProfile({ accountId, client: serviceClient });
 
   return NextResponse.json({ ok: true });
 }
@@ -448,6 +582,8 @@ function serializeFreeTopicResult({
   formatVersion,
   instrumentVersion,
   localResultId,
+  productReleaseId,
+  questions,
   profileCodeAtCompletion,
   reportContentVersion,
   reportSnapshot,
@@ -455,6 +591,7 @@ function serializeFreeTopicResult({
   scoringVersion,
   serverResultId,
   syncedAt,
+  traitImpactSnapshot,
 }: {
   assessment: NonNullable<ReturnType<typeof getFreeTopicAssessment>>;
   completedAt: string;
@@ -462,6 +599,8 @@ function serializeFreeTopicResult({
   formatVersion: number;
   instrumentVersion: string;
   localResultId: string;
+  productReleaseId?: string | null;
+  questions: FreeTopicQuestion[];
   profileCodeAtCompletion: string | null;
   reportContentVersion: string;
   reportSnapshot: FreeTopicResultReport;
@@ -469,6 +608,7 @@ function serializeFreeTopicResult({
   scoringVersion: string;
   serverResultId: string;
   syncedAt: string;
+  traitImpactSnapshot?: TopicTraitImpactSnapshot;
 }) {
   return {
     assessment: {
@@ -477,11 +617,14 @@ function serializeFreeTopicResult({
       slug: assessment.slug,
       title: assessment.title,
     },
+    assessmentSnapshot: assessment,
     completedAt,
     ...(evidenceVersion ? { evidenceVersion } : {}),
     formatVersion,
     instrumentVersion,
     localResultId,
+    ...(productReleaseId ? { productReleaseId } : {}),
+    questionsSnapshot: questions,
     ...(profileCodeAtCompletion
       ? {
           nuangCodeContext: {
@@ -495,16 +638,46 @@ function serializeFreeTopicResult({
     result,
     scoringVersion,
     serverResultId,
+    ...(traitImpactSnapshot ? { traitImpactSnapshot } : {}),
     sync: { status: "synced", syncedAt },
   };
 }
 
-function serializeStoredFreeTopicResult(row: FreeTopicResultRow) {
-  const assessment = getFreeTopicAssessment(row.topic_slug);
+async function serializeStoredFreeTopicResult(row: FreeTopicResultRow) {
+  const evidence = readRecord(row.evidence_payload);
+  const productReleaseId =
+    row.assessment_content_release_id ??
+    (typeof evidence.productReleaseId === "string"
+      ? evidence.productReleaseId
+      : null);
+  const historicalRuntime = productReleaseId
+    ? await resolveAssessmentReleaseById({
+        category: "topic",
+        releaseId: productReleaseId,
+        slug: row.topic_slug,
+        subtype: "free_topic",
+      })
+    : null;
+  const runtimePayload = historicalRuntime?.document?.payload as
+    | {
+        assessment?: NonNullable<ReturnType<typeof getFreeTopicAssessment>>;
+        questions?: FreeTopicQuestion[];
+      }
+    | undefined;
+  const evidenceAssessment = readAssessmentSnapshot(
+    evidence.assessmentSnapshot,
+  );
+  const assessment =
+    runtimePayload?.assessment ??
+    evidenceAssessment ??
+    getFreeTopicAssessment(row.topic_slug);
 
   if (!assessment) return null;
+  const questions =
+    runtimePayload?.questions ??
+    readQuestionSnapshot(evidence.questionsSnapshot) ??
+    getFreeTopicQuestions(assessment.slug);
 
-  const evidence = readRecord(row.evidence_payload);
   const evidenceVersion =
     typeof evidence.evidenceVersion === "string"
       ? evidence.evidenceVersion
@@ -550,6 +723,8 @@ function serializeStoredFreeTopicResult(row: FreeTopicResultRow) {
         : freeTopicResultFormatVersion,
     instrumentVersion,
     localResultId: row.local_result_id,
+    productReleaseId,
+    questions,
     profileCodeAtCompletion:
       typeof row.profile_code_at_completion === "string"
         ? row.profile_code_at_completion
@@ -561,10 +736,38 @@ function serializeStoredFreeTopicResult(row: FreeTopicResultRow) {
     scoringVersion,
     serverResultId: row.id,
     syncedAt: row.updated_at ?? row.completed_at,
+    traitImpactSnapshot:
+      readTopicTraitImpactSnapshot(evidence.traitImpactSnapshot) ?? undefined,
   });
 }
 
-async function readProfileCodeAtCompletion({
+function readAssessmentSnapshot(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const assessment = value as Partial<
+    NonNullable<ReturnType<typeof getFreeTopicAssessment>>
+  >;
+  return typeof assessment.slug === "string" &&
+    typeof assessment.title === "string" &&
+    typeof assessment.categoryId === "string" &&
+    typeof assessment.categoryLabel === "string"
+    ? (assessment as NonNullable<ReturnType<typeof getFreeTopicAssessment>>)
+    : null;
+}
+
+function readQuestionSnapshot(value: unknown): FreeTopicQuestion[] | null {
+  if (!Array.isArray(value)) return null;
+  const questions = value.filter((item): item is FreeTopicQuestion =>
+    Boolean(
+      item &&
+      typeof item === "object" &&
+      typeof (item as { id?: unknown }).id === "string" &&
+      typeof (item as { text?: unknown }).text === "string",
+    ),
+  );
+  return questions.length === value.length ? questions : null;
+}
+
+async function readCoreProfileCodeAtCompletion({
   accountId,
   client,
   completedAt,

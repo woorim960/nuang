@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { resolvePublicBalancePackCatalog } from "@/features/assessment/server-assessment-content-runtime";
 import { BalanceGameLanding } from "@/features/together-balance/BalanceGameLanding";
 
 export const metadata: Metadata = {
@@ -15,5 +17,13 @@ export default async function BalanceGamePage({
   const resolved = await searchParams;
   const initialPackSlug =
     typeof resolved.pack === "string" ? resolved.pack : undefined;
-  return <BalanceGameLanding initialPackSlug={initialPackSlug} />;
+  if (initialPackSlug) {
+    redirect(
+      `/assessments/together/balance-game/setup?pack=${encodeURIComponent(
+        initialPackSlug,
+      )}`,
+    );
+  }
+  const packs = await resolvePublicBalancePackCatalog();
+  return <BalanceGameLanding packs={packs} />;
 }

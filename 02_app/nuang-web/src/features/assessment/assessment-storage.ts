@@ -536,6 +536,10 @@ function buildNewLocalAttempt(
   return {
     id: `local_${crypto.randomUUID()}`,
     assessmentId: assessment.assessmentId,
+    assessmentSnapshot: structuredClone(assessment),
+    ...(assessment.contentReleaseId
+      ? { assessmentContentReleaseId: assessment.contentReleaseId }
+      : {}),
     releaseId: assessment.releaseId,
     mode: assessment.mode,
     itemIds: assessment.items.map((item) => item.itemId),

@@ -300,6 +300,34 @@ describe("assessment completion storage", () => {
     expect(next.releaseId).toBe("NUANG-CORE-QUICK-1.0");
   });
 
+  it("keeps the question snapshot when content is published during an active run", async () => {
+    const firstContent = {
+      ...quickCoreAssessment,
+      contentReleaseId: "11111111-1111-4111-8111-111111111111",
+      items: quickCoreAssessment.items.map((item, index) =>
+        index === 0 ? { ...item, text: "처음 시작할 때 본 문항" } : item,
+      ),
+    };
+    const original = await getOrCreateLocalAttempt(firstContent);
+    const newlyPublishedContent = {
+      ...firstContent,
+      contentReleaseId: "22222222-2222-4222-8222-222222222222",
+      items: firstContent.items.map((item, index) =>
+        index === 0 ? { ...item, text: "새로 게시된 문항" } : item,
+      ),
+    };
+
+    const resumed = await getOrCreateLocalAttempt(newlyPublishedContent);
+
+    expect(resumed.id).toBe(original.id);
+    expect(resumed.assessmentContentReleaseId).toBe(
+      "11111111-1111-4111-8111-111111111111",
+    );
+    expect(resumed.assessmentSnapshot?.items[0]?.text).toBe(
+      "처음 시작할 때 본 문항",
+    );
+  });
+
   it("starts an explicit zero-answer retest while preserving completed results", async () => {
     const active = await getOrCreateLocalAttempt(quickCoreAssessment);
     const readiness = prepareAssessmentCompletion(

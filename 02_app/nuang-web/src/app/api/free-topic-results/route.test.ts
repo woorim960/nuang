@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DELETE, GET, POST } from "@/app/api/free-topic-results/route";
+import { getBuiltinAssessmentStudioEntries } from "@/features/admin/assessment-studio-sources";
 
 const routeMocks = vi.hoisted(() => ({
   authResult: {
@@ -39,7 +40,7 @@ describe("free topic results API", () => {
       local_result_id: "topic_test_123",
       result_summary: {
         summary:
-          "이 결과는 취향과 추천을 더 섬세하게 만드는 참고 신호로만 사용돼요.",
+          "이 결과는 여러 검사와 함께 누적되어 현재 대표 성향을 더 정교하게 이해하는 데 사용돼요.",
         title: "대화 온도",
       },
       topic_slug: "conversation-temperature",
@@ -54,12 +55,15 @@ describe("free topic results API", () => {
       }),
       scoresByTargetId: {
         "facet:RO-EC": 100,
-        "facet:RO-RN": 75,
         "facet:SE-AI": 50,
       },
       scoringVersion: "server-v2-missing-aware",
+      traitImpactSnapshot: {
+        degree: "none",
+        state: "no_baseline",
+        version: "topic-trait-impact.v1",
+      },
     });
-    expect(JSON.stringify(mock.captured.upsertRow)).not.toContain("999");
     expect(JSON.stringify(mock.captured.upsertRow)).not.toContain(
       "조작된 결과",
     );
@@ -104,7 +108,7 @@ describe("free topic results API", () => {
           scoresByTargetId?: Record<string, number>;
         }
       ).scoresByTargetId,
-    ).toEqual({});
+    ).toEqual({ "facet:RO-EC": 50 });
   });
 
   it("freezes the owner's Nuang code with the topic report", async () => {
@@ -139,6 +143,110 @@ describe("free topic results API", () => {
         }
       ).reportSnapshot?.nuangCodeSection?.title,
     ).toContain("INGMC");
+  });
+
+  it("freezes the before and after trait profile used for this result", async () => {
+    const mock = createMockClient({ coreRows: [createDynamicCoreRow()] });
+    routeMocks.serviceClient = mock.client;
+
+    const response = await POST(jsonRequest(createPayload()));
+    const body = await response.json();
+    const snapshot = (
+      mock.captured.upsertRow?.evidence_payload as {
+        traitImpactSnapshot?: {
+          after?: {
+            code?: string;
+            domains?: Array<{
+              domainId: string;
+              score: number;
+              symbol: string;
+            }>;
+          };
+          before?: { code?: string; domains?: unknown[] };
+          state?: string;
+        };
+      }
+    ).traitImpactSnapshot;
+
+    expect(response.status).toBe(200);
+    expect(snapshot).toMatchObject({
+      after: { code: expect.any(String), domains: expect.any(Array) },
+      before: { code: "ENAKQ", domains: expect.any(Array) },
+      state: "ready",
+    });
+    expect(body.result.traitImpactSnapshot).toEqual(snapshot);
+    expect(mock.captured.profileUpsertRow).toMatchObject({
+      account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      profile_code: snapshot?.after?.code,
+    });
+    expect(
+      (
+        mock.captured.profileUpsertRow?.domains as Array<{
+          domainId: string;
+          score: number;
+          symbol: string;
+        }>
+      ).map(({ domainId, score, symbol }) => ({ domainId, score, symbol })),
+    ).toEqual(
+      snapshot?.after?.domains?.map((domain) => ({
+        domainId: domain.domainId,
+        score: domain.score,
+        symbol: domain.symbol,
+      })),
+    );
+    expect(mock.captured.upsertRow?.profile_code_at_completion).toBe(
+      snapshot?.after?.code,
+    );
+  });
+
+  it("keeps the local result queued when the current trait profile cannot be persisted", async () => {
+    const mock = createMockClient({
+      coreRows: [createDynamicCoreRow()],
+      profileUpsertError: true,
+    });
+    routeMocks.serviceClient = mock.client;
+
+    const response = await POST(jsonRequest(createPayload()));
+    const body = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(body.error).toBe("account_trait_profile_write_failed");
+    expect(
+      (
+        mock.captured.upsertRow?.evidence_payload as {
+          traitImpactSnapshot?: { state?: string };
+        }
+      ).traitImpactSnapshot?.state,
+    ).toBe("ready");
+  });
+
+  it("repairs the current trait profile when a completed result is retried", async () => {
+    const mock = createMockClient({ coreRows: [createDynamicCoreRow()] });
+    routeMocks.serviceClient = mock.client;
+
+    const first = await POST(jsonRequest(createPayload()));
+    const retry = await POST(jsonRequest(createPayload()));
+
+    expect(first.status).toBe(200);
+    expect(retry.status).toBe(200);
+    expect(mock.captured.insertCount).toBe(2);
+    expect(mock.captured.profileUpsertRow?.profile_code).toBeTruthy();
+  });
+
+  it("keeps a conflict retry queued when trait-profile repair still fails", async () => {
+    const mock = createMockClient({
+      coreRows: [createDynamicCoreRow()],
+      profileUpsertError: true,
+    });
+    routeMocks.serviceClient = mock.client;
+
+    const first = await POST(jsonRequest(createPayload()));
+    const retry = await POST(jsonRequest(createPayload()));
+    const retryBody = await retry.json();
+
+    expect(first.status).toBe(503);
+    expect(retry.status).toBe(503);
+    expect(retryBody.error).toBe("account_trait_profile_write_failed");
   });
 
   it("does not copy a legacy code into the current-code snapshot column", async () => {
@@ -200,6 +308,17 @@ describe("free topic results API", () => {
             observations: [{ label: "표현", targetId: "SE-AI" }],
             scoringVersion: "server-v2-missing-aware",
             scoresByTargetId: { "SE-AI": 72 },
+            traitImpactSnapshot: {
+              affectedDomains: [null],
+              after: null,
+              before: null,
+              calculatedAt: "2026-07-10T00:00:00.000Z",
+              codeChanged: false,
+              degree: "none",
+              isRetest: false,
+              state: "no_baseline",
+              version: "topic-trait-impact.v1",
+            },
           },
           local_result_id: "topic_test_123",
           result_summary: {
@@ -233,6 +352,7 @@ describe("free topic results API", () => {
       sync: { status: "synced" },
     });
     expect(body.results[0].answers).toBeUndefined();
+    expect(body.results[0].traitImpactSnapshot).toBeUndefined();
   });
 
   it("can read one server result by local result id for local-first fallback", async () => {
@@ -273,6 +393,57 @@ describe("free topic results API", () => {
       "topic_test_123",
     ]);
     expect(mock.captured.limitValue).toBe(1);
+  });
+
+  it("restores an operator release with the exact historical assessment copy", async () => {
+    const releaseId = "22222222-2222-4222-8222-222222222222";
+    const builtin = getBuiltinAssessmentStudioEntries().find(
+      (entry) => entry.slug === "conversation-temperature",
+    );
+    if (!builtin) throw new Error("fixture assessment missing");
+    const historicalDocument = structuredClone(builtin.document);
+    historicalDocument.title = "발행 당시 대화 온도";
+    const assessment = (
+      historicalDocument.payload as {
+        assessment: { title: string };
+      }
+    ).assessment;
+    assessment.title = historicalDocument.title;
+    const mock = createMockClient({
+      releaseDocument: historicalDocument,
+      releaseId,
+      resultRows: [
+        {
+          assessment_content_release_id: releaseId,
+          category_id: "relationship",
+          category_label: "관계",
+          completed_at: "2026-07-10T00:00:00.000Z",
+          evidence_payload: {
+            instrumentVersion: "conversation-temperature-2026-07-28",
+            productReleaseId: releaseId,
+            scoringVersion: "server-v2-missing-aware",
+            scoresByTargetId: { "facet:SE-AI": 72 },
+          },
+          id: "33333333-3333-4333-8333-333333333333",
+          local_result_id: "topic_operator_123",
+          result_summary: {
+            summary: "완료 결과",
+            title: historicalDocument.title,
+          },
+          topic_slug: "conversation-temperature",
+        },
+      ],
+    });
+    routeMocks.serviceClient = mock.client;
+
+    const response = await GET(
+      new Request("http://localhost:3000/api/free-topic-results"),
+    );
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.results[0].assessment.title).toBe("발행 당시 대화 온도");
+    expect(body.results[0].productReleaseId).toBe(releaseId);
   });
 
   it("does not reinterpret a result created with an older instrument", async () => {
@@ -399,19 +570,29 @@ function createComfortPayload() {
 
 function createMockClient({
   coreRows = [],
+  profileUpsertError = false,
+  releaseDocument,
+  releaseId = "22222222-2222-4222-8222-222222222222",
   resultRows = [],
 }: {
   coreRows?: unknown[];
+  profileUpsertError?: boolean;
+  releaseDocument?: unknown;
+  releaseId?: string;
   resultRows?: unknown[];
 } = {}) {
   const captured: {
     eqCalls: Array<[string, unknown]>;
+    insertCount: number;
     limitValue: null | number;
+    profileUpsertRow: null | Record<string, unknown>;
     updateRow: null | Record<string, unknown>;
     upsertRow: null | Record<string, unknown>;
   } = {
     eqCalls: [],
+    insertCount: 0,
     limitValue: null,
+    profileUpsertRow: null,
     updateRow: null,
     upsertRow: null,
   };
@@ -419,21 +600,51 @@ function createMockClient({
     data: { account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa" },
     error: null,
   };
-  const insertResponse = {
-    data: {
-      id: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
-      updated_at: "2026-07-10T00:00:00.000Z",
-    },
-    error: null,
-  };
-  const resultResponse = {
-    data: resultRows,
-    error: null,
-  };
+  const mutableResultRows = [...resultRows] as Array<Record<string, unknown>>;
 
   return {
     captured,
     client: {
+      from(tableName: string) {
+        if (!releaseDocument) {
+          const unavailableBuilder = {
+            eq: () => unavailableBuilder,
+            maybeSingle: async () => ({
+              data: null,
+              error: { message: `Unavailable public table ${tableName}` },
+            }),
+            select: () => unavailableBuilder,
+          };
+          return unavailableBuilder;
+        }
+        const response =
+          tableName === "assessment_content_release"
+            ? {
+                data: {
+                  document: releaseDocument,
+                  entry_id: "44444444-4444-4444-8444-444444444444",
+                  id: releaseId,
+                  release_number: 1,
+                },
+                error: null,
+              }
+            : tableName === "assessment_content_entry"
+              ? {
+                  data: {
+                    category: "topic",
+                    slug: "conversation-temperature",
+                    subtype: "free_topic",
+                  },
+                  error: null,
+                }
+              : { data: null, error: { message: "unexpected table" } };
+        const builder = {
+          eq: () => builder,
+          maybeSingle: async () => response,
+          select: () => builder,
+        };
+        return builder;
+      },
       schema(schemaName: string) {
         return {
           from(tableName: string) {
@@ -453,21 +664,58 @@ function createMockClient({
                 captured.limitValue = value;
                 return key === "report.result_report"
                   ? { data: coreRows, error: null }
-                  : resultResponse;
+                  : { data: mutableResultRows, error: null };
               },
               lte: () => assessmentBuilder,
+              maybeSingle: async () => ({
+                data: mutableResultRows[0] ?? null,
+                error: null,
+              }),
               order: () => assessmentBuilder,
               select: () => assessmentBuilder,
               update: (row: Record<string, unknown>) => {
                 captured.updateRow = row;
                 return assessmentBuilder;
               },
+              upsert: async (row: Record<string, unknown>) => {
+                captured.profileUpsertRow = row;
+                return {
+                  data: null,
+                  error: profileUpsertError
+                    ? { message: "profile write failed" }
+                    : null,
+                };
+              },
               insert: (row: Record<string, unknown>) => {
+                captured.insertCount += 1;
                 captured.upsertRow = row;
+                const duplicate = mutableResultRows.some(
+                  (resultRow) =>
+                    resultRow.local_result_id === row.local_result_id,
+                );
+
+                if (!duplicate) {
+                  mutableResultRows.push({
+                    ...row,
+                    updated_at: "2026-07-10T00:00:00.000Z",
+                  });
+                }
 
                 return {
                   select: () => ({
-                    single: async () => insertResponse,
+                    single: async () =>
+                      duplicate
+                        ? {
+                            data: null,
+                            error: { code: "23505", message: "duplicate" },
+                          }
+                        : {
+                            data: {
+                              id: row.id,
+                              updated_at: "2026-07-10T00:00:00.000Z",
+                            },
+                            error: null,
+                          },
                   }),
                 };
               },
@@ -477,6 +725,25 @@ function createMockClient({
           },
         };
       },
+    },
+  };
+}
+
+function createDynamicCoreRow() {
+  return {
+    created_at: "2026-07-01T00:00:00.000Z",
+    id: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+    profile_code: "ENAKQ",
+    report_kind: "full",
+    summary: {
+      completedAt: "2026-07-01T00:00:00.000Z",
+      domains: [
+        { domainId: "SE", score: 60, symbol: "E" },
+        { domainId: "OE", score: 60, symbol: "N" },
+        { domainId: "RO", score: 60, symbol: "A" },
+        { domainId: "SM", score: 60, symbol: "K" },
+        { domainId: "ER", score: 60, symbol: "Q" },
+      ],
     },
   };
 }

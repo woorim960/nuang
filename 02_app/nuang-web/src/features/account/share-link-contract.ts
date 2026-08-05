@@ -13,6 +13,7 @@ export type ShareLinkRevokeStepId =
 
 export type ShareLinkFailureCode =
   | "result_report_not_found"
+  | "result_release_not_publicable"
   | "share_scope_not_allowed"
   | "share_summary_build_failed"
   | "share_token_hash_failed"
@@ -103,6 +104,13 @@ export const shareLinkFailures: Record<
   result_report_not_found: {
     httpStatus: 404,
     message: "공유할 결과를 찾을 수 없어요.",
+    retryable: false,
+    step: "verify_result_report_owner",
+  },
+  result_release_not_publicable: {
+    httpStatus: 409,
+    message:
+      "이 결과는 검증 중인 버전이라 아직 공개 공유를 사용할 수 없어요.",
     retryable: false,
     step: "verify_result_report_owner",
   },

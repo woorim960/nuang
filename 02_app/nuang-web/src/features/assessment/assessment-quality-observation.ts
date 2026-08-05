@@ -6,6 +6,7 @@ export const assessmentQualityObservationSchema = z
     clientSessionId: z.uuid(),
     instrumentVersion: z.string().trim().min(3).max(120),
     localResultId: z.string().trim().min(6).max(128).optional(),
+    productReleaseId: z.string().uuid().optional(),
     observations: z
       .array(
         z.discriminatedUnion("kind", [

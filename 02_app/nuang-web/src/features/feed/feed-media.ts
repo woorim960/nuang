@@ -1,7 +1,9 @@
 export const feedMediaBucket = "feed-media";
 export const maxFeedPhotoCount = 19;
-export const maxFeedPhotoBytes = 8 * 1024 * 1024;
-export const maxFeedPhotoTotalBytes = 40 * 1024 * 1024;
+// Vercel Functions reject request payloads above 4.5 MB. Keep the complete
+// multipart body below that platform boundary until direct signed uploads ship.
+export const maxFeedPhotoBytes = 4 * 1024 * 1024;
+export const maxFeedPhotoTotalBytes = 4 * 1024 * 1024;
 export const supportedFeedPhotoTypes = [
   "image/jpeg",
   "image/png",
@@ -20,13 +22,13 @@ export function validateFeedPhotoFiles(files: File[]) {
   }
 
   if (files.some((file) => file.size <= 0 || file.size > maxFeedPhotoBytes)) {
-    return "사진 한 장의 크기는 8MB 이하여야 해요.";
+    return "사진 한 장의 크기는 4MB 이하여야 해요.";
   }
 
   if (
     files.reduce((total, file) => total + file.size, 0) > maxFeedPhotoTotalBytes
   ) {
-    return "한 게시물의 사진 용량은 모두 합쳐 40MB 이하여야 해요.";
+    return "한 게시물의 사진 용량은 모두 합쳐 4MB 이하여야 해요.";
   }
 
   return null;

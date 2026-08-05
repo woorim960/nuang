@@ -23,7 +23,11 @@
   --nu-color-surface-raised: var(--admin-surface-subtle);
   --nu-color-surface-soft: var(--nu-neutral-50);
   --nu-color-surface-muted: var(--nu-neutral-100);
-  --nu-color-surface-translucent: color-mix(in srgb, var(--nu-neutral-0) 94%, transparent);
+  --nu-color-surface-translucent: color-mix(
+    in srgb,
+    var(--nu-neutral-0) 94%,
+    transparent
+  );
   --nu-color-border: var(--admin-border);
   --nu-color-border-soft: var(--admin-border-soft);
   --nu-color-border-strong: var(--admin-border-strong);
@@ -377,6 +381,32 @@
     gap: 1.05rem;
     min-width: 0;
     padding: 0;
+  }
+
+  .sidebarNavigationScroll {
+    min-height: 0;
+    flex: 1;
+    margin: 0 -0.8rem;
+    padding: 0 0.8rem 0.75rem;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-color: var(--nu-neutral-600) transparent;
+    scrollbar-gutter: stable;
+    scrollbar-width: thin;
+  }
+
+  .sidebarNavigationScroll::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .sidebarNavigationScroll::-webkit-scrollbar-thumb {
+    border-radius: 999px;
+    background: var(--nu-neutral-600);
+  }
+
+  .sidebarNavigationScroll::-webkit-scrollbar-track {
+    background: transparent;
   }
 
   .sidebar .navGroup {

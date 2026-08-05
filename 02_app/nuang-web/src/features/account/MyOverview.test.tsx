@@ -1,131 +1,96 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { MyOverview } from "@/features/account/MyOverview";
-import type { AccountResultSummary } from "@/features/account/account-result-contract";
-import { candidateFullScoringRelease } from "@/features/assessment/candidate-full-core-seed";
+import { prepareAssessmentCompletion } from "@/features/assessment/assessment-completion";
+import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
+import type { LocalAssessmentAttempt } from "@/features/assessment/types";
+import { coreResultCopyVersion } from "@/features/result/report-copy";
 
 const myOverviewMocks = vi.hoisted(() => ({
-  authUser: { id: "auth-user" } as { id: string } | null,
-  localAttempts: [] as unknown[],
-}));
-
-vi.mock("@/components/character/NuangCharacter", () => ({
-  NuangCharacter: () => <span aria-label="뉴앙 캐릭터" />,
+  localAttempts: [] as LocalAssessmentAttempt[],
 }));
 
 vi.mock("@/features/assessment/assessment-storage", () => ({
   listLocalAttempts: vi.fn(async () => myOverviewMocks.localAttempts),
 }));
 
-vi.mock("@/features/assessment/assessment-account-sync", () => ({
-  synchronizeAccountAssessmentAttempts: vi.fn(async () => ({
-    attempts: [],
-    status: "unauthenticated",
-  })),
-}));
-
-vi.mock("@/lib/supabase/browser", () => ({
-  createBrowserSupabaseClient: () =>
-    myOverviewMocks.authUser
-      ? {
-          auth: {
-            getUser: async () => ({
-              data: { user: myOverviewMocks.authUser },
-            }),
-          },
-        }
-      : null,
-}));
-
 describe("MyOverview", () => {
   afterEach(() => {
-    myOverviewMocks.authUser = { id: "auth-user" };
     myOverviewMocks.localAttempts = [];
-    vi.unstubAllGlobals();
   });
 
-  it("puts the latest identity and core personal routes first", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(
-        async () =>
-          new Response(
-            JSON.stringify({
-              ok: true,
-              results: [createAccountResult()],
-            }),
-            { status: 200 },
-          ),
-      ),
-    );
+  it("keeps the signed-in profile structure while showing a local result", async () => {
+    myOverviewMocks.localAttempts = [createCompletedAttempt()];
 
-    render(<MyOverview />);
+    render(<MyOverview initialContent="reports" />);
 
-    expect(await screen.findByText("INGMC")).toBeInTheDocument();
-    expect(screen.getByText("새 가능성을 찾는 탐험가")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "내 성향 보기" })).toHaveAttribute(
-      "href",
-      "/my/reports",
-    );
-    expect(screen.getByRole("link", { name: "최신 리포트" })).toHaveAttribute(
-      "href",
-      "/my/reports",
-    );
     expect(
-      screen.queryByRole("link", { name: "성향 놀이터 기록" }),
-    ).not.toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "내 게시물" })).toHaveAttribute(
+      await screen.findByRole("heading", { name: "나의 뉴앙" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("정밀 코어 검사 완료")).toBeInTheDocument();
+    expect(screen.getByText("ENAKQ")).toBeInTheDocument();
+    expect(screen.getByText("관계를 여는 선도자")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "내 결과 보기" })).toHaveAttribute(
       "href",
-      "/feed/me",
+      "/my/reports",
+    );
+    expect(screen.getByRole("link", { name: "내 성향 상세" })).toHaveAttribute(
+      "href",
+      "/my/reports",
     );
     expect(screen.getByRole("link", { name: "의견 보내기" })).toHaveAttribute(
       "href",
       "/my/feedback?from=%2Fmy",
     );
+    expect(screen.getByRole("tab", { name: /게시물/ })).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /검사 결과/ })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
+    expect(
+      screen.getByRole("link", { name: "검사 결과 보기" }),
+    ).toHaveAttribute("href", "/my/reports");
   });
 
-  it("gives a first-time viewer one clear assessment action", async () => {
-    myOverviewMocks.authUser = null;
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(
-        async () =>
-          new Response(JSON.stringify({ ok: true, results: [] }), {
-            status: 200,
-          }),
-      ),
-    );
-
+  it("gives a first-time viewer the same profile, shortcuts, and tabs", async () => {
+    const user = userEvent.setup();
     render(<MyOverview />);
 
     expect(
-      await screen.findByText("내 뉴앙 코드를 만나보세요"),
+      await screen.findByRole("heading", { name: "나의 뉴앙" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("첫 성향 검사로 내 뉴앙 코드를 만나보세요"),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "첫 성향 검사 시작하기" }),
-    ).toHaveAttribute("href", "/home");
+    ).toHaveAttribute(
+      "href",
+      "/assessments/nu-core-quick?returnTo=%2Fmy%3Ftab%3Dreports",
+    );
 
-    await waitFor(() => {
-      expect(
-        screen.getByRole("link", {
-          name: "로그인 또는 가입",
-        }),
-      ).toHaveAttribute("href", "/login?next=/my");
-    });
+    expect(
+      screen.getByRole("link", {
+        name: "로그인 또는 가입",
+      }),
+    ).toHaveAttribute("href", "/login?next=/my");
+
+    const postsTab = screen.getByRole("tab", { name: /게시물/ });
+    const reportsTab = screen.getByRole("tab", { name: /검사 결과/ });
+    expect(postsTab).toHaveAttribute("aria-selected", "true");
+    postsTab.focus();
+    await user.keyboard("{ArrowRight}");
+    expect(reportsTab).toHaveFocus();
+    expect(reportsTab).toHaveAttribute("aria-selected", "true");
+    expect(
+      screen.getByText("아직 완료한 검사 결과가 없어요"),
+    ).toBeInTheDocument();
   });
 
   it("shows the operation center only when the server marks the account as admin", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(
-        async () =>
-          new Response(JSON.stringify({ ok: true, results: [] }), {
-            status: 200,
-          }),
-      ),
-    );
-
     const { rerender } = render(<MyOverview />);
+    await screen.findByRole("heading", { name: "나의 뉴앙" });
     expect(
       screen.queryByRole("link", { name: "관리자 운영 센터" }),
     ).not.toBeInTheDocument();
@@ -137,43 +102,51 @@ describe("MyOverview", () => {
   });
 });
 
-function createAccountResult(): AccountResultSummary {
-  const profileCode = "INGMC";
+function createCompletedAttempt(): LocalAssessmentAttempt {
+  const assessment = candidateFullCoreAssessment;
+  const completedAt = "2026-07-19T03:00:00.000Z";
+  const responses = Object.fromEntries(
+    assessment.items.map((item, index) => [
+      item.itemId,
+      {
+        answeredAt: new Date(
+          Date.parse(completedAt) + index * 1000,
+        ).toISOString(),
+        itemId: item.itemId,
+        value: (item.isReverse ? 1 : 5) as 1 | 5,
+      },
+    ]),
+  );
+  const draft: LocalAssessmentAttempt = {
+    assessmentId: assessment.assessmentId,
+    completedAt,
+    createdAt: completedAt,
+    currentIndex: assessment.items.length - 1,
+    expiresAt: "2026-08-19T03:00:00.000Z",
+    id: "local-my-overview",
+    itemIds: assessment.items.map((item) => item.itemId),
+    localPersistStatus: "saved",
+    mode: assessment.mode,
+    releaseId: assessment.releaseId,
+    responses,
+    state: "completed",
+    updatedAt: completedAt,
+  };
+  const readiness = prepareAssessmentCompletion(assessment, draft);
+
   return {
-    alternativeCodes: [],
-    assessmentAttemptId: "attempt-account",
-    completedAt: "2026-07-19T03:00:00.000Z",
-    createdAt: "2026-07-19T03:00:00.000Z",
-    domains: candidateFullScoringRelease.domains.map((domain) => ({
-      domainId: domain.domainId,
-      isBoundary: false,
-      label: domain.label,
-      score: 70,
-      status: "valid" as const,
-      symbol: profileCode[(domain.codePosition ?? 1) - 1],
-    })),
-    facets: candidateFullScoringRelease.facets.map((facet) => ({
-      facetId: facet.facetId,
-      label: facet.label,
-      score: 70,
-      status: "valid" as const,
-      validResponses: Math.max(1, facet.minValidResponses),
-    })),
-    kind: "full",
-    localResultId: null,
-    originResultId: "origin-account-result",
-    profileCode,
-    profileName: "새 가능성을 찾는 탐험가",
-    resultLabel: "현재 가장 가까운 대표 성향",
-    resultCopyVersion: "candidate-result-copy.v1",
-    resultEvidenceStatus: "clear",
-    resultReportId: "4292e0e7-0353-43f0-9132-f90149badee5",
-    resultStatus: "ready",
-    versionBundle: {
-      assessmentReleaseId: candidateFullScoringRelease.assessmentReleaseId,
-      codeSchemeVersion: candidateFullScoringRelease.codeSchemeVersion,
-      scoringModelVersion: candidateFullScoringRelease.scoringModelVersion,
-      scoringReleaseId: candidateFullScoringRelease.scoringReleaseId,
+    ...draft,
+    completionStatus: "completed",
+    responseSnapshotHash: readiness.responseSnapshotHash,
+    resultCopyVersion: coreResultCopyVersion,
+    resultEvidenceStatus: readiness.evidenceStatus,
+    resultSnapshot: {
+      ...readiness.versionBundle,
+      createdAt: completedAt,
+      responseSnapshotHash: readiness.responseSnapshotHash,
+      resultCopyVersion: coreResultCopyVersion,
+      resultStatus: "ready",
+      scoreResult: readiness.result,
     },
   };
 }

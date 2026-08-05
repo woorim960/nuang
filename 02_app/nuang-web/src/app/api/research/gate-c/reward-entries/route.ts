@@ -26,7 +26,7 @@ export async function GET() {
     }),
     context.client
       .from("research_gate_c_reward_entry")
-      .select("id,status,created_at,updated_at")
+      .select("id,status,contact_method,created_at,updated_at")
       .eq("campaign_id", campaign.campaignId)
       .eq("account_id", context.accountId)
       .maybeSingle(),
@@ -46,6 +46,7 @@ export async function GET() {
       entry: entry.data
         ? {
             createdAt: entry.data.created_at,
+            contactMethod: entry.data.contact_method,
             id: entry.data.id,
             status: entry.data.status,
             updatedAt: entry.data.updated_at,
@@ -114,12 +115,22 @@ export async function POST(request: Request) {
       { status: 503 },
     );
   }
-  if (
-    contact.data.mobilePhoneStatus === "missing" ||
-    !contact.data.mobilePhoneLookupHash
-  ) {
+  const contactLookupHash =
+    parsedBody.data.contactMethod === "email"
+      ? contact.data.emailHash
+      : contact.data.mobilePhoneLookupHash;
+  const contactIsMissing =
+    parsedBody.data.contactMethod === "email"
+      ? contact.data.emailStatus === "missing"
+      : contact.data.mobilePhoneStatus === "missing";
+  if (contactIsMissing || !contactLookupHash) {
     return NextResponse.json(
-      { error: "profile_mobile_phone_required" },
+      {
+        error:
+          parsedBody.data.contactMethod === "email"
+            ? "profile_email_required"
+            : "profile_mobile_phone_required",
+      },
       { status: 422 },
     );
   }
@@ -142,8 +153,8 @@ export async function POST(request: Request) {
     campaign_id: campaign.campaignId,
     consent_version: parsedBody.data.consentVersion,
     contact_ciphertext: null,
-    contact_lookup_hash: contact.data.mobilePhoneLookupHash,
-    contact_method: campaign.contactMethod,
+    contact_lookup_hash: contactLookupHash,
+    contact_method: parsedBody.data.contactMethod,
     receipt_lookup_hash: createGateCRewardReceiptLookupHash(
       campaign.campaignId,
       parsedBody.data.publicReceiptId,
@@ -185,6 +196,7 @@ export async function POST(request: Request) {
   return NextResponse.json({
     announcementLabel: campaign.publicCampaign.announcementLabel,
     contact: toPrivateContactPayload(contact.data),
+    contactMethod: parsedBody.data.contactMethod,
     entryId: writeResponse.data.id,
     ok: true,
   });

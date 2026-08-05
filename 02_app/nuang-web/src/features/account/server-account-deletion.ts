@@ -6,7 +6,7 @@ import { ensureAccountForUser } from "@/features/account/server-writes";
 import { feedMediaBucket } from "@/features/feed/feed-media";
 
 type AccountDeletionResult =
-  | { cleanupPending?: boolean; ok: true }
+  | { ok: true }
   | {
       code:
         | "account_delete_failed"
@@ -28,6 +28,17 @@ export async function deleteOwnAccount({
   const media = await readOwnedMedia(client, account.accountId);
   if (!media.ok) return { code: "media_cleanup_failed", ok: false };
 
+  for (const [bucket, paths] of media.pathsByBucket) {
+    for (let index = 0; index < paths.length; index += 100) {
+      const removal = await client.storage
+        .from(bucket)
+        .remove(paths.slice(index, index + 100));
+      if (removal.error) {
+        return { code: "media_cleanup_failed", ok: false };
+      }
+    }
+  }
+
   const deletion = await client.rpc("delete_own_nuang_account", {
     p_account_id: account.accountId,
     p_supabase_user_id: user.id,
@@ -37,26 +48,7 @@ export async function deleteOwnAccount({
     return { code: "account_delete_failed", ok: false };
   }
 
-  let cleanupPending = false;
-
-  for (const [bucket, paths] of media.pathsByBucket) {
-    for (let index = 0; index < paths.length; index += 100) {
-      const removal = await client.storage
-        .from(bucket)
-        .remove(paths.slice(index, index + 100));
-      if (removal.error) {
-        cleanupPending = true;
-      }
-    }
-  }
-
-  if (cleanupPending) {
-    console.error("Account deleted but owned media cleanup is pending.", {
-      accountId: account.accountId,
-    });
-  }
-
-  return cleanupPending ? { cleanupPending: true, ok: true } : { ok: true };
+  return { ok: true };
 }
 
 async function readOwnedMedia(client: SupabaseClient, accountId: string) {

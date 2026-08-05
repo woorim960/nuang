@@ -6,9 +6,18 @@ export const assessmentAgeAccessPolicies = [
 export type AssessmentAgeAccessPolicy =
   (typeof assessmentAgeAccessPolicies)[number];
 
-export function requiresAdultVerification(
-  policy: AssessmentAgeAccessPolicy,
-) {
+/**
+ * Adult-only assessments stay authorable in the operations center, but the
+ * beta public runtime does not expose them until a verified adult access flow
+ * is implemented and reviewed.
+ */
+export const betaAdultAssessmentsEnabled = false;
+
+export function canExposeAssessmentInBeta(policy: AssessmentAgeAccessPolicy) {
+  return policy === "all_ages" || betaAdultAssessmentsEnabled;
+}
+
+export function requiresAdultVerification(policy: AssessmentAgeAccessPolicy) {
   return policy === "adult_verification_required";
 }
 

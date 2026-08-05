@@ -1,5 +1,6 @@
 import {
   BadgeDollarSign,
+  BarChart3,
   BookOpenText,
   ClipboardList,
   FileCheck2,
@@ -7,6 +8,8 @@ import {
   LayoutDashboard,
   MessageSquareMore,
   MessagesSquare,
+  PanelsTopLeft,
+  Scale,
   Settings2,
   ShieldCheck,
   Send,
@@ -35,6 +38,12 @@ export const adminNavigation: readonly AdminNavigationGroup[] = [
         icon: LayoutDashboard,
         keywords: ["대시보드", "현황", "업무", "지표"],
         label: "운영 개요",
+      },
+      {
+        href: "/admin/analytics",
+        icon: BarChart3,
+        keywords: ["제품 분석", "활성", "퍼널", "완료", "재방문", "트래픽"],
+        label: "제품 분석",
       },
       {
         href: "/admin/members",
@@ -91,6 +100,12 @@ export const adminNavigation: readonly AdminNavigationGroup[] = [
     label: "품질 관리",
     items: [
       {
+        href: "/admin/experiences",
+        icon: PanelsTopLeft,
+        keywords: ["검사", "문항", "밸런스", "연구소", "팩", "발행"],
+        label: "검사 스튜디오",
+      },
+      {
         href: "/admin/research",
         icon: FlaskConical,
         keywords: ["문항", "연구", "검토", "성향지도 피드백"],
@@ -107,6 +122,12 @@ export const adminNavigation: readonly AdminNavigationGroup[] = [
   {
     label: "거버넌스",
     items: [
+      {
+        href: "/admin/legal",
+        icon: Scale,
+        keywords: ["법률", "약관", "개인정보 처리방침", "승인", "정책", "자문"],
+        label: "법률·정책",
+      },
       {
         href: "/admin/consents",
         icon: FileCheck2,

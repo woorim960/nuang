@@ -1,0 +1,23 @@
+{
+  "status": "template_locked_no_participant_analysis",
+  "models": [
+    "ten_correlated_facets",
+    "five_correlated_axes",
+    "five_axes_with_nested_facets",
+    "method_factor_for_reverse_items"
+  ],
+  "requiredDiagnostics": [
+    "ordinal_item_distributions",
+    "unsure_and_missing_by_item",
+    "corrected_item_total",
+    "target_and_cross_loadings",
+    "omega_with_uncertainty",
+    "test_retest_with_uncertainty",
+    "quick_full_agreement",
+    "code_transition_near_boundary",
+    "ordinal_dif",
+    "configural_threshold_metric_invariance"
+  ],
+  "developmentConfirmationReuseAllowed": false,
+  "humanGateEffect": "none"
+}

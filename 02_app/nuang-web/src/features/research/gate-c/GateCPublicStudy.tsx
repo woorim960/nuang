@@ -13,6 +13,7 @@ import { useEffect, useRef, useState } from "react";
 import {
   type PrivateContactPayload,
   privateContactConsentVersion,
+  privateEmailRegistrationVersion,
 } from "@/features/account/private-contact-contract";
 import {
   AssessmentBottomSheet,
@@ -45,12 +46,16 @@ import {
   type GateCPublicResponseRecord,
   type GateCPublicSessionStart,
 } from "@/features/research/gate-c/gate-c-public-contract";
-import { gateCRewardEntryConsentVersion } from "@/features/research/gate-c/gate-c-reward-entry-contract";
+import {
+  gateCRewardEntryConsentVersion,
+  type GateCRewardContactMethod,
+} from "@/features/research/gate-c/gate-c-reward-entry-contract";
 import {
   isGateCFormId,
   type GateCResponseChoice,
 } from "@/features/research/gate-c/gate-c-study-contract";
 import { gateCParticipantDefinitions } from "@/features/research/gate-c/gate-c-study-fixture";
+import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
 import styles from "./GateCPublicStudy.module.css";
 
 type Surface = "complete" | "questions" | "setup";
@@ -373,128 +378,168 @@ export function GateCPublicStudy({
 
   if (surface === "setup") {
     return (
-      <main className={styles.publicPage}>
-        <section className={styles.intro}>
-          <div className={styles.brandRow}>
-            <span>약 4분 · 12개 질문</span>
-          </div>
-          <h1>뉴앙의 질문을 더 분명하게 만드는 데 함께해 주세요</h1>
-          <p className={styles.introCopy}>
-            질문을 읽고 평소 모습에 가까운 답을 골라 주세요. 어떤 질문이
-            헷갈리는지 확인해 뉴앙의 성향 검사를 개선합니다.
-          </p>
-
-          <div className={styles.privacyPanel}>
-            <ShieldCheck aria-hidden="true" size={21} strokeWidth={1.7} />
-            <div>
-              <strong>검사 참여에는 이름과 연락처가 필요 없어요</strong>
-              <p>
-                이벤트 응모는 참여 완료 후 뉴앙 회원의 비공개 프로필 연락처로
-                진행해요.
-              </p>
+      <CommunityScreenShell
+        backHref="/home"
+        backLabel="뉴앙 홈으로 돌아가기"
+        title="검사 질문 리뷰"
+      >
+        <form
+          className={styles.publicPage}
+          onSubmit={(event) => {
+            event.preventDefault();
+            void startStudy();
+          }}
+        >
+          <section className={styles.intro}>
+            <div className={styles.brandRow}>
+              <strong>뉴앙 연구소</strong>
+              <span>약 4분 · 12개 질문</span>
             </div>
-          </div>
-
-          <div className={styles.rewardPanel}>
-            <Gift aria-hidden="true" size={21} strokeWidth={1.65} />
-            <div>
-              <strong>리뷰 이벤트</strong>
-              <p>
-                참여 후 리뷰를 남긴 분 중 {rewardCampaign.winnerCount}명을
-                추첨해 {rewardCampaign.prize}을 드려요.
-              </p>
-              <RewardCampaignStatus campaign={rewardCampaign} />
-            </div>
-          </div>
-
-          <div className={styles.formFields}>
-            <StudySelect
-              label="연령대"
-              onChange={(value) => setAgeBand(value as GateCAgeBand)}
-              options={gateCAgeBands.map((value) => ({
-                label: gateCAgeBandLabels[value],
-                value,
-              }))}
-              placeholder="연령대를 선택해 주세요"
-              value={ageBand}
-            />
-            <StudySelect
-              label="요즘의 생활 모습"
-              onChange={(value) => setLifeContext(value as GateCLifeContext)}
-              options={gateCLifeContexts.map((value) => ({
-                label: gateCLifeContextLabels[value],
-                value,
-              }))}
-              placeholder="가장 가까운 모습을 선택해 주세요"
-              value={lifeContext}
-            />
-            <StudySelect
-              label="성향검사 경험"
-              onChange={(value) =>
-                setAssessmentExperience(value as GateCAssessmentExperience)
-              }
-              options={gateCAssessmentExperiences.map((value) => ({
-                label: gateCAssessmentExperienceLabels[value],
-                value,
-              }))}
-              placeholder="경험 정도를 선택해 주세요"
-              value={assessmentExperience}
-            />
-            <label aria-hidden="true" className={styles.honeypot}>
-              웹사이트
-              <input
-                autoComplete="off"
-                onChange={(event) => setWebsite(event.target.value)}
-                tabIndex={-1}
-                value={website}
-              />
-            </label>
-          </div>
-
-          <div className={styles.consentList}>
-            <label>
-              <input
-                checked={isAdult}
-                onChange={(event) => setIsAdult(event.target.checked)}
-                type="checkbox"
-              />
-              <span>만 18세 이상이에요.</span>
-            </label>
-            <label>
-              <input
-                checked={consentAccepted}
-                onChange={(event) => setConsentAccepted(event.target.checked)}
-                type="checkbox"
-              />
-              <span>
-                참여는 자발적이며 제출 전 언제든 그만둘 수 있어요. 제출한 익명
-                기록은 최대 1년 보관된 뒤 삭제되는 것에 동의해요.
-              </span>
-            </label>
-          </div>
-
-          {errorMessage ? (
-            <p aria-live="polite" className={styles.errorMessage}>
-              {errorMessage}
+            <h2>뉴앙의 질문을 더 분명하게 만드는 데 함께해 주세요</h2>
+            <p className={styles.introCopy}>
+              질문을 읽고 평소 모습에 가까운 답을 골라 주세요. 어떤 질문이
+              헷갈리는지 확인해 뉴앙의 성향 검사를 개선합니다.
             </p>
-          ) : null}
-          <button
-            className={styles.startButton}
-            disabled={!canStart || starting}
-            onClick={startStudy}
-            type="button"
+
+            <div className={styles.privacyPanel}>
+              <span aria-hidden="true" className={styles.noteIcon}>
+                <ShieldCheck size={19} strokeWidth={1.7} />
+              </span>
+              <div>
+                <strong>질문 리뷰에는 이름과 연락처가 필요 없어요</strong>
+                <p>
+                  이벤트 응모는 참여 완료 후 뉴앙 회원의 비공개 프로필 연락처로
+                  진행해요.
+                </p>
+              </div>
+            </div>
+
+            <div className={styles.rewardPanel}>
+              <span aria-hidden="true" className={styles.noteIcon}>
+                <Gift size={19} strokeWidth={1.65} />
+              </span>
+              <div>
+                <strong>리뷰 이벤트</strong>
+                <p>
+                  참여 후 리뷰를 남긴 분 중 {rewardCampaign.winnerCount}명을
+                  추첨해 {rewardCampaign.prize}을 드려요.
+                </p>
+                <RewardCampaignStatus campaign={rewardCampaign} />
+              </div>
+            </div>
+          </section>
+
+          <section
+            aria-labelledby="research-participant-heading"
+            className={styles.setupSection}
           >
-            {starting ? "질문을 준비하고 있어요" : "질문 확인 시작하기"}
-            {!starting ? (
-              <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
+            <header className={styles.sectionHeading}>
+              <small>참여 정보</small>
+              <h2 id="research-participant-heading">
+                참여 전 간단히 알려주세요
+              </h2>
+              <p>개인을 알아볼 수 없는 범위에서 문항 분석에만 사용해요.</p>
+            </header>
+            <div className={styles.formFields}>
+              <StudySelect
+                label="연령대"
+                onChange={(value) => setAgeBand(value as GateCAgeBand)}
+                options={gateCAgeBands.map((value) => ({
+                  label: gateCAgeBandLabels[value],
+                  value,
+                }))}
+                placeholder="연령대를 선택해 주세요"
+                value={ageBand}
+              />
+              <StudySelect
+                label="요즘의 생활 모습"
+                onChange={(value) => setLifeContext(value as GateCLifeContext)}
+                options={gateCLifeContexts.map((value) => ({
+                  label: gateCLifeContextLabels[value],
+                  value,
+                }))}
+                placeholder="가장 가까운 모습을 선택해 주세요"
+                value={lifeContext}
+              />
+              <StudySelect
+                label="성향검사 경험"
+                onChange={(value) =>
+                  setAssessmentExperience(value as GateCAssessmentExperience)
+                }
+                options={gateCAssessmentExperiences.map((value) => ({
+                  label: gateCAssessmentExperienceLabels[value],
+                  value,
+                }))}
+                placeholder="경험 정도를 선택해 주세요"
+                value={assessmentExperience}
+              />
+              <label aria-hidden="true" className={styles.honeypot}>
+                웹사이트
+                <input
+                  autoComplete="off"
+                  onChange={(event) => setWebsite(event.target.value)}
+                  tabIndex={-1}
+                  value={website}
+                />
+              </label>
+            </div>
+          </section>
+
+          <section
+            aria-labelledby="research-consent-heading"
+            className={styles.consentSection}
+          >
+            <header className={styles.sectionHeading}>
+              <small>참여 동의</small>
+              <h2 id="research-consent-heading">마지막으로 확인해 주세요</h2>
+              <p>두 항목을 확인하면 질문 리뷰를 시작할 수 있어요.</p>
+            </header>
+            <div className={styles.consentList}>
+              <label>
+                <input
+                  checked={isAdult}
+                  onChange={(event) => setIsAdult(event.target.checked)}
+                  type="checkbox"
+                />
+                <span>만 18세 이상이에요.</span>
+              </label>
+              <label>
+                <input
+                  checked={consentAccepted}
+                  onChange={(event) => setConsentAccepted(event.target.checked)}
+                  type="checkbox"
+                />
+                <span>
+                  참여는 자발적이며 제출 전 언제든 그만둘 수 있어요. 제출한 익명
+                  기록은 최대 1년 보관된 뒤 삭제되는 것에 동의해요.
+                </span>
+              </label>
+            </div>
+
+            {errorMessage ? (
+              <p aria-live="polite" className={styles.errorMessage}>
+                {errorMessage}
+              </p>
             ) : null}
-          </button>
-          <p className={styles.boundaryCopy}>
-            이 참여 화면은 성향 결과를 제공하지 않으며, 고객용 검사 점수를
-            만들지 않아요.
-          </p>
-        </section>
-      </main>
+          </section>
+
+          <footer className={styles.actionBar}>
+            <p className={styles.boundaryCopy}>
+              성향 결과나 검사 점수를 만드는 참여가 아니에요.
+            </p>
+            <button
+              className={styles.startButton}
+              disabled={!canStart || starting}
+              type="submit"
+            >
+              {starting ? "질문을 준비하고 있어요" : "질문 확인 시작하기"}
+              {!starting ? (
+                <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
+              ) : null}
+            </button>
+          </footer>
+        </form>
+      </CommunityScreenShell>
     );
   }
 
@@ -514,6 +559,8 @@ export function GateCPublicStudy({
             <span>내 참여번호</span>
             <strong>{receipt.participantCode}</strong>
           </div>
+
+          <ResultAnnouncementGuide campaign={rewardCampaign} />
 
           <RewardEntryPanel
             campaign={rewardCampaign}
@@ -763,6 +810,49 @@ function RewardCampaignStatus({
   );
 }
 
+function ResultAnnouncementGuide({
+  campaign,
+}: {
+  campaign: GateCReviewRewardCampaign;
+}) {
+  const announcement = campaign.announcementLabel ?? "운영 일정 확정 후 안내";
+
+  return (
+    <section
+      aria-labelledby="result-announcement-heading"
+      className={styles.resultAnnouncementGuide}
+    >
+      <div className={styles.resultAnnouncementHeading}>
+        <span aria-hidden="true">
+          <Gift size={18} strokeWidth={1.7} />
+        </span>
+        <div>
+          <h2 id="result-announcement-heading">이벤트 결과 안내</h2>
+          <p>응모했다면 아래 일정과 연락 방법으로 결과를 확인할 수 있어요.</p>
+        </div>
+      </div>
+      <dl className={styles.resultAnnouncementList}>
+        <div>
+          <dt>결과 발표</dt>
+          <dd>{announcement}</dd>
+        </div>
+        <div>
+          <dt>안내받을 곳</dt>
+          <dd>응모할 때 선택한 이메일 또는 휴대전화</dd>
+        </div>
+        <div>
+          <dt>안내 대상</dt>
+          <dd>당첨자에게만 개별 안내</dd>
+        </div>
+      </dl>
+      <p className={styles.resultAnnouncementNotice}>
+        휴대전화번호 인증은 아직 준비 중이에요. 휴대전화를 선택하면 입력한
+        번호를 그대로 사용하니 오타가 없는지 꼭 확인해 주세요.
+      </p>
+    </section>
+  );
+}
+
 function RewardEntryPanel({
   campaign,
   onLogin,
@@ -772,7 +862,12 @@ function RewardEntryPanel({
   onLogin: () => void;
   receipt: CompletionReceipt;
 }) {
-  const [contact, setContact] = useState("");
+  const [email, setEmail] = useState("");
+  const [mobilePhone, setMobilePhone] = useState("");
+  const [selectedMethod, setSelectedMethod] =
+    useState<GateCRewardContactMethod>("email");
+  const [entryContactMethod, setEntryContactMethod] =
+    useState<GateCRewardContactMethod | null>(null);
   const [state, setState] = useState<
     | "editing"
     | "entering"
@@ -790,6 +885,7 @@ function RewardEntryPanel({
     useState<PrivateContactPayload | null>(null);
 
   useEffect(() => {
+    if (!campaign.entryEnabled) return;
     let active = true;
     void fetch("/api/research/gate-c/reward-entries", {
       cache: "no-store",
@@ -797,7 +893,10 @@ function RewardEntryPanel({
       .then(async (response) => ({
         body: (await response.json().catch(() => null)) as {
           contact?: PrivateContactPayload;
-          entry?: { status?: string } | null;
+          entry?: {
+            contactMethod?: GateCRewardContactMethod;
+            status?: string;
+          } | null;
         } | null,
         response,
       }))
@@ -815,11 +914,15 @@ function RewardEntryPanel({
           return;
         }
         setProfileContact(body.contact);
+        const preferredMethod = choosePreferredContactMethod(
+          body.contact,
+          body.entry?.contactMethod,
+        );
+        setSelectedMethod(preferredMethod);
+        setEntryContactMethod(body.entry?.contactMethod ?? null);
         setState(
           body.entry &&
-            ["contacted", "entered", "winner"].includes(
-              body.entry.status ?? "",
-            )
+            ["contacted", "entered", "winner"].includes(body.entry.status ?? "")
             ? "success"
             : "idle",
         );
@@ -834,16 +937,25 @@ function RewardEntryPanel({
     return () => {
       active = false;
     };
-  }, []);
+  }, [campaign.entryEnabled]);
 
-  if (!campaign.entryEnabled || campaign.contactMethod !== "mobile_phone") {
+  if (!campaign.entryEnabled) {
     return null;
   }
 
-  const mobileDigits = contact.replace(/\D/g, "");
+  const contactIsSaved =
+    selectedMethod === "email"
+      ? Boolean(profileContact?.hasEmail)
+      : Boolean(profileContact?.hasMobilePhone);
+  const needsContact = !contactIsSaved || state === "editing";
+  const mobileDigits = mobilePhone.replace(/\D/g, "");
+  const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
   const canEnter =
-    (profileContact?.hasMobilePhone ||
-      mobileDigits.length === 11) &&
+    (needsContact
+      ? selectedMethod === "email"
+        ? emailIsValid
+        : mobileDigits.length === 11
+      : contactIsSaved) &&
     state !== "entering" &&
     state !== "saving_contact";
 
@@ -852,15 +964,22 @@ function RewardEntryPanel({
     setState("entering");
     setErrorMessage("");
 
-    let currentContact = profileContact;
-    if (!currentContact?.hasMobilePhone || state === "editing") {
+    if (needsContact) {
       setState("saving_contact");
       const contactResponse = await fetch("/api/me/contact", {
-      body: JSON.stringify({
-          consentVersion: privateContactConsentVersion,
-          mobilePhone: contact,
-          source: "event_entry",
-        }),
+        body: JSON.stringify(
+          selectedMethod === "email"
+            ? {
+                consentVersion: privateEmailRegistrationVersion,
+                email: email.trim(),
+                source: "event_entry",
+              }
+            : {
+                consentVersion: privateContactConsentVersion,
+                mobilePhone,
+                source: "event_entry",
+              },
+        ),
         headers: { "content-type": "application/json" },
         method: "PATCH",
       });
@@ -873,13 +992,14 @@ function RewardEntryPanel({
       if (!contactResponse.ok || !contactBody?.contact) {
         setErrorMessage(
           contactBody?.message ??
-            "휴대전화번호를 저장하지 못했어요. 다시 확인해 주세요.",
+            (selectedMethod === "email"
+              ? "이메일을 저장하지 못했어요. 주소를 다시 확인해 주세요."
+              : "휴대전화번호를 저장하지 못했어요. 번호를 다시 확인해 주세요."),
         );
         setState("error");
         return;
       }
-      currentContact = contactBody.contact;
-      setProfileContact(currentContact);
+      setProfileContact(contactBody.contact);
       setState("entering");
     }
 
@@ -887,6 +1007,7 @@ function RewardEntryPanel({
       body: JSON.stringify({
         consentAccepted: true,
         consentVersion: gateCRewardEntryConsentVersion,
+        contactMethod: selectedMethod,
         participantCode: receipt.participantCode,
         publicReceiptId: receipt.publicReceiptId,
         website: "",
@@ -896,12 +1017,14 @@ function RewardEntryPanel({
     });
     const body = (await response.json().catch(() => null)) as {
       contact?: PrivateContactPayload;
+      contactMethod?: GateCRewardContactMethod;
       entryId?: string;
       error?: string;
     } | null;
 
     if (response.ok && body?.entryId) {
       if (body.contact) setProfileContact(body.contact);
+      setEntryContactMethod(body.contactMethod ?? selectedMethod);
       window.sessionStorage.removeItem(gateCRewardResumeStorageKey);
       setState("success");
       return;
@@ -909,10 +1032,12 @@ function RewardEntryPanel({
 
     setErrorMessage(
       body?.error === "reward_entry_duplicate"
-        ? "이미 이 계정이나 휴대전화번호로 응모했어요."
-        : body?.error === "profile_mobile_phone_required"
-          ? "응모 안내를 받을 휴대전화번호를 등록해 주세요."
-          : "지금은 응모를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+        ? "이미 이 계정이나 연락처로 응모했어요."
+        : body?.error === "profile_email_required"
+          ? "당첨 안내를 받을 이메일을 등록해 주세요."
+          : body?.error === "profile_mobile_phone_required"
+            ? "응모 안내를 받을 휴대전화번호를 등록해 주세요."
+            : "지금은 응모를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     );
     setState("error");
   }
@@ -938,7 +1063,9 @@ function RewardEntryPanel({
   if (state === "loading") {
     return (
       <section aria-live="polite" className={styles.rewardEntryPanel}>
-        <p className={styles.rewardEntryLoading}>응모 정보를 확인하고 있어요.</p>
+        <p className={styles.rewardEntryLoading}>
+          응모 정보를 확인하고 있어요.
+        </p>
       </section>
     );
   }
@@ -965,6 +1092,8 @@ function RewardEntryPanel({
   }
 
   if (state === "success" || state === "withdrawing") {
+    const method = entryContactMethod ?? selectedMethod;
+    const maskedContact = getMaskedContact(profileContact, method);
     return (
       <section aria-live="polite" className={styles.rewardEntrySuccess}>
         <Check aria-hidden="true" size={21} strokeWidth={1.8} />
@@ -972,18 +1101,22 @@ function RewardEntryPanel({
           <strong>이벤트 응모가 완료됐어요</strong>
           <p>
             {campaign.announcementLabel} 당첨자에게{" "}
-            {profileContact?.mobilePhoneMasked ?? "프로필 연락처"}로
-            안내할게요.
+            {maskedContact ?? "선택한 연락처"}로 안내할게요.
           </p>
+          <small className={styles.rewardContactStatus}>
+            {getContactStatusCopy(profileContact, method)}
+          </small>
           <button
             disabled={state === "withdrawing"}
             onClick={() => {
-              setContact("");
+              setEmail("");
+              setMobilePhone("");
+              setSelectedMethod(method);
               setState("editing");
             }}
             type="button"
           >
-            번호 변경
+            연락처 변경
           </button>
           <button
             disabled={state === "withdrawing"}
@@ -1008,8 +1141,6 @@ function RewardEntryPanel({
     );
   }
 
-  const needsContact = !profileContact?.hasMobilePhone || state === "editing";
-
   return (
     <section className={styles.rewardEntryPanel}>
       <div className={styles.rewardEntryHeading}>
@@ -1017,50 +1148,104 @@ function RewardEntryPanel({
         <div>
           <strong>리뷰 이벤트 응모</strong>
           <span>
-            {campaign.periodLabel} · {campaign.announcementLabel} 발표
+            {campaign.periodLabel} · 이메일 또는 휴대전화 중 하나를 선택해요
           </span>
         </div>
       </div>
+      <fieldset className={styles.rewardContactMethods}>
+        <legend>당첨 안내를 받을 곳</legend>
+        <div>
+          <button
+            aria-pressed={selectedMethod === "email"}
+            className={selectedMethod === "email" ? styles.isSelected : ""}
+            onClick={() => {
+              setSelectedMethod("email");
+              setErrorMessage("");
+              if (state === "editing" && profileContact?.hasEmail) {
+                setState("idle");
+              }
+            }}
+            type="button"
+          >
+            이메일
+            {profileContact?.hasEmail ? <small>저장됨</small> : null}
+          </button>
+          <button
+            aria-pressed={selectedMethod === "mobile_phone"}
+            className={
+              selectedMethod === "mobile_phone" ? styles.isSelected : ""
+            }
+            onClick={() => {
+              setSelectedMethod("mobile_phone");
+              setErrorMessage("");
+              if (state === "editing" && profileContact?.hasMobilePhone) {
+                setState("idle");
+              }
+            }}
+            type="button"
+          >
+            휴대전화
+            {profileContact?.hasMobilePhone ? <small>저장됨</small> : null}
+          </button>
+        </div>
+      </fieldset>
       {needsContact ? (
         <>
           <label className={styles.rewardContactField}>
             <span>
-              {profileContact?.hasMobilePhone
-                ? "새 휴대전화번호"
-                : "당첨 안내를 받을 휴대전화번호"}
+              {selectedMethod === "email"
+                ? profileContact?.hasEmail
+                  ? "새 이메일"
+                  : "당첨 안내를 받을 이메일"
+                : profileContact?.hasMobilePhone
+                  ? "새 휴대전화번호"
+                  : "당첨 안내를 받을 휴대전화번호"}
             </span>
             <input
-              autoComplete="tel"
-              inputMode="tel"
-              maxLength={13}
-              onChange={(event) =>
-                setContact(formatKoreanMobile(event.target.value))
+              autoComplete={selectedMethod === "email" ? "email" : "tel"}
+              inputMode={selectedMethod === "email" ? "email" : "tel"}
+              maxLength={selectedMethod === "email" ? 254 : 13}
+              onChange={(event) => {
+                if (selectedMethod === "email") setEmail(event.target.value);
+                else setMobilePhone(formatKoreanMobile(event.target.value));
+              }}
+              placeholder={
+                selectedMethod === "email"
+                  ? "name@example.com"
+                  : "010-0000-0000"
               }
-              placeholder="010-0000-0000"
-              type="tel"
-              value={contact}
+              type={selectedMethod === "email" ? "email" : "tel"}
+              value={selectedMethod === "email" ? email : mobilePhone}
             />
           </label>
-          {!profileContact?.hasMobilePhone ? (
-            <p className={styles.rewardConsent}>
-              번호는 다른 사람에게 공개되지 않으며, 이벤트 당첨과 계정에 꼭
-              필요한 안내에 사용합니다.
+          <p className={styles.rewardConsent}>
+            연락처는 다른 사람에게 공개되지 않으며 이벤트 당첨 안내에만
+            사용해요.
+          </p>
+          {selectedMethod === "mobile_phone" ? (
+            <p className={styles.rewardVerificationNotice}>
+              휴대전화번호 인증은 아직 준비 중이에요. 베타에서는 입력한 번호를
+              그대로 사용하니 정확히 확인해 주세요.
             </p>
           ) : null}
         </>
       ) : (
         <div className={styles.rewardSavedContact}>
-          <span>안내받을 번호</span>
-          <strong>{profileContact.mobilePhoneMasked}</strong>
+          <span>
+            안내받을 {selectedMethod === "email" ? "이메일" : "휴대전화"}
+          </span>
+          <strong>{getMaskedContact(profileContact, selectedMethod)}</strong>
           <button
             onClick={() => {
-              setContact("");
+              setEmail("");
+              setMobilePhone("");
               setState("editing");
             }}
             type="button"
           >
             변경
           </button>
+          <small>{getContactStatusCopy(profileContact, selectedMethod)}</small>
         </div>
       )}
       {errorMessage ? (
@@ -1076,15 +1261,16 @@ function RewardEntryPanel({
       >
         {state === "entering" || state === "saving_contact"
           ? "응모하고 있어요"
-          : profileContact?.hasMobilePhone && state !== "editing"
-            ? "이 번호로 응모하기"
-            : "번호 저장하고 응모하기"}
+          : contactIsSaved && state !== "editing"
+            ? `이 ${selectedMethod === "email" ? "이메일" : "번호"}로 응모하기`
+            : `${selectedMethod === "email" ? "이메일" : "번호"} 저장하고 응모하기`}
       </button>
       {state === "editing" ? (
         <button
           className={styles.rewardEntryCancel}
           onClick={() => {
-            setContact("");
+            setEmail("");
+            setMobilePhone("");
             setState("idle");
           }}
           type="button"
@@ -1094,6 +1280,37 @@ function RewardEntryPanel({
       ) : null}
     </section>
   );
+}
+
+function choosePreferredContactMethod(
+  contact: PrivateContactPayload,
+  entryMethod?: GateCRewardContactMethod,
+): GateCRewardContactMethod {
+  if (entryMethod) return entryMethod;
+  if (contact.emailStatus === "verified") return "email";
+  if (contact.hasMobilePhone) return "mobile_phone";
+  return "email";
+}
+
+function getMaskedContact(
+  contact: PrivateContactPayload | null,
+  method: GateCRewardContactMethod,
+) {
+  return method === "email" ? contact?.emailMasked : contact?.mobilePhoneMasked;
+}
+
+function getContactStatusCopy(
+  contact: PrivateContactPayload | null,
+  method: GateCRewardContactMethod,
+) {
+  if (method === "email") {
+    return contact?.emailStatus === "verified"
+      ? "인증된 이메일이에요."
+      : "아직 인증 전인 이메일이에요. 주소를 다시 확인해 주세요.";
+  }
+  return contact?.mobilePhoneStatus === "verified"
+    ? "인증된 휴대전화번호예요."
+    : "휴대전화 인증 준비 전이라 입력한 번호로 안내해요.";
 }
 
 const gateCRewardResumeStorageKey = "nuang-gate-c-reward-resume-v1";

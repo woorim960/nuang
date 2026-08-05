@@ -31,6 +31,7 @@
 
 .tabs {
   display: flex;
+  overflow-x: auto;
   gap: 1.5rem;
   padding: 0 1rem;
   border-bottom: 1px solid var(--admin-border, var(--nu-color-border));
@@ -47,6 +48,7 @@
   color: var(--nu-color-text-muted);
   font-size: var(--nu-text-body-sm);
   font-weight: var(--nu-weight-semibold);
+  white-space: nowrap;
 }
 
 .tabs a[data-active="true"] {
@@ -278,20 +280,12 @@
 
 .recommendation[data-tone="warning"] {
   border-left-color: var(--nu-color-warning);
-  background: color-mix(
-    in srgb,
-    var(--nu-color-warning-soft) 55%,
-    white
-  );
+  background: color-mix(in srgb, var(--nu-color-warning-soft) 55%, white);
 }
 
 .recommendation[data-tone="success"] {
   border-left-color: var(--nu-color-success);
-  background: color-mix(
-    in srgb,
-    var(--nu-color-success-soft) 55%,
-    white
-  );
+  background: color-mix(in srgb, var(--nu-color-success-soft) 55%, white);
 }
 
 .recommendation strong {

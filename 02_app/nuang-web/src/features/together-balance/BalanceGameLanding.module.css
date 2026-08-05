@@ -204,6 +204,7 @@
   color: var(--nu-color-text);
   background: var(--nu-color-surface);
   text-align: left;
+  text-decoration: none;
 }
 
 .packCard[data-tone="rose"] {

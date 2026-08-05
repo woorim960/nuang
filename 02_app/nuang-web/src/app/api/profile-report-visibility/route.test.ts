@@ -24,4 +24,17 @@ describe("profile report visibility route contract", () => {
       source.indexOf("profile_report_visibility_write_failed"),
     );
   });
+
+  it("checks the core release before making an original report public", () => {
+    expect(source).toContain("readCoreResultPublicationDecision");
+    expect(source).toContain('parsed.data.visibility === "profile_public"');
+    expect(source).toContain('error: "result_release_not_publicable"');
+  });
+
+  it("does not apply the core release gate to topic and lab reports", () => {
+    expect(source).toContain('key.kind === "core"');
+    expect(source.indexOf('key.kind === "core"')).toBeLessThan(
+      source.indexOf("readCoreResultPublicationDecision({"),
+    );
+  });
 });

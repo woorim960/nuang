@@ -46,7 +46,9 @@ describe("refreshSupabaseAuthSession", () => {
       ) => {
         mocks.getClaims.mockImplementation(async () => {
           expect(options.cookies.getAll()).toEqual([
-            { name: "existing", value: "cookie" },
+            expect.objectContaining({
+              name: expect.stringMatching(/^sb-project-auth-token/),
+            }),
           ]);
           options.cookies.setAll(
             [
@@ -79,7 +81,7 @@ describe("refreshSupabaseAuthSession", () => {
   it("refreshes the session and returns the renewed 30-day cookie", async () => {
     const request = new NextRequest("https://nuang.example/my", {
       headers: {
-        cookie: "existing=cookie",
+        cookie: "sb-project-auth-token=cookie",
       },
     });
 
@@ -109,7 +111,48 @@ describe("refreshSupabaseAuthSession", () => {
     mocks.getSupabasePublicEnv.mockReturnValue(null);
 
     const response = await refreshSupabaseAuthSession(
-      new NextRequest("https://nuang.example/"),
+      new NextRequest("https://nuang.example/", {
+        headers: { cookie: "sb-project-auth-token=cookie" },
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(mocks.createServerClient).not.toHaveBeenCalled();
+  });
+
+  it("passes anonymous requests through without initializing auth", async () => {
+    const response = await refreshSupabaseAuthSession(
+      new NextRequest("https://nuang.example/home", {
+        headers: { cookie: "nuang_onboarding=complete; theme=light" },
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(mocks.getSupabasePublicEnv).not.toHaveBeenCalled();
+    expect(mocks.createServerClient).not.toHaveBeenCalled();
+    expect(mocks.getClaims).not.toHaveBeenCalled();
+  });
+
+  it("recognizes chunked Supabase auth cookies", async () => {
+    const request = new NextRequest("https://nuang.example/my", {
+      headers: {
+        cookie: "sb-project-auth-token.0=chunk-zero",
+      },
+    });
+
+    await refreshSupabaseAuthSession(request);
+
+    expect(mocks.createServerClient).toHaveBeenCalledOnce();
+    expect(mocks.getClaims).toHaveBeenCalledOnce();
+  });
+
+  it("does not treat the PKCE verifier as an authenticated session", async () => {
+    const response = await refreshSupabaseAuthSession(
+      new NextRequest("https://nuang.example/auth/callback", {
+        headers: {
+          cookie: "sb-project-auth-token-code-verifier=verifier",
+        },
+      }),
     );
 
     expect(response.status).toBe(200);

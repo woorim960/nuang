@@ -1,6 +1,7 @@
 import "server-only";
 
 import type { SupabaseClient, User } from "@supabase/supabase-js";
+import { readPublicSnapshotPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import { ensureAccountForUser } from "@/features/account/server-writes";
 import {
   communityProfileAvatarBucket,
@@ -69,6 +70,7 @@ export async function readCommunityProfileForAccount({
     .from("community_profile")
     .select(communityProfileSelect)
     .eq("account_id", accountId)
+    .eq("status", "active")
     .is("deleted_at", null)
     .maybeSingle();
 
@@ -233,10 +235,19 @@ export async function mergeCommunityProfileIntoSnapshot({
   profile: CommunityProfileRecord | null;
   snapshot: PublicProfileSnapshotPayload;
 }) {
-  if (!profile) return snapshot;
+  const publication = await readPublicSnapshotPublicationDecision({
+    client,
+    ...(profile ? { ownerAccountId: profile.accountId } : {}),
+    publicSnapshotId: snapshot.snapshotId,
+  });
+  if (!profile) {
+    return publication.eligible ? snapshot : redactSnapshotMeasurement(snapshot);
+  }
 
   const includedFields = new Set(snapshot.visibility.includedFields);
+  const measurementVisible = publication.eligible;
   const codeVisible =
+    measurementVisible &&
     profile.codeVisibility === "public" &&
     includedFields.has("representative_profile");
   const detailsVisible =
@@ -278,6 +289,25 @@ export async function mergeCommunityProfileIntoSnapshot({
       }),
     },
   } satisfies PublicProfileSnapshotPayload;
+}
+
+function redactSnapshotMeasurement(
+  snapshot: PublicProfileSnapshotPayload,
+): PublicProfileSnapshotPayload {
+  return {
+    ...snapshot,
+    profile: { code: "-----", name: "비공개 성향" },
+    publicData: { coreDomainMap: [], coreFacetSummary: [] },
+    visibility: {
+      ...snapshot.visibility,
+      includedFields: snapshot.visibility.includedFields.filter(
+        (fieldId) =>
+          fieldId !== "representative_profile" &&
+          fieldId !== "core_domain_map" &&
+          fieldId !== "core_facet_summary",
+      ),
+    },
+  };
 }
 
 export async function resolveCommunityProfileImage({

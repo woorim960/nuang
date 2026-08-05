@@ -90,6 +90,36 @@ describe("LocalResultManager", () => {
     expect(screen.queryByText("아직 결과가 없어요")).not.toBeInTheDocument();
   });
 
+  it("downloads every loaded report as a private JSON export", async () => {
+    render(<LocalResultManager />);
+
+    const exportButton = await screen.findByRole("button", {
+      name: "내보내기",
+    });
+    const createObjectURL = vi.fn(() => "blob:nuang-export");
+    const revokeObjectURL = vi.fn();
+    const click = vi.fn();
+    const anchor = {
+      click,
+      download: "",
+      href: "",
+    } as unknown as HTMLAnchorElement;
+    vi.stubGlobal("URL", { createObjectURL, revokeObjectURL });
+    vi.spyOn(document, "createElement").mockReturnValue(anchor);
+    vi.spyOn(window, "setTimeout").mockImplementation((handler) => {
+      if (typeof handler === "function") handler();
+      return 0 as unknown as ReturnType<typeof setTimeout>;
+    });
+
+    fireEvent.click(exportButton);
+
+    expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    expect(anchor.download).toMatch(/^nuang-data-\d{4}-\d{2}-\d{2}\.json$/);
+    expect(anchor.href).toBe("blob:nuang-export");
+    expect(click).toHaveBeenCalledOnce();
+    expect(revokeObjectURL).toHaveBeenCalledWith("blob:nuang-export");
+  });
+
   it("keeps report access and delete rights visible for stored local results", async () => {
     vi.mocked(listLocalAttempts).mockResolvedValue([
       {

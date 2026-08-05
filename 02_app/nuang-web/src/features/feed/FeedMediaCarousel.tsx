@@ -100,12 +100,15 @@ export function FeedMediaCarousel({ media }: { media: FeedPostMedia[] }) {
           ref={trackRef}
           role="group"
         >
-          {media.map((item) => (
+          {media.map((item, index) => (
             <figure className={styles.slide} key={item.id}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 alt={item.alt}
+                decoding="async"
                 draggable={false}
+                fetchPriority={index === 0 ? "high" : "low"}
+                loading={index === 0 ? "eager" : "lazy"}
                 onDragStart={(event) => event.preventDefault()}
                 src={item.url}
               />

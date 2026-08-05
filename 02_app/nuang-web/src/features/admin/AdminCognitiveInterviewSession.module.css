@@ -1,0 +1,468 @@
+.sessionPanel {
+  display: grid;
+  gap: 1rem;
+  padding: 1rem;
+  background: var(--admin-surface, var(--nu-color-surface));
+}
+
+.sessionHeader,
+.interviewProgress,
+.subheading,
+.itemNavigation,
+.exportPanel {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.sessionHeader p,
+.interviewProgress p {
+  margin: 0 0 0.3rem;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.sessionHeader h2,
+.interviewProgress h2,
+.subheading h3 {
+  margin: 0;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-title-sm);
+  line-height: 1.35;
+}
+
+.textButton,
+.itemNavigation button,
+.exportPanel button {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font: inherit;
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
+}
+
+.notice,
+.screenBoundary,
+.handoffBanner {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem;
+  padding: 0.85rem 0.9rem;
+  border-left: 3px solid var(--nu-color-brand-action);
+  border-radius: 0 6px 6px 0;
+  background: var(--nu-color-brand-surface);
+}
+
+.notice {
+  display: block;
+}
+
+.notice strong,
+.handoffBanner strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+}
+
+.notice p,
+.screenBoundary p,
+.handoffBanner p,
+.exportPanel p {
+  margin: 0.25rem 0 0;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.55;
+}
+
+.setupGrid,
+.recordFields {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.setupGrid label,
+.recordFields label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.setupGrid label > span,
+.recordFields label > span,
+.issueCodes legend {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.setupGrid small,
+.recordFields small,
+.subheading span,
+.exportPanel small {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.45;
+}
+
+.setupGrid input,
+.recordFields input,
+.recordFields select,
+.recordFields textarea {
+  width: 100%;
+  min-height: 42px;
+  padding: 0.65rem 0.7rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+  outline: none;
+  color: var(--admin-text, var(--nu-color-text));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font: inherit;
+  font-size: var(--nu-text-admin-label);
+}
+
+.recordFields textarea {
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.setupGrid input:focus,
+.recordFields input:focus,
+.recordFields select:focus,
+.recordFields textarea:focus {
+  border-color: var(--nu-color-brand-action);
+  box-shadow: 0 0 0 2px var(--nu-color-brand-surface);
+}
+
+.preflight,
+.issueCodes {
+  display: grid;
+  gap: 0.55rem;
+  margin: 0;
+  padding: 0.9rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+}
+
+.preflight legend,
+.issueCodes legend {
+  padding: 0 0.35rem;
+  font-weight: var(--nu-weight-bold);
+}
+
+.preflight label,
+.issueCodes label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.5;
+}
+
+.preflight input,
+.issueCodes input,
+.probeRow input {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  margin-top: 0.15rem;
+  accent-color: var(--nu-color-brand-action);
+}
+
+.primaryActions {
+  display: grid;
+  justify-items: start;
+  gap: 0.45rem;
+}
+
+.primaryActions button,
+.exportPanel button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0 0.9rem;
+  border: 0;
+  border-radius: 6px;
+  color: var(--nu-color-surface);
+  background: var(--nu-color-brand-action);
+  font: inherit;
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
+}
+
+.primaryActions button:disabled,
+.itemNavigation button:disabled,
+.exportPanel button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.primaryActions p {
+  margin: 0;
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.participantSurface {
+  position: relative;
+  overflow: hidden;
+  min-height: 760px;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 8px;
+  background: var(--nu-color-surface);
+}
+
+.handoffBanner {
+  margin: 0.75rem;
+}
+
+.interviewProgress {
+  align-items: center;
+}
+
+.interviewProgress h2 {
+  max-width: 34rem;
+  font-size: var(--nu-text-label);
+}
+
+.interviewProgress > span {
+  flex: 0 0 auto;
+  padding: 0.35rem 0.55rem;
+  border-radius: 4px;
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-brand-surface);
+  font-size: var(--nu-text-admin-micro);
+  font-weight: var(--nu-weight-bold);
+}
+
+.screenBoundary {
+  border-left-color: var(--nu-color-warning);
+  background: var(--nu-color-warning-soft);
+}
+
+.screenBoundary svg {
+  color: var(--nu-color-warning-strong, var(--nu-reaction-700));
+}
+
+.screenBoundary p {
+  margin: 0;
+}
+
+.itemContext {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+}
+
+.itemContext span {
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.itemContext strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-title-sm);
+  line-height: 1.45;
+}
+
+.itemContext small {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.internalDetail {
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+}
+
+.internalDetail summary {
+  min-height: 44px;
+  padding: 0 0.8rem;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-bold);
+  cursor: pointer;
+}
+
+.internalDetail dl {
+  display: grid;
+  gap: 0.7rem;
+  margin: 0;
+  padding: 0 0.8rem 0.8rem;
+}
+
+.internalDetail dl div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.internalDetail dt {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.internalDetail dd {
+  margin: 0;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.5;
+}
+
+.probes,
+.recordFields {
+  display: grid;
+  gap: 0.65rem;
+  padding-top: 0.25rem;
+}
+
+.subheading {
+  align-items: baseline;
+  padding-bottom: 0.2rem;
+}
+
+.subheading h3 {
+  font-size: var(--nu-text-label);
+}
+
+.probeRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+}
+
+.probeGroupTitle {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.45rem;
+}
+
+.probeGroupTitle strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-label);
+}
+
+.probeGroupTitle span {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.probeRow > span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.probeRow strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-label);
+}
+
+.probeRow small {
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.5;
+}
+
+.issueCodes {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.issueCodes legend {
+  grid-column: 1 / -1;
+}
+
+.itemNavigation {
+  padding-top: 0.25rem;
+}
+
+.exportPanel {
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0.9rem;
+  border: 1px solid var(--nu-color-brand-action);
+  border-radius: 6px;
+  background: var(--nu-color-brand-surface);
+}
+
+.exportPanel > div {
+  flex: 1 1 20rem;
+}
+
+.exportPanel > .exportActions {
+  display: flex;
+  flex: 0 1 auto;
+  gap: 0.5rem;
+}
+
+.exportPanel strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+}
+
+.exportPanel small {
+  flex-basis: 100%;
+}
+
+@media (min-width: 760px) {
+  .sessionPanel {
+    padding: 1.2rem;
+  }
+
+  .setupGrid,
+  .recordFields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .wideField,
+  .preflight,
+  .subheading {
+    grid-column: 1 / -1;
+  }
+
+  .internalDetail dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .sessionHeader,
+  .interviewProgress,
+  .subheading,
+  .probeGroupTitle {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .exportPanel > .exportActions {
+    flex-basis: 100%;
+    flex-direction: column;
+  }
+
+  .issueCodes {
+    grid-template-columns: 1fr;
+  }
+
+  .itemNavigation button {
+    flex: 1;
+  }
+}

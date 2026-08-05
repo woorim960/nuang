@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   maxFeedPhotoBytes,
+  maxFeedPhotoTotalBytes,
   validateFeedPhotoFiles,
 } from "@/features/feed/feed-media";
 
@@ -27,6 +28,15 @@ describe("feed photo validation", () => {
         type: "image/jpeg",
       },
     );
-    expect(validateFeedPhotoFiles([largeFile])).toContain("8MB");
+    expect(validateFeedPhotoFiles([largeFile])).toContain("4MB");
+  });
+
+  it("keeps the complete multipart upload below the hosting payload limit", () => {
+    const half = Math.floor(maxFeedPhotoTotalBytes / 2) + 1;
+    const photos = ["one.jpg", "two.jpg"].map(
+      (name) => new File([new Uint8Array(half)], name, { type: "image/jpeg" }),
+    );
+
+    expect(validateFeedPhotoFiles(photos)).toContain("모두 합쳐 4MB");
   });
 });

@@ -108,6 +108,7 @@ export type CreatePublicProfileSnapshotInput = {
 
 export type PublicComparisonFailureCode =
   | "viewer_full_core_missing"
+  | "measurement_release_not_publicable"
   | "viewer_comparison_scope_missing"
   | "target_public_snapshot_missing"
   | "snapshot_policy_version_mismatch"
@@ -176,6 +177,12 @@ export const publicComparisonFailures: Record<
     step: PublicComparisonWriteStepId;
   }
 > = {
+  measurement_release_not_publicable: {
+    httpStatus: 409,
+    message: "검토가 끝난 코어 결과끼리만 비교할 수 있어요.",
+    retryable: false,
+    step: "ensure_viewer_full_core",
+  },
   viewer_full_core_missing: {
     httpStatus: 403,
     message: "내 정밀 코어 결과가 있어야 1:1 비교를 만들 수 있어요.",

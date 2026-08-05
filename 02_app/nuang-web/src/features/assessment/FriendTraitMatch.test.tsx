@@ -5,6 +5,7 @@ import {
   createFriendTraitMatchInviteUrl,
   parseFriendTraitMatchInvite,
 } from "@/features/assessment/friend-trait-match-invite";
+import { defaultFriendTraitMatchContent } from "@/features/assessment/friend-trait-match-content";
 
 const now = new Date("2026-07-28T00:00:00.000Z").getTime();
 
@@ -15,14 +16,31 @@ describe("FriendTraitMatch invite contract", () => {
       mine: "plan",
       now,
       origin: "https://nuang.example",
+      releaseId: "11111111-1111-4111-8111-111111111111",
     });
     const searchParams = Object.fromEntries(new URL(url).searchParams);
 
     expect(parseFriendTraitMatchInvite(searchParams, now)).toMatchObject({
       guess: "listen",
       mine: "plan",
+      releaseId: "11111111-1111-4111-8111-111111111111",
       status: "ready",
     });
+    expect(new URL(url).pathname).toBe("/assessments/friend-match");
+  });
+
+  it("keeps an operator-created friend game on its own invite route", () => {
+    const url = createFriendTraitMatchInviteUrl({
+      guess: "plan",
+      mine: "listen",
+      now,
+      origin: "https://nuang.example",
+      slug: "weekend-friend-match",
+    });
+
+    expect(new URL(url).pathname).toBe(
+      "/assessments/weekend-friend-match",
+    );
   });
 
   it("rejects malformed, duplicated, and expired invite values", () => {
@@ -49,6 +67,9 @@ describe("FriendTraitMatch invite contract", () => {
         Number(searchParams.expires) + 1,
       ),
     ).toEqual({ status: "expired" });
+    expect(
+      parseFriendTraitMatchInvite({ ...searchParams, release: "unsafe" }, now),
+    ).toEqual({ status: "invalid" });
   });
 });
 
@@ -64,7 +85,9 @@ describe("FriendTraitMatch sender", () => {
       value: undefined,
     });
 
-    render(<FriendTraitMatch />);
+    render(
+      <FriendTraitMatch releaseId="22222222-2222-4222-8222-222222222222" />,
+    );
 
     fireEvent.click(
       screen.getByRole("radio", {
@@ -95,6 +118,7 @@ describe("FriendTraitMatch sender", () => {
     expect(parsed).toMatchObject({
       guess: "listen",
       mine: "plan",
+      releaseId: "22222222-2222-4222-8222-222222222222",
       status: "ready",
     });
     expect(screen.getByText("초대 링크를 복사했어요.")).toBeInTheDocument();
@@ -134,6 +158,35 @@ describe("FriendTraitMatch receiver", () => {
     expect(
       screen.getByRole("link", { name: "나도 친구 성향 맞히기" }),
     ).toHaveAttribute("href", "/assessments/friend-match");
+  });
+
+  it("renders the operator-authored copy for the matching result combination", () => {
+    const content = structuredClone(defaultFriendTraitMatchContent);
+    content.resultCopies.predictionOnlyMatched = {
+      description: "운영자가 작성한 결과 설명",
+      title: "운영자가 작성한 결과 제목",
+    };
+    render(
+      <FriendTraitMatch
+        content={content}
+        inviteState={{
+          expiresAt: now + 1_000,
+          guess: "listen",
+          mine: "plan",
+          status: "ready",
+        }}
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole("radio", {
+        name: /왜 바뀌었는지 친구의 상황부터/,
+      }),
+    );
+    fireEvent.click(screen.getByRole("button", { name: "결과 보기" }));
+
+    expect(screen.getByText("운영자가 작성한 결과 제목")).toBeInTheDocument();
+    expect(screen.getByText("운영자가 작성한 결과 설명")).toBeInTheDocument();
   });
 
   it("shows a clear restart path for an invalid or expired invite", () => {

@@ -6,6 +6,16 @@ import {
   buildTopicReportShareContent,
 } from "@/features/share/report-share-contract";
 
+const kakaoMocks = vi.hoisted(() => ({
+  prepareImage: vi.fn(async () => "https://mud-kage.kakao.com/share.png"),
+  send: vi.fn(async () => undefined),
+}));
+
+vi.mock("@/features/share/kakao-talk-share", () => ({
+  prepareKakaoReportShareImage: kakaoMocks.prepareImage,
+  sendReportToKakaoTalk: kakaoMocks.send,
+}));
+
 const content = buildTopicReportShareContent({
   assessmentTitle: "위로받을 때 필요한 것",
   highlights: [
@@ -32,9 +42,10 @@ describe("ReportShareSheet", () => {
     vi.unstubAllGlobals();
   });
 
-  it("shows the same complete action set and no partial image share", () => {
+  it("shows the exact public summary without exposing private score details", () => {
     render(
       <ReportShareSheet
+        canonicalUrl="/feed/profiles/profile-1/reports/report-1"
         content={content}
         isOpen
         onClose={vi.fn()}
@@ -46,6 +57,9 @@ describe("ReportShareSheet", () => {
       screen.getByRole("dialog", { name: "결과 공유" }),
     ).toBeInTheDocument();
     expect(
+      screen.getByRole("button", { name: "카카오톡으로 보내기" }),
+    ).toBeInTheDocument();
+    expect(
       screen.getByRole("button", { name: "링크 복사" }),
     ).toBeInTheDocument();
     expect(
@@ -54,12 +68,19 @@ describe("ReportShareSheet", () => {
     expect(
       screen.getByRole("button", { name: "커뮤니티에 공유" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("원본 결과 주소를 복사해요")).toBeInTheDocument();
-    expect(screen.getByText("휴대폰의 공유창을 열어요")).toBeInTheDocument();
     expect(
-      screen.getByText("내 한마디와 함께 피드에 올려요"),
+      screen.getByRole("region", { name: "주제 검사 공유 결과" }),
     ).toBeInTheDocument();
-    expect(screen.queryByText(/이미지|캡처|캡쳐/)).not.toBeInTheDocument();
+    expect(
+      screen.getByText("카카오톡에서 보낼 대화방을 직접 선택해요."),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("답변과 원점수는 공유되지 않아요."),
+    ).toBeInTheDocument();
+    expect(screen.getByText(content.summary)).toBeInTheDocument();
+    content.highlights.forEach((highlight) => {
+      expect(screen.queryByText(highlight)).not.toBeInTheDocument();
+    });
   });
 
   it("closes with Escape for keyboard users", () => {
@@ -92,13 +113,16 @@ describe("ReportShareSheet", () => {
 
     expect(screen.getByRole("button", { name: "링크 복사" })).toBeDisabled();
     expect(
+      screen.getByRole("button", { name: "카카오톡으로 보내기" }),
+    ).toBeDisabled();
+    expect(
       screen.getByRole("button", { name: "다른 앱으로 공유" }),
     ).toBeDisabled();
     expect(
       screen.getByRole("button", { name: "커뮤니티에 공유" }),
     ).toBeDisabled();
     expect(
-      screen.getByText("먼저 로그인하고 결과를 계정에 저장해 주세요."),
+      screen.getByText("로그인하고 결과를 저장한 뒤 공유할 수 있어요."),
     ).toBeInTheDocument();
     expect(fetchMock).not.toHaveBeenCalled();
   });
@@ -126,10 +150,106 @@ describe("ReportShareSheet", () => {
     });
     expect(fetchMock).not.toHaveBeenCalled();
     expect(
-      screen.getByText("검사 당시의 원본 결과 리포트를 그대로 공유해요."),
+      await screen.findByText("결과 링크를 복사했어요."),
+    ).toBeInTheDocument();
+  });
+
+  it("uses the server-authorized link when both a report key and canonical URL exist", async () => {
+    const authorizedUrl =
+      "http://localhost:3000/feed/profiles/profile-1/reports/topic_authorized";
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ ok: true, url: authorizedUrl }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <ReportShareSheet
+        canonicalUrl="/feed/profiles/profile-1/reports/topic_stale"
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+        originalReportKey="topic_authorized"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "링크 복사" }));
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/report-share-links",
+        expect.objectContaining({ method: "POST" }),
+      );
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(authorizedUrl);
+    });
+  });
+
+  it("opens the official Kakao Talk picker with the prepared original report", async () => {
+    const url =
+      "http://localhost:3000/feed/profiles/profile-1/reports/topic_11111111-1111-4111-8111-111111111111";
+
+    render(
+      <ReportShareSheet
+        canonicalUrl={url}
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    const button = screen.getByRole("button", {
+      name: "카카오톡으로 보내기",
+    });
+    await waitFor(() => expect(button).toBeEnabled());
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(kakaoMocks.send).toHaveBeenCalledWith({ content, url });
+    });
+    expect(
+      screen.getByText("카카오톡에서 보낼 대상을 선택해 주세요."),
     ).toBeInTheDocument();
     expect(
-      await screen.findByText("원본 리포트 링크를 복사했어요."),
+      screen.getByText("카카오톡에서 보낼 대화방을 직접 선택해요."),
+    ).toBeInTheDocument();
+  });
+
+  it("falls back to the device share sheet when Kakao Talk cannot open", async () => {
+    kakaoMocks.send.mockImplementationOnce(() => {
+      throw new Error("picker unavailable");
+    });
+    const nativeShare = vi.fn().mockResolvedValue(undefined);
+    Object.defineProperty(navigator, "share", {
+      configurable: true,
+      value: nativeShare,
+    });
+    const url =
+      "http://localhost:3000/feed/profiles/profile-1/reports/topic_11111111-1111-4111-8111-111111111111";
+
+    render(
+      <ReportShareSheet
+        canonicalUrl={url}
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    const button = screen.getByRole("button", {
+      name: "카카오톡으로 보내기",
+    });
+    await waitFor(() => expect(button).toBeEnabled());
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(nativeShare).toHaveBeenCalledWith(
+        expect.objectContaining({ url }),
+      );
+    });
+    expect(
+      screen.getByText("카카오톡을 열지 못해 기기의 공유창을 열었어요."),
     ).toBeInTheDocument();
   });
 
@@ -177,12 +297,15 @@ describe("ReportShareSheet", () => {
     );
   });
 
-  it("creates an expiring summary token for a core result link", async () => {
+  it("resolves a core result to its persistent original report URL", async () => {
+    const url =
+      "http://localhost:3000/feed/profiles/profile-1/reports/core_11111111-1111-4111-8111-111111111111";
     const fetchMock = vi.fn().mockResolvedValue(
       new Response(
         JSON.stringify({
           ok: true,
-          shareLink: { url: "http://localhost:3000/share/core-token" },
+          persistent: true,
+          url,
         }),
         {
           headers: { "content-type": "application/json" },
@@ -211,20 +334,276 @@ describe("ReportShareSheet", () => {
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledWith(
-        "/api/share-links",
+        "/api/report-share-links",
         expect.objectContaining({
           body: JSON.stringify({
-            resultReportId: "11111111-1111-4111-8111-111111111111",
-            ttlDays: 30,
-            visibility: "summary",
+            reportKey: "core_11111111-1111-4111-8111-111111111111",
           }),
           method: "POST",
         }),
       );
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-        "http://localhost:3000/share/core-token",
-      );
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(url);
     });
+  });
+
+  it("keeps a private report private when Kakao publication is cancelled", async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          error: "report_private",
+          message: "프로필에 공개한 결과만 링크로 공유할 수 있어요.",
+          ok: false,
+        }),
+        {
+          headers: { "content-type": "application/json" },
+          status: 409,
+        },
+      ),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+        originalReportKey="topic_11111111-1111-4111-8111-111111111111"
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "카카오톡으로 보내기" }),
+    );
+
+    expect(
+      await screen.findByRole("dialog", { name: "공개 후 공유" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("이 결과를 공개하고 공유할까요?"),
+    ).toBeInTheDocument();
+    expect(screen.getByText("내 답변과 원점수")).toBeInTheDocument();
+    expect(kakaoMocks.send).not.toHaveBeenCalled();
+
+    fireEvent.click(screen.getByRole("button", { name: "취소" }));
+
+    expect(
+      screen.getByRole("dialog", { name: "결과 공유" }),
+    ).toBeInTheDocument();
+    expect(
+      fetchMock.mock.calls.some(
+        ([input]) => String(input) === "/api/profile-report-visibility",
+      ),
+    ).toBe(false);
+    expect(kakaoMocks.send).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    ["링크 복사", "공개하고 링크 복사"],
+    ["다른 앱으로 공유", "공개하고 공유"],
+    ["커뮤니티에 공유", "공개하고 커뮤니티에 공유"],
+  ])(
+    "asks before changing a private result for %s",
+    async (actionName, approvalName) => {
+      const fetchMock = vi.fn().mockResolvedValue(
+        new Response(
+          JSON.stringify({
+            error: "report_private",
+            message: "프로필에 공개한 결과만 링크로 공유할 수 있어요.",
+            ok: false,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 409,
+          },
+        ),
+      );
+      vi.stubGlobal("fetch", fetchMock);
+
+      render(
+        <ReportShareSheet
+          content={content}
+          isOpen
+          onClose={vi.fn()}
+          originalReportKey="topic_private"
+        />,
+      );
+
+      fireEvent.click(screen.getByRole("button", { name: actionName }));
+
+      expect(
+        await screen.findByRole("dialog", { name: "공개 후 공유" }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: approvalName }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole("heading", { name: "공개 후 공유" }),
+      ).toHaveFocus();
+      expect(
+        fetchMock.mock.calls.some(
+          ([input]) => String(input) === "/api/profile-report-visibility",
+        ),
+      ).toBe(false);
+    },
+  );
+
+  it("cannot be dismissed while a publication change is in progress", async () => {
+    const reportKey = "topic_private";
+    const publicUrl =
+      "http://localhost:3000/feed/profiles/profile-1/reports/topic_private";
+    let shareLinkAttempts = 0;
+    let finishPublication: (() => void) | undefined;
+    const publicationResponse = new Promise<Response>((resolve) => {
+      finishPublication = () =>
+        resolve(
+          new Response(JSON.stringify({ visibility: "profile_public" }), {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          }),
+        );
+    });
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      if (String(input) === "/api/profile-report-visibility") {
+        return publicationResponse;
+      }
+      shareLinkAttempts += 1;
+      if (shareLinkAttempts === 1) {
+        return new Response(
+          JSON.stringify({ error: "report_private", ok: false }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 409,
+          },
+        );
+      }
+      return new Response(JSON.stringify({ ok: true, url: publicUrl }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+    const onClose = vi.fn();
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={onClose}
+        originalReportKey={reportKey}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "링크 복사" }));
+    fireEvent.click(
+      await screen.findByRole("button", { name: "공개하고 링크 복사" }),
+    );
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "공개 설정 중" }),
+      ).toBeDisabled();
+    });
+
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onClose).not.toHaveBeenCalled();
+    screen
+      .getAllByRole("button", { name: "공유 창 닫기" })
+      .forEach((button) => expect(button).toBeDisabled());
+
+    finishPublication?.();
+    await waitFor(() => {
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(publicUrl);
+    });
+  });
+
+  it("publishes a private report before sharing it to Kakao on approval", async () => {
+    const reportKey = "topic_11111111-1111-4111-8111-111111111111";
+    const url =
+      "http://localhost:3000/feed/profiles/profile-1/reports/topic_11111111-1111-4111-8111-111111111111";
+    let shareLinkAttempts = 0;
+    const fetchMock = vi.fn(
+      async (input: string | URL | Request, _init?: RequestInit) => {
+        void _init;
+        const endpoint = String(input);
+        if (endpoint === "/api/profile-report-visibility") {
+          return new Response(
+            JSON.stringify({
+              ok: true,
+              reportKey,
+              visibility: "profile_public",
+            }),
+            {
+              headers: { "content-type": "application/json" },
+              status: 200,
+            },
+          );
+        }
+        if (endpoint === "/api/report-share-links") {
+          shareLinkAttempts += 1;
+          if (shareLinkAttempts === 1) {
+            return new Response(
+              JSON.stringify({
+                error: "report_private",
+                message: "프로필에 공개한 결과만 링크로 공유할 수 있어요.",
+                ok: false,
+              }),
+              {
+                headers: { "content-type": "application/json" },
+                status: 409,
+              },
+            );
+          }
+          return new Response(
+            JSON.stringify({ ok: true, persistent: true, url }),
+            {
+              headers: { "content-type": "application/json" },
+              status: 200,
+            },
+          );
+        }
+        throw new Error(`Unexpected request: ${endpoint}`);
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+        originalReportKey={reportKey}
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "카카오톡으로 보내기" }),
+    );
+    await screen.findByRole("dialog", { name: "공개 후 공유" });
+    fireEvent.click(
+      screen.getByRole("button", { name: "공개하고 카카오톡 공유" }),
+    );
+
+    await waitFor(() => {
+      expect(kakaoMocks.send).toHaveBeenCalledWith({ content, url });
+    });
+    const patchCallIndex = fetchMock.mock.calls.findIndex(
+      ([input]) => String(input) === "/api/profile-report-visibility",
+    );
+    const lastLinkCallIndex = fetchMock.mock.calls.findLastIndex(
+      ([input]) => String(input) === "/api/report-share-links",
+    );
+    expect(patchCallIndex).toBeGreaterThanOrEqual(0);
+    expect(lastLinkCallIndex).toBeGreaterThan(patchCallIndex);
+    expect(fetchMock.mock.calls[patchCallIndex]).toEqual([
+      "/api/profile-report-visibility",
+      expect.objectContaining({
+        body: JSON.stringify({
+          reportKey,
+          visibility: "profile_public",
+        }),
+        method: "PATCH",
+      }),
+    ]);
+    expect(shareLinkAttempts).toBe(2);
   });
 
   it("previews an optional note before sharing the original report to the community", async () => {
@@ -265,18 +644,20 @@ describe("ReportShareSheet", () => {
     );
 
     fireEvent.click(screen.getByRole("button", { name: "커뮤니티에 공유" }));
-    expect(fetchMock).not.toHaveBeenCalled();
     expect(
-      screen.getByText("피드에 올라갈 내용을 확인해 주세요."),
+      fetchMock.mock.calls.some(([input]) => String(input) === "/api/feed"),
+    ).toBe(false);
+    expect(
+      await screen.findByRole("dialog", { name: "커뮤니티에 공유" }),
     ).toBeInTheDocument();
 
     fireEvent.change(
       screen.getByPlaceholderText("이 결과를 보고 든 생각을 남겨보세요."),
       { target: { value: "지금의 나와 정말 닮은 결과예요." } },
     );
-    expect(screen.getAllByText("지금의 나와 정말 닮은 결과예요.")).toHaveLength(
-      2,
-    );
+    expect(
+      screen.getByDisplayValue("지금의 나와 정말 닮은 결과예요."),
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "커뮤니티에 공유" }));
 
@@ -312,7 +693,7 @@ describe("ReportShareSheet", () => {
     expect(onNavigate).toHaveBeenCalledWith("/feed");
   });
 
-  it("prefills the selected result sentence in the community note", () => {
+  it("prefills the selected result sentence in the community note", async () => {
     render(
       <ReportShareSheet
         canonicalUrl="/feed/profiles/profile-1/reports/report-1"
@@ -326,16 +707,18 @@ describe("ReportShareSheet", () => {
     fireEvent.click(screen.getByRole("button", { name: "커뮤니티에 공유" }));
 
     expect(
-      screen.getByPlaceholderText("이 결과를 보고 든 생각을 남겨보세요."),
+      await screen.findByPlaceholderText(
+        "이 결과를 보고 든 생각을 남겨보세요.",
+      ),
     ).toHaveValue("“생각을 정리한 뒤 대화를 시작해요.”");
   });
 
   it.each([
-    ["core", "코어 검사 결과 미리보기"],
-    ["topic", "주제 검사 결과 미리보기"],
-    ["lab", "별난 연구소 결과 미리보기"],
+    ["core", "코어 검사 공유 결과"],
+    ["topic", "주제 검사 공유 결과"],
+    ["lab", "별난 연구소 공유 결과"],
   ] as const)(
-    "labels the %s result preview without relying on color",
+    "labels the %s result identity without relying on color",
     (reportType, label) => {
       render(
         <ReportShareSheet

@@ -26,34 +26,34 @@ type ContactResponse =
   | { code?: string; message?: string; ok: false };
 type VerificationRequestResponse =
   | {
-      ok: true;
-      verification: {
-        challengeId: string;
-        emailMasked: string;
-        expiresAt: string;
-        resendAfterSeconds: number;
-      };
-    }
-  | {
-      code?: string;
-      message?: string;
-      ok: false;
-      retryAfterSeconds?: number;
+    ok: true;
+    verification: {
+      challengeId: string;
+      emailMasked: string;
+      expiresAt: string;
+      resendAfterSeconds: number;
     };
+  }
+  | {
+    code?: string;
+    message?: string;
+    ok: false;
+    retryAfterSeconds?: number;
+  };
 type VerificationConfirmResponse =
   | {
-      ok: true;
-      verification: {
-        emailStatus: "verified";
-        verifiedAt: string;
-      };
-    }
-  | {
-      attemptsRemaining?: number;
-      code?: string;
-      message?: string;
-      ok: false;
+    ok: true;
+    verification: {
+      emailStatus: "verified";
+      verifiedAt: string;
     };
+  }
+  | {
+    attemptsRemaining?: number;
+    code?: string;
+    message?: string;
+    ok: false;
+  };
 
 export function PrivateContactEditor() {
   const [contact, setContact] = useState<PrivateContactPayload | null>(null);
@@ -143,15 +143,15 @@ export function PrivateContactEditor() {
       body: JSON.stringify(
         field === "email"
           ? {
-              consentVersion: privateEmailRegistrationVersion,
-              email,
-              source: "account_security",
-            }
+            consentVersion: privateEmailRegistrationVersion,
+            email,
+            source: "account_security",
+          }
           : {
-              consentVersion: privateContactConsentVersion,
-              mobilePhone,
-              source: "account_security",
-            },
+            consentVersion: privateContactConsentVersion,
+            mobilePhone,
+            source: "account_security",
+          },
       ),
       headers: { "content-type": "application/json" },
       method: "PATCH",
@@ -265,10 +265,10 @@ export function PrivateContactEditor() {
     setContact((current) =>
       current
         ? {
-            ...current,
-            emailStatus: "verified",
-            emailVerifiedAt: payload.verification.verifiedAt,
-          }
+          ...current,
+          emailStatus: "verified",
+          emailVerifiedAt: payload.verification.verifiedAt,
+        }
         : current,
     );
     setVerificationCode("");
@@ -367,8 +367,7 @@ export function PrivateContactEditor() {
         </span>
       </div>
       <p className={styles.headingCopy}>
-        로그인 방법을 모두 사용할 수 없을 때 이전 기록을 찾는 데 사용해요.
-        등록은 선택이며 프로필에는 공개되지 않아요.
+        이전 저장된 데이터를 복구할 수 있어요.
       </p>
 
       {state === "loading" ? (
@@ -446,9 +445,9 @@ export function PrivateContactEditor() {
                     </div>
                   )}
                   {contact.emailStatus !== "verified" &&
-                  (verificationState === "code" ||
-                    verificationState === "confirming" ||
-                    Boolean(verificationChallengeId)) ? (
+                    (verificationState === "code" ||
+                      verificationState === "confirming" ||
+                      Boolean(verificationChallengeId)) ? (
                     <div
                       aria-labelledby="email-verification-title"
                       className={styles.verificationPanel}

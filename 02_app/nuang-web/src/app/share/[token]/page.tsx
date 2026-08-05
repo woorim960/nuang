@@ -1,5 +1,6 @@
 import { Link2Off } from "lucide-react";
 import type { Metadata } from "next";
+import { cache } from "react";
 import { ButtonLink } from "@/components/ui/Button";
 import { CoreResultReportTemplate } from "@/features/result/unified-core-report/CoreResultReportTemplate";
 import { readPublicShareToken } from "@/features/share/public-share-server";
@@ -8,17 +9,60 @@ type SharePageProps = {
   params: Promise<{ token: string }>;
 };
 
-export const metadata: Metadata = {
-  robots: {
-    follow: false,
-    index: false,
-  },
-  title: "검사 결과 | NUANG",
+const shareRobots: Metadata["robots"] = {
+  follow: false,
+  index: false,
 };
+const readShareToken = cache(readPublicShareToken);
+
+export async function generateMetadata({
+  params,
+}: SharePageProps): Promise<Metadata> {
+  const { token } = await params;
+  const result = await readShareToken(token);
+  const image = {
+    alt: "뉴앙 결과 리포트를 나누는 보라색과 초록색 메인 캐릭터",
+    height: 630,
+    url: "https://nuang.app/images/share/nuang-result-share-card-v1.png",
+    width: 1200,
+  };
+
+  if (result.status !== "active") {
+    return {
+      description: "뉴앙에서 공유한 결과 리포트입니다.",
+      robots: shareRobots,
+      title: "검사 결과 | 뉴앙",
+    };
+  }
+
+  const resultName =
+    result.model.result.currentProfileName || result.model.result.code;
+  const title = `${resultName} | 뉴앙 결과 리포트`;
+  const description = `${result.model.result.code} · 뉴앙에서 발견한 성향 결과를 확인해 보세요.`;
+
+  return {
+    description,
+    openGraph: {
+      description,
+      images: [image],
+      siteName: "뉴앙",
+      title,
+      type: "article",
+    },
+    robots: shareRobots,
+    title,
+    twitter: {
+      card: "summary_large_image",
+      description,
+      images: [image.url],
+      title,
+    },
+  };
+}
 
 export default async function SharePage({ params }: SharePageProps) {
   const { token } = await params;
-  const result = await readPublicShareToken(token);
+  const result = await readShareToken(token);
 
   if (result.status === "active") {
     return (

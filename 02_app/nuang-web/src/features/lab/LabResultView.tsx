@@ -125,6 +125,7 @@ export function LabResultView({
   }
 
   const { profile, scores, tiedProfileIds } = storedResult.result;
+  const activeAssessment = storedResult.assessmentSnapshot ?? assessment;
   const selectedLocalResultId = storedResult.localResultId;
   const answeredCount =
     answeredCountOverride ?? Object.keys(storedResult.answers).length;
@@ -134,7 +135,7 @@ export function LabResultView({
   );
   const hasTie = tiedProfileIds.length > 1;
   const shareContent = buildLabReportShareContent({
-    assessmentTitle: assessment.title,
+    assessmentTitle: activeAssessment.title,
     highlights: [
       ...profile.strengths.slice(0, 2),
       `관계에서는 이렇게 알려주세요: ${profile.relationTip}`,
@@ -185,13 +186,13 @@ export function LabResultView({
       <div className={styles.content}>
         <section className={styles.hero}>
           <div className={styles.heroCopy}>
-            <p>{assessment.resultLabel}</p>
+            <p>{activeAssessment.resultLabel}</p>
             <h1>{profile.title}</h1>
             <span>{profile.summary}</span>
           </div>
           <NuangCharacter
             className={styles.character}
-            motif={motifBySlug[assessment.slug]}
+            motif={motifBySlug[activeAssessment.slug]}
             size="lg"
           />
           <p className={styles.meta}>
@@ -211,7 +212,7 @@ export function LabResultView({
             <h2>내 선택 분포</h2>
           </div>
           <div className={styles.distribution}>
-            {assessment.profiles.map((item) => (
+            {activeAssessment.profiles.map((item) => (
               <DistributionBar
                 active={item.id === profile.id}
                 key={item.id}
@@ -277,7 +278,7 @@ export function LabResultView({
           ) : (
             <Link
               className={styles.secondaryAction}
-              href={`/labs/${assessment.slug}`}
+              href={`/labs/${activeAssessment.slug}`}
             >
               <RotateCcw aria-hidden="true" size={17} strokeWidth={1.8} />
               다시 하기

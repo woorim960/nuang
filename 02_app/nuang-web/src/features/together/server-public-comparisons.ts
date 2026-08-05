@@ -1,5 +1,9 @@
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import {
+  readCoreResultPublicationDecision,
+  readPublicSnapshotPublicationDecision,
+} from "@/features/assessment/server-core-result-publication-policy";
+import {
   mergeCommunityProfileIntoSnapshot,
   readCommunityProfileForAccount,
 } from "@/features/account/server-community-profile";
@@ -56,6 +60,7 @@ type PublicComparisonReportRow = {
   target_public_snapshot_id: string;
   viewer_account_id: string;
   viewer_public_snapshot_id: string | null;
+  viewer_result_report_id: string | null;
 };
 
 export type CreatePublicComparisonServerResult =
@@ -145,6 +150,22 @@ export async function createPublicComparisonForUser({
     return { code: "target_public_snapshot_not_active", ok: false };
   }
 
+  const [viewerPublication, targetPublication] = await Promise.all([
+    readCoreResultPublicationDecision({
+      client,
+      ownerAccountId: accountId,
+      resultReportId: viewerReport.id,
+    }),
+    readPublicSnapshotPublicationDecision({
+      client,
+      ownerAccountId: targetSnapshotRow.account_id,
+      publicSnapshotId: targetSnapshotRow.id,
+    }),
+  ]);
+  if (!viewerPublication.eligible || !targetPublication.eligible) {
+    return { code: "measurement_release_not_publicable", ok: false };
+  }
+
   const targetComparisonEnabled = await readCommunityComparisonEnabled({
     accountId: targetSnapshotRow.account_id,
     client,
@@ -212,42 +233,18 @@ export async function createPublicComparisonForUser({
   });
   const insertResponse = await client
     .schema("comparison")
-    .from("public_comparison_report")
-    .insert({
-      id: comparisonReportId,
-      policy_version: profileVisibilityPolicyVersion,
-      report_payload: report,
-      target_public_snapshot_id: targetSnapshotRow.id,
-      viewer_account_id: accountId,
-      viewer_public_snapshot_id: viewerSnapshot.id,
-      viewer_result_report_id: viewerReport.id,
-    })
-    .select("id")
-    .single();
+    .rpc("create_public_comparison_report", {
+      p_id: comparisonReportId,
+      p_policy_version: profileVisibilityPolicyVersion,
+      p_report_payload: report,
+      p_target_public_snapshot_id: targetSnapshotRow.id,
+      p_viewer_account_id: accountId,
+      p_viewer_public_snapshot_id: viewerSnapshot.id,
+      p_viewer_result_report_id: viewerReport.id,
+    });
 
-  if (insertResponse.error || !insertResponse.data) {
+  if (insertResponse.error || insertResponse.data !== comparisonReportId) {
     return { code: "comparison_report_build_failed", ok: false };
-  }
-
-  const auditResponse = await client
-    .schema("audit")
-    .from("visibility_audit_event")
-    .insert({
-      account_id: targetSnapshotRow.account_id,
-      actor_account_id: accountId,
-      event_type: "public_comparison_created",
-      metadata: {
-        comparisonReportId,
-        policyVersion: profileVisibilityPolicyVersion,
-      },
-      target_id: targetSnapshotRow.id,
-      target_table: "profile.profile_public_snapshot",
-    })
-    .select("id")
-    .single();
-
-  if (auditResponse.error || !auditResponse.data) {
-    return { code: "comparison_audit_write_failed", ok: false };
   }
 
   return {
@@ -259,7 +256,7 @@ export async function createPublicComparisonForUser({
   };
 }
 
-async function readCommunityComparisonEnabled({
+export async function readCommunityComparisonEnabled({
   accountId,
   client,
 }: {
@@ -275,10 +272,10 @@ async function readCommunityComparisonEnabled({
     .is("deleted_at", null)
     .maybeSingle();
 
-  // Existing profiles created before the community profile migration keep the
-  // previous comparison behavior until the backfill runs.
-  if (response.error || !response.data) return true;
-  return response.data.comparison_enabled !== false;
+  // Comparison consent is privacy-sensitive. Missing rows and read failures
+  // must never widen the target's public scope.
+  if (response.error || !response.data) return false;
+  return response.data.comparison_enabled === true;
 }
 
 export async function readPublicComparisonForUser({
@@ -300,7 +297,7 @@ export async function readPublicComparisonForUser({
     .schema("comparison")
     .from("public_comparison_report")
     .select(
-      "id, viewer_account_id, viewer_public_snapshot_id, target_public_snapshot_id, access_status, report_payload",
+      "id, viewer_account_id, viewer_public_snapshot_id, viewer_result_report_id, target_public_snapshot_id, access_status, report_payload",
     )
     .eq("id", comparisonReportId)
     .is("deleted_at", null)
@@ -327,6 +324,52 @@ export async function readPublicComparisonForUser({
     };
   }
 
+  const targetSnapshotRow = await readTargetPublicSnapshot({
+    client,
+    publicSnapshotId: row.target_public_snapshot_id,
+  });
+  const [viewerPublication, targetPublication] = await Promise.all([
+    row.viewer_result_report_id
+      ? readCoreResultPublicationDecision({
+          client,
+          ownerAccountId: accountId,
+          resultReportId: row.viewer_result_report_id,
+        })
+      : Promise.resolve({ eligible: false as const }),
+    readPublicSnapshotPublicationDecision({
+      client,
+      publicSnapshotId: row.target_public_snapshot_id,
+    }),
+  ]);
+  if (
+    !viewerPublication.eligible ||
+    !targetPublication.eligible ||
+    !targetSnapshotRow ||
+    targetSnapshotRow.status !== "active" ||
+    targetSnapshotRow.visibility_policy_version !==
+      profileVisibilityPolicyVersion
+  ) {
+    await disableStoredPublicComparison(client, row.id);
+    return { code: "comparison_report_disabled", ok: false };
+  }
+
+  const targetSnapshot = coercePublicProfileSnapshotPayload(
+    targetSnapshotRow.snapshot_payload,
+    targetSnapshotRow.id,
+  );
+  const targetComparisonEnabled = await readCommunityComparisonEnabled({
+    accountId: targetSnapshotRow.account_id,
+    client,
+  });
+  if (
+    !targetComparisonEnabled ||
+    !targetSnapshot ||
+    !hasRequiredPublicComparisonScope(targetSnapshot)
+  ) {
+    await disableStoredPublicComparison(client, row.id);
+    return { code: "comparison_report_disabled", ok: false };
+  }
+
   const report = coercePublicComparisonReportPayload(row.report_payload);
 
   if (!report) {
@@ -337,6 +380,7 @@ export async function readPublicComparisonForUser({
     client,
     report,
     row,
+    targetSnapshotRow,
   });
 
   return { data: refreshedReport ?? report, ok: true };
@@ -360,7 +404,9 @@ export async function listPublicComparisonsForUser({
   const response = await client
     .schema("comparison")
     .from("public_comparison_report")
-    .select("id, access_status, created_at, report_payload")
+    .select(
+      "id, access_status, created_at, report_payload, target_public_snapshot_id, viewer_result_report_id",
+    )
     .eq("viewer_account_id", accountId)
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
@@ -370,9 +416,28 @@ export async function listPublicComparisonsForUser({
     return { code: "comparison_report_lookup_failed", ok: false };
   }
 
+  const rows = (response.data ?? []) as PublicComparisonReportRow[];
+  const publication = await Promise.all(
+    rows.map(async (row) => {
+      if (!row.viewer_result_report_id) return false;
+      const [viewer, target] = await Promise.all([
+        readCoreResultPublicationDecision({
+          client,
+          ownerAccountId: accountId,
+          resultReportId: row.viewer_result_report_id,
+        }),
+        readPublicSnapshotPublicationDecision({
+          client,
+          publicSnapshotId: row.target_public_snapshot_id,
+        }),
+      ]);
+      return viewer.eligible && target.eligible;
+    }),
+  );
+
   return {
-    data: ((response.data ?? []) as PublicComparisonReportRow[]).flatMap(
-      toAccountComparisonReportSummary,
+    data: rows.flatMap((row, index) =>
+      publication[index] ? toAccountComparisonReportSummary(row) : [],
     ),
     ok: true,
   };
@@ -668,10 +733,12 @@ async function refreshComparisonReportIfNeeded({
   client,
   report,
   row,
+  targetSnapshotRow,
 }: {
   client: ServiceClient;
   report: PublicComparisonReportPayload;
   row: PublicComparisonReportRow;
+  targetSnapshotRow: PublicProfileSnapshotRow;
 }) {
   if (
     !shouldRefreshComparisonReport(report) ||
@@ -680,16 +747,10 @@ async function refreshComparisonReportIfNeeded({
     return null;
   }
 
-  const [viewerSnapshotRow, targetSnapshotRow] = await Promise.all([
-    readTargetPublicSnapshot({
-      client,
-      publicSnapshotId: row.viewer_public_snapshot_id,
-    }),
-    readTargetPublicSnapshot({
-      client,
-      publicSnapshotId: row.target_public_snapshot_id,
-    }),
-  ]);
+  const viewerSnapshotRow = await readTargetPublicSnapshot({
+    client,
+    publicSnapshotId: row.viewer_public_snapshot_id,
+  });
 
   if (!viewerSnapshotRow || !targetSnapshotRow) {
     return null;
@@ -724,6 +785,21 @@ async function refreshComparisonReportIfNeeded({
     .eq("id", row.id);
 
   return refreshedReport;
+}
+
+async function disableStoredPublicComparison(
+  client: ServiceClient,
+  comparisonReportId: string,
+) {
+  await client
+    .schema("comparison")
+    .from("public_comparison_report")
+    .update({
+      access_status: "disabled",
+      disabled_at: new Date().toISOString(),
+    })
+    .eq("id", comparisonReportId)
+    .eq("access_status", "active");
 }
 
 function shouldRefreshComparisonReport(report: PublicComparisonReportPayload) {

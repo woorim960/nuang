@@ -1,0 +1,124 @@
+.slot {
+  display: grid;
+  min-width: 0;
+  gap: 0.5rem;
+  padding: 1rem var(--nu-page-gutter) 1.25rem;
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  background: var(--nu-color-surface);
+}
+
+.slot[data-preview="true"] {
+  padding: 0;
+  border-bottom: 0;
+}
+
+.slotHeader {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  line-height: 1.4;
+}
+
+.slotHeader > span {
+  font-weight: var(--nu-weight-bold);
+  letter-spacing: 0.02em;
+}
+
+.slotHeader > small {
+  overflow: hidden;
+  font: inherit;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.banner {
+  position: relative;
+  display: block;
+  min-width: 0;
+  aspect-ratio: 3 / 1;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--nu-warm-300) 64%, transparent);
+  border-radius: 10px;
+  background: var(--nu-color-ad-sample-surface);
+  color: var(--nu-neutral-950);
+}
+
+.banner:focus-visible {
+  outline: 2px solid var(--nu-color-brand);
+  outline-offset: 3px;
+}
+
+.artwork {
+  object-fit: cover;
+  object-position: center 54%;
+  transition: transform 320ms ease;
+}
+
+.banner:hover .artwork {
+  transform: scale(1.015);
+}
+
+.copy {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  width: 54%;
+  height: 100%;
+  align-content: center;
+  gap: 0.18rem;
+  padding: clamp(0.7rem, 3vw, 1.35rem);
+  background: var(--nu-color-ad-sample-copy-surface);
+}
+
+.copy > small {
+  color: var(--nu-color-ad-sample-overline);
+  font-size: var(--nu-text-ad-overline);
+  font-weight: var(--nu-weight-bold);
+  letter-spacing: 0.08em;
+}
+
+.copy > strong {
+  color: var(--nu-color-ad-sample-title);
+  font-size: var(--nu-text-ad-title);
+  font-weight: var(--nu-weight-bold);
+  letter-spacing: -0.035em;
+  line-height: 1.25;
+}
+
+.copy > span {
+  color: var(--nu-color-ad-sample-body);
+  font-size: var(--nu-text-ad-body);
+  line-height: 1.35;
+}
+
+.copy > em {
+  width: fit-content;
+  margin-top: 0.2rem;
+  padding-bottom: 0.08rem;
+  border-bottom: 1px solid var(--nu-color-ad-sample-link-border);
+  color: var(--nu-color-ad-sample-link);
+  font-size: var(--nu-text-ad-link);
+  font-style: normal;
+  font-weight: var(--nu-weight-semibold);
+}
+
+@media (max-width: 359px) {
+  .copy {
+    width: 58%;
+    padding: 0.62rem;
+  }
+
+  .copy > span {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artwork {
+    transition: none;
+  }
+}

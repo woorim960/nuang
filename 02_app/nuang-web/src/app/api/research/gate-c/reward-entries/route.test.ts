@@ -20,6 +20,10 @@ vi.mock("@/features/account/server-writes", () => ({
 vi.mock("@/features/account/server-private-contact", () => ({
   readPrivateContact: routeMocks.readPrivateContact,
   toPrivateContactPayload: () => ({
+    emailMasked: "te**@example.com",
+    emailStatus: "unverified",
+    emailVerifiedAt: null,
+    hasEmail: true,
     hasMobilePhone: true,
     marketingOptIn: false,
     mobilePhoneMasked: "010-****-5678",
@@ -47,6 +51,9 @@ describe("Gate C reward entry API", () => {
     routeMocks.readPrivateContact.mockResolvedValue({
       data: {
         accountId: "11111111-1111-4111-8111-111111111111",
+        emailEncrypted: "v1.email-encrypted",
+        emailHash: "b".repeat(64),
+        emailStatus: "unverified",
         mobilePhoneCiphertext: "v1.encrypted",
         mobilePhoneLookupHash: "a".repeat(64),
         mobilePhoneStatus: "unverified",
@@ -72,6 +79,7 @@ describe("Gate C reward entry API", () => {
       jsonRequest("http://localhost/api/research/gate-c/reward-entries", {
         consentAccepted: true,
         consentVersion: gateCRewardEntryConsentVersion,
+        contactMethod: "mobile_phone",
         participantCode: "GC-1234ABCD",
         publicReceiptId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
         website: "",
@@ -83,6 +91,7 @@ describe("Gate C reward entry API", () => {
     expect(body).toMatchObject({
       announcementLabel: "2026년 10월 1일",
       entryId: "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+      contactMethod: "mobile_phone",
       ok: true,
     });
     expect(captured.insert).toMatchObject({
@@ -100,6 +109,61 @@ describe("Gate C reward entry API", () => {
     expect(String(captured.insert?.receipt_lookup_hash)).toHaveLength(64);
   });
 
+  it("uses the member-selected email without copying it into the reward table", async () => {
+    const captured: { insert: null | Record<string, unknown> } = {
+      insert: null,
+    };
+    routeMocks.serviceClient = createRewardClient(captured);
+
+    const response = await POST(
+      jsonRequest("http://localhost/api/research/gate-c/reward-entries", {
+        consentAccepted: true,
+        consentVersion: gateCRewardEntryConsentVersion,
+        contactMethod: "email",
+        participantCode: "GC-1234ABCD",
+        publicReceiptId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        website: "",
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    expect(captured.insert).toMatchObject({
+      contact_ciphertext: null,
+      contact_lookup_hash: "b".repeat(64),
+      contact_method: "email",
+    });
+    expect(captured.insert).not.toHaveProperty("email");
+  });
+
+  it("requires the selected contact method to exist on the private profile", async () => {
+    routeMocks.serviceClient = createRewardClient({ insert: null });
+    routeMocks.readPrivateContact.mockResolvedValue({
+      data: {
+        emailHash: null,
+        emailStatus: "missing",
+        mobilePhoneLookupHash: "a".repeat(64),
+        mobilePhoneStatus: "unverified",
+      },
+      ok: true,
+    });
+
+    const response = await POST(
+      jsonRequest("http://localhost/api/research/gate-c/reward-entries", {
+        consentAccepted: true,
+        consentVersion: gateCRewardEntryConsentVersion,
+        contactMethod: "email",
+        participantCode: "GC-1234ABCD",
+        publicReceiptId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
+        website: "",
+      }),
+    );
+
+    expect(response.status).toBe(422);
+    await expect(response.json()).resolves.toEqual({
+      error: "profile_email_required",
+    });
+  });
+
   it("rejects entry before a matching participation is complete", async () => {
     routeMocks.serviceClient = createRewardClient(
       { insert: null },
@@ -110,6 +174,7 @@ describe("Gate C reward entry API", () => {
       jsonRequest("http://localhost/api/research/gate-c/reward-entries", {
         consentAccepted: true,
         consentVersion: gateCRewardEntryConsentVersion,
+        contactMethod: "mobile_phone",
         participantCode: "GC-1234ABCD",
         publicReceiptId: "bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb",
         website: "",

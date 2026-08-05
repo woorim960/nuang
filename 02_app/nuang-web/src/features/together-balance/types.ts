@@ -64,6 +64,17 @@ export type BalancePack = Readonly<{
   questions: readonly BalanceQuestion[];
 }>;
 
+export type BalancePackCatalogItem = Readonly<{
+  defaultQuestionCount: BalanceQuestionCount;
+  description: string;
+  id: string;
+  sampleOptions: readonly [string, string];
+  scoringTemplate: BalanceScoringTemplate;
+  slug: string;
+  title: string;
+  totalQuestionCount: number;
+}>;
+
 export type BalanceExposure = Readonly<{
   itemId: string;
   seenAt: string | Date;

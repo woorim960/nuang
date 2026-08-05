@@ -18,6 +18,7 @@ export const gateCRewardEntryStatuses = [
 export const gateCRewardEntryRequestSchema = z.object({
   consentAccepted: z.literal(true),
   consentVersion: z.literal(gateCRewardEntryConsentVersion),
+  contactMethod: z.enum(gateCRewardContactMethods),
   participantCode: z.string().regex(/^GC-[A-F0-9]{8}$/),
   publicReceiptId: z.uuid(),
   website: z.string().max(0).optional().default(""),

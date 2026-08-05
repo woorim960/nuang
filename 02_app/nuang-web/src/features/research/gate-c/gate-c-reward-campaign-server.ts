@@ -65,7 +65,5 @@ export function readGateCReviewRewardCampaign(
 function isCampaignEntryEnabled() {
   const configured =
     process.env.GATE_C_REVIEW_EVENT_ENTRY_ENABLED?.trim().toLowerCase();
-  if (configured === "false") return false;
-
-  return true;
+  return configured === "true";
 }

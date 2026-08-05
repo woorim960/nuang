@@ -8,6 +8,11 @@ import {
 import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
+import type { LabAssessment } from "@/features/lab/lab-assessments";
+import {
+  resolveAssessmentReleaseById,
+  resolveAssessmentRuntimeContent,
+} from "@/features/assessment/server-assessment-content-runtime";
 
 const labResultRequestSchema = z.object({
   answers: z.record(
@@ -21,6 +26,7 @@ const labResultRequestSchema = z.object({
   completedAt: z.string().datetime(),
   contentVersion: z.string().min(1).max(100),
   localResultId: z.string().trim().min(8).max(128),
+  productReleaseId: z.string().uuid().optional(),
   slug: z.string().min(1).max(100),
 });
 
@@ -32,9 +38,25 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "validation_error" }, { status: 422 });
   }
 
-  const assessment = getLabAssessment(parsed.data.slug);
+  const runtime = parsed.data.productReleaseId
+    ? await resolveAssessmentReleaseById({
+        category: "lab",
+        releaseId: parsed.data.productReleaseId,
+        slug: parsed.data.slug,
+        subtype: "odd_lab",
+      })
+    : await resolveAssessmentRuntimeContent({
+        category: "lab",
+        slug: parsed.data.slug,
+        subtype: "odd_lab",
+      });
+  const runtimePayload = runtime.document?.payload as
+    | { assessment?: LabAssessment }
+    | undefined;
+  const assessment = runtimePayload?.assessment ?? getLabAssessment(parsed.data.slug);
   if (
     !assessment ||
+    runtime.state === "unavailable" ||
     assessment.contentVersion !== parsed.data.contentVersion ||
     !hasExactAnswerSet(assessment, parsed.data.answers)
   ) {
@@ -74,13 +96,17 @@ export async function POST(request: Request) {
     .upsert(
       {
         account_id: accountId,
+        assessment_content_release_id: runtime.releaseId,
         answers: parsed.data.answers,
         completed_at: parsed.data.completedAt,
         content_version: assessment.contentVersion,
         lab_slug: assessment.slug,
         local_result_id: parsed.data.localResultId,
         profile_code_at_completion: profileCodeAtCompletion,
-        result_payload: result,
+        result_payload: {
+          ...result,
+          assessmentSnapshot: assessment,
+        },
         updated_at: new Date().toISOString(),
       },
       { onConflict: "account_id,local_result_id" },
@@ -98,6 +124,7 @@ export async function POST(request: Request) {
     ok: true,
     result: {
       ...result,
+      assessmentSnapshot: assessment,
       completedAt: parsed.data.completedAt,
       nuangCodeContext: profileCodeAtCompletion
         ? {

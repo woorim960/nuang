@@ -12,18 +12,26 @@ export type PolicySkeleton = {
 
 export const policySkeletonVersion = "policy.v1.0";
 
+const legalBusinessName =
+  process.env.LEGAL_BUSINESS_NAME?.trim() || "딱좋은라이프";
+const legalRepresentativeName =
+  process.env.LEGAL_REPRESENTATIVE_NAME?.trim() || "박우림";
+const legalBusinessRegistrationNumber =
+  process.env.LEGAL_BUSINESS_REGISTRATION_NUMBER?.trim() || "768-75-00424";
 const legalOperatorName =
-  process.env.LEGAL_OPERATOR_NAME?.trim() || "뉴앙 운영자";
+  process.env.LEGAL_OPERATOR_NAME?.trim() || legalBusinessName;
+const legalServiceOrigin =
+  process.env.LEGAL_SERVICE_ORIGIN?.trim() || "https://nuang.app";
+const supportResponseWindow =
+  process.env.LEGAL_SUPPORT_RESPONSE_WINDOW?.trim() || "접수 후 1~3일 이내";
 const supabaseDataRegion =
   process.env.SUPABASE_DATA_REGION?.trim() || "배포 설정에서 선택한 지역";
 const privacyContactEmail =
   process.env.PRIVACY_CONTACT_EMAIL?.trim() || "woorimprog@gmail.com";
-const privacyContactPhone =
-  process.env.MARKETING_CONTACT_PHONE?.trim() || "010-2515-0939";
 
 export const policySkeletons = {
   terms: {
-    effectiveDate: "2026년 8월 1일",
+    effectiveDate: "2026년 8월 5일",
     id: "terms",
     guide: "서로를 존중하며 안전하게 이용하기 위한 기본 약속이에요.",
     summary:
@@ -34,8 +42,9 @@ export const policySkeletons = {
         items: [
           "이 약관은 뉴앙이 제공하는 성향 검사, 리포트, 성향지도와 커뮤니티의 이용 기준을 정합니다.",
           "회원은 약관과 개인정보 처리방침을 읽고 동의한 뒤 계정을 만들 수 있습니다.",
-          "뉴앙의 일반 콘텐츠와 검사는 전 연령이 이용할 수 있습니다. 만 14세 미만 회원의 개인정보를 저장하는 기능은 법정대리인 동의 확인이 필요합니다.",
-          "19세 이상 전용 검사는 운영자가 별도로 지정한 경우에만 진입 전에 성인 인증을 요청합니다.",
+          "회원가입과 계정 저장 기능은 만 14세 이상인 이용자에게만 제공합니다. 가입 화면에서 만 14세 이상임을 사실대로 확인해야 합니다.",
+          "만 14세 미만 이용자의 회원가입은 현재 제공하지 않습니다. 로그인 없이 브라우저에만 저장하는 일반 검사 콘텐츠는 이용할 수 있습니다.",
+          "19세 이상 전용 검사는 성인 인증 수단과 차단 기능이 준비된 뒤 운영자가 별도로 지정한 경우에만 공개합니다.",
         ],
         title: "가입과 적용",
       },
@@ -81,7 +90,7 @@ export const policySkeletons = {
       },
       {
         items: [
-          "회원은 설정에서 로그아웃하거나 계정을 삭제할 수 있습니다. 계정 삭제가 완료되면 프로필, 게시물, 검사 결과와 비공개 연락처가 함께 삭제되며 복구할 수 없습니다.",
+          "회원은 설정에서 로그아웃하거나 계정을 삭제할 수 있습니다. 계정 삭제가 완료되면 프로필, 게시물, 검사 결과, 비교 기록, 로그인 정보와 비공개 연락처 등 계정에 연결된 데이터가 영구 삭제되며 복구할 수 없습니다. 같은 소셜 로그인으로 다시 가입할 수 있지만 이전 데이터는 새 계정으로 이어지지 않습니다. 결제·청약철회·민원처럼 다른 법령이 보존을 요구하는 기록이 실제로 존재하는 경우에만 서비스 데이터와 분리해 법정 기간 동안 보관한 뒤 삭제합니다.",
           "서비스 운영이 어려운 중대한 사유가 생기면 가능한 범위에서 미리 안내하고, 회원이 자신의 정보를 확인하거나 정리할 시간을 제공합니다.",
           "서비스의 중요한 내용이나 약관이 바뀌면 적용일과 변경 이유를 서비스 안에서 알립니다. 회원에게 불리한 중요한 변경은 충분한 안내 기간을 둡니다.",
         ],
@@ -98,7 +107,11 @@ export const policySkeletons = {
       {
         items: [
           `서비스 운영자: ${legalOperatorName}`,
-          `약관과 서비스 이용에 관한 문의는 ${privacyContactEmail}으로 보내 주세요.`,
+          `상호: ${legalBusinessName}`,
+          `대표자: ${legalRepresentativeName}`,
+          `사업자등록번호: ${legalBusinessRegistrationNumber}`,
+          `서비스 웹사이트: ${legalServiceOrigin}`,
+          `약관과 서비스 이용 문의: ${privacyContactEmail} (${supportResponseWindow} 답변)`,
           "회원과 뉴앙 사이의 분쟁에는 대한민국 법령을 적용합니다. 분쟁이 생기면 먼저 충분히 대화해 해결하고, 해결되지 않으면 관련 법령이 정한 법원이나 분쟁조정 절차를 이용할 수 있습니다.",
         ],
         title: "문의와 분쟁 해결",
@@ -106,7 +119,7 @@ export const policySkeletons = {
     ],
   },
   privacy: {
-    effectiveDate: "2026년 8월 3일",
+    effectiveDate: "2026년 8월 5일",
     id: "privacy",
     guide:
       "필요한 정보만 사용하고, 공개 범위는 사용자가 이해할 수 있게 안내해요.",
@@ -118,7 +131,7 @@ export const policySkeletons = {
         items: [
           "로그인 계정 식별값, 이메일, 이름과 프로필 이미지 등 로그인 제공자가 전달한 기본 정보",
           "사용자가 등록하고 인증한 비공개 이메일·휴대전화번호와 광고성 이메일 수신 설정",
-          "약관과 개인정보 처리방침에 동의한 기록",
+          "약관, 개인정보 수집·이용 동의와 만 14세 이상 확인 기록",
           "서비스 개선을 위한 이용 데이터 수집과 광고성 소식 수신에 대한 선택·철회 기록",
           "성향 검사 응답과 결과, 사용자가 작성한 게시물과 커뮤니티 활동",
           "서비스 접속 시각, 기기·브라우저 정보, IP 주소, 오류와 보안 기록처럼 서비스 이용 과정에서 자동으로 생기는 정보",
@@ -141,9 +154,10 @@ export const policySkeletons = {
       },
       {
         items: [
-          "회원 정보, 검사 결과와 커뮤니티 활동은 회원이 계정을 이용하는 동안 보관하고, 계정 삭제가 완료되면 함께 삭제합니다.",
+          "회원 정보, 로그인 제공자 식별값, 검사 결과와 커뮤니티 활동은 회원이 계정을 이용하는 동안 보관하고, 계정 삭제가 완료되면 영구 삭제합니다. 같은 소셜 로그인으로 다시 가입하면 이전 데이터가 없는 새 계정으로 시작합니다.",
+          "계정 삭제 완료 사실은 계정 ID, 로그인 제공자, 이메일이나 연락처 없이 삭제된 계정·로그인 수만 남기는 비식별 운영 기록으로 확인합니다.",
           "연구 참여 기록은 안내한 연구 목적과 보관기간에 따라 관리합니다. 연구 참여 화면에서 별도 기간을 안내한 경우 그 기간을 우선 적용합니다.",
-          "법령상 보관 의무가 있거나 신고·분쟁·부정 이용 대응이 진행 중인 정보는 해당 목적에 필요한 최소 범위와 기간만 분리해 보관한 뒤 삭제합니다.",
+          "결제·청약철회·민원처럼 법령상 보관 의무가 실제로 있거나 신고·분쟁 대응이 진행 중인 정보는 해당 목적에 필요한 최소 범위와 기간만 다른 회원 정보와 분리해 보관한 뒤 삭제합니다.",
           "계약되지 않고 종료된 광고·제휴 문의는 종료 후 1년, 스팸으로 확인된 문의는 판정 후 90일이 지나면 연락처와 원문을 삭제하거나 개인을 알아보기 어렵게 처리합니다. 계약으로 이어진 문의는 계약·세무상 필요한 기간만 별도로 관리합니다.",
           "개인을 식별하지 않는 광고 원시 품질 기록은 30일, 일별 집계는 13개월을 기본으로 보관합니다.",
           "선택 동의로 수집한 서비스 영역 이용 기록은 90일을 기본으로 보관하고, 계정을 삭제하면 개인과 연결된 기록도 함께 삭제합니다.",
@@ -185,8 +199,9 @@ export const policySkeletons = {
       },
       {
         items: [
-          "만 14세 미만 회원의 개인정보를 처리해야 할 때에는 법정대리인 동의를 받고 그 동의가 확인된 뒤 계정 기능을 엽니다.",
-          "일반 커뮤니티 활동과 검사에 만 14세 기준을 콘텐츠 이용 제한으로 적용하지 않습니다.",
+          "현재 회원가입과 계정 저장 기능은 만 14세 이상인 이용자에게만 제공합니다.",
+          "만 14세 미만 이용자의 법정대리인 동의 및 확인 절차는 현재 제공하지 않으며, 그 절차가 마련되기 전에는 계정을 만들거나 커뮤니티 기록을 저장할 수 없습니다.",
+          "로그인 없이 브라우저에만 저장하는 일반 검사 콘텐츠에는 만 14세 기준을 이용 등급으로 적용하지 않습니다.",
           "접근 권한을 역할별로 제한하고, 비공개 연락처와 서버용 비밀키가 공개 화면이나 브라우저 코드에 노출되지 않도록 분리합니다.",
           "중요한 변경과 관리자 조치를 기록하고, 도배·중복 요청·잘못된 공개 대상을 서버에서 확인하며, 업로드 파일과 외부 링크를 제한합니다.",
         ],
@@ -194,9 +209,10 @@ export const policySkeletons = {
       },
       {
         items: [
-          `개인정보 보호 담당자: ${legalOperatorName}`,
+          `개인정보 보호 담당자: ${legalRepresentativeName} (${legalBusinessName})`,
           `문의 이메일: ${privacyContactEmail}`,
-          `문의 연락처: ${privacyContactPhone}`,
+          `서비스 웹사이트: ${legalServiceOrigin}`,
+          `답변 안내: ${supportResponseWindow}`,
           "개인정보 침해 신고나 상담이 필요한 경우 개인정보침해신고센터(privacy.kisa.or.kr, 국번 없이 118)와 개인정보분쟁조정위원회(kopico.go.kr)를 이용할 수 있습니다.",
           "이 방침이 바뀌면 적용일과 변경 내용을 서비스 안에서 알립니다.",
         ],

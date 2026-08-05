@@ -15,11 +15,11 @@ export const metadata: Metadata = {
 };
 
 export default async function MyPage({
-  searchParams = Promise.resolve({}),
+  searchParams,
 }: {
   searchParams?: Promise<{ tab?: string }>;
-} = {}) {
-  const query = await searchParams;
+}) {
+  const query = (await searchParams) ?? {};
   const [serverClient, serviceClient] = await Promise.all([
     createServerSupabaseClient(),
     Promise.resolve(createSupabaseServiceClient()),
@@ -37,7 +37,14 @@ export default async function MyPage({
   const showAdminEntry = Boolean(adminIdentity);
 
   if (!data.user) {
-    return <MyOverview showAdminEntry={showAdminEntry} />;
+    return (
+      <div className={styles.fullBleedProfile}>
+        <MyOverview
+          initialContent={query.tab === "reports" ? "reports" : "posts"}
+          showAdminEntry={showAdminEntry}
+        />
+      </div>
+    );
   }
 
   if (!serviceClient) {

@@ -11,13 +11,17 @@ import {
 describe("profile visibility policy", () => {
   it("allows 1:1 comparison within a pre-published profile scope without extra counterparty approval", () => {
     expect(oneToOneComparisonPolicy.requiresCounterpartyApproval).toBe(false);
-    expect(oneToOneComparisonPolicy.canCompareWithoutCounterpartyApproval).toBe(true);
+    expect(oneToOneComparisonPolicy.canCompareWithoutCounterpartyApproval).toBe(
+      true,
+    );
     expect(oneToOneComparisonPolicy.requiresTargetPublicSnapshot).toBe(true);
     expect(oneToOneComparisonPolicy.privateInferenceAllowed).toBe(false);
   });
 
   it("defaults basic profile and core map surfaces to public comparison fields", () => {
-    const comparableIds = listDefaultComparableFields().map((rule) => rule.fieldId);
+    const comparableIds = listDefaultComparableFields().map(
+      (rule) => rule.fieldId,
+    );
 
     expect(comparableIds).toEqual([
       "display_profile",
@@ -25,6 +29,19 @@ describe("profile visibility policy", () => {
       "core_domain_map",
       "core_facet_summary",
     ]);
+  });
+
+  it("defaults regular result summaries to public without using them for comparison", () => {
+    for (const fieldId of ["quick_core_result", "lab_results"] as const) {
+      const rule = profileVisibilityRules.find(
+        (candidate) => candidate.fieldId === fieldId,
+      );
+      expect(rule).toMatchObject({
+        comparisonUse: "hidden",
+        defaultVisibility: "public",
+      });
+      expect(isComparableByDefault(fieldId)).toBe(false);
+    }
   });
 
   it("keeps direct responses, raw scores, sensitive topics, and identity data private or blocked", () => {

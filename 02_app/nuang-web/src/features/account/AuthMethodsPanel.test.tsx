@@ -125,9 +125,46 @@ describe("AuthMethodsPanel", () => {
     render(<AuthMethodsPanel />);
 
     expect(await screen.findByRole("alert")).toHaveTextContent(
-      "기존 기록은 그대로예요",
+      "다른 뉴앙 계정에서 이미 사용 중이에요",
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "현재 기록은 그대로예요",
     );
     expect(window.location.search).toBe("");
+  });
+
+  it("gives an actionable explanation when the provider rejects linking", async () => {
+    mocks.linkIdentity.mockResolvedValue({
+      data: {},
+      error: { message: "identity already exists" },
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockImplementation((input: RequestInfo | URL) =>
+        Promise.resolve(
+          String(input) === "/api/me/auth/methods"
+            ? Response.json({ ok: true, security })
+            : Response.json({
+                link: {
+                  expiresAt: "2026-08-02T01:10:00.000Z",
+                  provider: "kakao",
+                  redirectTo: "https://nuang.app/auth/link/callback",
+                },
+                ok: true,
+              }),
+        ),
+      ),
+    );
+
+    render(<AuthMethodsPanel />);
+    fireEvent.click(await screen.findByRole("button", { name: "연결" }));
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "다른 뉴앙 계정에서 이미 사용 중일 수 있어요",
+    );
+    expect(screen.getByRole("alert")).toHaveTextContent(
+      "고객 문의로 알려주세요",
+    );
   });
 
   it("keeps unlink confirmation keyboard safe", async () => {

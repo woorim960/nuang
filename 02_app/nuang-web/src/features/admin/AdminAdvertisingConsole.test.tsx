@@ -123,7 +123,7 @@ describe("AdminAdvertisingConsole", () => {
       campaignId: null,
       name: "가을 홈 캠페인",
       placementKeys: ["HOME_INLINE_01"],
-      provider: "adsense",
+      provider: "direct",
     });
   });
 });

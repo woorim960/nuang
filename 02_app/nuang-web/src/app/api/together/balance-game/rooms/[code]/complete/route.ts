@@ -24,12 +24,18 @@ export async function POST(
   const { code } = await context.params;
 
   try {
-    const room = await completeBalanceRoomOnServer({
+    const completed = await completeBalanceRoomOnServer({
       participantToken: readBalanceParticipantToken(request),
       roomCode: code,
     });
-    revalidateBalanceFeed();
-    return NextResponse.json({ ok: true, room });
+    if (completed.room.participationMode === "feed_group") {
+      revalidateBalanceFeed();
+    }
+    return NextResponse.json({
+      completed: { participantId: completed.participantId },
+      ok: true,
+      room: completed.room,
+    });
   } catch (error) {
     return handleBalanceRouteError(error);
   }

@@ -1,6 +1,12 @@
 import { z } from "zod";
+import type { PublicProfileImage } from "@/features/public-profile/profile-image";
+import { BALANCE_ANSWER_REVEAL_CONSENT_VERSION } from "./constants";
 
-export const BALANCE_ANSWER_REVEAL_CONSENT_VERSION = "balance-answer-reveal-v1";
+export {
+  BALANCE_ANSWER_REVEAL_CONSENT_VERSION,
+  BALANCE_PARTICIPANT_TOKEN_HEADER,
+  balanceParticipantSessionStorageKey,
+} from "./constants";
 
 const balanceNicknameSchema = z
   .string()
@@ -96,6 +102,23 @@ export type SaveBalanceResponseRequest = z.infer<
   typeof saveBalanceResponseRequestSchema
 >;
 
+export type SaveBalanceResponseResponse = {
+  ok: true;
+  saved: {
+    clientSequence: number;
+    optionId: string;
+    questionId: string;
+  };
+};
+
+export type CompleteBalanceRoomResponse = {
+  completed: {
+    participantId: string;
+  };
+  ok: true;
+  room: BalanceRoomState;
+};
+
 export type BalanceRoomQuestionView = {
   id: string;
   options: [
@@ -110,11 +133,13 @@ export type BalanceRoomQuestionView = {
 
 export type BalanceRoomParticipantView = {
   answeredCount: number;
+  avatarSeed?: string | null;
   completedAt: string | null;
   id: string;
   isMe: boolean;
   isOwner: boolean;
   nickname: string;
+  profileImage?: PublicProfileImage | null;
   status: "reserved" | "active" | "completed" | "left" | "removed";
 };
 
@@ -130,6 +155,7 @@ export type BalancePairResultView = {
   comparedCount: number;
   matchCount: number;
   otherParticipantId: string;
+  otherParticipantAvatarSeed?: string | null;
   otherParticipantNickname: string;
   score: number;
 };
@@ -256,12 +282,6 @@ export type BalanceApiError = {
   ok: false;
   retryable: boolean;
 };
-
-export const BALANCE_PARTICIPANT_TOKEN_HEADER =
-  "x-nuang-balance-participant-token";
-
-export const balanceParticipantSessionStorageKey =
-  "nuang.together-balance.participant.v1";
 
 function isSafeBalanceNickname(value: string) {
   if (/[\p{Cc}\p{Cf}]/u.test(value)) return false;

@@ -29,9 +29,8 @@ vi.mock("@/features/assessment/AssessmentHomeCoreSection", () => ({
   ),
 }));
 
-vi.mock("@/features/advertising/delivery/AdSenseInlineSlot", () => ({
-  AdSenseInlineSlot: ({ config }: { config: unknown }) =>
-    config ? <section aria-label="테스트 홈 광고" /> : null,
+vi.mock("@/features/advertising/delivery/BetaSampleSponsorBanner", () => ({
+  BetaSampleSponsorBanner: () => <section aria-label="광고 예시" />,
 }));
 
 describe("AssessmentHub", () => {
@@ -59,19 +58,7 @@ describe("AssessmentHub", () => {
   });
 
   it("orders recommended content as topics, together, lab, then utilities", () => {
-    render(
-      <AssessmentHub
-        homeAd={{
-          canonicalOrigin: "https://nuang.example",
-          dailyCap: 1,
-          enabled: true,
-          placementKey: "HOME_INLINE_01",
-          publisherId: "ca-pub-1234567890123456",
-          sessionCap: 1,
-          slotId: "1234567890",
-        }}
-      />,
-    );
+    render(<AssessmentHub />);
 
     const topics = screen.getByRole("heading", {
       name: "지금 궁금한 내 모습을 골라보세요",
@@ -79,7 +66,7 @@ describe("AssessmentHub", () => {
     const together = screen.getByRole("heading", {
       name: "우리, 얼마나 비슷하게 고를까요?",
     });
-    const ad = screen.getByRole("region", { name: "테스트 홈 광고" });
+    const ad = screen.getByRole("region", { name: "광고 예시" });
     const lab = screen.getByRole("heading", {
       name: "내 안의 의외성을 발견해요",
     });
@@ -103,6 +90,18 @@ describe("AssessmentHub", () => {
       Node.DOCUMENT_POSITION_FOLLOWING,
     );
   });
+
+  it.each(["self", "together", "lab"])(
+    "does not show the beta sponsor outside the recommended home view (%s)",
+    (view) => {
+      navigationMocks.params = `view=${view}`;
+      render(<AssessmentHub />);
+
+      expect(
+        screen.queryByRole("region", { name: "광고 예시" }),
+      ).not.toBeInTheDocument();
+    },
+  );
 
   it("uses URL views and keeps the core journey outside every tab", () => {
     navigationMocks.params = "view=self";

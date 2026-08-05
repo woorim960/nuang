@@ -56,7 +56,7 @@ export type SelfProfilePayload = {
     code: string;
     completedAt: string;
     profileName: string;
-    source: "full" | "quick";
+    source: "combined" | "full" | "quick";
   } | null;
   viewerCode: string | null;
 };

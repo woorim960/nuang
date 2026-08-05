@@ -1,0 +1,324 @@
+.avatar,
+.groupAvatar {
+  position: relative;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid var(--nu-color-brand-border);
+  border-radius: 50%;
+  background: var(--nu-color-brand-surface);
+}
+
+.avatar[data-size="small"] {
+  width: 30px;
+  height: 30px;
+}
+
+.groupAvatar {
+  width: 56px;
+  height: 52px;
+  overflow: visible;
+  isolation: isolate;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.avatar[data-size="medium"] {
+  width: 52px;
+  height: 52px;
+}
+
+.avatar[data-size="large"] {
+  width: 64px;
+  height: 64px;
+}
+
+.avatarImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.groupAvatarImage {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  object-fit: cover;
+  overflow: hidden;
+  border: 2px solid var(--nu-color-surface);
+  border-radius: 50%;
+  background: var(--nu-color-brand-surface);
+  box-shadow: 0 2px 5px rgb(var(--nu-rgb-neutral-900) / 10%);
+}
+
+.groupAvatarImage[data-position="0"] {
+  bottom: 2px;
+  left: 0;
+  z-index: 1;
+}
+
+.groupAvatarImage[data-position="1"] {
+  top: 0;
+  left: 12px;
+  z-index: 3;
+}
+
+.groupAvatarImage[data-position="2"] {
+  right: 0;
+  bottom: 2px;
+  z-index: 2;
+}
+
+.duo {
+  position: relative;
+  display: block;
+  width: min(100%, 280px);
+  height: 144px;
+  overflow: visible;
+}
+
+.duoHalo {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  width: 176px;
+  height: 92px;
+  border-radius: 50%;
+  background: var(--nu-color-brand-surface-strong);
+  filter: blur(1px);
+  transform: translateX(-50%);
+}
+
+.duoConnection {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.duoGround {
+  fill: none;
+  stroke: var(--nu-color-brand-border);
+  stroke-linecap: round;
+  stroke-width: 2.5;
+}
+
+.duoConnectionPath {
+  fill: none;
+  stroke: var(--nu-color-brand-action);
+  stroke-dasharray: 4 7;
+  stroke-linecap: round;
+  stroke-width: 2.5;
+  animation: result-connection 6s linear infinite;
+}
+
+.duoPulse {
+  fill: var(--nu-color-brand-action);
+  transform-origin: center;
+  animation: result-pulse 3.6s ease-in-out infinite;
+}
+
+.duoCharacterSlot {
+  position: absolute;
+  z-index: 2;
+  display: block;
+  width: 104px;
+  height: 104px;
+}
+
+.duoCharacterSlot[data-side="left"] {
+  bottom: 18px;
+  left: 37px;
+}
+
+.duoCharacterSlot[data-side="right"] {
+  right: 35px;
+  bottom: 16px;
+}
+
+.duoCharacterSlot[data-side="group"] {
+  top: 0;
+  left: 50%;
+  z-index: 1;
+  width: 62px;
+  height: 62px;
+  opacity: 0;
+  transform: translateX(-50%) scale(0.82);
+  transition: opacity 240ms ease, transform 320ms ease;
+}
+
+.duo[data-mode="group"] .duoCharacterSlot[data-side="group"] {
+  opacity: 1;
+  transform: translateX(-50%) scale(1);
+}
+
+.duo[data-mode="pair"] .duoCharacterSlot[data-side="left"] {
+  transform: translateX(8px) rotate(2deg);
+}
+
+.duo[data-mode="pair"] .duoCharacterSlot[data-side="right"] {
+  transform: translateX(-8px) rotate(-2deg);
+}
+
+.duo[data-mode="self"] .duoCharacterSlot[data-side="right"] {
+  opacity: 0.28;
+  filter: saturate(0.55);
+}
+
+.duoCharacter {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 7px 9px rgb(var(--nu-rgb-neutral-900) / 12%));
+  transform-origin: center bottom;
+  animation: result-character-float 4.8s ease-in-out infinite;
+}
+
+.duoCharacterSlot[data-side="right"] .duoCharacter {
+  animation-delay: -2.4s;
+}
+
+.duoCharacterSlot[data-side="group"] .duoCharacter {
+  animation-delay: -1.1s;
+}
+
+.scene {
+  position: relative;
+  display: grid;
+  width: 54px;
+  height: 44px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid var(--nu-color-brand-border);
+  border-radius: 14px;
+  background: var(--nu-color-brand-surface);
+  overflow: hidden;
+}
+
+.sceneCharacter {
+  position: absolute;
+  bottom: 3px;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 3px rgb(var(--nu-rgb-neutral-900) / 10%));
+  transform-origin: center bottom;
+  animation: result-scene-character 4.4s ease-in-out infinite;
+}
+
+.sceneCharacter[data-position="0"] {
+  left: 1px;
+}
+
+.sceneCharacter[data-position="1"] {
+  right: 1px;
+  animation-delay: -2.3s;
+}
+
+.sceneSignal {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  z-index: 3;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--nu-color-brand-action);
+  box-shadow: -7px 3px 0 var(--nu-color-brand-border),
+    7px 3px 0 var(--nu-color-brand-border);
+  transform: translateX(-50%);
+  animation: result-scene-signal 2.6s ease-in-out infinite;
+}
+
+.scene[data-scene="different"] .sceneCharacter[data-position="0"] {
+  left: -2px;
+  transform: rotate(-7deg);
+}
+
+.scene[data-scene="different"] .sceneCharacter[data-position="1"] {
+  right: -2px;
+  transform: rotate(7deg);
+}
+
+.scene[data-scene="invite"] .sceneCharacter[data-position="1"] {
+  opacity: 0.34;
+  animation-name: result-scene-invite;
+}
+
+@keyframes result-character-float {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.015);
+  }
+}
+
+@keyframes result-connection {
+  to {
+    stroke-dashoffset: -22;
+  }
+}
+
+@keyframes result-pulse {
+  0%,
+  100% {
+    opacity: 0.52;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
+@keyframes result-scene-character {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-1.5px);
+  }
+}
+
+@keyframes result-scene-signal {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateX(-50%) scale(0.78);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.08);
+  }
+}
+
+@keyframes result-scene-invite {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateX(0);
+  }
+  50% {
+    opacity: 0.48;
+    transform: translateX(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .duoConnection,
+  .duoConnectionPath,
+  .duoPulse,
+  .duoCharacter,
+  .sceneCharacter,
+  .sceneSignal {
+    animation: none;
+  }
+}

@@ -126,6 +126,47 @@
   border-top: 1px solid var(--nu-color-border);
 }
 
+.requiredConsentNotice {
+  padding: 0 0.75rem;
+  border-top: 1px solid var(--nu-color-border);
+  color: var(--nu-color-text-muted);
+}
+
+.requiredConsentNotice summary {
+  min-height: 44px;
+  padding-block: 0.8125rem;
+  cursor: pointer;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+  line-height: var(--nu-leading-label);
+}
+
+.requiredConsentNotice dl {
+  display: grid;
+  gap: 0.625rem;
+  margin: 0;
+  padding: 0 0 0.875rem;
+}
+
+.requiredConsentNotice dl div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.requiredConsentNotice dt {
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.requiredConsentNotice dd {
+  margin: 0;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-body-sm);
+  word-break: keep-all;
+}
+
 .optionalConsent summary {
   box-sizing: border-box;
   min-height: 44px;

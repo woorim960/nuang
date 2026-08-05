@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { readJsonResponse } from "@/features/account/response-json";
+import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import {
@@ -73,10 +74,11 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
         localRead.state === "error" || accountRead.state === "error"
           ? null
           : buildMapViewerProfile({
-            accountReadState: accountRead.state,
-            accountResults: accountRead.results,
-            localAttempts: localRead.attempts,
-          });
+              accountReadState: accountRead.state,
+              accountResults: accountRead.results,
+              currentTraitProfile: accountRead.currentTraitProfile,
+              localAttempts: localRead.attempts,
+            });
 
       if (!isMounted) return;
       setViewerProfile(profile);
@@ -163,15 +165,15 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
       : matchingProfiles.slice(0, INITIAL_PROFILE_COUNT);
   const startProfile = selectedProfile
     ? {
-      code: selectedProfile.code,
-      displayName: selectedProfile.displayName,
-      sourceLabel:
-        viewerProfile?.code === selectedProfile.code
-          ? viewerProfile.sourceLabel
-          : savedCodes.includes(selectedProfile.code)
-            ? "최근 관심 코드"
-            : "지금 선택한 성향",
-    }
+        code: selectedProfile.code,
+        displayName: selectedProfile.displayName,
+        sourceLabel:
+          viewerProfile?.code === selectedProfile.code
+            ? viewerProfile.sourceLabel
+            : savedCodes.includes(selectedProfile.code)
+              ? "최근 관심 코드"
+              : "지금 선택한 성향",
+      }
     : null;
 
   const moveToBuilder = () => {
@@ -602,6 +604,7 @@ function ProfileResult({
 }
 
 async function listMapAccountResults(): Promise<{
+  currentTraitProfile: AccountTraitProfile | null;
   results: AccountResultSummary[];
   state: "error" | "not_requested" | "ready";
 }> {
@@ -610,31 +613,57 @@ async function listMapAccountResults(): Promise<{
       cache: "no-store",
       method: "GET",
     });
-    if (response.status === 401) return { results: [], state: "not_requested" };
-    if (!response.ok) return { results: [], state: "error" };
+    if (response.status === 401) {
+      return {
+        currentTraitProfile: null,
+        results: [],
+        state: "not_requested",
+      };
+    }
+    if (!response.ok) {
+      return { currentTraitProfile: null, results: [], state: "error" };
+    }
 
     const body = await readJsonResponse<{
+      currentTraitProfile?: AccountTraitProfile | null;
       ok?: boolean;
       results?: AccountResultSummary[];
     }>(response);
 
     return body?.ok && Array.isArray(body.results)
-      ? { results: body.results, state: "ready" }
-      : { results: [], state: "error" };
+      ? {
+          currentTraitProfile: body.currentTraitProfile ?? null,
+          results: body.results,
+          state: "ready",
+        }
+      : { currentTraitProfile: null, results: [], state: "error" };
   } catch {
-    return { results: [], state: "error" };
+    return { currentTraitProfile: null, results: [], state: "error" };
   }
 }
 
 function buildMapViewerProfile({
   accountReadState,
   accountResults,
+  currentTraitProfile,
   localAttempts,
 }: {
   accountReadState: "not_requested" | "ready";
   accountResults: AccountResultSummary[];
+  currentTraitProfile: AccountTraitProfile | null;
   localAttempts: LocalAssessmentAttempt[];
 }): MapViewerProfile | null {
+  if (currentTraitProfile) {
+    return {
+      code: currentTraitProfile.code,
+      displayName: currentTraitProfile.profileName,
+      sourceLabel:
+        currentTraitProfile.source === "core_and_topics"
+          ? `내 현재 코드 · 주제 검사 ${currentTraitProfile.topicCount}개 반영`
+          : "내 대표 코드 · 코어 검사 기준",
+    };
+  }
+
   const representative = selectRepresentativeCoreResult(
     collectValidatedCoreResultCandidates({
       accountReadState,

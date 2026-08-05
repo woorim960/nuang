@@ -1,0 +1,307 @@
+.filters {
+  display: flex;
+  gap: 0.35rem;
+  padding: 0 1rem;
+}
+
+.filters a {
+  display: inline-flex;
+  min-width: 54px;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font-size: var(--nu-text-admin-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.filters a[data-active="true"] {
+  border-color: var(--admin-accent, var(--nu-color-brand));
+  color: var(--admin-accent-strong, var(--nu-color-brand-strong));
+  background: var(--admin-accent-soft, var(--nu-color-brand-surface));
+}
+
+.scopeNote,
+.instrumentationNote {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: start;
+  gap: 0.65rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 8px;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface, var(--nu-color-surface));
+}
+
+.scopeNote svg,
+.instrumentationNote svg {
+  margin-top: 0.08rem;
+  color: var(--admin-accent, var(--nu-color-brand));
+}
+
+.scopeNote p,
+.instrumentationNote p {
+  margin: 0;
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.6;
+}
+
+.metricGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  background: var(--admin-border, var(--nu-color-border));
+}
+
+.metricGrid article {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.65rem;
+  padding: 0.9rem;
+  background: var(--admin-surface, var(--nu-color-surface));
+}
+
+.metricGrid article > span {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--admin-accent-strong, var(--nu-color-brand-strong));
+  background: var(--admin-accent-soft, var(--nu-color-brand-surface));
+}
+
+.metricGrid article > div {
+  display: grid;
+  min-width: 0;
+  gap: 0.12rem;
+}
+
+.metricGrid small,
+.valueGrid span {
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  font-size: var(--nu-text-admin-meta);
+  font-weight: var(--nu-weight-bold);
+}
+
+.metricGrid strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-metric);
+  line-height: 1.15;
+}
+
+.metricGrid p,
+.valueGrid p {
+  margin: 0;
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+  line-height: 1.45;
+}
+
+.dailyChart {
+  display: flex;
+  min-height: 214px;
+  align-items: end;
+  gap: 2px;
+  padding: 1rem 1rem 0.8rem;
+}
+
+.dailyChart > div {
+  display: flex;
+  min-width: 2px;
+  height: 170px;
+  flex: 1 1 0;
+  flex-direction: column;
+  justify-content: end;
+  gap: 0.45rem;
+}
+
+.dailyChart > div > span {
+  min-height: var(--analytics-bar-height);
+  border-radius: 3px 3px 1px 1px;
+  background: var(--admin-accent, var(--nu-color-brand));
+}
+
+.dailyChart small {
+  min-height: 16px;
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-overline);
+  white-space: nowrap;
+}
+
+.areaRows {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+}
+
+.areaRows > div {
+  display: grid;
+  grid-template-columns: 4.5rem minmax(4rem, 1fr) 3.2rem 3rem;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.areaRows span,
+.areaRows strong,
+.areaRows small {
+  font-size: var(--nu-text-admin-label);
+}
+
+.areaRows span {
+  color: var(--admin-text, var(--nu-color-text));
+  font-weight: var(--nu-weight-bold);
+}
+
+.areaRows > div > div {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 99px;
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+}
+
+.areaRows i {
+  display: block;
+  width: var(--analytics-area-width);
+  height: 100%;
+  border-radius: inherit;
+  background: var(--admin-accent, var(--nu-color-brand));
+}
+
+.areaRows strong,
+.areaRows small {
+  text-align: right;
+}
+
+.areaRows small {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+}
+
+.valueGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.valueGrid article {
+  display: grid;
+  min-width: 0;
+  gap: 0.3rem;
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-border-soft, var(--nu-color-border));
+}
+
+.valueGrid article:nth-child(odd) {
+  border-right: 1px solid var(--admin-border-soft, var(--nu-color-border));
+}
+
+.valueGrid strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-heading);
+}
+
+.qualityRows {
+  display: grid;
+}
+
+.qualityRows > div {
+  display: grid;
+  gap: 0.7rem;
+  padding: 1rem;
+}
+
+.qualityRows > div + div {
+  border-top: 1px solid var(--admin-border-soft, var(--nu-color-border));
+}
+
+.qualityRows > div > strong {
+  font-size: var(--nu-text-admin-label);
+}
+
+.qualityRows dl {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin: 0;
+}
+
+.qualityRows dl div {
+  padding: 0.7rem;
+  border-radius: 6px;
+  background: var(--admin-surface-subtle, var(--nu-color-surface-soft));
+}
+
+.qualityRows dt {
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+.qualityRows dd {
+  margin: 0.25rem 0 0;
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-body);
+  font-weight: var(--nu-weight-bold);
+}
+
+.instrumentationNote strong {
+  color: var(--admin-text, var(--nu-color-text));
+  font-size: var(--nu-text-admin-label);
+}
+
+.instrumentationNote span {
+  grid-column: 2;
+  color: var(--admin-subtle, var(--nu-color-text-subtle));
+  font-size: var(--nu-text-admin-micro);
+}
+
+@media (min-width: 700px) {
+  .filters {
+    padding-inline: 0;
+  }
+
+  .metricGrid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    overflow: hidden;
+    border: 1px solid var(--admin-border, var(--nu-color-border));
+    border-radius: 8px;
+  }
+
+  .valueGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .valueGrid article:nth-child(odd) {
+    border-right: 0;
+  }
+
+  .valueGrid article:not(:nth-child(3n)) {
+    border-right: 1px solid var(--admin-border-soft, var(--nu-color-border));
+  }
+
+  .qualityRows {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .qualityRows > div + div {
+    border-top: 0;
+    border-left: 1px solid var(--admin-border-soft, var(--nu-color-border));
+  }
+}
+
+@media (max-width: 520px) {
+  .metricGrid article {
+    grid-template-columns: 1fr;
+  }
+
+  .areaRows > div {
+    grid-template-columns: 3.8rem minmax(3rem, 1fr) 2.7rem;
+  }
+
+  .areaRows small {
+    display: none;
+  }
+}

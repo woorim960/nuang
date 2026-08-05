@@ -41,6 +41,14 @@ const communityMutationGuardMigration = readFileSync(
   "supabase/migrations/202607280006_community_mutation_guard.sql",
   "utf8",
 );
+const atomicProfileBlockMigration = readFileSync(
+  "supabase/migrations/202608050006_atomic_profile_block_cleanup.sql",
+  "utf8",
+);
+const communitySocialServerSource = readFileSync(
+  "src/features/feed/server-community-social.ts",
+  "utf8",
+);
 const migrations = `${foundationMigration}\n${seedTargetMigration}\n${preferenceMigration}\n${interactionMigration}\n${homeCommunityPollMigration}\n${topicMediaMigration}`;
 
 describe("feed db schema draft", () => {
@@ -215,23 +223,29 @@ describe("feed db schema draft", () => {
     expect(communityMutationGuardMigration).toContain(
       "comment.deleted_at is null",
     );
-    expect(communityMutationGuardMigration).toContain(
-      "when 'react' then",
-    );
-    expect(communityMutationGuardMigration).toContain(
-      "when 'bookmark' then",
-    );
-    expect(communityMutationGuardMigration).toContain(
-      "when 'vote_poll' then",
-    );
+    expect(communityMutationGuardMigration).toContain("when 'react' then");
+    expect(communityMutationGuardMigration).toContain("when 'bookmark' then");
+    expect(communityMutationGuardMigration).toContain("when 'vote_poll' then");
     expect(communityMutationGuardMigration).toContain(
       "when 'follow_profile' then",
     );
     expect(communityMutationGuardMigration).toContain(
       "return 'target_invalid'",
     );
-    expect(communityMutationGuardMigration).toContain(
-      "to service_role",
+    expect(communityMutationGuardMigration).toContain("to service_role");
+  });
+
+  it("removes both follow directions and notifications in the block transaction", () => {
+    expect(atomicProfileBlockMigration).toContain(
+      "function feed.set_profile_block",
     );
+    expect(atomicProfileBlockMigration).toContain("update feed.profile_follow");
+    expect(atomicProfileBlockMigration).toContain(
+      "update feed.activity_notification",
+    );
+    expect(atomicProfileBlockMigration).toContain(
+      "follower_account_id = p_blocked_account_id",
+    );
+    expect(communitySocialServerSource).toContain('.rpc("set_profile_block"');
   });
 });

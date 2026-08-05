@@ -90,6 +90,28 @@ const milestoneSchema = z.object({
   status: z.enum(["shown", "completed", "deferred"]),
 });
 
+const assessmentItemSnapshotSchema = z.object({
+  contextLabel: z.string().max(240).optional(),
+  domainId: z.string().min(1).max(24),
+  facetId: z.string().min(1).max(24),
+  isReverse: z.boolean(),
+  itemId: z.string().min(1).max(120),
+  responseFormat: z.enum(["frequency_5", "forced_direction_4"]).optional(),
+  text: z.string().min(1).max(1000),
+});
+
+const assessmentDefinitionSnapshotSchema = z.object({
+  adaptiveItems: z.array(assessmentItemSnapshotSchema).max(20).optional(),
+  assessmentId: z.enum(["nu-core-quick", "nu-core-full"]),
+  contentReleaseId: z.string().uuid().optional(),
+  estimatedMinutes: z.number().int().min(1).max(120),
+  items: z.array(assessmentItemSnapshotSchema).min(1).max(80),
+  mode: z.enum(["quick", "full"]),
+  releaseId: z.string().min(1).max(120),
+  resultLabel: z.string().min(1).max(160),
+  title: z.string().min(1).max(160),
+});
+
 export const accountAssessmentProgressAttemptSchema = z
   .object({
     adaptiveItemIds: z.array(z.string().min(1).max(120)).max(20).optional(),
@@ -97,6 +119,8 @@ export const accountAssessmentProgressAttemptSchema = z
       .enum(["intro", "in_progress", "completed"])
       .optional(),
     assessmentId: z.enum(["nu-core-quick", "nu-core-full"]),
+    assessmentContentReleaseId: z.string().uuid().optional(),
+    assessmentSnapshot: assessmentDefinitionSnapshotSchema.optional(),
     completedAt: z.string().datetime().optional(),
     completionRequestId: z.string().min(1).max(128).optional(),
     completionStatus: z

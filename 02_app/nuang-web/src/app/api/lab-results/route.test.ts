@@ -38,6 +38,12 @@ describe("lab results API", () => {
       account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
       lab_slug: "conversation-temperature",
       local_result_id: "lab_attempt_1",
+      result_payload: {
+        assessmentSnapshot: {
+          slug: "conversation-temperature",
+          title: "대화 온도 실험",
+        },
+      },
     });
     expect(mock.captured.onConflict).toBe("account_id,local_result_id");
   });

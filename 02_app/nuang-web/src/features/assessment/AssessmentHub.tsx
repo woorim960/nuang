@@ -17,8 +17,7 @@ import { useEffect, type ComponentType } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { AssessmentHomeCoreSection } from "@/features/assessment/AssessmentHomeCoreSection";
-import { AdSenseInlineSlot } from "@/features/advertising/delivery/AdSenseInlineSlot";
-import type { AdSenseDeliveryConfig } from "@/features/advertising/delivery/advertising-delivery-contract";
+import { BetaSampleSponsorBanner } from "@/features/advertising/delivery/BetaSampleSponsorBanner";
 import {
   assessmentHubFilters,
   type AssessmentCatalogItem,
@@ -28,6 +27,12 @@ import {
   togetherAssessmentCatalog,
 } from "@/features/assessment/assessment-catalog";
 import styles from "./AssessmentHub.module.css";
+
+type RuntimeAssessmentCatalog = {
+  labs: AssessmentCatalogItem[];
+  topics: AssessmentCatalogItem[];
+  together: AssessmentCatalogItem[];
+};
 
 type IconComponent = ComponentType<{
   "aria-hidden"?: boolean | "true" | "false";
@@ -49,9 +54,15 @@ const motifBySlug: Record<string, NuangCharacterMotif> = {
 };
 
 export function AssessmentHub({
-  homeAd = null,
+  catalog = {
+    labs: labAssessmentCatalog,
+    topics: topicAssessmentCatalog.filter(
+      (item) => item.publicationStatus === "published",
+    ),
+    together: togetherAssessmentCatalog,
+  },
 }: {
-  homeAd?: AdSenseDeliveryConfig | null;
+  catalog?: RuntimeAssessmentCatalog;
 }) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -130,13 +141,15 @@ export function AssessmentHub({
         role="tabpanel"
       >
         {activeFilter === "recommended" ? (
-          <RecommendedDiscovery homeAd={homeAd} />
+          <RecommendedDiscovery catalog={catalog} />
         ) : null}
-        {activeFilter === "self" ? <SelfDiscovery /> : null}
-        {activeFilter === "together" ? <TogetherDiscovery /> : null}
-        {activeFilter === "lab" ? (
-          <LabDiscovery items={labAssessmentCatalog} />
+        {activeFilter === "self" ? (
+          <SelfDiscovery items={catalog.topics} />
         ) : null}
+        {activeFilter === "together" ? (
+          <TogetherDiscovery items={catalog.together} />
+        ) : null}
+        {activeFilter === "lab" ? <LabDiscovery items={catalog.labs} /> : null}
       </section>
     </div>
   );
@@ -170,31 +183,27 @@ export function AssessmentHubFallback() {
 }
 
 function RecommendedDiscovery({
-  homeAd,
+  catalog,
 }: {
-  homeAd: AdSenseDeliveryConfig | null;
+  catalog: RuntimeAssessmentCatalog;
 }) {
-  const releasedTopics = topicAssessmentCatalog.filter(
-    (item) => item.publicationStatus === "published",
-  );
+  const releasedTopics = catalog.topics;
 
   return (
     <>
       {releasedTopics.length > 0 ? (
         <TopicDiscovery items={releasedTopics.slice(0, 3)} />
       ) : null}
-      <AdSenseInlineSlot config={homeAd} />
-      <TogetherDiscovery includeFind={false} />
-      <LabDiscovery items={labAssessmentCatalog.slice(0, 2)} />
+      <BetaSampleSponsorBanner />
+      <TogetherDiscovery includeFind={false} items={catalog.together} />
+      <LabDiscovery items={catalog.labs.slice(0, 2)} />
       <UtilitySection />
     </>
   );
 }
 
-function SelfDiscovery() {
-  const releasedTopics = topicAssessmentCatalog.filter(
-    (item) => item.publicationStatus === "published",
-  );
+function SelfDiscovery({ items }: { items: AssessmentCatalogItem[] }) {
+  const releasedTopics = items;
 
   return (
     <>
@@ -224,7 +233,10 @@ function TopicDiscovery({ items }: { items: AssessmentCatalogItem[] }) {
               <span className={styles.storyCopy}>
                 <strong>{item.title}</strong>
                 <small>{item.caption}</small>
-                <em>12개 질문 · 약 {item.estimatedMinutes}분</em>
+                <em>
+                  {item.questionCount ? `${item.questionCount}개 질문 · ` : ""}
+                  약 {item.estimatedMinutes}분
+                </em>
               </span>
               <ChevronRight aria-hidden="true" size={18} strokeWidth={1.6} />
             </Link>
@@ -243,8 +255,14 @@ function GlobalHomeJourney() {
   );
 }
 
-function TogetherDiscovery({ includeFind = true }: { includeFind?: boolean }) {
-  const [balanceGame, ...otherTogetherItems] = togetherAssessmentCatalog;
+function TogetherDiscovery({
+  includeFind = true,
+  items,
+}: {
+  includeFind?: boolean;
+  items: AssessmentCatalogItem[];
+}) {
+  const [balanceGame, ...otherTogetherItems] = items;
 
   return (
     <>

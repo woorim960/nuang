@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
 import { GateCPublicStudy } from "@/features/research/gate-c/GateCPublicStudy";
 import { readGateCReviewRewardCampaign } from "@/features/research/gate-c/gate-c-reward-campaign-server";
+import { createServerSupabaseClient } from "@/lib/supabase/server";
 
 export const metadata: Metadata = {
   description:
@@ -11,6 +13,35 @@ export const metadata: Metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default function ResearchPage() {
+type ResearchPageProps = {
+  searchParams?: Promise<Record<string, string | string[] | undefined>>;
+};
+
+export default async function ResearchPage({
+  searchParams,
+}: ResearchPageProps) {
+  const query = searchParams ? await searchParams : {};
+  const client = await createServerSupabaseClient();
+  const { data } = client
+    ? await client.auth.getUser()
+    : { data: { user: null } };
+
+  if (!data.user) {
+    const returnPath = createResearchReturnPath(query);
+    redirect(`/login?next=${encodeURIComponent(returnPath)}&reason=research`);
+  }
+
   return <GateCPublicStudy rewardCampaign={readGateCReviewRewardCampaign()} />;
+}
+
+function createResearchReturnPath(
+  query: Record<string, string | string[] | undefined>,
+) {
+  const params = new URLSearchParams();
+  (["from", "reward"] as const).forEach((key) => {
+    const value = Array.isArray(query[key]) ? query[key][0] : query[key];
+    if (value && value.length <= 80) params.set(key, value);
+  });
+  const serialized = params.toString();
+  return serialized ? `/research?${serialized}` : "/research";
 }

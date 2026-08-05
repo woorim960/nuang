@@ -39,9 +39,15 @@ const responseOptions: Array<{ label: string; value: M05ScaleValue }> = [
 ];
 
 export function M05ParticipantRunner({
+  completionActionLabel = "정밀 검사로 돌아가기",
   onComplete,
+  onContinueAfterComplete,
+  onExit,
 }: {
+  completionActionLabel?: string;
   onComplete?: (session: M05ParticipantSession) => void;
+  onContinueAfterComplete?: () => void;
+  onExit?: () => void;
 }) {
   const router = useRouter();
   const questionShownAtRef = useRef(0);
@@ -113,6 +119,10 @@ export function M05ParticipantRunner({
   }
 
   function leavePreview() {
+    if (onExit) {
+      onExit();
+      return;
+    }
     router.push(
       "/assessments/nu-core-full?preview=intro&from=home&backTo=%2Fhome",
     );
@@ -136,10 +146,10 @@ export function M05ParticipantRunner({
           <div className={styles.completionActions}>
             <button
               className={styles.primaryAction}
-              onClick={leavePreview}
+              onClick={onContinueAfterComplete ?? leavePreview}
               type="button"
             >
-              정밀 검사로 돌아가기
+              {completionActionLabel}
             </button>
           </div>
         </section>
@@ -240,10 +250,7 @@ export function M05ParticipantRunner({
             <AssessmentSheetAction onClick={() => setSheet(null)}>
               계속 확인하기
             </AssessmentSheetAction>
-            <AssessmentSheetAction
-              onClick={leavePreview}
-              variant="secondary"
-            >
+            <AssessmentSheetAction onClick={leavePreview} variant="secondary">
               정밀 검사로 돌아가기
             </AssessmentSheetAction>
           </AssessmentSheetActions>

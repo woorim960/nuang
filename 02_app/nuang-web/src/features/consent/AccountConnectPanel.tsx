@@ -55,7 +55,8 @@ export function AccountConnectPanel({
     privacy,
     terms,
   });
-  const allRequiredChecked = is14OrOlder && terms && privacy;
+  const allConsentChecked =
+    is14OrOlder && terms && privacy && analytics && marketing;
 
   const consentSummary = useMemo(
     () => ({ terms, privacy, is14OrOlder, analytics, marketing }),
@@ -223,19 +224,21 @@ export function AccountConnectPanel({
 
       <div className={styles.consentBox}>
         <ConsentCheck
-          checked={allRequiredChecked}
+          checked={allConsentChecked}
           emphasis
-          label="필수 항목 모두 동의"
+          label="모든 항목 동의"
           onChange={(checked) => {
             setIs14OrOlder(checked);
             setTerms(checked);
             setPrivacy(checked);
+            setAnalytics(checked);
+            setMarketing(checked);
           }}
         />
         <div className={styles.consentGroup}>
           <ConsentCheck
             checked={is14OrOlder}
-            label="만 14세 이상이에요"
+            label="만 14세 이상이며, 사실대로 확인했어요"
             onChange={setIs14OrOlder}
           />
           <ConsentCheck
@@ -245,15 +248,46 @@ export function AccountConnectPanel({
           />
           <ConsentCheck
             checked={privacy}
-            label="개인정보 처리방침에 동의해요"
+            label="개인정보 수집·이용에 동의해요"
             onChange={setPrivacy}
           />
         </div>
+        <details className={styles.requiredConsentNotice}>
+          <summary>필수 개인정보 수집·이용 안내</summary>
+          <dl>
+            <div>
+              <dt>목적</dt>
+              <dd>로그인, 계정 관리, 검사 결과 저장과 커뮤니티 활동 제공</dd>
+            </div>
+            <div>
+              <dt>항목</dt>
+              <dd>
+                소셜 로그인 식별값, 제공자가 전달한 이메일·이름·프로필 이미지,
+                동의 기록, 저장한 검사 응답·결과와 커뮤니티 활동
+              </dd>
+            </div>
+            <div>
+              <dt>보유 기간</dt>
+              <dd>
+                계정 삭제 시까지. 법령상 보관이나 분쟁 대응이 필요한 정보는 해당
+                기간 동안 분리 보관 후 삭제
+              </dd>
+            </div>
+            <div>
+              <dt>거부 권리와 영향</dt>
+              <dd>
+                동의를 거부할 수 있으며, 이 경우 로그인·계정 저장·커뮤니티
+                기능은 이용할 수 없습니다. 로그인 없는 일반 검사는 이용할 수
+                있습니다.
+              </dd>
+            </div>
+          </dl>
+        </details>
         <details className={styles.optionalConsent}>
           <summary>선택 동의 보기</summary>
           <ConsentCheck
             checked={analytics}
-            description="어떤 화면과 기능을 이용했는지만 모아 더 편하게 개선해요. 검사 답변과 작성한 내용은 포함하지 않아요."
+            description="어떤 화면과 기능을 이용했는지 모아 서비스를 개선하는데 도움을 줄 수 있어요. 검사 성향 검사 결과는 수집하지 않아요."
             label="서비스 개선을 위한 이용 데이터 수집"
             onChange={setAnalytics}
             optional
@@ -269,9 +303,9 @@ export function AccountConnectPanel({
       </div>
 
       <p className={styles.policyCopy}>
-        계속하면 <Link href="/policies/terms">이용약관</Link>과{" "}
-        <Link href="/policies/privacy">개인정보 처리방침</Link>에 동의하게
-        됩니다.
+        자세한 내용은 <Link href="/policies/terms">이용약관</Link>과{" "}
+        <Link href="/policies/privacy">개인정보 처리방침</Link>에서 확인할 수
+        있습니다.
       </p>
 
       <div className={styles.providerList}>
@@ -305,7 +339,7 @@ export function AccountConnectPanel({
 function authReturnMessage(status: string | null) {
   const messages: Record<string, string> = {
     account_deleted:
-      "삭제된 계정의 로그인 정보예요. 다른 로그인 방법을 이용해 주세요.",
+      "이전 계정은 삭제됐어요. 같은 로그인 방법으로 다시 시작하면 새 계정을 만들 수 있어요.",
     connected: "로그인이 완료됐어요.",
     consent_error:
       "필수 동의를 저장하지 못했어요. 확인 후 다시 로그인해 주세요.",

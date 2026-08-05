@@ -346,9 +346,8 @@ describe("LocalResultView", () => {
         new Response(
           JSON.stringify({
             ok: true,
-            shareLink: {
-              url: "http://localhost:3000/share/core-token",
-            },
+            persistent: true,
+            url: "http://localhost:3000/share/core-token",
           }),
           {
             headers: { "content-type": "application/json" },
@@ -364,11 +363,13 @@ describe("LocalResultView", () => {
     );
     await user.click(await screen.findByRole("button", { name: "링크 복사" }));
 
-    expect(writeText).toHaveBeenCalledWith(
-      "http://localhost:3000/share/core-token",
-    );
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith(
+        "http://localhost:3000/share/core-token",
+      );
+    });
     expect(
-      await screen.findByText("원본 리포트 링크를 복사했어요."),
+      await screen.findByText("결과 링크를 복사했어요."),
     ).toBeInTheDocument();
   });
 

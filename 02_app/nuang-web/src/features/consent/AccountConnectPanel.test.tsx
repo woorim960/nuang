@@ -60,7 +60,7 @@ describe("AccountConnectPanel", () => {
     ["session_error", "로그인 정보를 저장하지 못했어요. 다시 시도해 주세요."],
     [
       "account_deleted",
-      "삭제된 계정의 로그인 정보예요. 다른 로그인 방법을 이용해 주세요.",
+      "이전 계정은 삭제됐어요. 같은 로그인 방법으로 다시 시작하면 새 계정을 만들 수 있어요.",
     ],
     [
       "identity_error",
@@ -78,7 +78,7 @@ describe("AccountConnectPanel", () => {
         screen.getByRole("button", { name: "카카오로 계속하기" }),
       ).toBeDisabled();
       fireEvent.click(
-        screen.getByRole("checkbox", { name: "필수 항목 모두 동의" }),
+        screen.getByRole("checkbox", { name: "모든 항목 동의" }),
       );
       expect(
         screen.getByRole("button", { name: "카카오로 계속하기" }),
@@ -95,6 +95,12 @@ describe("AccountConnectPanel", () => {
     expect(
       screen.getByRole("link", { name: "개인정보 처리방침" }),
     ).toHaveAttribute("href", "/policies/privacy");
+    expect(
+      screen.getByText("필수 개인정보 수집·이용 안내", {
+        selector: "summary",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("거부 권리와 영향")).toBeInTheDocument();
   });
 
   it("opens social auth buttons only after required consent checks", async () => {
@@ -111,13 +117,13 @@ describe("AccountConnectPanel", () => {
     );
     fireEvent.click(
       screen.getByRole("checkbox", {
-        name: "개인정보 처리방침에 동의해요",
+        name: "개인정보 수집·이용에 동의해요",
       }),
     );
     expect(kakaoButton).toBeDisabled();
     fireEvent.click(
       screen.getByRole("checkbox", {
-        name: "만 14세 이상이에요",
+        name: "만 14세 이상이며, 사실대로 확인했어요",
       }),
     );
 
@@ -128,6 +134,37 @@ describe("AccountConnectPanel", () => {
     expect(
       screen.queryByRole("button", { name: /네이버/ }),
     ).not.toBeInTheDocument();
+  });
+
+  it("selects and clears required and optional items together", async () => {
+    render(<AccountConnectPanel />);
+
+    const allConsent = await screen.findByRole("checkbox", {
+      name: "모든 항목 동의",
+    });
+    const consentItems = [
+      screen.getByRole("checkbox", {
+        name: "만 14세 이상이며, 사실대로 확인했어요",
+      }),
+      screen.getByRole("checkbox", { name: "이용약관에 동의해요" }),
+      screen.getByRole("checkbox", {
+        name: "개인정보 수집·이용에 동의해요",
+      }),
+      screen.getByRole("checkbox", {
+        name: /서비스 개선을 위한 이용 데이터 수집/,
+      }),
+      screen.getByRole("checkbox", { name: /광고성 이메일 수신 동의/ }),
+    ];
+
+    fireEvent.click(allConsent);
+
+    expect(allConsent).toBeChecked();
+    consentItems.forEach((item) => expect(item).toBeChecked());
+
+    fireEvent.click(allConsent);
+
+    expect(allConsent).not.toBeChecked();
+    consentItems.forEach((item) => expect(item).not.toBeChecked());
   });
 
   it("does not reuse optional consent saved by another login", async () => {

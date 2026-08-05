@@ -28,7 +28,9 @@ export async function POST(
       participantToken: readBalanceParticipantToken(request),
       roomCode: code,
     });
-    revalidateBalanceFeed();
+    if (room.participationMode === "feed_group") {
+      revalidateBalanceFeed();
+    }
     return NextResponse.json({ ok: true, room });
   } catch (error) {
     return handleBalanceRouteError(error);

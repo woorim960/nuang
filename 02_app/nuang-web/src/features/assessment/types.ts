@@ -14,6 +14,7 @@ export type AssessmentItem = {
 };
 
 export type AssessmentDefinition = {
+  contentReleaseId?: string;
   assessmentId: string;
   releaseId: string;
   mode: AssessmentMode;
@@ -91,6 +92,9 @@ export type AssessmentCompletionStatus =
   "submitting" | "completed" | "insufficient_evidence" | "failed";
 
 export type LocalAssessmentAttempt = {
+  assessmentContentReleaseId?: string;
+  /** 시작 당시 문항·문구를 고정해 게시 중에도 같은 검사로 이어서 수행한다. */
+  assessmentSnapshot?: AssessmentDefinition;
   id: string;
   assessmentId: string;
   releaseId: string;

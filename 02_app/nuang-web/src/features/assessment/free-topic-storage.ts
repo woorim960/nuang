@@ -3,6 +3,7 @@
 import type {
   FreeTopicAnswer,
   FreeTopicAssessment,
+  FreeTopicQuestion,
   FreeTopicResultReport,
   FreeTopicScoreResult,
 } from "@/features/assessment/free-topic-assessments";
@@ -19,6 +20,7 @@ import {
   getFreeTopicReportContentVersion,
   getFreeTopicScoringVersion,
 } from "@/features/assessment/free-topic-result-version";
+import type { TopicTraitImpactSnapshot } from "@/features/assessment/topic-trait-impact";
 
 export type StoredFreeTopicResult = {
   answers: Record<string, FreeTopicAnswer>;
@@ -28,6 +30,7 @@ export type StoredFreeTopicResult = {
     slug: string;
     title: string;
   };
+  assessmentSnapshot?: FreeTopicAssessment;
   completedAt: string;
   expiresAt: string;
   evidenceVersion?: string;
@@ -38,11 +41,14 @@ export type StoredFreeTopicResult = {
     capturedAt: string;
     code: string;
   };
+  productReleaseId?: string;
+  questionsSnapshot?: FreeTopicQuestion[];
   reportContentVersion: string;
   reportSnapshot: FreeTopicResultReport;
   result: FreeTopicScoreResult;
   scoringVersion: string;
   serverResultId?: string;
+  traitImpactSnapshot?: TopicTraitImpactSnapshot;
   sync: {
     lastError?: string;
     lastTriedAt?: string;
@@ -59,11 +65,15 @@ export function saveFreeTopicResult({
   answers,
   assessment,
   completedAt,
+  productReleaseId,
+  questions,
   result,
 }: {
   answers: Record<string, FreeTopicAnswer>;
   assessment: FreeTopicAssessment;
   completedAt: string;
+  productReleaseId?: string | null;
+  questions?: Parameters<typeof calculateFreeTopicResult>[0]["questions"];
   result: FreeTopicScoreResult;
 }) {
   const localResultId = `topic_${crypto.randomUUID()}`;
@@ -75,14 +85,23 @@ export function saveFreeTopicResult({
       slug: assessment.slug,
       title: assessment.title,
     },
+    assessmentSnapshot: structuredClone(assessment),
     completedAt,
     evidenceVersion: getFreeTopicEvidenceVersion(assessment.slug),
     expiresAt: addDays(new Date(completedAt), retentionDays).toISOString(),
     formatVersion: freeTopicResultFormatVersion,
     instrumentVersion: getFreeTopicInstrumentVersion(assessment.slug),
     localResultId,
+    ...(productReleaseId ? { productReleaseId } : {}),
+    questionsSnapshot: structuredClone(
+      questions ?? getFreeTopicQuestions(assessment.slug),
+    ),
     reportContentVersion: getFreeTopicReportContentVersion(assessment.slug),
-    reportSnapshot: buildFreeTopicResultReport({ assessment, result }),
+    reportSnapshot: buildFreeTopicResultReport({
+      assessment,
+      questions,
+      result,
+    }),
     result,
     scoringVersion: getFreeTopicScoringVersion(assessment.slug),
     sync: { status: "queued" },
@@ -128,8 +147,19 @@ export async function listFreeTopicResultsLocalFirst() {
   );
 
   localResults.forEach((result) => {
-    // 같은 완료 기록은 사용자가 완료 직후 확인한 로컬 스냅샷을 유지합니다.
-    merged.set(result.localResultId, result);
+    const serverResult = merged.get(result.localResultId);
+    // 동기화가 끝난 같은 기록은 서버의 성향 반영 스냅샷을 우선하고,
+    // 서버에 보내지 않는 원본 답변과 로컬 보관 기한만 기기에서 유지합니다.
+    merged.set(
+      result.localResultId,
+      serverResult && result.sync.status === "synced"
+        ? {
+            ...serverResult,
+            answers: result.answers,
+            expiresAt: result.expiresAt,
+          }
+        : result,
+    );
   });
 
   return [...merged.values()].sort((a, b) =>
@@ -140,13 +170,20 @@ export async function listFreeTopicResultsLocalFirst() {
 export async function loadFreeTopicResultLocalFirst(localResultId: string) {
   const localResult = loadFreeTopicResult(localResultId);
 
-  if (localResult) return localResult;
+  if (localResult && localResult.sync.status !== "synced") return localResult;
 
   const serverResults = await fetchFreeTopicResultsFromServer(localResultId);
-  return (
-    serverResults.find((result) => result.localResultId === localResultId) ??
-    null
+  const serverResult = serverResults.find(
+    (result) => result.localResultId === localResultId,
   );
+  if (!serverResult) return localResult;
+  if (!localResult) return serverResult;
+
+  return {
+    ...serverResult,
+    answers: localResult.answers,
+    expiresAt: localResult.expiresAt,
+  };
 }
 
 async function fetchFreeTopicResultsFromServer(localResultId?: string) {
@@ -226,6 +263,7 @@ export async function syncFreeTopicResult(result: StoredFreeTopicResult) {
         assessment: { slug: result.assessment.slug },
         completedAt: result.completedAt,
         localResultId: result.localResultId,
+        productReleaseId: result.productReleaseId,
       }),
       cache: "no-store",
       headers: { "content-type": "application/json" },
@@ -251,25 +289,19 @@ export async function syncFreeTopicResult(result: StoredFreeTopicResult) {
     const canonicalResult = body?.result
       ? normalizeServerFreeTopicResult(body.result)
       : null;
-    const syncedResult: StoredFreeTopicResult = canonicalResult
-      ? {
-          ...canonicalResult,
-          answers: result.answers,
-          expiresAt: result.expiresAt,
-          sync: {
-            lastTriedAt: triedAt,
-            status: "synced",
-            syncedAt: body?.syncedAt ?? new Date().toISOString(),
-          },
-        }
-      : {
-          ...result,
-          sync: {
-            lastTriedAt: triedAt,
-            status: "synced",
-            syncedAt: body?.syncedAt ?? new Date().toISOString(),
-          },
-        };
+    if (!canonicalResult) {
+      return markSyncFailed(result, triedAt, "invalid_success_response");
+    }
+    const syncedResult: StoredFreeTopicResult = {
+      ...canonicalResult,
+      answers: result.answers,
+      expiresAt: result.expiresAt,
+      sync: {
+        lastTriedAt: triedAt,
+        status: "synced",
+        syncedAt: body?.syncedAt ?? new Date().toISOString(),
+      },
+    };
     writeStoredFreeTopicResult(syncedResult);
     return syncedResult;
   } catch {
@@ -318,7 +350,10 @@ function normalizeLocalFreeTopicResult(value: unknown): {
     assessmentRecord && typeof assessmentRecord.slug === "string"
       ? assessmentRecord.slug
       : "";
-  const assessment = getFreeTopicAssessment(slug);
+  const assessmentSnapshot = isRecord(value.assessmentSnapshot)
+    ? (value.assessmentSnapshot as unknown as FreeTopicAssessment)
+    : undefined;
+  const assessment = assessmentSnapshot ?? getFreeTopicAssessment(slug);
 
   if (!assessment) return null;
 
@@ -346,7 +381,9 @@ function normalizeLocalFreeTopicResult(value: unknown): {
     return { result: stored, upgraded: false };
   }
 
-  const questions = getFreeTopicQuestions(slug);
+  const questions = Array.isArray(value.questionsSnapshot)
+    ? (value.questionsSnapshot as FreeTopicQuestion[])
+    : getFreeTopicQuestions(slug);
   const answers = stored.answers;
   const hasCurrentQuestionSet =
     questions.length > 0 &&
@@ -371,6 +408,7 @@ function normalizeLocalFreeTopicResult(value: unknown): {
       slug: assessment.slug,
       title: assessment.title,
     },
+    assessmentSnapshot: structuredClone(assessment),
     expiresAt:
       typeof stored.expiresAt === "string"
         ? stored.expiresAt
@@ -381,6 +419,7 @@ function normalizeLocalFreeTopicResult(value: unknown): {
     reportContentVersion: getFreeTopicReportContentVersion(slug),
     reportSnapshot: buildFreeTopicResultReport({ assessment, result }),
     result,
+    questionsSnapshot: structuredClone(questions),
     scoringVersion: getFreeTopicScoringVersion(slug),
     sync: { status: "queued" },
   };

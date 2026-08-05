@@ -91,6 +91,10 @@ function getLoginCopy(reason: string) {
       description: "로그인 후 완료한 리뷰의 이벤트 응모를 바로 이어갈게요.",
       title: "이벤트에 응모하려면 로그인해 주세요",
     },
+    research: {
+      description: "로그인 후 지금 보려던 검사 질문 리뷰로 바로 돌아갈게요.",
+      title: "검사 질문 리뷰는 로그인 후 참여할 수 있어요",
+    },
     follow: {
       description: "로그인 후 보고 있던 프로필로 바로 돌아갑니다.",
       title: "팔로우하려면 로그인해 주세요",

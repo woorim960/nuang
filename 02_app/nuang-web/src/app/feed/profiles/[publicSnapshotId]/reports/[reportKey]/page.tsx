@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { FreeTopicResultView } from "@/features/assessment/FreeTopicResultView";
 import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
-import { getLabAssessment } from "@/features/lab/lab-assessments";
 import { LabResultView } from "@/features/lab/LabResultView";
 import {
   readOriginalProfileReport,
@@ -36,17 +35,17 @@ export default async function ProfileOriginalReportPage({
     resolveViewerAccountId(),
   ]);
   if (!ownerAccountId) notFound();
-  if (
-    viewerAccountId &&
-    viewerAccountId !== ownerAccountId &&
-    (
-      await readBlockedCommunityAccountIds({
-        accountId: viewerAccountId,
-        client: serviceClient,
-      })
-    ).has(ownerAccountId)
-  ) {
-    notFound();
+  if (viewerAccountId && viewerAccountId !== ownerAccountId) {
+    const blockedAccountIdsResult = await readBlockedCommunityAccountIds({
+      accountId: viewerAccountId,
+      client: serviceClient,
+    });
+    if (
+      blockedAccountIdsResult.state === "unavailable" ||
+      blockedAccountIdsResult.blockedAccountIds.has(ownerAccountId)
+    ) {
+      notFound();
+    }
   }
 
   const original = await readOriginalProfileReport({
@@ -104,8 +103,7 @@ export default async function ProfileOriginalReportPage({
     );
   }
 
-  const assessment = getLabAssessment(original.summary.assessmentSlug);
-  if (!assessment) notFound();
+  const assessment = original.assessment;
 
   return (
     <LabResultView
@@ -114,6 +112,7 @@ export default async function ProfileOriginalReportPage({
       backHref={backHref}
       canonicalShareUrl={canonicalShareUrl}
       initialResult={{
+        assessmentSnapshot: assessment,
         answers: {},
         completedAt: original.summary.completedAt,
         contentVersion: assessment.contentVersion,

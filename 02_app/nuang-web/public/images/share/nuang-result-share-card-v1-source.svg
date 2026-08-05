@@ -1,0 +1,45 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="background" x1="92" y1="40" x2="1134" y2="606" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FBF9FF"/>
+      <stop offset="1" stop-color="#F4F0FD"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="84" y1="78" x2="441" y2="527" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8665D8"/>
+      <stop offset="1" stop-color="#6543B8"/>
+    </linearGradient>
+    <filter id="shadow" x="-40" y="-40" width="1280" height="710" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="18" stdDeviation="28" flood-color="#4D376D" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="630" fill="#F0ECF8"/>
+  <g filter="url(#shadow)">
+    <rect x="34" y="34" width="1132" height="562" rx="44" fill="url(#background)"/>
+    <rect x="34.5" y="34.5" width="1131" height="561" rx="43.5" stroke="#E4DCF3"/>
+  </g>
+
+  <circle cx="1097" cy="110" r="98" fill="#E6F5EB" fill-opacity="0.68"/>
+  <circle cx="1043" cy="557" r="145" fill="#EEE7FB"/>
+  <path d="M568 35H1005C1078 35 1137 94 1137 167V596H518L568 35Z" fill="#F5F1FC" fill-opacity="0.54"/>
+
+  <g transform="translate(92 78)">
+    <rect width="132" height="46" rx="23" fill="#EFE9FA"/>
+    <circle cx="26" cy="23" r="8" fill="url(#brand)"/>
+    <text x="46" y="30" fill="#593D99" font-family="Arial, Helvetica, sans-serif" font-size="20" font-weight="700" letter-spacing="2.2">NUANG</text>
+  </g>
+
+  <text x="92" y="219" fill="#201A2A" font-family="Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="62" font-weight="800" letter-spacing="-2.8">
+    <tspan x="92" dy="0">나를 이해하고</tspan>
+    <tspan x="92" dy="78">관계를 이어가는 리포트</tspan>
+  </text>
+  <text x="94" y="409" fill="#70677C" font-family="Apple SD Gothic Neo, Noto Sans KR, sans-serif" font-size="27" font-weight="600" letter-spacing="-0.9">
+    <tspan x="94" dy="0">뉴앙에서 발견한 나의 모습을</tspan>
+    <tspan x="94" dy="41">가까운 사람과 나눠보세요.</tspan>
+  </text>
+
+  <g transform="translate(92 517)">
+    <rect width="142" height="42" rx="21" fill="#FFFFFF" stroke="#DFD5F1"/>
+    <text x="21" y="28" fill="#6B4CB6" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" letter-spacing="0.4">nuang.app</text>
+  </g>
+</svg>

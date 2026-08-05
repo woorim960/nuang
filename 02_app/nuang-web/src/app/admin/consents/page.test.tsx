@@ -72,6 +72,27 @@ describe("AdminConsentsPage", () => {
     expect(
       screen.getByText("분석 이벤트 저장소 연결 후 집계됩니다"),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", {
+        name: "회원에게 무엇이 달라지는지 먼저 확인하세요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "가입 필수 동의" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "서비스 개선 이용 데이터" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "광고성 이메일 수신" }),
+    ).toBeInTheDocument();
+    expect(screen.getByText(/검사 답변, 뉴앙코드/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/동의율과 실제 발송 준비 인원은 다릅니다/),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "회원 설정 화면 확인" }),
+    ).toHaveAttribute("href", "/my/settings/notifications");
     expect(screen.getByText("4292E0E7")).toBeInTheDocument();
     expect(screen.getByText("마이 설정")).toBeInTheDocument();
     expect(screen.queryByRole("button")).not.toBeInTheDocument();

@@ -18,8 +18,14 @@ vi.mock("next/navigation", () => ({
 }));
 
 vi.mock("@/features/advertising/delivery/CoupangAffiliateCard", () => ({
-  CoupangAffiliateCard: ({ creative }: { creative: { title: string } | null }) =>
-    creative ? <section aria-label="테스트 피드 광고">{creative.title}</section> : null,
+  CoupangAffiliateCard: ({
+    creative,
+  }: {
+    creative: { title: string } | null;
+  }) =>
+    creative ? (
+      <section aria-label="테스트 피드 광고">{creative.title}</section>
+    ) : null,
 }));
 
 const post: FeedItem = {
@@ -175,7 +181,7 @@ describe("CommunityFeed", () => {
         visibility: {
           cardScope: "public_profile_card",
           includedFields: [],
-          policyVersion: "profile-visibility.v0.1",
+          policyVersion: "profile-visibility.v0.2",
         },
       },
       viewerIsAuthor: true,
@@ -314,7 +320,7 @@ describe("CommunityFeed", () => {
         visibility: {
           cardScope: "public_profile_card",
           includedFields: [],
-          policyVersion: "profile-visibility.v0.1",
+          policyVersion: "profile-visibility.v0.2",
         },
       },
     };

@@ -4,16 +4,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState } from "react";
 import {
   AssessmentBottomSheet,
-  AssessmentChoiceResponseOptions,
-  AssessmentQuestionContent,
-  AssessmentQuestionDock,
-  AssessmentQuestionGuide,
-  AssessmentQuestionHeader,
-  AssessmentQuestionPrompt,
-  AssessmentQuestionScreen,
   AssessmentSheetAction,
   AssessmentSheetActions,
-  useAssessmentQuestionScroll,
 } from "@/features/assessment/AssessmentQuestionControls";
 import {
   calculateLabResult,
@@ -25,8 +17,15 @@ import {
   saveLabResult,
   syncLabResult,
 } from "@/features/lab/lab-storage";
+import { LabQuestionSurface } from "@/features/lab/LabQuestionSurface";
 
-export function LabRunner({ assessment }: { assessment: LabAssessment }) {
+export function LabRunner({
+  assessment,
+  releaseId = null,
+}: {
+  assessment: LabAssessment;
+  releaseId?: string | null;
+}) {
   const router = useRouter();
   const [answers, setAnswers] = useState<Record<string, LabAnswer>>({});
   const latestAnswersRef = useRef<Record<string, LabAnswer>>({});
@@ -38,8 +37,6 @@ export function LabRunner({ assessment }: { assessment: LabAssessment }) {
   const currentAnswer = answers[currentQuestion.id];
   const canGoNext = Boolean(currentAnswer);
   const isLast = currentIndex === assessment.questions.length - 1;
-
-  useAssessmentQuestionScroll(currentQuestion.id);
 
   function handleSelect(optionId: string) {
     const option = currentQuestion.options.find((item) => item.id === optionId);
@@ -78,10 +75,12 @@ export function LabRunner({ assessment }: { assessment: LabAssessment }) {
     const localResultId = createLabLocalResultId();
     completionIdRef.current = localResultId;
     const storedResult = saveLabResult({
+      assessmentSnapshot: structuredClone(assessment),
       answers: finalAnswers,
       completedAt: new Date().toISOString(),
       contentVersion: assessment.contentVersion,
       localResultId,
+      productReleaseId: releaseId ?? undefined,
       result,
       slug: assessment.slug,
     });
@@ -92,42 +91,20 @@ export function LabRunner({ assessment }: { assessment: LabAssessment }) {
   }
 
   return (
-    <AssessmentQuestionScreen>
-      <AssessmentQuestionHeader
-        closeLabel="검사 닫기"
-        countLabel={`전체 ${assessment.questions.length}개 중 ${currentIndex + 1}번째 문항`}
+    <>
+      <LabQuestionSurface
+        assessment={assessment}
         current={currentIndex + 1}
-        onClose={() => setIsExitOpen(true)}
-        progressLabel="검사 진행률"
-        title={assessment.title}
-        total={assessment.questions.length}
-      />
-
-      <AssessmentQuestionContent>
-        <AssessmentQuestionGuide>
-          최근의 평소 모습을 떠올려 주세요
-        </AssessmentQuestionGuide>
-        <AssessmentQuestionPrompt
-          contextLabel={currentQuestion.contextLabel}
-          key={currentQuestion.id}
-          text={currentQuestion.text}
-        />
-
-        <AssessmentChoiceResponseOptions
-          choices={currentQuestion.options}
-          legend="이럴 때 나는?"
-          name={`lab-response-${currentQuestion.id}`}
-          onChange={handleSelect}
-          selectedId={currentAnswer?.optionId}
-        />
-      </AssessmentQuestionContent>
-
-      <AssessmentQuestionDock
         nextDisabled={!canGoNext}
         nextLabel={isLast ? "결과 보기" : "다음"}
+        onClose={() => setIsExitOpen(true)}
         onNext={goNext}
         onPrevious={goPrevious}
+        onSelect={handleSelect}
         previousDisabled={currentIndex === 0}
+        question={currentQuestion}
+        selectedId={currentAnswer?.optionId}
+        total={assessment.questions.length}
       />
 
       {isExitOpen ? (
@@ -149,6 +126,6 @@ export function LabRunner({ assessment }: { assessment: LabAssessment }) {
           </AssessmentSheetActions>
         </AssessmentBottomSheet>
       ) : null}
-    </AssessmentQuestionScreen>
+    </>
   );
 }

@@ -668,7 +668,7 @@ function CampaignCreateForm({
 }) {
   const router = useRouter();
   const [provider, setProvider] = useState<"adsense" | "coupang" | "direct">(
-    "adsense",
+    "direct",
   );
   const [placementKeys, setPlacementKeys] = useState<string[]>([
     "HOME_INLINE_01",
@@ -737,9 +737,11 @@ function CampaignCreateForm({
             }}
             value={provider}
           >
-            <option value="adsense">Google AdSense</option>
+            <option value="direct">광고주 직접 배너</option>
             <option value="coupang">쿠팡 파트너스</option>
-            <option value="direct">직접 제휴</option>
+            <option disabled value="adsense">
+              Google AdSense · 베타 도입 보류
+            </option>
           </select>
         </label>
         <label>
@@ -1258,7 +1260,7 @@ function CreativePanel({ data }: { data: AdminAdvertisingData }) {
   return (
     <Panel
       title="소재 검수"
-      description="쿠팡 링크와 표시 문구는 승인 전에 반드시 실제 화면에서 확인합니다."
+      description="광고주 배너와 쿠팡 링크·표시 문구는 승인 전에 반드시 실제 화면에서 확인합니다."
     >
       <DataScope
         shown={data.creatives.items.length}

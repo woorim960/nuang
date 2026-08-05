@@ -3,7 +3,6 @@ import { metadata as adminMetadata } from "@/app/admin/page";
 import { metadata as privacyPolicyMetadata } from "@/app/policies/privacy/page";
 import { metadata as termsPolicyMetadata } from "@/app/policies/terms/page";
 import { metadata as localResultMetadata } from "@/app/results/local/[localResultId]/page";
-import { metadata as shareMetadata } from "@/app/share/[token]/page";
 import { metadata as publicComparisonMetadata } from "@/app/reports/comparison/[comparisonReportId]/page";
 import { metadata as publicComparisonUnavailableMetadata } from "@/app/together/comparison-unavailable/[status]/page";
 import { metadata as gateCResearchMetadata } from "@/app/research/gate-c/page";
@@ -11,7 +10,6 @@ import { metadata as gateCResearchMetadata } from "@/app/research/gate-c/page";
 const noindexRoutes = [
   ["admin readiness", adminMetadata],
   ["local result", localResultMetadata],
-  ["share pending", shareMetadata],
   ["public comparison pending", publicComparisonMetadata],
   ["public comparison unavailable", publicComparisonUnavailableMetadata],
   ["terms skeleton", termsPolicyMetadata],

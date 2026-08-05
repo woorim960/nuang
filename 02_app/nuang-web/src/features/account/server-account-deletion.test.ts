@@ -19,9 +19,11 @@ describe("deleteOwnAccount", () => {
     });
   });
 
-  it("does not remove media when the atomic account deletion fails", async () => {
+  it("removes owned media before atomically deleting the account", async () => {
+    const events: string[] = [];
     const { client, remove } = createClient({
       deletion: { data: null, error: { code: "PGRST202" } },
+      events,
     });
 
     await expect(
@@ -31,10 +33,11 @@ describe("deleteOwnAccount", () => {
       }),
     ).resolves.toEqual({ code: "account_delete_failed", ok: false });
 
-    expect(remove).not.toHaveBeenCalled();
+    expect(events).toEqual(["remove-media", "delete-account"]);
+    expect(remove).toHaveBeenCalledWith(["account-1/avatar.png"]);
   });
 
-  it("deletes the account before removing owned media", async () => {
+  it("deletes the account only after all owned media is removed", async () => {
     const events: string[] = [];
     const { client } = createClient({
       deletion: { data: true, error: null },
@@ -48,13 +51,14 @@ describe("deleteOwnAccount", () => {
       }),
     ).resolves.toEqual({ ok: true });
 
-    expect(events).toEqual(["delete-account", "remove-media"]);
+    expect(events).toEqual(["remove-media", "delete-account"]);
   });
 
-  it("keeps account deletion successful when later media cleanup needs retry", async () => {
-    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
-    const { client } = createClient({
+  it("keeps the account when owned media cleanup fails", async () => {
+    const events: string[] = [];
+    const { client, rpc } = createClient({
       deletion: { data: true, error: null },
+      events,
       removalError: { message: "storage unavailable" },
     });
 
@@ -63,13 +67,10 @@ describe("deleteOwnAccount", () => {
         client: client as never,
         user: { id: "auth-user-1" } as never,
       }),
-    ).resolves.toEqual({ cleanupPending: true, ok: true });
+    ).resolves.toEqual({ code: "media_cleanup_failed", ok: false });
 
-    expect(errorSpy).toHaveBeenCalledWith(
-      "Account deleted but owned media cleanup is pending.",
-      { accountId: "account-1" },
-    );
-    errorSpy.mockRestore();
+    expect(events).toEqual(["remove-media"]);
+    expect(rpc).not.toHaveBeenCalled();
   });
 });
 
@@ -86,11 +87,12 @@ function createClient({
     events.push("remove-media");
     return { error: removalError };
   });
+  const rpc = vi.fn(async () => {
+    events.push("delete-account");
+    return deletion;
+  });
   const client = {
-    rpc: vi.fn(async () => {
-      events.push("delete-account");
-      return deletion;
-    }),
+    rpc,
     schema: vi.fn((schema: string) => ({
       from: vi.fn((table: string) => {
         if (schema === "profile" && table === "community_profile") {
@@ -127,5 +129,5 @@ function createClient({
     },
   };
 
-  return { client, remove };
+  return { client, remove, rpc };
 }

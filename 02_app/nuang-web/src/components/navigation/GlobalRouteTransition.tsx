@@ -4,9 +4,12 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { NuangRouteLoadingScreen } from "@/components/navigation/NuangRouteLoadingScreen";
 
-const standardMinimumVisibleDuration = 420;
+const standardMinimumVisibleDuration = 100;
+const standardLoadingDelay = 160;
 const communityMinimumVisibleDuration = 100;
 const communityLoadingDelay = 180;
+const interactiveFlowMinimumVisibleDuration = 100;
+const interactiveFlowLoadingDelay = 120;
 const safetyTimeoutDuration = 10_000;
 
 type NavigationEventLike = Event & {
@@ -93,6 +96,14 @@ export function GlobalRouteTransition() {
       const nextUrl = new URL(destination, window.location.href);
       const isCommunityRoute =
         nextUrl.pathname === "/feed" || nextUrl.pathname.startsWith("/feed/");
+      const isInteractiveFlow = nextUrl.pathname.startsWith(
+        "/assessments/together/balance-game",
+      );
+      const loadingDelay = isCommunityRoute
+        ? communityLoadingDelay
+        : isInteractiveFlow
+          ? interactiveFlowLoadingDelay
+          : standardLoadingDelay;
       programmaticStartTimerRef.current = window.setTimeout(
         () => {
           programmaticStartTimerRef.current = null;
@@ -100,10 +111,12 @@ export function GlobalRouteTransition() {
           beginTransition(
             isCommunityRoute
               ? communityMinimumVisibleDuration
-              : standardMinimumVisibleDuration,
+              : isInteractiveFlow
+                ? interactiveFlowMinimumVisibleDuration
+                : standardMinimumVisibleDuration,
           );
         },
-        isCommunityRoute ? communityLoadingDelay : 0,
+        loadingDelay,
       );
     };
 

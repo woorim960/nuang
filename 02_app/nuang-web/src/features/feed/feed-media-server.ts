@@ -49,39 +49,38 @@ export async function uploadFeedPostMedia({
   const bucketReady = await ensureFeedMediaBucket(client);
   if (!bucketReady) return { code: "feed_media_upload_failed", ok: false };
 
-  const uploadedPaths: string[] = [];
-
-  for (const [index, file] of files.entries()) {
-    if (!isSupportedFeedPhotoType(file.type)) {
-      await rollbackPostWithMedia({
-        client,
-        postId,
-        storagePaths: uploadedPaths,
-      });
-      return { code: "feed_target_invalid", ok: false };
-    }
-
+  const uploadPlans = files.map((file, index) => {
     const order = index + 1;
+    if (!isSupportedFeedPhotoType(file.type)) {
+      throw new TypeError("Unsupported feed media type after validation.");
+    }
     const extension = getFeedPhotoExtension(file.type);
     const path = `${account.accountId}/${postId}/${String(order).padStart(2, "0")}-${randomUUID()}.${extension}`;
-    const uploadResponse = await client.storage
-      .from(feedMediaBucket)
-      .upload(path, await file.arrayBuffer(), {
-        cacheControl: "3600",
-        contentType: file.type,
-        upsert: false,
-      });
+    return { file, path };
+  });
+  const uploadResponses = await Promise.all(
+    uploadPlans.map(async ({ file, path }) => ({
+      path,
+      response: await client.storage
+        .from(feedMediaBucket)
+        .upload(path, await file.arrayBuffer(), {
+          cacheControl: "3600",
+          contentType: file.type,
+          upsert: false,
+        }),
+    })),
+  );
+  const uploadedPaths = uploadResponses
+    .filter(({ response }) => !response.error)
+    .map(({ path }) => path);
 
-    if (uploadResponse.error) {
-      await rollbackPostWithMedia({
-        client,
-        postId,
-        storagePaths: uploadedPaths,
-      });
-      return { code: "feed_media_upload_failed", ok: false };
-    }
-
-    uploadedPaths.push(path);
+  if (uploadResponses.some(({ response }) => response.error)) {
+    await rollbackPostWithMedia({
+      client,
+      postId,
+      storagePaths: uploadedPaths,
+    });
+    return { code: "feed_media_upload_failed", ok: false };
   }
 
   const mediaRows = files.map((file, index) => ({
@@ -98,7 +97,9 @@ export async function uploadFeedPostMedia({
     .insert(mediaRows);
 
   if (isMissingMediaTable(mediaResponse.error)) {
-    const previousAttachments = Array.isArray(postResponse.data.attachment_payload)
+    const previousAttachments = Array.isArray(
+      postResponse.data.attachment_payload,
+    )
       ? postResponse.data.attachment_payload
       : [];
     const fallbackResponse = await client

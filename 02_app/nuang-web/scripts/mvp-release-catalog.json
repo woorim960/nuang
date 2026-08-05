@@ -1,0 +1,471 @@
+{
+  "asOf": "2026-08-05",
+  "releaseName": "NUANG MVP",
+  "domains": [
+    {
+      "id": "admin_operations",
+      "name": "관리자와 운영 통제",
+      "purpose": "운영자 인증을 전제로 회원, 콘텐츠, 광고, 마케팅, 연구, 피드백, 감사 기록과 시스템 상태를 관리한다.",
+      "capabilities": [
+        "관리자 접근 제어와 운영자 식별",
+        "회원 상세 조회와 안전 조치",
+        "커뮤니티 콘텐츠·외부 링크 검토와 원자적 moderation",
+        "검사 콘텐츠 스튜디오의 조회·검증·배포 자료 관리",
+        "광고 캠페인·소재·문의·인벤토리·kill switch 운영",
+        "마케팅 캠페인·미리보기·발송 운영",
+        "연구 의사결정·리워드·갱신 운영",
+        "피드백·동의·감사 로그·시스템 준비 상태 조회"
+      ],
+      "surfacePatterns": ["^admin/", "^api/admin/"],
+      "sourceRoots": ["src/features/admin"],
+      "testEvidence": [
+        "src/features/admin/server-admin-access.test.ts",
+        "src/features/admin/admin-atomic-operations.test.ts",
+        "src/features/admin/AdminAssessmentStudio.test.tsx",
+        "src/app/api/admin/experiences/route.test.ts"
+      ]
+    },
+    {
+      "id": "advertising",
+      "name": "광고와 제휴 문의",
+      "purpose": "광고주 안내와 문의 접수부터 운영 캠페인·소재 전달, 이벤트 수집, 메일 outbox까지 제공한다.",
+      "capabilities": [
+        "광고 상품 안내와 문의 폼 제출·완료",
+        "광고 노출·클릭·피드백 이벤트 수집",
+        "광고 세션과 빈도·전달 정책 적용",
+        "문의 보안 검증과 관리자 처리",
+        "Resend webhook 검증과 광고 메일 outbox 처리"
+      ],
+      "surfacePatterns": [
+        "^advertise/",
+        "^api/advertising/",
+        "^api/internal/advertising/",
+        "^ads\\.txt/"
+      ],
+      "sourceRoots": ["src/features/advertising"],
+      "testEvidence": [
+        "src/features/advertising/AdvertisingLanding.test.tsx",
+        "src/features/advertising/AdvertisingInquiryForm.test.tsx",
+        "src/features/advertising/server-advertising-delivery.test.ts",
+        "src/app/api/advertising/events/route.test.ts"
+      ]
+    },
+    {
+      "id": "marketing_email",
+      "name": "마케팅 이메일",
+      "purpose": "선택 동의를 기반으로 마케팅 캠페인을 구성하고 발송·수신거부 상태를 안전하게 관리한다.",
+      "capabilities": [
+        "마케팅 캠페인 구성과 운영 미리보기",
+        "동의 기반 수신 대상 제한",
+        "서명된 수신거부 토큰 처리",
+        "메일 outbox drain과 발송 설정",
+        "사용자 마케팅 수신 설정 편집"
+      ],
+      "surfacePatterns": [
+        "^email/",
+        "^api/marketing/",
+        "^api/internal/marketing/"
+      ],
+      "sourceRoots": [
+        "src/features/marketing",
+        "src/features/account/MarketingPreferenceEditor.tsx"
+      ],
+      "testEvidence": [
+        "src/features/marketing/marketing-email-contract.test.ts",
+        "src/features/marketing/server-marketing-email-renderer.test.ts",
+        "src/features/marketing/server-marketing-unsubscribe-token.test.ts",
+        "src/features/account/MarketingPreferenceEditor.test.tsx"
+      ]
+    },
+    {
+      "id": "research",
+      "name": "연구 참여와 분석",
+      "purpose": "공개 연구 안내, Gate C와 M05 참여, 제출·완료·철회, 보상 신청, 내부 분석 화면을 격리된 계약으로 제공한다.",
+      "capabilities": [
+        "연구 허브와 공개 연구 안내",
+        "Gate C 세션 생성·응답 제출·완료·철회",
+        "연구 보상 신청·조회·삭제",
+        "M05 인지 검토 참여 흐름",
+        "성향지도 피드백 수집과 내부 분석",
+        "연구 데이터와 제품 계정 데이터의 격리"
+      ],
+      "surfacePatterns": ["^research/", "^api/research/"],
+      "sourceRoots": ["src/features/research", "src/research"],
+      "testEvidence": [
+        "src/features/research/gate-c/GateCPublicStudy.test.tsx",
+        "src/features/research/gate-c/gate-c-server-security.test.ts",
+        "src/features/research/m05/M05ParticipantRunner.test.tsx",
+        "src/app/api/research/gate-c/public-route.test.ts"
+      ]
+    },
+    {
+      "id": "together_balance_game",
+      "name": "함께하는 밸런스 게임",
+      "purpose": "2~8명이 동일 문항을 선택하고 개인·그룹의 공통점과 차이를 결과 리포트로 확인한다.",
+      "capabilities": [
+        "전체·인기·취향·관계·재미 주제팩 탐색",
+        "방 이름·방장 닉네임·인원·문항 수·참여 방식 설정",
+        "익명 또는 로그인 참여자의 방 생성·코드 입장·좌석 예약",
+        "좌우 2지선다 응답의 즉시·멱등 저장",
+        "방장 마감·참여자 제거·완료 상태 동기화",
+        "전체·참여자별 비교와 문항별 물결 게이지 결과",
+        "공개 모집과 결과의 커뮤니티 공유",
+        "메인 캐릭터 기반 익명 프로필 배정",
+        "서울 리전·통합 RPC·캐시 기반 성능 최적화"
+      ],
+      "surfacePatterns": [
+        "^assessments/together/balance-game/",
+        "^api/together/balance-game/"
+      ],
+      "sourceRoots": ["src/features/together-balance"],
+      "testEvidence": [
+        "src/features/together-balance/BalanceGameLanding.test.tsx",
+        "src/features/together-balance/BalanceGameSetup.test.tsx",
+        "src/features/together-balance/BalanceGameRoom.test.tsx",
+        "src/features/together/together-balance-game-db-schema.test.ts"
+      ]
+    },
+    {
+      "id": "public_profile_safety",
+      "name": "공개 프로필과 소셜 안전",
+      "purpose": "사용자가 허용한 프로필 요약만 공개하고 팔로우·차단·신고·검색·연결 관계를 안전하게 제공한다.",
+      "capabilities": [
+        "공개 프로필·대표 코드·공개 리포트 조회",
+        "팔로워·팔로잉 연결 목록",
+        "프로필 검색과 공개 카드 projection",
+        "팔로우·언팔로우",
+        "차단 목록 조회·차단 해제",
+        "프로필·콘텐츠 신고와 안전 조치",
+        "프로필 및 리포트 공개 범위 설정"
+      ],
+      "surfacePatterns": [
+        "^feed/profiles/",
+        "^api/community/",
+        "^api/profile-visibility/",
+        "^api/profile-report-visibility/"
+      ],
+      "sourceRoots": ["src/features/public-profile", "src/features/moderation"],
+      "testEvidence": [
+        "src/features/public-profile/CommunityProfileScreen.test.tsx",
+        "src/features/public-profile/public-profile-db-schema.test.ts",
+        "src/app/api/community/blocks/route.test.ts",
+        "src/app/api/community/profiles/search/route.test.ts"
+      ]
+    },
+    {
+      "id": "community_feed",
+      "name": "커뮤니티 피드",
+      "purpose": "성향 중심 글·질문·투표·밸런스 모집·리포트 공유 콘텐츠를 읽고 작성하며 반응한다.",
+      "capabilities": [
+        "공식 콘텐츠와 사용자 글의 통합 피드 읽기",
+        "글·오늘의 질문·2지선다 투표 작성과 수정",
+        "댓글·좋아요·공감 반응·저장·관심 없음",
+        "투표 참여와 전체·뉴앙 코드별 익명 통계",
+        "태그 탐색·검색·관점 모음·내 글",
+        "알림 목록과 게시물 상세",
+        "밸런스 게임 모집·결과 공유 카드",
+        "외부 링크 안전 정책과 moderation 상태 처리"
+      ],
+      "surfacePatterns": ["^feed/", "^api/feed/"],
+      "sourceRoots": ["src/features/feed"],
+      "testEvidence": [
+        "src/features/feed/CommunityFeed.test.tsx",
+        "src/features/feed/feed-api.test.ts",
+        "src/features/feed/server-writes.test.ts",
+        "src/features/feed/FeedPollCard.test.tsx"
+      ]
+    },
+    {
+      "id": "public_comparison",
+      "name": "1:1 성향 비교",
+      "purpose": "현재 사용자와 공개 프로필 상대의 허용된 성향 요약만 이용해 관계 리듬을 비교한다.",
+      "capabilities": [
+        "공개 프로필에서 비교 생성",
+        "비교 리포트 소유권·정밀 결과·정책 버전 검증",
+        "같은 코드 자리와 다른 코드 자리 설명",
+        "오해 장면·대화 질문·조율 가이드",
+        "stale·disabled·deleted unavailable 상태",
+        "내 리포트에서 비교 다시 열기와 삭제",
+        "직접 응답·원점수·상대 비공개 추론 차단"
+      ],
+      "surfacePatterns": [
+        "^reports/comparison/",
+        "^together/",
+        "^api/public-comparison"
+      ],
+      "sourceRoots": ["src/features/together"],
+      "testEvidence": [
+        "src/features/together/PublicComparisonReportView.test.tsx",
+        "src/features/together/public-comparison-contract.test.ts",
+        "src/features/together/public-comparison-db-schema.test.ts",
+        "src/app/together/comparison/[comparisonReportId]/page.test.tsx"
+      ]
+    },
+    {
+      "id": "sharing",
+      "name": "결과 공유",
+      "purpose": "결과의 공개 가능한 스냅샷만 기간 제한 주소 또는 피드 리포트로 공유한다.",
+      "capabilities": [
+        "30일 만료 공유 주소 생성",
+        "token hash 기반 공개 조회와 철회",
+        "만료·철회·삭제·비활성 상태 처리",
+        "결과 리포트의 피드 공유 projection",
+        "noindex와 직접 응답·원점수·식별 정보 비노출",
+        "브라우저 복사 실패 시 수동 복사 fallback"
+      ],
+      "surfacePatterns": [
+        "^share/",
+        "^feed/reports/",
+        "^api/share-links/",
+        "^api/revoke-share/",
+        "^api/report-share-links/"
+      ],
+      "sourceRoots": ["src/features/share"],
+      "testEvidence": [
+        "src/features/share/ReportShareSheet.test.tsx",
+        "src/features/share/public-share-server.test.ts",
+        "src/app/share/[token]/page.test.tsx",
+        "src/app/api/report-share-links/route.test.ts"
+      ]
+    },
+    {
+      "id": "feedback_analytics",
+      "name": "피드백과 제품 분석",
+      "purpose": "선택 동의와 개인정보 경계를 지키며 제품 피드백, 검사 품질 관찰, 분석 이벤트를 수집한다.",
+      "capabilities": [
+        "사용자 피드백 작성과 내 피드백 조회",
+        "결과·코어 리포트 품질 평가",
+        "검사 문항 품질 관찰 수집",
+        "선택 동의 기반 제품 분석 이벤트",
+        "광고 피드백과 제품 피드백 데이터 분리"
+      ],
+      "surfacePatterns": [
+        "^my/feedback/",
+        "^api/feedback/",
+        "^api/analytics/",
+        "^api/assessment-quality-observations/",
+        "^api/core-result-feedback/"
+      ],
+      "sourceRoots": [
+        "src/features/feedback",
+        "src/features/assessment/AssessmentResultQualityPrompt.tsx"
+      ],
+      "testEvidence": [
+        "src/features/feedback/ProductFeedbackForm.test.tsx",
+        "src/features/feedback/product-feedback-db-schema.test.ts",
+        "src/app/api/analytics/events/route.test.ts",
+        "src/app/api/assessment-quality-observations/route.test.ts"
+      ]
+    },
+    {
+      "id": "auth_consent_onboarding",
+      "name": "온보딩·로그인·동의",
+      "purpose": "비회원 우선 사용을 유지하면서 필요한 순간에 안전한 OAuth 로그인, 계정 연결, 연령·필수·선택 동의를 처리한다.",
+      "capabilities": [
+        "첫 방문 서비스 가이드와 완료 상태 저장",
+        "Kakao·Google OAuth 시작과 callback",
+        "내부 경로만 허용하는 안전한 인증 redirect",
+        "필수 약관·개인정보·만 14세 확인과 선택 분석·마케팅 동의",
+        "다중 OAuth 계정 연결·해제와 복구",
+        "인증 사용자와 내부 account 식별자의 안전한 연결",
+        "환경 미설정·취소·실패 닫힌 상태"
+      ],
+      "surfacePatterns": [
+        "^login/",
+        "^auth/",
+        "^onboarding/",
+        "^api/auth/",
+        "^api/me/auth/",
+        "^api/me/consents/"
+      ],
+      "sourceRoots": [
+        "src/features/auth",
+        "src/features/consent",
+        "src/features/onboarding"
+      ],
+      "testEvidence": [
+        "src/features/onboarding/OnboardingGuideCarousel.test.tsx",
+        "src/features/auth/sign-in-intent-security.test.ts",
+        "src/features/consent/AccountConnectPanel.test.tsx",
+        "src/app/auth/callback/route.test.ts"
+      ]
+    },
+    {
+      "id": "account_my",
+      "name": "마이·계정·개인 데이터",
+      "purpose": "대표 성향과 내 리포트를 다시 열고 프로필·연락처·연결 계정·공개 범위·데이터 권리를 관리한다.",
+      "capabilities": [
+        "비회원·회원별 마이 요약과 대표 뉴앙 코드",
+        "내 프로필 조회·편집과 공개 프로필 preview",
+        "검사·주제·연구소·비교 리포트 통합 목록",
+        "진행 중 검사 이어하기와 결과 다시 열기",
+        "비공개 연락처와 이메일 인증",
+        "연결 로그인 수단 관리",
+        "계정 활동 기록·차단 목록·알림 준비 상태",
+        "로컬 데이터 export·결과 삭제·계정 삭제",
+        "결과 변경 후 동적 대표 성향 재계산"
+      ],
+      "surfacePatterns": [
+        "^\\(tabs\\)/my/",
+        "^my/",
+        "^api/account(?:/|-results/)",
+        "^api/me/",
+        "^api/profile-visibility/",
+        "^api/profile-report-visibility/"
+      ],
+      "sourceRoots": ["src/features/account"],
+      "testEvidence": [
+        "src/features/account/MyOverview.test.tsx",
+        "src/features/account/server-reads.test.ts",
+        "src/features/account/delete-result-write.test.ts",
+        "src/features/account/server-account-deletion.test.ts"
+      ]
+    },
+    {
+      "id": "assessments",
+      "name": "코어·주제·친구 검사",
+      "purpose": "비회원도 빠른·정밀 코어와 생활 주제 검사를 수행하고 자동 저장·복구·채점·결과 생성까지 완료한다.",
+      "capabilities": [
+        "빠른 코어와 정밀 코어의 시작·사전 안내·문항 진행",
+        "한 문항 집중형 5점 응답과 판단 어려움 사유",
+        "IndexedDB 자동 저장·7일 이어하기·중간 체크포인트·재개",
+        "멱등 완료·근거 부족 보강 문항·결과 스냅샷",
+        "생활 주제 검사 카탈로그·진행·동적 성향 근거 반영",
+        "친구 성향 맞히기 초대와 결과",
+        "로그인 후 로컬 결과 claim과 계정 동기화",
+        "검사 콘텐츠 릴리스 runtime과 fallback",
+        "품질 피드백과 문항 관찰"
+      ],
+      "surfacePatterns": [
+        "^assessments/",
+        "^api/assessment-progress/",
+        "^api/free-topic-results/",
+        "^api/claim-result/"
+      ],
+      "sourceRoots": ["src/features/assessment", "src/lib/scoring"],
+      "testEvidence": [
+        "src/features/assessment/AssessmentRunner.test.tsx",
+        "src/features/assessment/assessment-storage.test.ts",
+        "src/features/assessment/assessment-completion.test.ts",
+        "src/lib/scoring/core.test.ts"
+      ]
+    },
+    {
+      "id": "labs_help",
+      "name": "별난 성향 연구소와 도움 연결",
+      "purpose": "생활형 재미 검사는 로컬 결과로 제공하고 민감·위기 주제는 점수화하지 않은 도움 자원으로 연결한다.",
+      "capabilities": [
+        "별난 성향 연구소 카탈로그·문항·로컬 저장·결과",
+        "연구소 결과 기록과 삭제",
+        "코어 코드와 대표 성향을 바꾸지 않는 경계 안내",
+        "긴급 전화와 공식 도움 자원 연결",
+        "도움 화면 이용 맥락의 계정·결과 비저장",
+        "민감·임상 주제의 재미 검사 노출 차단"
+      ],
+      "surfacePatterns": ["^labs/", "^help/", "^api/lab-results/"],
+      "sourceRoots": ["src/features/lab", "src/features/help"],
+      "testEvidence": [
+        "src/features/lab/lab-assessments.test.ts",
+        "src/features/lab/lab-storage.test.ts",
+        "src/features/help/help-resources.test.ts",
+        "src/app/help/page.test.tsx"
+      ]
+    },
+    {
+      "id": "nuang_code_map",
+      "name": "뉴앙 코드와 성향지도",
+      "purpose": "현재 승인 후보 체계의 32개 코드를 일관된 이름·방향·안전 경계와 함께 탐색한다.",
+      "capabilities": [
+        "E/I · R/N · G/A · K/M · C/Q 다섯 자리 코드 생성",
+        "32개 코드 이름·가족·요약 탐색",
+        "내 코드와 전체 코드 지도 연결",
+        "코드 자리·세부 신호·상황별 설명",
+        "현재 measurement release와 콘텐츠 lineage 확인",
+        "진단·능력·관계 성공·고정 행동으로 읽히지 않는 가드레일",
+        "내부 facet key와 연구 전용 claim의 고객 화면 차단"
+      ],
+      "surfacePatterns": ["^\\(tabs\\)/map/"],
+      "sourceRoots": ["src/features/map", "src/features/nuang-code"],
+      "testEvidence": [
+        "src/features/map/TraitMapPreviewTemplate.test.tsx",
+        "src/features/nuang-code/next-code-scheme.test.ts",
+        "src/features/nuang-code/trait-map-32-profile-completeness-v2.test.ts",
+        "src/features/nuang-code/trait-map-safety-contract.test.ts"
+      ]
+    },
+    {
+      "id": "result_reports",
+      "name": "결과 리포트",
+      "purpose": "로컬·계정 결과를 동일한 사용자 경험으로 열고 코드, 코드 지도, 세부 신호, 해석 경계와 다음 행동을 제공한다.",
+      "capabilities": [
+        "로컬 코어 결과와 계정 결과 리포트",
+        "빠른·정밀 결과별 정보 깊이와 정밀 검사 확장",
+        "통합 코어 리포트 섹션·읽기 내비게이션·피드백",
+        "생활 주제 결과와 현재 대표 성향 영향 설명",
+        "결과 이미지·기기 공유·공유 주소·피드 공유",
+        "결과 삭제와 목록 복귀",
+        "점수 우열·진단·경계 낙인 금지"
+      ],
+      "surfacePatterns": ["^results/", "^assessments/topics/.+/result/"],
+      "sourceRoots": ["src/features/result"],
+      "testEvidence": [
+        "src/features/result/LocalResultView.test.tsx",
+        "src/features/result/AccountResultView.test.tsx",
+        "src/features/result/unified-core-report/CoreResultReportTemplate.test.tsx",
+        "src/features/result/report-copy.test.ts"
+      ]
+    },
+    {
+      "id": "home_navigation",
+      "name": "앱 셸·홈·주요 내비게이션",
+      "purpose": "모바일 우선 앱 셸에서 현재 상태에 맞는 다음 행동과 홈·커뮤니티·성향지도·마이 이동을 제공한다.",
+      "capabilities": [
+        "루트에서 홈으로 안전한 진입",
+        "홈의 추천·나 알아보기·함께하기·연구소 URL 상태",
+        "진행 중 검사·최근 결과·첫 검사 중 최우선 다음 행동",
+        "모바일 하단 주요 메뉴와 현재 위치 표시",
+        "전역 경로 전환 상태와 뒤로가기",
+        "폐기된 함께 최상위 경로의 현재 제품 표면 redirect",
+        "접근성·safe area·반응형 앱 프레임"
+      ],
+      "surfacePatterns": [
+        "^(?:page|layout)\\.tsx$",
+        "^\\(tabs\\)/(?:layout\\.tsx|(?:home|assessments|together)/)"
+      ],
+      "sourceRoots": ["src/features/home", "src/features/navigation"],
+      "testEvidence": [
+        "src/features/home/HomeDashboard.test.tsx",
+        "src/features/navigation/NuangNextActionFlow.test.tsx",
+        "src/app/(tabs)/home/page.test.tsx",
+        "tests/e2e/smoke.spec.ts"
+      ]
+    },
+    {
+      "id": "policy_security_platform",
+      "name": "정책·보안·플랫폼 기반",
+      "purpose": "정책 문서, noindex, CSP, 환경 닫힘 상태, Supabase 경계, 전역 테마와 오류 처리를 출시 기준으로 유지한다.",
+      "capabilities": [
+        "이용약관·개인정보 처리방침 표시와 승인 상태",
+        "공개하면 안 되는 화면의 noindex",
+        "CSP 보고 수집과 보안 헤더",
+        "환경 변수 누락 시 명시적 closed state",
+        "Supabase auth session·proxy·service role 경계",
+        "전역 테마·금지 문구·이모지 회귀 검사",
+        "404·오류·로딩·접근성 공통 상태"
+      ],
+      "surfacePatterns": ["^policies/", "^api/security/"],
+      "sourceRoots": [
+        "src/features/policy",
+        "src/features/copy",
+        "src/lib/api",
+        "src/lib/supabase"
+      ],
+      "testEvidence": [
+        "src/features/policy/PolicySkeletonView.test.tsx",
+        "src/app/noindex-metadata.test.ts",
+        "src/lib/api/closed-state.test.ts",
+        "src/app/api/security/csp-report/route.test.ts"
+      ]
+    }
+  ]
+}

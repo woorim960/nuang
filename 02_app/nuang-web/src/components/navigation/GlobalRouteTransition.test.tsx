@@ -25,7 +25,27 @@ describe("GlobalRouteTransition", () => {
     vi.useRealTimers();
   });
 
-  it("shows the Nuang loading character immediately for a standard route", () => {
+  it("does not cover a standard route that finishes before the delay", () => {
+    const { rerender } = render(
+      <>
+        <GlobalRouteTransition />
+        <Link href="/map" onClick={(event) => event.preventDefault()}>
+          성향지도
+        </Link>
+      </>,
+    );
+
+    fireEvent.click(screen.getByRole("link", { name: "성향지도" }));
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+
+    navigationMock.pathname = "/map";
+    rerender(<GlobalRouteTransition />);
+    act(() => vi.advanceTimersByTime(standardDelayForTest + 50));
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
+  it("shows the loading screen only when a standard route is slow", () => {
     render(
       <>
         <GlobalRouteTransition />
@@ -36,11 +56,10 @@ describe("GlobalRouteTransition", () => {
     );
 
     fireEvent.click(screen.getByRole("link", { name: "성향지도" }));
-    act(() => vi.advanceTimersByTime(0));
+    act(() => vi.advanceTimersByTime(standardDelayForTest - 1));
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
 
-    expect(
-      screen.getByRole("heading", { name: "다음 화면을 준비하고 있어요" }),
-    ).toBeInTheDocument();
+    act(() => vi.advanceTimersByTime(1));
     expect(screen.getByRole("status")).toHaveTextContent("화면 연결 중");
   });
 
@@ -97,6 +116,30 @@ describe("GlobalRouteTransition", () => {
     ).toBeInTheDocument();
   });
 
+  it("does not flash a loading overlay for a fast balance-game transition", () => {
+    const { rerender } = render(
+      <>
+        <GlobalRouteTransition />
+        <Link
+          href="/assessments/together/balance-game/setup?pack=what-to-eat"
+          onClick={(event) => event.preventDefault()}
+        >
+          방 설정
+        </Link>
+      </>,
+    );
+
+    fireEvent.click(screen.getByRole("link", { name: "방 설정" }));
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+
+    navigationMock.pathname = "/assessments/together/balance-game/setup";
+    navigationMock.search = "pack=what-to-eat";
+    rerender(<GlobalRouteTransition />);
+    act(() => vi.advanceTimersByTime(balanceGameDelayForTest + 50));
+
+    expect(screen.queryByRole("status")).not.toBeInTheDocument();
+  });
+
   it("does not interrupt same-page or external links", () => {
     render(
       <>
@@ -116,3 +159,5 @@ describe("GlobalRouteTransition", () => {
 });
 
 const communityDelayForTest = 180;
+const balanceGameDelayForTest = 120;
+const standardDelayForTest = 160;

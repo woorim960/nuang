@@ -1,9 +1,14 @@
 "use client";
 
 import { localCompletedRetentionDays } from "@/features/account/local-retention-policy";
-import type { LabAnswer, LabScoreResult } from "@/features/lab/lab-assessments";
+import type {
+  LabAnswer,
+  LabAssessment,
+  LabScoreResult,
+} from "@/features/lab/lab-assessments";
 
 export type StoredLabResult = {
+  assessmentSnapshot?: LabAssessment;
   answers: Record<string, LabAnswer>;
   completedAt: string;
   contentVersion?: string;
@@ -13,6 +18,7 @@ export type StoredLabResult = {
     capturedAt: string;
     code: string;
   };
+  productReleaseId?: string;
   result: LabScoreResult;
   serverResultId?: string;
   slug: string;
@@ -151,6 +157,7 @@ export async function syncLabResult(result: StoredLabResult) {
         completedAt: result.completedAt,
         contentVersion: result.contentVersion,
         localResultId: result.localResultId,
+        productReleaseId: result.productReleaseId,
         slug: result.slug,
       }),
       cache: "no-store",

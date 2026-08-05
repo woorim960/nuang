@@ -50,7 +50,7 @@ describe("calculateEffectiveTraitEvidenceWeight", () => {
     );
   });
 
-  it("excludes help and blocked observations from scoring", () => {
+  it("excludes together, odd-lab, and blocked observations from scoring", () => {
     expect(
       calculateEffectiveTraitEvidenceWeight(
         evidence({ sourceKind: "help", approvalStatus: "approved" }),
@@ -59,6 +59,16 @@ describe("calculateEffectiveTraitEvidenceWeight", () => {
     expect(
       calculateEffectiveTraitEvidenceWeight(
         evidence({ sourceKind: "free_topic", approvalStatus: "blocked" }),
+      ),
+    ).toBe(0);
+    expect(
+      calculateEffectiveTraitEvidenceWeight(
+        evidence({ sourceKind: "odd_lab", approvalStatus: "approved" }),
+      ),
+    ).toBe(0);
+    expect(
+      calculateEffectiveTraitEvidenceWeight(
+        evidence({ sourceKind: "group", approvalStatus: "approved" }),
       ),
     ).toBe(0);
   });

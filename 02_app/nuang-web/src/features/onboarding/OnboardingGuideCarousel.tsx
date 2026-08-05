@@ -59,8 +59,7 @@ const guideSlides = [
     title: (
       <>
         가까운 사람과
-        <br />
-        더 잘 지내는 방법
+        <br />더 잘 지내는 방법
       </>
     ),
   },
@@ -73,8 +72,7 @@ const guideSlides = [
     title: (
       <>
         가볍게 답하고,
-        <br />
-        내 첫 결과를 확인해요
+        <br />내 첫 결과를 확인해요
       </>
     ),
   },
@@ -118,9 +116,15 @@ export function OnboardingGuideCarousel() {
   function goToSlide(index: number) {
     const safeIndex = Math.min(guideSlides.length - 1, Math.max(0, index));
     const track = trackRef.current;
+    const canScroll =
+      typeof track?.scrollTo === "function" && track.clientWidth > 0;
 
-    setActiveIndex(safeIndex);
-    track?.scrollTo?.({
+    if (!canScroll) {
+      setActiveIndex(safeIndex);
+      return;
+    }
+
+    track.scrollTo({
       behavior: prefersReducedMotion() ? "auto" : "smooth",
       left: safeIndex * track.clientWidth,
     });

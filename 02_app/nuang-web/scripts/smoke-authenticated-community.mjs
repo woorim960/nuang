@@ -4,10 +4,14 @@ import { resolve } from "node:path";
 import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 
-const officialPollId = "7be2c8d3-c9f2-4f16-8d79-87ca3ceb0801";
-const officialOptionId = "8cf3d9e4-daf3-4017-8e8a-98db4dfc0801";
-const officialPostId = "6af1b7c2-b8e1-4ee5-9c68-76b92bda0801";
 const requiredFlag = "NUANG_ALLOW_TEMP_REMOTE_SMOKE";
+const requiredConsentVersions = {
+  analytics: "NUANG-ANALYTICS-PREFERENCE-2026-08-03",
+  marketing: "NUANG-MARKETING-EMAIL-KO-2026-08-03",
+  policy: "nuang-consent.v0.1",
+  privacy: "privacy.v0.1",
+  terms: "terms.v0.1",
+};
 
 if (process.env[requiredFlag] !== "true") {
   console.error(
@@ -52,6 +56,9 @@ const service = createClient(
 
 let authUserId = null;
 let accountId = null;
+let smokePostId = null;
+let smokePollId = null;
+let smokeOptionId = null;
 let smokeResult = null;
 let primaryError = null;
 
@@ -120,14 +127,22 @@ try {
   const cookieHeader = cookieJar
     .map(({ name, value }) => `${name}=${value}`)
     .join("; ");
-  const voteResponse = await postFeedAction(appOrigin, cookieHeader, {
-    action: "vote_poll",
-    optionId: officialOptionId,
-    pollId: officialPollId,
+  const accountBootstrapResponse = await fetch(`${appOrigin}/api/me/consents`, {
+    headers: { cookie: cookieHeader },
   });
 
-  if (!voteResponse.ok) {
-    throw createHttpStageError("vote_poll", voteResponse);
+  if (!accountBootstrapResponse.ok) {
+    const bootstrapBody = await accountBootstrapResponse
+      .json()
+      .catch(() => null);
+    const accountWasCreatedBeforeMissingConsent =
+      accountBootstrapResponse.status === 503 &&
+      bootstrapBody?.code === "preference_read_failed";
+    if (!accountWasCreatedBeforeMissingConsent) {
+      throw new Error(
+        `bootstrap_account failed (http ${accountBootstrapResponse.status})`,
+      );
+    }
   }
 
   const identityResponse = await service
@@ -142,17 +157,92 @@ try {
   }
 
   accountId = identityResponse.data.account_id;
+  const consentResponse = await service
+    .schema("consent")
+    .rpc("persist_account_consent", {
+      p_account_id: accountId,
+      p_analytics_requested: false,
+      p_analytics_version: requiredConsentVersions.analytics,
+      p_is_14_or_older: true,
+      p_marketing_requested: false,
+      p_marketing_version: requiredConsentVersions.marketing,
+      p_policy_version: requiredConsentVersions.policy,
+      p_privacy_version: requiredConsentVersions.privacy,
+      p_terms_version: requiredConsentVersions.terms,
+    });
+
+  if (consentResponse.error || consentResponse.data !== true) {
+    throw createStageError("persist_required_consent", consentResponse.error);
+  }
+
+  const createPollResponse = await postFeedAction(appOrigin, cookieHeader, {
+    action: "create_post",
+    body: `MVP 인증 스모크 ${runId}`,
+    clientRequestId: `smoke-post-${runId}`,
+    poll: {
+      options: ["첫 번째 선택", "두 번째 선택"],
+      question: "MVP 출시 전 인증 투표가 정상 동작하나요?",
+    },
+    source: "balance_game",
+    sourceId: `smoke-poll-${runId}`,
+    visibility: "public",
+  });
+
+  if (!createPollResponse.ok) {
+    throw await createHttpStageError("create_poll_post", createPollResponse);
+  }
+
+  const createPollPayload = await createPollResponse.json();
+  smokePostId = createPollPayload?.feedWrite?.id ?? null;
+  if (!smokePostId) throw new Error("create_poll_post returned no post id");
+
+  const pollRow = await service
+    .schema("feed")
+    .from("feed_poll")
+    .select("id")
+    .eq("post_id", smokePostId)
+    .eq("status", "active")
+    .is("deleted_at", null)
+    .maybeSingle();
+  if (pollRow.error || !pollRow.data?.id) {
+    throw createStageError("read_created_poll", pollRow.error);
+  }
+  smokePollId = pollRow.data.id;
+
+  const optionRow = await service
+    .schema("feed")
+    .from("feed_poll_option")
+    .select("id")
+    .eq("poll_id", smokePollId)
+    .order("sort_order", { ascending: true })
+    .limit(1)
+    .maybeSingle();
+  if (optionRow.error || !optionRow.data?.id) {
+    throw createStageError("read_created_poll_option", optionRow.error);
+  }
+  smokeOptionId = optionRow.data.id;
+
+  const voteResponse = await postFeedAction(appOrigin, cookieHeader, {
+    action: "vote_poll",
+    optionId: smokeOptionId,
+    pollId: smokePollId,
+  });
+
+  if (!voteResponse.ok) {
+    throw await createHttpStageError("vote_poll", voteResponse);
+  }
+
   const commentResponse = await postFeedAction(appOrigin, cookieHeader, {
     action: "create_comment",
     body: commentBody,
     target: {
-      id: officialPostId,
+      id: smokePostId,
       type: "feed_post",
     },
   });
 
   if (!commentResponse.ok) {
-    throw createHttpStageError("create_comment", commentResponse);
+    throw await createHttpStageError("create_comment", commentResponse);
   }
 
   const [voteRow, commentRow, viewerFeedResponse] = await Promise.all([
@@ -161,7 +251,7 @@ try {
       .from("feed_poll_vote")
       .select("id, option_id")
       .eq("account_id", accountId)
-      .eq("poll_id", officialPollId)
+      .eq("poll_id", smokePollId)
       .is("deleted_at", null)
       .maybeSingle(),
     service
@@ -169,7 +259,7 @@ try {
       .from("feed_comment")
       .select("id, body, moderation_status")
       .eq("author_account_id", accountId)
-      .eq("post_id", officialPostId)
+      .eq("post_id", smokePostId)
       .eq("body", commentBody)
       .is("deleted_at", null)
       .maybeSingle(),
@@ -180,7 +270,7 @@ try {
     }),
   ]);
 
-  if (voteRow.error || voteRow.data?.option_id !== officialOptionId) {
+  if (voteRow.error || voteRow.data?.option_id !== smokeOptionId) {
     throw createStageError("verify_vote_row", voteRow.error);
   }
 
@@ -189,16 +279,19 @@ try {
   }
 
   if (!viewerFeedResponse.ok) {
-    throw createHttpStageError("read_authenticated_feed", viewerFeedResponse);
+    throw await createHttpStageError(
+      "read_authenticated_feed",
+      viewerFeedResponse,
+    );
   }
 
   const viewerFeed = await viewerFeedResponse.json();
-  const officialItem = viewerFeed?.result?.items?.find(
-    (item) => item?.poll?.id === officialPollId,
+  const smokeItem = viewerFeed?.result?.items?.find(
+    (item) => item?.poll?.id === smokePollId,
   );
   const viewerVoteVisible =
-    officialItem?.poll?.viewerVoteOptionId === officialOptionId;
-  const ownCommentVisible = officialItem?.replyPreview?.some(
+    smokeItem?.poll?.viewerVoteOptionId === smokeOptionId;
+  const ownCommentVisible = smokeItem?.replyPreview?.some(
     (reply) => reply?.body === commentBody,
   );
 
@@ -233,7 +326,7 @@ try {
   }
 
   if (accountId) {
-    for (const cleanup of [
+    const cleanupOperations = [
       service
         .schema("feed")
         .from("feed_comment")
@@ -244,8 +337,22 @@ try {
         .from("feed_poll_vote")
         .delete()
         .eq("account_id", accountId),
+    ];
+    if (smokePollId) {
+      cleanupOperations.push(
+        service.schema("feed").from("feed_poll").delete().eq("id", smokePollId),
+      );
+    }
+    if (smokePostId) {
+      cleanupOperations.push(
+        service.schema("feed").from("feed_post").delete().eq("id", smokePostId),
+      );
+    }
+    cleanupOperations.push(
       service.schema("identity").from("account").delete().eq("id", accountId),
-    ]) {
+    );
+
+    for (const cleanup of cleanupOperations) {
       const response = await cleanup;
 
       if (response.error) {
@@ -253,28 +360,45 @@ try {
       }
     }
 
-    const [remainingComments, remainingVotes, remainingAccount] =
-      await Promise.all([
-        service
-          .schema("feed")
-          .from("feed_comment")
-          .select("id", { count: "exact", head: true })
-          .eq("author_account_id", accountId),
-        service
-          .schema("feed")
-          .from("feed_poll_vote")
-          .select("id", { count: "exact", head: true })
-          .eq("account_id", accountId),
-        service
-          .schema("identity")
-          .from("account")
-          .select("id", { count: "exact", head: true })
-          .eq("id", accountId),
-      ]);
+    const [
+      remainingComments,
+      remainingVotes,
+      remainingAccount,
+      remainingPost,
+      remainingPoll,
+    ] = await Promise.all([
+      service
+        .schema("feed")
+        .from("feed_comment")
+        .select("id", { count: "exact", head: true })
+        .eq("author_account_id", accountId),
+      service
+        .schema("feed")
+        .from("feed_poll_vote")
+        .select("id", { count: "exact", head: true })
+        .eq("account_id", accountId),
+      service
+        .schema("identity")
+        .from("account")
+        .select("id", { count: "exact", head: true })
+        .eq("id", accountId),
+      service
+        .schema("feed")
+        .from("feed_post")
+        .select("id", { count: "exact", head: true })
+        .eq("id", smokePostId ?? "00000000-0000-4000-8000-000000000000"),
+      service
+        .schema("feed")
+        .from("feed_poll")
+        .select("id", { count: "exact", head: true })
+        .eq("id", smokePollId ?? "00000000-0000-4000-8000-000000000000"),
+    ]);
     const cleanupVerification = [
       ["comment", remainingComments],
       ["vote", remainingVotes],
       ["account", remainingAccount],
+      ["post", remainingPost],
+      ["poll", remainingPoll],
     ];
 
     for (const [label, response] of cleanupVerification) {
@@ -289,7 +413,9 @@ try {
 
     if (deletedUser.error) {
       cleanupErrors.push(
-        deletedUser.error.code ?? deletedUser.error.name ?? "cleanup_auth_failed",
+        deletedUser.error.code ??
+          deletedUser.error.name ??
+          "cleanup_auth_failed",
       );
     }
   }
@@ -374,6 +500,9 @@ function createStageError(stage, error) {
   return new Error(`${stage} failed (${code})`);
 }
 
-function createHttpStageError(stage, response) {
-  return new Error(`${stage} failed (http ${response.status})`);
+async function createHttpStageError(stage, response) {
+  const body = await response.text().catch(() => "");
+  return new Error(
+    `${stage} failed (http ${response.status}${body ? `: ${body.slice(0, 500)}` : ""})`,
+  );
 }

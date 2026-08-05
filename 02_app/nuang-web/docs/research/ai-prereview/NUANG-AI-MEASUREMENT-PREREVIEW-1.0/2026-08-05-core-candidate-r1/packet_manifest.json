@@ -1,0 +1,101 @@
+{
+  "protocolVersion": "NUANG-AI-MEASUREMENT-PREREVIEW-1.0",
+  "runId": "2026-08-05-core-candidate-r1",
+  "createdAt": "2026-08-05T17:50:00+09:00",
+  "overallStatus": "completed_with_blockers",
+  "humanGateEffect": "none",
+  "validationAuthority": "none_ai_prereview_only",
+  "containsSyntheticData": true,
+  "containsPersonalData": false,
+  "sharedModelFamily": true,
+  "issueCount": 16,
+  "releaseLock": {
+    "assessmentReleases": [
+      "NUANG-CORE-QUICK-CANDIDATE-1.0",
+      "NUANG-CORE-FULL-CANDIDATE-1.0"
+    ],
+    "itemBankRelease": "NUANG-CORE-BETA-1.0",
+    "scoringReleases": [
+      "NUANG-CORE-QUICK-CANDIDATE-SCORING-1.0",
+      "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0"
+    ],
+    "codeSchemeVersion": "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+    "profileCopyVersion": "NUANG-CANDIDATE-PROFILE-NARRATIVE-1.0",
+    "facetCopyVersion": "NUANG-PRECISION-FACET-COPY-1.0"
+  },
+  "trackStatuses": {
+    "cognitiveAndContent": "completed_with_blockers",
+    "fairnessAndInvarianceRisk": "completed_with_blockers",
+    "quantitativePilotReadiness": "completed_with_blockers",
+    "reliabilityStructureAndClaimTraceability": "completed_with_blockers"
+  },
+  "roleRuns": [
+    {
+      "role": "cognitive_content_reviewer",
+      "actorType": "ai_agent",
+      "modelIdentity": "session-managed Codex agent; exact build not exported",
+      "humanReviewer": false
+    },
+    {
+      "role": "fairness_invariance_risk_reviewer",
+      "actorType": "ai_agent",
+      "modelIdentity": "session-managed Codex agent; exact build not exported",
+      "humanReviewer": false
+    },
+    {
+      "role": "quantitative_structure_claims_integrator",
+      "actorType": "ai_agent",
+      "modelIdentity": "session-managed Codex agent; exact build not exported",
+      "humanReviewer": false
+    }
+  ],
+  "lockedInputManifestSha256": "b4fbca9f065a91f4cdd4c1d8e189c6616f12d48438a9a0e9b79fc5d64922bab5",
+  "artifactFiles": [
+    {
+      "path": "RUN_BOUNDARY.md",
+      "sha256": "f5ab99b06800f2e13cbdff694487831a26995cf4c396c75259b0f3fd6f5fb6be"
+    },
+    {
+      "path": "analysis/FOUR_TRACK_EXECUTION_REPORT.md",
+      "sha256": "1ea27599a5084536930d3f6f37f74b911f086f0baf31e10994d9228ad76ceef3"
+    },
+    {
+      "path": "analysis/issue_ledger.csv",
+      "sha256": "cf2e86ae2da9d673cc08531d544a950aa5ac9147f8aaadbdf1e965b6af99609c"
+    },
+    {
+      "path": "analysis/quantitative_pilot/data_quality_rulebook.csv",
+      "sha256": "1b4e2f60b3c62e2d3302ed5616ac66ce42b49c0e30d6672082facca317407abb"
+    },
+    {
+      "path": "analysis/quantitative_pilot/sample_size_inputs.json",
+      "sha256": "69ccee76a11803abcafd2a5a9d5a5d6f21cbf434e82bd30a32f030359b3d4878"
+    },
+    {
+      "path": "analysis/quantitative_pilot/synthetic_pipeline_report.json",
+      "sha256": "7ee5d761521ab3f88acc084a0af5046e636f0612c3b7b92ce4db9eb9fcac0d91"
+    },
+    {
+      "path": "analysis/reliability_and_structure/analysis_notebook_lock.json",
+      "sha256": "e85a5b864670b1b17086ad35c26cd44ee75ea7dae60237dfc00ada75863bc33f"
+    },
+    {
+      "path": "analysis/reliability_and_structure/score_copy_traceability.csv",
+      "sha256": "a6ed87c31b22ff14cc960a15950f5e8f2c9c13af002fa6a1da04cd7623e0aa2b"
+    },
+    {
+      "path": "handoff/HUMAN_HANDOFF.md",
+      "sha256": "c9dc661d644ed62cb96e84ce56500341f02261a02ce1acc2ca41d9cf962e3ea2"
+    }
+  ],
+  "verificationFiles": [
+    {
+      "path": "src/lib/scoring/core-ai-prereview-safety.test.ts",
+      "sha256": "0997a0f08539f8f042c306cc1717bf733a4cf9a3503611cbd041d32a0c27954d"
+    },
+    {
+      "path": "scripts/verify-core-ai-prereview-run.mjs",
+      "sha256": "d9e75566cc206f54498446024da2077a864a58a96f43216eac00b4c599474413"
+    }
+  ]
+}

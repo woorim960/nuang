@@ -15,8 +15,9 @@ import {
 } from "@/features/share/report-share-contract";
 
 describe("report share data contract", () => {
-  it("keeps the same three share actions for every report", () => {
+  it("keeps the same complete share actions for every report", () => {
     expect(reportShareActions.map((action) => action.label)).toEqual([
+      "카카오톡으로 보내기",
       "링크 복사",
       "다른 앱으로 공유",
       "커뮤니티에 공유",

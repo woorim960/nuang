@@ -1,6 +1,7 @@
 import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
+import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import {
   parseProfileReportKey,
   updateProfileReportVisibilityRequestSchema,
@@ -39,6 +40,26 @@ export async function PATCH(request: Request) {
   const accountId = String(account.data.account_id);
   if (!(await ownsOriginalReport({ accountId, client, key }))) {
     return NextResponse.json({ error: "report_not_found" }, { status: 404 });
+  }
+
+  if (
+    key.kind === "core" &&
+    parsed.data.visibility === "profile_public"
+  ) {
+    const publication = await readCoreResultPublicationDecision({
+      client,
+      ownerAccountId: accountId,
+      resultReportId: key.sourceId,
+    });
+    if (!publication.eligible) {
+      return NextResponse.json(
+        {
+          error: "result_release_not_publicable",
+          message: "검토가 끝난 코어 결과만 프로필에 공개할 수 있어요.",
+        },
+        { status: 409 },
+      );
+    }
   }
 
   if (

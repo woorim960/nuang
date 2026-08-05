@@ -6,25 +6,18 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import {
   AssessmentBottomSheet,
-  AssessmentQuestionContent,
-  AssessmentQuestionDock,
-  AssessmentQuestionGuide,
-  AssessmentQuestionHeader,
-  AssessmentQuestionPrompt,
-  AssessmentQuestionScreen,
-  AssessmentScaleResponseOptions,
   AssessmentSheetAction,
   AssessmentSheetActions,
-  AssessmentUnsureControl,
   AssessmentUnsureSheet,
   useAssessmentQuestionScroll,
 } from "@/features/assessment/AssessmentQuestionControls";
+import { FreeTopicQuestionSurface } from "@/features/assessment/FreeTopicQuestionSurface";
 import {
   calculateFreeTopicResult,
-  defaultFreeTopicRecallPrompt,
   getFreeTopicQuestions,
   type FreeTopicAnswer,
   type FreeTopicAssessment,
+  type FreeTopicQuestion,
 } from "@/features/assessment/free-topic-assessments";
 import {
   bucketAssessmentDwell,
@@ -40,37 +33,17 @@ import {
 import type { ResponseValue } from "@/lib/scoring/types";
 import styles from "./FreeTopicRunner.module.css";
 
-const agreementResponseOptions = [
-  { label: "거의 하지 않았어요", value: 1 },
-  { label: "드물게 했어요", value: 2 },
-  { label: "때때로 했어요", value: 3 },
-  { label: "자주 했어요", value: 4 },
-  { label: "거의 항상 했어요", value: 5 },
-] satisfies Array<{ label: string; value: ResponseValue }>;
-
-const helpfulnessResponseOptions = [
-  { label: "전혀 도움이 되지 않았어요", value: 1 },
-  { label: "별로 도움이 되지 않았어요", value: 2 },
-  { label: "보통이었어요", value: 3 },
-  { label: "꽤 도움이 됐어요", value: 4 },
-  { label: "매우 도움이 됐어요", value: 5 },
-] satisfies Array<{ label: string; value: ResponseValue }>;
-
-const needResponseOptions = [
-  { label: "전혀 필요하지 않았어요", value: 1 },
-  { label: "별로 필요하지 않았어요", value: 2 },
-  { label: "어느 정도 필요했어요", value: 3 },
-  { label: "꽤 필요했어요", value: 4 },
-  { label: "매우 필요했어요", value: 5 },
-] satisfies Array<{ label: string; value: ResponseValue }>;
-
 export function FreeTopicRunner({
   assessment,
+  questions: suppliedQuestions,
+  releaseId = null,
 }: {
   assessment: FreeTopicAssessment;
+  questions?: FreeTopicQuestion[];
+  releaseId?: string | null;
 }) {
   const router = useRouter();
-  const questions = getFreeTopicQuestions(assessment.slug);
+  const questions = suppliedQuestions ?? getFreeTopicQuestions(assessment.slug);
   const [answers, setAnswers] = useState<Record<string, FreeTopicAnswer>>({});
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isExitOpen, setIsExitOpen] = useState(false);
@@ -83,19 +56,6 @@ export function FreeTopicRunner({
     ? answers[currentQuestion.id]
     : undefined;
   const isLast = currentIndex === questions.length - 1;
-  const responseOptions =
-    assessment.responseScale === "need_5"
-      ? needResponseOptions
-      : assessment.responseScale === "helpfulness_5"
-        ? helpfulnessResponseOptions
-        : agreementResponseOptions;
-  const responseLegend =
-    assessment.responseScale === "need_5"
-      ? "그 상황에서 이런 도움이 얼마나 필요했나요?"
-      : assessment.responseScale === "helpfulness_5"
-        ? "이런 위로는 얼마나 도움이 되었나요?"
-        : "비슷한 상황에서 나는 얼마나 자주 이렇게 행동했나요?";
-
   useAssessmentQuestionScroll(currentQuestion?.id ?? null);
 
   useEffect(() => {
@@ -171,18 +131,24 @@ export function FreeTopicRunner({
       answers,
       assessment,
       observedAt: completedAt,
+      questions,
     });
     const stored = saveFreeTopicResult({
       answers,
       assessment,
       completedAt,
+      questions,
       result,
+      productReleaseId: releaseId,
     });
     void syncFreeTopicResult(stored);
     enqueueAssessmentQualityObservations({
       assessmentSlug: assessment.slug,
       instrumentVersion: stored.instrumentVersion,
       localResultId: stored.localResultId,
+      ...(stored.productReleaseId
+        ? { productReleaseId: stored.productReleaseId }
+        : {}),
       observations: questions.map((question) => {
         const answer = answers[question.id];
         return {
@@ -217,50 +183,22 @@ export function FreeTopicRunner({
   }
 
   return (
-    <AssessmentQuestionScreen>
-      <AssessmentQuestionHeader
-        closeLabel="검사 닫기"
-        countLabel={`전체 ${questions.length}개 중 ${currentIndex + 1}번째 문항`}
+    <>
+      <FreeTopicQuestionSurface
+        answer={currentAnswer}
+        assessment={assessment}
         current={currentIndex + 1}
-        onClose={() => setIsExitOpen(true)}
-        progressLabel="검사 진행률"
-        title={assessment.title}
-        total={questions.length}
-      />
-
-      <AssessmentQuestionContent>
-        {currentIndex === 0 ? (
-          <AssessmentQuestionGuide>
-            {assessment.recallPrompt ?? defaultFreeTopicRecallPrompt}
-          </AssessmentQuestionGuide>
-        ) : null}
-        <AssessmentQuestionPrompt
-          contextLabel={currentQuestion.contextLabel}
-          key={currentQuestion.id}
-          text={currentQuestion.text}
-        />
-        <AssessmentScaleResponseOptions
-          legend={responseLegend}
-          name={`topic-response-${currentQuestion.id}`}
-          onChange={selectAnswer}
-          options={responseOptions}
-          selectedValue={currentAnswer?.value}
-        />
-        <AssessmentUnsureControl
-          onOpen={() => setIsUnsureOpen(true)}
-          selectedReason={currentAnswer?.unsureReason}
-        />
-      </AssessmentQuestionContent>
-
-      <AssessmentQuestionDock
-        nextDisabled={!currentAnswer}
         nextLabel={isLast ? "결과 보기" : "다음"}
+        onAnswer={selectAnswer}
+        onClose={() => setIsExitOpen(true)}
         onNext={goNext}
         onPrevious={() => {
           recordCurrentQuestionDwell();
           setCurrentIndex((index) => Math.max(0, index - 1));
         }}
-        previousDisabled={currentIndex === 0}
+        onUnsureOpen={() => setIsUnsureOpen(true)}
+        question={currentQuestion}
+        total={questions.length}
       />
 
       {isExitOpen ? (
@@ -295,7 +233,7 @@ export function FreeTopicRunner({
           selectedReason={currentAnswer?.unsureReason}
         />
       ) : null}
-    </AssessmentQuestionScreen>
+    </>
   );
 
   function countRevision(questionId: string) {

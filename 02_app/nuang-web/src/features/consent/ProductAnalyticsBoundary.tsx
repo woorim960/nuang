@@ -15,24 +15,64 @@ export function ProductAnalyticsBoundary() {
 
   useEffect(() => {
     const area = resolveProductAnalyticsArea(pathname);
-    if (!area) return;
+    if (!area || isProductAnalyticsTrackingDisabled()) return;
 
     const eventKey = `${pathname}:${area}`;
     if (lastEventKey.current === eventKey) return;
-    lastEventKey.current = eventKey;
+    let cancelled = false;
+    let idleCallbackId: number | null = null;
+    let fallbackTimerId: number | null = null;
 
-    void fetch("/api/analytics/events", {
-      body: JSON.stringify({ area, eventName: "screen_view" }),
-      cache: "no-store",
-      headers: { "content-type": "application/json" },
-      keepalive: true,
-      method: "POST",
-    }).catch(() => {
-      // Analytics must never interrupt the product experience.
-    });
+    const send = () => {
+      if (
+        cancelled ||
+        lastEventKey.current === eventKey ||
+        isProductAnalyticsTrackingDisabled()
+      ) {
+        return;
+      }
+      lastEventKey.current = eventKey;
+      void fetch("/api/analytics/events", {
+        body: JSON.stringify({ area, eventName: "screen_view" }),
+        cache: "no-store",
+        headers: { "content-type": "application/json" },
+        keepalive: true,
+        method: "POST",
+      }).catch(() => {
+        // Analytics must never interrupt the product experience.
+      });
+    };
+
+    if (typeof window.requestIdleCallback === "function") {
+      idleCallbackId = window.requestIdleCallback(send, { timeout: 1_500 });
+    } else {
+      fallbackTimerId = window.setTimeout(send, 700);
+    }
+
+    return () => {
+      cancelled = true;
+      if (idleCallbackId !== null) {
+        window.cancelIdleCallback(idleCallbackId);
+      }
+      if (fallbackTimerId !== null) {
+        window.clearTimeout(fallbackTimerId);
+      }
+    };
   }, [pathname]);
 
   return null;
+}
+
+export function isProductAnalyticsTrackingDisabled() {
+  const navigatorWithPrivacySignals = navigator as Navigator & {
+    globalPrivacyControl?: boolean;
+  };
+  const windowWithDnt = window as Window & { doNotTrack?: string | null };
+  return (
+    navigator.doNotTrack === "1" ||
+    windowWithDnt.doNotTrack === "1" ||
+    navigatorWithPrivacySignals.globalPrivacyControl === true
+  );
 }
 
 export function resolveProductAnalyticsArea(
