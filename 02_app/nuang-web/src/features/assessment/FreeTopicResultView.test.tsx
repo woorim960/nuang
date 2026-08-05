@@ -315,6 +315,48 @@ describe("FreeTopicResultView", () => {
     ).toBeInTheDocument();
   });
 
+  it("restores the current reviewed long report for an older published result", async () => {
+    const assessment = getFreeTopicAssessment("apology-style")!;
+    const stored = createStoredResult({ syncStatus: "synced" });
+    stored.assessment = {
+      categoryId: assessment.categoryId,
+      categoryLabel: assessment.categoryLabel,
+      slug: assessment.slug,
+      title: assessment.title,
+    };
+    stored.assessmentSnapshot = assessment;
+    stored.productReleaseId = "11111111-1111-4111-8111-111111111111";
+    stored.result.scoresByScaleId = {
+      impact_listening: 50,
+      repair_planning: 50,
+      responsibility_acknowledgement: 75,
+    };
+    stored.reportSnapshot = {
+      ...buildFreeTopicResultReport({
+        assessment,
+        result: stored.result,
+      }),
+      longReportSections: [],
+    };
+
+    render(
+      <FreeTopicResultView
+        initialResult={stored}
+        localResultId="topic_apology_old_snapshot"
+        slug={assessment.slug}
+      />,
+    );
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "사람에 따라 이렇게 적용해 보세요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      document.body.textContent?.replace(/\s/g, "").length,
+    ).toBeGreaterThan(2_000);
+  });
+
   it("uses the recharge recall period and score meaning on the result", async () => {
     const assessment = getFreeTopicAssessment("recharge-routine")!;
     const completedAt = "2026-07-29T00:00:00.000Z";

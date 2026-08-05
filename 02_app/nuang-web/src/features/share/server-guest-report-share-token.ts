@@ -33,8 +33,13 @@ export function createGuestReportShareToken(
   if (!pepper) return null;
 
   const issuedAt = Math.floor(now.getTime() / 1_000);
+  const parsedContent = reportShareContentSchema.parse(content);
   const payload: GuestSharePayload = {
-    content: reportShareContentSchema.parse(content),
+    content: {
+      ...parsedContent,
+      // 상세 문장은 검수된 원본에서 다시 구성해 URL 길이와 개인정보 노출을 줄입니다.
+      sections: undefined,
+    },
     expiresAt: issuedAt + GUEST_SHARE_LIFETIME_SECONDS,
     issuedAt,
     version: 1,

@@ -1,13 +1,66 @@
 import { z } from "zod";
 
+const shareScoreRecordSchema = z
+  .record(z.string().trim().min(1).max(80), z.number().finite().min(0).max(100))
+  .superRefine((scores, context) => {
+    if (Object.keys(scores).length > 12) {
+      context.addIssue({
+        code: "custom",
+        message: "공유 결과에는 점수 항목을 12개까지만 담을 수 있어요.",
+      });
+    }
+  });
+
+export const reportShareSourceSchema = z.discriminatedUnion("kind", [
+  z.object({
+    code: z.string().trim().min(2).max(12),
+    kind: z.literal("core"),
+  }),
+  z.object({
+    assessmentSlug: z.string().trim().min(2).max(80),
+    code: z.string().trim().min(2).max(12).optional(),
+    kind: z.literal("topic"),
+    scoresByScaleId: shareScoreRecordSchema,
+  }),
+  z.object({
+    assessmentSlug: z.string().trim().min(2).max(80),
+    kind: z.literal("lab"),
+    profileId: z.string().trim().min(1).max(80),
+    scores: shareScoreRecordSchema,
+  }),
+]);
+
+const reportShareSectionItemSchema = z.object({
+  label: z.string().trim().min(1).max(100).optional(),
+  text: z.string().trim().min(1).max(1_500),
+  value: z.string().trim().min(1).max(40).optional(),
+});
+
+export const reportShareSectionSchema = z.object({
+  description: z.string().trim().min(1).max(2_500).optional(),
+  id: z.string().trim().min(1).max(100),
+  items: z.array(reportShareSectionItemSchema).max(48).optional(),
+  title: z.string().trim().min(1).max(120),
+});
+
 export const reportShareContentSchema = z.object({
   code: z.string().trim().min(2).max(12).optional(),
-  contentVersion: z.literal("report-share-v1"),
+  contentVersion: z.enum(["report-share-v1", "report-share-v2"]),
   highlights: z.array(z.string().trim().min(1).max(120)).min(1).max(3),
   reportType: z.enum(["core", "lab", "topic"]),
   resultName: z.string().trim().min(1).max(100),
+  sections: z.array(reportShareSectionSchema).max(20).optional(),
+  source: reportShareSourceSchema.optional(),
   summary: z.string().trim().min(1).max(500),
   title: z.string().trim().min(1).max(100),
+}).superRefine((content, context) => {
+  if (content.source && content.source.kind !== content.reportType) {
+    context.addIssue({
+      code: "custom",
+      message: "공유 원본과 결과 유형이 일치해야 해요.",
+      path: ["source"],
+    });
+  }
 });
 
 export const createOriginalReportShareLinkRequestSchema = z.object({
@@ -15,6 +68,8 @@ export const createOriginalReportShareLinkRequestSchema = z.object({
 });
 
 export type ReportShareContent = z.infer<typeof reportShareContentSchema>;
+export type ReportShareSection = z.infer<typeof reportShareSectionSchema>;
+export type ReportShareSource = z.infer<typeof reportShareSourceSchema>;
 
 export type ReportShareFeedAttachment = {
   id: string;
@@ -76,10 +131,11 @@ export function buildCoreReportShareContent({
 }): ReportShareContent {
   return normalizeReportShareContent({
     code,
-    contentVersion: "report-share-v1",
+    contentVersion: "report-share-v2",
     highlights: [...highlights],
     reportType: "core",
     resultName: profileName,
+    source: { code, kind: "core" },
     summary,
     title: resultLabel,
   });
@@ -87,20 +143,35 @@ export function buildCoreReportShareContent({
 
 export function buildTopicReportShareContent({
   assessmentTitle,
+  assessmentSlug,
+  code,
   highlights,
   resultName,
+  scoresByScaleId,
   summary,
 }: {
   assessmentTitle: string;
+  assessmentSlug?: string;
+  code?: string | null;
   highlights: readonly string[];
   resultName: string;
+  scoresByScaleId?: Readonly<Record<string, number>>;
   summary: string;
 }): ReportShareContent {
   return normalizeReportShareContent({
-    contentVersion: "report-share-v1",
+    contentVersion: "report-share-v2",
     highlights: [...highlights],
     reportType: "topic",
     resultName,
+    source:
+      assessmentSlug && scoresByScaleId
+        ? {
+            assessmentSlug,
+            ...(code ? { code } : {}),
+            kind: "topic",
+            scoresByScaleId: { ...scoresByScaleId },
+          }
+        : undefined,
     summary,
     title: `${assessmentTitle} 결과`,
   });
@@ -108,20 +179,35 @@ export function buildTopicReportShareContent({
 
 export function buildLabReportShareContent({
   assessmentTitle,
+  assessmentSlug,
   highlights,
+  profileId,
   resultName,
+  scores,
   summary,
 }: {
   assessmentTitle: string;
+  assessmentSlug?: string;
   highlights: readonly string[];
+  profileId?: string;
   resultName: string;
+  scores?: Readonly<Record<string, number>>;
   summary: string;
 }): ReportShareContent {
   return normalizeReportShareContent({
-    contentVersion: "report-share-v1",
+    contentVersion: "report-share-v2",
     highlights: [...highlights],
     reportType: "lab",
     resultName,
+    source:
+      assessmentSlug && profileId && scores
+        ? {
+            assessmentSlug,
+            kind: "lab",
+            profileId,
+            scores: { ...scores },
+          }
+        : undefined,
     summary,
     title: `${assessmentTitle} 결과`,
   });

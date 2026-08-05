@@ -16,6 +16,7 @@ import { AssessmentReportRichText } from "@/features/assessment/AssessmentReport
 import { AssessmentResultQualityPrompt } from "@/features/assessment/AssessmentResultQualityPrompt";
 import { TopicTraitImpactCard } from "@/features/assessment/TopicTraitImpactCard";
 import {
+  buildFreeTopicResultReport,
   getFreeTopicAssessment,
   getFreeTopicQuestions,
   type FreeTopicAssessment,
@@ -25,6 +26,7 @@ import {
   type FreeTopicPersonalizedSummary,
   type FreeTopicResultReport,
 } from "@/features/assessment/free-topic-assessments";
+import { isTopicAssessmentPublished } from "@/features/assessment/assessment-catalog";
 import { AssessmentBottomSheet } from "@/features/assessment/AssessmentQuestionControls";
 import { getFreeTopicInstrumentVersion } from "@/features/assessment/free-topic-result-version";
 import {
@@ -81,9 +83,14 @@ export function FreeTopicResultView({
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isScoreMeaningOpen, setIsScoreMeaningOpen] = useState(false);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
+  const currentPublishedAssessment =
+    !previewMode && isTopicAssessmentPublished(slug)
+    ? getFreeTopicAssessment(slug)
+    : null;
   const assessment =
-    result?.assessmentSnapshot ??
     assessmentOverride ??
+    currentPublishedAssessment ??
+    result?.assessmentSnapshot ??
     getFreeTopicAssessment(slug);
   const currentNuangCode = result?.nuangCodeContext?.code ?? null;
   const retryTraitSync = () => {
@@ -215,17 +222,26 @@ export function FreeTopicResultView({
   }
 
   const activeAssessment = assessment;
-  const currentQuestions =
-    result.questionsSnapshot ??
-    questionsOverride ??
-    getFreeTopicQuestions(activeAssessment.slug);
+  const currentQuestions = questionsOverride
+    ? questionsOverride
+    : !previewMode && isTopicAssessmentPublished(activeAssessment.slug)
+      ? getFreeTopicQuestions(activeAssessment.slug)
+      : (result.questionsSnapshot ??
+        getFreeTopicQuestions(activeAssessment.slug));
   const questionCount = getCompletedQuestionCount({
     currentQuestionCount: currentQuestions.length,
     result,
   });
+  const currentBetaReport = isTopicAssessmentPublished(activeAssessment.slug)
+    ? buildFreeTopicResultReport({
+        assessment: activeAssessment,
+        questions: currentQuestions,
+        result: result.result,
+      })
+    : null;
   const report = getFreeTopicReportDisplay(
     activeAssessment.slug,
-    result.reportSnapshot,
+    currentBetaReport ?? result.reportSnapshot,
   );
   const rebuiltPersonalizedSummary = buildFreeTopicPersonalizedSummary({
     assessment: activeAssessment,
@@ -288,11 +304,9 @@ export function FreeTopicResultView({
         section.role !== "close_person_script" &&
         section.title !== "가까운 사람에게 보여줄 한 문장"),
   );
-  // 릴리스가 고정된 결과는 완료 시점의 보고서 문구도 그대로 보존합니다.
-  // 릴리스 식별자가 없던 초기 로컬 결과만 최신 진단 섹션으로 보완합니다.
-  const latestDiagnosticSections = result.productReleaseId
-    ? []
-    : buildFreeTopicLongReportSections({
+  // 베타에서는 현재 공개 검수를 통과한 상세 진단을 과거 결과에도 보완합니다.
+  // 원점수나 답변은 바꾸지 않고, 같은 점수에서 파생되는 설명만 최신화합니다.
+  const latestDiagnosticSections = buildFreeTopicLongReportSections({
         assessment: activeAssessment,
         questions: currentQuestions,
         scaleStatisticsById: result.result.scaleStatisticsById,
@@ -314,7 +328,9 @@ export function FreeTopicResultView({
     ),
   ]);
   const shareContent = buildTopicReportShareContent({
+    assessmentSlug: activeAssessment.slug,
     assessmentTitle: activeAssessment.title,
+    code: currentNuangCode,
     highlights:
       report.signals.length > 0
         ? report.signals
@@ -327,6 +343,7 @@ export function FreeTopicResultView({
             )
         : [report.confidenceCopy],
     resultName: personalizedSummary?.title ?? report.headline,
+    scoresByScaleId: result.result.scoresByScaleId,
     summary: personalizedSummary?.body ?? report.headline,
   });
   const canShare = Boolean(

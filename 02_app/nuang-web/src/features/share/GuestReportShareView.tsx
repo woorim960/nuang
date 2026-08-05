@@ -86,8 +86,51 @@ export function GuestReportShareView({
           </ul>
         </section>
 
+        {content.sections?.length ? (
+          <section
+            aria-labelledby="guest-share-details"
+            className={styles.details}
+          >
+            <header className={styles.detailsHeading}>
+              <div>
+                <p>뉴앙 베타 공개 리포트</p>
+                <h2 id="guest-share-details">결과를 더 자세히 보기</h2>
+              </div>
+              <span>{content.sections.length}개 항목</span>
+            </header>
+
+            <div className={styles.detailList}>
+              {content.sections.map((section) => (
+                <article className={styles.detailSection} key={section.id}>
+                  <h3>{section.title}</h3>
+                  {section.description ? <p>{section.description}</p> : null}
+                  {section.items?.length ? (
+                    <div className={styles.detailItems}>
+                      {section.items.map((item, index) => (
+                        <div
+                          className={styles.detailItem}
+                          key={`${section.id}-${item.label ?? index}-${index}`}
+                        >
+                          {item.label || item.value ? (
+                            <div className={styles.detailItemHeading}>
+                              {item.label ? <h4>{item.label}</h4> : <span />}
+                              {item.value ? <strong>{item.value}</strong> : null}
+                            </div>
+                          ) : null}
+                          <p>{item.text}</p>
+                        </div>
+                      ))}
+                    </div>
+                  ) : null}
+                </article>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
         <aside className={styles.privacy}>
-          이 링크에는 답변 내용, 연락처, 계정 정보가 담기지 않아요.
+          공개 가능한 결과 해석만 보여요. 답변 원문, 연락처, 계정 정보는 이
+          링크에 담기지 않아요.
         </aside>
 
         <section className={styles.next}>

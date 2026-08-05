@@ -147,6 +147,111 @@
   content: "";
 }
 
+.details {
+  padding: 32px 2px;
+  border-top: 1px solid var(--nu-color-border);
+}
+
+.detailsHeading {
+  display: flex;
+  margin-bottom: 6px;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.detailsHeading p {
+  margin: 0 0 6px;
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.detailsHeading h2 {
+  margin: 0;
+  font-size: var(--nu-text-title-sm);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.03em;
+}
+
+.detailsHeading > span {
+  flex: 0 0 auto;
+  padding-bottom: 2px;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.detailList {
+  display: grid;
+}
+
+.detailSection {
+  padding: 30px 0;
+  border-bottom: 1px solid var(--nu-color-border-soft);
+}
+
+.detailSection:last-child {
+  border-bottom: 0;
+}
+
+.detailSection > h3 {
+  margin: 0;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.025em;
+  line-height: 1.5;
+}
+
+.detailSection > p {
+  margin: 10px 0 0;
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-body-sm);
+  line-height: 1.75;
+}
+
+.detailItems {
+  display: grid;
+  margin-top: 20px;
+  gap: 0;
+}
+
+.detailItem {
+  padding: 17px 0;
+  border-top: 1px solid var(--nu-color-border-soft);
+}
+
+.detailItemHeading {
+  display: flex;
+  margin-bottom: 7px;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.detailItemHeading h4 {
+  margin: 0;
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+  line-height: 1.45;
+}
+
+.detailItemHeading strong {
+  flex: 0 0 auto;
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-heavy);
+}
+
+.detailItem > p {
+  margin: 0;
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-body-sm);
+  line-height: 1.75;
+}
+
 .privacy {
   padding: 14px 16px;
   border-radius: 14px;

@@ -14,7 +14,10 @@ import { useEffect, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { AssessmentBottomSheet } from "@/features/assessment/AssessmentQuestionControls";
-import { type LabAssessment } from "@/features/lab/lab-assessments";
+import {
+  getLabAssessment,
+  type LabAssessment,
+} from "@/features/lab/lab-assessments";
 import {
   deleteLabResult,
   loadLabResult,
@@ -142,8 +145,18 @@ export function LabResultView({
     );
   }
 
-  const { profile, scores, tiedProfileIds } = storedResult.result;
-  const activeAssessment = storedResult.assessmentSnapshot ?? assessment;
+  const {
+    profile: storedProfile,
+    scores,
+    tiedProfileIds,
+  } = storedResult.result;
+  const activeAssessment =
+    getLabAssessment(storedResult.slug) ??
+    storedResult.assessmentSnapshot ??
+    assessment;
+  const profile =
+    activeAssessment.profiles.find((item) => item.id === storedProfile.id) ??
+    storedProfile;
   const selectedLocalResultId = storedResult.localResultId;
   const answeredCount =
     answeredCountOverride ?? Object.keys(storedResult.answers).length;
@@ -153,12 +166,15 @@ export function LabResultView({
   );
   const hasTie = tiedProfileIds.length > 1;
   const shareContent = buildLabReportShareContent({
+    assessmentSlug: activeAssessment.slug,
     assessmentTitle: activeAssessment.title,
     highlights: [
       ...profile.strengths.slice(0, 2),
       `관계에서는 이렇게 알려주세요: ${profile.relationTip}`,
     ],
+    profileId: profile.id,
     resultName: profile.title,
+    scores,
     summary: profile.summary,
   });
   const canShare = shareEnabled;

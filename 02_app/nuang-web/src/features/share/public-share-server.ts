@@ -3,6 +3,7 @@ import { readCoreResultPublicationDecision } from "@/features/assessment/server-
 import { adaptPublicCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
 import type { CoreResultReportModel } from "@/features/result/unified-core-report/core-result-report-model";
 import type { ReportShareContent } from "@/features/share/report-share-contract";
+import { resolveRichReportShareContent } from "@/features/share/report-share-rich-projection";
 import { readGuestReportShareToken } from "@/features/share/server-guest-report-share-token";
 import {
   createSupabaseServiceClient,
@@ -34,7 +35,7 @@ export async function readPublicShareToken(
   const guestShare = readGuestReportShareToken(token);
   if (guestShare.status === "active") {
     return {
-      content: guestShare.content,
+      content: resolveRichReportShareContent(guestShare.content),
       shareKind: "guest_summary",
       status: "active",
     };
