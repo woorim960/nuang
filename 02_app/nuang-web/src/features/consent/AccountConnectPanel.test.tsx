@@ -1,9 +1,10 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { AccountConnectPanel } from "@/features/consent/AccountConnectPanel";
 
-const { mockGetUser, mockSignOut } = vi.hoisted(() => ({
+const { mockGetUser, mockReplace, mockSignOut } = vi.hoisted(() => ({
   mockGetUser: vi.fn(),
+  mockReplace: vi.fn(),
   mockSignOut: vi.fn(),
 }));
 const consentStorage = new Map<string, string>();
@@ -11,6 +12,7 @@ const consentStorage = new Map<string, string>();
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     refresh: vi.fn(),
+    replace: mockReplace,
   }),
 }));
 
@@ -77,9 +79,7 @@ describe("AccountConnectPanel", () => {
       expect(
         screen.getByRole("button", { name: "카카오로 계속하기" }),
       ).toBeDisabled();
-      fireEvent.click(
-        screen.getByRole("checkbox", { name: "모든 항목 동의" }),
-      );
+      fireEvent.click(screen.getByRole("checkbox", { name: "모든 항목 동의" }));
       expect(
         screen.getByRole("button", { name: "카카오로 계속하기" }),
       ).toBeEnabled();
@@ -228,5 +228,27 @@ describe("AccountConnectPanel", () => {
     expect(
       screen.queryByRole("button", { name: "카카오로 계속하기" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("returns an existing session to the exact pending action", async () => {
+    mockGetUser.mockResolvedValue({
+      data: {
+        user: {
+          app_metadata: { provider: "google" },
+          identities: [],
+          user_metadata: { name: "탐험가" },
+        },
+      },
+    });
+
+    render(
+      <AccountConnectPanel continueHref="/share/g1.test?share=community" />,
+    );
+
+    await waitFor(() => {
+      expect(mockReplace).toHaveBeenCalledWith(
+        "/share/g1.test?share=community&auth=connected",
+      );
+    });
   });
 });

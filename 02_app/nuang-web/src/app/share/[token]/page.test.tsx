@@ -28,13 +28,16 @@ vi.mock("@/features/share/GuestReportShareView", () => ({
   GuestReportShareView: ({
     canonicalUrl,
     content,
+    resumeCommunityShare,
   }: {
     canonicalUrl: string;
     content: { resultName: string };
+    resumeCommunityShare?: boolean;
   }) => (
     <main>
       <h1>{content.resultName}</h1>
       <p>{canonicalUrl}</p>
+      <p>{resumeCommunityShare ? "커뮤니티 공유 이어가기" : "일반 보기"}</p>
     </main>
   ),
 }));
@@ -140,7 +143,9 @@ describe("SharePage", () => {
       params: Promise.resolve({ token: "g1.test.token" }),
     });
 
-    expect(screen.getByRole("heading", { name: "잔잔한 대화" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("heading", { name: "잔잔한 대화" }),
+    ).toBeInTheDocument();
     expect(metadata.openGraph).toMatchObject({
       images: [
         expect.objectContaining({
@@ -148,5 +153,29 @@ describe("SharePage", () => {
         }),
       ],
     });
+  });
+
+  it("reopens the guest community share after login", async () => {
+    readPublicShareTokenMock.mockResolvedValue({
+      content: {
+        contentVersion: "report-share-v1",
+        highlights: ["천천히 대화를 풀어가요"],
+        reportType: "topic",
+        resultName: "잔잔한 대화",
+        summary: "말을 고르며 차분하게 대화를 이어가는 편이에요.",
+        title: "대화 온도 결과",
+      },
+      shareKind: "guest_summary",
+      status: "active",
+    });
+
+    render(
+      await SharePage({
+        params: Promise.resolve({ token: "g1.test.token" }),
+        searchParams: Promise.resolve({ share: "community" }),
+      }),
+    );
+
+    expect(screen.getByText("커뮤니티 공유 이어가기")).toBeInTheDocument();
   });
 });

@@ -25,6 +25,7 @@ import {
   createReportShareText,
   type ReportShareContent,
 } from "@/features/share/report-share-contract";
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import styles from "./ReportShareSheet.module.css";
 
 type ReportShareSheetProps = {
@@ -36,6 +37,7 @@ type ReportShareSheetProps = {
   onNavigate?: (href: string) => void;
   originalReportKey?: string;
   returnFocusRef?: RefObject<HTMLButtonElement | null>;
+  startInCommunity?: boolean;
 };
 
 type ShareActionId =
@@ -93,6 +95,7 @@ export function ReportShareSheet({
   onNavigate,
   originalReportKey,
   returnFocusRef,
+  startInCommunity = false,
 }: ReportShareSheetProps) {
   const [activeAction, setActiveAction] = useState<ShareActionId | null>(null);
   const [communityNote, setCommunityNote] = useState("");
@@ -102,7 +105,9 @@ export function ReportShareSheet({
   const [pendingPrivateAction, setPendingPrivateAction] =
     useState<ShareActionId | null>(null);
   const [publishProgress, setPublishProgress] = useState<PublishProgress>(null);
-  const [step, setStep] = useState<ShareStep>("actions");
+  const [step, setStep] = useState<ShareStep>(
+    startInCommunity ? "community" : "actions",
+  );
   const [status, setStatus] = useState<ShareStatus>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const guestShareUrlRef = useRef<{ key: string; url: string } | null>(null);
@@ -324,7 +329,10 @@ export function ReportShareSheet({
       setActiveAction("feed_share");
       setStatus(null);
       const shareUrl = await getFreshShareUrl();
-      if (!parseOriginalReportAttachment(shareUrl)) {
+      if (
+        !parseOriginalReportAttachment(shareUrl) &&
+        !(await hasCurrentAccount())
+      ) {
         navigateToLoginForCommunity(onNavigate);
         return;
       }
@@ -494,18 +502,16 @@ export function ReportShareSheet({
       setStatus(null);
       const originalUrl = await getFreshShareUrl();
       const attachment = parseOriginalReportAttachment(originalUrl);
-      if (!attachment) {
-        throw new Error(
-          "원본 리포트를 확인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
-        );
-      }
+      const guestBody = [communityNote.trim(), originalUrl]
+        .filter(Boolean)
+        .join("\n\n");
       const response = await fetch("/api/feed", {
         body: JSON.stringify({
           action: "create_post",
-          attachments: [attachment],
-          body: communityNote.trim(),
-          source: "report_share",
-          sourceId: attachment.id,
+          ...(attachment ? { attachments: [attachment] } : {}),
+          body: attachment ? communityNote.trim() : guestBody,
+          source: attachment ? "report_share" : "free_text",
+          ...(attachment ? { sourceId: attachment.id } : {}),
           topic: {
             category: null,
             source: "manual",
@@ -823,7 +829,9 @@ function ReportIdentity({
         {content.code ? <span>{content.code}</span> : null}
         {content.resultName}
       </h3>
-      {!compact ? <p className={styles.resultSummary}>{content.summary}</p> : null}
+      {!compact ? (
+        <p className={styles.resultSummary}>{content.summary}</p>
+      ) : null}
     </section>
   );
 }
@@ -950,12 +958,29 @@ async function createGuestShareUrl(
 
 function navigateToLoginForCommunity(onNavigate?: (href: string) => void) {
   const currentUrl = new URL(window.location.href);
-  currentUrl.searchParams.set("share", "1");
+  currentUrl.searchParams.set("share", "community");
   const nextPath = `${currentUrl.pathname}${currentUrl.search}`;
   navigate(
     `/login?next=${encodeURIComponent(nextPath)}&reason=share`,
     onNavigate,
   );
+}
+
+async function hasCurrentAccount() {
+  const supabase = createBrowserSupabaseClient();
+  if (!supabase) return false;
+
+  try {
+    const result = await Promise.race([
+      supabase.auth.getUser(),
+      new Promise<null>((resolve) =>
+        window.setTimeout(() => resolve(null), 2500),
+      ),
+    ]);
+    return Boolean(result?.data.user);
+  } catch {
+    return false;
+  }
 }
 
 function parseOriginalReportAttachment(value: string) {

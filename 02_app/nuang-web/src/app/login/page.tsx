@@ -20,7 +20,8 @@ type LoginPageProps = {
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const query = searchParams ? await searchParams : {};
   const reason = readFirst(query.reason);
-  const nextPath = readSafeNextPath(readFirst(query.next));
+  const requestedNextPath = readFirst(query.next);
+  const nextPath = readSafeNextPath(requestedNextPath);
   const copy = getLoginCopy(reason);
   const isCommunityLogin = [
     "bookmark",
@@ -30,6 +31,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
     "poll",
     "post",
     "reaction",
+    "share",
   ].includes(reason);
   const backHref = createBackHref(nextPath);
   const backLabel =
@@ -63,6 +65,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
       <section className={styles.authSection}>
         <AccountConnectPanel
+          continueHref={requestedNextPath ? nextPath : undefined}
           context={isCommunityLogin ? "community" : "account"}
         />
       </section>

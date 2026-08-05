@@ -29,11 +29,13 @@ const reportTypeCopy: Record<
 export function GuestReportShareView({
   canonicalUrl,
   content,
+  resumeCommunityShare = false,
 }: {
   canonicalUrl: string;
   content: ReportShareContent;
+  resumeCommunityShare?: boolean;
 }) {
-  const [isShareOpen, setIsShareOpen] = useState(false);
+  const [isShareOpen, setIsShareOpen] = useState(resumeCommunityShare);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
   const presentation = reportTypeCopy[content.reportType];
 
@@ -72,7 +74,10 @@ export function GuestReportShareView({
           <p className={styles.summary}>{content.summary}</p>
         </section>
 
-        <section aria-labelledby="guest-share-highlights" className={styles.highlights}>
+        <section
+          aria-labelledby="guest-share-highlights"
+          className={styles.highlights}
+        >
           <h2 id="guest-share-highlights">이 결과에서 눈에 띈 모습</h2>
           <ul>
             {content.highlights.map((highlight) => (
@@ -100,6 +105,7 @@ export function GuestReportShareView({
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
         returnFocusRef={shareButtonRef}
+        startInCommunity={resumeCommunityShare}
       />
     </main>
   );

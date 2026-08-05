@@ -9,6 +9,7 @@ import { getAppOrigin } from "@/lib/supabase/env";
 
 type SharePageProps = {
   params: Promise<{ token: string }>;
+  searchParams?: Promise<{ share?: string | string[] }>;
 };
 
 const shareRobots: Metadata["robots"] = {
@@ -71,8 +72,13 @@ export async function generateMetadata({
   };
 }
 
-export default async function SharePage({ params }: SharePageProps) {
+export default async function SharePage({
+  params,
+  searchParams,
+}: SharePageProps) {
   const { token } = await params;
+  const query = searchParams ? await searchParams : {};
+  const share = Array.isArray(query.share) ? query.share[0] : query.share;
   const result = await readShareToken(token);
 
   if (result.status === "active") {
@@ -81,6 +87,7 @@ export default async function SharePage({ params }: SharePageProps) {
         <GuestReportShareView
           canonicalUrl={new URL(`/share/${token}`, getAppOrigin()).toString()}
           content={result.content}
+          resumeCommunityShare={share === "community"}
         />
       );
     }

@@ -29,8 +29,10 @@ type ConnectedAccount = {
 };
 
 export function AccountConnectPanel({
+  continueHref,
   context = "account",
 }: {
+  continueHref?: string;
   context?: "account" | "community";
 }) {
   const router = useRouter();
@@ -95,6 +97,11 @@ export function AccountConnectPanel({
     void (async () => {
       const user = await readCurrentUserWithTimeout(supabase);
       if (!isActive) return;
+      if (user && continueHref) {
+        setIsCheckingAccount(false);
+        router.replace(createConnectedReturnHref(continueHref));
+        return;
+      }
       setConnectedAccount(user ? createConnectedAccount(user) : null);
       setIsCheckingAccount(false);
     })();
@@ -102,7 +109,7 @@ export function AccountConnectPanel({
     return () => {
       isActive = false;
     };
-  }, [savedConsentDraft]);
+  }, [continueHref, router, savedConsentDraft]);
 
   async function handleProviderClick(
     provider: (typeof socialAuthProviders)[number],
@@ -558,6 +565,12 @@ function createConnectedAccount(user: User): ConnectedAccount {
     providerId: provider?.id ?? null,
     providerLabel: provider?.label ?? "소셜 계정",
   };
+}
+
+function createConnectedReturnHref(href: string) {
+  const url = new URL(href, "https://nuang.local");
+  url.searchParams.set("auth", "connected");
+  return `${url.pathname}${url.search}${url.hash}`;
 }
 
 function readSavedConsentDraft(): ConsentDraft | null {

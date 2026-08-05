@@ -3,8 +3,19 @@ import { describe, expect, it, vi } from "vitest";
 import LoginPage from "@/app/login/page";
 
 vi.mock("@/features/consent/AccountConnectPanel", () => ({
-  AccountConnectPanel: ({ context }: { context?: string }) => (
-    <div data-testid="account-connect-context">{context}</div>
+  AccountConnectPanel: ({
+    context,
+    continueHref,
+  }: {
+    context?: string;
+    continueHref?: string;
+  }) => (
+    <div
+      data-continue-href={continueHref}
+      data-testid="account-connect-context"
+    >
+      {context}
+    </div>
   ),
 }));
 
@@ -26,6 +37,10 @@ describe("LoginPage", () => {
     ).toBeInTheDocument();
     expect(screen.getByTestId("account-connect-context")).toHaveTextContent(
       "community",
+    );
+    expect(screen.getByTestId("account-connect-context")).toHaveAttribute(
+      "data-continue-href",
+      "/home?resumeFeed=poll&pollId=poll-001&optionId=option-001",
     );
     expect(
       screen.getByRole("link", { name: "홈으로 돌아가기" }),
@@ -61,5 +76,24 @@ describe("LoginPage", () => {
     expect(
       screen.getByRole("link", { name: "이전 화면으로 돌아가기" }),
     ).toHaveAttribute("href", "/research?from=assessments");
+  });
+
+  it("treats report sharing as a community login and preserves its return path", async () => {
+    render(
+      await LoginPage({
+        searchParams: Promise.resolve({
+          next: "/share/g1.test?share=community",
+          reason: "share",
+        }),
+      }),
+    );
+
+    expect(screen.getByTestId("account-connect-context")).toHaveTextContent(
+      "community",
+    );
+    expect(screen.getByTestId("account-connect-context")).toHaveAttribute(
+      "data-continue-href",
+      "/share/g1.test?share=community",
+    );
   });
 });

@@ -10,10 +10,18 @@ const kakaoMocks = vi.hoisted(() => ({
   prepareImage: vi.fn(async () => "https://mud-kage.kakao.com/share.png"),
   send: vi.fn(async () => undefined),
 }));
+const shareAuthMocks = vi.hoisted(() => ({
+  getUser: vi.fn(),
+}));
 
 vi.mock("@/features/share/kakao-talk-share", () => ({
   prepareKakaoReportShareImage: kakaoMocks.prepareImage,
   sendReportToKakaoTalk: kakaoMocks.send,
+}));
+vi.mock("@/lib/supabase/browser", () => ({
+  createBrowserSupabaseClient: () => ({
+    auth: { getUser: shareAuthMocks.getUser },
+  }),
 }));
 
 const content = buildTopicReportShareContent({
@@ -32,6 +40,9 @@ describe("ReportShareSheet", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+    shareAuthMocks.getUser.mockResolvedValue({
+      data: { user: { id: "account-1" } },
+    });
     Object.defineProperty(navigator, "clipboard", {
       configurable: true,
       value: { writeText: vi.fn().mockResolvedValue(undefined) },
@@ -127,7 +138,9 @@ describe("ReportShareSheet", () => {
     expect(
       screen.getByRole("button", { name: "커뮤니티에 공유" }),
     ).toBeEnabled();
-    expect(screen.getByText("결과 요약을 안전하게 공유해요.")).toBeInTheDocument();
+    expect(
+      screen.getByText("결과 요약을 안전하게 공유해요."),
+    ).toBeInTheDocument();
 
     fireEvent.click(screen.getByRole("button", { name: "링크 복사" }));
     await waitFor(() => {
@@ -154,13 +167,7 @@ describe("ReportShareSheet", () => {
       ),
     );
 
-    render(
-      <ReportShareSheet
-        content={content}
-        isOpen
-        onClose={vi.fn()}
-      />,
-    );
+    render(<ReportShareSheet content={content} isOpen onClose={vi.fn()} />);
 
     fireEvent.click(
       screen.getByRole("button", { name: "카카오톡으로 보내기" }),
@@ -182,6 +189,7 @@ describe("ReportShareSheet", () => {
         }),
       ),
     );
+    shareAuthMocks.getUser.mockResolvedValueOnce({ data: { user: null } });
 
     render(
       <ReportShareSheet
@@ -196,7 +204,7 @@ describe("ReportShareSheet", () => {
 
     await waitFor(() => {
       expect(onNavigate).toHaveBeenCalledWith(
-        "/login?next=%2F%3Fshare%3D1&reason=share",
+        "/login?next=%2F%3Fshare%3Dcommunity&reason=share",
       );
     });
     expect(
@@ -204,14 +212,77 @@ describe("ReportShareSheet", () => {
     ).not.toBeInTheDocument();
   });
 
+  it("publishes a signed guest summary as a safe community link after login", async () => {
+    const guestUrl = "https://nuang.app/share/g1.payload.signature";
+    const fetchMock = vi.fn(
+      async (input: string | URL | Request, _init?: RequestInit) => {
+        void _init;
+        if (String(input) === "/api/guest-report-share-links") {
+          return new Response(JSON.stringify({ ok: true, url: guestUrl }), {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          });
+        }
+        return new Response(JSON.stringify({ ok: true }), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        });
+      },
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+        onNavigate={onNavigate}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "커뮤니티에 공유" }));
+    expect(
+      await screen.findByRole("dialog", { name: "커뮤니티에 공유" }),
+    ).toBeInTheDocument();
+    fireEvent.change(
+      screen.getByPlaceholderText("이 결과를 보고 든 생각을 남겨보세요."),
+      { target: { value: "친구와 같이 이야기해 보고 싶어요." } },
+    );
+    fireEvent.click(screen.getByRole("button", { name: "커뮤니티에 공유" }));
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/feed",
+        expect.objectContaining({ method: "POST" }),
+      );
+    });
+    const feedCall = fetchMock.mock.calls.find(
+      ([input]) => String(input) === "/api/feed",
+    );
+    const requestBody = JSON.parse(
+      String((feedCall?.[1] as RequestInit | undefined)?.body),
+    );
+    expect(requestBody).toMatchObject({
+      action: "create_post",
+      body: `친구와 같이 이야기해 보고 싶어요.\n\n${guestUrl}`,
+      source: "free_text",
+      visibility: "public",
+    });
+    expect(requestBody).not.toHaveProperty("attachments");
+    expect(onNavigate).toHaveBeenCalledWith("/feed");
+  });
+
   it("falls back to guest sharing when a local server id has no signed-in owner", async () => {
     const guestUrl = "https://nuang.app/share/g1.fallback.signature";
     const fetchMock = vi.fn(async (input: string | URL | Request) => {
       if (String(input) === "/api/report-share-links") {
-        return new Response(JSON.stringify({ error: "authentication_required" }), {
-          headers: { "content-type": "application/json" },
-          status: 401,
-        });
+        return new Response(
+          JSON.stringify({ error: "authentication_required" }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 401,
+          },
+        );
       }
       return new Response(JSON.stringify({ ok: true, url: guestUrl }), {
         headers: { "content-type": "application/json" },
