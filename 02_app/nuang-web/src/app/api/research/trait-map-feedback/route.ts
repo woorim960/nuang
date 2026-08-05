@@ -4,7 +4,7 @@ import type { AccountResultSummary } from "@/features/account/account-result-con
 import { readAccountResults } from "@/features/account/server-reads";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
 import { nuangCodeSchema } from "@/features/nuang-code/trait-map-knowledge-contract";
-import { getPublishedTraitMapCustomerGuide } from "@/features/nuang-code/trait-map-customer-guide-registry";
+import { getCustomerApprovedTraitMapGuide } from "@/features/nuang-code/trait-map-customer-guide-registry";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
@@ -86,7 +86,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const guide = getPublishedTraitMapCustomerGuide(parsedBody.data.code);
+  const guide = getCustomerApprovedTraitMapGuide(parsedBody.data.code);
   const chapter = guide?.chapters.find(
     (candidate) => candidate.id === parsedBody.data.chapterId,
   );

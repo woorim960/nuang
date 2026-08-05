@@ -212,23 +212,23 @@ export function getTopicTraitImpactPresentation(
 
   if (snapshot.state === "no_baseline") {
     return {
-      badge: "비교 준비 중",
-      body: "코어 검사를 마치면 이번 답도 함께 살펴 내 뉴앙코드를 만들어요.",
+      badge: "주제 결과만 보기",
+      body: "코어 검사를 마치면 대표 뉴앙 코드를 확인할 수 있어요. 이번 결과는 이 주제를 이해하는 데만 사용해요.",
       changedDomainCount: 0,
       items: [],
-      note: "코어 검사를 마치면 이번 답도 함께 살펴 내 뉴앙코드를 만들어요.",
+      note: "주제검사 결과가 없어지지는 않으며, 지금 본 리포트는 그대로 보관돼요.",
       title: "아직 비교할 뉴앙코드가 없어요",
     };
   }
 
   if (snapshot.state === "insufficient_evidence") {
     return {
-      badge: "이번 결과만 확인",
-      body: "검사 결과는 그대로 볼 수 있고, 현재 뉴앙코드는 달라지지 않았어요.",
+      badge: "주제 결과만 보기",
+      body: "이번 결과는 이 주제를 이해하는 데만 사용하고, 현재 뉴앙 코드는 그대로 유지해요.",
       changedDomainCount: 0,
       items: [],
-      note: "답하기 어려웠던 항목은 억지로 코드 점수로 바꾸지 않았어요.",
-      title: "이번 검사에서는 코드에 반영할 내용이 충분하지 않았어요",
+      note: "주제검사와 대표 성향의 연결이 충분히 확인된 뒤에만 코드 반영 여부를 다시 정해요.",
+      title: "현재 뉴앙 코드는 바뀌지 않아요",
     };
   }
 

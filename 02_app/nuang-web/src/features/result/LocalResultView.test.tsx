@@ -124,10 +124,10 @@ describe("LocalResultView", () => {
     ).toHaveAttribute("href", "/home");
     expectFiveCodeTabs();
     expect(
-      screen.queryByRole("button", {
+      screen.getByRole("button", {
         name: "검사 결과 공유",
       }),
-    ).not.toBeInTheDocument();
+    ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "이 결과 삭제" }),
     ).toBeInTheDocument();
@@ -230,7 +230,7 @@ describe("LocalResultView", () => {
     expect(screen.queryByText(/계정에 저장/)).not.toBeInTheDocument();
   });
 
-  it("retries account saving from the share action after a temporary claim error", async () => {
+  it("keeps summary sharing available after a temporary account-save error", async () => {
     const user = userEvent.setup();
     storageMock.getLocalAttempt.mockResolvedValue(
       buildCompletedAttempt(candidateFullCoreAssessment),
@@ -280,22 +280,20 @@ describe("LocalResultView", () => {
 
     expect(
       await screen.findByText(
-        "결과는 이 기기에 남아 있어요. 공유 버튼을 누르면 계정 저장을 다시 시도해요.",
+        "계정 저장은 잠시 뒤 다시 시도해요. 지금도 결과 요약은 공유할 수 있어요.",
       ),
     ).toBeInTheDocument();
     await user.click(screen.getByRole("button", { name: "검사 결과 공유" }));
 
-    await waitFor(() => {
-      expect(
-        fetchMock.mock.calls.filter(
-          ([url, init]) =>
-            url === "/api/claim-result" && init?.method === "POST",
-        ),
-      ).toHaveLength(2);
-    });
     expect(
-      await screen.findByRole("button", { name: "검사 결과 공유" }),
+      await screen.findByRole("dialog", { name: "결과 공유" }),
     ).toBeInTheDocument();
+    expect(
+      fetchMock.mock.calls.filter(
+        ([url, init]) =>
+          url === "/api/claim-result" && init?.method === "POST",
+      ),
+    ).toHaveLength(1);
   });
 
   it("copies a generated common report share link", async () => {

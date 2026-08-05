@@ -10,10 +10,14 @@ import {
 
 export default async function FreeTopicResultPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ localResultId: string; slug: string }>;
+  searchParams: Promise<{ share?: string | string[] }>;
 }) {
   const { localResultId, slug } = await params;
+  const query = await searchParams;
+  const share = Array.isArray(query.share) ? query.share[0] : query.share;
   let resolution = await resolveAssessmentRuntimeContent({
     category: "topic",
     slug,
@@ -42,6 +46,7 @@ export default async function FreeTopicResultPage({
     <FreeTopicResultView
       assessmentOverride={payload?.assessment}
       localResultId={localResultId}
+      openShareOnMount={share === "1"}
       questionsOverride={payload?.questions}
       slug={slug}
     />

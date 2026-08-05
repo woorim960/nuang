@@ -3,8 +3,8 @@
 - 기준일: 2026-08-05
 - 출시 후보: NUANG MVP
 - 기능 도메인: 18개
-- 앱 진입 표면: 176개 (화면 90, API·callback 83, layout 3)
-- 자동 테스트: 480개 파일, 정적 집계 1967개 테스트 케이스
+- 앱 진입 표면: 186개 (화면 91, API·callback 86, layout 9)
+- 자동 테스트: 494개 파일, 정적 집계 2016개 테스트 케이스
 
 이 문서는 `src/app`의 모든 `page.tsx`, `route.ts`, `layout.tsx`를 실제 파일에서 수집해 기능 도메인과 연결한 출시 인벤토리다. 기능·화면·API가 추가됐는데 분류나 테스트 근거가 없으면 `npm run release:inventory:check`가 실패한다.
 
@@ -14,24 +14,24 @@
 
 | ID                         | 기능 도메인                  | 앱 표면 | 테스트 근거 |
 | -------------------------- | ---------------------------- | ------: | ----------: |
-| `admin_operations`         | 관리자와 운영 통제           |      42 |           4 |
+| `admin_operations`         | 관리자와 운영 통제           |      45 |           4 |
 | `advertising`              | 광고와 제휴 문의             |       9 |           4 |
 | `marketing_email`          | 마케팅 이메일                |       3 |           4 |
-| `research`                 | 연구 참여와 분석             |      13 |           4 |
+| `research`                 | 연구 참여와 분석             |      14 |           4 |
 | `together_balance_game`    | 함께하는 밸런스 게임         |      13 |           4 |
 | `public_profile_safety`    | 공개 프로필과 소셜 안전      |      10 |           4 |
 | `community_feed`           | 커뮤니티 피드                |      15 |           4 |
 | `public_comparison`        | 1:1 성향 비교                |       6 |           4 |
-| `sharing`                  | 결과 공유                    |       5 |           4 |
+| `sharing`                  | 결과 공유                    |       6 |           6 |
 | `feedback_analytics`       | 피드백과 제품 분석           |       5 |           4 |
 | `auth_consent_onboarding`  | 온보딩·로그인·동의           |      10 |           4 |
-| `account_my`               | 마이·계정·개인 데이터        |      21 |           4 |
+| `account_my`               | 마이·계정·개인 데이터        |      22 |           4 |
 | `assessments`              | 코어·주제·친구 검사          |       6 |           4 |
-| `labs_help`                | 별난 성향 연구소와 도움 연결 |       4 |           4 |
+| `labs_help`                | 별난 성향 연구소와 도움 연결 |       5 |           4 |
 | `nuang_code_map`           | 뉴앙 코드와 성향지도         |       2 |           4 |
-| `result_reports`           | 결과 리포트                  |       3 |           4 |
+| `result_reports`           | 결과 리포트                  |       6 |           4 |
 | `home_navigation`          | 앱 셸·홈·주요 내비게이션     |       6 |           4 |
-| `policy_security_platform` | 정책·보안·플랫폼 기반        |       3 |           4 |
+| `policy_security_platform` | 정책·보안·플랫폼 기반        |       3 |           6 |
 
 ## 관리자와 운영 통제
 
@@ -73,6 +73,7 @@
 | `/admin/community`                                    | page                  | `src/app/admin/community/page.tsx`                                    |
 | `/admin/consents`                                     | page                  | `src/app/admin/consents/page.tsx`                                     |
 | `/admin/content`                                      | page                  | `src/app/admin/content/page.tsx`                                      |
+| `/admin/content/trait-map`                            | page                  | `src/app/admin/content/trait-map/page.tsx`                            |
 | `/admin/events`                                       | page                  | `src/app/admin/events/page.tsx`                                       |
 | `/admin/experiences`                                  | page                  | `src/app/admin/experiences/page.tsx`                                  |
 | `/admin/feedback`                                     | page                  | `src/app/admin/feedback/page.tsx`                                     |
@@ -107,6 +108,8 @@
 | `/api/admin/research/decisions`                       | POST                  | `src/app/api/admin/research/decisions/route.ts`                       |
 | `/api/admin/research/gate-c/rewards`                  | GET, POST             | `src/app/api/admin/research/gate-c/rewards/route.ts`                  |
 | `/api/admin/research/refresh`                         | POST                  | `src/app/api/admin/research/refresh/route.ts`                         |
+| `/api/admin/trait-map-guide-content`                  | POST                  | `src/app/api/admin/trait-map-guide-content/route.ts`                  |
+| `/api/admin/trait-map-guide-review`                   | POST                  | `src/app/api/admin/trait-map-guide-review/route.ts`                   |
 
 ## 광고와 제휴 문의
 
@@ -217,6 +220,7 @@
 | `/api/research/gate-c/sessions/[sessionId]/complete` | POST              | `src/app/api/research/gate-c/sessions/[sessionId]/complete/route.ts` |
 | `/api/research/gate-c/submissions`                   | DELETE            | `src/app/api/research/gate-c/submissions/route.ts`                   |
 | `/api/research/trait-map-feedback`                   | GET, POST         | `src/app/api/research/trait-map-feedback/route.ts`                   |
+| `/research`                                          | layout            | `src/app/research/layout.tsx`                                        |
 | `/research`                                          | page              | `src/app/research/page.tsx`                                          |
 | `/research/gate-c`                                   | page              | `src/app/research/gate-c/page.tsx`                                   |
 | `/research/gate-c/[formId]`                          | page              | `src/app/research/gate-c/[formId]/page.tsx`                          |
@@ -411,6 +415,7 @@
 ### 제공 기능
 
 - 30일 만료 공유 주소 생성
+- 비회원 결과 요약의 180일 만료 서명 주소 생성
 - token hash 기반 공개 조회와 철회
 - 만료·철회·삭제·비활성 상태 처리
 - 결과 리포트의 피드 공유 projection
@@ -425,18 +430,21 @@
 
 - `src/features/share/ReportShareSheet.test.tsx`
 - `src/features/share/public-share-server.test.ts`
+- `src/features/share/server-guest-report-share-token.test.ts`
 - `src/app/share/[token]/page.test.tsx`
 - `src/app/api/report-share-links/route.test.ts`
+- `src/app/api/guest-report-share-links/route.test.ts`
 
 ### 화면·API 진입점
 
-| 경로                      | 종류·메서드 | 소스                                      |
-| ------------------------- | ----------- | ----------------------------------------- |
-| `/api/report-share-links` | POST        | `src/app/api/report-share-links/route.ts` |
-| `/api/revoke-share`       | POST        | `src/app/api/revoke-share/route.ts`       |
-| `/api/share-links`        | POST        | `src/app/api/share-links/route.ts`        |
-| `/feed/reports/[postId]`  | page        | `src/app/feed/reports/[postId]/page.tsx`  |
-| `/share/[token]`          | page        | `src/app/share/[token]/page.tsx`          |
+| 경로                            | 종류·메서드 | 소스                                            |
+| ------------------------------- | ----------- | ----------------------------------------------- |
+| `/api/guest-report-share-links` | POST        | `src/app/api/guest-report-share-links/route.ts` |
+| `/api/report-share-links`       | POST        | `src/app/api/report-share-links/route.ts`       |
+| `/api/revoke-share`             | POST        | `src/app/api/revoke-share/route.ts`             |
+| `/api/share-links`              | POST        | `src/app/api/share-links/route.ts`              |
+| `/feed/reports/[postId]`        | page        | `src/app/feed/reports/[postId]/page.tsx`        |
+| `/share/[token]`                | page        | `src/app/share/[token]/page.tsx`                |
 
 ## 피드백과 제품 분석
 
@@ -561,6 +569,7 @@
 | `/api/me/onboarding`                         | GET, PATCH         | `src/app/api/me/onboarding/route.ts`                         |
 | `/api/me/profile`                            | GET, PATCH         | `src/app/api/me/profile/route.ts`                            |
 | `/my`                                        | page               | `src/app/(tabs)/my/page.tsx`                                 |
+| `/my`                                        | layout             | `src/app/my/layout.tsx`                                      |
 | `/my/events`                                 | page               | `src/app/my/events/page.tsx`                                 |
 | `/my/profile`                                | page               | `src/app/my/profile/page.tsx`                                |
 | `/my/profile/edit`                           | page               | `src/app/my/profile/edit/page.tsx`                           |
@@ -643,12 +652,13 @@
 
 ### 화면·API 진입점
 
-| 경로                  | 종류·메서드 | 소스                                  |
-| --------------------- | ----------- | ------------------------------------- |
-| `/api/lab-results`    | POST        | `src/app/api/lab-results/route.ts`    |
-| `/help`               | page        | `src/app/help/page.tsx`               |
-| `/labs/[slug]`        | page        | `src/app/labs/[slug]/page.tsx`        |
-| `/labs/[slug]/result` | page        | `src/app/labs/[slug]/result/page.tsx` |
+| 경로                  | 종류·메서드 | 소스                                    |
+| --------------------- | ----------- | --------------------------------------- |
+| `/api/lab-results`    | POST        | `src/app/api/lab-results/route.ts`      |
+| `/help`               | page        | `src/app/help/page.tsx`                 |
+| `/labs/[slug]`        | page        | `src/app/labs/[slug]/page.tsx`          |
+| `/labs/[slug]/result` | layout      | `src/app/labs/[slug]/result/layout.tsx` |
+| `/labs/[slug]/result` | page        | `src/app/labs/[slug]/result/page.tsx`   |
 
 ## 뉴앙 코드와 성향지도
 
@@ -716,7 +726,10 @@
 
 | 경로                                                | 종류·메서드 | 소스                                                                |
 | --------------------------------------------------- | ----------- | ------------------------------------------------------------------- |
+| `/assessments/topics/[slug]/result`                 | layout      | `src/app/assessments/topics/[slug]/result/layout.tsx`               |
 | `/assessments/topics/[slug]/result/[localResultId]` | page        | `src/app/assessments/topics/[slug]/result/[localResultId]/page.tsx` |
+| `/reports`                                          | layout      | `src/app/reports/layout.tsx`                                        |
+| `/results`                                          | layout      | `src/app/results/layout.tsx`                                        |
 | `/results/account/[resultReportId]`                 | page        | `src/app/results/account/[resultReportId]/page.tsx`                 |
 | `/results/local/[localResultId]`                    | page        | `src/app/results/local/[localResultId]/page.tsx`                    |
 
@@ -763,11 +776,13 @@
 
 기능 ID: `policy_security_platform`
 
-정책 문서, noindex, CSP, 환경 닫힘 상태, Supabase 경계, 전역 테마와 오류 처리를 출시 기준으로 유지한다.
+정책 문서, 검색 노출, noindex, CSP, 환경 닫힘 상태, Supabase 경계, 전역 테마와 오류 처리를 출시 기준으로 유지한다.
 
 ### 제공 기능
 
 - 이용약관·개인정보 처리방침 표시와 승인 상태
+- 검색엔진별 고유 제목·설명·대표 이미지와 canonical 제공
+- 사이트맵·robots·구조화 데이터·파비콘·앱 아이콘 관리
 - 공개하면 안 되는 화면의 noindex
 - CSP 보고 수집과 보안 헤더
 - 환경 변수 누락 시 명시적 closed state
@@ -779,12 +794,15 @@
 
 - `src/features/policy`
 - `src/features/copy`
+- `src/features/seo`
 - `src/lib/api`
 - `src/lib/supabase`
 
 ### 자동 테스트 근거
 
 - `src/features/policy/PolicySkeletonView.test.tsx`
+- `src/features/seo/site-config.test.ts`
+- `src/app/seo-routes.test.ts`
 - `src/app/noindex-metadata.test.ts`
 - `src/lib/api/closed-state.test.ts`
 - `src/app/api/security/csp-report/route.test.ts`

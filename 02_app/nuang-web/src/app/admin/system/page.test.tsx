@@ -15,12 +15,12 @@ vi.mock("@/features/admin/server-admin-system", () => ({
 }));
 
 describe("AdminSystemPage beta release gates", () => {
-  it("shows only the release candidate as required work and keeps deferrals unapproved", async () => {
+  it("shows all required gates complete and keeps deferrals unapproved", async () => {
     render(await AdminSystemPage());
 
-    expect(screen.getByText("필수 5/6")).toBeInTheDocument();
+    expect(screen.getByText("필수 6/6")).toBeInTheDocument();
     expect(
-      screen.getByText("베타 출시 전에 1개 필수 조건을 해결해야 합니다"),
+      screen.getByText("뉴앙 베타 운영 준비가 완료됐습니다"),
     ).toBeInTheDocument();
     expect(screen.getByText("베타 내부 기준 완료")).toBeInTheDocument();
     expect(screen.getByText("외부 승인 아님 · 유예")).toBeInTheDocument();

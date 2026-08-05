@@ -124,8 +124,7 @@ export function CandidateCoreResultView({
   const nextPosition = (selectedPosition + 1) % candidateAxisCopy.length;
   const isQuickResult = isCandidateQuickRelease(attempt);
   const isShareAvailable =
-    Boolean(shareReportId) &&
-    (isQuickResult || isCandidateFullRelease(attempt));
+    isQuickResult || isCandidateFullRelease(attempt);
   const resultLabel = isQuickResult ? "첫 성향 결과" : "정밀 성향 결과";
   const precisionHref = isQuickResult
     ? buildPrecisionIntroHref({

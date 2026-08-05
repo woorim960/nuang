@@ -17,14 +17,14 @@ describe("core result report content snapshot v2", () => {
     expect(snapshot.schemaVersion).toBe(
       "nuang-core-result-content-snapshot.v2",
     );
-    expect(snapshot.guideVersion).toBe("ENAKQ-CUSTOMER-GUIDE-2.0");
+    expect(snapshot.guideVersion).toBe("ENAKQ-CUSTOMER-GUIDE-4.0-BETA-AI");
     expect(snapshot.excerptManifestDigest).toMatch(/^fnv1a32x2:[a-f0-9]{16}$/);
     expect(snapshot.sections.length).toBeGreaterThan(5);
     expect(snapshot.sections).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           contentKey: "guide.ENAKQ.contexts",
-          contentVersion: "ENAKQ-CUSTOMER-GUIDE-2.0",
+          contentVersion: "ENAKQ-CUSTOMER-GUIDE-4.0-BETA-AI",
           sourceClass: "current_customer_guide",
         }),
       ]),

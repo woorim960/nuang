@@ -14,6 +14,7 @@ import {
   buildFreeTopicPersonalizedSummary,
 } from "@/features/assessment/free-topic-long-report";
 import type { AssessmentUnsureReason } from "@/features/assessment/types";
+import { canTopicEvidenceUpdateRepresentativeCode } from "@/features/assessment/topic-representative-code-policy";
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 
 export type FreeTopicCategoryId =
@@ -1577,8 +1578,8 @@ export function buildFreeTopicResultReport({
 
   return {
     averageScore,
-    confidenceCopy: buildConfidenceCopy({ assessment, result, signals }),
-    confidenceLabel: buildConfidenceLabel({ assessment, result, signals }),
+    confidenceCopy: buildConfidenceCopy({ assessment }),
+    confidenceLabel: buildConfidenceLabel({ assessment }),
     headline:
       personalizedSummary?.title ??
       buildReportHeadline({ assessment, signals }),
@@ -1656,7 +1657,12 @@ export function buildFreeTopicEvidenceObservations({
   responseQuality?: number;
   scoresByTargetId: Record<string, number | null | undefined>;
 }): TraitEvidenceObservation[] {
-  if (assessment.evidenceUse === "blocked") return [];
+  if (
+    assessment.evidenceUse === "blocked" ||
+    !canTopicEvidenceUpdateRepresentativeCode({ slug: assessment.slug })
+  ) {
+    return [];
+  }
 
   const mappingByTarget = new Map(
     assessment.mappings.map((mapping) => [
@@ -1879,7 +1885,7 @@ function buildFreeTopicReportSignal({
     label: boundedScore < 45 ? display.lowLabel : display.label,
     levelLabel: level.label,
     roleLabel:
-      getMappingRank(assessment, targetId) === 1 ? "보조 참고" : "핵심 반영",
+      getMappingRank(assessment, targetId) === 1 ? "함께 본 모습" : "주요 모습",
     score: boundedScore,
   };
 }
@@ -2064,50 +2070,36 @@ function buildReportHeadline({
 
 function buildConfidenceLabel({
   assessment,
-  result,
-  signals,
 }: {
   assessment: FreeTopicAssessment;
-  result: Pick<FreeTopicScoreResult, "observations">;
-  signals: FreeTopicReportSignal[];
 }) {
   if (assessment.reportMode === "independent_dimensions") {
     if (assessment.responseScale === "need_5") return "최근 필요 기록";
     if (assessment.responseScale === "helpfulness_5") return "최근 도움 기록";
     return "최근 행동 기록";
   }
-  if (assessment.evidenceUse === "blocked") return "주제별 결과";
-  if (result.observations.length >= 3 && signals.length >= 3)
-    return "누적 반영 가능";
-  return "참고 신호";
+  return "주제별 결과";
 }
 
 function buildConfidenceCopy({
   assessment,
-  result,
-  signals,
 }: {
   assessment: FreeTopicAssessment;
-  result: Pick<FreeTopicScoreResult, "observations">;
-  signals: FreeTopicReportSignal[];
 }) {
   if (
     assessment.reportMode === "independent_dimensions" &&
     assessment.responseScale === "need_5"
   ) {
-    return "최근 6개월의 힘든 상황에서 어떤 도움이 필요했는지 정리한 결과예요. 비슷한 성향이 다른 주제에서도 반복되면 현재 뉴앙 코드에 함께 반영돼요.";
+    return "최근 6개월의 힘든 상황에서 어떤 도움이 필요했는지 정리한 결과예요. 이번 결과는 현재 뉴앙 코드를 바꾸지 않고, 이 주제를 이해하는 데 사용해요.";
   }
   if (
     assessment.reportMode === "independent_dimensions" &&
     assessment.responseScale === "frequency_5"
   ) {
-    return `${assessment.recallPeriodLabel ?? "최근 4주"}의 실제 행동을 정리한 결과예요. 비슷한 성향이 다른 주제에서도 반복되면 현재 뉴앙 코드에 함께 반영돼요.`;
-  }
-  if (assessment.evidenceUse === "blocked") {
-    return "이 결과는 이 주제 안에서 나를 이해하고 추천을 더 섬세하게 만드는 데 사용돼요.";
+    return `${assessment.recallPeriodLabel ?? "최근 4주"}의 실제 행동을 정리한 결과예요. 이번 결과는 현재 뉴앙 코드를 바꾸지 않고, 이 주제를 이해하는 데 사용해요.`;
   }
 
-  return `${signals.length}개 세부 신호와 ${result.observations.length}개 승인된 관찰값을 참고했어요. 대표 성향은 여러 검사에서 같은 방향이 반복될 때만 조심스럽게 업데이트돼요.`;
+  return "이번 답에서 보인 모습을 이 주제 안에서 정리했어요. 현재 뉴앙 코드는 그대로 유지돼요.";
 }
 
 const freeTopicTargetCopy: Record<
@@ -2366,7 +2358,7 @@ function buildResultSummary({
   observations: TraitEvidenceObservation[];
 }) {
   if (assessment.evidenceUse === "blocked" || observations.length === 0) {
-    return "이 결과는 취향과 추천을 더 섬세하게 만드는 참고 신호로만 사용돼요.";
+    return "이 결과는 현재 뉴앙 코드를 바꾸지 않고, 이 주제 안에서 내 모습을 이해하는 데 사용돼요.";
   }
 
   return "이 결과는 여러 검사와 함께 누적되어 현재 대표 성향을 더 정교하게 이해하는 데 사용돼요.";

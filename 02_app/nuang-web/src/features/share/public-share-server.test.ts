@@ -64,7 +64,7 @@ describe("public share server read", () => {
     const result = await readPublicShareToken("public-token");
 
     expect(result.status).toBe("active");
-    if (result.status !== "active") return;
+    if (result.status !== "active" || result.shareKind !== "account_core") return;
     expect(result.model.result.code).toBe("ENAKQ");
     expect(result.model.result.domains).toEqual([]);
     expect(result.model.identity.originResultId).toBeNull();

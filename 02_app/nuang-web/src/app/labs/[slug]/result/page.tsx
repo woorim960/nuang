@@ -9,7 +9,10 @@ import {
 
 type LabResultPageProps = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ localResultId?: string }>;
+  searchParams: Promise<{
+    localResultId?: string | string[];
+    share?: string | string[];
+  }>;
 };
 
 export default async function LabResultPage({
@@ -17,7 +20,11 @@ export default async function LabResultPage({
   searchParams,
 }: LabResultPageProps) {
   const { slug } = await params;
-  const { localResultId } = await searchParams;
+  const query = await searchParams;
+  const localResultId = Array.isArray(query.localResultId)
+    ? query.localResultId[0]
+    : query.localResultId;
+  const share = Array.isArray(query.share) ? query.share[0] : query.share;
   let resolution = await resolveAssessmentRuntimeContent({
     category: "lab",
     slug,
@@ -44,6 +51,7 @@ export default async function LabResultPage({
     <LabResultView
       assessment={assessment}
       localResultId={localResultId}
+      openShareOnMount={share === "1"}
     />
   );
 }

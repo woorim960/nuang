@@ -299,22 +299,6 @@ export function LocalResultView({
     );
   }
 
-  const canRequestUnavailableShare =
-    !serverResultReportId &&
-    (claimState === "error" ||
-      claimState === "unauthenticated" ||
-      claimState === "missing_consent");
-
-  function handleUnavailableShareRequest() {
-    if (claimState === "error") {
-      setClaimState("idle");
-      return;
-    }
-
-    const next = `/results/local/${localResultId}?share=1`;
-    router.push(`/login?reason=share&next=${encodeURIComponent(next)}`);
-  }
-
   if (isCandidateResult) {
     const isPersistableCandidate =
       isCandidateQuickRelease(attempt) || isCandidateFullRelease(attempt);
@@ -348,9 +332,6 @@ export function LocalResultView({
         }
         deletePending={deleteState === "working"}
         onDelete={() => void handleDeleteResult()}
-        onShareRequest={
-          canRequestUnavailableShare ? handleUnavailableShareRequest : undefined
-        }
         openShareOnMount={openShareOnMount}
         result={result}
         shareReportId={serverResultReportId ?? undefined}
@@ -380,14 +361,11 @@ export function LocalResultView({
         deletePending={deleteState === "working"}
         model={unifiedLegacyModel}
         onDelete={() => void handleDeleteResult()}
-        onShareUnavailable={
-          canRequestUnavailableShare ? handleUnavailableShareRequest : undefined
-        }
         originalReportKey={
           serverResultReportId ? `core_${serverResultReportId}` : undefined
         }
         precisionHref={legacyPrecisionHref}
-        shareEnabled={Boolean(serverResultReportId)}
+        shareEnabled
         statusMessage={getClaimStatusMessage(claimState)}
         surface="completion"
       />
@@ -503,20 +481,16 @@ export function LocalResultView({
         <p className="truncate px-2 text-center text-sm font-bold">
           결과 리포트
         </p>
-        {serverResultReportId ? (
-          <button
-            aria-haspopup="dialog"
-            aria-label="검사 결과 공유"
-            className="grid h-10 w-10 place-items-center rounded-full text-ink hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40"
-            onClick={() => setIsShareOpen(true)}
-            ref={shareButtonRef}
-            type="button"
-          >
-            <Share2 aria-hidden="true" size={20} strokeWidth={1.9} />
-          </button>
-        ) : (
-          <span aria-hidden="true" />
-        )}
+        <button
+          aria-haspopup="dialog"
+          aria-label="검사 결과 공유"
+          className="grid h-10 w-10 place-items-center rounded-full text-ink hover:bg-surface disabled:cursor-not-allowed disabled:opacity-40"
+          onClick={() => setIsShareOpen(true)}
+          ref={shareButtonRef}
+          type="button"
+        >
+          <Share2 aria-hidden="true" size={20} strokeWidth={1.9} />
+        </button>
       </header>
 
       <section className="border-b border-line pb-6 pt-7">
@@ -711,16 +685,16 @@ export function LocalResultView({
           </p>
         )}
       </section>
-      {serverResultReportId ? (
-        <ReportShareSheet
-          content={shareContent}
-          isOpen={isShareOpen}
-          onClose={() => setIsShareOpen(false)}
-          onNavigate={(href) => router.push(href)}
-          originalReportKey={`core_${serverResultReportId}`}
-          returnFocusRef={shareButtonRef}
-        />
-      ) : null}
+      <ReportShareSheet
+        content={shareContent}
+        isOpen={isShareOpen}
+        onClose={() => setIsShareOpen(false)}
+        onNavigate={(href) => router.push(href)}
+        originalReportKey={
+          serverResultReportId ? `core_${serverResultReportId}` : undefined
+        }
+        returnFocusRef={shareButtonRef}
+      />
     </main>
   );
 }
@@ -990,10 +964,10 @@ function getClaimStatusMessage(
   if (state === "saving")
     return "다른 기기에서도 볼 수 있도록 저장하고 있어요.";
   if (state === "error") {
-    return "결과는 이 기기에 남아 있어요. 공유 버튼을 누르면 계정 저장을 다시 시도해요.";
+    return "계정 저장은 잠시 뒤 다시 시도해요. 지금도 결과 요약은 공유할 수 있어요.";
   }
   if (state === "missing_consent") {
-    return "공유하려면 로그인 화면에서 필수 항목을 확인해 주세요.";
+    return "계정에 저장하려면 로그인 화면에서 필수 항목을 확인해 주세요. 결과 요약은 지금도 공유할 수 있어요.";
   }
   return null;
 }

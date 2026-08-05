@@ -12,9 +12,7 @@ import {
   type TraitMapCustomerGuideChapter,
 } from "@/features/nuang-code/trait-map-customer-guide-contract";
 
-type Profile = NonNullable<
-  ReturnType<typeof getCandidateProfileDefinition>
->;
+type Profile = NonNullable<ReturnType<typeof getCandidateProfileDefinition>>;
 
 type GuideContext = {
   code: string;
@@ -71,7 +69,7 @@ const evidenceReferences = [
   },
   {
     description:
-      "관계 만족에서 본인과 상대의 성향이 어떤 관련을 갖는지 살펴본 부부 표본 연구",
+      "세 나라의 부부 표본에서 본인·상대 성향과 관계 만족의 관련성을 비교하고, 성향만으로 설명되는 범위가 제한적임을 보여준 연구",
     href: "https://pubmed.ncbi.nlm.nih.gov/20718544/",
     title: "Dyrenforth et al. (2010), Personality and Relationships",
   },
@@ -90,46 +88,39 @@ const axisStories: Readonly<Record<CandidateCodeSymbol, AxisStory>> = {
     action:
       "필요한 순간에 먼저 말을 꺼내고, 다른 사람의 반응을 받으며 다음 행동을 정해요",
     benefit:
-      "대화를 열고 여러 사람의 참여를 끌어내 함께 움직이게 하는 힘이 있어요",
+      "이 방식은 대화를 시작하고 함께 참여할 사람을 찾는 데 도움이 될 수 있어요",
     focus: "사람들과 말을 주고받으며 생각을 또렷하게 만드는 것",
-    need:
-      "계속 사람에게 맞추느라 지치지 않도록 혼자 쉬며 생각을 정리하는 시간도 필요해요",
+    need: "계속 사람에게 맞추느라 지치지 않도록 혼자 쉬며 생각을 정리하는 시간도 필요해요",
     sequence: "사람들과 이야기하며 생각을 깨운다",
   },
   I: {
     symbol: "I",
     thought: "혼자 생각을 정리할 시간이 있을 때 핵심이 더 분명해져요",
-    action:
-      "먼저 분위기와 정보를 살핀 뒤, 꼭 필요한 말과 행동을 골라 보여줘요",
+    action: "먼저 분위기와 정보를 살핀 뒤, 꼭 필요한 말과 행동을 골라 보여줘요",
     benefit:
-      "복잡한 상황에서도 중요한 내용을 차분히 정리하고 깊이 있는 의견을 내는 힘이 있어요",
+      "이 방식은 복잡한 상황에서 중요한 내용을 차분히 정리하는 데 도움이 될 수 있어요",
     focus: "혼자 생각을 정리하며 핵심을 분명하게 만드는 것",
-    need:
-      "준비가 끝날 때까지 기다리기보다 필요한 말은 짧게라도 미리 알려주는 것이 좋아요",
+    need: "준비가 끝날 때까지 기다리기보다 필요한 말은 짧게라도 미리 알려주는 것이 좋아요",
     sequence: "혼자 핵심을 정리한다",
   },
   R: {
     symbol: "R",
     thought: "직접 확인한 사실과 실제 경험부터 살펴봐요",
-    action:
-      "지금 바로 쓸 수 있는 방법과 구체적인 다음 행동을 찾아요",
+    action: "지금 바로 쓸 수 있는 방법과 구체적인 다음 행동을 찾아요",
     benefit:
-      "막연한 생각을 생활에서 실행할 수 있는 선택으로 바꾸는 힘이 있어요",
+      "이 방식은 막연한 생각을 생활에서 시도할 선택으로 바꾸는 데 도움이 될 수 있어요",
     focus: "직접 확인한 사실과 실제 경험부터 살피는 것",
-    need:
-      "익숙한 방법만 고집하지 않도록 아직 시도하지 않은 선택도 한 번 열어두면 좋아요",
+    need: "익숙한 방법만 고집하지 않도록 아직 시도하지 않은 선택도 한 번 열어두면 좋아요",
     sequence: "확인된 사실부터 살핀다",
   },
   N: {
     symbol: "N",
     thought: "보이는 내용 너머의 의미와 새로운 가능성을 더 찾아봐요",
-    action:
-      "서로 다른 생각을 연결하고, 기존과 다른 방법을 제안해요",
+    action: "서로 다른 생각을 연결하고, 기존과 다른 방법을 제안해요",
     benefit:
-      "익숙한 문제에서 새로운 관점과 다음 가능성을 발견하는 힘이 있어요",
+      "이 방식은 익숙한 문제에서 다른 관점과 다음 가능성을 찾는 데 도움이 될 수 있어요",
     focus: "보이는 내용 너머의 의미와 새로운 가능성을 찾아보는 것",
-    need:
-      "아이디어가 많아질수록 지금 가장 먼저 해볼 한 가지를 정하는 것이 좋아요",
+    need: "아이디어가 많아질수록 지금 가장 먼저 해볼 한 가지를 정하는 것이 좋아요",
     sequence: "새로운 가능성을 넓힌다",
   },
   G: {
@@ -138,10 +129,9 @@ const axisStories: Readonly<Record<CandidateCodeSymbol, AxisStory>> = {
     action:
       "원인을 확인하는 질문을 하고, 실제로 도움이 될 해결 방법을 제안해요",
     benefit:
-      "문제를 사람 탓으로 돌리기보다 바꿀 수 있는 부분을 찾아 해결하는 힘이 있어요",
+      "이 방식은 사람을 탓하기 전에 바꿀 수 있는 부분을 찾는 데 도움이 될 수 있어요",
     focus: "문제를 만든 원인과 바꿀 수 있는 부분을 찾는 것",
-    need:
-      "해결책을 말하기 전에 상대가 지금 원하는 것이 위로인지 방법인지 물어보면 좋아요",
+    need: "해결책을 말하기 전에 상대가 지금 원하는 것이 위로인지 방법인지 물어보면 좋아요",
     sequence: "원인과 해결할 부분을 찾는다",
   },
   A: {
@@ -150,58 +140,52 @@ const axisStories: Readonly<Record<CandidateCodeSymbol, AxisStory>> = {
     action:
       "상대의 경험을 먼저 듣고, 마음이 편안해질 수 있는 말과 행동을 골라요",
     benefit:
-      "결과뿐 아니라 사람에게 남을 마음까지 살펴 관계를 이어가는 힘이 있어요",
+      "이 방식은 결과와 함께 상대에게 남을 마음을 살피는 데 도움이 될 수 있어요",
     focus: "상대의 마음과 관계에 필요한 것을 살피는 것",
-    need:
-      "상대의 마음을 오래 짐작하기보다 원하는 도움을 직접 물어보는 것이 좋아요",
+    need: "상대의 마음을 오래 짐작하기보다 원하는 도움을 직접 물어보는 것이 좋아요",
     sequence: "상대의 마음을 살핀다",
   },
   K: {
     symbol: "K",
     thought: "해야 할 일과 순서, 끝낸 것으로 볼 기준을 먼저 정해요",
-    action:
-      "중간에 흐름이 끊겨도 다시 이어가며 약속한 일을 마무리해요",
+    action: "중간에 흐름이 끊겨도 다시 이어가며 약속한 일을 마무리해요",
     benefit:
-      "좋은 생각과 약속을 실제 결과까지 꾸준히 이어가는 힘이 있어요",
+      "이 방식은 생각과 약속을 정한 시점까지 이어가는 데 도움이 될 수 있어요",
     focus: "할 일과 순서, 마무리할 기준을 분명하게 정하는 것",
-    need:
-      "계획이 바뀌었을 때 처음 순서만 지키려 하지 말고 목표에 맞춰 다시 정하면 좋아요",
+    need: "계획이 바뀌었을 때 처음 순서만 지키려 하지 말고 목표에 맞춰 다시 정하면 좋아요",
     sequence: "할 일과 순서를 정해 이어간다",
   },
   M: {
     symbol: "M",
-    thought: "지금의 에너지와 시간, 주변 상황을 보고 움직이기 쉬운 방법을 골라요",
-    action:
-      "예상 밖의 변화가 생기면 한 방법에 묶이지 않고 다른 길로 바꿔요",
+    thought:
+      "지금의 에너지와 시간, 주변 상황을 보고 움직이기 쉬운 방법을 골라요",
+    action: "예상 밖의 변화가 생기면 한 방법에 묶이지 않고 다른 길로 바꿔요",
     benefit:
-      "변화가 많은 장면에서도 현실에 맞는 방법을 빠르게 다시 찾는 힘이 있어요",
+      "이 방식은 변화가 생겼을 때 지금 가능한 방법을 다시 찾는 데 도움이 될 수 있어요",
     focus: "지금의 시간과 에너지에 맞는 방법을 고르는 것",
-    need:
-      "흥미가 줄어도 꼭 끝내야 하는 일은 아주 작은 마감과 확인 시점을 정하면 좋아요",
+    need: "흥미가 줄어도 꼭 끝내야 하는 일은 아주 작은 마감과 확인 시점을 정하면 좋아요",
     sequence: "지금 움직이기 쉬운 방법으로 바꾼다",
   },
   C: {
     symbol: "C",
-    thought: "불편한 일이 생겨도 걱정이 크게 올라오기 전에 사실과 선택지를 살펴봐요",
-    action:
-      "급한 순간에도 목소리와 행동을 비교적 차분하게 유지하며 대응해요",
+    thought:
+      "불편한 일이 생겨도 걱정이 크게 올라오기 전에 사실과 선택지를 살펴봐요",
+    action: "급한 순간에도 목소리와 행동을 비교적 차분하게 유지하며 대응해요",
     benefit:
-      "문제와 감정을 나누어 보고 지금 할 수 있는 일을 고르는 힘이 있어요",
+      "이 방식은 문제와 감정을 나누어 보고 할 일을 고르는 데 도움이 될 수 있어요",
     focus: "감정이 크게 오르기 전에 사실과 선택지를 살피는 것",
-    need:
-      "당장 괜찮아 보여도 일이 끝난 뒤 몸의 긴장과 뒤늦게 올라오는 감정을 확인하면 좋아요",
+    need: "당장 괜찮아 보여도 일이 끝난 뒤 몸의 긴장과 뒤늦게 올라오는 감정을 확인하면 좋아요",
     sequence: "차분하게 대응한다",
   },
   Q: {
     symbol: "Q",
-    thought: "불확실한 점과 놓치기 쉬운 위험, 관계의 작은 변화를 빠르게 알아차려요",
-    action:
-      "걱정되는 부분을 일찍 확인하고 문제가 커지기 전에 준비하려고 해요",
+    thought:
+      "불확실한 점과 놓치기 쉬운 위험, 관계의 작은 변화를 빠르게 알아차려요",
+    action: "걱정되는 부분을 일찍 확인하고 문제가 커지기 전에 준비하려고 해요",
     benefit:
-      "작은 신호를 놓치지 않고 미리 확인해 중요한 일과 관계를 지키는 힘이 있어요",
+      "이 방식은 작은 변화를 일찍 확인하고 준비할 부분을 찾는 데 도움이 될 수 있어요",
     focus: "불확실한 점과 작은 변화를 빠르게 알아차리는 것",
-    need:
-      "걱정이 커질 때는 확인된 사실과 아직 생각만 한 가능성을 나누어 적으면 좋아요",
+    need: "걱정이 커질 때는 확인된 사실과 아직 생각만 한 가능성을 나누어 적으면 좋아요",
     sequence: "걱정되는 신호를 빠르게 확인한다",
   },
 };
@@ -231,16 +215,18 @@ export function buildTraitMapCustomerGuideV3(
   const chapters = drafts.map((draft, index) => {
     const chapter: TraitMapCustomerGuideChapter = {
       ...draft,
+      checkQuestion: normalizeParagraph(draft.checkQuestion),
       id: `chapter-${String(index + 1).padStart(2, "0")}`,
       number: index + 1,
       slot: traitMapCustomerGuideChapterSlots[index],
+      summary: normalizeParagraph(draft.summary),
     };
     if (chapter.slot === "evidence") {
       chapter.references = [...evidenceReferences];
     }
     return chapter;
   });
-  makeGuideSentencesUnique(chapters);
+  addSceneContextToRepeatedSentences(chapters);
   const totalCharacters = countTraitMapCustomerGuideCharacters(chapters);
   if (totalCharacters < 10_000) {
     throw new Error(
@@ -252,14 +238,16 @@ export function buildTraitMapCustomerGuideV3(
     chapters,
     code: normalizedCode,
     contractVersion: traitMapCustomerGuideContractVersion,
-    heroSummary: `${normalizedCode}는 ${profile.overview.map((item) => item.text).join(" ")} 이런 흐름이 함께 나타나 ‘${profile.displayName}’라는 별칭으로 설명해요.`,
+    heroSummary: normalizeParagraph(
+      `검사 답변에서는 ${profile.overview.map((item) => item.text).join(" ")} 이 다섯 방향을 함께 살펴 ‘${profile.displayName}’이라는 이름으로 소개해요. 이 설명은 능력이나 관계의 결과가 아니라, 최근 답변에서 자주 나타난 생각과 행동을 이해하기 위한 안내예요.`,
+    ),
     profileName: profile.displayName,
     readingMinutes: Math.max(
       10,
       Math.min(60, Math.round(totalCharacters / 650)),
     ),
     totalCharacters,
-    version: `${normalizedCode}-CUSTOMER-GUIDE-3.0`,
+    version: `${normalizedCode}-CUSTOMER-GUIDE-4.0-BETA-AI`,
   });
 }
 
@@ -300,7 +288,7 @@ function buildCoreChapter(context: GuideContext): ChapterDraft {
       ),
       section(
         "생각이 흘러가는 순서",
-        `새로운 일이 생기면 ${code}의 생각은 대체로 ‘${energy.sequence} → ${interest.sequence} → ${relationship.sequence} → ${routine.sequence}’의 순서로 움직여요. 이 흐름이 반복되면서 ${profile.displayName}의 생활 방식이 만들어져요.`,
+        `새로운 일이 생기면 ${code}는 먼저 ‘${energy.focus}’부터 시작해요. 이어서 ‘${interest.focus}’, ‘${relationship.focus}’, ‘${routine.focus}’을 살펴요. 이 순서는 최근 답변에서 비교적 자주 나타난 흐름이에요.`,
         `${emotion.thought} 그래서 같은 문제를 마주해도 걱정과 감정이 올라오는 시점, 확인하고 싶은 정보, 행동을 시작하는 속도에서 ${code}만의 특징이 보여요. 감정의 속도는 나머지 네 글자가 실제 행동으로 이어지는 방식에도 영향을 줘요.`,
       ),
       section(
@@ -333,12 +321,12 @@ function buildRoleChapter(context: GuideContext): ChapterDraft {
       ),
       section(
         "이 이름에 담긴 가치",
-        `${code}는 ${interest.benefit.replace("있어요", "있고")} ${relationship.benefit.replace("있어요", "있어요")} 단순히 멋진 생각을 내는 것보다 자신이 중요하게 본 가치가 실제 관계와 생활에서 도움이 되기를 바라요.`,
+        `${interest.benefit} ${relationship.benefit} ${code}는 새로운 생각을 내는 데서 그치기보다, 중요하게 본 내용을 관계와 생활에서 시도하려는 쪽으로 답했어요.`,
         `${routine.thought} 그래서 선택한 방향을 생활에 맞는 행동으로 옮기는 과정도 중요하게 여겨요. 주변과 함께 움직이는 방식은 달라도, 생각을 실제 경험으로 연결하려는 점이 이 별칭의 중심이에요.`,
       ),
       section(
         "이 이름이 잘 드러나는 순간",
-        `무엇부터 해야 할지 모르는 장면에서 ${code}는 먼저 ${energy.sequence} 그다음 ${interest.sequence} 이어서 ${relationship.sequence} 이렇게 문제를 보는 순서를 잡으면서 ${profile.shortName}의 역할이 자연스럽게 드러나요.`,
+        `무엇부터 해야 할지 모르는 장면에서 ${code}는 먼저 ‘${energy.focus}’에 집중해요. 그다음 ‘${interest.focus}’, ‘${relationship.focus}’을 차례로 살펴요.`,
         `사람들의 생각이 흩어져 있거나 예상 밖의 변화가 생겼을 때도 ${routine.action} 이때 주변에서는 ${code}가 복잡한 장면을 자신만의 기준으로 정리하고 다음 움직임을 만드는 사람처럼 느낄 수 있어요.`,
       ),
       section(
@@ -411,9 +399,7 @@ function buildCombinedChapter(context: GuideContext): ChapterDraft {
   };
 }
 
-function buildThoughtAndResponseChapter(
-  context: GuideContext,
-): ChapterDraft {
+function buildThoughtAndResponseChapter(context: GuideContext): ChapterDraft {
   const { code, emotion, energy, profile, relationship } = context;
   return {
     label: "생각과 반응",
@@ -480,7 +466,7 @@ function buildDailyChapter(context: GuideContext): ChapterDraft {
 }
 
 function buildFamilyChapter(context: GuideContext): ChapterDraft {
-  const { code, energy, profile, relationship, routine } = context;
+  const { code, energy, relationship, routine } = context;
   return {
     label: "가족",
     title: `가족과 함께 있을 때의 ${code}를 알아봐요`,
@@ -496,17 +482,17 @@ function buildFamilyChapter(context: GuideContext): ChapterDraft {
       section(
         "가족과 의견이 다를 때",
         `${energy.symbol === "E" ? "대화를 통해 바로 풀고 싶어 먼저 말을 꺼낼 수 있어요." : "생각을 정리한 뒤 정확하게 말하고 싶어 잠시 조용해질 수 있어요."} 가족은 이 시간을 관심의 크기로 오해하지 않도록 필요한 시간을 알려주면 좋아요.`,
-        `${relationship.symbol === "G" ? "누가 맞는지를 따지기보다 문제를 만든 원인과 바꿀 행동을 정하려 해요." : "각자가 왜 그렇게 느꼈는지 듣고 관계가 편안해질 말을 찾으려 해요."} 서로 원하는 대화 방식부터 맞추면 갈등이 줄어요.`,
+        `${relationship.symbol === "G" ? "누가 맞는지를 따지기보다 문제를 만든 원인과 바꿀 행동을 정하려 해요." : "각자가 왜 그렇게 느꼈는지 듣고 관계가 편안해질 말을 찾으려 해요."} 서로 원하는 대화 방식을 먼저 확인하면 함께 이야기할 지점을 찾는 데 도움이 될 수 있어요.`,
       ),
       section(
         "가족 안에서 자주 맡는 역할",
-        `${profile.shortName}는 가족 안에서 ${relationship.benefit.replace("있어요", "있고")} ${routine.benefit} 그래서 복잡한 일이 생겼을 때 주변에서 자연스럽게 도움을 기대할 수 있어요.`,
+        `가족과 관련된 답변에서는 다음 두 흐름을 함께 살펴볼 수 있어요. ${relationship.benefit} ${routine.benefit} 실제 역할과 기대는 가족 구성원과 상황에 따라 확인해야 해요.`,
         `오래 맡아 온 역할은 성향과 함께 행동에 영향을 줘요. 늘 잘해왔다는 이유로 같은 사람이 계속 책임지지 않도록 역할과 부담을 말로 나누는 것이 가족 관계를 오래 편안하게 만들어요.`,
       ),
       section(
         "서로 편안해지는 방법",
-        `${energy.need} ${relationship.need} 이 두 가지를 가족이 알고 있으면 도움을 주고받는 과정에서 생기는 오해가 크게 줄어요.`,
-        `“지금은 들어주면 돼, 아니면 같이 방법을 찾을까?”라고 먼저 물어보세요. ${code}의 장점을 그대로 쓰면서도 가족이 실제로 원하는 도움과 맞출 수 있는 가장 쉬운 질문이에요.`,
+        `${energy.need} ${relationship.need} 이 두 가지를 가족과 미리 나누면 서로 다르게 이해한 부분을 확인하기 쉬워요.`,
+        `“지금은 들어주면 돼, 아니면 같이 방법을 찾을까?”라고 먼저 물어보세요. ${code}의 익숙한 방식을 가족이 실제로 원하는 도움과 맞출 때 바로 써볼 수 있는 질문이에요.`,
       ),
     ],
   };
@@ -556,7 +542,7 @@ function buildPartnerChapter(context: GuideContext): ChapterDraft {
     sections: [
       section(
         "애정을 표현하는 방식",
-        `${energy.symbol === "E" ? "좋아하는 마음을 말과 함께하는 활동으로 자주 표현해요." : "상대가 했던 말을 기억하고 필요한 순간에 조용히 챙기는 행동으로 마음을 보여줘요."} 표현 방식이 상대와 다르면 사랑의 크기보다 알아듣는 방식이 다른 것일 수 있어요.`,
+        `${energy.symbol === "E" ? "좋아하는 마음을 말과 함께하는 활동으로 자주 표현해요." : "상대가 했던 말을 기억하고 필요한 순간에 조용히 챙기는 행동으로 마음을 보여줘요."} 표현 방식이 상대와 다르면 마음이 적어서가 아니라 서로 익숙한 전달 방식이 다른지 먼저 확인해 봐요.`,
         `${relationship.symbol === "G" ? "상대의 어려움을 실제로 줄여주는 행동과 해결 방법을 찾는 것이 중요한 애정 표현이에요." : "상대가 이해받고 편안하다고 느끼는 말과 시간을 만드는 것이 중요한 애정 표현이에요."} 내가 자주 하는 표현을 상대에게 알려주면 좋아요.`,
       ),
       section(
@@ -578,9 +564,7 @@ function buildPartnerChapter(context: GuideContext): ChapterDraft {
   };
 }
 
-function buildPersonOfInterestChapter(
-  context: GuideContext,
-): ChapterDraft {
+function buildPersonOfInterestChapter(context: GuideContext): ChapterDraft {
   const { code, emotion, energy, interest, relationship } = context;
   return {
     label: "마음 가는 사람",
@@ -631,11 +615,11 @@ function buildWorkChapter(context: GuideContext): ChapterDraft {
       section(
         "함께 의견을 나눌 때",
         `${energy.action} ${relationship.thought} 이 때문에 회의나 공동 과제에서 정보와 사람을 함께 살피며 자신의 기준으로 의견을 정리해요.`,
-        `${relationship.action} 의견이 다를 때는 상대의 결론만 반박하기보다 무엇을 중요하게 보고 그런 생각을 했는지 물으면 ${relationship.benefit.replace("있어요", "살아나요")}`,
+        `${relationship.action} 의견이 다를 때는 결론만 반박하기보다 서로 무엇을 중요하게 보는지 물어보세요. 그러면 판단의 기준을 확인하는 데 도움이 될 수 있어요.`,
       ),
       section(
         "마감과 변화를 다룰 때",
-        `${routine.action} ${routine.symbol === "K" ? "마감과 완료 기준이 분명할수록 안정적으로 실력을 내요." : "중간 결과를 자주 확인하고 방법을 바꿀 여지가 있을 때 실력을 내요."}`,
+        `${routine.action} ${routine.symbol === "K" ? "마감과 완료 기준이 분명할수록 해야 할 일에 집중하기 쉬워요." : "중간 결과를 자주 확인하고 방법을 바꿀 여지가 있을 때 해야 할 일에 집중하기 쉬워요."}`,
         `${emotion.action} 급한 일을 처리한 뒤에는 ${emotion.need} 계속 일할 수 있다는 것과 충분히 회복했다는 것은 다른 일이에요.`,
       ),
       section(
@@ -685,24 +669,24 @@ function buildGrowthChapter(context: GuideContext): ChapterDraft {
     context;
   return {
     label: "강점과 성장",
-    title: `${code}의 강점을 편안하게 오래 쓰는 방법을 알아봐요`,
-    summary: `${code}의 강점은 알맞은 장면에서 충분히 쓰고, 지나치게 쓰기 시작하는 신호를 알아차릴 때 오래 이어져요.`,
+    title: `${code}의 익숙한 방식을 편안하게 오래 쓰는 방법을 알아봐요`,
+    summary: `${code}의 익숙한 방식은 필요한 장면에서 쓰고, 지나치게 쓰기 시작하는 신호를 알아차릴 때 부담 없이 이어가기 쉬워요.`,
     checkQuestion:
       "내 방식이 특히 잘 통했던 장면과 오히려 지치게 만들었던 장면은 무엇이 달랐나요?",
     sections: [
       section(
-        "자연스럽게 잘하는 것",
-        `${energy.benefit} ${interest.benefit} 이 두 힘이 만나면 ${code}는 자신에게 맞는 방식으로 정보를 이해하고 다른 사람과 나눌 수 있어요.`,
-        `${relationship.benefit} ${routine.benefit} 여기에 ${emotion.benefit} 이런 강점이 함께 움직이는 모습이 ${profile.displayName}의 중심이에요.`,
+        "자연스럽게 쓰는 방식",
+        `${energy.benefit} ${interest.benefit} 이 두 흐름이 함께 나타나면 ${code}는 자신에게 익숙한 방식으로 정보를 이해하고 다른 사람과 나누려 해요.`,
+        `${relationship.benefit} ${routine.benefit} ${emotion.benefit} 이런 흐름이 함께 나타나는 모습을 ${profile.displayName}이라는 이름으로 소개해요.`,
       ),
       section(
         "강점을 많이 쓰면 생기는 일",
-        `${energy.need} ${interest.need} 익숙하고 잘하는 방식도 오래 계속하면 피로가 쌓이거나 다른 선택을 놓칠 수 있어요.`,
-        `${relationship.need} ${routine.need} 자신의 좋은 의도가 상대에게 어떻게 전달됐는지 확인하고, 목표보다 부담이 커지는 순간에는 잠시 멈추는 것이 좋아요.`,
+        `${energy.need} ${interest.need} 익숙한 방식도 오래 계속하면 피로가 쌓이거나 다른 선택을 놓칠 수 있어요.`,
+        `${relationship.need} ${routine.need} 내 의도가 상대에게 어떻게 전달됐는지 확인하고, 목표보다 부담이 커지는 순간에는 잠시 멈추는 것이 좋아요.`,
       ),
       section(
         "균형을 되찾는 작은 행동",
-        `${emotion.need} 하루를 마칠 때 ‘오늘 잘 쓴 강점 하나, 지나치게 쓴 강점 하나, 내일 바꿀 행동 하나’를 적으면 스스로를 탓하지 않고 균형을 찾기 쉬워요.`,
+        `${emotion.need} 하루를 마칠 때 ‘오늘 도움이 된 방식 하나, 오래 써서 지친 방식 하나, 내일 바꿀 행동 하나’를 적으면 스스로를 탓하지 않고 균형을 찾기 쉬워요.`,
         `${energy.symbol === "E" ? "대화하기 전에 혼자 핵심을 한 줄로 정리하고" : "생각이 완벽히 정리되기 전에 핵심을 한 줄로 공유하고"}, ${interest.symbol === "N" ? "여러 가능성 중 하나를 실제로 시험하며" : "익숙한 방법 외의 선택을 하나 더 물어보는"} 행동이 도움이 돼요.`,
       ),
       section(
@@ -772,6 +756,11 @@ function buildEvidenceChapter(context: GuideContext): ChapterDraft {
         `가족·친구·연인·일에서 나타나는 모습은 관계 만족, 협력, 스트레스와 회복에 관한 연구를 함께 참고해요. 연구 용어를 그대로 옮기지 않고, ${code}의 다섯 성향과 연결되는 일상 장면과 행동으로 설명해요.`,
       ),
       section(
+        "어디까지 해석하나요?",
+        `관계 연구에서도 성향은 만족도의 일부만 설명했고, 두 사람이 닮은 정도가 설명하는 범위는 매우 작았어요. 그래서 뉴앙 코드는 관계의 미래나 두 사람의 잘 맞는 정도를 예측하는 점수로 사용하지 않아요.`,
+        `가족·친구·연인·일 장의 설명은 답변에서 확인한 경향을 돌아볼 질문으로 읽어 주세요. 실제 역할, 상대의 마음, 행동의 이유는 코드로 정하지 않고 당사자의 말과 현재 상황을 직접 확인해야 해요.`,
+      ),
+      section(
         "문항과 설명을 함께 관리해요",
         `문항, 점수 계산, 코드 이름, 성향 설명은 같은 버전으로 함께 관리해요. 질문이 바뀌면 관련 결과와 문장을 다시 확인하고, 검사에서 살펴본 내용과 결과 화면의 설명이 어긋나지 않도록 점검해요.`,
         `사용자가 남긴 문장 이해도와 실제 경험 피드백은 문항과 설명을 더 분명하게 다듬는 데 반영해요. ${code} 안내도 같은 말이 반복되지 않는지, 누구나 이해하기 쉬운 한국어인지, 실제 생활 장면이 먼저 설명되는지 계속 확인해요.`,
@@ -802,7 +791,12 @@ function normalizeParagraph(paragraph: string) {
     .trim();
 }
 
-function makeGuideSentencesUnique(
+/**
+ * 같은 축 설명이 여러 생활 장에 그대로 반복되면 기계적으로 읽힐 수 있어요.
+ * 첫 설명은 유지하고, 다음 등장부터는 실제 섹션 제목을 짧은 상황 단서로
+ * 연결합니다. 과거처럼 장·섹션 이름을 내부 경로 형태로 붙이지 않습니다.
+ */
+function addSceneContextToRepeatedSentences(
   chapters: TraitMapCustomerGuideChapter[],
 ) {
   const used = new Set<string>();
@@ -810,20 +804,19 @@ function makeGuideSentencesUnique(
   for (const chapter of chapters) {
     for (const section of chapter.sections) {
       section.paragraphs = section.paragraphs.map((paragraph) => {
-        const sentences =
-          paragraph.match(/[^.!?]+[.!?]?/g)?.map((item) => item.trim()) ?? [
-            paragraph,
-          ];
+        const sentences = paragraph
+          .match(/[^.!?。！？]+[.!?。！？]?/gu)
+          ?.map((item) => item.trim()) ?? [paragraph];
         return sentences
           .map((sentence) => {
-            const signature = sentenceSignature(sentence);
+            const signature = customerSentenceSignature(sentence);
             if (signature.length < 30 || !used.has(signature)) {
               used.add(signature);
               return sentence;
             }
 
-            const contextualized = `${chapter.label}의 ‘${section.title}’ 장면에서는 ${sentence}`;
-            used.add(sentenceSignature(contextualized));
+            const contextualized = `${sceneContextLead(section.title)} ${sentence}`;
+            used.add(customerSentenceSignature(contextualized));
             return contextualized;
           })
           .join(" ");
@@ -832,8 +825,22 @@ function makeGuideSentencesUnique(
   }
 }
 
-function sentenceSignature(sentence: string) {
-  return sentence
-    .replace(/[A-Z]{5}/g, "")
-    .replace(/[^가-힣a-zA-Z0-9]/g, "");
+function sceneContextLead(sectionTitle: string) {
+  if (sectionTitle.includes("—")) {
+    return `${sectionTitle.split("—")[0]?.trim() ?? sectionTitle} 성향을 살펴보면,`;
+  }
+  if (/(?:때|순간|앞에서|안에서|사이에서|중에는)$/u.test(sectionTitle)) {
+    return `${sectionTitle},`;
+  }
+  return `${sectionTitle}${koreanObjectParticle(sectionTitle)} 살펴보면,`;
+}
+
+function koreanObjectParticle(value: string) {
+  const last = value.trim().codePointAt(value.trim().length - 1);
+  if (!last || last < 0xac00 || last > 0xd7a3) return "를";
+  return (last - 0xac00) % 28 === 0 ? "를" : "을";
+}
+
+function customerSentenceSignature(sentence: string) {
+  return sentence.replace(/[A-Z]{5}/gu, "").replace(/[^가-힣a-zA-Z0-9]/gu, "");
 }

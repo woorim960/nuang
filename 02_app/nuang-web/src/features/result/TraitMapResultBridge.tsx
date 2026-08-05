@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { getPublishedTraitMapCustomerGuide } from "@/features/nuang-code/trait-map-customer-guide-registry";
+import { getCustomerApprovedTraitMapGuide } from "@/features/nuang-code/trait-map-customer-guide-registry";
 import type {
   TraitMapCustomerGuide,
   TraitMapCustomerGuideChapter,
@@ -22,15 +22,15 @@ const resultPreviewSlots: Array<{
   label: string;
   slot: TraitMapCustomerGuideChapter["slot"];
 }> = [
-    { label: "생각에서 행동까지", slot: "thought_and_response" },
-    { label: "평소 생활", slot: "daily_life" },
-    { label: "마음 가는 사람 앞에서", slot: "person_of_interest" },
-    { label: "연인과 함께할 때", slot: "partner" },
-    { label: "가족 안에서", slot: "family" },
-    { label: "친구 사이에서", slot: "friend" },
-    { label: "일과 공부를 할 때", slot: "work" },
-    { label: "지치거나 긴장할 때", slot: "stress_and_recovery" },
-  ];
+  { label: "생각에서 행동까지", slot: "thought_and_response" },
+  { label: "평소 생활", slot: "daily_life" },
+  { label: "마음 가는 사람 앞에서", slot: "person_of_interest" },
+  { label: "연인과 함께할 때", slot: "partner" },
+  { label: "가족 안에서", slot: "family" },
+  { label: "친구 사이에서", slot: "friend" },
+  { label: "일과 공부를 할 때", slot: "work" },
+  { label: "지치거나 긴장할 때", slot: "stress_and_recovery" },
+];
 
 /** 결과 리포트와 성향지도를 잇는 공통 장문 요약 블록입니다. */
 export function TraitMapResultBridge({
@@ -39,7 +39,7 @@ export function TraitMapResultBridge({
   facets = [],
   profileName,
 }: TraitMapResultBridgeProps) {
-  const guide = getPublishedTraitMapCustomerGuide(code);
+  const guide = getCustomerApprovedTraitMapGuide(code);
   if (!guide) return null;
 
   const fiveLetters = guide.chapters.find(
@@ -142,9 +142,7 @@ export function TraitMapResultBridge({
   );
 }
 
-export function getTraitMapResultPreviewChapters(
-  guide: TraitMapCustomerGuide,
-) {
+export function getTraitMapResultPreviewChapters(guide: TraitMapCustomerGuide) {
   return resultPreviewSlots.flatMap(({ label, slot }) => {
     const chapter = guide.chapters.find((item) => item.slot === slot);
     return chapter ? [{ chapter, label }] : [];
@@ -159,9 +157,9 @@ export function countTraitMapResultPreviewCharacters(
   );
   const fiveLetterText = fiveLetters
     ? [
-      fiveLetters.summary,
-      ...fiveLetters.sections.slice(0, 5).map((section) => section.title),
-    ].join("")
+        fiveLetters.summary,
+        ...fiveLetters.sections.slice(0, 5).map((section) => section.title),
+      ].join("")
     : "";
   const chapterText = getTraitMapResultPreviewChapters(guide)
     .flatMap(({ chapter }) => [

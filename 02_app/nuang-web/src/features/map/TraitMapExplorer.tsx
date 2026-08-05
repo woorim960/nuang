@@ -328,10 +328,10 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
 
         <label className={styles.search}>
           <Search aria-hidden="true" size={18} strokeWidth={1.7} />
-          <span className={styles.srOnly}>코드 또는 역할 이름 검색</span>
+          <span className={styles.srOnly}>코드 또는 성향 이름 검색</span>
           <input
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="5글자 코드 또는 역할 이름"
+            placeholder="5글자 코드 또는 성향 이름"
             type="search"
             value={query}
           />
@@ -375,7 +375,7 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
         ) : (
           <div className={styles.emptySearch}>
             <strong>찾는 코드가 보이지 않아요.</strong>
-            <span>코드나 역할 이름의 일부만 입력해 보세요.</span>
+            <span>코드나 성향 이름의 일부만 입력해 보세요.</span>
           </div>
         )}
 
@@ -585,9 +585,7 @@ function ProfileResult({
                   <strong>
                     {symbol} · {direction.publicTypeName}
                   </strong>
-                  <p>
-                    {direction.detailTitle}. {direction.description}
-                  </p>
+                  <p>{direction.description}</p>
                 </div>
               </li>
             );

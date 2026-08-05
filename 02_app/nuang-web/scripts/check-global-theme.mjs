@@ -28,6 +28,7 @@ for (const filePath of walk(sourceRoot)) {
     !file.includes(".test.") &&
     // 브라우저 CSS 변수를 해석하지 못하는 외부 산출물은 앱 테마 범위가 아닙니다.
     !file.endsWith("src/features/result/share-image.ts") &&
+    !file.endsWith("src/features/seo/site-config.ts") &&
     !file.endsWith("src/features/account/server-email-delivery.ts") &&
     !file.endsWith("src/features/admin/server-admin-review-notification.ts") &&
     !file.endsWith("src/features/advertising/server-advertising-mail-outbox.ts")

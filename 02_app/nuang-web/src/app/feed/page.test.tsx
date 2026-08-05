@@ -59,7 +59,10 @@ describe("FeedPage", () => {
   });
 
   it("keeps product metadata for the feed route", () => {
-    expect(metadata.title).toBe("커뮤니티 | NUANG");
+    expect(metadata.title).toEqual({
+      absolute: "성향 기반 커뮤니티 | 뉴앙",
+    });
+    expect(metadata.alternates).toEqual({ canonical: "/feed" });
   });
 
   it("requests the resumed poll even when it fell outside the regular feed page", async () => {

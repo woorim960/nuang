@@ -11,7 +11,7 @@ import {
   candidateProfileNameReleaseId,
   getCandidateProfileDefinition,
 } from "@/features/nuang-code/candidate-profile-names";
-import { getPublishedTraitMapCustomerGuide } from "@/features/nuang-code/trait-map-customer-guide-registry";
+import { getCustomerApprovedTraitMapGuide } from "@/features/nuang-code/trait-map-customer-guide-registry";
 import { resolveTraitMapResultSummaryV2 } from "@/features/nuang-code/trait-map-result-summary-publication-v2";
 import type {
   DomainScore,
@@ -97,7 +97,7 @@ export function adaptValidatedLocalCoreResult(
     releaseSupport === "current" &&
     (attempt.resultEvidenceStatus === "clear" ||
       attempt.resultEvidenceStatus === "near_boundary");
-  const guide = getPublishedTraitMapCustomerGuide(snapshot.scoreResult.code!);
+  const guide = getCustomerApprovedTraitMapGuide(snapshot.scoreResult.code!);
   const canonicalResolution = resolveTraitMapResultSummaryV2({
     code: snapshot.scoreResult.code!,
   });
@@ -316,7 +316,7 @@ export function adaptAccountCoreResult(
       ? "complete"
       : "partial";
   const contentSnapshot = accountResult.reportContentSnapshot ?? null;
-  const guide = getPublishedTraitMapCustomerGuide(accountResult.profileCode);
+  const guide = getCustomerApprovedTraitMapGuide(accountResult.profileCode);
   const snapshotResolution =
     contentSnapshot && accountResult.resultCopyVersion
       ? resolveReportContentSnapshot({
@@ -425,7 +425,7 @@ export function adaptPublicCoreResult(
   const profile = getCandidateProfileDefinition(projection.profileCode);
 
   if (!profile) return null;
-  const guide = getPublishedTraitMapCustomerGuide(projection.profileCode);
+  const guide = getCustomerApprovedTraitMapGuide(projection.profileCode);
 
   return {
     identity: {
@@ -492,7 +492,7 @@ export function isRenderableCoreResultModel(model: CoreResultReportModel) {
   return (
     model.completeness.state !== "unsupported" &&
     model.result.responseEvidenceStatus !== "insufficient_evidence" &&
-    Boolean(getPublishedTraitMapCustomerGuide(model.result.code))
+    Boolean(getCustomerApprovedTraitMapGuide(model.result.code))
   );
 }
 

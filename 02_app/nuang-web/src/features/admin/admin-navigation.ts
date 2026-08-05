@@ -114,7 +114,15 @@ export const adminNavigation: readonly AdminNavigationGroup[] = [
       {
         href: "/admin/content",
         icon: BookOpenText,
-        keywords: ["데이터센터", "콘텐츠", "릴리스", "운영 가이드"],
+        keywords: [
+          "데이터센터",
+          "콘텐츠",
+          "릴리스",
+          "운영 가이드",
+          "성향지도 문장",
+          "7역할 검수",
+          "사람 승인",
+        ],
         label: "성향 콘텐츠",
       },
     ],

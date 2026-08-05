@@ -8,11 +8,10 @@ import { readSelfProfilePayload } from "@/features/account/server-self-profile";
 import { resolveAdminIdentityForUser } from "@/features/admin/server-admin-access";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "마이 | NUANG",
-};
+export const metadata: Metadata = createPrivatePageMetadata({ title: "마이" });
 
 export default async function MyPage({
   searchParams,

@@ -166,9 +166,10 @@ describe("topic trait impact", () => {
     });
 
     expect(impact.state).toBe("insufficient_evidence");
-    expect(getTopicTraitImpactPresentation(impact).title).toContain(
-      "코드에 반영할 내용이 충분하지 않았어요",
-    );
+    expect(getTopicTraitImpactPresentation(impact)).toMatchObject({
+      badge: "주제 결과만 보기",
+      title: "현재 뉴앙 코드는 바뀌지 않아요",
+    });
   });
 
   it("omits a malformed frozen snapshot instead of exposing it to the report", () => {

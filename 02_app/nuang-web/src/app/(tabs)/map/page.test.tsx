@@ -102,7 +102,7 @@ describe("MapPage", () => {
     render(await MapPage({}));
 
     await user.type(
-      screen.getByRole("searchbox", { name: "코드 또는 역할 이름 검색" }),
+      screen.getByRole("searchbox", { name: "코드 또는 성향 이름 검색" }),
       "경청자",
     );
 

@@ -24,6 +24,20 @@ vi.mock(
     ),
   }),
 );
+vi.mock("@/features/share/GuestReportShareView", () => ({
+  GuestReportShareView: ({
+    canonicalUrl,
+    content,
+  }: {
+    canonicalUrl: string;
+    content: { resultName: string };
+  }) => (
+    <main>
+      <h1>{content.resultName}</h1>
+      <p>{canonicalUrl}</p>
+    </main>
+  ),
+}));
 
 describe("SharePage", () => {
   beforeEach(() => {
@@ -62,6 +76,7 @@ describe("SharePage", () => {
   it("renders an active token with the share projection", async () => {
     readPublicShareTokenMock.mockResolvedValue({
       model: { result: { code: "ENAKQ" } },
+      shareKind: "account_core",
       status: "active",
     });
 
@@ -83,6 +98,7 @@ describe("SharePage", () => {
           currentProfileName: "차분한 탐색가",
         },
       },
+      shareKind: "account_core",
       status: "active",
     });
 
@@ -100,6 +116,37 @@ describe("SharePage", () => {
         }),
       ],
       siteName: "뉴앙",
+    });
+  });
+
+  it("renders and previews a guest summary without account data", async () => {
+    readPublicShareTokenMock.mockResolvedValue({
+      content: {
+        contentVersion: "report-share-v1",
+        highlights: ["천천히 대화를 풀어가요"],
+        reportType: "lab",
+        resultName: "잔잔한 대화",
+        summary: "말을 고르며 차분하게 대화를 이어가는 편이에요.",
+        title: "대화 온도 결과",
+      },
+      shareKind: "guest_summary",
+      status: "active",
+    });
+
+    render(
+      await SharePage({ params: Promise.resolve({ token: "g1.test.token" }) }),
+    );
+    const metadata = await generateMetadata({
+      params: Promise.resolve({ token: "g1.test.token" }),
+    });
+
+    expect(screen.getByRole("heading", { name: "잔잔한 대화" })).toBeInTheDocument();
+    expect(metadata.openGraph).toMatchObject({
+      images: [
+        expect.objectContaining({
+          url: "https://nuang.app/images/share/nuang-result-share-lab-v2.png",
+        }),
+      ],
     });
   });
 });

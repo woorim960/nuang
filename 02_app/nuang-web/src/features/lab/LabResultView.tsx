@@ -39,6 +39,7 @@ export function LabResultView({
   canonicalShareUrl,
   initialResult,
   localResultId,
+  openShareOnMount = false,
   readOnly = false,
   shareEnabled = true,
 }: {
@@ -48,6 +49,7 @@ export function LabResultView({
   canonicalShareUrl?: string;
   initialResult?: StoredLabResult;
   localResultId?: string;
+  openShareOnMount?: boolean;
   readOnly?: boolean;
   shareEnabled?: boolean;
 }) {
@@ -59,6 +61,7 @@ export function LabResultView({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const hasAutoOpenedShareRef = useRef(false);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
@@ -88,6 +91,21 @@ export function LabResultView({
     initialResult,
     localResultId,
   ]);
+
+  useEffect(() => {
+    if (
+      hasAutoOpenedShareRef.current ||
+      !openShareOnMount ||
+      !shareEnabled ||
+      !loaded ||
+      !storedResult
+    ) {
+      return;
+    }
+    hasAutoOpenedShareRef.current = true;
+    const frame = requestAnimationFrame(() => setIsShareOpen(true));
+    return () => cancelAnimationFrame(frame);
+  }, [loaded, openShareOnMount, shareEnabled, storedResult]);
 
   if (!loaded) {
     return (
@@ -143,9 +161,7 @@ export function LabResultView({
     resultName: profile.title,
     summary: profile.summary,
   });
-  const canShare = Boolean(
-    shareEnabled && (canonicalShareUrl || storedResult.serverResultId),
-  );
+  const canShare = shareEnabled;
 
   function handleDelete() {
     deleteLabResult(selectedLocalResultId);

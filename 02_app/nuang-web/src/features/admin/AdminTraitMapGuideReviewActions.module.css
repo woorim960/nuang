@@ -1,0 +1,61 @@
+.wrap {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.wrap textarea {
+  width: 100%;
+  min-height: 58px;
+  padding: 0.6rem 0.7rem;
+  resize: vertical;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 6px;
+  color: var(--admin-text, var(--nu-color-text));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font: inherit;
+  font-size: var(--nu-text-admin-label);
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.4rem;
+}
+
+.actions button,
+.wrap > button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  justify-content: center;
+  gap: 0.32rem;
+  padding: 0 0.65rem;
+  border: 1px solid var(--admin-border, var(--nu-color-border));
+  border-radius: 5px;
+  color: var(--admin-muted, var(--nu-color-text-muted));
+  background: var(--admin-surface, var(--nu-color-surface));
+  font-size: var(--nu-text-admin-meta);
+  font-weight: var(--nu-weight-bold);
+}
+
+.actions .primary,
+.wrap > .primary {
+  border-color: var(--admin-accent, var(--nu-color-brand));
+  color: white;
+  background: var(--admin-accent, var(--nu-color-brand));
+}
+
+.actions button:disabled,
+.wrap > button:disabled {
+  cursor: wait;
+  opacity: 0.52;
+}
+
+.wrap p {
+  margin: 0;
+  color: var(--nu-color-danger);
+  font-size: var(--nu-text-admin-meta);
+  line-height: 1.45;
+}

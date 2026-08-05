@@ -65,9 +65,15 @@ describe("CandidateCoreResultView", () => {
         name: "이번 답에서 보인 내 모습",
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText(/새로운 관점을 더 찾아봐요/)).toBeInTheDocument();
-    expect(screen.getByText(/상대가 어떤 마음인지/)).toBeInTheDocument();
-    expect(screen.getByText(/빠르게 커질 수 있어요/)).toBeInTheDocument();
+    expect(
+      screen.getAllByText(/새로운 관점을 더 찾아봐요/).length,
+    ).toBeGreaterThan(0);
+    expect(screen.getAllByText(/상대가 어떤 마음인지/).length).toBeGreaterThan(
+      0,
+    );
+    expect(screen.getAllByText(/빠르게 커질 수 있어요/).length).toBeGreaterThan(
+      0,
+    );
     expect(screen.queryByText("다섯 자리 요약")).not.toBeInTheDocument();
     expect(screen.queryByText("눈에 띈 모습")).not.toBeInTheDocument();
     expect(
@@ -192,11 +198,11 @@ describe("CandidateCoreResultView", () => {
           domains: result.domains.map((domain) =>
             domain.domainId === "SE"
               ? {
-                ...domain,
-                isBoundary: false,
-                score: 30,
-                symbol: "I",
-              }
+                  ...domain,
+                  isBoundary: false,
+                  score: 30,
+                  symbol: "I",
+                }
               : domain,
           ),
         }}

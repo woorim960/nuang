@@ -42,21 +42,17 @@ describe("release operational scripts", () => {
     expect(source).not.toContain("officialPollId");
   });
 
-  it("keeps beta blocked only by the unresolved release candidate gate", () => {
+  it("keeps every recorded beta release gate satisfied", () => {
     const result = spawnSync(
       process.execPath,
       [path.join(projectRoot, "scripts/check-mvp-go-live.mjs")],
       { cwd: projectRoot, encoding: "utf8" },
     );
 
-    expect(result.status).toBe(1);
-    expect(result.stdout).not.toContain("BLOCKED minimum_legal_privacy");
-    expect(result.stdout).not.toContain("BLOCKED production_oauth");
-    expect(result.stdout).not.toContain("BLOCKED security_privacy");
-    expect(result.stdout).not.toContain("BLOCKED product_value_observability");
-    expect(result.stdout).toContain("BLOCKED release_candidate");
-    expect(result.stdout).not.toContain(
-      "measurement scheme is still candidate",
+    expect(result.status).toBe(0);
+    expect(result.stdout).not.toContain("BLOCKED");
+    expect(result.stdout).toContain(
+      "go-live gates passed with recorded evidence.",
     );
   });
 });

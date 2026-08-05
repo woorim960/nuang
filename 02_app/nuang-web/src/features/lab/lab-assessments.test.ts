@@ -5,7 +5,32 @@ import {
   calculateLabResult,
   forbiddenLabTopicKeywords,
   labAssessments,
+  type LabResultProfile,
 } from "@/features/lab/lab-assessments";
+
+const plainLanguageProfileOverrides: Record<
+  string,
+  Record<string, Partial<LabResultProfile>>
+> = {
+  "conversation-temperature": {
+    spark: { title: "생각이 떠오르면 바로 말하는 대화 스타일" },
+    warmup: { title: "분위기를 살핀 뒤 말하는 대화 스타일" },
+  },
+  "recharge-ritual": {
+    quiet: {
+      summary:
+        "자극을 줄이고 혼자 조용히 쉬면 기운이 천천히 돌아오는 편이에요.",
+    },
+    sensory: {
+      summary:
+        "공간을 바꾸거나 음악을 듣고 산책하면 지친 기분에서 벗어나기 쉬운 편이에요.",
+    },
+    together: {
+      summary:
+        "누군가와 가볍게 이야기하거나 함께 있을 때 다시 기운이 나는 편이에요.",
+    },
+  },
+};
 
 describe("lab assessments", () => {
   it("matches the provisional content seed manifest", () => {
@@ -26,7 +51,9 @@ describe("lab assessments", () => {
       expect(seedAssessment?.title).toBe(assessment.title);
       expect(seedAssessment?.card_title).toBe(assessment.cardTitle);
       expect(seedAssessment?.sensitivity).toBe(assessment.sensitivity);
-      expect(seedAssessment?.estimated_minutes).toBe(assessment.estimatedMinutes);
+      expect(seedAssessment?.estimated_minutes).toBe(
+        assessment.estimatedMinutes,
+      );
       expect(seedAssessment?.question_count).toBe(assessment.questions.length);
       expect(assessment.contentVersion).toBe(labResultCopy.content_version);
       expect(seedAssessment?.profile_ids).toEqual(
@@ -42,9 +69,9 @@ describe("lab assessments", () => {
     expect(labResultCopy.policy.ranking_enabled).toBe(false);
     expect(labResultCopy.policy.clinical_use).toBe(false);
     expect(labResultCopy.policy.comparison_use).toBe(false);
-    expect(labResultCopy.assessments.map((assessment) => assessment.slug)).toEqual(
-      labAssessments.map((assessment) => assessment.slug),
-    );
+    expect(
+      labResultCopy.assessments.map((assessment) => assessment.slug),
+    ).toEqual(labAssessments.map((assessment) => assessment.slug));
 
     labAssessments.forEach((assessment) => {
       const seedAssessment = labResultCopy.assessments.find(
@@ -61,18 +88,37 @@ describe("lab assessments", () => {
           (item) => item.id === profile.id,
         );
 
-        expect(seedProfile).toEqual({
+        const seedProfileForRuntime = {
           id: profile.id,
-          relation_tip: profile.relationTip,
-          short_title: profile.shortTitle,
-          small_experiment: profile.smallExperiment,
-          strengths: profile.strengths,
-          summary: profile.summary,
-          title: profile.title,
-          watch: profile.watch,
+          relationTip: seedProfile?.relation_tip,
+          shortTitle: seedProfile?.short_title,
+          smallExperiment: seedProfile?.small_experiment,
+          strengths: seedProfile?.strengths,
+          summary: seedProfile?.summary,
+          title: seedProfile?.title,
+          watch: seedProfile?.watch,
+        };
+
+        expect(profile).toEqual({
+          ...seedProfileForRuntime,
+          ...(plainLanguageProfileOverrides[assessment.slug]?.[profile.id] ??
+            {}),
         });
       });
     });
+  });
+
+  it("uses concrete everyday wording for the reviewed lab copy", () => {
+    const runtimeCopy = JSON.stringify(labAssessments);
+
+    [
+      "바로 불을 켜는 대화 스타일",
+      "천천히 온도를 올리는 대화 스타일",
+      "대화 온도를 낮추며 기다린다",
+      "정적과 여백이 회복의 핵심입니다",
+      "기분과 리듬이 다시 움직이는",
+      "회복의 통로가 됩니다",
+    ].forEach((metaphor) => expect(runtimeCopy).not.toContain(metaphor));
   });
 
   it("keeps result copy inside provisional QA rules", () => {
@@ -91,8 +137,12 @@ describe("lab assessments", () => {
         ].join(" ");
 
         expect(profile.summary.length).toBeGreaterThanOrEqual(30);
-        expect(profile.strengths).toHaveLength(strengthLimits.min_strength_count);
-        expect(profile.strengths).toHaveLength(strengthLimits.max_strength_count);
+        expect(profile.strengths).toHaveLength(
+          strengthLimits.min_strength_count,
+        );
+        expect(profile.strengths).toHaveLength(
+          strengthLimits.max_strength_count,
+        );
         expect(profile.watch.length).toBeGreaterThanOrEqual(20);
         expect(profile.relationTip.length).toBeGreaterThanOrEqual(20);
         expect(profile.smallExperiment.length).toBeGreaterThanOrEqual(20);
@@ -109,9 +159,11 @@ describe("lab assessments", () => {
   });
 
   it("keeps the first lab release inside S1/S2", () => {
-    expect(labAssessments.every((assessment) => ["S1", "S2"].includes(assessment.sensitivity))).toBe(
-      true,
-    );
+    expect(
+      labAssessments.every((assessment) =>
+        ["S1", "S2"].includes(assessment.sensitivity),
+      ),
+    ).toBe(true);
   });
 
   it("does not use excluded clinical or high-risk topics in titles", () => {

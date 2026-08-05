@@ -4,11 +4,15 @@ import { readFeedCoupangDelivery } from "@/features/advertising/server-advertisi
 import { CommunityFeed } from "@/features/feed/CommunityFeed";
 import { createServerFeedReadPayload } from "@/features/feed/server-read";
 import { parseLegacyHomePollResumeIntent } from "@/features/navigation/legacy-home-feed-resume";
+import { createPublicPageMetadata } from "@/features/seo/site-config";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "커뮤니티 | NUANG",
-};
+export const metadata: Metadata = createPublicPageMetadata({
+  description:
+    "성향 테스트 결과와 일상 속 생각을 나누고, 나와 다른 관점을 발견하는 뉴앙 성향 커뮤니티를 둘러보세요.",
+  path: "/feed",
+  title: "성향 기반 커뮤니티",
+});
 
 export default async function FeedPage({
   searchParams,

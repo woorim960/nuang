@@ -13,37 +13,26 @@ import {
 const now = new Date("2026-08-03T12:00:00.000Z");
 
 describe("buildAccountDynamicTraitProfile", () => {
-  it("keeps a full-core code after only one opposing topic result", () => {
+  it("keeps topic-specific results out of the representative code until validation", () => {
     const profile = buildAccountDynamicTraitProfile({
       coreResults: [coreResult()],
       now,
-      topicResults: [topicResult("topic-one", 0)],
+      topicResults: [
+        topicResult("conversation-temperature", 0),
+        topicResult("future-public-topic", 0),
+      ],
     });
 
     expect(profile).toMatchObject({
       code: "ENAKQ",
-      source: "core_and_topics",
-      topicCount: 1,
-    });
-  });
-
-  it("changes only the supported code position after different topics repeat the same direction", () => {
-    const profile = buildAccountDynamicTraitProfile({
-      coreResults: [coreResult()],
-      now,
-      topicResults: [topicResult("topic-one", 0), topicResult("topic-two", 0)],
-    });
-
-    expect(profile).toMatchObject({
-      code: "INAKQ",
-      source: "core_and_topics",
-      topicCount: 2,
+      evidenceCount: 5,
+      source: "core_only",
+      topicCount: 0,
     });
     expect(
       profile?.domains.find((domain) => domain.domainId === "SE"),
     ).toMatchObject({
-      change: "code_changed",
-      symbol: "I",
+      symbol: "E",
     });
   });
 
@@ -57,7 +46,11 @@ describe("buildAccountDynamicTraitProfile", () => {
       ],
     });
 
-    expect(profile).toMatchObject({ code: "ENAKQ", topicCount: 1 });
+    expect(profile).toMatchObject({
+      code: "ENAKQ",
+      source: "core_only",
+      topicCount: 0,
+    });
   });
 
   it("excludes blocked experiences and incomplete topic scales", () => {

@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 
-export const metadata: Metadata = {
-  title: "내 커뮤니티 프로필 | NUANG",
-};
+export const metadata: Metadata = createPrivatePageMetadata({
+  title: "내 커뮤니티 프로필",
+});
 
 export default async function MyCommunityProfilePage() {
   const serverClient = await createServerSupabaseClient();

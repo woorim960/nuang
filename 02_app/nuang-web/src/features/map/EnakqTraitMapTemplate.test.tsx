@@ -1,10 +1,12 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { TraitMapDetailTemplate } from "@/features/map/EnakqTraitMapTemplate";
 import { enakqCustomerGuideV2 as guide } from "@/features/nuang-code/enakq-customer-guide-v2";
 
 describe("TraitMapDetailTemplate", () => {
+  afterEach(() => vi.unstubAllGlobals());
+
   it("shows a detailed 15-chapter guide centered on typical ENAKQ patterns", () => {
     render(<TraitMapDetailTemplate guide={guide} />);
 
@@ -105,6 +107,45 @@ describe("TraitMapDetailTemplate", () => {
     expect(customerCopy).not.toContain("조합 가설");
     expect(customerCopy).not.toContain("개인 과정 자료");
     expect(customerCopy).not.toContain("인지 인터뷰");
+  });
+
+  it("edits the real customer component and applies an approved beta revision", async () => {
+    const user = userEvent.setup();
+    const nextText =
+      "최근 답변에서는 사람들과 대화할 때 생각이 또렷해지고, 새로운 가능성과 상대의 마음을 함께 살피는 흐름이 자주 나타났어요.";
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(
+          JSON.stringify({
+            message: "저장했고 뉴앙 베타 성향지도에 바로 반영했습니다.",
+            ok: true,
+            text: nextText,
+          }),
+          { headers: { "content-type": "application/json" }, status: 200 },
+        ),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <TraitMapDetailTemplate
+        editor={{ activeRevisionCount: 0, releaseId: "beta-release" }}
+        embedded
+        guide={guide}
+      />,
+    );
+
+    await user.click(screen.getByRole("button", { name: /상단 소개 편집:/ }));
+    const textarea = screen.getByRole("textbox", {
+      name: "상단 소개 수정 내용",
+    });
+    await user.clear(textarea);
+    await user.type(textarea, nextText);
+    await user.click(
+      screen.getByRole("button", { name: "저장하고 베타 반영" }),
+    );
+
+    await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(screen.getByText(nextText)).toBeInTheDocument());
   });
 });
 

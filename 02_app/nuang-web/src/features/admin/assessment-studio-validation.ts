@@ -8,6 +8,10 @@ import {
   isRepresentativeTraitTarget,
   resolveFreeTopicTraitRule,
 } from "@/features/assessment/free-topic-assessments";
+import {
+  validatePublicLanguageText,
+  type PublicLanguageTextKind,
+} from "@/features/copy/public-language-validation";
 import type { BalancePack } from "@/features/together-balance/types";
 import { validateBalancePack } from "@/features/together-balance/validation";
 
@@ -342,6 +346,48 @@ function findDuplicateIds(ids: string[]) {
   ];
 }
 
+type PublicCopyEntry = Readonly<{
+  allowChoiceCompletion?: boolean;
+  fieldPath: string;
+  kind: PublicLanguageTextKind;
+  text: string;
+}>;
+
+function addPublicLanguageIssues(
+  issues: AssessmentStudioValidationIssue[],
+  entries: readonly PublicCopyEntry[],
+) {
+  for (const entry of entries) {
+    for (const languageIssue of validatePublicLanguageText(entry)) {
+      issues.push(
+        issue(
+          "blocker",
+          `public_language_${languageIssue.code}`,
+          entry.fieldPath,
+          languageIssue.message,
+        ),
+      );
+    }
+  }
+}
+
+function optionalCopyEntry({
+  fieldPath,
+  kind,
+  record,
+  key,
+}: {
+  fieldPath: string;
+  kind: PublicLanguageTextKind;
+  record: Record<string, unknown>;
+  key: string;
+}): PublicCopyEntry[] {
+  const value = record[key];
+  return typeof value === "string"
+    ? [{ fieldPath: `${fieldPath}.${key}`, kind, text: value }]
+    : [];
+}
+
 export function validateAssessmentStudioDocument(
   input: unknown,
 ): AssessmentStudioValidationIssue[] {
@@ -350,6 +396,15 @@ export function validateAssessmentStudioDocument(
 
   const document = common.data;
   const issues: AssessmentStudioValidationIssue[] = [];
+  addPublicLanguageIssues(issues, [
+    { fieldPath: "title", kind: "title", text: document.title },
+    { fieldPath: "caption", kind: "description", text: document.caption },
+    {
+      fieldPath: "description",
+      kind: "description",
+      text: document.description,
+    },
+  ]);
   if (document.ageAccessPolicy === "adult_verification_required") {
     issues.push(
       issue(
@@ -385,6 +440,43 @@ export function validateAssessmentStudioDocument(
     const parsed = corePayloadSchema.safeParse(document.payload);
     if (!parsed.success) return [...issues, ...zodIssues(parsed.error)];
     const definition = parsed.data.definition;
+    addPublicLanguageIssues(issues, [
+      {
+        fieldPath: "payload.definition.title",
+        kind: "title",
+        text: definition.title,
+      },
+      {
+        fieldPath: "payload.definition.resultLabel",
+        kind: "title",
+        text: definition.resultLabel,
+      },
+      ...[...definition.items, ...(definition.adaptiveItems ?? [])].flatMap(
+        (item, itemIndex) => {
+          const group =
+            itemIndex < definition.items.length ? "items" : "adaptiveItems";
+          const index =
+            group === "items" ? itemIndex : itemIndex - definition.items.length;
+          const fieldPath = `payload.definition.${group}.${index}`;
+          return [
+            ...(item.contextLabel
+              ? [
+                  {
+                    fieldPath: `${fieldPath}.contextLabel`,
+                    kind: "context" as const,
+                    text: item.contextLabel,
+                  },
+                ]
+              : []),
+            {
+              fieldPath: `${fieldPath}.text`,
+              kind: "question" as const,
+              text: item.text,
+            },
+          ];
+        },
+      ),
+    ]);
     const expectedMode = document.subtype === "core_quick" ? "quick" : "full";
     const expectedSlug =
       document.subtype === "core_quick" ? "quick-core" : "full-core";
@@ -470,6 +562,81 @@ export function validateAssessmentStudioDocument(
     const parsed = topicPayloadSchema.safeParse(document.payload);
     if (!parsed.success) return [...issues, ...zodIssues(parsed.error)];
     const { assessment, questions } = parsed.data;
+    const topicCopy: PublicCopyEntry[] = [
+      {
+        fieldPath: "payload.assessment.title",
+        kind: "title",
+        text: assessment.title,
+      },
+      {
+        fieldPath: "payload.assessment.caption",
+        kind: "description",
+        text: assessment.caption,
+      },
+      ...(assessment.recallPeriodLabel
+        ? [
+            {
+              fieldPath: "payload.assessment.recallPeriodLabel",
+              kind: "context" as const,
+              text: assessment.recallPeriodLabel,
+            },
+          ]
+        : []),
+      ...(assessment.recallPrompt
+        ? [
+            {
+              fieldPath: "payload.assessment.recallPrompt",
+              kind: "description" as const,
+              text: assessment.recallPrompt,
+            },
+          ]
+        : []),
+      ...questions.flatMap((question, index) => [
+        {
+          fieldPath: `payload.questions.${index}.contextLabel`,
+          kind: "context" as const,
+          text: question.contextLabel,
+        },
+        {
+          fieldPath: `payload.questions.${index}.text`,
+          kind: "question" as const,
+          text: question.text,
+        },
+      ]),
+    ];
+    assessment.reportScales?.forEach((scale, index) => {
+      const fieldPath = `payload.assessment.reportScales.${index}`;
+      const record = scale as typeof scale & Record<string, unknown>;
+      for (const key of ["areaLabel", "groupLabel"]) {
+        topicCopy.push(
+          ...optionalCopyEntry({ fieldPath, key, kind: "title", record }),
+        );
+      }
+      for (const key of ["highLabel", "midLabel", "lowLabel"]) {
+        topicCopy.push(
+          ...optionalCopyEntry({ fieldPath, key, kind: "result", record }),
+        );
+      }
+      for (const key of [
+        "highCopy",
+        "midCopy",
+        "lowCopy",
+        "highAction",
+        "midAction",
+        "lowAction",
+        "highStrength",
+        "midStrength",
+        "lowStrength",
+        "highWatch",
+        "midWatch",
+        "lowWatch",
+      ]) {
+        topicCopy.push(
+          ...optionalCopyEntry({ fieldPath, key, kind: "result", record }),
+        );
+      }
+    });
+    addPublicLanguageIssues(issues, topicCopy);
     if (assessment.slug !== document.slug) {
       issues.push(
         issue(
@@ -603,6 +770,97 @@ export function validateAssessmentStudioDocument(
     const parsed = labPayloadSchema.safeParse(document.payload);
     if (!parsed.success) return [...issues, ...zodIssues(parsed.error)];
     const { assessment } = parsed.data;
+    addPublicLanguageIssues(issues, [
+      {
+        fieldPath: "payload.assessment.title",
+        kind: "title",
+        text: assessment.title,
+      },
+      {
+        fieldPath: "payload.assessment.cardTitle",
+        kind: "title",
+        text: assessment.cardTitle,
+      },
+      {
+        fieldPath: "payload.assessment.caption",
+        kind: "description",
+        text: assessment.caption,
+      },
+      {
+        fieldPath: "payload.assessment.safetyNote",
+        kind: "description",
+        text: assessment.safetyNote,
+      },
+      {
+        fieldPath: "payload.assessment.resultLabel",
+        kind: "title",
+        text: assessment.resultLabel,
+      },
+      ...assessment.profiles.flatMap((profile, profileIndex) => {
+        const fieldPath = `payload.assessment.profiles.${profileIndex}`;
+        return [
+          {
+            fieldPath: `${fieldPath}.title`,
+            kind: "title" as const,
+            text: profile.title,
+          },
+          {
+            fieldPath: `${fieldPath}.shortTitle`,
+            kind: "title" as const,
+            text: profile.shortTitle,
+          },
+          {
+            fieldPath: `${fieldPath}.summary`,
+            kind: "result" as const,
+            text: profile.summary,
+          },
+          ...profile.strengths.map((text, index) => ({
+            fieldPath: `${fieldPath}.strengths.${index}`,
+            kind: "result" as const,
+            text,
+          })),
+          {
+            fieldPath: `${fieldPath}.watch`,
+            kind: "result" as const,
+            text: profile.watch,
+          },
+          {
+            fieldPath: `${fieldPath}.relationTip`,
+            kind: "result" as const,
+            text: profile.relationTip,
+          },
+          {
+            fieldPath: `${fieldPath}.smallExperiment`,
+            kind: "result" as const,
+            text: profile.smallExperiment,
+          },
+        ];
+      }),
+      ...assessment.questions.flatMap((question, questionIndex) => {
+        const fieldPath = `payload.assessment.questions.${questionIndex}`;
+        const questionRecord = question as typeof question &
+          Record<string, unknown>;
+        return [
+          ...optionalCopyEntry({
+            fieldPath,
+            key: "contextLabel",
+            kind: "context",
+            record: questionRecord,
+          }),
+          {
+            allowChoiceCompletion: true,
+            fieldPath: `${fieldPath}.text`,
+            kind: "question" as const,
+            text: question.text,
+          },
+          ...question.options.map((option, optionIndex) => ({
+            fieldPath: `${fieldPath}.options.${optionIndex}.label`,
+            kind: "option" as const,
+            text: option.label,
+          })),
+        ];
+      }),
+    ]);
     if (
       assessment.slug !== document.slug ||
       assessment.cardTitle !== document.title ||
@@ -653,6 +911,36 @@ export function validateAssessmentStudioDocument(
   if (document.subtype === "balance_pack") {
     const parsed = balancePayloadSchema.safeParse(document.payload);
     if (!parsed.success) return [...issues, ...zodIssues(parsed.error)];
+    addPublicLanguageIssues(issues, [
+      {
+        fieldPath: "payload.pack.title",
+        kind: "title",
+        text: parsed.data.pack.title,
+      },
+      {
+        fieldPath: "payload.pack.description",
+        kind: "description",
+        text: parsed.data.pack.description,
+      },
+      ...parsed.data.pack.questions.flatMap((question, questionIndex) => [
+        {
+          allowChoiceCompletion: true,
+          fieldPath: `payload.pack.questions.${questionIndex}.prompt`,
+          kind: "question" as const,
+          text: question.prompt,
+        },
+        {
+          fieldPath: `payload.pack.questions.${questionIndex}.subtopic`,
+          kind: "title" as const,
+          text: question.subtopic,
+        },
+        ...question.options.map((option, optionIndex) => ({
+          fieldPath: `payload.pack.questions.${questionIndex}.options.${optionIndex}.text`,
+          kind: "option" as const,
+          text: option.text,
+        })),
+      ]),
+    ]);
     const expectedSemantics = {
       dilemma_fun: "choice_chemistry",
       discovery_only: "discovery_only",
@@ -727,6 +1015,49 @@ export function validateAssessmentStudioDocument(
   if (document.subtype === "friend_match") {
     const parsed = friendPayloadSchema.safeParse(document.payload);
     if (!parsed.success) return [...issues, ...zodIssues(parsed.error)];
+    const config = parsed.data.config;
+    addPublicLanguageIssues(issues, [
+      ...[
+        ["title", "title"],
+        ["description", "description"],
+        ["contextLabel", "context"],
+        ["question", "question"],
+        ["senderHeading", "title"],
+        ["predictionHeading", "title"],
+        ["receiverHeading", "title"],
+        ["invitationTitle", "title"],
+        ["invitationText", "description"],
+        ["resultInsight", "result"],
+        ["expiredInviteTitle", "title"],
+        ["expiredInviteDescription", "description"],
+        ["invalidInviteTitle", "title"],
+        ["invalidInviteDescription", "description"],
+      ].map(([key, kind]) => ({
+        allowChoiceCompletion: key === "question",
+        fieldPath: `payload.config.${key}`,
+        kind: kind as PublicLanguageTextKind,
+        text: config[key as keyof typeof config] as string,
+      })),
+      ...config.choices.map((choice, index) => ({
+        fieldPath: `payload.config.choices.${index}.label`,
+        kind: "option" as const,
+        text: choice.label,
+      })),
+      ...Object.entries(config.resultCopies).flatMap(
+        ([resultKey, resultCopy]) => [
+          {
+            fieldPath: `payload.config.resultCopies.${resultKey}.title`,
+            kind: "title" as const,
+            text: resultCopy.title,
+          },
+          {
+            fieldPath: `payload.config.resultCopies.${resultKey}.description`,
+            kind: "result" as const,
+            text: resultCopy.description,
+          },
+        ],
+      ),
+    ]);
     if (
       parsed.data.config.title !== document.title ||
       parsed.data.config.description !== document.description

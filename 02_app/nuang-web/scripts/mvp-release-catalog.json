@@ -207,6 +207,7 @@
       "purpose": "결과의 공개 가능한 스냅샷만 기간 제한 주소 또는 피드 리포트로 공유한다.",
       "capabilities": [
         "30일 만료 공유 주소 생성",
+        "비회원 결과 요약의 180일 만료 서명 주소 생성",
         "token hash 기반 공개 조회와 철회",
         "만료·철회·삭제·비활성 상태 처리",
         "결과 리포트의 피드 공유 projection",
@@ -218,14 +219,17 @@
         "^feed/reports/",
         "^api/share-links/",
         "^api/revoke-share/",
-        "^api/report-share-links/"
+        "^api/report-share-links/",
+        "^api/guest-report-share-links/"
       ],
       "sourceRoots": ["src/features/share"],
       "testEvidence": [
         "src/features/share/ReportShareSheet.test.tsx",
         "src/features/share/public-share-server.test.ts",
+        "src/features/share/server-guest-report-share-token.test.ts",
         "src/app/share/[token]/page.test.tsx",
-        "src/app/api/report-share-links/route.test.ts"
+        "src/app/api/report-share-links/route.test.ts",
+        "src/app/api/guest-report-share-links/route.test.ts"
       ]
     },
     {
@@ -406,7 +410,11 @@
         "결과 삭제와 목록 복귀",
         "점수 우열·진단·경계 낙인 금지"
       ],
-      "surfacePatterns": ["^results/", "^assessments/topics/.+/result/"],
+      "surfacePatterns": [
+        "^results/",
+        "^reports/layout\\.tsx$",
+        "^assessments/topics/.+/result/"
+      ],
       "sourceRoots": ["src/features/result"],
       "testEvidence": [
         "src/features/result/LocalResultView.test.tsx",
@@ -443,9 +451,11 @@
     {
       "id": "policy_security_platform",
       "name": "정책·보안·플랫폼 기반",
-      "purpose": "정책 문서, noindex, CSP, 환경 닫힘 상태, Supabase 경계, 전역 테마와 오류 처리를 출시 기준으로 유지한다.",
+      "purpose": "정책 문서, 검색 노출, noindex, CSP, 환경 닫힘 상태, Supabase 경계, 전역 테마와 오류 처리를 출시 기준으로 유지한다.",
       "capabilities": [
         "이용약관·개인정보 처리방침 표시와 승인 상태",
+        "검색엔진별 고유 제목·설명·대표 이미지와 canonical 제공",
+        "사이트맵·robots·구조화 데이터·파비콘·앱 아이콘 관리",
         "공개하면 안 되는 화면의 noindex",
         "CSP 보고 수집과 보안 헤더",
         "환경 변수 누락 시 명시적 closed state",
@@ -457,11 +467,14 @@
       "sourceRoots": [
         "src/features/policy",
         "src/features/copy",
+        "src/features/seo",
         "src/lib/api",
         "src/lib/supabase"
       ],
       "testEvidence": [
         "src/features/policy/PolicySkeletonView.test.tsx",
+        "src/features/seo/site-config.test.ts",
+        "src/app/seo-routes.test.ts",
         "src/app/noindex-metadata.test.ts",
         "src/lib/api/closed-state.test.ts",
         "src/app/api/security/csp-report/route.test.ts"

@@ -2,6 +2,8 @@ import { hashShareToken } from "@/features/account/server-writes";
 import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import { adaptPublicCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
 import type { CoreResultReportModel } from "@/features/result/unified-core-report/core-result-report-model";
+import type { ReportShareContent } from "@/features/share/report-share-contract";
+import { readGuestReportShareToken } from "@/features/share/server-guest-report-share-token";
 import {
   createSupabaseServiceClient,
   getSupabaseServiceEnv,
@@ -11,6 +13,12 @@ import { createServerSupabaseClient } from "@/lib/supabase/server";
 type PublicShareReadResult =
   | {
       model: CoreResultReportModel;
+      shareKind: "account_core";
+      status: "active";
+    }
+  | {
+      content: ReportShareContent;
+      shareKind: "guest_summary";
       status: "active";
     }
   | {
@@ -23,6 +31,18 @@ type PublicShareReadResult =
 export async function readPublicShareToken(
   token: string,
 ): Promise<PublicShareReadResult> {
+  const guestShare = readGuestReportShareToken(token);
+  if (guestShare.status === "active") {
+    return {
+      content: guestShare.content,
+      shareKind: "guest_summary",
+      status: "active",
+    };
+  }
+  if (guestShare.status === "expired") return { status: "expired" };
+  if (guestShare.status === "invalid") return { status: "not_found" };
+  if (guestShare.status === "unavailable") return { status: "closed" };
+
   const client = createSupabaseServiceClient();
   const env = getSupabaseServiceEnv();
 
@@ -125,6 +145,7 @@ export async function readPublicShareToken(
 
   return {
     model,
+    shareKind: "account_core",
     status: "active",
   };
 }

@@ -32,17 +32,6 @@ const blockedInternalPhrases = [
   "연구 중인",
 ] as const;
 
-const evasivePhrases = [
-  "단정할 수",
-  "알 수 없",
-  "보장하지",
-  "다를 수",
-  "상황에 따라",
-  "아닐 수도",
-  "무조건 그런",
-  "확정할 수",
-] as const;
-
 const customerGuideReferenceSchema = z.object({
   description: z.string().trim().min(12).max(180),
   href: z.string().url().startsWith("https://"),
@@ -137,19 +126,6 @@ export const traitMapCustomerGuideSchema = z
           path: ["chapters"],
         });
       }
-    }
-
-    const evasivePhraseCount = evasivePhrases.reduce(
-      (total, phrase) => total + customerCopy.split(phrase).length - 1,
-      0,
-    );
-    if (evasivePhraseCount > 2) {
-      context.addIssue({
-        code: "custom",
-        message:
-          "회피성 표현을 반복하기보다 이 코드에서 대체로 나타나는 생각과 행동을 구체적으로 설명해 주세요.",
-        path: ["chapters"],
-      });
     }
   });
 

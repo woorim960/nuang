@@ -6,10 +6,11 @@ import styles from "@/features/feed/CommunitySecondaryScreen.module.css";
 import { readCommunityNotifications } from "@/features/feed/server-community-social";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 
-export const metadata: Metadata = {
-  title: "커뮤니티 알림 | NUANG",
-};
+export const metadata: Metadata = createPrivatePageMetadata({
+  title: "커뮤니티 알림",
+});
 
 export default async function CommunityNotificationsPage() {
   const result = await resolveNotifications();

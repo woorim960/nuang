@@ -49,6 +49,7 @@ export function FreeTopicResultView({
   canonicalShareUrl,
   initialResult,
   localResultId,
+  openShareOnMount = false,
   questionsOverride,
   previewMode = false,
   readOnly = false,
@@ -60,6 +61,7 @@ export function FreeTopicResultView({
   canonicalShareUrl?: string;
   initialResult?: StoredFreeTopicResult;
   localResultId: string;
+  openShareOnMount?: boolean;
   questionsOverride?: FreeTopicQuestion[];
   previewMode?: boolean;
   readOnly?: boolean;
@@ -148,6 +150,19 @@ export function FreeTopicResultView({
       isMounted = false;
     };
   }, [initialResult, localResultId, router, slug]);
+
+  useEffect(() => {
+    if (
+      !openShareOnMount ||
+      previewMode ||
+      !shareEnabled ||
+      loadState !== "ready"
+    ) {
+      return;
+    }
+    const frame = requestAnimationFrame(() => setIsShareOpen(true));
+    return () => cancelAnimationFrame(frame);
+  }, [loadState, openShareOnMount, previewMode, shareEnabled]);
 
   if (
     loadState === "loading" ||
@@ -316,8 +331,7 @@ export function FreeTopicResultView({
   });
   const canShare = Boolean(
     !previewMode &&
-    shareEnabled &&
-    (canonicalShareUrl || result.serverResultId),
+    shareEnabled,
   );
 
   return (

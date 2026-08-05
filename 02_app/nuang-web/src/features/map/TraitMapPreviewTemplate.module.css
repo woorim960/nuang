@@ -12,6 +12,13 @@
   line-height: var(--nu-leading-label);
 }
 
+.sectionHeading p {
+  margin: 0.5rem 0 0;
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-label);
+  line-height: var(--nu-leading-body-sm);
+}
+
 .letterGuide {
   padding: 1.25rem 1rem;
 }

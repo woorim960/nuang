@@ -4,7 +4,7 @@ import {
 } from "@/features/nuang-code/candidate-profile-names";
 import {
   getArchivedTraitMapCustomerGuide,
-  getPublishedTraitMapCustomerGuide,
+  getCustomerApprovedTraitMapGuide,
 } from "@/features/nuang-code/trait-map-customer-guide-registry";
 import {
   getTraitMapResultSummaryPublicationByDigestV2,
@@ -67,7 +67,7 @@ export function buildReportContentSnapshot({
   kind,
   measurementVersion,
 }: SnapshotBuildInput): ReportContentSnapshot {
-  const guide = getPublishedTraitMapCustomerGuide(code);
+  const guide = getCustomerApprovedTraitMapGuide(code);
   const canonicalResolution = resolveTraitMapResultSummaryV2({ code });
   const excerptManifest = guide
     ? buildCoreResultExcerpt(guide, kind).manifest
@@ -126,7 +126,7 @@ export function resolveReportContentSnapshot({
 
   const guide = snapshot.guideVersion
     ? getArchivedTraitMapCustomerGuide(code, snapshot.guideVersion)
-    : getPublishedTraitMapCustomerGuide(code);
+    : getCustomerApprovedTraitMapGuide(code);
   if (snapshot.guideVersion && !guide) {
     return unavailable("GUIDE_ARCHIVE_MISSING");
   }

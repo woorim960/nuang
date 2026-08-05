@@ -110,6 +110,10 @@ export default async function AdminContentPage({
         >
           운영 가이드
         </Link>
+        <Link href="/admin/content/trait-map">
+          상세 문장 검수
+          <span>32</span>
+        </Link>
       </nav>
 
       {view !== "guide" ? <ContentGuide view={view} /> : null}

@@ -5,7 +5,7 @@ import type {
 } from "@/features/nuang-code/trait-map-customer-guide-contract";
 import {
   getArchivedTraitMapCustomerGuide,
-  getPublishedTraitMapCustomerGuide,
+  getCustomerApprovedTraitMapGuide,
 } from "@/features/nuang-code/trait-map-customer-guide-registry";
 import {
   getTraitMapResultSummaryPublicationByDigestV2,
@@ -94,7 +94,7 @@ export function assembleCoreResultContent(
   model: CoreResultReportModel,
 ): CoreResultContentBundle {
   const profile = getCandidateProfileDefinition(model.result.code);
-  const publishedGuide = getPublishedTraitMapCustomerGuide(model.result.code);
+  const publishedGuide = getCustomerApprovedTraitMapGuide(model.result.code);
   const guide = model.interpretation.guideVersion
     ? (getArchivedTraitMapCustomerGuide(
         model.result.code,
@@ -216,9 +216,7 @@ function buildOverviewFlow(
   const cost =
     overuseSection?.paragraphs[0] ?? firstSection?.paragraphs[1] ?? null;
   const adjustment =
-    adjustmentSection?.paragraphs[0] ??
-    lastSection?.paragraphs.at(-1) ??
-    null;
+    adjustmentSection?.paragraphs[0] ?? lastSection?.paragraphs.at(-1) ?? null;
 
   if (!strength || !cost || !adjustment) return fallback;
 

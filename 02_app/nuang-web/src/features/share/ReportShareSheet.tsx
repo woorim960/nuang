@@ -105,6 +105,7 @@ export function ReportShareSheet({
   const [step, setStep] = useState<ShareStep>("actions");
   const [status, setStatus] = useState<ShareStatus>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
+  const guestShareUrlRef = useRef<{ key: string; url: string } | null>(null);
   const isCriticalTransitionRef = useRef(false);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -113,7 +114,6 @@ export function ReportShareSheet({
     getClientSnapshot,
     getServerSnapshot,
   );
-  const sharesOriginalReport = Boolean(canonicalUrl || originalReportKey);
   const isCriticalTransition =
     step === "publish-confirm" && activeAction !== null;
 
@@ -135,6 +135,10 @@ export function ReportShareSheet({
         url?: string;
       } | null;
 
+      if (shouldUseGuestSummaryFallback(response.status, payload?.error)) {
+        return createGuestShareUrl(content, guestShareUrlRef);
+      }
+
       if (!response.ok || !payload?.ok || !payload.url) {
         throw new ReportShareRequestError(
           payload?.error ?? "share_link_failed",
@@ -149,8 +153,8 @@ export function ReportShareSheet({
       return new URL(canonicalUrl, window.location.origin).toString();
     }
 
-    throw new Error("검사 결과를 계정에 저장한 뒤 공유할 수 있어요.");
-  }, [canonicalUrl, originalReportKey]);
+    return createGuestShareUrl(content, guestShareUrlRef);
+  }, [canonicalUrl, content, originalReportKey]);
 
   const closeSheet = useCallback(() => {
     if (isCriticalTransitionRef.current) return;
@@ -220,7 +224,7 @@ export function ReportShareSheet({
   }, [isOpen, step]);
 
   useEffect(() => {
-    if (!isOpen || !sharesOriginalReport) return;
+    if (!isOpen) return;
     let cancelled = false;
 
     void prepareKakaoReportShareImage(content.reportType)
@@ -234,7 +238,7 @@ export function ReportShareSheet({
     return () => {
       cancelled = true;
     };
-  }, [content.reportType, isOpen, sharesOriginalReport]);
+  }, [content.reportType, isOpen]);
 
   if (!isClient || !isOpen) return null;
 
@@ -319,7 +323,11 @@ export function ReportShareSheet({
     try {
       setActiveAction("feed_share");
       setStatus(null);
-      await getFreshShareUrl();
+      const shareUrl = await getFreshShareUrl();
+      if (!parseOriginalReportAttachment(shareUrl)) {
+        navigateToLoginForCommunity(onNavigate);
+        return;
+      }
       setCommunityNote(
         (current) => current || initialCommunityNote?.slice(0, 120) || "",
       );
@@ -513,8 +521,7 @@ export function ReportShareSheet({
       } | null;
 
       if (response.status === 401) {
-        const nextPath = `${window.location.pathname}${window.location.search}`;
-        navigate(`/login?next=${encodeURIComponent(nextPath)}`, onNavigate);
+        navigateToLoginForCommunity(onNavigate);
         return;
       }
       if (!response.ok || !payload?.ok) throw new Error("feed_share_failed");
@@ -543,9 +550,7 @@ export function ReportShareSheet({
       ? "글을 덧붙여 커뮤니티에 올려요."
       : step === "publish-confirm"
         ? "공개 범위를 확인해 주세요."
-        : sharesOriginalReport
-          ? "저장된 결과를 공유해요."
-          : "먼저 결과를 계정에 저장해 주세요.";
+        : "결과 요약을 안전하게 공유해요.";
 
   return createPortal(
     <div className={styles.layer}>
@@ -614,7 +619,7 @@ export function ReportShareSheet({
                 aria-busy={activeAction === "kakao_share"}
                 aria-label="카카오톡으로 보내기"
                 className={styles.kakaoAction}
-                disabled={activeAction !== null || !sharesOriginalReport}
+                disabled={activeAction !== null}
                 onClick={() => void handleKakaoShare()}
                 type="button"
               >
@@ -648,7 +653,7 @@ export function ReportShareSheet({
                       aria-busy={isWorking}
                       aria-label={action.label}
                       data-action={action.id}
-                      disabled={activeAction !== null || !sharesOriginalReport}
+                      disabled={activeAction !== null}
                       key={action.id}
                       onClick={() => void actionHandlers[action.id]()}
                       type="button"
@@ -776,9 +781,7 @@ export function ReportShareSheet({
 
         {step === "actions" ? (
           <p className={styles.privacyNote}>
-            {sharesOriginalReport
-              ? "답변과 원점수는 공유되지 않아요."
-              : "로그인하고 결과를 저장한 뒤 공유할 수 있어요."}
+            답변, 연락처와 계정 정보는 공유되지 않아요.
           </p>
         ) : null}
       </div>
@@ -872,6 +875,15 @@ function isPrivateReportError(error: unknown) {
   );
 }
 
+function shouldUseGuestSummaryFallback(status: number, error?: string) {
+  return (
+    status === 401 ||
+    error === "account_not_found" ||
+    error === "public_profile_not_found" ||
+    error === "report_not_found"
+  );
+}
+
 function isAbortError(error: unknown) {
   return error instanceof DOMException && error.name === "AbortError";
 }
@@ -906,6 +918,44 @@ function navigate(href: string, onNavigate?: (href: string) => void) {
     return;
   }
   window.location.assign(href);
+}
+
+async function createGuestShareUrl(
+  content: ReportShareContent,
+  cacheRef: RefObject<{ key: string; url: string } | null>,
+) {
+  const contentKey = JSON.stringify(content);
+  if (cacheRef.current?.key === contentKey) return cacheRef.current.url;
+
+  const response = await fetch("/api/guest-report-share-links", {
+    body: JSON.stringify({ content }),
+    headers: { "content-type": "application/json" },
+    method: "POST",
+  });
+  const payload = (await response.json().catch(() => null)) as {
+    message?: string;
+    ok?: boolean;
+    url?: string;
+  } | null;
+  if (!response.ok || !payload?.ok || !payload.url) {
+    throw new Error(
+      payload?.message ??
+        "공유 링크를 준비하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+    );
+  }
+
+  cacheRef.current = { key: contentKey, url: payload.url };
+  return payload.url;
+}
+
+function navigateToLoginForCommunity(onNavigate?: (href: string) => void) {
+  const currentUrl = new URL(window.location.href);
+  currentUrl.searchParams.set("share", "1");
+  const nextPath = `${currentUrl.pathname}${currentUrl.search}`;
+  navigate(
+    `/login?next=${encodeURIComponent(nextPath)}&reason=share`,
+    onNavigate,
+  );
 }
 
 function parseOriginalReportAttachment(value: string) {

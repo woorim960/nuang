@@ -47,7 +47,12 @@ export function TraitMapPreviewTemplate({
 
       <section className={styles.letterGuide} aria-labelledby="letter-title">
         <div className={styles.sectionHeading}>
-          <h2 id="letter-title">뉴앙 코드가 보여주는 핵심 모습</h2>
+          <h2 id="letter-title">검사에서 확인한 다섯 가지 모습</h2>
+          <p>
+            지금은 답변에서 직접 확인할 수 있는 내용만 보여드려요. 관계나 일에
+            대한 자세한 해석은 문장별 검토를 마친 뒤 추가합니다. 성향 이름은
+            지도를 쉽게 찾기 위한 별칭이며 직업이나 능력을 뜻하지 않아요.
+          </p>
         </div>
         <ol>
           {profile.code.split("").map((symbol, index) => {
@@ -60,9 +65,7 @@ export function TraitMapPreviewTemplate({
                   <strong>
                     {symbol} · {direction.publicTypeName}
                   </strong>
-                  <p>
-                    {direction.detailTitle}. {direction.description}
-                  </p>
+                  <p>{direction.description}</p>
                 </div>
               </li>
             );

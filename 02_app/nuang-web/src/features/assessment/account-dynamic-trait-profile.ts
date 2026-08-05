@@ -5,6 +5,7 @@ import {
   type FreeTopicQuestion,
 } from "@/features/assessment/free-topic-assessments";
 import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
+import { canTopicEvidenceUpdateRepresentativeCode } from "@/features/assessment/topic-representative-code-policy";
 import {
   calculateDynamicTraitSnapshot,
   dynamicTraitEvidenceVersion,
@@ -90,7 +91,12 @@ export function buildTopicDomainObservations(
   result: TopicTraitEvidenceResult,
   now = new Date(),
 ): TraitEvidenceObservation[] {
-  if (result.assessment.evidenceUse === "blocked") return [];
+  if (
+    result.assessment.evidenceUse === "blocked" ||
+    !canTopicEvidenceUpdateRepresentativeCode({ slug: result.slug })
+  ) {
+    return [];
+  }
 
   const scoreGroups = new Map<
     string,

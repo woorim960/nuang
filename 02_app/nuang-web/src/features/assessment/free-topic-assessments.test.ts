@@ -112,7 +112,7 @@ describe("freeTopicAssessments", () => {
     });
   });
 
-  it("makes approved topic results available to the cumulative current code", () => {
+  it("keeps public topic results out of the representative code until validation", () => {
     const assessment = getFreeTopicAssessment("conversation-temperature");
     expect(assessment).not.toBeNull();
 
@@ -129,14 +129,7 @@ describe("freeTopicAssessments", () => {
       },
     });
 
-    expect(observations).toHaveLength(2);
-    expect(observations.map((item) => buildTargetKey(item.target))).toEqual([
-      "facet:RO-EC",
-      "facet:SE-AI",
-    ]);
-    expect(observations.every((item) => item.sourceKind === "free_topic")).toBe(
-      true,
-    );
+    expect(observations).toEqual([]);
   });
 
   it("gives every open question a concrete situation label", () => {
@@ -386,7 +379,7 @@ describe("freeTopicAssessments", () => {
     expect(serialized).not.toContain("facet:");
   });
 
-  it("lets preference topics contribute only through their approved mappings", () => {
+  it("also excludes preference topics from representative-code evidence", () => {
     const assessment = getFreeTopicAssessment("cafe-seat-style");
     expect(assessment?.impactGrade).toBe("A");
     expect(assessment?.evidenceUse).toBe("dynamic_trait_evidence");
@@ -402,13 +395,7 @@ describe("freeTopicAssessments", () => {
       ),
     });
 
-    const codeMappings = assessment!.mappings.filter((mapping) =>
-      isRepresentativeTraitTarget(mapping.target),
-    );
-    expect(observations).toHaveLength(codeMappings.length);
-    expect(observations.map((item) => buildTargetKey(item.target))).toEqual(
-      codeMappings.map((mapping) => buildTargetKey(mapping.target)),
-    );
+    expect(observations).toEqual([]);
   });
 
   it("names the opposite behavior when a result is clearly below the midpoint", () => {

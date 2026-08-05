@@ -3,11 +3,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { AccountConnectPanel } from "@/features/consent/AccountConnectPanel";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 import styles from "./page.module.css";
 
-export const metadata: Metadata = {
-  title: "로그인 또는 가입 | NUANG",
-};
+export const metadata: Metadata = createPrivatePageMetadata({
+  title: "로그인 또는 가입",
+});
 
 type LoginPageProps = {
   searchParams?: Promise<{

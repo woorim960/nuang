@@ -35,6 +35,8 @@ credential 준비는 `CREDENTIAL_MINIMAL_SETUP.md`를 먼저 따른다.
 - `202607210001_trait_map_content_catalog.sql`: 성향지도의 5축·10개 세부 특성·32개 역할형과 문구·근거·4분야 검토를 버전 관리하고, 승인 전 고객 공개를 DB에서 차단한다.
 - `202607310001_together_balance_game_foundation.sql`: 함께하기 밸런스 게임의 버전 고정 콘텐츠·2~8명 방·8문항 라운드·비공개 응답·결과 스냅샷·피드 모집 연결을 별도 `together_balance` 도메인에 추가한다. 원문 방/참여자 토큰은 저장하지 않고 SHA-256 해시만 받으며, 좌석 확보·응답 저장·라운드 완료·방 마감은 service-role 전용 원자 RPC를 사용한다.
 - `202608010001_core_result_report_feedback.sql`: 코어·정밀 결과 리포트의 완료 시점 문장 ID·버전별 적합도 피드백, 운영 집계 view, 감사 로그가 남는 검토 상태 변경 RPC를 추가한다. 브라우저에는 원본 테이블을 열지 않고 서버가 결과 소유권과 저장된 콘텐츠 스냅샷을 다시 확인한다.
+- `202608060001_trait_map_sentence_review_operations.sql`: 성향지도 문장별 7개 역할 검토, 프로필 승인, 베타·MVP 배포 기록을 원자적으로 관리한다.
+- `202608060002_trait_map_inline_content_editing.sql`: 운영센터 미리보기에서 승인된 문장을 직접 수정하고, AI 안전 검수·개정 이력·사람 재검토 무효화를 한 트랜잭션으로 처리한다.
 
 Data API 설정:
 

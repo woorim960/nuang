@@ -161,18 +161,18 @@ describe("public balance content", () => {
     );
 
     expect(fingerprints).toEqual({
-      "mixed-taste": { version: 1, fingerprint: "308c3415" },
-      "where-to-go": { version: 1, fingerprint: "91ddfba6" },
+      "mixed-taste": { version: 2, fingerprint: "c8c9ce22" },
+      "where-to-go": { version: 2, fingerprint: "c3f3b1ea" },
       "what-to-eat": { version: 1, fingerprint: "11b5edeb" },
-      "what-to-do": { version: 1, fingerprint: "2c7f5930" },
-      "what-to-watch": { version: 1, fingerprint: "7eea56f5" },
-      "ideal-person": { version: 1, fingerprint: "b79f3ac4" },
-      "forever-one": { version: 1, fingerprint: "f090ea0f" },
-      "funny-extreme": { version: 2, fingerprint: "2ecfe112" },
+      "what-to-do": { version: 2, fingerprint: "44eadfa0" },
+      "what-to-watch": { version: 2, fingerprint: "8a818fb3" },
+      "ideal-person": { version: 2, fingerprint: "48075fae" },
+      "forever-one": { version: 2, fingerprint: "93bd4e83" },
+      "funny-extreme": { version: 3, fingerprint: "42521a87" },
     });
     expect(
       getPublicBalancePack("funny-extreme")?.questions.every(
-        (question) => question.contentVersion === 2,
+        (question) => question.contentVersion === 3,
       ),
     ).toBe(true);
   });

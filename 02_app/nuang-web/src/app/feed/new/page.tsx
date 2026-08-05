@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { FeedComposer } from "@/features/feed/FeedComposer";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 
-export const metadata: Metadata = {
-  title: "글쓰기 | NUANG",
-};
+export const metadata: Metadata = createPrivatePageMetadata({
+  title: "글쓰기",
+});
 
 export default async function NewFeedPostPage({
   searchParams,

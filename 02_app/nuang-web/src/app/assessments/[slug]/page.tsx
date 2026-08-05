@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { AssessmentRunner } from "@/features/assessment/AssessmentRunner";
 import { FriendTraitMatch } from "@/features/assessment/FriendTraitMatch";
@@ -9,6 +10,7 @@ import { parseFriendTraitMatchInvite } from "@/features/assessment/friend-trait-
 import { betaCoreAssessment } from "@/features/assessment/beta-core-seed";
 import { candidateQuickCoreAssessment } from "@/features/assessment/candidate-quick-core-seed";
 import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
+import { applyCorePlainKoreanRuntimeCopy } from "@/features/assessment/core-runtime-plain-language";
 import { PrecisionAssessmentIntro } from "@/features/assessment/PrecisionAssessmentIntro";
 import {
   parsePrecisionEntrySource,
@@ -20,11 +22,45 @@ import {
   resolveAssessmentReleaseById,
   resolveAssessmentRuntimeContent,
 } from "@/features/assessment/server-assessment-content-runtime";
+import {
+  createPrivatePageMetadata,
+  createPublicPageMetadata,
+} from "@/features/seo/site-config";
 
 type AssessmentStartPageProps = {
   params: Promise<{ slug: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 };
+
+export async function generateMetadata({
+  params,
+}: Pick<AssessmentStartPageProps, "params">): Promise<Metadata> {
+  const { slug } = await params;
+
+  if (slug === "nu-core-quick") {
+    return createPublicPageMetadata({
+      description:
+        "22개 생활 질문으로 지금의 나를 다섯 가지 성향 기준에서 알아보는 무료 성향 테스트예요. 약 3분이면 시작할 수 있어요.",
+      image: "/images/share/nuang-result-share-core-v2.png",
+      imageAlt: "뉴앙 무료 성향 테스트 코어 리포트",
+      path: "/assessments/nu-core-quick",
+      title: "무료 성향 테스트",
+    });
+  }
+
+  if (slug === "nu-core-full") {
+    return createPublicPageMetadata({
+      description:
+        "생활 속 선택을 더 자세히 돌아보며 다섯 가지 성향 기준을 정밀하게 살펴보는 뉴앙 성향 검사예요.",
+      image: "/images/share/nuang-result-share-core-v2.png",
+      imageAlt: "뉴앙 정밀 성향 검사 코어 리포트",
+      path: "/assessments/nu-core-full",
+      title: "정밀 성향 검사",
+    });
+  }
+
+  return createPrivatePageMetadata({ title: "검사" });
+}
 
 export default async function AssessmentStartPage({
   params,
@@ -40,7 +76,7 @@ export default async function AssessmentStartPage({
   ) {
     return (
       <AssessmentRunner
-        assessment={betaCoreAssessment}
+        assessment={applyCorePlainKoreanRuntimeCopy(betaCoreAssessment)}
         returnDestination="/home"
       />
     );
@@ -122,9 +158,12 @@ export default async function AssessmentStartPage({
           subtype: "friend_match",
         });
   if (friendResolution.state === "published") {
-    const content = (friendResolution.document.payload as {
-      config?: FriendTraitMatchContent;
-    }).config ?? defaultFriendTraitMatchContent;
+    const content =
+      (
+        friendResolution.document.payload as {
+          config?: FriendTraitMatchContent;
+        }
+      ).config ?? defaultFriendTraitMatchContent;
     return (
       <FriendTraitMatch
         content={content}
@@ -149,14 +188,13 @@ async function resolveCoreAssessment(
     subtype,
   });
   if (resolution.state === "unavailable") return null;
-  const definition = (resolution.document?.payload as
-    | { definition?: AssessmentDefinition }
-    | undefined)?.definition;
+  const definition = (
+    resolution.document?.payload as
+      { definition?: AssessmentDefinition } | undefined
+  )?.definition;
   return {
-    ...(definition ?? fallback),
-    ...(resolution.releaseId
-      ? { contentReleaseId: resolution.releaseId }
-      : {}),
+    ...(definition ?? applyCorePlainKoreanRuntimeCopy(fallback)),
+    ...(resolution.releaseId ? { contentReleaseId: resolution.releaseId } : {}),
   };
 }
 

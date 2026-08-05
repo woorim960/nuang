@@ -3,7 +3,9 @@ import type { Metadata } from "next";
 import { cache } from "react";
 import { ButtonLink } from "@/components/ui/Button";
 import { CoreResultReportTemplate } from "@/features/result/unified-core-report/CoreResultReportTemplate";
+import { GuestReportShareView } from "@/features/share/GuestReportShareView";
 import { readPublicShareToken } from "@/features/share/public-share-server";
+import { getAppOrigin } from "@/lib/supabase/env";
 
 type SharePageProps = {
   params: Promise<{ token: string }>;
@@ -36,15 +38,24 @@ export async function generateMetadata({
   }
 
   const resultName =
-    result.model.result.currentProfileName || result.model.result.code;
+    result.shareKind === "guest_summary"
+      ? result.content.resultName
+      : result.model.result.currentProfileName || result.model.result.code;
   const title = `${resultName} | 뉴앙 결과 리포트`;
-  const description = `${result.model.result.code} · 뉴앙에서 발견한 성향 결과를 확인해 보세요.`;
+  const description =
+    result.shareKind === "guest_summary"
+      ? result.content.summary
+      : `${result.model.result.code} · 뉴앙에서 발견한 성향 결과를 확인해 보세요.`;
+  const imageUrl =
+    result.shareKind === "guest_summary"
+      ? `https://nuang.app/images/share/nuang-result-share-${result.content.reportType}-v2.png`
+      : image.url;
 
   return {
     description,
     openGraph: {
       description,
-      images: [image],
+      images: [{ ...image, url: imageUrl }],
       siteName: "뉴앙",
       title,
       type: "article",
@@ -54,7 +65,7 @@ export async function generateMetadata({
     twitter: {
       card: "summary_large_image",
       description,
-      images: [image.url],
+      images: [imageUrl],
       title,
     },
   };
@@ -65,6 +76,14 @@ export default async function SharePage({ params }: SharePageProps) {
   const result = await readShareToken(token);
 
   if (result.status === "active") {
+    if (result.shareKind === "guest_summary") {
+      return (
+        <GuestReportShareView
+          canonicalUrl={new URL(`/share/${token}`, getAppOrigin()).toString()}
+          content={result.content}
+        />
+      );
+    }
     return (
       <CoreResultReportTemplate
         model={result.model}

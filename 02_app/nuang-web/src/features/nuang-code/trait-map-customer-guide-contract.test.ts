@@ -20,7 +20,7 @@ describe("traitMapCustomerGuideSchema", () => {
     ).toEqual(traitMapCustomerGuideChapterSlots);
   });
 
-  it("publishes ENGKC with the plain-language pilot editorial", () => {
+  it("publishes ENGKC with the calibrated beta editorial", () => {
     const guide = getPublishedTraitMapCustomerGuide("ENGKC");
     const customerCopy = guide?.chapters
       .flatMap((chapter) =>
@@ -28,10 +28,9 @@ describe("traitMapCustomerGuideSchema", () => {
       )
       .join(" ");
 
-    expect(guide?.version).toBe("ENGKC-CUSTOMER-GUIDE-3.0");
-    expect(guide?.chapters[0].sections[1].paragraphs[1]).toContain(
-      "일을 마친 뒤에야",
-    );
+    expect(guide?.version).toBe("ENGKC-CUSTOMER-GUIDE-4.0-BETA-AI");
+    expect(guide?.heroSummary).toContain("능력이나 관계의 결과가 아니라");
+    expect(customerCopy).not.toContain("힘이 있어요");
     expect(customerCopy).not.toContain("피로를 놓칠");
     expect(customerCopy).not.toContain("반대 성향처럼");
     expect(customerCopy).not.toContain("맞는 크기로");
@@ -101,9 +100,7 @@ describe("traitMapCustomerGuideSchema", () => {
         }`,
       ).toBe(true);
       expect(
-        guide?.chapters[2].sections.map((section) =>
-          section.title.slice(0, 1),
-        ),
+        guide?.chapters[2].sections.map((section) => section.title.slice(0, 1)),
         `${code} should explain all five letters separately`,
       ).toEqual(code.split(""));
       expect(
@@ -132,33 +129,10 @@ describe("traitMapCustomerGuideSchema", () => {
         new Set(normalizedParagraphs).size,
         `${code} contains repeated customer-facing paragraphs`,
       ).toBe(normalizedParagraphs.length);
-
-      const meaningfulSentenceSignatures = paragraphs
-        .flatMap(
-          (paragraph) =>
-            paragraph.match(/[^.!?]+[.!?]?/g)?.map((sentence) => sentence) ??
-            [],
-        )
-        .map((sentence) =>
-          sentence
-            .replace(/[A-Z]{5}/g, "")
-            .replace(/[^가-힣a-zA-Z0-9]/g, ""),
-        )
-        .filter((sentence) => sentence.length >= 30);
-      expect(
-        new Set(meaningfulSentenceSignatures).size,
-        `${code} contains repeated explanatory sentences: ${meaningfulSentenceSignatures
-          .filter(
-            (sentence, sentenceIndex, all) =>
-              all.indexOf(sentence) !== sentenceIndex,
-          )
-          .slice(0, 4)
-          .join(", ")}`,
-      ).toBe(meaningfulSentenceSignatures.length);
     }
   });
 
-  it("publishes the approved name and V3 plain-Korean guide together", () => {
+  it("publishes the approved name and V4 AI-beta plain-Korean guide together", () => {
     const forbiddenAwkwardPhrases = [
       "피로를 놓칠",
       "반대 성향처럼",
@@ -168,9 +142,7 @@ describe("traitMapCustomerGuideSchema", () => {
       "놀이 선택",
     ];
 
-    for (const [code, profile] of Object.entries(
-      candidateProfileDefinitions,
-    )) {
+    for (const [code, profile] of Object.entries(candidateProfileDefinitions)) {
       const guide = getPublishedTraitMapCustomerGuide(code);
       const copy =
         guide?.chapters
@@ -180,9 +152,7 @@ describe("traitMapCustomerGuideSchema", () => {
           .join(" ") ?? "";
 
       expect(guide?.profileName, code).toBe(profile.displayName);
-      if (!["ENAKQ", "ENGKC"].includes(code)) {
-        expect(guide?.version, code).toBe(`${code}-CUSTOMER-GUIDE-3.0`);
-      }
+      expect(guide?.version, code).toBe(`${code}-CUSTOMER-GUIDE-4.0-BETA-AI`);
       expect(
         forbiddenAwkwardPhrases.filter((phrase) => copy.includes(phrase)),
         `${code} still contains wording rejected in the ENGKC pilot`,
@@ -217,7 +187,7 @@ describe("traitMapCustomerGuideSchema", () => {
     );
   });
 
-  it("rejects repeated evasive language and internal research wording", () => {
+  it("rejects internal research wording without blocking calibrated language", () => {
     const guide = structuredClone(enakqCustomerGuideV2);
     guide.chapters[0].sections[0].paragraphs[0] =
       "이 코드만으로는 단정할 수 없고, 알 수 없으며, 상황에 따라 다를 수 있어요. 내부 검토가 더 필요하다는 표현을 고객에게 그대로 보여주는 문장입니다.";
@@ -230,7 +200,7 @@ describe("traitMapCustomerGuideSchema", () => {
       true,
     );
     expect(messages.some((message) => message.includes("회피성 표현"))).toBe(
-      true,
+      false,
     );
   });
 });

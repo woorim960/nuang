@@ -2,20 +2,41 @@
 
 import { ArrowLeft, Check, ChevronDown, ExternalLink, X } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { candidateAxisCopy } from "@/features/nuang-code/candidate-profile-names";
 import type {
   TraitMapCustomerGuide,
   TraitMapCustomerGuideChapter,
 } from "@/features/nuang-code/trait-map-customer-guide-contract";
+import { applyTraitMapGuideTextOverrides } from "@/features/nuang-code/trait-map-guide-text-overrides";
+import {
+  createTraitMapGuideReviewUnits,
+  createTraitMapGuideUnitKey,
+  splitKoreanSentences,
+  type TraitMapGuideReviewUnit,
+} from "@/features/nuang-code/trait-map-guide-review";
+import { traitMapBetaInterpretationNotice } from "@/features/nuang-code/trait-map-guide-review-contract";
 import styles from "@/features/map/EnakqTraitMapTemplate.module.css";
 
 export function TraitMapDetailTemplate({
+  editor,
+  embedded = false,
   guide,
 }: {
+  editor?: Readonly<{
+    activeRevisionCount: number;
+    activeUnitKeys?: readonly string[];
+    initialChapterId?: string;
+    releaseId: string;
+  }>;
+  embedded?: boolean;
   guide: TraitMapCustomerGuide;
 }) {
+  const [renderedGuide, setRenderedGuide] = useState(guide);
+  const [sessionEditedUnitKeys, setSessionEditedUnitKeys] = useState<
+    readonly string[]
+  >([]);
   const [activeChapter, setActiveChapter] = useState(1);
   const [tableOfContentsOpen, setTableOfContentsOpen] = useState(false);
   const [feedbackEnabled, setFeedbackEnabled] = useState(false);
@@ -25,7 +46,40 @@ export function TraitMapDetailTemplate({
   const chapterSelectionLocked = useRef(false);
   const chapterSelectionTimer = useRef<number | null>(null);
   const chapterNavigatorButtonRef = useRef<HTMLButtonElement>(null);
+  const pageRef = useRef<HTMLElement>(null);
   const syncActiveChapterRef = useRef<(() => void) | null>(null);
+  const editableUnits = useMemo(
+    () =>
+      new Map(
+        createTraitMapGuideReviewUnits(renderedGuide).map((unit) => [
+          unit.unitKey,
+          unit,
+        ]),
+      ),
+    [renderedGuide],
+  );
+
+  useEffect(() => {
+    if (!editor?.initialChapterId) return;
+    const chapter = renderedGuide.chapters.find(
+      (item) => item.id === editor.initialChapterId,
+    );
+    const page = pageRef.current;
+    const target = page?.querySelector<HTMLElement>(
+      `[id="${editor.initialChapterId}"]`,
+    );
+    if (!chapter || !page || !target) return;
+    setActiveChapter(chapter.number);
+    const scrollContainer = page.parentElement;
+    window.requestAnimationFrame(() => {
+      if (typeof scrollContainer?.scrollTo === "function") {
+        scrollContainer.scrollTo({
+          behavior: "auto",
+          top: Math.max(0, target.offsetTop - 58),
+        });
+      }
+    });
+  }, [editor?.initialChapterId, renderedGuide.chapters]);
 
   useEffect(() => {
     let frameId: number | null = null;
@@ -38,21 +92,30 @@ export function TraitMapDetailTemplate({
         chapterNavigatorButtonRef.current?.getBoundingClientRect().bottom ??
         114;
       const activationLine = navigatorBottom + 10;
-      let nextChapterNumber = guide.chapters[0]?.number ?? 1;
+      let nextChapterNumber = renderedGuide.chapters[0]?.number ?? 1;
 
-      for (const chapter of guide.chapters) {
-        const chapterElement = document.getElementById(chapter.id);
+      for (const chapter of renderedGuide.chapters) {
+        const chapterElement = pageRef.current?.querySelector<HTMLElement>(
+          `[id="${chapter.id}"]`,
+        );
         if (!chapterElement) continue;
         if (chapterElement.getBoundingClientRect().top > activationLine) break;
         nextChapterNumber = chapter.number;
       }
 
-      const documentHeight = document.documentElement.scrollHeight;
+      const scrollContainer = embedded ? pageRef.current?.parentElement : null;
+      const documentHeight = scrollContainer
+        ? scrollContainer.scrollHeight
+        : document.documentElement.scrollHeight;
+      const viewportHeight =
+        scrollContainer?.clientHeight ?? window.innerHeight;
+      const scrollTop = scrollContainer?.scrollTop ?? window.scrollY;
       const reachedDocumentEnd =
-        documentHeight > window.innerHeight &&
-        window.scrollY + window.innerHeight >= documentHeight - 2;
+        documentHeight > viewportHeight &&
+        scrollTop + viewportHeight >= documentHeight - 2;
       if (reachedDocumentEnd) {
-        nextChapterNumber = guide.chapters.at(-1)?.number ?? nextChapterNumber;
+        nextChapterNumber =
+          renderedGuide.chapters.at(-1)?.number ?? nextChapterNumber;
       }
 
       setActiveChapter((current) =>
@@ -67,7 +130,8 @@ export function TraitMapDetailTemplate({
 
     syncActiveChapterRef.current = scheduleActiveChapterSync;
     scheduleActiveChapterSync();
-    window.addEventListener("scroll", scheduleActiveChapterSync, {
+    const scrollTarget = embedded ? pageRef.current?.parentElement : window;
+    scrollTarget?.addEventListener("scroll", scheduleActiveChapterSync, {
       passive: true,
     });
     window.addEventListener("resize", scheduleActiveChapterSync);
@@ -75,10 +139,10 @@ export function TraitMapDetailTemplate({
     return () => {
       if (frameId !== null) window.cancelAnimationFrame(frameId);
       syncActiveChapterRef.current = null;
-      window.removeEventListener("scroll", scheduleActiveChapterSync);
+      scrollTarget?.removeEventListener("scroll", scheduleActiveChapterSync);
       window.removeEventListener("resize", scheduleActiveChapterSync);
     };
-  }, [guide.chapters]);
+  }, [embedded, renderedGuide.chapters]);
 
   useEffect(
     () => () => {
@@ -90,12 +154,13 @@ export function TraitMapDetailTemplate({
   );
 
   useEffect(() => {
+    if (editor) return;
     let mounted = true;
 
     async function loadFeedback() {
       try {
         const response = await fetch(
-          `/api/research/trait-map-feedback?code=${encodeURIComponent(guide.code)}`,
+          `/api/research/trait-map-feedback?code=${encodeURIComponent(renderedGuide.code)}`,
           { cache: "no-store" },
         );
         if (!response.ok) return;
@@ -131,11 +196,42 @@ export function TraitMapDetailTemplate({
     return () => {
       mounted = false;
     };
-  }, [guide.code]);
+  }, [editor, renderedGuide.code]);
 
   const currentChapter =
-    guide.chapters.find((chapter) => chapter.number === activeChapter) ??
-    guide.chapters[0];
+    renderedGuide.chapters.find(
+      (chapter) => chapter.number === activeChapter,
+    ) ?? renderedGuide.chapters[0];
+
+  function editableText(unitKey: string, text: string) {
+    const unit = editableUnits.get(unitKey);
+    if (!editor || !unit) return text;
+    return (
+      <InlineEditableGuideText
+        editor={{
+          ...editor,
+          activeUnitKeys: [
+            ...(editor.activeUnitKeys ?? []),
+            ...sessionEditedUnitKeys,
+          ],
+        }}
+        key={`${unit.unitKey}:${unit.contentHash}`}
+        onSaved={(nextText) => {
+          setRenderedGuide((current) =>
+            applyTraitMapGuideTextOverrides(current, [
+              { text: nextText, unitKey: unit.unitKey },
+            ]),
+          );
+          setSessionEditedUnitKeys((current) =>
+            current.includes(unit.unitKey)
+              ? current
+              : [...current, unit.unitKey],
+          );
+        }}
+        unit={unit}
+      />
+    );
+  }
 
   function moveToChapter(chapterId: string, chapterNumber: number) {
     chapterSelectionLocked.current = true;
@@ -151,10 +247,20 @@ export function TraitMapDetailTemplate({
     setTableOfContentsOpen(false);
     window.requestAnimationFrame(() => {
       window.requestAnimationFrame(() => {
+        const target = pageRef.current?.querySelector<HTMLElement>(
+          `[id="${chapterId}"]`,
+        );
+        if (embedded && target) {
+          pageRef.current?.parentElement?.scrollTo({
+            behavior: "smooth",
+            top: Math.max(0, target.offsetTop - 58),
+          });
+          return;
+        }
         const reduceMotion =
           typeof window.matchMedia === "function" &&
           window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-        document.getElementById(chapterId)?.scrollIntoView({
+        target?.scrollIntoView({
           behavior: reduceMotion ? "auto" : "smooth",
           block: "start",
         });
@@ -163,9 +269,27 @@ export function TraitMapDetailTemplate({
   }
 
   return (
-    <article className={styles.page}>
+    <article
+      className={`${styles.page} ${embedded ? styles.embeddedPage : ""}`}
+      data-editor-mode={editor ? "true" : undefined}
+      ref={pageRef}
+    >
+      {editor ? (
+        <aside className={styles.editorModeBar} role="status">
+          <span>실제 고객 화면 · 편집 모드</span>
+          <strong>고칠 문장을 바로 눌러 주세요</strong>
+          <small>
+            저장하면 7역할 검수를 다시 거쳐 베타 화면에 즉시 반영돼요 · 현재
+            수정본 {countActiveEditedUnits(editor, sessionEditedUnitKeys)}개
+          </small>
+        </aside>
+      ) : null}
       <header className={styles.header}>
-        <Link aria-label="성향지도로 돌아가기" href="/map">
+        <Link
+          aria-label="성향지도로 돌아가기"
+          href="/map"
+          target={editor ? "_blank" : undefined}
+        >
           <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.65} />
         </Link>
         <span>성향지도 상세</span>
@@ -175,9 +299,18 @@ export function TraitMapDetailTemplate({
       <section className={styles.hero}>
         <div className={styles.heroCopy}>
           <p className={styles.eyebrow}>5글자 뉴앙 코드</p>
-          <CodeLetters code={guide.code} />
-          <h1>{guide.profileName}</h1>
-          <p>{guide.heroSummary}</p>
+          <CodeLetters code={renderedGuide.code} />
+          <h1>{renderedGuide.profileName}</h1>
+          <p>
+            {editableText(
+              createTraitMapGuideUnitKey({
+                guideVersion: renderedGuide.version,
+                kind: "hero_summary",
+                profileCode: renderedGuide.code,
+              }),
+              renderedGuide.heroSummary,
+            )}
+          </p>
         </div>
         <div className={styles.characterWrap}>
           <span aria-hidden="true" />
@@ -186,10 +319,10 @@ export function TraitMapDetailTemplate({
       </section>
 
       <section
-        aria-label={`${guide.code} 뉴앙 코드의 성향 이름`}
+        aria-label={`${renderedGuide.code} 뉴앙 코드의 성향 이름`}
         className={styles.codeLanguage}
       >
-        {guide.code.split("").map((symbol, index) => {
+        {renderedGuide.code.split("").map((symbol, index) => {
           const direction = candidateAxisCopy[index]?.directions[symbol];
           if (!direction) return null;
           return (
@@ -201,9 +334,14 @@ export function TraitMapDetailTemplate({
         })}
       </section>
 
+      <aside className={styles.interpretationNotice}>
+        <strong>{traitMapBetaInterpretationNotice.title}</strong>
+        <p>{traitMapBetaInterpretationNotice.description}</p>
+      </aside>
+
       <nav
         className={styles.chapterNavigator}
-        aria-label={`${guide.code} 상세 목차`}
+        aria-label={`${renderedGuide.code} 상세 목차`}
       >
         <button
           aria-expanded={tableOfContentsOpen}
@@ -217,7 +355,7 @@ export function TraitMapDetailTemplate({
           </span>
           <span className={styles.navigatorCopy}>
             <small>
-              {activeChapter} / {guide.chapters.length} · 읽는 중
+              {activeChapter} / {renderedGuide.chapters.length} · 읽는 중
             </small>
             <strong>{currentChapter.label}</strong>
           </span>
@@ -231,14 +369,14 @@ export function TraitMapDetailTemplate({
         <span className={styles.progressTrack} aria-hidden="true">
           <span
             style={{
-              width: `${(activeChapter / guide.chapters.length) * 100}%`,
+              width: `${(activeChapter / renderedGuide.chapters.length) * 100}%`,
             }}
           />
         </span>
         {tableOfContentsOpen ? (
           <div className={styles.tableOfContents}>
             <ol>
-              {guide.chapters.map((chapter) => (
+              {renderedGuide.chapters.map((chapter) => (
                 <li key={chapter.id}>
                   <button
                     aria-current={
@@ -258,11 +396,14 @@ export function TraitMapDetailTemplate({
       </nav>
 
       <div className={styles.chapterList}>
-        {guide.chapters.map((chapter) => (
+        {renderedGuide.chapters.map((chapter) => (
           <GuideChapter
             chapter={chapter}
-            code={guide.code}
+            code={renderedGuide.code}
+            editableText={editableText}
+            editingEnabled={Boolean(editor)}
             feedbackEnabled={feedbackEnabled}
+            guideVersion={renderedGuide.version}
             key={chapter.id}
             onFeedbackSaved={(chapterId, sectionKey, value) => {
               setSavedFeedback((current) => ({
@@ -286,13 +427,19 @@ export function TraitMapDetailTemplate({
 function GuideChapter({
   chapter,
   code,
+  editableText,
+  editingEnabled,
   feedbackEnabled,
+  guideVersion,
   onFeedbackSaved,
   savedFeedback,
 }: {
   chapter: GuideChapterDocument;
   code: string;
+  editableText: (unitKey: string, text: string) => React.ReactNode;
+  editingEnabled: boolean;
   feedbackEnabled: boolean;
+  guideVersion: string;
   onFeedbackSaved: (
     chapterId: string,
     sectionKey: string,
@@ -310,8 +457,28 @@ function GuideChapter({
       <header className={styles.chapterHeading}>
         <span>{String(chapter.number).padStart(2, "0")}</span>
         <p>{chapter.label}</p>
-        <h2>{chapter.title}</h2>
-        <strong>{chapter.summary}</strong>
+        <h2>
+          {editableText(
+            createTraitMapGuideUnitKey({
+              chapterId: chapter.id,
+              guideVersion,
+              kind: "chapter_title",
+              profileCode: code,
+            }),
+            chapter.title,
+          )}
+        </h2>
+        <strong>
+          {editableText(
+            createTraitMapGuideUnitKey({
+              chapterId: chapter.id,
+              guideVersion,
+              kind: "chapter_summary",
+              profileCode: code,
+            }),
+            chapter.summary,
+          )}
+        </strong>
       </header>
 
       <div className={styles.chapterContent}>
@@ -320,7 +487,20 @@ function GuideChapter({
             className={styles.chapterSection}
             key={`${chapter.id}-${section.title ?? sectionIndex}`}
           >
-            {section.title ? <h3>{section.title}</h3> : null}
+            {section.title ? (
+              <h3>
+                {editableText(
+                  createTraitMapGuideUnitKey({
+                    chapterId: chapter.id,
+                    guideVersion,
+                    kind: "section_title",
+                    profileCode: code,
+                    sectionIndex,
+                  }),
+                  section.title,
+                )}
+              </h3>
+            ) : null}
             <div className={styles.narrativeBlocks}>
               {chunkParagraphs(section.paragraphs, 3).map(
                 (paragraphs, blockIndex) => (
@@ -328,9 +508,37 @@ function GuideChapter({
                     className={styles.narrativeBlock}
                     key={`${chapter.id}-${sectionIndex}-${blockIndex}`}
                   >
-                    {paragraphs.map((paragraph) => (
-                      <p key={paragraph}>{paragraph}</p>
-                    ))}
+                    {paragraphs.map((paragraph, localParagraphIndex) => {
+                      const paragraphIndex =
+                        blockIndex * 3 + localParagraphIndex;
+                      return (
+                        <p
+                          key={`${chapter.id}-${sectionIndex}-${paragraphIndex}`}
+                        >
+                          {splitKoreanSentences(paragraph).map(
+                            (sentence, sentenceIndex) => (
+                              <span
+                                className={styles.editableSentence}
+                                key={`${paragraphIndex}-${sentenceIndex}`}
+                              >
+                                {editableText(
+                                  createTraitMapGuideUnitKey({
+                                    chapterId: chapter.id,
+                                    guideVersion,
+                                    kind: "paragraph_sentence",
+                                    paragraphIndex,
+                                    profileCode: code,
+                                    sectionIndex,
+                                    sentenceIndex,
+                                  }),
+                                  sentence,
+                                )}{" "}
+                              </span>
+                            ),
+                          )}
+                        </p>
+                      );
+                    })}
                   </div>
                 ),
               )}
@@ -348,10 +556,10 @@ function GuideChapter({
                 }
                 savedValue={
                   savedFeedback[
-                  createSectionFeedbackKey(
-                    chapter.id,
-                    createSectionKey(sectionIndex),
-                  )
+                    createSectionFeedbackKey(
+                      chapter.id,
+                      createSectionKey(sectionIndex),
+                    )
                   ]
                 }
                 sectionKey={createSectionKey(sectionIndex)}
@@ -368,28 +576,73 @@ function GuideChapter({
             <h3>참고한 전문 자료</h3>
           </div>
           <ul>
-            {chapter.references.map((reference) => (
-              <li key={reference.href}>
-                <a href={reference.href} rel="noreferrer" target="_blank">
+            {chapter.references.map((reference, referenceIndex) => {
+              const referenceContent = (
+                <>
                   <span>
-                    <strong>{reference.title}</strong>
-                    <small>{reference.description}</small>
+                    <strong>
+                      {editableText(
+                        createTraitMapGuideUnitKey({
+                          chapterId: chapter.id,
+                          guideVersion,
+                          kind: "reference_title",
+                          paragraphIndex: referenceIndex,
+                          profileCode: code,
+                        }),
+                        reference.title,
+                      )}
+                    </strong>
+                    <small>
+                      {editableText(
+                        createTraitMapGuideUnitKey({
+                          chapterId: chapter.id,
+                          guideVersion,
+                          kind: "reference_description",
+                          paragraphIndex: referenceIndex,
+                          profileCode: code,
+                        }),
+                        reference.description,
+                      )}
+                    </small>
                   </span>
                   <ExternalLink
                     aria-hidden="true"
                     size={16}
                     strokeWidth={1.6}
                   />
-                </a>
-              </li>
-            ))}
+                </>
+              );
+              return (
+                <li key={reference.href}>
+                  {editingEnabled ? (
+                    <div className={styles.editorReference}>
+                      {referenceContent}
+                    </div>
+                  ) : (
+                    <a href={reference.href} rel="noreferrer" target="_blank">
+                      {referenceContent}
+                    </a>
+                  )}
+                </li>
+              );
+            })}
           </ul>
         </section>
       ) : null}
 
       <div className={styles.selfCheck}>
         <span>내 모습과 비교해 보기</span>
-        <p>{chapter.checkQuestion}</p>
+        <p>
+          {editableText(
+            createTraitMapGuideUnitKey({
+              chapterId: chapter.id,
+              guideVersion,
+              kind: "check_question",
+              profileCode: code,
+            }),
+            chapter.checkQuestion,
+          )}
+        </p>
       </div>
     </section>
   );
@@ -520,6 +773,193 @@ function SectionFitFeedback({
   );
 }
 
+function InlineEditableGuideText({
+  editor,
+  onSaved,
+  unit,
+}: {
+  editor: Readonly<{
+    activeRevisionCount: number;
+    activeUnitKeys?: readonly string[];
+    releaseId: string;
+  }>;
+  onSaved: (text: string) => void;
+  unit: Omit<TraitMapGuideReviewUnit, "reviewDecisions">;
+}) {
+  const [editing, setEditing] = useState(false);
+  const [draft, setDraft] = useState(unit.text);
+  const [message, setMessage] = useState("");
+  const [issues, setIssues] = useState<string[]>([]);
+  const [saving, setSaving] = useState(false);
+
+  async function save() {
+    if (saving || draft.trim() === unit.text) return;
+    setSaving(true);
+    setMessage("");
+    setIssues([]);
+    try {
+      const response = await fetch("/api/admin/trait-map-guide-content", {
+        body: JSON.stringify({
+          expectedContentHash: unit.contentHash,
+          profileCode: unit.profileCode,
+          releaseId: editor.releaseId,
+          text: draft,
+          unitKey: unit.unitKey,
+        }),
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      });
+      const payload = (await response.json().catch(() => null)) as {
+        issues?: Array<{ rationale?: string; role?: string }>;
+        message?: string;
+        ok?: boolean;
+        text?: string;
+      } | null;
+      if (!response.ok || !payload?.ok || !payload.text) {
+        setMessage(payload?.message ?? "수정본을 저장하지 못했습니다.");
+        setIssues(
+          [...new Set((payload?.issues ?? []).map((issue) => issue.rationale))]
+            .filter((value): value is string => Boolean(value))
+            .slice(0, 4),
+        );
+        return;
+      }
+      onSaved(payload.text);
+      setEditing(false);
+    } catch {
+      setMessage("연결이 원활하지 않습니다. 잠시 뒤 다시 저장해 주세요.");
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!editing) {
+    return (
+      <button
+        aria-label={`${unitKindEditorLabel(unit.kind)} 편집: ${unit.text}`}
+        className={styles.inlineEditableText}
+        data-revised={
+          editor.activeUnitKeys?.includes(unit.unitKey) || undefined
+        }
+        onClick={(event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          setEditing(true);
+        }}
+        title={
+          editor.activeUnitKeys?.includes(unit.unitKey)
+            ? "현재 베타에 반영된 수정 문장 · 눌러서 다시 수정"
+            : "눌러서 바로 수정"
+        }
+        type="button"
+      >
+        {unit.text}
+      </button>
+    );
+  }
+
+  return (
+    <span
+      className={styles.inlineEditor}
+      onClick={(event) => {
+        event.preventDefault();
+        event.stopPropagation();
+      }}
+    >
+      <span className={styles.inlineEditorMeta}>
+        <strong>{unitKindEditorLabel(unit.kind)}</strong>
+        <small>{Array.from(draft).length}자</small>
+      </span>
+      <textarea
+        aria-label={`${unitKindEditorLabel(unit.kind)} 수정 내용`}
+        autoFocus
+        maxLength={2_000}
+        onChange={(event) => {
+          setDraft(event.target.value);
+          setMessage("");
+          setIssues([]);
+        }}
+        onKeyDown={(event) => {
+          if (event.key === "Escape") {
+            setDraft(unit.text);
+            setEditing(false);
+          }
+          if ((event.metaKey || event.ctrlKey) && event.key === "Enter") {
+            event.preventDefault();
+            void save();
+          }
+        }}
+        rows={unit.kind === "paragraph_sentence" ? 3 : 2}
+        value={draft}
+      />
+      <span className={styles.inlineEditorHelp}>
+        저장 즉시 7역할 재검수 후 베타에 반영되고, 이 문장의 사람 승인은 다시
+        받아야 해요.
+      </span>
+      {message ? (
+        <span className={styles.inlineEditorError}>{message}</span>
+      ) : null}
+      {issues.length ? (
+        <ul className={styles.inlineEditorIssues}>
+          {issues.map((issue) => (
+            <li key={issue}>{issue}</li>
+          ))}
+        </ul>
+      ) : null}
+      <span className={styles.inlineEditorActions}>
+        <button
+          disabled={saving}
+          onClick={() => {
+            setDraft(unit.text);
+            setEditing(false);
+          }}
+          type="button"
+        >
+          취소
+        </button>
+        <button
+          disabled={saving || draft.trim() === unit.text}
+          onClick={() => void save()}
+          type="button"
+        >
+          <Check aria-hidden="true" size={14} strokeWidth={1.9} />
+          {saving ? "검수하고 있어요" : "저장하고 베타 반영"}
+        </button>
+      </span>
+    </span>
+  );
+}
+
+function unitKindEditorLabel(kind: TraitMapGuideReviewUnit["kind"]) {
+  return (
+    {
+      chapter_summary: "장 요약",
+      chapter_title: "장 제목",
+      check_question: "확인 질문",
+      hero_summary: "상단 소개",
+      paragraph_sentence: "본문 문장",
+      reference_description: "근거 설명",
+      reference_title: "근거 제목",
+      section_title: "섹션 제목",
+    }[kind] ?? "문장"
+  );
+}
+
+function countActiveEditedUnits(
+  editor: Readonly<{
+    activeRevisionCount: number;
+    activeUnitKeys?: readonly string[];
+  }>,
+  sessionEditedUnitKeys: readonly string[],
+) {
+  const initiallyActive = new Set(editor.activeUnitKeys ?? []);
+  return (
+    editor.activeRevisionCount +
+    sessionEditedUnitKeys.filter((unitKey) => !initiallyActive.has(unitKey))
+      .length
+  );
+}
+
 function CodeLetters({ code }: { code: string }) {
   return (
     <p aria-label={`뉴앙 코드 ${code}`} className={styles.codeLetters}>
@@ -562,11 +1002,11 @@ const sectionFitOptions: ReadonlyArray<{
   label: string;
   value: SectionFitRating;
 }> = [
-    { label: "매우 비슷해요", value: "very_close" },
-    { label: "대체로 비슷해요", value: "mostly_close" },
-    { label: "조금 달라요", value: "partly_different" },
-    { label: "많이 달라요", value: "very_different" },
-  ];
+  { label: "매우 비슷해요", value: "very_close" },
+  { label: "대체로 비슷해요", value: "mostly_close" },
+  { label: "조금 달라요", value: "partly_different" },
+  { label: "많이 달라요", value: "very_different" },
+];
 
 function createSectionKey(sectionIndex: number) {
   return `section-${String(sectionIndex + 1).padStart(2, "0")}`;

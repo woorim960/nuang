@@ -40,7 +40,7 @@ describe("free topic results API", () => {
       local_result_id: "topic_test_123",
       result_summary: {
         summary:
-          "이 결과는 여러 검사와 함께 누적되어 현재 대표 성향을 더 정교하게 이해하는 데 사용돼요.",
+          "이 결과는 현재 뉴앙 코드를 바꾸지 않고, 이 주제 안에서 내 모습을 이해하는 데 사용돼요.",
         title: "대화 온도",
       },
       topic_slug: "conversation-temperature",
@@ -172,7 +172,7 @@ describe("free topic results API", () => {
     expect(snapshot).toMatchObject({
       after: { code: expect.any(String), domains: expect.any(Array) },
       before: { code: "ENAKQ", domains: expect.any(Array) },
-      state: "ready",
+      state: "insufficient_evidence",
     });
     expect(body.result.traitImpactSnapshot).toEqual(snapshot);
     expect(mock.captured.profileUpsertRow).toMatchObject({
@@ -217,7 +217,7 @@ describe("free topic results API", () => {
           traitImpactSnapshot?: { state?: string };
         }
       ).traitImpactSnapshot?.state,
-    ).toBe("ready");
+    ).toBe("insufficient_evidence");
   });
 
   it("repairs the current trait profile when a completed result is retried", async () => {

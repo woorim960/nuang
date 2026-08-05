@@ -82,7 +82,7 @@ describe("AdminAssessmentStudio", () => {
       target: { value: "unchanged" },
     });
     expect(
-      screen.getByRole("heading", { name: "이번에는 달라진 부분이 없어요" }),
+      screen.getByRole("heading", { name: "현재 뉴앙 코드는 바뀌지 않아요" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("option", { name: "반대쪽 모습도 보임" }),
@@ -94,7 +94,7 @@ describe("AdminAssessmentStudio", () => {
       target: { value: "opposite_seen" },
     });
     expect(
-      screen.getByRole("heading", { name: "반대쪽 모습도 함께 보였어요" }),
+      screen.getByRole("heading", { name: "현재 뉴앙 코드는 바뀌지 않아요" }),
     ).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("성향 반영 상태"), {
       target: { value: "login_required" },

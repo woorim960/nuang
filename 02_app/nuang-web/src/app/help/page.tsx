@@ -13,6 +13,7 @@ import {
   Users,
 } from "lucide-react";
 import Link from "next/link";
+import type { Metadata } from "next";
 import type { ComponentType } from "react";
 import {
   helpBoundaries,
@@ -23,7 +24,15 @@ import {
   urgentSteps,
   type HelpResource,
 } from "@/features/help/help-resources";
+import { createPublicPageMetadata } from "@/features/seo/site-config";
 import styles from "./page.module.css";
+
+export const metadata: Metadata = createPublicPageMetadata({
+  description:
+    "지금 도움이 필요할 때 112·119와 공식 상담 연락처를 빠르게 확인하세요. 이 화면에서 누른 내용은 뉴앙에 저장하지 않아요.",
+  path: "/help",
+  title: "위기·상담 도움 연락처",
+});
 
 type IconComponent = ComponentType<{
   "aria-hidden"?: boolean | "true" | "false";

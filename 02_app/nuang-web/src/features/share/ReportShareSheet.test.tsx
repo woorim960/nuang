@@ -75,7 +75,7 @@ describe("ReportShareSheet", () => {
       screen.getByText("카카오톡에서 보낼 대화방을 직접 선택해요."),
     ).toBeInTheDocument();
     expect(
-      screen.getByText("답변과 원점수는 공유되지 않아요."),
+      screen.getByText("답변, 연락처와 계정 정보는 공유되지 않아요."),
     ).toBeInTheDocument();
     expect(screen.getByText(content.summary)).toBeInTheDocument();
     content.highlights.forEach((highlight) => {
@@ -98,8 +98,14 @@ describe("ReportShareSheet", () => {
     expect(onClose).toHaveBeenCalledTimes(1);
   });
 
-  it("keeps every share action unavailable until the original report is saved", () => {
-    const fetchMock = vi.fn();
+  it("creates a safe summary link when a guest has no saved report", async () => {
+    const guestUrl = "http://localhost:3000/share/g1.payload.signature";
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ ok: true, url: guestUrl }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      }),
+    );
     vi.stubGlobal("fetch", fetchMock);
 
     render(
@@ -111,20 +117,163 @@ describe("ReportShareSheet", () => {
       />,
     );
 
-    expect(screen.getByRole("button", { name: "링크 복사" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "링크 복사" })).toBeEnabled();
     expect(
       screen.getByRole("button", { name: "카카오톡으로 보내기" }),
-    ).toBeDisabled();
+    ).toBeEnabled();
     expect(
       screen.getByRole("button", { name: "다른 앱으로 공유" }),
-    ).toBeDisabled();
+    ).toBeEnabled();
     expect(
       screen.getByRole("button", { name: "커뮤니티에 공유" }),
-    ).toBeDisabled();
+    ).toBeEnabled();
+    expect(screen.getByText("결과 요약을 안전하게 공유해요.")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "링크 복사" }));
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/guest-report-share-links",
+        expect.objectContaining({
+          body: JSON.stringify({ content }),
+          method: "POST",
+        }),
+      );
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(guestUrl);
+    });
+  });
+
+  it("opens Kakao Talk for a guest with the signed summary link", async () => {
+    const guestUrl = "https://nuang.app/share/g1.payload.signature";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ ok: true, url: guestUrl }), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        }),
+      ),
+    );
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    fireEvent.click(
+      screen.getByRole("button", { name: "카카오톡으로 보내기" }),
+    );
+
+    await waitFor(() => {
+      expect(kakaoMocks.send).toHaveBeenCalledWith({ content, url: guestUrl });
+    });
+  });
+
+  it("sends a guest to login only when community identity is required", async () => {
+    const guestUrl = "https://nuang.app/share/g1.payload.signature";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ ok: true, url: guestUrl }), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        }),
+      ),
+    );
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+        onNavigate={onNavigate}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "커뮤니티에 공유" }));
+
+    await waitFor(() => {
+      expect(onNavigate).toHaveBeenCalledWith(
+        "/login?next=%2F%3Fshare%3D1&reason=share",
+      );
+    });
     expect(
-      screen.getByText("로그인하고 결과를 저장한 뒤 공유할 수 있어요."),
-    ).toBeInTheDocument();
-    expect(fetchMock).not.toHaveBeenCalled();
+      screen.queryByPlaceholderText("이 결과를 보고 든 생각을 남겨보세요."),
+    ).not.toBeInTheDocument();
+  });
+
+  it("falls back to guest sharing when a local server id has no signed-in owner", async () => {
+    const guestUrl = "https://nuang.app/share/g1.fallback.signature";
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      if (String(input) === "/api/report-share-links") {
+        return new Response(JSON.stringify({ error: "authentication_required" }), {
+          headers: { "content-type": "application/json" },
+          status: 401,
+        });
+      }
+      return new Response(JSON.stringify({ ok: true, url: guestUrl }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+        originalReportKey="topic_11111111-1111-4111-8111-111111111111"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "링크 복사" }));
+
+    await waitFor(() => {
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(guestUrl);
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/guest-report-share-links",
+      expect.objectContaining({ method: "POST" }),
+    );
+  });
+
+  it("keeps a local result shareable while account synchronization is still catching up", async () => {
+    const guestUrl = "https://nuang.app/share/g1.sync-fallback.signature";
+    const fetchMock = vi.fn(async (input: string | URL | Request) => {
+      if (String(input) === "/api/report-share-links") {
+        return new Response(JSON.stringify({ error: "report_not_found" }), {
+          headers: { "content-type": "application/json" },
+          status: 404,
+        });
+      }
+      return new Response(JSON.stringify({ ok: true, url: guestUrl }), {
+        headers: { "content-type": "application/json" },
+        status: 200,
+      });
+    });
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <ReportShareSheet
+        content={content}
+        isOpen
+        onClose={vi.fn()}
+        originalReportKey="topic_11111111-1111-4111-8111-111111111111"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "링크 복사" }));
+
+    await waitFor(() => {
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(guestUrl);
+    });
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/guest-report-share-links",
+      expect.objectContaining({ method: "POST" }),
+    );
   });
 
   it("shares the canonical original report URL without creating a summary link", async () => {

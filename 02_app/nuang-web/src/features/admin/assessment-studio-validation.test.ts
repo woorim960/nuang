@@ -7,6 +7,93 @@ import { getBuiltinAssessmentStudioEntries } from "./assessment-studio-sources";
 import { validateAssessmentStudioDocument } from "./assessment-studio-validation";
 
 describe("assessment studio validation", () => {
+  it("blocks unreviewed public-language defects in every assessment family", () => {
+    const entries = getBuiltinAssessmentStudioEntries();
+    const cases: Array<{
+      code: string;
+      document: AssessmentStudioDocument;
+      mutate: (payload: Record<string, unknown>) => void;
+      subtype: AssessmentStudioDocument["subtype"];
+    }> = [
+      {
+        code: "public_language_internal_jargon",
+        document: structuredClone(
+          entries.find((entry) => entry.subtype === "core_quick")!.document,
+        ),
+        mutate: (payload) => {
+          const definition = payload.definition as Record<string, unknown>;
+          const items = definition.items as Array<Record<string, unknown>>;
+          items[0].text = "이 문항은 심리측정 구성개념을 확인한다.";
+        },
+        subtype: "core_quick",
+      },
+      {
+        code: "public_language_placeholder",
+        document: structuredClone(
+          entries.find((entry) => entry.slug === "apology-style")!.document,
+        ),
+        mutate: (payload) => {
+          const assessment = payload.assessment as Record<string, unknown>;
+          const scales = assessment.reportScales as Array<
+            Record<string, unknown>
+          >;
+          scales[0].highCopy = "{{결과 문장}}";
+        },
+        subtype: "free_topic",
+      },
+      {
+        code: "public_language_ambiguous_fragment",
+        document: structuredClone(
+          entries.find((entry) => entry.subtype === "odd_lab")!.document,
+        ),
+        mutate: (payload) => {
+          const assessment = payload.assessment as Record<string, unknown>;
+          const profiles = assessment.profiles as Array<
+            Record<string, unknown>
+          >;
+          profiles[0].summary = "그것은?";
+        },
+        subtype: "odd_lab",
+      },
+      {
+        code: "public_language_question_too_long",
+        document: structuredClone(
+          entries.find((entry) => entry.slug === "mixed-taste")!.document,
+        ),
+        mutate: (payload) => {
+          const pack = payload.pack as Record<string, unknown>;
+          const questions = pack.questions as Array<Record<string, unknown>>;
+          questions[0].prompt = "가".repeat(81);
+        },
+        subtype: "balance_pack",
+      },
+      {
+        code: "public_language_dependent_fragment",
+        document: structuredClone(
+          entries.find((entry) => entry.subtype === "friend_match")!.document,
+        ),
+        mutate: (payload) => {
+          const config = payload.config as Record<string, unknown>;
+          config.invitationText = "친구에게 알려주고 싶지만";
+        },
+        subtype: "friend_match",
+      },
+    ];
+
+    for (const testCase of cases) {
+      expect(testCase.document.subtype).toBe(testCase.subtype);
+      testCase.mutate(testCase.document.payload);
+      expect(validateAssessmentStudioDocument(testCase.document)).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            code: testCase.code,
+            severity: "blocker",
+          }),
+        ]),
+      );
+    }
+  });
+
   it("blocks every adult-only draft until adult verification is operational", () => {
     const source = getBuiltinAssessmentStudioEntries().find(
       (entry) => entry.subtype === "odd_lab",

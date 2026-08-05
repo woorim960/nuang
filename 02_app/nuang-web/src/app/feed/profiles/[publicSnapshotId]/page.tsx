@@ -5,15 +5,16 @@ import { readCommunityProfileSocialState } from "@/features/feed/server-communit
 import { CommunityProfileScreen } from "@/features/public-profile/CommunityProfileScreen";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 
 type CommunityProfilePageProps = {
   params: Promise<{ publicSnapshotId: string }>;
   searchParams: Promise<{ intent?: string; tab?: string; view?: string }>;
 };
 
-export const metadata: Metadata = {
-  title: "커뮤니티 프로필 | NUANG",
-};
+export const metadata: Metadata = createPrivatePageMetadata({
+  title: "커뮤니티 프로필",
+});
 
 export default async function CommunityProfilePage({
   params,

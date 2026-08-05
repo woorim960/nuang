@@ -69,7 +69,7 @@ export const labAssessments: LabAssessment[] = [
     profiles: [
       {
         id: "spark",
-        title: "바로 불을 켜는 대화 스타일",
+        title: "생각이 떠오르면 바로 말하는 대화 스타일",
         shortTitle: "바로 대화",
         summary:
           "생각이 떠오르면 대화를 시작하며 정리하는 편이에요. 말하면서 방향이 잡히고, 상대의 반응을 보며 속도를 조절합니다.",
@@ -86,7 +86,7 @@ export const labAssessments: LabAssessment[] = [
       },
       {
         id: "warmup",
-        title: "천천히 온도를 올리는 대화 스타일",
+        title: "분위기를 살핀 뒤 말하는 대화 스타일",
         shortTitle: "온도 조율",
         summary:
           "바로 핵심으로 들어가기보다 분위기와 상대의 상태를 보며 대화를 데우는 편이에요.",
@@ -125,8 +125,16 @@ export const labAssessments: LabAssessment[] = [
         id: "ct-01",
         text: "중요한 이야기가 생기면 나는 보통",
         options: [
-          { id: "ct-01-a", label: "바로 말을 꺼내며 정리한다", resultId: "spark" },
-          { id: "ct-01-b", label: "분위기를 살피며 천천히 꺼낸다", resultId: "warmup" },
+          {
+            id: "ct-01-a",
+            label: "바로 말을 꺼내며 정리한다",
+            resultId: "spark",
+          },
+          {
+            id: "ct-01-b",
+            label: "분위기를 살피며 천천히 꺼낸다",
+            resultId: "warmup",
+          },
           { id: "ct-01-c", label: "혼자 정리한 뒤 말한다", resultId: "draft" },
         ],
       },
@@ -135,9 +143,21 @@ export const labAssessments: LabAssessment[] = [
         id: "ct-02",
         text: "상대가 애매하게 말하면 나는",
         options: [
-          { id: "ct-02-a", label: "무슨 뜻인지 바로 물어본다", resultId: "spark" },
-          { id: "ct-02-b", label: "상대가 더 말할 수 있게 기다린다", resultId: "warmup" },
-          { id: "ct-02-c", label: "들은 내용을 정리한 뒤 확인한다", resultId: "draft" },
+          {
+            id: "ct-02-a",
+            label: "무슨 뜻인지 바로 물어본다",
+            resultId: "spark",
+          },
+          {
+            id: "ct-02-b",
+            label: "상대가 더 말할 수 있게 기다린다",
+            resultId: "warmup",
+          },
+          {
+            id: "ct-02-c",
+            label: "들은 내용을 정리한 뒤 확인한다",
+            resultId: "draft",
+          },
         ],
       },
       {
@@ -146,8 +166,16 @@ export const labAssessments: LabAssessment[] = [
         text: "대화가 불편해질 때 더 편한 방식은",
         options: [
           { id: "ct-03-a", label: "지금 바로 풀어보는 것", resultId: "spark" },
-          { id: "ct-03-b", label: "가벼운 말로 긴장을 낮추는 것", resultId: "warmup" },
-          { id: "ct-03-c", label: "잠깐 멈추고 정리하는 것", resultId: "draft" },
+          {
+            id: "ct-03-b",
+            label: "가벼운 말로 긴장을 낮추는 것",
+            resultId: "warmup",
+          },
+          {
+            id: "ct-03-c",
+            label: "잠깐 멈추고 정리하는 것",
+            resultId: "draft",
+          },
         ],
       },
       {
@@ -156,8 +184,16 @@ export const labAssessments: LabAssessment[] = [
         text: "내 마음을 표현할 때 가까운 쪽은",
         options: [
           { id: "ct-04-a", label: "솔직하게 바로 말한다", resultId: "spark" },
-          { id: "ct-04-b", label: "상대가 받을 수 있게 부드럽게 말한다", resultId: "warmup" },
-          { id: "ct-04-c", label: "문장으로 정리해 정확히 말한다", resultId: "draft" },
+          {
+            id: "ct-04-b",
+            label: "상대가 받을 수 있게 부드럽게 말한다",
+            resultId: "warmup",
+          },
+          {
+            id: "ct-04-c",
+            label: "문장으로 정리해 정확히 말한다",
+            resultId: "draft",
+          },
         ],
       },
       {
@@ -165,9 +201,21 @@ export const labAssessments: LabAssessment[] = [
         id: "ct-05",
         text: "단체 대화에서 내가 자주 하는 역할은",
         options: [
-          { id: "ct-05-a", label: "질문을 던지고 흐름을 만든다", resultId: "spark" },
-          { id: "ct-05-b", label: "분위기를 보며 연결한다", resultId: "warmup" },
-          { id: "ct-05-c", label: "정리된 의견을 나중에 보탠다", resultId: "draft" },
+          {
+            id: "ct-05-a",
+            label: "질문을 던지고 흐름을 만든다",
+            resultId: "spark",
+          },
+          {
+            id: "ct-05-b",
+            label: "분위기를 보며 연결한다",
+            resultId: "warmup",
+          },
+          {
+            id: "ct-05-c",
+            label: "정리된 의견을 나중에 보탠다",
+            resultId: "draft",
+          },
         ],
       },
       {
@@ -176,8 +224,16 @@ export const labAssessments: LabAssessment[] = [
         text: "상대가 바로 답하지 않으면 나는",
         options: [
           { id: "ct-06-a", label: "추가 질문으로 이어간다", resultId: "spark" },
-          { id: "ct-06-b", label: "대화 온도를 낮추며 기다린다", resultId: "warmup" },
-          { id: "ct-06-c", label: "상대도 정리 시간이 필요하다고 본다", resultId: "draft" },
+          {
+            id: "ct-06-b",
+            label: "상대가 더 말할 때까지 기다린다",
+            resultId: "warmup",
+          },
+          {
+            id: "ct-06-c",
+            label: "상대도 정리 시간이 필요하다고 본다",
+            resultId: "draft",
+          },
         ],
       },
     ],
@@ -200,13 +256,12 @@ export const labAssessments: LabAssessment[] = [
         title: "소음을 낮추는 조용한 회복 방식",
         shortTitle: "조용한 회복",
         summary:
-          "자극을 줄이고 혼자 있을 때 에너지가 천천히 돌아오는 편이에요. 정적과 여백이 회복의 핵심입니다.",
+          "자극을 줄이고 혼자 조용히 쉬면 기운이 천천히 돌아오는 편이에요.",
         strengths: [
           "과한 자극에서 빠져나와 내 상태를 차분히 볼 수 있어요.",
           "혼자 있는 시간을 죄책감 없이 회복 자원으로 쓸 수 있어요.",
         ],
-        watch:
-          "계속 혼자만 버티다 보면 필요한 도움 요청까지 늦어질 수 있어요.",
+        watch: "계속 혼자만 버티다 보면 필요한 도움 요청까지 늦어질 수 있어요.",
         relationTip:
           "가까운 사람에게는 혼자 있고 싶은 마음이 거절이 아니라 회복이라는 점을 알려주세요.",
         smallExperiment:
@@ -217,7 +272,7 @@ export const labAssessments: LabAssessment[] = [
         title: "감각을 바꾸는 전환 회복 방식",
         shortTitle: "감각 전환",
         summary:
-          "공간, 음악, 산책, 음식, 정리처럼 감각을 바꾸면 기분과 리듬이 다시 움직이는 편이에요.",
+          "공간을 바꾸거나 음악을 듣고 산책하면 지친 기분에서 벗어나기 쉬운 편이에요.",
         strengths: [
           "작은 환경 변화로도 빠르게 분위기를 전환할 수 있어요.",
           "몸과 감각을 활용해 머릿속 과부하를 낮추는 데 익숙해요.",
@@ -234,7 +289,7 @@ export const labAssessments: LabAssessment[] = [
         title: "온기를 나누는 연결 회복 방식",
         shortTitle: "연결 회복",
         summary:
-          "혼자 버티기보다 누군가와 가볍게 연결될 때 에너지가 돌아오는 편이에요. 말과 반응이 회복의 통로가 됩니다.",
+          "누군가와 가볍게 이야기하거나 함께 있을 때 다시 기운이 나는 편이에요.",
         strengths: [
           "힘든 기분을 관계 안에서 부드럽게 흘려보낼 수 있어요.",
           "가벼운 대화나 동행으로 기분 전환을 만들기 쉬워요.",
@@ -254,8 +309,16 @@ export const labAssessments: LabAssessment[] = [
         text: "기운이 빠진 날 가장 먼저 하고 싶은 일은",
         options: [
           { id: "rr-01-a", label: "혼자 조용히 쉬기", resultId: "quiet" },
-          { id: "rr-01-b", label: "공간이나 분위기 바꾸기", resultId: "sensory" },
-          { id: "rr-01-c", label: "누군가와 가볍게 연락하기", resultId: "together" },
+          {
+            id: "rr-01-b",
+            label: "공간이나 분위기 바꾸기",
+            resultId: "sensory",
+          },
+          {
+            id: "rr-01-c",
+            label: "누군가와 가볍게 연락하기",
+            resultId: "together",
+          },
         ],
       },
       {
@@ -263,9 +326,21 @@ export const labAssessments: LabAssessment[] = [
         id: "rr-02",
         text: "쉬는 시간이 생기면 나는",
         options: [
-          { id: "rr-02-a", label: "아무것도 안 하는 시간을 원한다", resultId: "quiet" },
-          { id: "rr-02-b", label: "산책이나 음악처럼 전환을 원한다", resultId: "sensory" },
-          { id: "rr-02-c", label: "편한 사람과 느슨하게 있고 싶다", resultId: "together" },
+          {
+            id: "rr-02-a",
+            label: "아무것도 안 하는 시간을 원한다",
+            resultId: "quiet",
+          },
+          {
+            id: "rr-02-b",
+            label: "산책이나 음악처럼 전환을 원한다",
+            resultId: "sensory",
+          },
+          {
+            id: "rr-02-c",
+            label: "편한 사람과 느슨하게 있고 싶다",
+            resultId: "together",
+          },
         ],
       },
       {
@@ -283,9 +358,21 @@ export const labAssessments: LabAssessment[] = [
         id: "rr-04",
         text: "주말이 끝나고 덜 지치려면",
         options: [
-          { id: "rr-04-a", label: "혼자만의 여백이 필요하다", resultId: "quiet" },
-          { id: "rr-04-b", label: "기분이 바뀌는 활동이 필요하다", resultId: "sensory" },
-          { id: "rr-04-c", label: "좋은 사람과의 시간이 필요하다", resultId: "together" },
+          {
+            id: "rr-04-a",
+            label: "혼자만의 여백이 필요하다",
+            resultId: "quiet",
+          },
+          {
+            id: "rr-04-b",
+            label: "기분이 바뀌는 활동이 필요하다",
+            resultId: "sensory",
+          },
+          {
+            id: "rr-04-c",
+            label: "좋은 사람과의 시간이 필요하다",
+            resultId: "together",
+          },
         ],
       },
       {
@@ -293,9 +380,21 @@ export const labAssessments: LabAssessment[] = [
         id: "rr-05",
         text: "갑자기 약속이 취소되면 나는",
         options: [
-          { id: "rr-05-a", label: "오히려 혼자 쉴 수 있어 좋다", resultId: "quiet" },
-          { id: "rr-05-b", label: "다른 활동으로 흐름을 바꾼다", resultId: "sensory" },
-          { id: "rr-05-c", label: "다른 사람에게 연락해본다", resultId: "together" },
+          {
+            id: "rr-05-a",
+            label: "오히려 혼자 쉴 수 있어 좋다",
+            resultId: "quiet",
+          },
+          {
+            id: "rr-05-b",
+            label: "다른 활동으로 흐름을 바꾼다",
+            resultId: "sensory",
+          },
+          {
+            id: "rr-05-c",
+            label: "다른 사람에게 연락해본다",
+            resultId: "together",
+          },
         ],
       },
       {
@@ -304,8 +403,16 @@ export const labAssessments: LabAssessment[] = [
         text: "회복됐다고 느끼는 순간은",
         options: [
           { id: "rr-06-a", label: "마음이 조용해졌을 때", resultId: "quiet" },
-          { id: "rr-06-b", label: "감각과 기분이 바뀌었을 때", resultId: "sensory" },
-          { id: "rr-06-c", label: "누군가와 연결됐다고 느낄 때", resultId: "together" },
+          {
+            id: "rr-06-b",
+            label: "감각과 기분이 바뀌었을 때",
+            resultId: "sensory",
+          },
+          {
+            id: "rr-06-c",
+            label: "누군가와 연결됐다고 느낄 때",
+            resultId: "together",
+          },
         ],
       },
     ],
@@ -381,9 +488,21 @@ export const labAssessments: LabAssessment[] = [
         id: "cr-01",
         text: "갈등이 생긴 직후 내가 더 원하는 것은",
         options: [
-          { id: "cr-01-a", label: "빨리 확인하고 풀기", resultId: "quick-check" },
-          { id: "cr-01-b", label: "시간을 두고 진정하기", resultId: "time-space" },
-          { id: "cr-01-c", label: "서로의 뜻을 확인하기", resultId: "meaning-bridge" },
+          {
+            id: "cr-01-a",
+            label: "빨리 확인하고 풀기",
+            resultId: "quick-check",
+          },
+          {
+            id: "cr-01-b",
+            label: "시간을 두고 진정하기",
+            resultId: "time-space",
+          },
+          {
+            id: "cr-01-c",
+            label: "서로의 뜻을 확인하기",
+            resultId: "meaning-bridge",
+          },
         ],
       },
       {
@@ -391,9 +510,21 @@ export const labAssessments: LabAssessment[] = [
         id: "cr-02",
         text: "상대가 화난 것 같을 때 나는",
         options: [
-          { id: "cr-02-a", label: "무슨 일인지 바로 묻는다", resultId: "quick-check" },
-          { id: "cr-02-b", label: "조금 가라앉을 시간을 둔다", resultId: "time-space" },
-          { id: "cr-02-c", label: "상대가 무엇을 중요하게 여겼는지 본다", resultId: "meaning-bridge" },
+          {
+            id: "cr-02-a",
+            label: "무슨 일인지 바로 묻는다",
+            resultId: "quick-check",
+          },
+          {
+            id: "cr-02-b",
+            label: "조금 가라앉을 시간을 둔다",
+            resultId: "time-space",
+          },
+          {
+            id: "cr-02-c",
+            label: "상대가 무엇을 중요하게 여겼는지 본다",
+            resultId: "meaning-bridge",
+          },
         ],
       },
       {
@@ -401,9 +532,21 @@ export const labAssessments: LabAssessment[] = [
         id: "cr-03",
         text: "사과를 주고받을 때 더 중요하게 느끼는 것은",
         options: [
-          { id: "cr-03-a", label: "빨리 인정하고 회복하는 것", resultId: "quick-check" },
-          { id: "cr-03-b", label: "감정이 가라앉은 뒤 말하는 것", resultId: "time-space" },
-          { id: "cr-03-c", label: "무엇이 상처였는지 이해하는 것", resultId: "meaning-bridge" },
+          {
+            id: "cr-03-a",
+            label: "빨리 인정하고 회복하는 것",
+            resultId: "quick-check",
+          },
+          {
+            id: "cr-03-b",
+            label: "감정이 가라앉은 뒤 말하는 것",
+            resultId: "time-space",
+          },
+          {
+            id: "cr-03-c",
+            label: "무엇이 상처였는지 이해하는 것",
+            resultId: "meaning-bridge",
+          },
         ],
       },
       {
@@ -411,9 +554,21 @@ export const labAssessments: LabAssessment[] = [
         id: "cr-04",
         text: "갈등 대화가 길어질 때 나는",
         options: [
-          { id: "cr-04-a", label: "핵심을 정리해 결론을 내고 싶다", resultId: "quick-check" },
-          { id: "cr-04-b", label: "잠깐 쉬었다가 다시 하고 싶다", resultId: "time-space" },
-          { id: "cr-04-c", label: "서로 다르게 이해한 지점을 찾고 싶다", resultId: "meaning-bridge" },
+          {
+            id: "cr-04-a",
+            label: "핵심을 정리해 결론을 내고 싶다",
+            resultId: "quick-check",
+          },
+          {
+            id: "cr-04-b",
+            label: "잠깐 쉬었다가 다시 하고 싶다",
+            resultId: "time-space",
+          },
+          {
+            id: "cr-04-c",
+            label: "서로 다르게 이해한 지점을 찾고 싶다",
+            resultId: "meaning-bridge",
+          },
         ],
       },
       {
@@ -421,9 +576,21 @@ export const labAssessments: LabAssessment[] = [
         id: "cr-05",
         text: "다시 관계를 맞출 때 내가 편한 말은",
         options: [
-          { id: "cr-05-a", label: "그래서 지금 어떻게 할까?", resultId: "quick-check" },
-          { id: "cr-05-b", label: "조금 뒤에 다시 얘기하자", resultId: "time-space" },
-          { id: "cr-05-c", label: "내가 이해한 게 맞는지 확인할게", resultId: "meaning-bridge" },
+          {
+            id: "cr-05-a",
+            label: "그래서 지금 어떻게 할까?",
+            resultId: "quick-check",
+          },
+          {
+            id: "cr-05-b",
+            label: "조금 뒤에 다시 얘기하자",
+            resultId: "time-space",
+          },
+          {
+            id: "cr-05-c",
+            label: "내가 이해한 게 맞는지 확인할게",
+            resultId: "meaning-bridge",
+          },
         ],
       },
       {
@@ -431,9 +598,21 @@ export const labAssessments: LabAssessment[] = [
         id: "cr-06",
         text: "갈등 후 가장 부담스러운 것은",
         options: [
-          { id: "cr-06-a", label: "불편함이 오래 이어지는 것", resultId: "quick-check" },
-          { id: "cr-06-b", label: "감정이 큰 상태에서 말하는 것", resultId: "time-space" },
-          { id: "cr-06-c", label: "서로 다르게 이해한 채 넘어가는 것", resultId: "meaning-bridge" },
+          {
+            id: "cr-06-a",
+            label: "불편함이 오래 이어지는 것",
+            resultId: "quick-check",
+          },
+          {
+            id: "cr-06-b",
+            label: "감정이 큰 상태에서 말하는 것",
+            resultId: "time-space",
+          },
+          {
+            id: "cr-06-c",
+            label: "서로 다르게 이해한 채 넘어가는 것",
+            resultId: "meaning-bridge",
+          },
         ],
       },
     ],

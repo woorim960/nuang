@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { BalanceGameRoom } from "@/features/together-balance/BalanceGameRoom";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 
-export const metadata: Metadata = {
-  title: "우리의 선택 리포트 | NUANG 밸런스 게임",
-};
+export const metadata: Metadata = createPrivatePageMetadata({
+  title: "밸런스 게임 선택 리포트",
+});
 
 export default async function BalanceGameResultPage({
   params,

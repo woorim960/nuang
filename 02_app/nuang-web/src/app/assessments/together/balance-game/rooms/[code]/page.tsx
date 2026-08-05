@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { BalanceGameRoom } from "@/features/together-balance/BalanceGameRoom";
+import { createPrivatePageMetadata } from "@/features/seo/site-config";
 
-export const metadata: Metadata = {
-  title: "함께 고르기 | NUANG 밸런스 게임",
-};
+export const metadata: Metadata = createPrivatePageMetadata({
+  title: "밸런스 게임 함께 고르기",
+});
 
 export default async function BalanceGameRoomPage({
   params,

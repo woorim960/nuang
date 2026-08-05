@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:ui": "vitest --ui",
     "e2e": "playwright test",
+    "seo:assets": "node scripts/generate-seo-brand-assets.mjs",
     "release:inventory": "node scripts/generate-mvp-release-inventory.mjs",
     "release:inventory:check": "node scripts/generate-mvp-release-inventory.mjs --check",
     "release:go-live:check": "node scripts/check-mvp-go-live.mjs",

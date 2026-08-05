@@ -1,8 +1,16 @@
 import { render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import HelpPage from "@/app/help/page";
+import HelpPage, { metadata } from "@/app/help/page";
 
 describe("HelpPage", () => {
+  it("publishes a unique canonical description for the public help page", () => {
+    expect(metadata).toMatchObject({
+      alternates: { canonical: "/help" },
+      description: expect.stringContaining("공식 상담 연락처"),
+      title: { absolute: "위기·상담 도움 연락처 | 뉴앙" },
+    });
+  });
+
   it("puts immediate safety actions before other resources", () => {
     render(<HelpPage />);
 

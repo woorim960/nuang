@@ -14,10 +14,9 @@ describe("HomePage", () => {
 
   it("uses the approved assessment-first home metadata", () => {
     expect(metadata).toMatchObject({
-      title: "홈 | NUANG",
-      description: expect.stringContaining(
-        "나를 이해하고, 서로를 이해하는 성향 놀이터",
-      ),
+      title: { absolute: "성향 테스트와 관계 놀이터 | 뉴앙" },
+      description: expect.stringContaining("무료 성향 테스트"),
+      alternates: { canonical: "/home" },
     });
   });
 
