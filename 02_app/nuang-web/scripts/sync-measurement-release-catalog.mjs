@@ -40,19 +40,31 @@ const assessment = client.schema("assessment");
 const candidateReleaseId = "NUANG-CORE-CANDIDATE-BANK-M03-150";
 const betaReleaseId = "NUANG-CORE-BETA-1.0";
 const codeSchemeVersion = "NUANG-CODE-5AXIS-CANDIDATE-1.0";
+const measurementValidationGateDefaults = {
+  cognitive_review: "not_started",
+  fairness_and_invariance: "not_started",
+  quantitative_pilot: "not_started",
+  reliability_and_structure: "not_started",
+};
 
 const existingScheme = await scoring
   .from("code_scheme_release")
-  .select("code_scheme_version,status")
+  .select("code_scheme_version,status,validation_gates")
   .eq("code_scheme_version", codeSchemeVersion)
   .maybeSingle();
 if (existingScheme.error) throw existingScheme.error;
 
 const existingReleases = await assessment
   .from("item_bank_release")
-  .select("item_bank_release_id,status")
+  .select("item_bank_release_id,status,validation_gates")
   .in("item_bank_release_id", [candidateReleaseId, betaReleaseId]);
 if (existingReleases.error) throw existingReleases.error;
+const existingReleaseById = new Map(
+  (existingReleases.data ?? []).map((release) => [
+    release.item_bank_release_id,
+    release,
+  ]),
+);
 
 if (
   existingScheme.data &&
@@ -160,11 +172,9 @@ if (apply) {
           },
         ],
         status: "candidate",
-        validation_gates: {
-          cognitive_review: "not_started",
-          quantitative_pilot: "not_started",
-          reliability_and_structure: "not_started",
-        },
+        validation_gates: mergeValidationGates(
+          existingScheme.data?.validation_gates,
+        ),
       },
     ],
     "code_scheme_version",
@@ -183,11 +193,9 @@ if (apply) {
         },
         source_protocol_version: "m04-core-expert-kit.v0.1",
         status: "candidate",
-        validation_gates: {
-          cognitive_review: "not_started",
-          quantitative_pilot: "not_started",
-          reliability_and_structure: "not_started",
-        },
+        validation_gates: mergeValidationGates(
+          existingReleaseById.get(candidateReleaseId)?.validation_gates,
+        ),
       },
       {
         code_scheme_version: codeSchemeVersion,
@@ -200,11 +208,9 @@ if (apply) {
         },
         source_protocol_version: "m04-core-expert-kit.v0.1-internal-critique",
         status: "beta",
-        validation_gates: {
-          cognitive_review: "not_started",
-          quantitative_pilot: "not_started",
-          reliability_and_structure: "not_started",
-        },
+        validation_gates: mergeValidationGates(
+          existingReleaseById.get(betaReleaseId)?.validation_gates,
+        ),
       },
     ],
     "item_bank_release_id",
@@ -258,6 +264,16 @@ async function countMembers(releaseId) {
     .eq("item_bank_release_id", releaseId);
   if (response.error) throw response.error;
   return response.count ?? 0;
+}
+
+function mergeValidationGates(existingGates) {
+  const preservedGates =
+    existingGates &&
+    typeof existingGates === "object" &&
+    !Array.isArray(existingGates)
+      ? existingGates
+      : {};
+  return { ...measurementValidationGateDefaults, ...preservedGates };
 }
 
 async function upsertOrThrow(schema, table, rows, onConflict) {
