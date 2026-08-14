@@ -26,7 +26,7 @@ const homeCommunityPollMigration = readFileSync(
   "utf8",
 );
 const topicMediaMigration = readFileSync(
-  "supabase/migrations/202607200001_feed_post_topics_media.sql",
+  "supabase/migrations/202608140005_feed_post_topics_media.sql",
   "utf8",
 );
 const communityProfileSocialMigration = readFileSync(
@@ -38,7 +38,7 @@ const communitySafetyMigration = readFileSync(
   "utf8",
 );
 const communityMutationGuardMigration = readFileSync(
-  "supabase/migrations/202607280006_community_mutation_guard.sql",
+  "supabase/migrations/202608140003_community_mutation_guard.sql",
   "utf8",
 );
 const atomicProfileBlockMigration = readFileSync(

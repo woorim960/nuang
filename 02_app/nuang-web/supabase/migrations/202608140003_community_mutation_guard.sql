@@ -1,3 +1,4 @@
+-- Re-versioned after the production history audit found this guard unapplied.
 begin;
 
 alter table feed.community_write_bucket

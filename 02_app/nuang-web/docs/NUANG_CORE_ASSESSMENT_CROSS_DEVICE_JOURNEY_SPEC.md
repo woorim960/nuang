@@ -268,7 +268,7 @@ P0 구현은 고객이 요청한 기기 간 진행·완료 이력·홈 정확한
 
 보완 migration:
 
-- `supabase/migrations/202608020003_core_assessment_progress_completion_guard.sql`
+- `supabase/migrations/202608140004_core_assessment_progress_completion_guard.sql`
 
 집중 검증은 관련 위험 경로 14개 테스트 파일의 126개 테스트를 통과했고, 이후 UI 변경과 영구 거부 재전송 방지까지 합친 최종 회귀 묶음 12개 파일의 113개 테스트, TypeScript, 변경 파일 ESLint, `git diff --check`, Next.js 운영 빌드를 통과했다. 전체 테스트 모음은 이 기능과 무관한 테스트를 반복하지 않도록 실행하지 않았다.
 
@@ -276,4 +276,4 @@ P0 구현은 고객이 요청한 기기 간 진행·완료 이력·홈 정확한
 
 - 애플리케이션 코드·집중 테스트: 완료
 - 로컬 migration 파일: 완료
-- 운영 DB의 완료 snapshot 불변성: `202608020003_core_assessment_progress_completion_guard.sql` 실행 후 완료
+- 운영 DB의 완료 snapshot 불변성: `202608140004_core_assessment_progress_completion_guard.sql` 실행 후 완료

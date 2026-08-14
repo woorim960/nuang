@@ -5,7 +5,7 @@ import { describe, expect, it } from "vitest";
 const tableMigration = fs.readFileSync(
   path.join(
     process.cwd(),
-    "supabase/migrations/202607270004_private_email_verification.sql",
+    "supabase/migrations/20260727000401_private_email_verification.sql",
   ),
   "utf8",
 );

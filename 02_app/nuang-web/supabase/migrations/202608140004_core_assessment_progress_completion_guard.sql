@@ -1,3 +1,4 @@
+-- Re-versioned after the production history audit found this guard unapplied.
 -- A completed cross-device snapshot is historical evidence. It may be
 -- soft-deleted by account/result lifecycle work, but its answers, release and
 -- completion state must never be rewritten by a stale or compromised client.

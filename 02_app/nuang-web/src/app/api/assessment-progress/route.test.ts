@@ -37,7 +37,7 @@ describe("account assessment progress migration", () => {
     "utf8",
   ).toLowerCase();
   const completionGuard = readFileSync(
-    "supabase/migrations/202608020003_core_assessment_progress_completion_guard.sql",
+    "supabase/migrations/202608140004_core_assessment_progress_completion_guard.sql",
     "utf8",
   ).toLowerCase();
 

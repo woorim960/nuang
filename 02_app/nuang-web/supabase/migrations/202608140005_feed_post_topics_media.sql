@@ -1,3 +1,5 @@
+-- Re-versioned after the production history audit found this migration unapplied.
+-- Version 202607200001 remains assigned to the applied Gate B migration.
 alter table feed.feed_post
   add column if not exists topic_category text,
   add column if not exists topic_tags text[] not null default '{}'::text[],

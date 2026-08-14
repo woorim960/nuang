@@ -29,7 +29,7 @@ credential 준비는 `CREDENTIAL_MINIMAL_SETUP.md`를 먼저 따른다.
 - `202607180001_measurement_release_catalog.sql`: 신규 5축 코드·문항 revision·문항 bank release를 분리하고, 인지·정량·신뢰도 게이트 전 활성화를 차단한다.
 - `202607180002_core_candidate_bank_seed.sql`: 150개 후보 은행과 60개 연구 베타 세트를 비활성 상태로 저장한다.
 - `202607180003_assessment_release_traceability.sql`: 검사 attempt·점수 snapshot·결과 report에 문항·코드·채점 release 추적 필드를 고정한다.
-- `202607200001_feed_post_topics_media.sql`: 커뮤니티 게시물 주제와 최대 19장의 비공개 사진 저장·조회 구조를 추가한다.
+- `202608140005_feed_post_topics_media.sql`: 커뮤니티 게시물 주제와 최대 19장의 비공개 사진 저장·조회 구조를 추가한다.
 - `202607200003_gate_c_public_research.sql`: 이름·연락처 없이 공개 Gate C 자가 참여 세션을 저장하고, 문항별 자동 검수 대기열과 삭제 코드를 추가한다.
 - `202607200004_gate_c_research_retention.sql`: 익명 Gate C 기록의 1년 보관 기한을 매일 점검해 만료 자료와 파생 집계를 자동 삭제한다.
 - `202607210001_trait_map_content_catalog.sql`: 성향지도의 5축·10개 세부 특성·32개 역할형과 문구·근거·4분야 검토를 버전 관리하고, 승인 전 고객 공개를 DB에서 차단한다.

@@ -100,7 +100,7 @@
 - `src/features/account/PrivateContactEditor.tsx`
 - `supabase/migrations/202607030044_identity_consent_auth_foundation.sql`
 - `supabase/migrations/202607270001_account_contact_reward_entry.sql`
-- `supabase/migrations/202607270004_private_email_verification.sql`
+- `supabase/migrations/20260727000401_private_email_verification.sql`
 - `supabase/migrations/202607280010_self_account_deletion.sql`
 
 ---

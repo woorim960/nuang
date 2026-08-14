@@ -1,3 +1,4 @@
+-- Re-versioned to keep every Supabase migration version unique.
 -- Server-only verification challenges for a member's private profile email.
 -- Raw codes and raw email addresses are never stored in this table.
 
