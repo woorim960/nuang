@@ -1,0 +1,67 @@
+# 뉴앙 무료 운영 모니터링 가이드
+
+기준일: 2026-08-15
+
+## 목적
+
+운영 기능이나 사용자 데이터에 영향을 주지 않고 다음 상태를 조기에 확인한다.
+
+- 주요 공개 화면과 피드 API의 상태 코드·응답 시간
+- 비로그인 요청이 계정 전용 API에서 계속 안전하게 차단되는지
+- Supabase DB 크기와 연결 사용률
+- 활성 NUANG 크론의 최근 실패·장기 실행·마지막 성공
+- 광고·마케팅 메일 큐의 due·stale·terminal failure
+- 예약된 공식 콘텐츠의 게시·마감 지연
+- 결과 삭제 tombstone 수
+
+## 실행
+
+```bash
+npm run monitor:production
+npm run monitor:production -- --json
+npm run monitor:production -- --http-only
+```
+
+`DATABASE_URL` 또는 `NUANG_DATABASE_URL`은 로컬 환경 파일에서만 읽고 출력하지 않는다. DB 연결은 Supabase가 공식 배포한 CA를 고정해 서버 인증서를 검증하며, 교체가 필요하면 `NUANG_DATABASE_CA_FILE`로 새 인증서 경로를 지정한다. DB 점검은 `BEGIN READ ONLY`, 5초 statement timeout, `ROLLBACK`을 강제한다. 내부 outbox drain URL과 쓰기 RPC는 호출하지 않는다.
+
+## 판정 기준
+
+| 항목               | 경고                         | 실패                                               |
+| ------------------ | ---------------------------- | -------------------------------------------------- |
+| HTTP 전체 응답     | 1.5초 이상                   | 5초 이상, timeout, 예상하지 않은 상태·본문         |
+| DB 크기            | 350MB 이상                   | 425MB 이상                                         |
+| DB 연결            | `max_connections`의 50% 이상 | 75% 이상                                           |
+| 매분 크론          | 최근 실패 후 복구됨          | 마지막 성공 5분 초과, 마지막 실행 실패·stuck       |
+| 일일 크론          | 최근 실패 후 복구됨          | 마지막 성공 36시간 초과, 마지막 실행 실패·stuck    |
+| 최근 크론 실행시간 | 1초 이상                     | 5초 이상                                           |
+| 메일 큐            | due 행 존재                  | 5분 이상 due, stale sending, 최근 terminal failure |
+| 공식 콘텐츠        | 게시·마감 due 행 존재        | 5분 이상 게시·마감 지연                            |
+
+Supabase 무료 플랜은 DB가 500MB를 넘으면 read-only 상태가 될 수 있으므로 70%와 85%에서 미리 경고한다. 정확한 egress·MAU·Storage 사용량은 DB SQL로 알 수 없으므로 시작 시점, 24시간, 48시간에 Supabase Usage 화면에서 확인한다.
+
+마케팅 큐의 due 시간은 KST 08:00~21:00 발송 창 밖이거나 긴급 중지 중이면 판정에서 제외한다. 이미 15분 넘게 `sending`인 행과 최근 terminal failure는 중지 상태와 관계없이 실패로 판정한다.
+
+Vercel Hobby 런타임 로그는 1시간만 보관된다. 이 모니터는 사용자 요청 전체의 5xx 비율을 대신하지 않고, 주요 경로의 합성 장애를 감지한다. 실제 5xx 조사 시 Vercel 프로젝트의 Logs 화면에서 최근 1시간을 확인한다.
+
+## 48시간 관찰 부하
+
+시간당 한 번 실행하면 한 회당 HTTP GET 10회와 읽기 전용 DB 세션 1개만 사용한다. 48시간 합계는 HTTP 480회와 DB 세션 48개이며, 정상 결과를 DB에 기록하지 않는다.
+
+전체 `smoke:server:readiness`는 배포 직후 또는 이상 탐지 후에만 사용한다. 임시 계정·게시물·투표·댓글을 생성하는 `smoke:community:authenticated`는 자동 반복하지 않는다.
+
+## 대응 순서
+
+1. HTTP 실패가 2회 연속이면 Vercel 배포 상태와 최근 Logs를 확인한다.
+2. 크론 실패가 있으면 해당 `cron.job_run_details`의 오류와 마지막 성공을 확인한다.
+3. due queue가 5분 넘게 남으면 outbox worker 설정과 Vault origin/secret을 확인한다.
+4. DB가 350MB를 넘으면 증가량과 큰 테이블을 확인하고 보존 정책을 검토한다.
+5. 기능 확인이 필요해도 먼저 읽기 전용 readiness를 실행하고, 쓰기 smoke는 배포 직후 한 번만 수행한다.
+
+## 공식 무료 한도 근거
+
+- Supabase 요금 및 무료 한도: https://supabase.com/pricing
+- Supabase DB 크기와 read-only 동작: https://supabase.com/docs/guides/platform/database-size
+- Vercel Hobby 한도: https://vercel.com/docs/plans/hobby
+- Vercel Runtime Logs 보관: https://vercel.com/docs/logs/runtime
+
+DB CA는 Supabase Database Settings의 `Download certificate`가 제공하는 `Supabase Root 2021 CA`를 사용한다. SHA-256 fingerprint는 `80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA`, 만료일은 2031-04-26이다. 교체 시 새 인증서의 발급처·fingerprint·실제 pooler 연결을 검증한 뒤 갱신한다.
