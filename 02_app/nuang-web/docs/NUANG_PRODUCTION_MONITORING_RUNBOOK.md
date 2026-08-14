@@ -20,9 +20,12 @@
 npm run monitor:production
 npm run monitor:production -- --json
 npm run monitor:production -- --http-only
+npm run monitor:production:email
 ```
 
 `DATABASE_URL` 또는 `NUANG_DATABASE_URL`은 로컬 환경 파일에서만 읽고 출력하지 않는다. DB 연결은 Supabase가 공식 배포한 CA를 고정해 서버 인증서를 검증하며, 교체가 필요하면 `NUANG_DATABASE_CA_FILE`로 새 인증서 경로를 지정한다. DB 점검은 `BEGIN READ ONLY`, 5초 statement timeout, `ROLLBACK`을 강제한다. 내부 outbox drain URL과 쓰기 RPC는 호출하지 않는다.
+
+`monitor:production:email`은 동일 점검을 실행하고 최종 결과를 `NUANG_MONITOR_EMAIL_TO`로 보낸다. 실패 또는 실행 오류는 10초 뒤 한 번 재확인하며, 메일은 최종 상태 한 통만 발송한다. 발송 네트워크 오류나 Resend 429·5xx는 같은 idempotency key로 한 번만 재시도해 중복을 방지한다. 자동화에서는 `npm run monitor:production:email -- --scheduled`를 사용해 같은 시간대의 중복 실행도 한 통으로 제한한다. 수신자·발신자·답장 주소는 각각 `NUANG_MONITOR_EMAIL_TO`, `NUANG_MONITOR_EMAIL_FROM`, `NUANG_MONITOR_EMAIL_REPLY_TO`로 변경할 수 있고, 발신자는 인증된 `nuang.app` 하위 도메인만 허용한다. HTML과 plain text에는 집계된 운영 지표만 포함하며 환경변수, credential, 응답 본문, 사용자 정보는 넣지 않는다.
 
 ## 판정 기준
 
@@ -45,7 +48,9 @@ Vercel Hobby 런타임 로그는 1시간만 보관된다. 이 모니터는 사�
 
 ## 48시간 관찰 부하
 
-시간당 한 번 실행하면 한 회당 HTTP GET 10회와 읽기 전용 DB 세션 1개만 사용한다. 48시간 합계는 HTTP 480회와 DB 세션 48개이며, 정상 결과를 DB에 기록하지 않는다.
+시간당 한 번 실행하면 한 회당 HTTP GET 10회와 읽기 전용 DB 세션 1개만 사용한다. 48시간 합계는 HTTP 480회와 DB 세션 48개이며, 점검 결과 자체를 DB에 기록하지 않는다. 모니터 메일에는 `production_monitor` 태그를 붙이고 공통 Resend webhook이 이 태그를 DB 접근 전에 정상 응답으로 제외하므로 광고·마케팅 운영 기록도 만들지 않는다.
+
+시간당 운영 메일 한 통은 하루 24통, 48시간 동안 48통이다. Resend 무료 거래성 한도인 하루 100통·월 3,000통 안이지만 인증메일과 다른 운영 메일도 같은 한도를 함께 사용하므로 Resend Usage를 함께 확인한다.
 
 전체 `smoke:server:readiness`는 배포 직후 또는 이상 탐지 후에만 사용한다. 임시 계정·게시물·투표·댓글을 생성하는 `smoke:community:authenticated`는 자동 반복하지 않는다.
 
@@ -63,5 +68,6 @@ Vercel Hobby 런타임 로그는 1시간만 보관된다. 이 모니터는 사�
 - Supabase DB 크기와 read-only 동작: https://supabase.com/docs/guides/platform/database-size
 - Vercel Hobby 한도: https://vercel.com/docs/plans/hobby
 - Vercel Runtime Logs 보관: https://vercel.com/docs/logs/runtime
+- Resend 무료 발송 한도: https://resend.com/docs/knowledge-base/what-is-resend-pricing
 
 DB CA는 Supabase Database Settings의 `Download certificate`가 제공하는 `Supabase Root 2021 CA`를 사용한다. SHA-256 fingerprint는 `80:70:25:AD:50:D4:ED:21:9D:2C:9C:7D:29:9C:00:4F:82:4E:B0:0C:F7:F6:5A:FE:F6:07:D0:7B:72:E6:CA:FA`, 만료일은 2031-04-26이다. 교체 시 새 인증서의 발급처·fingerprint·실제 pooler 연결을 검증한 뒤 갱신한다.

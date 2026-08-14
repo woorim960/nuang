@@ -7,7 +7,13 @@ export const runtime = "nodejs";
 
 const resendWebhookSchema = z.object({
   created_at: z.string().optional(),
-  data: z.object({ email_id: z.string().min(1).max(500) }),
+  data: z.object({
+    email_id: z.string().min(1).max(500),
+    tags: z
+      .object({ category: z.string().min(1).max(100).optional() })
+      .passthrough()
+      .optional(),
+  }),
   type: z.string().min(1).max(100),
 });
 
@@ -34,6 +40,9 @@ export async function POST(request: Request) {
   const parsed = resendWebhookSchema.safeParse(payload);
   if (!parsed.success) {
     return response({ message: "지원하지 않는 이벤트입니다.", ok: false }, 422);
+  }
+  if (parsed.data.data.tags?.category === "production_monitor") {
+    return response({ ignored: true, ok: true }, 200);
   }
 
   const client = createSupabaseServiceClient();
