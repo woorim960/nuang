@@ -3,8 +3,8 @@
 - 기준일: 2026-08-15
 - 출시 후보: NUANG MVP
 - 기능 도메인: 18개
-- 앱 진입 표면: 194개 (화면 95, API·callback 90, layout 9)
-- 자동 테스트: 528개 파일, 정적 집계 2225개 테스트 케이스
+- 앱 진입 표면: 195개 (화면 95, API·callback 91, layout 9)
+- 자동 테스트: 536개 파일, 정적 집계 2331개 테스트 케이스
 
 이 문서는 `src/app`의 모든 `page.tsx`, `route.ts`, `layout.tsx`를 실제 파일에서 수집해 기능 도메인과 연결한 출시 인벤토리다. 기능·화면·API가 추가됐는데 분류나 테스트 근거가 없으면 `npm run release:inventory:check`가 실패한다.
 
@@ -20,7 +20,7 @@
 | `research`                 | 연구 참여와 분석             |      14 |           4 |
 | `together_balance_game`    | 함께하는 밸런스 게임         |      13 |           4 |
 | `public_profile_safety`    | 공개 프로필과 소셜 안전      |      10 |           4 |
-| `community_feed`           | 커뮤니티 피드                |      15 |           4 |
+| `community_feed`           | 커뮤니티 피드                |      16 |           4 |
 | `public_comparison`        | 1:1 성향 비교                |       6 |           4 |
 | `sharing`                  | 결과 공유                    |       6 |           6 |
 | `feedback_analytics`       | 피드백과 제품 분석           |       5 |           4 |
@@ -336,6 +336,7 @@
 - 알림 목록과 게시물 상세
 - 밸런스 게임 모집·결과 공유 카드
 - 외부 링크 안전 정책과 moderation 상태 처리
+- 최적화된 피드 사진 저장과 내부 정리 작업
 
 ### 구현 위치
 
@@ -350,23 +351,24 @@
 
 ### 화면·API 진입점
 
-| 경로                            | 종류·메서드 | 소스                                            |
-| ------------------------------- | ----------- | ----------------------------------------------- |
-| `/api/feed`                     | GET, POST   | `src/app/api/feed/route.ts`                     |
-| `/feed`                         | page        | `src/app/feed/page.tsx`                         |
-| `/feed/balance/[postId]/edit`   | page        | `src/app/feed/balance/[postId]/edit/page.tsx`   |
-| `/feed/balance/new`             | page        | `src/app/feed/balance/new/page.tsx`             |
-| `/feed/me`                      | page        | `src/app/feed/me/page.tsx`                      |
-| `/feed/new`                     | page        | `src/app/feed/new/page.tsx`                     |
-| `/feed/notifications`           | page        | `src/app/feed/notifications/page.tsx`           |
-| `/feed/perspectives`            | page        | `src/app/feed/perspectives/page.tsx`            |
-| `/feed/polls/[pollId]/stats`    | page        | `src/app/feed/polls/[pollId]/stats/page.tsx`    |
-| `/feed/posts/[postId]`          | page        | `src/app/feed/posts/[postId]/page.tsx`          |
-| `/feed/posts/[postId]/edit`     | page        | `src/app/feed/posts/[postId]/edit/page.tsx`     |
-| `/feed/questions/[postId]/edit` | page        | `src/app/feed/questions/[postId]/edit/page.tsx` |
-| `/feed/questions/new`           | page        | `src/app/feed/questions/new/page.tsx`           |
-| `/feed/search`                  | page        | `src/app/feed/search/page.tsx`                  |
-| `/feed/tags/[tag]`              | page        | `src/app/feed/tags/[tag]/page.tsx`              |
+| 경로                               | 종류·메서드 | 소스                                               |
+| ---------------------------------- | ----------- | -------------------------------------------------- |
+| `/api/feed`                        | GET, POST   | `src/app/api/feed/route.ts`                        |
+| `/api/internal/feed-media/cleanup` | GET, POST   | `src/app/api/internal/feed-media/cleanup/route.ts` |
+| `/feed`                            | page        | `src/app/feed/page.tsx`                            |
+| `/feed/balance/[postId]/edit`      | page        | `src/app/feed/balance/[postId]/edit/page.tsx`      |
+| `/feed/balance/new`                | page        | `src/app/feed/balance/new/page.tsx`                |
+| `/feed/me`                         | page        | `src/app/feed/me/page.tsx`                         |
+| `/feed/new`                        | page        | `src/app/feed/new/page.tsx`                        |
+| `/feed/notifications`              | page        | `src/app/feed/notifications/page.tsx`              |
+| `/feed/perspectives`               | page        | `src/app/feed/perspectives/page.tsx`               |
+| `/feed/polls/[pollId]/stats`       | page        | `src/app/feed/polls/[pollId]/stats/page.tsx`       |
+| `/feed/posts/[postId]`             | page        | `src/app/feed/posts/[postId]/page.tsx`             |
+| `/feed/posts/[postId]/edit`        | page        | `src/app/feed/posts/[postId]/edit/page.tsx`        |
+| `/feed/questions/[postId]/edit`    | page        | `src/app/feed/questions/[postId]/edit/page.tsx`    |
+| `/feed/questions/new`              | page        | `src/app/feed/questions/new/page.tsx`              |
+| `/feed/search`                     | page        | `src/app/feed/search/page.tsx`                     |
+| `/feed/tags/[tag]`                 | page        | `src/app/feed/tags/[tag]/page.tsx`                 |
 
 ## 1:1 성향 비교
 

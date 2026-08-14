@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "databaseHistoryCount": 93,
+  "databaseHistoryCount": 94,
   "verifiedAt": "2026-08-15",
   "migrations": [
     {
@@ -467,6 +467,11 @@
       "version": "202608150002",
       "file": "202608150002_result_deletion_trigger_table_shape_fix.sql",
       "sha256": "50134fa4e23986d95c751fc7ce326f05a3facfe0a5ea92e0fdfff08e2000eb85"
+    },
+    {
+      "version": "202608150003",
+      "file": "202608150003_feed_media_storage_provider.sql",
+      "sha256": "692acab4726f0b425f867c2c4e9dfc9b278a45dfebcfe89c6b4cc9681b1cc8d2"
     }
   ]
 }

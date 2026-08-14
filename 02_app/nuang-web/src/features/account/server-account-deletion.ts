@@ -3,7 +3,14 @@ import "server-only";
 import type { SupabaseClient, User } from "@supabase/supabase-js";
 import { communityProfileAvatarBucket } from "@/features/account/community-profile";
 import { ensureAccountForUser } from "@/features/account/server-writes";
-import { feedMediaBucket } from "@/features/feed/feed-media";
+import {
+  feedMediaBucket,
+  isFeedMediaStorageProvider,
+} from "@/features/feed/feed-media";
+import {
+  deleteFeedMediaObjects,
+  type FeedMediaStoredObject,
+} from "@/features/feed/feed-media-storage";
 
 type AccountDeletionResult =
   | { ok: true }
@@ -48,6 +55,32 @@ export async function deleteOwnAccount({
     return { code: "account_delete_failed", ok: false };
   }
 
+  // Only fully activated objects are safe to delete immediately. Physically
+  // deleting the account has already queued every accounted media row in the
+  // same database transaction. Hidden uploads keep that trigger-created
+  // fifteen-minute grace so a late immutable PUT cannot land after resolution.
+  const immediateFeedObjects = media.feedObjects.filter(
+    (object) => object.deleteImmediately,
+  );
+  const feedRemoval = await deleteFeedMediaObjects({
+    client,
+    objects: immediateFeedObjects.map(({ provider, storagePath }) => ({
+      provider,
+      storagePath,
+    })),
+  });
+  const failedKeys = new Set(
+    feedRemoval.failedObjects.map(
+      (object) => `${object.provider}\n${object.storagePath}`,
+    ),
+  );
+  await resolveFeedCleanup(
+    client,
+    immediateFeedObjects.filter(
+      (object) => !failedKeys.has(`${object.provider}\n${object.storagePath}`),
+    ),
+  );
+
   return { ok: true };
 }
 
@@ -79,31 +112,78 @@ async function readOwnedMedia(client: SupabaseClient, accountId: string) {
     if ((response.data?.length ?? 0) < 1000) break;
   }
 
-  const mediaRows: Array<{ bucket_id: string; storage_path: string }> = [];
+  const mediaRows: Array<{
+    bucket_id: string;
+    deleted_at?: unknown;
+    storage_accounted?: unknown;
+    storage_path: string;
+    storage_provider?: unknown;
+    storage_ready?: unknown;
+  }> = [];
   const postIds = postRows.map((post) => post.id);
 
   for (let index = 0; index < postIds.length; index += 200) {
-    const response = await client
+    let response = (await client
       .schema("feed")
       .from("feed_post_media")
-      .select("bucket_id,storage_path")
-      .in("post_id", postIds.slice(index, index + 200));
+      .select(
+        "bucket_id,storage_path,storage_provider,storage_ready,deleted_at,storage_accounted",
+      )
+      .in("post_id", postIds.slice(index, index + 200))) as {
+      data: Array<{
+        bucket_id: string;
+        deleted_at?: unknown;
+        storage_accounted?: unknown;
+        storage_path: string;
+        storage_provider?: unknown;
+        storage_ready?: unknown;
+      }> | null;
+      error: unknown;
+    };
 
-    if (response.error && !isMissingMediaTable(response.error)) {
+    if (isMissingStorageProviderColumn(response.error)) {
+      response = (await client
+        .schema("feed")
+        .from("feed_post_media")
+        .select("bucket_id,storage_path,deleted_at")
+        .in("post_id", postIds.slice(index, index + 200))) as {
+        data: Array<{
+          bucket_id: string;
+          deleted_at?: unknown;
+          storage_accounted?: unknown;
+          storage_path: string;
+          storage_provider?: unknown;
+          storage_ready?: unknown;
+        }> | null;
+        error: unknown;
+      };
+    }
+
+    if (
+      response.error &&
+      !isMissingMediaTable(
+        response.error as { code?: string; message?: string },
+      )
+    ) {
       return { ok: false as const };
     }
     mediaRows.push(...(response.data ?? []));
   }
 
   const pathsByBucket = new Map<string, string[]>();
+  const feedObjects: Array<
+    FeedMediaStoredObject & { deleteImmediately: boolean }
+  > = [];
+  const supabaseMediaPaths = new Set<string>();
   const add = (bucket: string, path: string) => {
     const paths = pathsByBucket.get(bucket) ?? [];
     if (!paths.includes(path)) paths.push(path);
     pathsByBucket.set(bucket, paths);
   };
-  const profileRow = profile.data as
-    | { avatar_bucket: string | null; avatar_object_path: string | null }
-    | null;
+  const profileRow = profile.data as {
+    avatar_bucket: string | null;
+    avatar_object_path: string | null;
+  } | null;
 
   if (
     profileRow?.avatar_bucket === communityProfileAvatarBucket &&
@@ -113,8 +193,19 @@ async function readOwnedMedia(client: SupabaseClient, accountId: string) {
   }
 
   for (const row of mediaRows) {
-    if (row.bucket_id === feedMediaBucket && row.storage_path) {
-      add(row.bucket_id, row.storage_path);
+    const provider = row.storage_provider ?? "supabase";
+    if (
+      row.bucket_id === feedMediaBucket &&
+      row.storage_path &&
+      isFeedMediaStorageProvider(provider)
+    ) {
+      feedObjects.push({
+        deleteImmediately:
+          row.storage_ready !== false && row.storage_accounted !== false,
+        provider,
+        storagePath: row.storage_path,
+      });
+      if (provider === "supabase") supabaseMediaPaths.add(row.storage_path);
     }
   }
 
@@ -127,12 +218,43 @@ async function readOwnedMedia(client: SupabaseClient, accountId: string) {
         "storagePath" in attachment &&
         typeof attachment.storagePath === "string"
       ) {
-        add(feedMediaBucket, attachment.storagePath);
+        // Attachment-only fallback objects predate the media table and have no
+        // physical-delete trigger to create durable cleanup work. Preserve the
+        // original fail-closed account-deletion order for only those paths.
+        if (!supabaseMediaPaths.has(attachment.storagePath)) {
+          add(feedMediaBucket, attachment.storagePath);
+        }
       }
     }
   }
 
-  return { ok: true as const, pathsByBucket };
+  return { feedObjects, ok: true as const, pathsByBucket };
+}
+
+async function resolveFeedCleanup(
+  client: SupabaseClient,
+  objects: FeedMediaStoredObject[],
+) {
+  await Promise.all(
+    objects.map((object) =>
+      client.schema("feed").rpc("resolve_media_storage_cleanup", {
+        p_storage_path: object.storagePath,
+        p_storage_provider: object.provider,
+      }),
+    ),
+  );
+}
+
+function isMissingStorageProviderColumn(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as { code?: unknown; message?: unknown };
+  return (
+    candidate.code === "42703" ||
+    candidate.code === "PGRST204" ||
+    (typeof candidate.message === "string" &&
+      (candidate.message.includes("storage_provider") ||
+        candidate.message.includes("storage_ready")))
+  );
 }
 
 function isMissingMediaTable(error: { code?: string; message?: string }) {

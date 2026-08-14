@@ -1,4 +1,7 @@
 export const feedMediaBucket = "feed-media";
+export const feedMediaStorageProviders = ["supabase", "cloudflare_r2"] as const;
+export type FeedMediaStorageProvider =
+  (typeof feedMediaStorageProviders)[number];
 export const maxFeedPhotoCount = 19;
 // Vercel Functions reject request payloads above 4.5 MB. Keep the complete
 // multipart body below that platform boundary until direct signed uploads ship.
@@ -9,6 +12,12 @@ export const supportedFeedPhotoTypes = [
   "image/png",
   "image/webp",
 ] as const;
+
+export function isFeedMediaStorageProvider(
+  value: unknown,
+): value is FeedMediaStorageProvider {
+  return feedMediaStorageProviders.includes(value as FeedMediaStorageProvider);
+}
 
 export type SupportedFeedPhotoType = (typeof supportedFeedPhotoTypes)[number];
 

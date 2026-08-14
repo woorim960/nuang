@@ -126,6 +126,61 @@ test("database snapshot warns before the free database quota", () => {
   );
 });
 
+test("R2 capacity warns at 70 percent and stale cleanup fails closed", () => {
+  const snapshot = healthySnapshot();
+  snapshot.mediaStorage.activeBytes = 5_600_000_000;
+  let report = createHealthReport(
+    evaluateDatabaseSnapshot(snapshot, {
+      now: new Date("2026-08-15T01:00:00.000Z"),
+    }),
+  );
+  assert.equal(
+    report.checks.find((check) => check.id === "storage:r2-managed-capacity")
+      ?.status,
+    "warn",
+  );
+
+  snapshot.mediaStorage.cleanupPending = 1;
+  snapshot.mediaStorage.cleanupBytes = 250_000;
+  snapshot.mediaStorage.cleanupOldestAt = "2026-08-15T00:40:00.000Z";
+  report = createHealthReport(
+    evaluateDatabaseSnapshot(snapshot, {
+      now: new Date("2026-08-15T01:00:00.000Z"),
+    }),
+  );
+  assert.equal(
+    report.checks.find((check) => check.id === "storage:media-cleanup")?.status,
+    "warn",
+  );
+
+  snapshot.mediaStorage.cleanupOldestAt = "2026-08-13T12:00:00.000Z";
+  report = createHealthReport(
+    evaluateDatabaseSnapshot(snapshot, {
+      now: new Date("2026-08-15T01:00:00.000Z"),
+    }),
+  );
+  assert.equal(
+    report.checks.find((check) => check.id === "storage:media-cleanup")?.status,
+    "fail",
+  );
+
+  snapshot.mediaStorage.cleanupPending = 0;
+  snapshot.mediaStorage.cleanupBytes = 0;
+  snapshot.mediaStorage.cleanupOldestAt = null;
+  snapshot.mediaStorage.pendingUploadCount = 1;
+  snapshot.mediaStorage.pendingUploadOldestAt = "2026-08-15T00:20:00.000Z";
+  report = createHealthReport(
+    evaluateDatabaseSnapshot(snapshot, {
+      now: new Date("2026-08-15T01:00:00.000Z"),
+    }),
+  );
+  assert.equal(
+    report.checks.find((check) => check.id === "storage:media-upload-pending")
+      ?.status,
+    "fail",
+  );
+});
+
 test("cron failures and stale queues are deployment blockers", () => {
   const snapshot = healthySnapshot();
   snapshot.cronJobs[0].recentFailures = 1;
@@ -329,6 +384,16 @@ function healthySnapshot() {
       marketingConfirmationStale: 0,
       marketingEmergencyPaused: false,
       marketingWindowOpen: true,
+    },
+    mediaStorage: {
+      activeBytes: 0,
+      cleanupBytes: 0,
+      cleanupOldestAt: null,
+      cleanupPending: 0,
+      maxManagedBytes: 8_000_000_000,
+      pendingUploadCount: 0,
+      pendingUploadOldestAt: null,
+      reservedBytes: 0,
     },
     tombstones: { recent: 0, total: 0 },
   };

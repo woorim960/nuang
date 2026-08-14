@@ -25,12 +25,21 @@ const supabaseMocks = vi.hoisted(() => ({
   serviceClient: null as null | ReturnType<typeof createMockFeedReadClient>,
 }));
 
+const feedMediaStorageMocks = vi.hoisted(() => ({
+  createFeedMediaR2DeliveryUrl: vi.fn(),
+}));
+
 vi.mock("@/lib/supabase/server", () => ({
   createServerSupabaseClient: vi.fn(async () => supabaseMocks.serverClient),
 }));
 
 vi.mock("@/lib/supabase/service", () => ({
   createSupabaseServiceClient: vi.fn(() => supabaseMocks.serviceClient),
+}));
+
+vi.mock("@/features/feed/feed-media-storage", () => ({
+  createFeedMediaR2DeliveryUrl:
+    feedMediaStorageMocks.createFeedMediaR2DeliveryUrl,
 }));
 
 function createMockServerClient() {
@@ -52,6 +61,7 @@ describe("feed server read model", () => {
   afterEach(() => {
     supabaseMocks.serverClient = null;
     supabaseMocks.serviceClient = null;
+    feedMediaStorageMocks.createFeedMediaR2DeliveryUrl.mockReset();
     vi.clearAllMocks();
   });
 
@@ -108,6 +118,167 @@ describe("feed server read model", () => {
       viewerCanManage: false,
       viewerHasLiked: false,
     });
+  });
+
+  it("reads mixed Supabase and R2 media while signing each post with the correct visibility mode", async () => {
+    const signedUrlRequests: string[][] = [];
+    feedMediaStorageMocks.createFeedMediaR2DeliveryUrl.mockImplementation(
+      ({ mode, storagePath }: { mode: string; storagePath: string }) =>
+        `https://media.nuang.test/${storagePath}?mode=${mode}`,
+    );
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      mediaRows: [
+        createMockMediaRow({
+          id: "media-own-supabase",
+          postId: "post-own",
+          sortOrder: 1,
+          storagePath: "account-own/post-own/01.webp",
+          storageProvider: "supabase",
+        }),
+        createMockMediaRow({
+          id: "media-own-r2",
+          postId: "post-own",
+          sortOrder: 2,
+          storagePath: "feed/v1/post-own/02-r2.webp",
+          storageProvider: "cloudflare_r2",
+        }),
+        createMockMediaRow({
+          id: "media-public-r2",
+          postId: "post-public",
+          sortOrder: 1,
+          storagePath: "feed/v1/post-public/01-r2.webp",
+          storageProvider: "cloudflare_r2",
+        }),
+        createMockMediaRow({
+          id: "media-public-supabase",
+          postId: "post-public",
+          sortOrder: 2,
+          storagePath: "account-other/post-public/02.webp",
+          storageProvider: "supabase",
+        }),
+      ],
+      signedUrlRequests,
+    });
+
+    const payload = await createServerFeedReadPayload();
+    const ownPost = payload.items.find((item) => item.id === "post-own");
+    const publicPost = payload.items.find((item) => item.id === "post-public");
+
+    expect(ownPost?.media).toEqual([
+      expect.objectContaining({
+        id: "media-own-supabase",
+        url: "https://supabase.nuang.test/account-own%2Fpost-own%2F01.webp",
+      }),
+      expect.objectContaining({
+        id: "media-own-r2",
+        url: "https://media.nuang.test/feed/v1/post-own/02-r2.webp?mode=private",
+      }),
+    ]);
+    expect(publicPost?.media).toEqual([
+      expect.objectContaining({
+        id: "media-public-r2",
+        url: "https://media.nuang.test/feed/v1/post-public/01-r2.webp?mode=public",
+      }),
+      expect.objectContaining({
+        id: "media-public-supabase",
+        url: "https://supabase.nuang.test/account-other%2Fpost-public%2F02.webp",
+      }),
+    ]);
+    expect(signedUrlRequests).toEqual([
+      ["account-own/post-own/01.webp", "account-other/post-public/02.webp"],
+    ]);
+    expect(
+      feedMediaStorageMocks.createFeedMediaR2DeliveryUrl,
+    ).toHaveBeenCalledWith({
+      mode: "private",
+      storagePath: "feed/v1/post-own/02-r2.webp",
+    });
+    expect(
+      feedMediaStorageMocks.createFeedMediaR2DeliveryUrl,
+    ).toHaveBeenCalledWith({
+      mode: "public",
+      storagePath: "feed/v1/post-public/01-r2.webp",
+    });
+  });
+
+  it("omits only R2 media when delivery signing is unavailable", async () => {
+    feedMediaStorageMocks.createFeedMediaR2DeliveryUrl.mockReturnValue(null);
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      mediaRows: [
+        createMockMediaRow({
+          id: "media-own-supabase",
+          postId: "post-own",
+          sortOrder: 1,
+          storagePath: "account-own/post-own/01.webp",
+          storageProvider: "supabase",
+        }),
+        createMockMediaRow({
+          id: "media-own-r2",
+          postId: "post-own",
+          sortOrder: 2,
+          storagePath: "feed/v1/post-own/02-r2.webp",
+          storageProvider: "cloudflare_r2",
+        }),
+        createMockMediaRow({
+          id: "media-public-r2",
+          postId: "post-public",
+          sortOrder: 1,
+          storagePath: "feed/v1/post-public/01-r2.webp",
+          storageProvider: "cloudflare_r2",
+        }),
+      ],
+    });
+
+    const payload = await createServerFeedReadPayload();
+    const ownPost = payload.items.find((item) => item.id === "post-own");
+    const publicPost = payload.items.find((item) => item.id === "post-public");
+
+    expect(ownPost?.media).toEqual([
+      expect.objectContaining({
+        id: "media-own-supabase",
+        url: "https://supabase.nuang.test/account-own%2Fpost-own%2F01.webp",
+      }),
+    ]);
+    expect(publicPost?.media).toEqual([]);
+  });
+
+  it("falls back to legacy Supabase media reads while the provider column rolls out", async () => {
+    const operations: MockFeedReadOperation[] = [];
+    const signedUrlRequests: string[][] = [];
+    const items = await createServerOwnFeedItems({
+      accountId: "account-own",
+      client: createMockFeedReadClient({
+        mediaProviderColumnMissing: true,
+        mediaRows: [
+          createMockMediaRow({
+            id: "media-legacy-provider",
+            postId: "post-own",
+            sortOrder: 1,
+            storagePath: "account-own/post-own/legacy.webp",
+          }),
+        ],
+        operations,
+        signedUrlRequests,
+      }) as never,
+    });
+
+    expect(items[0]?.media).toEqual([
+      expect.objectContaining({
+        id: "media-legacy-provider",
+        url: "https://supabase.nuang.test/account-own%2Fpost-own%2Flegacy.webp",
+      }),
+    ]);
+    expect(
+      operations
+        .filter((operation) => operation.table === "feed_post_media")
+        .map((operation) => operation.select),
+    ).toEqual([
+      "id, post_id, storage_path, storage_provider, sort_order, width, height",
+      "id, post_id, storage_path, sort_order, width, height",
+    ]);
+    expect(signedUrlRequests).toEqual([["account-own/post-own/legacy.webp"]]);
   });
 
   it("reads only the requested account's posts for the self profile", async () => {
@@ -375,7 +546,18 @@ type MockFeedReadOperation = {
   filters: Array<[string, string, unknown]>;
   limit?: number;
   schema: string;
+  select?: string;
   table: string;
+};
+
+type MockFeedMediaRow = {
+  height: number | null;
+  id: string;
+  post_id: string;
+  sort_order: number;
+  storage_path: string;
+  storage_provider?: "cloudflare_r2" | "supabase";
+  width: number | null;
 };
 
 function createMockFeedReadClient({
@@ -383,23 +565,31 @@ function createMockFeedReadClient({
   hiddenPostIds = [],
   hiddenSeedKeys = [],
   includeOriginalReportShare = false,
+  mediaProviderColumnMissing = false,
+  mediaRows = [],
   originalReportPrivate = false,
   operations,
   privateReportShare = false,
+  signedUrlRequests,
 }: {
   blockReadFailure?: boolean;
   hiddenPostIds?: string[];
   hiddenSeedKeys?: string[];
   includeOriginalReportShare?: boolean;
+  mediaProviderColumnMissing?: boolean;
+  mediaRows?: MockFeedMediaRow[];
   originalReportPrivate?: boolean;
   operations?: MockFeedReadOperation[];
   privateReportShare?: boolean;
+  signedUrlRequests?: string[][];
 } = {}) {
   const options = {
     blockReadFailure,
     hiddenPostIds,
     hiddenSeedKeys,
     includeOriginalReportShare,
+    mediaProviderColumnMissing,
+    mediaRows,
     originalReportPrivate,
     privateReportShare,
   };
@@ -439,7 +629,8 @@ function createMockFeedReadClient({
             order() {
               return builder;
             },
-            select() {
+            select(columns?: string) {
+              operation.select = columns;
               return builder;
             },
             then<TResult1 = unknown, TResult2 = never>(
@@ -458,6 +649,22 @@ function createMockFeedReadClient({
         },
       };
     },
+    storage: {
+      from() {
+        return {
+          async createSignedUrls(paths: string[]) {
+            signedUrlRequests?.push(paths);
+            return {
+              data: paths.map((path) => ({
+                path,
+                signedUrl: `https://supabase.nuang.test/${encodeURIComponent(path)}`,
+              })),
+              error: null,
+            };
+          },
+        };
+      },
+    },
   };
 }
 
@@ -468,6 +675,8 @@ function resolveFeedReadOperation(
     hiddenPostIds: string[];
     hiddenSeedKeys: string[];
     includeOriginalReportShare: boolean;
+    mediaProviderColumnMissing: boolean;
+    mediaRows: MockFeedMediaRow[];
     originalReportPrivate: boolean;
     privateReportShare: boolean;
   },
@@ -488,6 +697,31 @@ function resolveFeedReadOperation(
           error: { code: "BLOCK_READ_FAILED", message: "read failed" },
         }
       : { data: [], error: null };
+  }
+
+  if (operation.schema === "feed" && operation.table === "feed_post_media") {
+    if (
+      options.mediaProviderColumnMissing &&
+      operation.select?.includes("storage_provider")
+    ) {
+      return {
+        data: null,
+        error: {
+          code: "42703",
+          message: "column storage_provider does not exist",
+        },
+      };
+    }
+
+    return {
+      data: options.mediaRows.map((row) => {
+        if (operation.select?.includes("storage_provider")) return row;
+        const legacyRow = { ...row };
+        delete legacyRow.storage_provider;
+        return legacyRow;
+      }),
+      error: null,
+    };
   }
 
   if (operation.schema === "feed" && operation.table === "feed_post") {
@@ -1057,6 +1291,30 @@ function resolveFeedReadOperation(
     error: {
       message: `Unexpected ${operation.schema}.${operation.table}`,
     },
+  };
+}
+
+function createMockMediaRow({
+  id,
+  postId,
+  sortOrder,
+  storagePath,
+  storageProvider,
+}: {
+  id: string;
+  postId: string;
+  sortOrder: number;
+  storagePath: string;
+  storageProvider?: "cloudflare_r2" | "supabase";
+}): MockFeedMediaRow {
+  return {
+    height: 900,
+    id,
+    post_id: postId,
+    sort_order: sortOrder,
+    storage_path: storagePath,
+    ...(storageProvider ? { storage_provider: storageProvider } : {}),
+    width: 1200,
   };
 }
 

@@ -24,7 +24,12 @@ import type {
   FeedReplyPreview,
 } from "@/features/feed/feed-seed";
 import { feedCodeStatsDisplayThreshold } from "@/features/feed/feed-privacy";
-import { feedMediaBucket } from "@/features/feed/feed-media";
+import {
+  feedMediaBucket,
+  isFeedMediaStorageProvider,
+  type FeedMediaStorageProvider,
+} from "@/features/feed/feed-media";
+import { createFeedMediaR2DeliveryUrl } from "@/features/feed/feed-media-storage";
 import {
   feedPostTopicLabels,
   type FeedPostTopicCategory,
@@ -78,6 +83,7 @@ type FeedPostMediaRow = {
   post_id: string;
   sort_order: number;
   storage_path: string;
+  storage_provider: FeedMediaStorageProvider;
   width: number | null;
 };
 
@@ -1656,36 +1662,82 @@ async function readPostMedia({
 
   if (postIds.length === 0) return mediaByPostId;
 
-  const response = await client
+  let response = (await client
     .schema("feed")
     .from("feed_post_media")
-    .select("id, post_id, storage_path, sort_order, width, height")
+    .select(
+      "id, post_id, storage_path, storage_provider, sort_order, width, height",
+    )
     .in("post_id", postIds)
     .is("deleted_at", null)
-    .order("sort_order", { ascending: true });
+    .order("sort_order", { ascending: true })) as {
+    data: unknown[] | null;
+    error: unknown;
+  };
+
+  let legacyProviderShape = false;
+  if (isMissingMediaStorageProviderColumn(response.error)) {
+    legacyProviderShape = true;
+    response = (await client
+      .schema("feed")
+      .from("feed_post_media")
+      .select("id, post_id, storage_path, sort_order, width, height")
+      .in("post_id", postIds)
+      .is("deleted_at", null)
+      .order("sort_order", { ascending: true })) as {
+      data: unknown[] | null;
+      error: unknown;
+    };
+  }
 
   if (response.error || !response.data) {
     return readLegacyPostMedia({ client, rows });
   }
 
-  const mediaRows = response.data as FeedPostMediaRow[];
-  const signedResponse = await client.storage
-    .from(feedMediaBucket)
-    .createSignedUrls(
-      mediaRows.map((row) => row.storage_path),
-      60 * 60,
-    );
-
-  if (signedResponse.error || !signedResponse.data) return mediaByPostId;
-
-  const signedUrlByPath = new Map(
-    signedResponse.data.flatMap((item) =>
-      item.signedUrl ? [[item.path, item.signedUrl] as const] : [],
-    ),
+  const mediaRows = response.data.flatMap((rawRow) => {
+    const row = rawRow as Omit<FeedPostMediaRow, "storage_provider"> & {
+      storage_provider?: unknown;
+    };
+    const provider = legacyProviderShape ? "supabase" : row.storage_provider;
+    if (!isFeedMediaStorageProvider(provider)) return [];
+    return [{ ...row, storage_provider: provider } satisfies FeedPostMediaRow];
+  });
+  const supabaseRows = mediaRows.filter(
+    (row) => row.storage_provider === "supabase",
   );
+  const signedUrlByPath = new Map<string, string>();
+
+  if (supabaseRows.length > 0) {
+    const signedResponse = await client.storage
+      .from(feedMediaBucket)
+      .createSignedUrls(
+        supabaseRows.map((row) => row.storage_path),
+        60 * 60,
+      );
+    for (const item of signedResponse.data ?? []) {
+      if (item.path && item.signedUrl) {
+        signedUrlByPath.set(item.path, item.signedUrl);
+      }
+    }
+  }
+
+  const postById = new Map(rows.map((row) => [row.id, row]));
 
   for (const row of mediaRows) {
-    const url = signedUrlByPath.get(row.storage_path);
+    const post = postById.get(row.post_id);
+    if (!post) continue;
+    const url =
+      row.storage_provider === "supabase"
+        ? signedUrlByPath.get(row.storage_path)
+        : createFeedMediaR2DeliveryUrl({
+            mode:
+              post.moderation_status === "published" &&
+              (post.visibility === "public" ||
+                post.visibility === "profile_public")
+                ? "public"
+                : "private",
+            storagePath: row.storage_path,
+          });
     if (!url) continue;
 
     const media = mediaByPostId.get(row.post_id) ?? [];
@@ -1708,6 +1760,20 @@ async function readPostMedia({
   }
 
   return mediaByPostId;
+}
+
+function isMissingMediaStorageProviderColumn(error: unknown) {
+  if (!error || typeof error !== "object") return false;
+  const candidate = error as { code?: unknown; message?: unknown };
+  const message =
+    typeof candidate.message === "string"
+      ? candidate.message.toLocaleLowerCase("en-US")
+      : "";
+  return (
+    candidate.code === "42703" ||
+    candidate.code === "PGRST204" ||
+    message.includes("storage_provider")
+  );
 }
 
 async function readLegacyPostMedia({

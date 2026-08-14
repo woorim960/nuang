@@ -43,6 +43,8 @@ export type FeedWriteFailureCode =
   | "feed_report_write_failed"
   | "feed_poll_write_failed"
   | "feed_poll_vote_write_failed"
+  | "feed_media_capacity_reached"
+  | "feed_media_processing_failed"
   | "feed_media_upload_failed"
   | "feed_reaction_remove_failed"
   | "feed_bookmark_remove_failed";
@@ -213,6 +215,20 @@ export const feedWriteFailures: Record<
     message: "투표를 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: true,
     step: "insert_feed_poll_vote",
+  },
+  feed_media_capacity_reached: {
+    httpStatus: 503,
+    message:
+      "사진 저장 공간을 안전하게 확보하고 있어요. 잠시 뒤 다시 시도해 주세요.",
+    retryable: false,
+    step: "upload_feed_media",
+  },
+  feed_media_processing_failed: {
+    httpStatus: 400,
+    message:
+      "사진을 안전하게 처리하지 못했어요. 다른 사진으로 다시 시도해 주세요.",
+    retryable: false,
+    step: "upload_feed_media",
   },
   feed_media_upload_failed: {
     httpStatus: 500,

@@ -164,9 +164,14 @@
         "태그 탐색·검색·관점 모음·내 글",
         "알림 목록과 게시물 상세",
         "밸런스 게임 모집·결과 공유 카드",
-        "외부 링크 안전 정책과 moderation 상태 처리"
+        "외부 링크 안전 정책과 moderation 상태 처리",
+        "최적화된 피드 사진 저장과 내부 정리 작업"
       ],
-      "surfacePatterns": ["^feed/", "^api/feed/"],
+      "surfacePatterns": [
+        "^feed/",
+        "^api/feed/",
+        "^api/internal/feed-media/"
+      ],
       "sourceRoots": ["src/features/feed"],
       "testEvidence": [
         "src/features/feed/CommunityFeed.test.tsx",

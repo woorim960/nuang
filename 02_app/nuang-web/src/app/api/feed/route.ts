@@ -1,7 +1,10 @@
 import { feedWriteRequestSchema } from "@/features/feed/feed-contract";
 import { revalidateTag } from "next/cache";
 import { validateFeedPhotoFiles } from "@/features/feed/feed-media";
-import { uploadFeedPostMedia } from "@/features/feed/feed-media-server";
+import {
+  cleanupDeletedFeedPostMedia,
+  uploadFeedPostMedia,
+} from "@/features/feed/feed-media-server";
 import {
   communityFeedCacheTag,
   createServerFeedReadPayload,
@@ -83,6 +86,16 @@ export async function POST(request: Request) {
           status: feedWriteFailures[mediaResult.code].httpStatus,
         },
       );
+    }
+  }
+
+  if (payload.data.action === "delete_post") {
+    const cleanup = await cleanupDeletedFeedPostMedia({
+      client: serviceClient,
+      postId: result.data.id,
+    });
+    if (!cleanup.ok) {
+      console.warn("[feed-media] deleted post media cleanup is pending");
     }
   }
 

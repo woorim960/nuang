@@ -1,0 +1,13 @@
+name = "nuang-feed-media"
+main = "src/index.ts"
+compatibility_date = "2026-08-15"
+workers_dev = false
+
+# Copy this file to wrangler.toml only after the private bucket and custom
+# media domain are ready. Never put the signing secret in this file.
+[[r2_buckets]]
+binding = "FEED_MEDIA"
+bucket_name = "nuang-feed-media"
+
+# Set the same 32+ character secret used by the Next.js server with:
+# npx wrangler secret put FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET

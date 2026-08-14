@@ -28,6 +28,12 @@ const databaseCaPath = env.NUANG_DATABASE_CA_FILE
       import.meta.url,
     );
 const lookbackMinutes = 90;
+const feedMediaR2MaxManagedBytes = parseIntegerInRange(
+  env.FEED_MEDIA_R2_MAX_MANAGED_BYTES,
+  1_000_000_000,
+  9_500_000_000,
+  8_000_000_000,
+);
 const checks = [];
 
 try {
@@ -54,6 +60,7 @@ if (!httpOnly) {
         connectionString,
         lookbackMinutes,
         databaseCa,
+        feedMediaR2MaxManagedBytes,
       );
       checks.push(...evaluateDatabaseSnapshot(snapshot));
     } catch (error) {
@@ -74,7 +81,12 @@ async function runHttpChecks(targetOrigin) {
   return runHttpProbes({ origin: targetOrigin });
 }
 
-async function readDatabaseSnapshot(databaseUrl, recentMinutes, databaseCa) {
+async function readDatabaseSnapshot(
+  databaseUrl,
+  recentMinutes,
+  databaseCa,
+  mediaMaxManagedBytes,
+) {
   const client = new pg.Client({
     application_name: "nuang-production-monitor",
     connectionString: databaseUrl,
@@ -275,12 +287,91 @@ async function readDatabaseSnapshot(databaseUrl, recentMinutes, databaseCa) {
         `,
       [recentMinutes],
     );
+    const mediaSchema = await client.query(`
+      select
+        to_regclass('feed.feed_media_storage_reservation') is not null
+        and to_regclass('feed.media_storage_cleanup_queue') is not null
+        and exists (
+          select 1 from pg_attribute
+          where attrelid = to_regclass('feed.feed_post_media')
+            and attname in ('storage_provider', 'storage_accounted')
+            and attnum > 0
+            and not attisdropped
+          group by attrelid
+          having count(*) = 2
+        ) as ready
+    `);
+    const mediaStorage = mediaSchema.rows[0]?.ready
+      ? await client.query(
+          `
+        select
+          $1::bigint::text as "maxManagedBytes",
+          coalesce((
+            select sum(media.byte_size::bigint)
+            from feed.feed_post_media media
+            where media.storage_provider = 'cloudflare_r2'
+              and media.storage_accounted
+          ), 0)::text as "activeBytes",
+          coalesce((
+            select sum(reservation.byte_size)
+            from feed.feed_media_storage_reservation reservation
+            where reservation.storage_provider = 'cloudflare_r2'
+              and reservation.expires_at > now()
+          ), 0)::text as "reservedBytes",
+          coalesce((
+            select sum(cleanup.byte_size)
+            from feed.media_storage_cleanup_queue cleanup
+            where cleanup.storage_provider = 'cloudflare_r2'
+              and cleanup.resolved_at is null
+          ), 0)::text as "cleanupBytes",
+          (select count(*)::integer
+            from feed.media_storage_cleanup_queue cleanup
+            where cleanup.resolved_at is null
+              and cleanup.guard_account_id is null
+              and cleanup.next_attempt_at <= now()
+          ) as "cleanupPending",
+          (select min(cleanup.next_attempt_at)
+            from feed.media_storage_cleanup_queue cleanup
+            where cleanup.resolved_at is null
+              and cleanup.guard_account_id is null
+              and cleanup.next_attempt_at <= now()
+          ) as "cleanupOldestAt",
+          (select count(*)::integer
+            from feed.feed_post_media media
+            where media.storage_accounted
+              and media.deleted_at is not null
+              and media.optimized_at is not null
+          ) as "pendingUploadCount",
+          (select min(media.optimized_at)
+            from feed.feed_post_media media
+            where media.storage_accounted
+              and media.deleted_at is not null
+              and media.optimized_at is not null
+          ) as "pendingUploadOldestAt"
+          `,
+          [mediaMaxManagedBytes],
+        )
+      : {
+          rows: [
+            {
+              activeBytes: "0",
+              cleanupBytes: "0",
+              cleanupOldestAt: null,
+              cleanupPending: 0,
+              maxManagedBytes: String(mediaMaxManagedBytes),
+              pendingUploadCount: 0,
+              pendingUploadOldestAt: null,
+              reservedBytes: "0",
+            },
+          ],
+        };
 
     await client.query("rollback");
     return {
       capacity: capacity.rows[0],
       cronJobs: cronJobs.rows,
       queues: queues.rows[0],
+      mediaStorage: mediaStorage.rows[0],
       tombstones: tombstones.rows[0],
     };
   } catch (error) {
@@ -326,4 +417,13 @@ function safeErrorCode(error) {
   if (typeof error?.code === "string") return error.code;
   if (typeof error?.name === "string") return error.name;
   return "unavailable";
+}
+
+function parseIntegerInRange(value, minimum, maximum, fallback) {
+  if (typeof value !== "string" || value.trim() === "") return fallback;
+  if (!/^\d+$/.test(value.trim())) return fallback;
+  const parsed = Number(value.trim());
+  return Number.isSafeInteger(parsed) && parsed >= minimum && parsed <= maximum
+    ? parsed
+    : fallback;
 }

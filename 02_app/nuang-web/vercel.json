@@ -1,5 +1,11 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/internal/feed-media/cleanup",
+      "schedule": "43 18 * * *"
+    }
+  ],
   "framework": "nextjs",
   "regions": ["icn1"]
 }

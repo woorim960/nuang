@@ -57,6 +57,13 @@ export const DEFAULT_THRESHOLDS = Object.freeze({
   frequentCronMaxAgeMs: 5 * 60 * 1000,
   httpFailMs: 5_000,
   httpWarnMs: 1_500,
+  // Vercel Hobby runs the cleanup route once per day. A due item is a useful
+  // warning, while 36 hours proves that at least one complete daily window was
+  // missed even with scheduler jitter.
+  mediaCleanupFailAgeMs: 36 * 60 * 60 * 1000,
+  mediaPendingUploadFailAgeMs: 30 * 60 * 1000,
+  mediaStorageFailRatio: 0.85,
+  mediaStorageWarnRatio: 0.7,
   queueMaxAgeMs: 5 * 60 * 1000,
   recentCronFailMs: 5_000,
   recentCronWarnMs: 1_000,
@@ -345,6 +352,70 @@ export function evaluateDatabaseSnapshot(
     detail: `total=${toFiniteNumber(snapshot.tombstones.total)} recent=${toFiniteNumber(snapshot.tombstones.recent)}`,
     id: "result-deletion:tombstones",
     status: "pass",
+  });
+
+  const mediaActiveBytes = toFiniteNumber(snapshot.mediaStorage.activeBytes);
+  const mediaReservedBytes = toFiniteNumber(
+    snapshot.mediaStorage.reservedBytes,
+  );
+  const mediaCleanupBytes = toFiniteNumber(snapshot.mediaStorage.cleanupBytes);
+  const mediaMaxManagedBytes = toFiniteNumber(
+    snapshot.mediaStorage.maxManagedBytes,
+  );
+  const mediaManagedBytes =
+    mediaActiveBytes + mediaReservedBytes + mediaCleanupBytes;
+  const mediaManagedRatio =
+    mediaMaxManagedBytes > 0
+      ? mediaManagedBytes / mediaMaxManagedBytes
+      : Number.POSITIVE_INFINITY;
+  checks.push({
+    detail: `${formatBytes(mediaManagedBytes)} / ${formatBytes(mediaMaxManagedBytes)} (${Math.round(mediaManagedRatio * 100)}%) active=${formatBytes(mediaActiveBytes)} reserved=${formatBytes(mediaReservedBytes)} cleanup=${formatBytes(mediaCleanupBytes)}`,
+    id: "storage:r2-managed-capacity",
+    status: classifyUpperBound(
+      mediaManagedRatio,
+      thresholds.mediaStorageWarnRatio,
+      thresholds.mediaStorageFailRatio,
+    ),
+    value: mediaManagedRatio,
+  });
+  const mediaCleanupPending = toFiniteNumber(
+    snapshot.mediaStorage.cleanupPending,
+  );
+  const mediaCleanupAgeMs = ageMs(snapshot.mediaStorage.cleanupOldestAt, now);
+  checks.push({
+    detail: `pending=${mediaCleanupPending}${
+      mediaCleanupPending > 0
+        ? ` oldest_age=${formatDuration(mediaCleanupAgeMs)}`
+        : ""
+    }`,
+    id: "storage:media-cleanup",
+    status:
+      mediaCleanupPending === 0
+        ? "pass"
+        : mediaCleanupAgeMs > thresholds.mediaCleanupFailAgeMs
+          ? "fail"
+          : "warn",
+  });
+  const pendingUploadCount = toFiniteNumber(
+    snapshot.mediaStorage.pendingUploadCount,
+  );
+  const pendingUploadAgeMs = ageMs(
+    snapshot.mediaStorage.pendingUploadOldestAt,
+    now,
+  );
+  checks.push({
+    detail: `pending=${pendingUploadCount}${
+      pendingUploadCount > 0
+        ? ` oldest_age=${formatDuration(pendingUploadAgeMs)}`
+        : ""
+    }`,
+    id: "storage:media-upload-pending",
+    status:
+      pendingUploadCount === 0
+        ? "pass"
+        : pendingUploadAgeMs > thresholds.mediaPendingUploadFailAgeMs
+          ? "fail"
+          : "warn",
   });
 
   return checks;
