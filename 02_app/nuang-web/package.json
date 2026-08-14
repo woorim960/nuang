@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/check-supabase-migrations.mjs --require-no-pending",
     "build": "next build --webpack",
     "start": "next start",
     "lint": "eslint",
@@ -16,6 +17,7 @@
     "release:inventory": "node scripts/generate-mvp-release-inventory.mjs",
     "release:inventory:check": "node scripts/generate-mvp-release-inventory.mjs --check",
     "release:go-live:check": "node scripts/check-mvp-go-live.mjs",
+    "db:migrations:check": "node scripts/check-supabase-migrations.mjs",
     "db:mvp-security:check": "node scripts/apply-mvp-security-migrations.mjs",
     "db:mvp-security:apply": "node scripts/apply-mvp-security-migrations.mjs --apply",
     "harness:check": "node scripts/check-product-harness.mjs && node scripts/generate-core-expert-review-kit.mjs --check && node scripts/check-core-expert-review-intake.mjs && npm run research:core:review-web-forms:check && npm run research:core:gate-c-kit:check && npm run research:enakq:check",

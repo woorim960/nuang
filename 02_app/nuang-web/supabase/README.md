@@ -13,6 +13,13 @@ credential 준비는 `CREDENTIAL_MINIMAL_SETUP.md`를 먼저 따른다.
 
 마이그레이션:
 
+- `supabase/migrations`에는 즉시 적용 가능한 활성 SQL만 둔다.
+- 운영 이력이 있는 SQL은 수정·삭제·재사용하지 않고 새 버전의 후속 마이그레이션을 만든다.
+- 활성 파일의 버전은 고유해야 하며 서로 접두 관계여서도 안 된다. 예: `202607270004`와 `20260727000401`을 함께 사용하지 않는다.
+- 외부 제공자 설정 등이 준비되지 않은 SQL은 `deferred-migrations/manifest.json`과 타임스탬프 없는 템플릿으로 보관한다. 준비가 끝나면 템플릿을 직접 되돌리지 않고 최신 버전의 새 활성 마이그레이션을 만든다.
+- `npm run db:migrations:check`는 적용 이력 체크섬, 활성·보류 경로 분리, 버전 충돌 및 위험한 자동 DB push 명령을 검사한다. 프로덕션 빌드 전에는 같은 검사에 `--require-no-pending`을 더해 운영 미적용 SQL이 하나라도 있으면 배포를 차단한다.
+- 자동화에서 `supabase db push` 또는 `--include-all`을 직접 실행하지 않는다. 운영 대조 후 검증된 마이그레이션만 명시적으로 적용한다.
+
 - `202607030044_identity_consent_auth_foundation.sql`: 계정, 동의, 검사, 결과, 공유 링크 foundation.
 - `202607040091_public_profile_code_snapshot.sql`: 공개 범위 설정, 공개 프로필 스냅샷, visibility audit 초안.
 - `202607040095_public_comparison_report.sql`: 공개 프로필 기반 1:1 비교 리포트와 access 재평가 상태 초안.

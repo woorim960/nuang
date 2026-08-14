@@ -1,0 +1,51 @@
+name: Supabase migration safety
+
+on:
+  pull_request:
+    paths:
+      - ".github/actions/**"
+      - ".github/workflows/**"
+      - "Makefile"
+      - "Taskfile.yml"
+      - "package.json"
+      - "scripts/**"
+      - "tools/**"
+      - "02_app/nuang-web/.husky/**"
+      - "02_app/nuang-web/package.json"
+      - "02_app/nuang-web/scripts/**"
+      - "02_app/nuang-web/supabase/**"
+      - "02_app/nuang-web/vercel.json"
+  push:
+    branches:
+      - master
+    paths:
+      - ".github/actions/**"
+      - ".github/workflows/**"
+      - "Makefile"
+      - "Taskfile.yml"
+      - "package.json"
+      - "scripts/**"
+      - "tools/**"
+      - "02_app/nuang-web/.husky/**"
+      - "02_app/nuang-web/package.json"
+      - "02_app/nuang-web/scripts/**"
+      - "02_app/nuang-web/supabase/**"
+      - "02_app/nuang-web/vercel.json"
+
+permissions:
+  contents: read
+
+jobs:
+  migration-safety:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify migration isolation and checksums
+        working-directory: 02_app/nuang-web
+        env:
+          MIGRATION_BASELINE_REF: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: node scripts/check-supabase-migrations.mjs --baseline-ref "$MIGRATION_BASELINE_REF"

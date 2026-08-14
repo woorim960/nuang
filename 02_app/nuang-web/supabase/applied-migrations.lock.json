@@ -1,0 +1,462 @@
+{
+  "schemaVersion": 1,
+  "databaseHistoryCount": 91,
+  "verifiedAt": "2026-08-15",
+  "migrations": [
+    {
+      "version": "202607030044",
+      "file": "202607030044_identity_consent_auth_foundation.sql",
+      "sha256": "93b13aace50499a3caba0427e7643246a3c87a064c6f6adf840ba1efdd0cd968"
+    },
+    {
+      "version": "202607040091",
+      "file": "202607040091_public_profile_code_snapshot.sql",
+      "sha256": "2835719c2ab3c22790d0661fcebbbde8ef276143c5be551079934a542f9cfda8"
+    },
+    {
+      "version": "202607040095",
+      "file": "202607040095_public_comparison_report.sql",
+      "sha256": "6c092ff2acfef8494acd5442c748ec82950cdd079417a22e7a81d70258822d2c"
+    },
+    {
+      "version": "202607090101",
+      "file": "202607090101_claim_result_idempotency.sql",
+      "sha256": "f39b00126c43d37594aa07b2fa74d4475aab659b41f84e9384f694ba69923f74"
+    },
+    {
+      "version": "202607090102",
+      "file": "202607090102_api_schema_grants.sql",
+      "sha256": "956da3068fbeaf8bde243181009f9734edf3c7ff86b84e02958217a8f511f081"
+    },
+    {
+      "version": "202607090103",
+      "file": "202607090103_feed_foundation.sql",
+      "sha256": "d634a5f9f0e7ef158f5bd910a543501018fd6ffe3ee7cfa35ea8f58a7c99422b"
+    },
+    {
+      "version": "202607090104",
+      "file": "202607090104_feed_seed_targets.sql",
+      "sha256": "54d7a10e827a8917a75e237d748308bf034f4649e9b502b9e7b8835995ec4e3b"
+    },
+    {
+      "version": "202607090105",
+      "file": "202607090105_feed_api_grants.sql",
+      "sha256": "d5b2ec39139d4d02d61207c39749c8e8fb73457301b89927d95dc75711adc981"
+    },
+    {
+      "version": "202607090106",
+      "file": "202607090106_feed_preference_not_interested.sql",
+      "sha256": "824c907fa9a73011d081a0959eb3fe42d1a997d080d69517f6bdfc3533efbe81"
+    },
+    {
+      "version": "202607090107",
+      "file": "202607090107_unified_result_delete.sql",
+      "sha256": "c12aabf0e912089d286603e04b07295396a08e0d592dfc5d4125db636317ef3d"
+    },
+    {
+      "version": "202607100001",
+      "file": "202607100001_drop_public_profile_code.sql",
+      "sha256": "ca5025f87612c746e9fa9c53bee7221e398d1dceb5447e63d92523bdf8c52a4b"
+    },
+    {
+      "version": "202607100002",
+      "file": "202607100002_free_topic_results.sql",
+      "sha256": "ea581ff578112f1ce004201d84eb36b9f85f8c6c477da6756a176b0ca204fc63"
+    },
+    {
+      "version": "202607100003",
+      "file": "202607100003_feed_mvp_interactions.sql",
+      "sha256": "4ae01d700225b51282a67f5640030225a4b6a90d1ae47cf3e72bfc2c7a953187"
+    },
+    {
+      "version": "202607180001",
+      "file": "202607180001_measurement_release_catalog.sql",
+      "sha256": "140dacf48acf1082882ccf6c63188750fd4513dc06cc189b836cd69ae2a52c6b"
+    },
+    {
+      "version": "202607180002",
+      "file": "202607180002_core_candidate_bank_seed.sql",
+      "sha256": "8736a894d718a8380a14ccae8b449f6d0392249da3eadd5890c4c57b7cf9c5de"
+    },
+    {
+      "version": "202607180003",
+      "file": "202607180003_assessment_release_traceability.sql",
+      "sha256": "75cc715f800e0a29a7b9ba6bb156ea7ba6cfe05bd5ed8912453e21bf756aa47f"
+    },
+    {
+      "version": "202607180004",
+      "file": "202607180004_candidate_profile_name_release.sql",
+      "sha256": "2ab33979a26953aace4f45c21156e4ec6260867cc672ea6c7c82b1f520672ebe"
+    },
+    {
+      "version": "202607190001",
+      "file": "202607190001_candidate_role_profile_name_release.sql",
+      "sha256": "b9f9314dece37a1ebd5f164b48d880bf069f8e08fec6edf574b0b1a3f646129d"
+    },
+    {
+      "version": "202607190002",
+      "file": "202607190002_home_daily_community_poll.sql",
+      "sha256": "bc0397830dd694b8d4ecfa21a28e40d0252bc982360e808a738a849b867aff41"
+    },
+    {
+      "version": "202607200001",
+      "file": "202607200001_gate_b_measurement_validation_gate.sql",
+      "sha256": "1601c177cc2eaabb69a1dc2a73445da65a3cef64d1a9f581744cecfd00f7a6b7"
+    },
+    {
+      "version": "202607200002",
+      "file": "202607200002_community_profile_social.sql",
+      "sha256": "f40ef0ecdcfa61444ea79301b0e05c767e3d9c16707f7e77f5a793586f5ab4fe"
+    },
+    {
+      "version": "202607200003",
+      "file": "202607200003_gate_c_public_research.sql",
+      "sha256": "6ff06724701cd8c32f73904f4236346464bc6a59444bbeaca5310fac02fc1a75"
+    },
+    {
+      "version": "202607200004",
+      "file": "202607200004_gate_c_research_retention.sql",
+      "sha256": "bab5005adf99fa20046aa7db31457eeea4cac3f56d2ccacb9556c5bef9903c20"
+    },
+    {
+      "version": "202607210001",
+      "file": "202607210001_trait_map_content_catalog.sql",
+      "sha256": "1a4eb40445e51395b8cb4328549dd339c76211a0df3d5d443d5dbbd7c06cc7bd"
+    },
+    {
+      "version": "202607210002",
+      "file": "202607210002_community_profile_preferences.sql",
+      "sha256": "4427ee3306f7e8f48a6a68df6dfe6468d784fba1ed05729e574fadfdc1720c52"
+    },
+    {
+      "version": "202607220001",
+      "file": "202607220001_profile_character_choice.sql",
+      "sha256": "7ab8fb1b2eec4c1edb483b23b87d591273d9f893e2393d925a4bffc759f098a2"
+    },
+    {
+      "version": "202607230001",
+      "file": "202607230001_candidate_role_profile_name_release_v2.sql",
+      "sha256": "077bb942bf9f23608e06565bca85923ba3004dae258c30e1a773aebdc76f65b3"
+    },
+    {
+      "version": "202607230002",
+      "file": "202607230002_candidate_role_profile_name_release_v2_1.sql",
+      "sha256": "e1b2ea511a126ab85b4d94a885141d10f7679407f0fe6f0a208cd6294fbb3704"
+    },
+    {
+      "version": "202607240001",
+      "file": "202607240001_unified_research_and_trait_map_feedback.sql",
+      "sha256": "7bdbeaf174b0b2b8d3504fd97e3f9ed5bded932a3356d6f7444cef5ae0ffe5ab"
+    },
+    {
+      "version": "202607240002",
+      "file": "202607240002_gate_c_reward_entry_contract.sql",
+      "sha256": "d075af0172b550faf9302cf6ff963dd89d37ca701406d53031c1943f2d60c848"
+    },
+    {
+      "version": "202607270001",
+      "file": "202607270001_account_contact_reward_entry.sql",
+      "sha256": "05bb181c83023632de6d6e5a624b7edd0fa001d7028b5c18a97853e9a3646334"
+    },
+    {
+      "version": "202607270002",
+      "file": "202607270002_reward_draw_operations.sql",
+      "sha256": "922589aab7122c52d900e26ba0ab7b2b52633f00a907f8feffa0af97056a9579"
+    },
+    {
+      "version": "202607270003",
+      "file": "202607270003_private_profile_email.sql",
+      "sha256": "25eb9b3462b4906d4e3b9f0c6feff006d5e9e3b47fdd6303f36a79637a0aa566"
+    },
+    {
+      "version": "20260727000400",
+      "file": "20260727000400_admin_trait_map_operations.sql",
+      "sha256": "f74dd57cd0b9983fd3dc6c93496825bdafd6e4d67c98e725f6baf8ed83dbcb37"
+    },
+    {
+      "version": "20260727000401",
+      "file": "20260727000401_private_email_verification.sql",
+      "sha256": "2bc60ceb3feef13d2030ad11bc28300244437dbab4ad6a6fd21c8f8b9819abd8"
+    },
+    {
+      "version": "202607270005",
+      "file": "202607270005_private_email_verification_service_grant.sql",
+      "sha256": "b2dfd44cbd78ed09f6d16ea247b5c238cbd077afe6a37a7c85af74a7415e8e50"
+    },
+    {
+      "version": "202607270006",
+      "file": "202607270006_admin_community_content_operations.sql",
+      "sha256": "eb3040ca2f802d7a4eb11cbfc763180bcb6ae78d1ae842c07c68e91ce66eca2c"
+    },
+    {
+      "version": "202607280001",
+      "file": "202607280001_feed_external_link_safety.sql",
+      "sha256": "11e7ab0a07e01cffefd853f4625bd39cabd4588cc75d4e3b254d091de72e57ad"
+    },
+    {
+      "version": "202607280002",
+      "file": "202607280002_official_content_response_lifecycle.sql",
+      "sha256": "fc97cf3ec32577b7958591a1233ddfab2e029e48f52658c2a39706b4e36be0a0"
+    },
+    {
+      "version": "202607280003",
+      "file": "202607280003_community_safety_mvp.sql",
+      "sha256": "16b2f1272385bdfaba980281866cc09b5e6ec29418837fdd691b0949d451550f"
+    },
+    {
+      "version": "202607280004",
+      "file": "202607280004_atomic_admin_operations.sql",
+      "sha256": "83dbfd14b739189a02f5dd0e3693632614b3982208c00c965c7f0edbe641c76b"
+    },
+    {
+      "version": "202607280005",
+      "file": "202607280005_admin_research_decisions.sql",
+      "sha256": "df621f0dc7a68c597e2a8f92fa6568c9dbed2bb9286851ad5095239b4671de4d"
+    },
+    {
+      "version": "202607280007",
+      "file": "202607280007_atomic_result_claim.sql",
+      "sha256": "a220af53165a9383bb50d4db38409db93d2820fa7850e5b540462077c54539c4"
+    },
+    {
+      "version": "202607280008",
+      "file": "202607280008_atomic_result_claim_responses.sql",
+      "sha256": "b8553128ee1ac5505ab00eb116beaa50175ff8f306ac43ed02fd70ba9a327e07"
+    },
+    {
+      "version": "202607280009",
+      "file": "202607280009_gate_c_request_guard.sql",
+      "sha256": "5f01364e1270724826e9124d8443726752e1902b2316455dfe8a9e54cf5bb79d"
+    },
+    {
+      "version": "202607280010",
+      "file": "202607280010_self_account_deletion.sql",
+      "sha256": "4a6d4860951f22f646b3aa85654784339c39b5d0f1e5c20ca48e37814569d240"
+    },
+    {
+      "version": "202607280011",
+      "file": "202607280011_launch_rpc_schema_refresh.sql",
+      "sha256": "fb9873158c8f08fe7dffc180bfa3bec84cfdde026a5b96dc81dab1062fbd655e"
+    },
+    {
+      "version": "202607280012",
+      "file": "202607280012_candidate_role_profile_name_release_v3.sql",
+      "sha256": "e341c8879addeda82dade8682a180c15a8e22856268a693c4dafb50fb41fe1cf"
+    },
+    {
+      "version": "202607280013",
+      "file": "202607280013_product_feedback_mvp.sql",
+      "sha256": "c0063c2e3e7a6e1ba03b41039f2808f9ce2ed3b42a65054bb63a2f7ed81e4399"
+    },
+    {
+      "version": "202607280014",
+      "file": "202607280014_original_profile_reports.sql",
+      "sha256": "7b64d235ac6cf2a06f479ba1b62e81c00f77f5be5cf7f4941e9d1bc9f148063c"
+    },
+    {
+      "version": "202607280015",
+      "file": "202607280015_legacy_report_visibility_guard.sql",
+      "sha256": "a40bd3ee557fe3f8ae27a578605b43c653d15589970e9e1dc08554fbaced56d4"
+    },
+    {
+      "version": "202607280016",
+      "file": "202607280016_lab_result_attempt_history.sql",
+      "sha256": "a402b6d180df6290516a57d37cd316ac4186a70165332cbfb1c9d51de87ee9c8"
+    },
+    {
+      "version": "202607280017",
+      "file": "202607280017_operator_identity_badge.sql",
+      "sha256": "b3ff10a8e7455084f689427b8ba12010183608b49bb6eaa3e9f15f988d307046"
+    },
+    {
+      "version": "202607280018",
+      "file": "202607280018_assessment_quality_observation.sql",
+      "sha256": "6f2e9e1b3544000f8420678524db361cd6812c349f6641137c452dcc3e8b6e0c"
+    },
+    {
+      "version": "202607310001",
+      "file": "202607310001_together_balance_game_foundation.sql",
+      "sha256": "860ecdba805391833314630701180516577d6fead0dae1dee300a2743284cc71"
+    },
+    {
+      "version": "202608010001",
+      "file": "202608010001_core_result_report_feedback.sql",
+      "sha256": "5339f15b3744fd6abd12ab2b6e4b3886f0f40b97911b365658079c04823e8669"
+    },
+    {
+      "version": "202608010002",
+      "file": "202608010002_advertising_inquiry_release_1a.sql",
+      "sha256": "2ff8880d3ff365050069448ed71600a68180ca0ab3a44722d82f79da19950e4d"
+    },
+    {
+      "version": "202608010003",
+      "file": "202608010003_advertising_delivery_release_1.sql",
+      "sha256": "ee1c4a09647d3555925db7ea24849107e6d6e78ad19ad74f376e24a593ea0d69"
+    },
+    {
+      "version": "202608020001",
+      "file": "202608020001_advertising_mail_outbox_retry_cron.sql",
+      "sha256": "6a75028e827e5d5f9579f478c8d90669199f512c7f7113335b33dd687e67775b"
+    },
+    {
+      "version": "202608020002",
+      "file": "202608020002_core_assessment_progress_sync.sql",
+      "sha256": "8e296d1e095ec5ef16f93ac25b41a64cd7914b54b9b544a6dc8f13cdc4aa4263"
+    },
+    {
+      "version": "202608020004",
+      "file": "202608020004_multi_oauth_identity_foundation.sql",
+      "sha256": "390621a6e4410d4e33d4813617c716401bed26f1e1168c7ab3fed010b5e2ba9b"
+    },
+    {
+      "version": "202608020005",
+      "file": "202608020005_multi_oauth_link_and_recovery.sql",
+      "sha256": "41b7a1504ce8b91a1e12924f1247efe029b747c810a851524664d48103a4f981"
+    },
+    {
+      "version": "202608020006",
+      "file": "202608020006_multi_oauth_service_grants_and_audit.sql",
+      "sha256": "681d75df42a195d0616cb42a3f02b610dd9d8d28767faa115bdfdbd1428a241b"
+    },
+    {
+      "version": "202608030001",
+      "file": "202608030001_optional_consent_operations.sql",
+      "sha256": "d9018631c95a4fa40b3003c44647c2f20de01c5be64e7b798b5ab988cd126d4c"
+    },
+    {
+      "version": "202608030002",
+      "file": "202608030002_onboarding_experience_state.sql",
+      "sha256": "caba68424dcd1bfd73430e1af8205b9535595525787eba0671a718e18be8bc8c"
+    },
+    {
+      "version": "202608030003",
+      "file": "202608030003_marketing_email_release1.sql",
+      "sha256": "297fe3887d26a98dfd824e5ce1c572e764e4b5ea217c895e55afddba7a4eafff"
+    },
+    {
+      "version": "202608030004",
+      "file": "202608030004_business_operations_control_plane.sql",
+      "sha256": "22334d1d9a909d51c60441b6b22f4c5616d3e2891b7268d0d477666b5baad25b"
+    },
+    {
+      "version": "202608030005",
+      "file": "202608030005_assessment_content_operations.sql",
+      "sha256": "3c5c4acc76821fb53543ae87d9fec62347517153a837c1ceff1b673e4b9d5805"
+    },
+    {
+      "version": "202608030006",
+      "file": "202608030006_assessment_content_reorder_audit.sql",
+      "sha256": "fe081d203265d17f5dc8d9e172615bc117695e16f724f87cc10e073db1e88260"
+    },
+    {
+      "version": "202608030007",
+      "file": "202608030007_dynamic_account_trait_profile.sql",
+      "sha256": "a10969cc45a801fd35e997ffe441d251fe4fcd2e8aef6e7ec6eb1954d219013b"
+    },
+    {
+      "version": "202608050001",
+      "file": "202608050001_together_balance_performance.sql",
+      "sha256": "45ccbb83372475a7b3301044b3b0462eb5bb5417d1ba8302b8afc8ed499fb95d"
+    },
+    {
+      "version": "202608050002",
+      "file": "202608050002_profile_report_visibility_private_default.sql",
+      "sha256": "26642fd9c5591dbddef5e33dff50707ef70a96858f3555346f5f667fa692660f"
+    },
+    {
+      "version": "202608050003",
+      "file": "202608050003_disable_revoked_public_comparisons.sql",
+      "sha256": "b2f902e63c5340db102a5b4c5b5deda222a8123d6e5b3f878d03f93f1a2eb2e4"
+    },
+    {
+      "version": "202608050004",
+      "file": "202608050004_admin_profile_public_surface_cleanup.sql",
+      "sha256": "5e308e2e1a61d1d40c94a468dbccfc97fb96736d044f81d8a2f6fca712d398d9"
+    },
+    {
+      "version": "202608050005",
+      "file": "202608050005_atomic_public_comparison_creation.sql",
+      "sha256": "d0e142b3960527698630628bdb8b057dc641f22612744677d52569010c5f2fa1"
+    },
+    {
+      "version": "202608050006",
+      "file": "202608050006_atomic_profile_block_cleanup.sql",
+      "sha256": "02a237133624df1b06a36ef0028a9e3fbb9e3ea17595b921540dcf2315ea78f6"
+    },
+    {
+      "version": "202608050007",
+      "file": "202608050007_admin_legal_review_operations.sql",
+      "sha256": "06dad059569a7f947e7c3fd1ca00a51dae21dd340bcaf551e855a75625c04d95"
+    },
+    {
+      "version": "202608050008",
+      "file": "202608050008_product_analytics_operations_center.sql",
+      "sha256": "8523e34e56c11fcfa615efeefe4f3b0f0a62a1adeac2b6b765a1bb2c30495b27"
+    },
+    {
+      "version": "202608050009",
+      "file": "202608050009_privacy_retention_alignment.sql",
+      "sha256": "670eb85d44dcd4990748ec9d360b685935f06b6853fb774195ee0e3b1f41a452"
+    },
+    {
+      "version": "202608050010",
+      "file": "202608050010_account_deletion_reregistration.sql",
+      "sha256": "bbfad255bbfd242602dfd002ec49e04d2fb9e9c578f7987dcf9aaf74d7b2cf27"
+    },
+    {
+      "version": "202608050011",
+      "file": "202608050011_report_summaries_public_default.sql",
+      "sha256": "8325a200a43108aa8e318fe0698e14e5d4278b560446a54623cb7317a4595cce"
+    },
+    {
+      "version": "202608060001",
+      "file": "202608060001_trait_map_sentence_review_operations.sql",
+      "sha256": "aa8e5ed9ec9ffa61e405d53dca80211634fe956e73b34e05621adccfc6933acf"
+    },
+    {
+      "version": "202608060002",
+      "file": "202608060002_trait_map_inline_content_editing.sql",
+      "sha256": "8a1abe680689a291e089c12bdd74fbe73c1610232c3c5dfc3aad9112f012c6dc"
+    },
+    {
+      "version": "202608140001",
+      "file": "202608140001_outbox_cron_empty_queue_guard.sql",
+      "sha256": "acebb695a23e26607bec115c63e0a308d33edfff0bcfe67ebf78f53ee62f7f43"
+    },
+    {
+      "version": "202608140002",
+      "file": "202608140002_cron_run_history_retention.sql",
+      "sha256": "44346e724ad0580e3008fccfd77a3fa80b5f0f302e7f1ee1c5291ab1d8f3d6da"
+    },
+    {
+      "version": "202608140003",
+      "file": "202608140003_community_mutation_guard.sql",
+      "sha256": "f9edb57fd7c4bcdf0282792cdc50ffed4961dac7b14fed683285cf151e192296"
+    },
+    {
+      "version": "202608140004",
+      "file": "202608140004_core_assessment_progress_completion_guard.sql",
+      "sha256": "727a1960d29fed476b1ced2df11cce209c473fc877a8ff41788b9f02184d6edf"
+    },
+    {
+      "version": "202608140005",
+      "file": "202608140005_feed_post_topics_media.sql",
+      "sha256": "3393a5b0c5ad5116b2d04458a4bbf097691ea13a2a286b4f1ec1fb8d77d55441"
+    },
+    {
+      "version": "202608140006",
+      "file": "202608140006_profile_name_release_chain_reconciliation.sql",
+      "sha256": "a708acad4f64638e0656856e0f39b33d10ced7b26ce070e1a44b0b41c9c3b715"
+    },
+    {
+      "version": "202608140007",
+      "file": "202608140007_consent_default_privileges_guard.sql",
+      "sha256": "1348132b3f8ceb220d8777a4bac7e8839494dc82265f1ed920dc8838e13c8b71"
+    },
+    {
+      "version": "202608140008",
+      "file": "202608140008_trait_map_operator_account_fk_delete_set_null.sql",
+      "sha256": "48655de9e16056eb6297e134241fa929c14018e72e02bb388639f51aadf89ece"
+    }
+  ]
+}

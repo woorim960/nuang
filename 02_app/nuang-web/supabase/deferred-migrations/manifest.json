@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "migrations": [
+    {
+      "id": "apple-sign-in-provider-registry",
+      "originalVersion": "202608110001",
+      "file": "apple-sign-in/provider_registry.sql",
+      "sha256": "dd2cf5fe7bb246395600836ad33607b969b059d5c805c450184d74d32cf0721c",
+      "status": "deferred",
+      "reason": "Apple provider credentials, callback URLs, and native entitlements are not ready for production activation."
+    }
+  ]
+}
