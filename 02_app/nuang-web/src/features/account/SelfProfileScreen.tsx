@@ -419,6 +419,8 @@ function PostCollection({
       label: feedPostTopicLabels[category],
     })),
   ];
+  const prioritizedMediaPostId =
+    posts.slice(0, 3).find((post) => (post.media?.length ?? 0) > 0)?.id ?? null;
 
   return (
     <>
@@ -470,6 +472,7 @@ function PostCollection({
               key={post.id}
               mode="recommended"
               post={post}
+              prioritizeMedia={post.id === prioritizedMediaPostId}
               returnTo={pathname}
               viewerCode={payload.viewerCode}
             />

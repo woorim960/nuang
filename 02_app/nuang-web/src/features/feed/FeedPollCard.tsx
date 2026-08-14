@@ -1,9 +1,9 @@
 "use client";
 
 import { ChevronDown } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { IntentPrefetchLink as Link } from "@/components/navigation/IntentPrefetchLink";
 import type { FeedPollSummary } from "@/features/feed/feed-seed";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { getCurrentNuangProfileName } from "@/features/nuang-code/profile-name-resolution";

@@ -30,6 +30,7 @@ import {
   syncFreeTopicResult,
   syncQueuedFreeTopicResults,
 } from "@/features/assessment/free-topic-storage";
+import { readCurrentSupabaseUserId } from "@/features/result-persistence/client-result-scope";
 import type { ResponseValue } from "@/lib/scoring/types";
 import styles from "./FreeTopicRunner.module.css";
 
@@ -51,6 +52,7 @@ export function FreeTopicRunner({
   const dwellByQuestionId = useRef<Record<string, number>>({});
   const questionEnteredAt = useRef(0);
   const revisionsByQuestionId = useRef<Record<string, number>>({});
+  const completionStarted = useRef(false);
   const currentQuestion = questions[currentIndex];
   const currentAnswer = currentQuestion
     ? answers[currentQuestion.id]
@@ -117,7 +119,7 @@ export function FreeTopicRunner({
     setIsUnsureOpen(false);
   }
 
-  function goNext() {
+  async function goNext() {
     if (!currentAnswer) return;
     recordCurrentQuestionDwell();
 
@@ -125,6 +127,8 @@ export function FreeTopicRunner({
       setCurrentIndex((index) => index + 1);
       return;
     }
+    if (completionStarted.current) return;
+    completionStarted.current = true;
 
     const completedAt = new Date().toISOString();
     const result = calculateFreeTopicResult({
@@ -137,6 +141,7 @@ export function FreeTopicRunner({
       answers,
       assessment,
       completedAt,
+      ownerSupabaseUserId: (await readCurrentSupabaseUserId()) ?? undefined,
       questions,
       result,
       productReleaseId: releaseId,

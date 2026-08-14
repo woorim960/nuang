@@ -14,6 +14,7 @@ import type {
   AccountComparisonReportSummary,
   AccountResultSummary,
 } from "@/features/account/account-result-contract";
+import { readClientAccountResults } from "@/features/account/client-account-results";
 import { readJsonResponse } from "@/features/account/response-json";
 import { buildLocalExportPayload } from "@/features/account/local-export";
 import {
@@ -21,7 +22,7 @@ import {
   listLocalAttempts,
 } from "@/features/assessment/assessment-storage";
 import {
-  deleteFreeTopicResult,
+  deleteFreeTopicResultEverywhere,
   listFreeTopicResultsLocalFirst,
   syncQueuedFreeTopicResults,
   type StoredFreeTopicResult,
@@ -31,9 +32,9 @@ import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
 import { labAssessments } from "@/features/lab/lab-assessments";
 import {
-  deleteLabResult,
+  deleteLabResultEverywhere,
   getLabExpiresAt,
-  listLabResults,
+  listLabResultsLocalFirst,
   type StoredLabResult,
 } from "@/features/lab/lab-storage";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
@@ -41,6 +42,10 @@ import {
   buildAccountCoreResultHref,
   buildLocalCoreResultHref,
 } from "@/features/result/unified-core-report/core-result-route-contract";
+import {
+  readCurrentSupabaseUserId,
+  verifyStableResultAuthScope,
+} from "@/features/result-persistence/client-result-scope";
 import styles from "./LocalResultManager.module.css";
 
 type ResultEntry =
@@ -88,7 +93,7 @@ type ResultEntry =
       id: string;
       kind: "lab";
       state: "completed";
-      storage: "device";
+      storage: "account" | "device";
       subtitle: string;
       title: string;
     };
@@ -128,15 +133,19 @@ export function LocalResultManager() {
 
     async function loadResults() {
       await synchronizeAccountAssessmentAttempts();
-      const [nextCoreAttempts, nextAccountResults, nextTopicResults] =
-        await Promise.all([
-          listLocalAttempts(),
-          listAccountReportData(),
-          listFreeTopicResultsLocalFirst(),
-        ]);
-      const nextLabResults = listLabResults(
-        labAssessments.map((assessment) => assessment.slug),
-      );
+      const [
+        nextCoreAttempts,
+        nextAccountResults,
+        nextTopicResults,
+        nextLabResults,
+      ] = await Promise.all([
+        listLocalAttempts(),
+        listAccountReportData(),
+        listFreeTopicResultsLocalFirst(),
+        listLabResultsLocalFirst(
+          labAssessments.map((assessment) => assessment.slug),
+        ),
+      ]);
 
       if (!isMounted) return;
       setCoreAttempts(nextCoreAttempts);
@@ -197,7 +206,8 @@ export function LocalResultManager() {
         id: attempt.id,
         kind: "core",
         state: attempt.state,
-        storage: accountResult ? "both" : "device",
+        storage:
+          accountResult || attempt.accountSync?.accountId ? "both" : "device",
         subtitle:
           currentAccountProfile?.displayName ??
           currentLocalProfile?.displayName ??
@@ -270,7 +280,7 @@ export function LocalResultManager() {
       id: result.localResultId,
       kind: "lab",
       state: "completed",
-      storage: "device",
+      storage: result.sync?.status === "synced" ? "account" : "device",
       subtitle: result.result.profile.shortTitle,
       title: labTitleBySlug[result.slug] ?? "별난 성향 연구소",
     })),
@@ -301,7 +311,7 @@ export function LocalResultManager() {
       }
 
       if (entry.kind === "topic") {
-        const serverDelete = await deleteTopicResult(entry.id);
+        const serverDelete = await deleteFreeTopicResultEverywhere(entry.id);
 
         if (serverDelete === "error") {
           setDeleteMessage(
@@ -310,7 +320,6 @@ export function LocalResultManager() {
           return;
         }
 
-        deleteFreeTopicResult(entry.id);
         setTopicResults((results) =>
           results.filter((result) => result.localResultId !== entry.id),
         );
@@ -318,13 +327,13 @@ export function LocalResultManager() {
       }
 
       if (entry.kind === "core") {
-        if (entry.state === "completed") {
+        if (entry.storage !== "device") {
           const serverDelete = await deleteAccountResult({
             localResultId: entry.storage === "account" ? undefined : entry.id,
             resultReportId: entry.accountResultId,
           });
 
-          if (serverDelete === "error") {
+          if (serverDelete !== "deleted") {
             setDeleteMessage(
               "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
             );
@@ -348,7 +357,13 @@ export function LocalResultManager() {
         return;
       }
 
-      deleteLabResult(entry.id);
+      const labDelete = await deleteLabResultEverywhere(entry.id);
+      if (labDelete === "error") {
+        setDeleteMessage(
+          "검사 결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+        );
+        return;
+      }
       setLabResults((results) =>
         results.filter((result) => result.localResultId !== entry.id),
       );
@@ -747,31 +762,15 @@ type AccountReportData = {
 };
 
 async function listAccountReportData(): Promise<AccountReportData> {
-  try {
-    const response = await fetch("/api/account-results", {
-      cache: "no-store",
-      method: "GET",
-    });
-
-    if (!response.ok) return { comparisonReports: [], results: [] };
-
-    const body = await readJsonResponse<{
-      comparisonReports?: AccountComparisonReportSummary[];
-      ok?: boolean;
-      results?: AccountResultSummary[];
-    }>(response);
-
-    return body?.ok && Array.isArray(body.results)
-      ? {
-          comparisonReports: Array.isArray(body.comparisonReports)
-            ? body.comparisonReports
-            : [],
-          results: body.results,
-        }
-      : { comparisonReports: [], results: [] };
-  } catch {
+  const accountRead = await readClientAccountResults();
+  if (accountRead.state !== "ready") {
     return { comparisonReports: [], results: [] };
   }
+
+  return {
+    comparisonReports: accountRead.comparisonReports,
+    results: accountRead.results,
+  };
 }
 
 async function deleteAccountResult({
@@ -782,10 +781,13 @@ async function deleteAccountResult({
   resultReportId?: string;
 }): Promise<"deleted" | "error" | "no_account"> {
   try {
+    const requestUserId = await readCurrentSupabaseUserId();
+    if (!requestUserId) return "no_account";
     const response = await fetch("/api/account-results", {
       body: JSON.stringify({ localResultId, resultReportId }),
       headers: {
         "content-type": "application/json",
+        "x-nuang-auth-user-id": requestUserId,
       },
       method: "DELETE",
     });
@@ -793,8 +795,15 @@ async function deleteAccountResult({
     if (response.status === 401) return "no_account";
     if (!response.ok) return "error";
 
-    const body = await readJsonResponse<{ ok?: boolean }>(response);
-    return body?.ok ? "deleted" : "error";
+    const body = await readJsonResponse<{
+      authUserId?: string;
+      ok?: boolean;
+    }>(response);
+    const stableUserId = await verifyStableResultAuthScope({
+      requestUserId,
+      responseUserId: body?.authUserId,
+    });
+    return body?.ok && stableUserId ? "deleted" : "error";
   } catch {
     return "error";
   }
@@ -809,26 +818,6 @@ async function deleteComparisonReport(
       headers: {
         "content-type": "application/json",
       },
-      method: "DELETE",
-    });
-
-    if (response.status === 401) return "no_account";
-    if (!response.ok) return "error";
-
-    const body = await readJsonResponse<{ ok?: boolean }>(response);
-    return body?.ok ? "deleted" : "error";
-  } catch {
-    return "error";
-  }
-}
-
-async function deleteTopicResult(
-  localResultId: string,
-): Promise<"deleted" | "error" | "no_account"> {
-  try {
-    const response = await fetch("/api/free-topic-results", {
-      body: JSON.stringify({ localResultId }),
-      headers: { "content-type": "application/json" },
       method: "DELETE",
     });
 

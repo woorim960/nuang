@@ -1,8 +1,9 @@
 import { mkdir, writeFile } from "node:fs/promises";
-import { resolve } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
-const root = resolve(import.meta.dirname, "..");
+const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const characterDirectory = resolve(root, "public/assets/characters");
 const publicIconDirectory = resolve(root, "public/icons");
 const seoImageDirectory = resolve(root, "public/images/seo");
@@ -14,7 +15,7 @@ await Promise.all([
 ]);
 
 const appIcon = await createAppIcon();
-const iconSizes = [16, 32, 48, 96, 128, 180, 192, 512];
+const iconSizes = [16, 32, 48, 96, 128, 180, 192, 512, 1024];
 const iconBuffers = new Map();
 
 for (const size of iconSizes) {
@@ -57,6 +58,10 @@ await Promise.all([
   writeFile(
     resolve(publicIconDirectory, "nuang-icon-512.png"),
     iconBuffers.get(512),
+  ),
+  writeFile(
+    resolve(publicIconDirectory, "nuang-app-store-icon-1024.png"),
+    iconBuffers.get(1024),
   ),
   writeFile(
     resolve(publicIconDirectory, "nuang-maskable-icon-512.png"),

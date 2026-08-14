@@ -41,6 +41,11 @@ import {
 } from "@/features/assessment/free-topic-storage";
 import { ReportShareSheet } from "@/features/share/ReportShareSheet";
 import { buildTopicReportShareContent } from "@/features/share/report-share-contract";
+import { ResultContinuityCard } from "@/features/result-persistence/ResultContinuityCard";
+import {
+  buildResultSaveLoginHref,
+  type ResultContinuityState,
+} from "@/features/result-persistence/result-continuity";
 import styles from "./FreeTopicResultView.module.css";
 
 type ResultLoadState = "error" | "loading" | "missing" | "ready";
@@ -82,6 +87,7 @@ export function FreeTopicResultView({
   );
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isScoreMeaningOpen, setIsScoreMeaningOpen] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
   const currentPublishedAssessment =
     !previewMode && isTopicAssessmentPublished(slug)
@@ -100,7 +106,10 @@ export function FreeTopicResultView({
       sync: { status: "queued" },
     };
     setResult(queuedResult);
-    void syncFreeTopicResult(queuedResult).then(setResult);
+    setIsSyncing(true);
+    void syncFreeTopicResult(queuedResult)
+      .then(setResult)
+      .finally(() => setIsSyncing(false));
   };
 
   useEffect(() => {
@@ -137,12 +146,16 @@ export function FreeTopicResultView({
         setLoadState("ready");
 
         if (nextResult.sync.status !== "synced") {
+          setIsSyncing(true);
           void syncFreeTopicResult(nextResult)
             .then((syncedResult) => {
               if (isMounted) setResult(syncedResult);
             })
             .catch(() => {
               // 로컬 결과는 그대로 보여 주고 서버 동기화만 다음 기회에 다시 시도합니다.
+            })
+            .finally(() => {
+              if (isMounted) setIsSyncing(false);
             });
         }
       })
@@ -213,9 +226,16 @@ export function FreeTopicResultView({
       <main className={styles.root}>
         <ResultHeader backHref={backHref} />
         <section className={styles.missing}>
-          <h1>결과를 찾지 못했어요</h1>
-          <p>검사를 다시 진행하면 새 결과를 바로 확인할 수 있어요.</p>
-          <Link href="/home?view=self">다른 검사 보기</Link>
+          <h1>이 브라우저에는 이 결과가 없어요</h1>
+          <p>
+            로그인하지 않고 만든 결과는 검사를 완료한 브라우저에 보관돼요.
+            다른 기기에서 보려면 로그인해 저장했거나 공유 버튼으로 만든 링크가
+            필요해요.
+          </p>
+          <Link href="/login?reason=result_restore&next=%2Fmy%2Freports%2Fhistory">
+            로그인하고 내 기록 확인하기
+          </Link>
+          <Link href="/home?view=self">새 검사 시작하기</Link>
         </section>
       </main>
     );
@@ -419,6 +439,17 @@ export function FreeTopicResultView({
           </section>
         ) : null}
 
+        {!previewMode && !readOnly ? (
+          <ResultContinuityCard
+            kind="topic"
+            loginHref={buildResultSaveLoginHref(
+              `/assessments/topics/${slug}/result/${localResultId}`,
+            )}
+            modalOpen={isShareOpen || isScoreMeaningOpen}
+            state={getTopicContinuityState(result, isSyncing)}
+          />
+        ) : null}
+
         {report.signals.length > 0 ? (
           <section className={styles.section}>
             <div className={styles.sectionHeading}>
@@ -503,6 +534,7 @@ export function FreeTopicResultView({
         <TopicTraitImpactCard
           loginHref={`/login?next=${encodeURIComponent(`/assessments/topics/${slug}/result/${localResultId}`)}`}
           onRetry={retryTraitSync}
+          showPending={previewMode}
           snapshot={result.traitImpactSnapshot}
           sync={result.sync}
         />
@@ -1074,4 +1106,15 @@ function orderDetailedReportSections(sections: FreeTopicLongReportSection[]) {
     (left, right) =>
       (priority.get(left.title) ?? 5) - (priority.get(right.title) ?? 5),
   );
+}
+
+function getTopicContinuityState(
+  result: StoredFreeTopicResult,
+  isSyncing: boolean,
+): ResultContinuityState {
+  if (isSyncing) return "saving";
+  if (result.sync.status === "synced") return "saved";
+  if (result.sync.lastError === "login_required") return "guest";
+  if (result.sync.status === "failed") return "error";
+  return "checking";
 }

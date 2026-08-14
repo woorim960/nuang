@@ -2,6 +2,18 @@
 
 # dependencies
 /node_modules
+/mobile/node_modules
+/mobile/dist
+/mobile/android/.gradle
+/mobile/android/build
+/mobile/android/app/build
+/mobile/android/app/src/main/assets/capacitor.config.json
+/mobile/android/app/src/main/assets/capacitor.plugins.json
+/mobile/android/app/src/main/assets/public
+/mobile/ios/App/DerivedData
+/mobile/ios/App/App/capacitor.config.json
+/mobile/ios/App/App/public
+/mobile/ios/App/Pods
 /.pnp
 .pnp.*
 .yarn/*
@@ -23,6 +35,19 @@
 # misc
 .DS_Store
 *.pem
+*.p8
+*.jks
+*.keystore
+*.mobileprovision
+*.p12
+*.ipa
+*.xcarchive
+*.aab
+/mobile/android/key.properties
+/mobile/android/keystore.properties
+/mobile/android/signing.properties
+/mobile/release-evidence/*
+!/mobile/release-evidence/README.md
 
 # debug
 npm-debug.log*

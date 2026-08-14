@@ -29,6 +29,22 @@ vi.mock("@/features/assessment/free-topic-storage", () => ({
   syncQueuedFreeTopicResults: vi.fn(async () => undefined),
 }));
 
+vi.mock("@/features/result-persistence/client-result-scope", () => ({
+  readCurrentSupabaseUserId: vi.fn(async () => "auth-user-a"),
+  verifyStableResultAuthScope: vi.fn(
+    async ({
+      requestUserId,
+      responseUserId,
+    }: {
+      requestUserId: string | null;
+      responseUserId?: string | null;
+    }) =>
+      requestUserId === "auth-user-a" && responseUserId === requestUserId
+        ? requestUserId
+        : null,
+  ),
+}));
+
 describe("MyTraitDetailView", () => {
   afterEach(() => {
     traitDetailMocks.localAttempts = [];
@@ -54,6 +70,7 @@ describe("MyTraitDetailView", () => {
         async () =>
           new Response(
             JSON.stringify({
+              authUserId: "auth-user-a",
               ok: true,
               results: [createAccountResult()],
             }),
@@ -102,9 +119,14 @@ describe("MyTraitDetailView", () => {
       "fetch",
       vi.fn(
         async () =>
-          new Response(JSON.stringify({ ok: true, results: [] }), {
-            status: 200,
-          }),
+          new Response(
+            JSON.stringify({
+              authUserId: "auth-user-a",
+              ok: true,
+              results: [],
+            }),
+            { status: 200 },
+          ),
       ),
     );
 

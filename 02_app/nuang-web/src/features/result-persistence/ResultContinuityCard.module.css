@@ -1,0 +1,195 @@
+.section {
+  padding: 1.4rem var(--nu-page-gutter) 1.5rem;
+  border-top: 8px solid var(--nu-color-app-bg);
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  background: var(--nu-brand-50);
+  color: var(--nu-color-text);
+  word-break: keep-all;
+}
+
+.section.saved {
+  border-bottom-width: 1px;
+  background: var(--nu-color-surface);
+}
+
+.eyebrow {
+  margin: 0;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-bold);
+}
+
+.section h2 {
+  margin: 0.45rem 0 0;
+  color: var(--nu-color-text-strong);
+  font-size: var(--nu-text-title-lg);
+  font-weight: var(--nu-weight-heavy);
+  letter-spacing: -0.03em;
+  line-height: 1.4;
+  text-wrap: balance;
+}
+
+.description {
+  margin: 0.75rem 0 0;
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-callout);
+  line-height: 1.65;
+}
+
+.benefits {
+  margin: 1rem 0 0;
+  padding: 0;
+  border-top: 1px solid var(--nu-color-border-soft);
+  list-style: none;
+}
+
+.benefits li {
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  gap: 0.65rem;
+  border-bottom: 1px solid var(--nu-color-border-soft);
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.benefits svg {
+  flex: 0 0 auto;
+  color: var(--nu-color-brand-strong);
+}
+
+.primaryAction,
+.savingStatus {
+  display: flex;
+  min-height: 52px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+  border-radius: var(--nu-radius-md);
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
+}
+
+.primaryAction {
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-brand-action);
+}
+
+.savingStatus {
+  color: var(--nu-color-brand-strong);
+  background: var(--nu-color-surface);
+}
+
+.continueButton {
+  display: grid;
+  min-height: 44px;
+  width: 100%;
+  place-items: center;
+  margin-top: 0.35rem;
+  border: 0;
+  color: var(--nu-color-text-secondary);
+  background: transparent;
+  font: inherit;
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+  cursor: pointer;
+}
+
+.trustCopy,
+.linkGuide {
+  margin: 0.75rem 0 0;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  line-height: 1.65;
+}
+
+.linkGuide {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--nu-color-border-soft);
+}
+
+.textLink {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  margin-top: 0.55rem;
+  color: var(--nu-color-brand-strong);
+  font-size: var(--nu-text-body-sm);
+  font-weight: var(--nu-weight-bold);
+}
+
+.dock {
+  position: fixed;
+  z-index: 16;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: grid;
+  width: min(100%, var(--nu-assessment-width));
+  grid-template-columns: minmax(0, 1fr) 44px;
+  gap: 0.5rem;
+  margin-inline: auto;
+  padding: 0.5rem 0.75rem calc(0.5rem + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--nu-color-border);
+  background: color-mix(in srgb, var(--nu-color-surface) 96%, transparent);
+  backdrop-filter: blur(16px);
+  animation: dock-enter 180ms var(--nu-ease-standard) both;
+}
+
+.dock > a {
+  display: flex;
+  min-height: 48px;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--nu-radius-md);
+  color: var(--nu-color-text-on-accent);
+  background: var(--nu-color-brand-action);
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-bold);
+}
+
+.dock > button {
+  display: grid;
+  width: 44px;
+  height: 48px;
+  place-items: center;
+  border: 0;
+  border-radius: var(--nu-radius-md);
+  color: var(--nu-color-text-secondary);
+  background: var(--nu-color-surface-muted);
+  cursor: pointer;
+}
+
+.primaryAction:focus-visible,
+.textLink:focus-visible,
+.dock a:focus-visible,
+.dock button:focus-visible,
+.continueButton:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--nu-color-brand-action) 42%, white);
+  outline-offset: 2px;
+}
+
+@keyframes dock-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 340px) {
+  .section {
+    padding-right: 0.875rem;
+    padding-left: 0.875rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock {
+    animation: none;
+  }
+}

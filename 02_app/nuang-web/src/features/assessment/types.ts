@@ -42,19 +42,18 @@ export type AssessmentUnsureReason =
 export type LocalPersistStatus = "idle" | "saving" | "saved" | "failed";
 
 export type AssessmentAccountSyncStatus =
-  | "failed"
-  | "local_only"
-  | "queued"
-  | "rejected"
-  | "synced"
-  | "syncing";
+  "failed" | "local_only" | "queued" | "rejected" | "synced" | "syncing";
 
 export type AssessmentAccountSyncMetadata = {
   accountId?: string;
+  /** Authenticated creator boundary before a canonical account id is known. */
+  ownerSupabaseUserId?: string;
   lastAttemptedAt?: string;
   lastSyncedAt?: string;
   restoredAt?: string;
   revision?: number;
+  /** One in-flight write owns this token. Late responses must match it. */
+  syncRequestId?: string;
   status: AssessmentAccountSyncStatus;
 };
 

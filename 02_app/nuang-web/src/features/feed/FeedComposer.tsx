@@ -17,7 +17,6 @@ import {
   Trash2,
   X,
 } from "lucide-react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   useEffect,
@@ -26,6 +25,7 @@ import {
   type ChangeEvent,
   type MouseEvent,
 } from "react";
+import { IntentPrefetchLink as Link } from "@/components/navigation/IntentPrefetchLink";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { FeedTopicSelector } from "@/features/feed/FeedTopicSelector";
 import { extractExternalLinks } from "@/features/feed/link-safety";

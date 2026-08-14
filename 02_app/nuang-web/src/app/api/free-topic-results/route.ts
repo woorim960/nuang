@@ -34,12 +34,17 @@ import {
 } from "@/features/assessment/server-assessment-content-runtime";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
 import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
+import { localResultIdSchema } from "@/features/result-persistence/local-result-id-contract";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import {
   calculateAccountTraitProfileTransition,
   rebuildAccountTraitProfile,
 } from "@/features/assessment/server-account-trait-profile";
+
+const privateNoStoreHeaders = {
+  "cache-control": "private, no-store, max-age=0",
+};
 
 const freeTopicResultSchema = z.object({
   answers: z.record(
@@ -76,16 +81,16 @@ const freeTopicResultSchema = z.object({
     slug: z.string(),
   }),
   completedAt: z.string().datetime(),
-  localResultId: z.string().min(6).max(128),
+  localResultId: localResultIdSchema,
   productReleaseId: z.string().uuid().optional(),
 });
 
 const freeTopicResultsQuerySchema = z.object({
-  localResultId: z.string().min(6).max(128).optional(),
+  localResultId: localResultIdSchema.optional(),
 });
 
 const deleteFreeTopicResultSchema = z.object({
-  localResultId: z.string().min(6).max(128),
+  localResultId: localResultIdSchema,
 });
 
 type FreeTopicResultRow = {
@@ -119,6 +124,17 @@ export async function POST(request: Request) {
       },
       { status: 422 },
     );
+  }
+
+  const auth = await requireAuthenticatedUser(request, {
+    expectedSupabaseUserId: request.headers.get("x-nuang-auth-user-id"),
+  });
+
+  if (!auth.ok) {
+    return auth.response;
+  }
+  if (!hasMatchingRequestAuthScope(request, auth.user.id)) {
+    return createAuthScopeChangedResponse(auth.user.id);
   }
 
   const payload = parsedBody.data;
@@ -195,12 +211,6 @@ export async function POST(request: Request) {
     assessment.slug,
   );
   const scoringVersion = getFreeTopicScoringVersion(assessment.slug);
-
-  const auth = await requireAuthenticatedUser();
-
-  if (!auth.ok) {
-    return auth.response;
-  }
 
   const serviceClient = createSupabaseServiceClient();
 
@@ -365,11 +375,23 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json({
+      accountId,
+      authUserId: auth.user.id,
       ok: true,
       result: existingResult,
       resultId: existingResult.serverResultId,
       syncedAt: existingResult.sync.syncedAt,
     });
+  }
+
+  if (insertResponse.error?.message?.includes("persisted_result_deleted")) {
+    return NextResponse.json(
+      {
+        authUserId: auth.user.id,
+        error: "free_topic_result_deleted",
+      },
+      { status: 410 },
+    );
   }
 
   if (insertResponse.error || !insertResponse.data) {
@@ -399,6 +421,8 @@ export async function POST(request: Request) {
   const syncedAt = inserted.updated_at;
 
   return NextResponse.json({
+    accountId,
+    authUserId: auth.user.id,
     ok: true,
     result: serializeFreeTopicResult({
       assessment,
@@ -443,10 +467,15 @@ export async function GET(request: Request) {
     );
   }
 
-  const auth = await requireAuthenticatedUser();
+  const auth = await requireAuthenticatedUser(request, {
+    expectedSupabaseUserId: request.headers.get("x-nuang-auth-user-id"),
+  });
 
   if (!auth.ok) {
     return auth.response;
+  }
+  if (!hasMatchingRequestAuthScope(request, auth.user.id)) {
+    return createAuthScopeChangedResponse(auth.user.id);
   }
 
   const serviceClient = createSupabaseServiceClient();
@@ -470,10 +499,30 @@ export async function GET(request: Request) {
   }
 
   if (!accountResponse.data) {
-    return NextResponse.json({ ok: true, results: [] });
+    return NextResponse.json({
+      authUserId: auth.user.id,
+      deletedLocalResultIds: [],
+      ok: true,
+      results: [],
+    });
   }
 
   const accountId = (accountResponse.data as { account_id: string }).account_id;
+  let tombstoneQuery = serviceClient
+    .schema("assessment")
+    .from("result_deletion_tombstone")
+    .select("local_result_id")
+    .eq("account_id", accountId)
+    .eq("result_kind", "topic")
+    .order("deleted_at", { ascending: false });
+
+  if (parsedQuery.data.localResultId) {
+    tombstoneQuery = tombstoneQuery.eq(
+      "local_result_id",
+      parsedQuery.data.localResultId,
+    );
+  }
+
   let resultQuery = serviceClient
     .schema("assessment")
     .from("free_topic_result")
@@ -505,16 +554,39 @@ export async function GET(request: Request) {
     );
   }
 
+  // Read tombstones after active rows so a concurrent deletion cannot produce
+  // an empty active response without also returning its deletion boundary.
+  const tombstoneResponse = await tombstoneQuery.limit(
+    parsedQuery.data.localResultId ? 1 : 1_000,
+  );
+  if (tombstoneResponse.error) {
+    return NextResponse.json(
+      { error: "free_topic_result_tombstones_read_failed" },
+      { status: 503 },
+    );
+  }
+  const deletedLocalResultIds = (tombstoneResponse.data ?? [])
+    .map((row) =>
+      typeof row.local_result_id === "string" ? row.local_result_id : null,
+    )
+    .filter((value): value is string => Boolean(value));
+
   const storedResults = await Promise.all(
     (resultResponse.data ?? []).map((row) =>
       serializeStoredFreeTopicResult(row as FreeTopicResultRow),
     ),
   );
+  const deletedLocalResultIdSet = new Set(deletedLocalResultIds);
 
   return NextResponse.json({
+    accountId,
+    authUserId: auth.user.id,
+    deletedLocalResultIds,
     ok: true,
     results: storedResults.filter(
-      (result): result is NonNullable<typeof result> => Boolean(result),
+      (result): result is NonNullable<typeof result> =>
+        Boolean(result) &&
+        !deletedLocalResultIdSet.has(result?.localResultId ?? ""),
     ),
   });
 }
@@ -528,9 +600,14 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "validation_error" }, { status: 422 });
   }
 
-  const auth = await requireAuthenticatedUser();
+  const auth = await requireAuthenticatedUser(request, {
+    expectedSupabaseUserId: request.headers.get("x-nuang-auth-user-id"),
+  });
 
   if (!auth.ok) return auth.response;
+  if (!hasMatchingRequestAuthScope(request, auth.user.id)) {
+    return createAuthScopeChangedResponse(auth.user.id);
+  }
 
   const serviceClient = createSupabaseServiceClient();
   if (!serviceClient) return createApiClosedResponse("supabase_env_missing");
@@ -550,18 +627,20 @@ export async function DELETE(request: Request) {
   }
 
   if (!accountResponse.data) {
-    return NextResponse.json({ ok: true });
+    return NextResponse.json(
+      { authUserId: auth.user.id, ok: true },
+      { headers: privateNoStoreHeaders },
+    );
   }
 
-  const deletedAt = new Date().toISOString();
   const accountId = (accountResponse.data as { account_id: string }).account_id;
   const deleteResponse = await serviceClient
     .schema("assessment")
-    .from("free_topic_result")
-    .update({ deleted_at: deletedAt, updated_at: deletedAt })
-    .eq("account_id", accountId)
-    .eq("local_result_id", parsedBody.data.localResultId)
-    .is("deleted_at", null);
+    .rpc("delete_persisted_result", {
+      p_account_id: accountId,
+      p_local_result_id: parsedBody.data.localResultId,
+      p_result_kind: "topic",
+    });
 
   if (deleteResponse.error) {
     return NextResponse.json(
@@ -570,9 +649,30 @@ export async function DELETE(request: Request) {
     );
   }
 
-  await rebuildAccountTraitProfile({ accountId, client: serviceClient });
+  if (deleteResponse.data === true) {
+    await rebuildAccountTraitProfile({ accountId, client: serviceClient });
+  }
 
-  return NextResponse.json({ ok: true });
+  return NextResponse.json(
+    { authUserId: auth.user.id, ok: true },
+    { headers: privateNoStoreHeaders },
+  );
+}
+
+function hasMatchingRequestAuthScope(request: Request, authUserId: string) {
+  return request.headers.get("x-nuang-auth-user-id") === authUserId;
+}
+
+function createAuthScopeChangedResponse(authUserId: string) {
+  return NextResponse.json(
+    {
+      authUserId,
+      error: "auth_scope_changed",
+      message: "로그인 계정이 변경되어 요청을 중단했어요. 다시 시도해 주세요.",
+      ok: false,
+    },
+    { headers: privateNoStoreHeaders, status: 409 },
+  );
 }
 
 function serializeFreeTopicResult({

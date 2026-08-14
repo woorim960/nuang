@@ -13,6 +13,7 @@ describe("NUANG search and app image assets", () => {
     ["public/icons/nuang-favicon-96.png", 96, 96, 2_000],
     ["public/icons/nuang-icon-192.png", 192, 192, 5_000],
     ["public/icons/nuang-icon-512.png", 512, 512, 5_000],
+    ["public/icons/nuang-app-store-icon-1024.png", 1024, 1024, 10_000],
     ["public/icons/nuang-maskable-icon-512.png", 512, 512, 5_000],
     ["public/images/seo/nuang-personality-social-v1.png", 1200, 630, 5_000],
   ])(

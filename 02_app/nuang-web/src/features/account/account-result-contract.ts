@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import { reportContentSnapshotSchema } from "@/features/result/unified-core-report/report-content-snapshot-contract";
+import { localResultIdSchema } from "@/features/result-persistence/local-result-id-contract";
 
 const accountResultDomainSchema = z.object({
   domainId: z.string().min(1).max(24),
@@ -59,7 +60,7 @@ export const accountResultsQuerySchema = z.object({
 
 export const deleteAccountResultRequestSchema = z
   .object({
-    localResultId: z.string().trim().min(8).max(128).optional(),
+    localResultId: localResultIdSchema.optional(),
     resultReportId: z.string().uuid().optional(),
   })
   .refine(

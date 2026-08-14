@@ -8,10 +8,34 @@ import type {
 const controls = vi.hoisted(() => ({
   selection: null as CoreResultSelection | null,
 }));
+const storageMocks = vi.hoisted(() => ({
+  deleteLocalAttempt: vi.fn().mockResolvedValue(undefined),
+}));
+const authScopeMocks = vi.hoisted(() => ({
+  currentUserId: "auth-user-a" as string | null,
+}));
 
 vi.mock("@/features/assessment/assessment-storage", () => ({
-  deleteLocalAttempt: vi.fn().mockResolvedValue(undefined),
+  deleteLocalAttempt: storageMocks.deleteLocalAttempt,
   listLocalAttempts: vi.fn().mockResolvedValue([]),
+}));
+
+vi.mock("@/features/result-persistence/client-result-scope", () => ({
+  readCurrentSupabaseUserId: vi.fn(async () => authScopeMocks.currentUserId),
+  verifyStableResultAuthScope: vi.fn(
+    async ({
+      requestUserId,
+      responseUserId,
+    }: {
+      requestUserId: string | null;
+      responseUserId?: string | null;
+    }) =>
+      requestUserId &&
+      requestUserId === responseUserId &&
+      requestUserId === authScopeMocks.currentUserId
+        ? requestUserId
+        : null,
+  ),
 }));
 
 vi.mock("@/features/assessment/assessment-account-sync", () => ({
@@ -40,16 +64,26 @@ vi.mock("./CoreResultReportTemplate", () => ({
     secondaryAction,
     statusMessage,
     surface,
+    onDelete,
+    deleteError,
   }: {
     backHref?: string;
     model: CoreResultReportModel;
     secondaryAction?: { href: string; label: string };
     statusMessage?: string | null;
     surface: string;
+    onDelete?: () => void;
+    deleteError?: string | null;
   }) => (
     <div data-testid="unified-core-template">
       {surface}:{model.result.code}:{backHref}:{secondaryAction?.href}
       {statusMessage ? <p>{statusMessage}</p> : null}
+      {deleteError ? <p>{deleteError}</p> : null}
+      {onDelete ? (
+        <button onClick={onDelete} type="button">
+          테스트 결과 삭제
+        </button>
+      ) : null}
     </div>
   ),
 }));
@@ -60,6 +94,7 @@ describe("MyLatestCoreReportView", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     controls.selection = null;
+    authScopeMocks.currentUserId = "auth-user-a";
     vi.stubGlobal(
       "fetch",
       vi.fn().mockResolvedValue(
@@ -168,6 +203,38 @@ describe("MyLatestCoreReportView", () => {
     expect(
       screen.queryByRole("heading", { name: "결과를 불러오지 못했어요" }),
     ).not.toBeInTheDocument();
+  });
+
+  it("does not delete the local copy when auth changes during account deletion", async () => {
+    controls.selection = createSelection({
+      latestRenderableReport: createModel(),
+      selectionReason: "LATEST_RENDERABLE",
+    });
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ ok: false }), { status: 401 }),
+      )
+      .mockImplementationOnce(async (_input, init) => {
+        expect(init?.headers).toMatchObject({
+          "x-nuang-auth-user-id": "auth-user-a",
+        });
+        authScopeMocks.currentUserId = "auth-user-b";
+        return new Response(
+          JSON.stringify({ authUserId: "auth-user-a", ok: true }),
+          { headers: { "content-type": "application/json" }, status: 200 },
+        );
+      });
+
+    render(<MyLatestCoreReportView />);
+    fireEvent.click(
+      await screen.findByRole("button", { name: "테스트 결과 삭제" }),
+    );
+
+    expect(
+      await screen.findByText(/결과를 삭제하지 못했어요/),
+    ).toBeInTheDocument();
+    expect(storageMocks.deleteLocalAttempt).not.toHaveBeenCalled();
   });
 });
 

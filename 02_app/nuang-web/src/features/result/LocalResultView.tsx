@@ -11,6 +11,7 @@ import {
   deleteLocalAttempt,
   getLocalAttempt,
 } from "@/features/assessment/assessment-storage";
+import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
 import {
   hasUniformCoreResponses,
   prepareAssessmentCompletion,
@@ -55,10 +56,19 @@ import {
 } from "@/features/result/CandidateCoreResultView";
 import { CoreResultReportTemplate } from "@/features/result/unified-core-report/CoreResultReportTemplate";
 import { adaptValidatedLocalCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
-import type { ConsentDraft } from "@/features/consent/consent-draft";
 import { ReportShareSheet } from "@/features/share/ReportShareSheet";
 import { buildCoreReportShareContent } from "@/features/share/report-share-contract";
 import { isCoreResultUndetermined } from "@/lib/scoring/core";
+import { ResultContinuityCard } from "@/features/result-persistence/ResultContinuityCard";
+import {
+  buildResultSaveLoginHref,
+  type ResultContinuityState,
+} from "@/features/result-persistence/result-continuity";
+import {
+  readCurrentSupabaseUserId,
+  verifyStableResultAuthScope,
+} from "@/features/result-persistence/client-result-scope";
+import { buildRequiredConsentHref } from "@/features/consent/required-consent-contract";
 
 type LocalResultViewProps = {
   backHref?: string;
@@ -101,6 +111,7 @@ export function LocalResultView({
 }: LocalResultViewProps) {
   const router = useRouter();
   const [attempt, setAttempt] = useState<LocalAssessmentAttempt | null>(null);
+  const [isDeletedResult, setIsDeletedResult] = useState(false);
   const [isMissing, setIsMissing] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
@@ -123,11 +134,16 @@ export function LocalResultView({
   useEffect(() => {
     let isMounted = true;
 
-    getLocalAttempt(localResultId).then((nextAttempt) => {
+    getLocalAttempt(localResultId).then(async (nextAttempt) => {
       if (!isMounted) return;
       if (!nextAttempt) {
-        setIsMissing(true);
-        return;
+        await synchronizeAccountAssessmentAttempts();
+        nextAttempt = await getLocalAttempt(localResultId);
+        if (!isMounted) return;
+        if (!nextAttempt) {
+          setIsMissing(true);
+          return;
+        }
       }
       setAttempt(nextAttempt);
     });
@@ -211,17 +227,7 @@ export function LocalResultView({
       return;
     }
 
-    const consentDraft = readStoredConsentDraft();
     let isMounted = true;
-
-    if (!consentDraft) {
-      void Promise.resolve().then(() => {
-        if (isMounted) setClaimState("missing_consent");
-      });
-      return () => {
-        isMounted = false;
-      };
-    }
 
     void Promise.resolve().then(async () => {
       if (!isMounted) return;
@@ -230,7 +236,6 @@ export function LocalResultView({
       try {
         const outcome = await claimLocalResult({
           attempt,
-          consentDraft,
           versionBundle: {
             assessmentReleaseId: resultSnapshot.assessmentReleaseId,
             codeSchemeVersion: resultSnapshot.codeSchemeVersion,
@@ -238,6 +243,18 @@ export function LocalResultView({
             scoringReleaseId: resultSnapshot.scoringReleaseId,
           },
         });
+
+        if (outcome.state === "deleted") {
+          try {
+            await deleteLocalAttempt(attempt.id);
+          } catch {
+            // The storage layer marks the tombstone before attempting IDB cleanup.
+          }
+          if (!isMounted) return;
+          setAttempt(null);
+          setIsDeletedResult(true);
+          return;
+        }
 
         if (!isMounted) return;
 
@@ -265,6 +282,14 @@ export function LocalResultView({
       isMounted = false;
     };
   }, [attempt, claimState, result, resultSnapshot]);
+
+  if (isDeletedResult) {
+    return (
+      <main className="mx-auto min-h-dvh max-w-[520px] px-5 py-5">
+        <DeletedResult />
+      </main>
+    );
+  }
 
   if (isMissing) {
     return (
@@ -299,6 +324,22 @@ export function LocalResultView({
     );
   }
 
+  const localResultHref = backHref
+    ? `/results/local/${localResultId}?backTo=${encodeURIComponent(backHref)}`
+    : `/results/local/${localResultId}`;
+  const continuity =
+    attempt.assessmentId === betaCoreAssessment.assessmentId ? null : (
+      <ResultContinuityCard
+        kind="core"
+        loginHref={
+          claimState === "missing_consent"
+            ? buildRequiredConsentHref(localResultHref)
+            : buildResultSaveLoginHref(localResultHref)
+        }
+        state={getResultContinuityState(claimState)}
+      />
+    );
+
   if (isCandidateResult) {
     const isPersistableCandidate =
       isCandidateQuickRelease(attempt) || isCandidateFullRelease(attempt);
@@ -325,6 +366,7 @@ export function LocalResultView({
       <CandidateCoreResultView
         attempt={attempt}
         backHref={backHref}
+        continuity={continuity}
         deleteError={
           deleteState === "error"
             ? "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요."
@@ -353,6 +395,7 @@ export function LocalResultView({
     return (
       <CoreResultReportTemplate
         backHref={backHref}
+        continuity={continuity}
         deleteError={
           deleteState === "error"
             ? "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요."
@@ -442,20 +485,31 @@ export function LocalResultView({
     setDeleteState("working");
 
     try {
-      if (serverResultReportId) {
+      if (serverResultReportId || attempt?.accountSync?.accountId) {
+        const requestUserId = await readCurrentSupabaseUserId();
         const response = await fetch("/api/account-results", {
           body: JSON.stringify({
             localResultId,
-            resultReportId: serverResultReportId,
+            ...(serverResultReportId
+              ? { resultReportId: serverResultReportId }
+              : {}),
           }),
           headers: {
             "content-type": "application/json",
+            ...(requestUserId ? { "x-nuang-auth-user-id": requestUserId } : {}),
           },
           method: "DELETE",
         });
-        const body = (await response.json()) as { ok?: boolean };
+        const body = (await response.json().catch(() => null)) as {
+          authUserId?: string;
+          ok?: boolean;
+        } | null;
+        const stableUserId = await verifyStableResultAuthScope({
+          requestUserId,
+          responseUserId: body?.authUserId,
+        });
 
-        if (!response.ok || !body.ok) {
+        if (!response.ok || !body?.ok || !stableUserId) {
           setDeleteState("error");
           return;
         }
@@ -520,6 +574,8 @@ export function LocalResultView({
           {answeredCount}개
         </p>
       </section>
+
+      {continuity}
 
       <section className="border-b border-line py-6">
         <h2 className="text-base font-bold">핵심 요약</h2>
@@ -825,6 +881,7 @@ async function readAccountStatus(
   | { result: ResultAccountStatus; state: "found" }
   | { state: "error" | "not_found" | "unauthenticated" }
 > {
+  const requestUserId = await readCurrentSupabaseUserId();
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), 2500);
 
@@ -833,6 +890,9 @@ async function readAccountStatus(
       `/api/claim-result?localResultId=${encodeURIComponent(localResultId)}`,
       {
         cache: "no-store",
+        headers: requestUserId
+          ? { "x-nuang-auth-user-id": requestUserId }
+          : undefined,
         method: "GET",
         signal: controller.signal,
       },
@@ -842,11 +902,18 @@ async function readAccountStatus(
     if (!response.ok) return { state: "error" };
 
     const body = (await response.json()) as {
+      authUserId?: string;
       ok?: boolean;
       result?: ResultAccountStatus | null;
     };
 
     if (!body.ok) return { state: "error" };
+    const stableUserId = await verifyStableResultAuthScope({
+      requestUserId,
+      responseUserId: body.authUserId,
+    });
+    if (!stableUserId) return { state: "error" };
+
     return body.result
       ? { result: body.result, state: "found" }
       : { state: "not_found" };
@@ -859,11 +926,9 @@ async function readAccountStatus(
 
 async function claimLocalResult({
   attempt,
-  consentDraft,
   versionBundle,
 }: {
   attempt: LocalAssessmentAttempt;
-  consentDraft: ConsentDraft;
   versionBundle: {
     assessmentReleaseId: string;
     codeSchemeVersion: string;
@@ -877,13 +942,13 @@ async function claimLocalResult({
       state: "saved";
     }
   | {
-      state: "error" | "unauthenticated";
+      state: "deleted" | "error" | "missing_consent" | "unauthenticated";
     }
 > {
+  const requestUserId = await readCurrentSupabaseUserId();
   const response = await fetch("/api/claim-result", {
     body: JSON.stringify({
       assessmentKind: attempt.mode,
-      consentDraft,
       localResultId: attempt.id,
       responses: Object.values(attempt.responses).map((response) => ({
         answeredAt: response.answeredAt,
@@ -899,22 +964,42 @@ async function claimLocalResult({
     }),
     headers: {
       "content-type": "application/json",
+      ...(requestUserId ? { "x-nuang-auth-user-id": requestUserId } : {}),
     },
     method: "POST",
   });
-  const body = (await response.json()) as {
+  const body = (await response.json().catch(() => null)) as {
+    authUserId?: string;
+    code?: string;
     ok?: boolean;
     result?: {
       restored?: boolean;
       resultReportId?: string;
     };
-  };
+  } | null;
 
   if (response.status === 401) {
     return { state: "unauthenticated" };
   }
 
-  if (!response.ok || !body.ok || !body.result?.resultReportId) {
+  const stableUserId = await verifyStableResultAuthScope({
+    requestUserId,
+    responseUserId: body?.authUserId,
+  });
+  if (!stableUserId) return { state: "error" };
+
+  if (
+    response.status === 400 &&
+    body?.code === "age_or_required_consent_missing"
+  ) {
+    return { state: "missing_consent" };
+  }
+
+  if (response.status === 410 && body?.code === "result_deleted") {
+    return { state: "deleted" };
+  }
+
+  if (!response.ok || !body?.ok || !body.result?.resultReportId) {
     return { state: "error" };
   }
 
@@ -923,32 +1008,6 @@ async function claimLocalResult({
     resultReportId: body.result.resultReportId,
     state: "saved",
   };
-}
-
-function readStoredConsentDraft(): ConsentDraft | null {
-  try {
-    const raw = localStorage.getItem("nuang-consent-draft");
-
-    if (!raw) {
-      return null;
-    }
-
-    const parsed = JSON.parse(raw) as Partial<ConsentDraft>;
-
-    if (parsed.is14OrOlder && parsed.terms && parsed.privacy) {
-      return {
-        analytics: Boolean(parsed.analytics),
-        is14OrOlder: true,
-        marketing: Boolean(parsed.marketing),
-        privacy: true,
-        terms: true,
-      };
-    }
-  } catch {
-    return null;
-  }
-
-  return null;
 }
 
 function getClaimStatusMessage(
@@ -967,20 +1026,66 @@ function getClaimStatusMessage(
     return "계정 저장은 잠시 뒤 다시 시도해요. 지금도 결과 요약은 공유할 수 있어요.";
   }
   if (state === "missing_consent") {
-    return "계정에 저장하려면 로그인 화면에서 필수 항목을 확인해 주세요. 결과 요약은 지금도 공유할 수 있어요.";
+    return "계정에 저장하려면 현재 필수 항목을 확인해 주세요. 결과 요약은 지금도 공유할 수 있어요.";
   }
   return null;
+}
+
+function getResultContinuityState(
+  state:
+    | "checking"
+    | "error"
+    | "idle"
+    | "missing_consent"
+    | "saved"
+    | "saving"
+    | "unauthenticated",
+): ResultContinuityState {
+  if (state === "unauthenticated") return "guest";
+  if (state === "saving" || state === "idle") return "saving";
+  if (state === "saved") return "saved";
+  if (state === "error" || state === "missing_consent") return "error";
+  return "checking";
 }
 
 function MissingResult() {
   return (
     <section className="rounded-lg border border-line bg-white p-5">
-      <h1 className="text-xl font-black">결과를 찾을 수 없어요</h1>
+      <h1 className="text-xl font-black">이 브라우저에는 이 결과가 없어요</h1>
       <p className="mt-2 text-sm leading-6 text-muted">
-        보관 기간이 지났거나 삭제된 결과일 수 있어요.
+        로그인하지 않고 만든 결과는 검사를 완료한 브라우저에 보관돼요. 주소창의
+        결과 주소만 복사하면 다른 기기에서 열리지 않을 수 있어요.
       </p>
+      <p className="mt-2 text-sm leading-6 text-muted">
+        다른 사람에게 보여주려면 결과 화면의 공유 버튼으로 만든 링크를 이용해
+        주세요.
+      </p>
+      <ButtonLink
+        className="mt-5 w-full"
+        href="/login?reason=result_restore&next=%2Fmy%2Freports%2Fhistory"
+      >
+        로그인하고 내 기록 확인하기
+      </ButtonLink>
       <ButtonLink className="mt-5 w-full" href="/assessments/nu-core-quick">
         빠른 코어 다시 하기
+      </ButtonLink>
+    </section>
+  );
+}
+
+function DeletedResult() {
+  return (
+    <section className="rounded-lg border border-line bg-white p-5">
+      <h1 className="text-xl font-black">이미 삭제한 결과예요</h1>
+      <p className="mt-2 text-sm leading-6 text-muted">
+        삭제한 결과는 계정이나 이 브라우저에 다시 저장하지 않아요. 새 검사를
+        시작하면 새로운 결과를 만들 수 있어요.
+      </p>
+      <ButtonLink className="mt-5 w-full" href="/assessments/nu-core-quick">
+        빠른 코어 새로 하기
+      </ButtonLink>
+      <ButtonLink className="mt-3 w-full" href="/my/reports/history">
+        내 기록으로 돌아가기
       </ButtonLink>
     </section>
   );

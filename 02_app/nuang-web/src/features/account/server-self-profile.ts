@@ -11,8 +11,11 @@ import {
   type SelfProfilePayload,
 } from "@/features/account/self-profile-contract";
 import { readAccountAssessmentProgress } from "@/features/assessment/server-account-assessment-progress";
-import { rebuildAccountTraitProfile } from "@/features/assessment/server-account-trait-profile";
-import { createServerFeedReadPayload } from "@/features/feed/server-read";
+import {
+  readAccountTraitProfile,
+  rebuildAccountTraitProfile,
+} from "@/features/assessment/server-account-trait-profile";
+import { createServerOwnFeedItems } from "@/features/feed/server-read";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { readOriginalProfileReportSummaries } from "@/features/public-profile/server-profile-reports";
 
@@ -55,7 +58,7 @@ export async function readSelfProfilePayload({
   ] = await Promise.allSettled([
     readAccountResults({ client, user }),
     readAccountAssessmentProgress({ client, user }),
-    createServerFeedReadPayload(),
+    createServerOwnFeedItems({ accountId: profile.accountId, client }),
     readOriginalProfileReportSummaries({
       client,
       ownerAccountId: profile.accountId,
@@ -63,7 +66,7 @@ export async function readSelfProfilePayload({
     }),
     readSelfProfileStats({ accountId: profile.accountId, client }),
     readActivePublicSnapshotId({ accountId: profile.accountId, client }),
-    rebuildAccountTraitProfile({ accountId: profile.accountId, client }),
+    readFreshAccountTraitProfile({ accountId: profile.accountId, client }),
   ]);
 
   const accountResults =
@@ -76,14 +79,12 @@ export async function readSelfProfilePayload({
       : [];
   const ownPosts =
     feedRead.status === "fulfilled"
-      ? feedRead.value.items
-          .filter((post) => post.viewerIsAuthor)
-          .map((post) => ({
-            ...post,
-            authorHandle: profile.handle,
-            authorName: profile.displayName,
-            avatarLabel: profile.displayName.slice(0, 1) || "나",
-          }))
+      ? feedRead.value.map((post) => ({
+          ...post,
+          authorHandle: profile.handle,
+          authorName: profile.displayName,
+          avatarLabel: profile.displayName.slice(0, 1) || "나",
+        }))
       : [];
   const reports = reportsRead.status === "fulfilled" ? reportsRead.value : [];
   const stats =
@@ -167,6 +168,21 @@ export async function readSelfProfilePayload({
     },
     state: "ready",
   };
+}
+
+async function readFreshAccountTraitProfile({
+  accountId,
+  client,
+}: {
+  accountId: string;
+  client: SupabaseClient;
+}) {
+  const stored = await readAccountTraitProfile({ accountId, client });
+  const updatedAt = stored ? Date.parse(stored.updatedAt) : Number.NaN;
+  const age = Date.now() - updatedAt;
+
+  if (stored && age >= 0 && age < 24 * 60 * 60 * 1000) return stored;
+  return rebuildAccountTraitProfile({ accountId, client });
 }
 
 async function readSelfProfileStats({

@@ -30,6 +30,21 @@ export async function POST(request: Request) {
   if (!isSameOriginBrowserRequest(request)) {
     return NextResponse.json({ error: "invalid_origin" }, { status: 403 });
   }
+  const auth = await requireAuthenticatedUser(request, {
+    expectedSupabaseUserId: request.headers.get("x-nuang-auth-user-id"),
+  });
+  if (!auth.ok) {
+    return auth.response?.status === 409
+      ? auth.response
+      : analyticsConsentDenied();
+  }
+  if (request.headers.get("x-nuang-auth-user-id") !== auth.user.id) {
+    return NextResponse.json(
+      { error: "assessment_quality_owner_changed" },
+      { headers: { "cache-control": "private, no-store" }, status: 409 },
+    );
+  }
+
   const payload = await readValidatedJson(
     request,
     assessmentQualityObservationSchema,
@@ -90,9 +105,6 @@ export async function POST(request: Request) {
   ) {
     return NextResponse.json({ error: "unknown_question" }, { status: 422 });
   }
-
-  const auth = await requireAuthenticatedUser();
-  if (!auth.ok) return analyticsConsentDenied();
 
   const client = createSupabaseServiceClient();
   const serviceEnv = getSupabaseServiceEnv();

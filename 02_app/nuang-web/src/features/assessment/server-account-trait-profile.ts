@@ -34,6 +34,19 @@ type TopicRow = {
   topic_slug: string;
 };
 
+type AccountTraitProfileRow = {
+  alternative_codes: unknown;
+  base_result_report_id: unknown;
+  domains: unknown;
+  evidence_count: unknown;
+  profile_code: unknown;
+  profile_name: unknown;
+  source: unknown;
+  topic_count: unknown;
+  updated_at: unknown;
+  version: unknown;
+};
+
 export type AccountTraitProfileTransition = {
   after: AccountTraitProfile | null;
   before: AccountTraitProfile | null;
@@ -41,6 +54,26 @@ export type AccountTraitProfileTransition = {
   replacedResultId: string | null;
   selectedAsLatest: boolean;
 };
+
+export async function readAccountTraitProfile({
+  accountId,
+  client,
+}: {
+  accountId: string;
+  client: ServiceClient;
+}): Promise<AccountTraitProfile | null> {
+  const response = await client
+    .schema("scoring")
+    .from("account_trait_profile")
+    .select(
+      "alternative_codes,base_result_report_id,domains,evidence_count,profile_code,profile_name,source,topic_count,updated_at,version",
+    )
+    .eq("account_id", accountId)
+    .maybeSingle();
+
+  if (response.error || !response.data) return null;
+  return parseStoredAccountTraitProfile(response.data as AccountTraitProfileRow);
+}
 
 export async function calculateAccountTraitProfileTransition({
   accountId,
@@ -274,4 +307,39 @@ function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === "object" && !Array.isArray(value)
     ? (value as Record<string, unknown>)
     : {};
+}
+
+function parseStoredAccountTraitProfile(
+  row: AccountTraitProfileRow,
+): AccountTraitProfile | null {
+  if (
+    !Array.isArray(row.alternative_codes) ||
+    !row.alternative_codes.every((value) => typeof value === "string") ||
+    typeof row.base_result_report_id !== "string" ||
+    !Array.isArray(row.domains) ||
+    typeof row.evidence_count !== "number" ||
+    typeof row.profile_code !== "string" ||
+    !isCurrentNuangCode(row.profile_code) ||
+    typeof row.profile_name !== "string" ||
+    (row.source !== "core_and_topics" && row.source !== "core_only") ||
+    typeof row.topic_count !== "number" ||
+    typeof row.updated_at !== "string" ||
+    !Number.isFinite(Date.parse(row.updated_at)) ||
+    typeof row.version !== "string"
+  ) {
+    return null;
+  }
+
+  return {
+    alternativeCodes: row.alternative_codes,
+    baseResultReportId: row.base_result_report_id,
+    code: row.profile_code,
+    domains: row.domains as AccountTraitProfile["domains"],
+    evidenceCount: row.evidence_count,
+    profileName: row.profile_name,
+    source: row.source,
+    topicCount: row.topic_count,
+    updatedAt: row.updated_at,
+    version: row.version,
+  };
 }

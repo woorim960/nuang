@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { consentDraftSchema } from "@/features/consent/consent-draft";
+import { localResultIdSchema } from "@/features/result-persistence/local-result-id-contract";
 
 const claimResponseSchema = z
   .object({
@@ -39,8 +40,7 @@ const claimResponseSchema = z
 
 export const claimResultRequestSchema = z.object({
   assessmentKind: z.enum(["quick", "full"]),
-  consentDraft: consentDraftSchema,
-  localResultId: z.string().min(6).max(128),
+  localResultId: localResultIdSchema,
   responses: z.array(claimResponseSchema).min(1).max(80),
   versionBundle: z.object({
     assessmentReleaseId: z.string().min(1).max(120),
@@ -54,7 +54,7 @@ export const claimResultRequestSchema = z.object({
 });
 
 export const resultAccountStatusQuerySchema = z.object({
-  localResultId: z.string().min(6).max(128),
+  localResultId: localResultIdSchema,
 });
 
 export const createShareLinkRequestSchema = z.object({

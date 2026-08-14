@@ -15,6 +15,9 @@ describe("identity link contract", () => {
     expect(
       identityLinkIntentRequestSchema.safeParse({ provider: "naver" }).success,
     ).toBe(false);
+    expect(
+      identityLinkIntentRequestSchema.safeParse({ provider: "apple" }).success,
+    ).toBe(false);
   });
 
   it("keeps callbacks on an internal path", () => {

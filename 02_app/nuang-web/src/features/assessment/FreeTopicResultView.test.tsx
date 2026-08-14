@@ -116,6 +116,32 @@ describe("FreeTopicResultView", () => {
     expect(storageMock.syncFreeTopicResult).not.toHaveBeenCalled();
   });
 
+  it("offers result-saving login after a guest topic report is visible", async () => {
+    const guestResult = createStoredResult({ syncStatus: "failed" });
+    guestResult.sync.lastError = "login_required";
+    storageMock.loadFreeTopicResultLocalFirst.mockResolvedValue(guestResult);
+    storageMock.syncFreeTopicResult.mockResolvedValue(guestResult);
+
+    render(
+      <FreeTopicResultView
+        localResultId="topic_test_123"
+        slug="conversation-temperature"
+      />,
+    );
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "로그인하고 이번 결과를 내 기록에 이어가세요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "로그인하고 결과 저장" }),
+    ).toHaveAttribute(
+      "href",
+      "/login?reason=result_save&next=%2Fassessments%2Ftopics%2Fconversation-temperature%2Fresult%2Ftopic_test_123",
+    );
+  });
+
   it("keeps the personalized copy frozen for a released result", async () => {
     const stored = createStoredResult({ syncStatus: "synced" });
     stored.productReleaseId = "11111111-1111-4111-8111-111111111111";

@@ -4,6 +4,17 @@ import { TopicTraitImpactCard } from "@/features/assessment/TopicTraitImpactCard
 import type { TopicTraitImpactSnapshot } from "@/features/assessment/topic-trait-impact";
 
 describe("TopicTraitImpactCard", () => {
+  it("can hide the pending login prompt when the common continuity card owns it", () => {
+    const { container } = render(
+      <TopicTraitImpactCard
+        showPending={false}
+        sync={{ lastError: "login_required", status: "failed" }}
+      />,
+    );
+
+    expect(container).toBeEmptyDOMElement();
+  });
+
   it("shows a true zero change explicitly", () => {
     render(
       <TopicTraitImpactCard

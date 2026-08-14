@@ -14,7 +14,10 @@ import {
 import { readResultAccountStatus } from "@/features/account/server-reads";
 import { claimResultToAccount } from "@/features/account/server-writes";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
-import { createApiClosedResponse } from "@/lib/api/closed-state";
+import {
+  apiClosedStates,
+  createApiClosedPayload,
+} from "@/lib/api/closed-state";
 import { readValidatedJson } from "@/lib/api/request";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 import { NextResponse } from "next/server";
@@ -38,16 +41,21 @@ export async function GET(request: Request) {
     );
   }
 
-  const auth = await requireAuthenticatedUser();
+  const auth = await requireAuthenticatedUser(request, {
+    expectedSupabaseUserId: request.headers.get("x-nuang-auth-user-id"),
+  });
 
   if (!auth.ok) {
     return auth.response;
+  }
+  if (!hasMatchingRequestAuthScope(request, auth.user.id)) {
+    return createAuthScopeChangedResponse(auth.user.id);
   }
 
   const serviceClient = createSupabaseServiceClient();
 
   if (!serviceClient) {
-    return createApiClosedResponse("supabase_env_missing");
+    return createAuthenticatedApiClosedResponse(auth.user.id);
   }
 
   const result = await readResultAccountStatus({
@@ -58,12 +66,14 @@ export async function GET(request: Request) {
 
   if (!result.ok) {
     return NextResponse.json(
-      createResultAccountStatusFailurePayload(result.code),
+      createResultAccountStatusFailurePayload(result.code, auth.user.id),
       { status: 500 },
     );
   }
 
-  return NextResponse.json(createResultAccountStatusPayload(result.data));
+  return NextResponse.json(
+    createResultAccountStatusPayload(result.data, auth.user.id),
+  );
 }
 
 export async function POST(request: Request) {
@@ -73,16 +83,21 @@ export async function POST(request: Request) {
     return payload.response;
   }
 
-  const auth = await requireAuthenticatedUser();
+  const auth = await requireAuthenticatedUser(request, {
+    expectedSupabaseUserId: request.headers.get("x-nuang-auth-user-id"),
+  });
 
   if (!auth.ok) {
     return auth.response;
+  }
+  if (!hasMatchingRequestAuthScope(request, auth.user.id)) {
+    return createAuthScopeChangedResponse(auth.user.id);
   }
 
   const serviceClient = createSupabaseServiceClient();
 
   if (!serviceClient) {
-    return createApiClosedResponse("supabase_env_missing");
+    return createAuthenticatedApiClosedResponse(auth.user.id);
   }
 
   const result = await claimResultToAccount({
@@ -92,10 +107,48 @@ export async function POST(request: Request) {
   });
 
   if (!result.ok) {
-    return NextResponse.json(createClaimResultWriteFailurePayload(result.code), {
-      status: claimResultWriteFailures[result.code].httpStatus,
-    });
+    return NextResponse.json(
+      {
+        ...createClaimResultWriteFailurePayload(result.code),
+        authUserId: auth.user.id,
+      },
+      {
+        status: claimResultWriteFailures[result.code].httpStatus,
+      },
+    );
   }
 
-  return NextResponse.json(createClaimResultWriteSuccessPayload(result.data));
+  return NextResponse.json({
+    ...createClaimResultWriteSuccessPayload(result.data),
+    authUserId: auth.user.id,
+  });
+}
+
+function createAuthenticatedApiClosedResponse(authUserId: string) {
+  return NextResponse.json(
+    {
+      ...createApiClosedPayload("supabase_env_missing"),
+      authUserId,
+    },
+    { status: apiClosedStates.supabase_env_missing.httpStatus },
+  );
+}
+
+function hasMatchingRequestAuthScope(request: Request, authUserId: string) {
+  return request.headers.get("x-nuang-auth-user-id") === authUserId;
+}
+
+function createAuthScopeChangedResponse(authUserId: string) {
+  return NextResponse.json(
+    {
+      authUserId,
+      error: "auth_scope_changed",
+      message: "로그인 계정이 변경되어 요청을 중단했어요. 다시 시도해 주세요.",
+      ok: false,
+    },
+    {
+      headers: { "cache-control": "private, no-store" },
+      status: 409,
+    },
+  );
 }

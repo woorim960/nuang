@@ -1,0 +1,124 @@
+{
+  "schemaVersion": 1,
+  "brand": {
+    "appName": "뉴앙",
+    "publicDeveloperName": "뉴앙",
+    "primaryDomain": "nuang.app"
+  },
+  "application": {
+    "applicationId": "app.nuang.mobile",
+    "initialMarket": "KR",
+    "minimumAccountAge": 14,
+    "containsAds": true
+  },
+  "operator": {
+    "legalBusinessName": "딱좋은라이프",
+    "representativeName": "박우림",
+    "businessRegistrationNumber": "768-75-00424",
+    "businessType": "sole_proprietor",
+    "businessAddress": {
+      "countryCode": "KR",
+      "postalAddress": "경기도 파주시 고봉로 755-27, 201-E280호(상지석동, 갤러리하우스상가)"
+    },
+    "publicContact": {
+      "email": "woorimprog@gmail.com",
+      "phoneLocal": "010-2515-0939",
+      "phoneE164": "+821025150939"
+    }
+  },
+  "stores": {
+    "googlePlay": {
+      "accountType": "organization",
+      "legalOrganizationName": "딱좋은라이프",
+      "publicDeveloperName": "뉴앙",
+      "dunsNumber": null,
+      "identityAddressSource": "business_registration_and_google_payments_profile",
+      "koreaPublicContactAddressSource": "business_registration_address"
+    },
+    "appleAppStore": {
+      "enrollmentType": "individual",
+      "accountHolderName": "박우림",
+      "appName": "뉴앙",
+      "sellerNameSource": "verified_apple_account_legal_name",
+      "enrollmentAddressSource": "account_holder_legal_address_entered_privately_in_apple_portal"
+    }
+  },
+  "releaseBlockers": {
+    "p0MobileProductFlowsComplete": false,
+    "nativeSecureSessionStorageImplemented": true,
+    "nativeOAuthReturnImplemented": false,
+    "nativeShareAndDeepLinksLiveVerified": false,
+    "unknownAndGuestAdvertisingSuppressionVerified": false,
+    "legalReviewApproved": false,
+    "googleFamiliesPolicyReviewCompleted": false,
+    "googleContentRatingQuestionnaireCompleted": false,
+    "googleDataSafetyPublished": false,
+    "appleAgeRatingAndUgcQuestionnaireCompleted": false,
+    "appleAppPrivacyPublished": false,
+    "googleDunsVerified": false,
+    "googlePlayAccountEnrolled": false,
+    "appleDeveloperAccountEnrolled": false,
+    "appleAccountHolderAddressVerifiedPrivately": false,
+    "appleSignInAppIdConfigured": false,
+    "appleSignInServicesIdConfigured": false,
+    "appleSignInKeyConfigured": false,
+    "appleSignInSupabaseProviderVerified": false,
+    "appleSignInLiveVerified": false,
+    "iosAssociatedDomainTeamIdConfigured": false,
+    "androidPlaySigningFingerprintConfigured": false,
+    "xcode26OrNewerInstalled": false,
+    "androidToolchainInstalled": true,
+    "storeAgreementsAccepted": false,
+    "reviewAccountCreated": false,
+    "realDeviceQaPassed": false,
+    "storeScreenshotsCaptured": false,
+    "productionBuildsSigned": false,
+    "releaseEvidenceManifestVerified": false
+  },
+  "releaseEvidence": {
+    "googleDunsInquirySubmitted": {
+      "verifiedAt": "2026-08-11",
+      "checks": [
+        "Google Play organization enrollment started with woorimprog@gmail.com",
+        "public developer name 뉴앙 entered",
+        "NICE D&B inquiry submitted for lookup or free issuance for 딱좋은라이프"
+      ]
+    },
+    "xcodePrerequisitePrepared": {
+      "verifiedAt": "2026-08-11",
+      "checks": [
+        "macOS Sequoia 15.7.9 update downloaded without installing or restarting",
+        "Apple Developer enrollment and Xcode 26.3 download sign-in pages prepared",
+        "Xcode 26.3 selected to avoid an unnecessary macOS Tahoe upgrade"
+      ]
+    },
+    "androidToolchainInstalled": {
+      "verifiedAt": "2026-08-11",
+      "checks": [
+        "Android Studio Quail 3 Patch 1 (2026.1) installed",
+        "Android command-line tools 15859902 installed",
+        "Android SDK Platform 36, Build Tools 36.0.0, and Platform Tools 37.0.1 installed",
+        "OpenJDK 21.0.12 installed for Gradle 8.14.3 compatibility",
+        "assembleDebug produced a 4.7 MB APK with SHA-256 7e2bd39d70f32c74e6f1c712a4679ccd862a231ad59d49cc74374a62976739a8",
+        "bundleRelease produced an intentionally unsigned 3.4 MB AAB with SHA-256 b5cfb2d34009158da40addb67a319b6107bade96598df905800dd9eed4deae81"
+      ]
+    },
+    "nativeSecureSessionStorageImplemented": {
+      "verifiedAt": "2026-08-11",
+      "checks": [
+        "25 mobile contract tests include Keychain reinstall, OAuth replay, busy-state recovery, and duplicate callback cases",
+        "Capacitor sync registers secure storage on iOS and Android",
+        "unsigned iOS simulator build links KeychainSwift and secure storage successfully"
+      ]
+    },
+    "nativePrivacyProtections": {
+      "verifiedAt": "2026-08-11",
+      "checks": [
+        "app-owned PrivacyInfo.xcprivacy validated and copied to the iOS app bundle root",
+        "NSPrivacyTracking is false and no tracking domains are declared",
+        "Android cleartext transport, cloud backup, and device transfer are disabled",
+        "privacy disclosures no longer overstate request HMACs as device identifiers"
+      ]
+    }
+  }
+}

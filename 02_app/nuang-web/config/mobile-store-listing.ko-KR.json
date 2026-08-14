@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "locale": "ko-KR",
+  "common": {
+    "appName": "뉴앙",
+    "applicationId": "app.nuang.mobile",
+    "category": {
+      "primary": "Lifestyle",
+      "secondary": "Social Networking"
+    },
+    "supportUrl": "https://nuang.app/support",
+    "marketingUrl": "https://nuang.app",
+    "privacyPolicyUrl": "https://nuang.app/policies/privacy",
+    "privacyChoicesUrl": "https://nuang.app/help/account-deletion",
+    "accountDeletionUrl": "https://nuang.app/help/account-deletion",
+    "copyright": "2026 딱좋은라이프",
+    "containsAds": true,
+    "minimumAccountAge": 14,
+    "madeForKids": false
+  },
+  "appleAppStore": {
+    "name": "뉴앙",
+    "subtitle": "성향 테스트와 관계형 SNS",
+    "promotionalText": "코어·주제 검사로 나를 알아보고, 밸런스 게임과 커뮤니티에서 친구·연인과 서로의 생각을 발견해 보세요.",
+    "description": "나를 한 단어로 단정하기보다, 여러 상황에서 드러나는 내 모습을 차근차근 알아보세요.\n\n뉴앙은 성향 테스트와 관계형 경험을 한곳에 모은 성향 기반 SNS입니다.\n\n나를 알아보는 검사\n• 코어 검사로 현재 성향의 큰 흐름을 확인해요.\n• 사과, 위로, 대화, 휴식처럼 일상적인 주제 검사로 상황별 모습을 살펴봐요.\n• 여러 결과를 내 기록에 모아 다시 보고 공개 범위를 직접 관리해요.\n\n함께 즐기는 관계 경험\n• 친구·연인과 밸런스 게임을 하며 서로의 선택을 비교해요.\n• 공유용 링크로 결과를 간편하게 나눠요.\n• 커뮤니티에서 다른 사람의 관점과 경험을 발견해요.\n\n내가 정하는 공개 범위\n• 결과 요약과 프로필의 공개 여부를 직접 바꿀 수 있어요.\n• 개별 답변과 원점수는 공개하지 않아요.\n• 계정과 연결된 데이터는 앱 또는 웹에서 영구 삭제할 수 있어요.\n\n뉴앙의 검사 결과는 자기이해와 대화를 돕기 위한 정보이며 의료·심리 진단을 대신하지 않습니다. 계정 가입은 만 14세 이상부터 가능하고, 일부 기능은 로그인 없이 이용할 수 있습니다.",
+    "keywords": "성향테스트,성격테스트,심리테스트,밸런스게임,관계테스트,친구궁합",
+    "primaryCategory": "Lifestyle",
+    "secondaryCategory": "Social Networking",
+    "reviewNotesStatus": "prepared_in_docs",
+    "ageRatingQuestionnaire": "pending_console_answers",
+    "userGeneratedContentReview": "pending_console_answers",
+    "appPrivacyQuestionnaire": "pending_console_answers",
+    "releaseMethod": "manual"
+  },
+  "googlePlay": {
+    "appName": "뉴앙",
+    "shortDescription": "성향 테스트와 밸런스 게임으로 나를 알아보고, 친구와 생각을 나누는 관계형 SNS",
+    "fullDescription": "나를 한 단어로 단정하기보다, 여러 상황에서 드러나는 내 모습을 차근차근 알아보세요.\n\n뉴앙은 성향 테스트와 관계형 경험을 한곳에 모은 성향 기반 SNS입니다.\n\n[나를 알아보는 검사]\n• 코어 검사로 현재 성향의 큰 흐름을 확인해요.\n• 사과, 위로, 대화, 휴식처럼 일상적인 주제 검사로 상황별 모습을 살펴봐요.\n• 여러 결과를 내 기록에 모아 다시 보고 공개 범위를 직접 관리해요.\n\n[함께 즐기는 관계 경험]\n• 친구·연인과 밸런스 게임을 하며 서로의 선택을 비교해요.\n• 공유용 링크로 결과를 간편하게 나눠요.\n• 커뮤니티에서 다른 사람의 관점과 경험을 발견해요.\n\n[내가 정하는 공개 범위]\n• 결과 요약과 프로필의 공개 여부를 직접 바꿀 수 있어요.\n• 개별 답변과 원점수는 공개하지 않아요.\n• 계정과 연결된 데이터는 앱 또는 웹에서 영구 삭제할 수 있어요.\n\n뉴앙의 검사 결과는 자기이해와 대화를 돕기 위한 정보이며 의료·심리 진단을 대신하지 않습니다. 계정 가입은 만 14세 이상부터 가능하고, 일부 기능은 로그인 없이 이용할 수 있습니다.",
+    "category": "Lifestyle",
+    "contentRatingQuestionnaire": "pending_console_answers",
+    "dataSafetyQuestionnaire": "pending_console_answers",
+    "familiesPolicyReview": "pending_legal_and_console_review",
+    "targetAudienceAgeGroups": ["13-15", "16-17", "18+"],
+    "targetAudienceNote": "계정 생성은 만 14세 이상으로 제한하며 14~18세 계정에는 광고를 노출하지 않는다.",
+    "familiesPolicyReviewRequired": true
+  },
+  "releaseDeclarations": {
+    "ads": {
+      "containsAds": true,
+      "personalizedAds": false,
+      "minorAccountAdsSuppressed": true,
+      "unknownAndGuestAdvertisingPolicy": "release_blocked_until_suppression_is_verified",
+      "providersInCurrentWebCode": [
+        "direct_sample_banner",
+        "coupang_partners",
+        "google_adsense_fail_closed"
+      ],
+      "mobileLaunchEnabledProviders": ["direct_banner", "coupang_partners"],
+      "googleAdSenseEnabledForInitialMobileRelease": false
+    },
+    "health": {
+      "medicalDevice": false,
+      "diagnosisOrTreatment": false,
+      "selfUnderstandingOnly": true
+    },
+    "accounts": {
+      "accountCreation": true,
+      "inAppDeletion": true,
+      "webDeletionRequest": true,
+      "guestUseAvailable": true
+    },
+    "userGeneratedContent": {
+      "present": true,
+      "reporting": true,
+      "blocking": true,
+      "moderation": true
+    },
+    "payments": {
+      "paidApp": false,
+      "inAppPurchases": false,
+      "subscriptions": false
+    }
+  }
+}

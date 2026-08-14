@@ -3,7 +3,18 @@ import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 
 const storage = vi.hoisted(() => ({
   attempts: new Map<string, LocalAssessmentAttempt>(),
+  deleted: new Set<string>(),
   scope: null as string | null,
+}));
+const storageHooks = vi.hoisted(() => ({
+  beforeGetStoredAttempt: null as ((id: string) => Promise<void> | void) | null,
+}));
+const authState = vi.hoisted(() => ({
+  userId: "auth-user-a" as string | null,
+}));
+
+vi.mock("@/features/result-persistence/client-result-scope", () => ({
+  readCurrentSupabaseUserId: vi.fn(async () => authState.userId),
 }));
 
 vi.mock("@/features/assessment/assessment-storage", () => ({
@@ -13,7 +24,39 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
       return attempt;
     },
   ),
-  getStoredLocalAttempt: vi.fn(async (id: string) => storage.attempts.get(id)),
+  compareAndSwapStoredLocalAttempt: vi.fn(
+    async ({
+      attempt,
+      expected,
+    }: {
+      attempt: LocalAssessmentAttempt;
+      expected: { syncRequestId?: string | null; updatedAt: string };
+    }) => {
+      const current = storage.attempts.get(attempt.id);
+      if (
+        storage.deleted.has(attempt.id) ||
+        !current ||
+        current.updatedAt !== expected.updatedAt ||
+        (current.accountSync?.syncRequestId ?? null) !==
+          (expected.syncRequestId ?? null)
+      ) {
+        return false;
+      }
+      storage.attempts.set(attempt.id, structuredClone(attempt));
+      return true;
+    },
+  ),
+  deleteLocalAttempt: vi.fn(async (id: string) => {
+    storage.deleted.add(id);
+    storage.attempts.delete(id);
+  }),
+  getStoredLocalAttempt: vi.fn(async (id: string) => {
+    await storageHooks.beforeGetStoredAttempt?.(id);
+    return storage.attempts.get(id);
+  }),
+  isLocalAssessmentAttemptDeleted: vi.fn((id: string) =>
+    storage.deleted.has(id),
+  ),
   listLocalAttempts: vi.fn(async () =>
     Array.from(storage.attempts.values()).filter((attempt) => {
       const owner = attempt.accountSync?.accountId;
@@ -41,7 +84,10 @@ import {
 describe("assessment account synchronization", () => {
   beforeEach(() => {
     storage.attempts.clear();
+    storage.deleted.clear();
     storage.scope = null;
+    storageHooks.beforeGetStoredAttempt = null;
+    authState.userId = "auth-user-a";
     vi.unstubAllGlobals();
     resetAssessmentAccountSyncSession();
   });
@@ -139,11 +185,187 @@ describe("assessment account synchronization", () => {
 
     await synchronizeAccountAssessmentAttempts();
 
-    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(storage.attempts.get(local.id)).toMatchObject({
       accountSync: { revision: 2, status: "synced" },
       currentIndex: 8,
     });
+  });
+
+  it("removes a local account cache listed in the server deletion boundary", async () => {
+    const deleted = createAttempt("core-deleted-on-another-device", {
+      accountSync: {
+        accountId: "account-a",
+        revision: 2,
+        status: "synced",
+      },
+    });
+    storage.attempts.set(deleted.id, deleted);
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        jsonResponse({
+          accountId: "account-a",
+          attempts: [],
+          deletedLocalResultIds: [deleted.id],
+          ok: true,
+        }),
+      ),
+    );
+
+    const result = await synchronizeAccountAssessmentAttempts();
+
+    expect(result.status).toBe("synced");
+    expect(storage.deleted.has(deleted.id)).toBe(true);
+    expect(storage.attempts.has(deleted.id)).toBe(false);
+  });
+
+  it("discards an account response when the authenticated user changes in flight", async () => {
+    const remote = createAttempt("remote-from-account-a");
+    let resolveRead!: (response: Response) => void;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            resolveRead = resolve;
+          }),
+      ),
+    );
+
+    const synchronization = synchronizeAccountAssessmentAttempts();
+    await vi.waitFor(() => expect(resolveRead).toEqual(expect.any(Function)));
+    authState.userId = "auth-user-b";
+    resolveRead(
+      jsonResponse({
+        accountId: "account-a",
+        attempts: [{ attempt: remote, revision: 1 }],
+        ok: true,
+      }),
+    );
+
+    await expect(synchronization).resolves.toMatchObject({ status: "error" });
+    expect(storage.scope).toBeNull();
+    expect(storage.attempts.has(remote.id)).toBe(false);
+  });
+
+  it("does not hydrate account A cache when authentication switches to B during hydration", async () => {
+    const remote = createAttempt("remote-a-during-hydration");
+    storageHooks.beforeGetStoredAttempt = (id) => {
+      if (id === remote.id) authState.userId = "auth-user-b";
+    };
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () =>
+        jsonResponse({
+          accountId: "account-a",
+          attempts: [{ attempt: remote, revision: 1 }],
+          ok: true,
+        }),
+      ),
+    );
+
+    const result = await synchronizeAccountAssessmentAttempts();
+
+    expect(result.status).toBe("error");
+    expect(storage.scope).toBeNull();
+    expect(storage.attempts.has(remote.id)).toBe(false);
+    expect(storage.deleted.has(remote.id)).toBe(false);
+  });
+
+  it("does not adopt account A write response when authentication switches to B before caching", async () => {
+    const guest = createAttempt("guest-write-before-auth-switch", {
+      accountSync: { status: "local_only" },
+    });
+    storage.attempts.set(guest.id, guest);
+    const writeResponse = jsonResponse({
+      accountId: "account-a",
+      attempt: guest,
+      ok: true,
+      restored: false,
+      revision: 1,
+    });
+    vi.mocked(writeResponse.json).mockImplementation(async () => {
+      authState.userId = "auth-user-b";
+      return {
+        accountId: "account-a",
+        attempt: guest,
+        authUserId: "auth-user-a",
+        ok: true,
+        restored: false,
+        revision: 1,
+      };
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          jsonResponse({ accountId: "account-a", attempts: [], ok: true }),
+        )
+        .mockResolvedValueOnce(writeResponse),
+    );
+
+    const result = await synchronizeAccountAssessmentAttempts();
+    const stored = storage.attempts.get(guest.id);
+
+    expect(result.status).toBe("error");
+    expect(storage.scope).toBeNull();
+    expect(stored?.accountSync?.status).not.toBe("synced");
+    expect(stored?.accountSync?.revision).toBeUndefined();
+    expect(storage.deleted.has(guest.id)).toBe(false);
+  });
+
+  it("does not upload an offline attempt created by account A after account B signs in", async () => {
+    const accountAOfflineAttempt = createAttempt("offline-owned-by-a", {
+      accountSync: {
+        ownerSupabaseUserId: "auth-user-a",
+        status: "local_only",
+      },
+    });
+    storage.attempts.set(accountAOfflineAttempt.id, accountAOfflineAttempt);
+    authState.userId = "auth-user-b";
+    const fetchMock = vi.fn(async () =>
+      jsonResponse(
+        { accountId: "account-b", attempts: [], ok: true },
+        200,
+        "auth-user-b",
+      ),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await synchronizeAccountAssessmentAttempts();
+
+    expect(result).toMatchObject({ accountId: "account-b", status: "synced" });
+    expect(fetchMock).toHaveBeenCalledOnce();
+    expect(storage.attempts.has(accountAOfflineAttempt.id)).toBe(false);
+  });
+
+  it("tombstones a local attempt when the server rejects a late retry as deleted", async () => {
+    const guest = createAttempt("core-retried-after-server-delete", {
+      accountSync: { status: "local_only" },
+    });
+    storage.attempts.set(guest.id, guest);
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          jsonResponse({ accountId: "account-a", attempts: [], ok: true }),
+        )
+        .mockResolvedValueOnce(
+          jsonResponse(
+            { error: "assessment_progress_deleted", ok: false },
+            410,
+          ),
+        ),
+    );
+
+    const result = await synchronizeAccountAssessmentAttempts();
+
+    expect(result.status).toBe("synced");
+    expect(storage.deleted.has(guest.id)).toBe(true);
+    expect(storage.attempts.has(guest.id)).toBe(false);
   });
 
   it("counts a cross-device hydration once and not again for the same synced revision", async () => {
@@ -401,7 +623,20 @@ describe("assessment account synchronization", () => {
     await vi.waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
   });
 
-  it("keeps guest work unclaimed when its first account upload fails", async () => {
+  it("does not re-create a tombstoned attempt when a delayed queue arrives", async () => {
+    const deleted = createAttempt("local-deleted-before-queue");
+    const fetchMock = vi.fn();
+    storage.deleted.add(deleted.id);
+    vi.stubGlobal("fetch", fetchMock);
+
+    const result = await queueAccountAssessmentAttemptSync(deleted);
+
+    expect(result).toBe(deleted);
+    expect(storage.attempts.has(deleted.id)).toBe(false);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("quarantines an ambiguous first upload to the account that attempted it", async () => {
     const guest = createAttempt("local-unsaved-guest", {
       accountSync: { status: "local_only" },
     });
@@ -423,14 +658,12 @@ describe("assessment account synchronization", () => {
     await synchronizeAccountAssessmentAttempts();
 
     expect(storage.attempts.get(guest.id)?.accountSync).toMatchObject({
+      accountId: "account-a",
       status: "failed",
     });
-    expect(
-      storage.attempts.get(guest.id)?.accountSync?.accountId,
-    ).toBeUndefined();
 
     await clearAccountOwnedLocalAttempts();
-    expect(storage.attempts.has(guest.id)).toBe(true);
+    expect(storage.attempts.has(guest.id)).toBe(false);
   });
 
   it("preserves a rejected guest attempt without retrying the same invalid payload", async () => {
@@ -477,7 +710,10 @@ describe("assessment account synchronization", () => {
     const pendingRead = new Promise<Response>((resolve) => {
       resolveRead = resolve;
     });
-    vi.stubGlobal("fetch", vi.fn(() => pendingRead));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(() => pendingRead),
+    );
 
     const synchronization = synchronizeAccountAssessmentAttempts();
     await clearAccountOwnedLocalAttempts();
@@ -493,6 +729,149 @@ describe("assessment account synchronization", () => {
 
     expect(storage.attempts.has(remote.id)).toBe(false);
     expect(storage.scope).toBeNull();
+  });
+
+  it("does not restore or re-upload a provisional attempt after logout during its write", async () => {
+    const guest = createAttempt("guest-write-before-logout", {
+      accountSync: { status: "local_only" },
+    });
+    storage.attempts.set(guest.id, guest);
+    let resolveWrite!: (response: Response) => void;
+    const pendingWrite = new Promise<Response>((resolve) => {
+      resolveWrite = resolve;
+    });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        jsonResponse({ accountId: "account-a", attempts: [], ok: true }),
+      )
+      .mockImplementationOnce(() => pendingWrite)
+      .mockResolvedValueOnce(
+        jsonResponse({ accountId: "account-b", attempts: [], ok: true }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const synchronization = synchronizeAccountAssessmentAttempts();
+    await vi.waitFor(() => {
+      expect(storage.attempts.get(guest.id)?.accountSync).toMatchObject({
+        accountId: "account-a",
+        status: "syncing",
+      });
+    });
+    await clearAccountOwnedLocalAttempts();
+    resolveWrite(
+      jsonResponse({
+        accountId: "account-a",
+        attempt: guest,
+        ok: true,
+        restored: false,
+        revision: 1,
+      }),
+    );
+    await synchronization;
+
+    expect(storage.attempts.has(guest.id)).toBe(false);
+    await synchronizeAccountAssessmentAttempts();
+    expect(
+      fetchMock.mock.calls.filter(([, init]) => init?.method === "PUT"),
+    ).toHaveLength(1);
+    expect(storage.attempts.has(guest.id)).toBe(false);
+  });
+
+  it("keeps a deleted attempt tombstoned across a late write and later hydration", async () => {
+    const guest = createAttempt("guest-deleted-during-write", {
+      accountSync: { status: "local_only" },
+    });
+    storage.attempts.set(guest.id, guest);
+    let resolveWrite!: (response: Response) => void;
+    const pendingWrite = new Promise<Response>((resolve) => {
+      resolveWrite = resolve;
+    });
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        jsonResponse({ accountId: "account-a", attempts: [], ok: true }),
+      )
+      .mockImplementationOnce(() => pendingWrite)
+      .mockResolvedValueOnce(
+        jsonResponse({
+          accountId: "account-a",
+          attempts: [{ attempt: guest, revision: 1 }],
+          ok: true,
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+
+    const synchronization = synchronizeAccountAssessmentAttempts();
+    await vi.waitFor(() => {
+      expect(storage.attempts.get(guest.id)?.accountSync?.status).toBe(
+        "syncing",
+      );
+    });
+    storage.deleted.add(guest.id);
+    storage.attempts.delete(guest.id);
+    resolveWrite(
+      jsonResponse({
+        accountId: "account-a",
+        attempt: guest,
+        ok: true,
+        restored: false,
+        revision: 1,
+      }),
+    );
+    await synchronization;
+
+    expect(storage.attempts.has(guest.id)).toBe(false);
+    resetAssessmentAccountSyncSession();
+    await synchronizeAccountAssessmentAttempts();
+    expect(storage.attempts.has(guest.id)).toBe(false);
+  });
+
+  it("does not let a stale failure downgrade a newer sync request", async () => {
+    const guest = createAttempt("guest-newer-sync-wins", {
+      accountSync: { status: "local_only" },
+    });
+    storage.attempts.set(guest.id, guest);
+    let resolveWrite!: (response: Response) => void;
+    const pendingWrite = new Promise<Response>((resolve) => {
+      resolveWrite = resolve;
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          jsonResponse({ accountId: "account-a", attempts: [], ok: true }),
+        )
+        .mockImplementationOnce(() => pendingWrite)
+        .mockResolvedValueOnce(
+          jsonResponse({ accountId: "account-a", attempts: [], ok: true }),
+        ),
+    );
+
+    const synchronization = synchronizeAccountAssessmentAttempts();
+    await vi.waitFor(() => {
+      expect(
+        storage.attempts.get(guest.id)?.accountSync?.syncRequestId,
+      ).toEqual(expect.any(String));
+    });
+    storage.attempts.set(guest.id, {
+      ...guest,
+      accountSync: {
+        accountId: "account-a",
+        revision: 2,
+        status: "synced",
+        syncRequestId: "newer-request",
+      },
+    });
+    resolveWrite(jsonResponse({}, 500));
+    await synchronization;
+
+    expect(storage.attempts.get(guest.id)?.accountSync).toMatchObject({
+      revision: 2,
+      status: "synced",
+      syncRequestId: "newer-request",
+    });
   });
 
   it("clears account caches without deleting unclaimed guest work", async () => {
@@ -520,6 +899,23 @@ describe("assessment account synchronization", () => {
     expect([...storage.attempts.keys()].sort()).toEqual([guest.id, ownedB.id]);
     expect(storage.scope).toBeNull();
   });
+
+  it("clears provisional authenticated-origin work while preserving a true guest", async () => {
+    const guest = createAttempt("local-true-guest");
+    const provisionalOwned = createAttempt("local-provisional-owned", {
+      accountSync: {
+        ownerSupabaseUserId: "auth-user-a",
+        status: "local_only",
+      },
+    });
+    storage.attempts.set(guest.id, guest);
+    storage.attempts.set(provisionalOwned.id, provisionalOwned);
+
+    await clearAccountOwnedLocalAttempts();
+
+    expect([...storage.attempts.keys()]).toEqual([guest.id]);
+    expect(storage.scope).toBeNull();
+  });
 });
 
 function createAttempt(
@@ -542,9 +938,23 @@ function createAttempt(
   };
 }
 
-function jsonResponse(body: unknown, status = 200) {
+function jsonResponse(body: unknown, status = 200, authUserId = "auth-user-a") {
+  const payload =
+    body && typeof body === "object"
+      ? {
+          ...body,
+          ...(status !== 401 && status !== 422 ? { authUserId } : {}),
+          ...(Array.isArray((body as { attempts?: unknown }).attempts)
+            ? {
+                deletedLocalResultIds:
+                  (body as { deletedLocalResultIds?: string[] })
+                    .deletedLocalResultIds ?? [],
+              }
+            : {}),
+        }
+      : body;
   return {
-    json: vi.fn(async () => body),
+    json: vi.fn(async () => payload),
     ok: status >= 200 && status < 300,
     status,
   } as unknown as Response;

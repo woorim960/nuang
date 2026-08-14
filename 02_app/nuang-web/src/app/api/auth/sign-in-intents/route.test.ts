@@ -44,6 +44,23 @@ describe("POST /api/auth/sign-in-intents", () => {
     },
   );
 
+  it("rejects Apple until the server-side provider rollout is complete", async () => {
+    const response = await POST(
+      new Request("https://nuang.app/api/auth/sign-in-intents", {
+        body: JSON.stringify({ provider: "apple", returnPath: "/my" }),
+        headers: {
+          "content-type": "application/json",
+          origin: "https://nuang.app",
+          "sec-fetch-site": "same-origin",
+        },
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(422);
+    expect(response.headers.get("set-cookie")).toBeNull();
+  });
+
   it.each([
     "http://127.0.0.1:3000",
     "http://localhost:3001",

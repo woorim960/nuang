@@ -4,13 +4,17 @@ import { ArrowLeft, ArrowRight, RotateCw } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
-import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { readClientAccountResults } from "@/features/account/client-account-results";
 import {
   deleteLocalAttempt,
   listLocalAttempts,
 } from "@/features/assessment/assessment-storage";
 import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
+import {
+  readCurrentSupabaseUserId,
+  verifyStableResultAuthScope,
+} from "@/features/result-persistence/client-result-scope";
 import { CoreResultReportTemplate } from "./CoreResultReportTemplate";
 import type {
   CoreResultReportModel,
@@ -47,7 +51,7 @@ export function MyLatestCoreReportView() {
       listLocalAttempts()
         .then((attempts) => ({ attempts, state: "ready" as const }))
         .catch(() => ({ attempts: [], state: "error" as const })),
-      readAccountResults(),
+      readClientAccountResults(),
     ]);
     const collection = collectValidatedCoreResultCandidates({
       accountReadState: accountRead.state,
@@ -361,44 +365,31 @@ function LatestReadIncompleteState({
   );
 }
 
-async function readAccountResults(): Promise<{
-  results: AccountResultSummary[];
-  state: "error" | "not_requested" | "ready";
-}> {
-  try {
-    const response = await fetch("/api/account-results", {
-      cache: "no-store",
-      method: "GET",
-    });
-    const body = (await response.json()) as {
-      ok?: boolean;
-      results?: AccountResultSummary[];
-    };
-    if (response.status === 401) {
-      return { results: [], state: "not_requested" };
-    }
-    if (!response.ok || !body.ok || !Array.isArray(body.results)) {
-      return { results: [], state: "error" };
-    }
-    return { results: body.results, state: "ready" };
-  } catch {
-    return { results: [], state: "error" };
-  }
-}
-
 async function deleteAccountCopy(model: CoreResultReportModel) {
   if (!model.identity.accountResultReportId) return null;
+  const requestUserId = await readCurrentSupabaseUserId();
+  if (!requestUserId) throw new Error("account_result_delete_auth_missing");
   const response = await fetch("/api/account-results", {
     body: JSON.stringify({
       resultReportId: model.identity.accountResultReportId,
     }),
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+      "x-nuang-auth-user-id": requestUserId,
+    },
     method: "DELETE",
   });
   const body = (await response.json()) as {
+    authUserId?: string;
     ok?: boolean;
     result?: { localResultId?: string | null };
   };
-  if (!response.ok || !body.ok) throw new Error("account_result_delete_failed");
+  const stableUserId = await verifyStableResultAuthScope({
+    requestUserId,
+    responseUserId: body.authUserId,
+  });
+  if (!response.ok || !body.ok || !stableUserId) {
+    throw new Error("account_result_delete_failed");
+  }
   return body.result?.localResultId ?? null;
 }

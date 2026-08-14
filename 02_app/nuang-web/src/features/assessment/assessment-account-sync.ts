@@ -2,13 +2,17 @@
 
 import {
   cacheLocalAssessmentAttempt,
+  compareAndSwapStoredLocalAttempt,
+  deleteLocalAttempt,
   getStoredLocalAttempt,
+  isLocalAssessmentAttemptDeleted,
   listLocalAttempts,
   listStoredLocalAttempts,
   removeStoredLocalAttempt,
   setLocalAssessmentAccountScope,
 } from "@/features/assessment/assessment-storage";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
+import { readCurrentSupabaseUserId } from "@/features/result-persistence/client-result-scope";
 import {
   localCompletedRetentionDays,
   localInProgressRetentionDays,
@@ -22,12 +26,15 @@ type RemoteAttemptEntry = {
 type AssessmentProgressCollection = {
   accountId: string;
   attempts: RemoteAttemptEntry[];
+  authUserId: string;
+  deletedLocalResultIds: string[];
   ok: true;
 };
 
 type AssessmentProgressWrite = {
   accountId: string;
   attempt: LocalAssessmentAttempt;
+  authUserId: string;
   ok: true;
   restored: boolean;
   revision: number;
@@ -87,15 +94,19 @@ export function synchronizeAccountAssessmentAttempts() {
 export async function queueAccountAssessmentAttemptSync(
   attempt: LocalAssessmentAttempt,
 ) {
+  const boundaryRevision = accountBoundaryRevision;
+  const accountSync = withoutSyncRequestId(attempt.accountSync);
   const queued: LocalAssessmentAttempt = {
     ...attempt,
     accountSync: {
-      ...attempt.accountSync,
+      ...accountSync,
       status: "queued",
     },
   };
 
-  await cacheLocalAssessmentAttempt(queued);
+  if (!(await cacheAttemptDuringActiveBoundary(queued, boundaryRevision))) {
+    return attempt;
+  }
 
   if (authenticationState !== "unauthenticated") {
     if (synchronizeInFlight) anotherPassRequested = true;
@@ -116,8 +127,11 @@ export async function clearAccountOwnedLocalAttempts(accountId?: string) {
   await Promise.all(
     attempts
       .filter((attempt) => {
-        const owner = attempt.accountSync?.accountId;
-        return Boolean(owner) && (!accountId || owner === accountId);
+        const ownerAccountId = attempt.accountSync?.accountId;
+        const provisionalOwner = attempt.accountSync?.ownerSupabaseUserId;
+        return accountId
+          ? ownerAccountId === accountId
+          : Boolean(ownerAccountId || provisionalOwner);
       })
       .map((attempt) => removeStoredLocalAttempt(attempt.id)),
   );
@@ -171,32 +185,55 @@ async function synchronizeOnce(): Promise<AccountAssessmentSyncResult> {
     };
   }
 
+  const authUserId = remoteRead.data.authUserId;
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return createSynchronizationErrorResult();
+  }
+
   authenticationState = "authenticated";
   const { accountId } = remoteRead.data;
-  setLocalAssessmentAccountScope(accountId);
-  await removeCachesOwnedByAnotherAccount(accountId, boundaryRevision);
-  if (boundaryRevision !== accountBoundaryRevision) {
-    return {
-      attempts: await safelyListLocalAttempts(),
-      status: "error",
-    };
+  setLocalAssessmentAccountScope(accountId, authUserId);
+  if (
+    !(await removeCachesOwnedByAnotherAccount(
+      accountId,
+      authUserId,
+      boundaryRevision,
+    ))
+  ) {
+    return createSynchronizationErrorResult();
   }
-  let restoredCount = await hydrateRemoteEntries(
+  if (
+    !(await reconcileDeletedCoreAttempts(
+      remoteRead.data.deletedLocalResultIds,
+      authUserId,
+      boundaryRevision,
+    ))
+  ) {
+    return createSynchronizationErrorResult();
+  }
+  const initialHydration = await hydrateRemoteEntries(
     remoteRead.data.attempts,
     accountId,
+    authUserId,
     boundaryRevision,
   );
-
-  if (boundaryRevision !== accountBoundaryRevision) {
-    return {
-      attempts: await safelyListLocalAttempts(),
-      status: "error",
-    };
+  if (initialHydration.status === "cancelled") {
+    return createSynchronizationErrorResult();
   }
+  let restoredCount = initialHydration.restoredCount;
 
-  const uploadCandidates = (await listStoredLocalAttempts()).filter(
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return createSynchronizationErrorResult();
+  }
+  const storedAttempts = await listStoredLocalAttempts();
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return createSynchronizationErrorResult();
+  }
+  const uploadCandidates = storedAttempts.filter(
     (attempt) =>
       isValidUploadCandidate(attempt) &&
+      (!attempt.accountSync?.ownerSupabaseUserId ||
+        attempt.accountSync.ownerSupabaseUserId === authUserId) &&
       (!attempt.accountSync?.accountId ||
         attempt.accountSync.accountId === accountId) &&
       attempt.accountSync?.status !== "synced" &&
@@ -204,7 +241,18 @@ async function synchronizeOnce(): Promise<AccountAssessmentSyncResult> {
   );
   let uploadedCount = 0;
   for (const attempt of uploadCandidates) {
-    const outcome = await uploadAttempt(attempt, accountId, boundaryRevision);
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return createSynchronizationErrorResult();
+    }
+    const outcome = await uploadAttempt(
+      attempt,
+      accountId,
+      authUserId,
+      boundaryRevision,
+    );
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return createSynchronizationErrorResult();
+    }
     if (outcome === "cancelled") {
       return {
         attempts: await safelyListLocalAttempts(),
@@ -226,19 +274,48 @@ async function synchronizeOnce(): Promise<AccountAssessmentSyncResult> {
     }
   }
 
+  if (uploadCandidates.length === 0) {
+    const syncedResult = await createSyncedResult({
+      accountId,
+      authUserId,
+      boundaryRevision,
+      restoredCount,
+      uploadedCount,
+    });
+    return syncedResult ?? createSynchronizationErrorResult();
+  }
+
   const refreshedRead = await requestRemoteAttempts();
-  if (boundaryRevision !== accountBoundaryRevision) {
-    return {
-      attempts: await safelyListLocalAttempts(),
-      status: "error",
-    };
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return createSynchronizationErrorResult();
   }
   if (refreshedRead.status === "ready") {
-    restoredCount += await hydrateRemoteEntries(
+    if (
+      refreshedRead.data.authUserId !== authUserId ||
+      refreshedRead.data.accountId !== accountId
+    ) {
+      invalidateAuthenticationBoundary();
+      return createSynchronizationErrorResult();
+    }
+    if (
+      !(await reconcileDeletedCoreAttempts(
+        refreshedRead.data.deletedLocalResultIds,
+        authUserId,
+        boundaryRevision,
+      ))
+    ) {
+      return createSynchronizationErrorResult();
+    }
+    const refreshedHydration = await hydrateRemoteEntries(
       refreshedRead.data.attempts,
       accountId,
+      authUserId,
       boundaryRevision,
     );
+    if (refreshedHydration.status === "cancelled") {
+      return createSynchronizationErrorResult();
+    }
+    restoredCount += refreshedHydration.restoredCount;
   } else if (refreshedRead.status === "unauthenticated") {
     authenticationState = "unauthenticated";
     setLocalAssessmentAccountScope(null);
@@ -248,13 +325,14 @@ async function synchronizeOnce(): Promise<AccountAssessmentSyncResult> {
     };
   }
 
-  return {
+  const syncedResult = await createSyncedResult({
     accountId,
-    attempts: await listLocalAttempts(),
+    authUserId,
+    boundaryRevision,
     restoredCount,
-    status: "synced",
     uploadedCount,
-  };
+  });
+  return syncedResult ?? createSynchronizationErrorResult();
 }
 
 async function requestRemoteAttempts(): Promise<
@@ -262,8 +340,12 @@ async function requestRemoteAttempts(): Promise<
   | { status: "error" | "unauthenticated" }
 > {
   try {
+    const requestAuthUserId = await readCurrentSupabaseUserId();
     const response = await fetch("/api/assessment-progress", {
       cache: "no-store",
+      headers: requestAuthUserId
+        ? { "x-nuang-auth-user-id": requestAuthUserId }
+        : undefined,
       method: "GET",
     });
 
@@ -272,6 +354,15 @@ async function requestRemoteAttempts(): Promise<
 
     const body = await readJson<unknown>(response);
     if (!isAssessmentProgressCollection(body)) return { status: "error" };
+    const currentAuthUserId = await readCurrentSupabaseUserId();
+    if (
+      !requestAuthUserId ||
+      body.authUserId !== requestAuthUserId ||
+      currentAuthUserId !== requestAuthUserId
+    ) {
+      invalidateAuthenticationBoundary();
+      return { status: "error" };
+    }
     return { data: body, status: "ready" };
   } catch {
     return { status: "error" };
@@ -281,37 +372,63 @@ async function requestRemoteAttempts(): Promise<
 async function uploadAttempt(
   attempt: LocalAssessmentAttempt,
   accountId: string,
+  authUserId: string,
   boundaryRevision: number,
 ): Promise<
-  "cancelled" | "error" | "restored" | "unauthenticated" | "uploaded"
+  | "cancelled"
+  | "deleted"
+  | "error"
+  | "restored"
+  | "unauthenticated"
+  | "uploaded"
 > {
   const attemptedAt = new Date().toISOString();
   const existingOwner = attempt.accountSync?.accountId;
+  const syncRequestId = crypto.randomUUID();
   const syncing: LocalAssessmentAttempt = {
     ...attempt,
     accountSync: {
-      ...attempt.accountSync,
-      ...(existingOwner ? { accountId: existingOwner } : {}),
+      ...withoutSyncRequestId(attempt.accountSync),
+      accountId,
       lastAttemptedAt: attemptedAt,
       status: "syncing",
+      syncRequestId,
     },
   };
-  if (!(await cacheAttemptDuringActiveBoundary(syncing, boundaryRevision))) {
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return "cancelled";
+  }
+  if (
+    !(await cacheAttemptDuringActiveBoundary(
+      syncing,
+      boundaryRevision,
+      attempt,
+      authUserId,
+    ))
+  ) {
     return "cancelled";
   }
 
   try {
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return "cancelled";
+    }
     const expectedRevision = attempt.accountSync?.revision;
     const response = await fetch("/api/assessment-progress", {
       body: JSON.stringify({
         attempt: stripClientSyncMetadata(attempt),
         ...(expectedRevision === undefined ? {} : { expectedRevision }),
       }),
-      headers: { "content-type": "application/json" },
+      headers: {
+        "content-type": "application/json",
+        "x-nuang-auth-user-id": authUserId,
+      },
       method: "PUT",
     });
 
-    if (boundaryRevision !== accountBoundaryRevision) return "cancelled";
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return "cancelled";
+    }
 
     if (response.status === 401) {
       await markSyncFailure(
@@ -319,30 +436,68 @@ async function uploadAttempt(
         existingOwner,
         attemptedAt,
         boundaryRevision,
+        syncRequestId,
+        { authUserId, releaseProvisionalOwner: true },
       );
       return "unauthenticated";
     }
 
     const body = await readJson<unknown>(response);
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return "cancelled";
+    }
+    if (
+      (response.ok || response.status === 409 || response.status === 410) &&
+      readResponseAuthUserId(body) !== authUserId
+    ) {
+      invalidateAuthenticationBoundary();
+      return "cancelled";
+    }
+    if (response.status === 410 && isAssessmentProgressDeleted(body)) {
+      if (
+        !(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))
+      ) {
+        return "cancelled";
+      }
+      await deleteLocalAttempt(attempt.id);
+      if (
+        !(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))
+      ) {
+        return "cancelled";
+      }
+      return "deleted";
+    }
     if (response.status === 422) {
       await markSyncRejected(
         attempt,
         existingOwner,
         attemptedAt,
         boundaryRevision,
+        syncRequestId,
+        authUserId,
       );
       return "error";
     }
 
     if (response.status === 409 && isAssessmentProgressConflict(body)) {
+      if (
+        !(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))
+      ) {
+        return "cancelled";
+      }
       const current = await getStoredLocalAttempt(attempt.id);
+      if (
+        !(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))
+      ) {
+        return "cancelled";
+      }
 
-      if (current) {
-        await cacheAttemptDuringActiveBoundary(
+      if (isCurrentSyncRequest(current, syncRequestId)) {
+        const cached = await cacheAttemptDuringActiveBoundary(
           {
             ...current,
             accountSync: {
-              ...current.accountSync,
+              ...withoutSyncRequestId(current.accountSync),
               accountId,
               lastAttemptedAt: attemptedAt,
               revision: body.currentRevision,
@@ -350,7 +505,10 @@ async function uploadAttempt(
             },
           },
           boundaryRevision,
+          current,
+          authUserId,
         );
+        if (!cached) return "cancelled";
         anotherPassRequested = true;
       } else {
         await markSyncFailure(
@@ -358,6 +516,8 @@ async function uploadAttempt(
           existingOwner,
           attemptedAt,
           boundaryRevision,
+          syncRequestId,
+          { authUserId },
         );
       }
 
@@ -370,6 +530,8 @@ async function uploadAttempt(
         existingOwner,
         attemptedAt,
         boundaryRevision,
+        syncRequestId,
+        { authUserId },
       );
       return "error";
     }
@@ -377,17 +539,31 @@ async function uploadAttempt(
     const remote = refreshRemoteCacheAttempt(
       body.attempt,
       body.accountId,
+      authUserId,
       body.revision,
       body.restored,
     );
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return "cancelled";
+    }
     const current = await getStoredLocalAttempt(attempt.id);
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return "cancelled";
+    }
+
+    if (
+      !isCurrentSyncRequest(current, syncRequestId) ||
+      isLocalAssessmentAttemptDeleted(attempt.id)
+    ) {
+      return "cancelled";
+    }
 
     if (current && current.updatedAt !== attempt.updatedAt) {
-      await cacheAttemptDuringActiveBoundary(
+      const cached = await cacheAttemptDuringActiveBoundary(
         {
           ...current,
           accountSync: {
-            ...current.accountSync,
+            ...withoutSyncRequestId(current.accountSync),
             accountId: body.accountId,
             lastAttemptedAt: attemptedAt,
             revision: body.revision,
@@ -395,10 +571,19 @@ async function uploadAttempt(
           },
         },
         boundaryRevision,
+        current,
+        authUserId,
       );
+      if (!cached) return "cancelled";
       anotherPassRequested = true;
     } else {
-      await cacheAttemptDuringActiveBoundary(remote, boundaryRevision);
+      const cached = await cacheAttemptDuringActiveBoundary(
+        remote,
+        boundaryRevision,
+        current,
+        authUserId,
+      );
+      if (!cached) return "cancelled";
     }
 
     return body.restored ? "restored" : "uploaded";
@@ -408,6 +593,8 @@ async function uploadAttempt(
       existingOwner,
       attemptedAt,
       boundaryRevision,
+      syncRequestId,
+      { authUserId },
     );
     return "error";
   }
@@ -418,25 +605,37 @@ async function markSyncRejected(
   existingOwner: string | undefined,
   attemptedAt: string,
   boundaryRevision: number,
+  syncRequestId: string,
+  authUserId: string,
 ) {
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return;
+  }
   const current = await getStoredLocalAttempt(attempted.id);
-  if (!current) return;
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return;
+  }
+  if (!isCurrentSyncRequest(current, syncRequestId)) return;
 
   const changedSinceRequest = current.updatedAt !== attempted.updatedAt;
-  await cacheAttemptDuringActiveBoundary(
+  const accountSync = withoutSyncRequestId(current.accountSync);
+  if (!existingOwner) delete accountSync.accountId;
+  const cached = await cacheAttemptDuringActiveBoundary(
     {
       ...current,
       accountSync: {
-        ...current.accountSync,
+        ...accountSync,
         ...(existingOwner ? { accountId: existingOwner } : {}),
         lastAttemptedAt: attemptedAt,
         status: changedSinceRequest ? "queued" : "rejected",
       },
     },
     boundaryRevision,
+    current,
+    authUserId,
   );
 
-  if (changedSinceRequest) anotherPassRequested = true;
+  if (cached && changedSinceRequest) anotherPassRequested = true;
 }
 
 async function markSyncFailure(
@@ -444,38 +643,78 @@ async function markSyncFailure(
   existingOwner: string | undefined,
   attemptedAt: string,
   boundaryRevision: number,
+  syncRequestId: string,
+  options: {
+    authUserId?: string;
+    releaseProvisionalOwner?: boolean;
+  } = {},
 ) {
+  if (
+    options.authUserId &&
+    !(await isAuthenticationBoundaryActive(
+      options.authUserId,
+      boundaryRevision,
+    ))
+  ) {
+    return;
+  }
   const current = await getStoredLocalAttempt(attemptId);
-  if (!current) return;
+  if (
+    options.authUserId &&
+    !(await isAuthenticationBoundaryActive(
+      options.authUserId,
+      boundaryRevision,
+    ))
+  ) {
+    return;
+  }
+  if (!isCurrentSyncRequest(current, syncRequestId)) return;
 
+  const accountSync = withoutSyncRequestId(current.accountSync);
+  if (options.releaseProvisionalOwner && !existingOwner) {
+    delete accountSync.accountId;
+  }
   await cacheAttemptDuringActiveBoundary(
     {
       ...current,
       accountSync: {
-        ...current.accountSync,
+        ...accountSync,
         ...(existingOwner ? { accountId: existingOwner } : {}),
         lastAttemptedAt: attemptedAt,
         status: "failed",
       },
     },
     boundaryRevision,
+    current,
+    options.authUserId,
   );
 }
 
 async function hydrateRemoteEntries(
   entries: RemoteAttemptEntry[],
   accountId: string,
+  authUserId: string,
   boundaryRevision: number,
-) {
+): Promise<
+  | { restoredCount: number; status: "completed" }
+  | { restoredCount: number; status: "cancelled" }
+> {
   let restoredCount = 0;
 
   for (const entry of entries) {
-    if (boundaryRevision !== accountBoundaryRevision) break;
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return { restoredCount, status: "cancelled" };
+    }
     if (!isCoreAttempt(entry.attempt)) continue;
+    if (isLocalAssessmentAttemptDeleted(entry.attempt.id)) continue;
     const local = await getStoredLocalAttempt(entry.attempt.id);
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return { restoredCount, status: "cancelled" };
+    }
     const remote = refreshRemoteCacheAttempt(
       entry.attempt,
       accountId,
+      authUserId,
       entry.revision,
       !local,
       local?.accountSync?.restoredAt,
@@ -494,11 +733,20 @@ async function hydrateRemoteEntries(
       local.accountSync.revision === entry.revision &&
       local.accountSync.status === "synced";
 
-    if (merged === remote && !wasAlreadyHydrated) restoredCount += 1;
-    await cacheAttemptDuringActiveBoundary(merged, boundaryRevision);
+    const cached = await cacheAttemptDuringActiveBoundary(
+      merged,
+      boundaryRevision,
+      local,
+      authUserId,
+    );
+    if (!cached) return { restoredCount, status: "cancelled" };
+    if (cached && merged === remote && !wasAlreadyHydrated) restoredCount += 1;
   }
 
-  return restoredCount;
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return { restoredCount, status: "cancelled" };
+  }
+  return { restoredCount, status: "completed" };
 }
 
 async function safelyListLocalAttempts() {
@@ -512,6 +760,7 @@ async function safelyListLocalAttempts() {
 function refreshRemoteCacheAttempt(
   attempt: LocalAssessmentAttempt,
   accountId: string,
+  authUserId: string,
   revision: number,
   restored: boolean,
   existingRestoredAt?: string,
@@ -527,6 +776,7 @@ function refreshRemoteCacheAttempt(
     ...attempt,
     accountSync: {
       accountId,
+      ownerSupabaseUserId: authUserId,
       lastSyncedAt: syncedAt,
       ...(existingRestoredAt
         ? { restoredAt: existingRestoredAt }
@@ -607,36 +857,172 @@ function preserveLocalWithRemoteRevision(
 
 async function removeCachesOwnedByAnotherAccount(
   accountId: string,
+  authUserId: string,
   boundaryRevision: number,
 ) {
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return false;
+  }
   const localAttempts = await listStoredLocalAttempts();
-  if (boundaryRevision !== accountBoundaryRevision) return;
-  await Promise.all(
-    localAttempts
-      .filter(
-        (attempt) =>
-          attempt.accountSync?.accountId &&
-          attempt.accountSync.accountId !== accountId,
-      )
-      .map((attempt) => removeStoredLocalAttempt(attempt.id)),
-  );
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return false;
+  }
+  const staleAttempts = localAttempts.filter((attempt) => {
+    const ownerAccountId = attempt.accountSync?.accountId;
+    const provisionalOwner = attempt.accountSync?.ownerSupabaseUserId;
+    return (
+      (Boolean(ownerAccountId) && ownerAccountId !== accountId) ||
+      (Boolean(provisionalOwner) && provisionalOwner !== authUserId)
+    );
+  });
+  for (const attempt of staleAttempts) {
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return false;
+    }
+    await removeStoredLocalAttempt(attempt.id);
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return false;
+    }
+  }
+  return isAuthenticationBoundaryActive(authUserId, boundaryRevision);
+}
+
+async function reconcileDeletedCoreAttempts(
+  localResultIds: string[],
+  authUserId: string,
+  boundaryRevision: number,
+) {
+  for (const localResultId of localResultIds) {
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return false;
+    }
+    await deleteLocalAttempt(localResultId);
+    if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+      return false;
+    }
+  }
+  return isAuthenticationBoundaryActive(authUserId, boundaryRevision);
+}
+
+function invalidateAuthenticationBoundary() {
+  accountBoundaryRevision += 1;
+  anotherPassRequested = false;
+  authenticationState = "unknown";
+  setLocalAssessmentAccountScope(null);
+}
+
+async function isAuthenticationBoundaryActive(
+  authUserId: string,
+  boundaryRevision: number,
+) {
+  if (boundaryRevision !== accountBoundaryRevision) return false;
+
+  try {
+    const currentAuthUserId = await readCurrentSupabaseUserId();
+    if (boundaryRevision !== accountBoundaryRevision) return false;
+    if (currentAuthUserId === authUserId) return true;
+  } catch {
+    if (boundaryRevision !== accountBoundaryRevision) return false;
+  }
+
+  invalidateAuthenticationBoundary();
+  return false;
+}
+
+async function createSynchronizationErrorResult(): Promise<{
+  attempts: LocalAssessmentAttempt[];
+  status: "error";
+}> {
+  return {
+    attempts: await safelyListLocalAttempts(),
+    status: "error",
+  };
+}
+
+async function createSyncedResult({
+  accountId,
+  authUserId,
+  boundaryRevision,
+  restoredCount,
+  uploadedCount,
+}: {
+  accountId: string;
+  authUserId: string;
+  boundaryRevision: number;
+  restoredCount: number;
+  uploadedCount: number;
+}): Promise<Extract<AccountAssessmentSyncResult, { status: "synced" }> | null> {
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return null;
+  }
+  const attempts = await listLocalAttempts();
+  if (!(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))) {
+    return null;
+  }
+  return {
+    accountId,
+    attempts,
+    restoredCount,
+    status: "synced",
+    uploadedCount,
+  };
 }
 
 async function cacheAttemptDuringActiveBoundary(
   attempt: LocalAssessmentAttempt,
   boundaryRevision: number,
+  expected?: LocalAssessmentAttempt,
+  authUserId?: string,
 ) {
-  if (boundaryRevision !== accountBoundaryRevision) return false;
-  await cacheLocalAssessmentAttempt(attempt);
-  if (boundaryRevision === accountBoundaryRevision) return true;
+  if (
+    boundaryRevision !== accountBoundaryRevision ||
+    isLocalAssessmentAttemptDeleted(attempt.id)
+  ) {
+    return false;
+  }
+  if (
+    authUserId &&
+    !(await isAuthenticationBoundaryActive(authUserId, boundaryRevision))
+  ) {
+    return false;
+  }
+  const cached = expected
+    ? await compareAndSwapStoredLocalAttempt({
+        attempt,
+        expected: {
+          syncRequestId: expected.accountSync?.syncRequestId ?? null,
+          updatedAt: expected.updatedAt,
+        },
+      })
+    : await cacheAttemptWithoutTombstone(attempt);
+  if (!cached) return false;
+  const authBoundaryActive = authUserId
+    ? await isAuthenticationBoundaryActive(authUserId, boundaryRevision)
+    : true;
+  if (
+    authBoundaryActive &&
+    boundaryRevision === accountBoundaryRevision &&
+    !isLocalAssessmentAttemptDeleted(attempt.id)
+  ) {
+    return true;
+  }
 
   const ownerAccountId = attempt.accountSync?.accountId;
-  if (ownerAccountId) {
-    const stored = await getStoredLocalAttempt(attempt.id);
-    if (stored?.accountSync?.accountId === ownerAccountId) {
-      await removeStoredLocalAttempt(attempt.id);
-    }
+  const stored = await getStoredLocalAttempt(attempt.id);
+  if (
+    isLocalAssessmentAttemptDeleted(attempt.id) ||
+    (ownerAccountId && stored?.accountSync?.accountId === ownerAccountId)
+  ) {
+    await removeStoredLocalAttempt(attempt.id);
   }
+  return false;
+}
+
+async function cacheAttemptWithoutTombstone(attempt: LocalAssessmentAttempt) {
+  if (isLocalAssessmentAttemptDeleted(attempt.id)) return false;
+  await cacheLocalAssessmentAttempt(attempt);
+  if (!isLocalAssessmentAttemptDeleted(attempt.id)) return true;
+  await removeStoredLocalAttempt(attempt.id);
   return false;
 }
 
@@ -668,6 +1054,11 @@ function isAssessmentProgressCollection(
   return (
     candidate.ok === true &&
     typeof candidate.accountId === "string" &&
+    typeof candidate.authUserId === "string" &&
+    Array.isArray(candidate.deletedLocalResultIds) &&
+    candidate.deletedLocalResultIds.every(
+      (localResultId) => typeof localResultId === "string",
+    ) &&
     Array.isArray(candidate.attempts) &&
     candidate.attempts.every(isRemoteAttemptEntry)
   );
@@ -681,6 +1072,7 @@ function isAssessmentProgressWrite(
   return (
     candidate.ok === true &&
     typeof candidate.accountId === "string" &&
+    typeof candidate.authUserId === "string" &&
     typeof candidate.revision === "number" &&
     Number.isInteger(candidate.revision) &&
     candidate.revision >= 0 &&
@@ -688,6 +1080,22 @@ function isAssessmentProgressWrite(
     Boolean(candidate.attempt) &&
     isLocalAttempt(candidate.attempt)
   );
+}
+
+function isAssessmentProgressDeleted(
+  value: unknown,
+): value is { error: "assessment_progress_deleted" } {
+  return (
+    Boolean(value) &&
+    typeof value === "object" &&
+    (value as { error?: unknown }).error === "assessment_progress_deleted"
+  );
+}
+
+function readResponseAuthUserId(value: unknown) {
+  return value && typeof value === "object"
+    ? ((value as { authUserId?: unknown }).authUserId ?? null)
+    : null;
 }
 
 function isAssessmentProgressConflict(
@@ -741,6 +1149,21 @@ function stripClientSyncMetadata(attempt: LocalAssessmentAttempt) {
   const payload = { ...attempt };
   delete payload.accountSync;
   return payload;
+}
+
+function withoutSyncRequestId(metadata: LocalAssessmentAttempt["accountSync"]) {
+  const next = { ...metadata };
+  delete next.syncRequestId;
+  return next;
+}
+
+function isCurrentSyncRequest(
+  attempt: LocalAssessmentAttempt | undefined,
+  syncRequestId: string,
+): attempt is LocalAssessmentAttempt {
+  return (
+    Boolean(attempt) && attempt?.accountSync?.syncRequestId === syncRequestId
+  );
 }
 
 async function readJson<T>(response: Response): Promise<T | null> {

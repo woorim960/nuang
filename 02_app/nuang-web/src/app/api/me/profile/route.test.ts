@@ -33,7 +33,7 @@ vi.mock("sharp", () => ({
   default: mocks.sharp,
 }));
 
-import { GET, PATCH } from "@/app/api/me/profile/route";
+import { GET, maxDuration, PATCH } from "@/app/api/me/profile/route";
 
 const profile = {
   accountId: "10000000-0000-4000-8000-000000000001",
@@ -105,6 +105,10 @@ describe("my community profile api", () => {
     mocks.createCommunityProfileEditorPayload.mockResolvedValue(editorPayload);
   });
 
+  it("isolates native avatar processing from the shared API function group", () => {
+    expect(maxDuration).toBe(60);
+  });
+
   it("returns the authenticated user's editable profile without caching", async () => {
     const response = await GET();
     const body = await response.json();
@@ -112,6 +116,7 @@ describe("my community profile api", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("private, no-store");
     expect(body).toEqual({ ok: true, profile: editorPayload });
+    expect(mocks.sharp).not.toHaveBeenCalled();
   });
 
   it("updates text fields with revision protection", async () => {

@@ -1,9 +1,8 @@
 "use client";
 
 import { House, Map, MessagesSquare, UserRound } from "lucide-react";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { usePathname } from "next/navigation";
+import { IntentPrefetchLink } from "@/components/navigation/IntentPrefetchLink";
 import { cn } from "@/lib/utils/cn";
 
 export const bottomNavigationItems = [
@@ -15,12 +14,6 @@ export const bottomNavigationItems = [
 
 export function BottomNavigation() {
   const pathname = usePathname() ?? "";
-  const router = useRouter();
-
-  useEffect(() => {
-    if (pathname === "/feed" || pathname.startsWith("/feed/")) return;
-    router.prefetch("/feed");
-  }, [pathname, router]);
 
   return (
     <nav
@@ -39,7 +32,7 @@ export function BottomNavigation() {
               : pathname === item.href || pathname.startsWith(`${item.href}/`);
 
           return (
-            <Link
+            <IntentPrefetchLink
               aria-label={`${item.label} 탭`}
               aria-current={isActive ? "page" : undefined}
               className={cn(
@@ -50,7 +43,6 @@ export function BottomNavigation() {
               )}
               href={item.href}
               key={item.href}
-              prefetch={item.href === "/feed" ? true : undefined}
             >
               <span
                 className={cn(
@@ -67,7 +59,7 @@ export function BottomNavigation() {
               >
                 {item.label}
               </span>
-            </Link>
+            </IntentPrefetchLink>
           );
         })}
       </div>

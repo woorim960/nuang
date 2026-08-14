@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
-import { readJsonResponse } from "@/features/account/response-json";
+import { readClientAccountResults } from "@/features/account/client-account-results";
 import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
@@ -68,7 +68,7 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
         listLocalAttempts()
           .then((attempts) => ({ attempts, state: "ready" as const }))
           .catch(() => ({ attempts: [], state: "error" as const })),
-        listMapAccountResults(),
+        readClientAccountResults(),
       ]);
       const profile =
         localRead.state === "error" || accountRead.state === "error"
@@ -599,45 +599,6 @@ function ProfileResult({
       </Link>
     </article>
   );
-}
-
-async function listMapAccountResults(): Promise<{
-  currentTraitProfile: AccountTraitProfile | null;
-  results: AccountResultSummary[];
-  state: "error" | "not_requested" | "ready";
-}> {
-  try {
-    const response = await fetch("/api/account-results", {
-      cache: "no-store",
-      method: "GET",
-    });
-    if (response.status === 401) {
-      return {
-        currentTraitProfile: null,
-        results: [],
-        state: "not_requested",
-      };
-    }
-    if (!response.ok) {
-      return { currentTraitProfile: null, results: [], state: "error" };
-    }
-
-    const body = await readJsonResponse<{
-      currentTraitProfile?: AccountTraitProfile | null;
-      ok?: boolean;
-      results?: AccountResultSummary[];
-    }>(response);
-
-    return body?.ok && Array.isArray(body.results)
-      ? {
-          currentTraitProfile: body.currentTraitProfile ?? null,
-          results: body.results,
-          state: "ready",
-        }
-      : { currentTraitProfile: null, results: [], state: "error" };
-  } catch {
-    return { currentTraitProfile: null, results: [], state: "error" };
-  }
 }
 
 function buildMapViewerProfile({

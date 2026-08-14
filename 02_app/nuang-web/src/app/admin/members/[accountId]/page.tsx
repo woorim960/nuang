@@ -128,7 +128,7 @@ function contactLabel(status: string) {
 
 function providerLabel(provider: string | null) {
   return (
-    { email: "이메일", google: "구글", kakao: "카카오", naver: "네이버" }[
+    { apple: "Apple", email: "이메일", google: "구글", kakao: "카카오", naver: "네이버" }[
       provider ?? ""
     ] ?? "확인 불가"
   );

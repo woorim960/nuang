@@ -439,6 +439,42 @@ describe("BalanceGameRoom", () => {
     expect(readBalanceRoom).toHaveBeenCalledTimes(1);
   });
 
+  it("polls a waiting result at a four-second interval", async () => {
+    vi.useFakeTimers();
+    const waitingRoom = {
+      ...answeredRoom,
+      participants: answeredRoom.participants.map((participant) => ({
+        ...participant,
+        completedAt: "2026-07-31T00:00:02.000Z",
+        status: "completed" as const,
+      })),
+      resultStatus: "waiting" as const,
+    };
+    vi.mocked(readBalanceRoom).mockResolvedValue({
+      ok: true,
+      room: waitingRoom,
+    });
+
+    render(<BalanceGameRoom resultView roomCode="ABC234" />);
+    await act(async () => {
+      await Promise.resolve();
+      await Promise.resolve();
+    });
+    expect(readBalanceRoom).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      vi.advanceTimersByTime(3_999);
+      await Promise.resolve();
+    });
+    expect(readBalanceRoom).toHaveBeenCalledTimes(1);
+
+    await act(async () => {
+      vi.advanceTimersByTime(1);
+      await Promise.resolve();
+    });
+    expect(readBalanceRoom).toHaveBeenCalledTimes(2);
+  });
+
   it("recovers an all-answered reload with an explicit completion retry", async () => {
     render(<BalanceGameRoom roomCode="abc234" />);
 

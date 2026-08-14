@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "databaseHistoryCount": 91,
+  "databaseHistoryCount": 93,
   "verifiedAt": "2026-08-15",
   "migrations": [
     {
@@ -457,6 +457,16 @@
       "version": "202608140008",
       "file": "202608140008_trait_map_operator_account_fk_delete_set_null.sql",
       "sha256": "48655de9e16056eb6297e134241fa929c14018e72e02bb388639f51aadf89ece"
+    },
+    {
+      "version": "202608150001",
+      "file": "202608150001_result_deletion_tombstone.sql",
+      "sha256": "9647a7fde453270d34c14eba1bc7bb2c80536be44d21038b4d73bd9482b57367"
+    },
+    {
+      "version": "202608150002",
+      "file": "202608150002_result_deletion_trigger_table_shape_fix.sql",
+      "sha256": "50134fa4e23986d95c751fc7ce326f05a3facfe0a5ea92e0fdfff08e2000eb85"
     }
   ]
 }

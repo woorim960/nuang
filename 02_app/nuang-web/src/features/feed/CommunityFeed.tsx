@@ -12,7 +12,6 @@ import {
   Search,
   X,
 } from "lucide-react";
-import Link from "next/link";
 import {
   useEffect,
   Fragment,
@@ -22,6 +21,7 @@ import {
   type ReactNode,
   type RefObject,
 } from "react";
+import { IntentPrefetchLink as Link } from "@/components/navigation/IntentPrefetchLink";
 import { CoupangAffiliateCard } from "@/features/advertising/delivery/CoupangAffiliateCard";
 import type { CoupangAffiliateCreative } from "@/features/advertising/delivery/advertising-delivery-contract";
 import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
@@ -114,6 +114,9 @@ export function CommunityFeed({
         : mode === "recommended"
           ? orderedPosts
           : decalPosts;
+  const prioritizedMediaPostId =
+    visiblePosts.slice(0, 3).find((post) => (post.media?.length ?? 0) > 0)
+      ?.id ?? null;
   const filteredProfileOptions = profileOptions.filter(({ code, name }) => {
     const normalizedQuery = filterQuery.trim().toLocaleLowerCase("ko-KR");
     if (!normalizedQuery) return true;
@@ -224,6 +227,7 @@ export function CommunityFeed({
                   highlighted={highlightedPostId === post.id}
                   mode={mode}
                   post={post}
+                  prioritizeMedia={post.id === prioritizedMediaPostId}
                   viewerCode={viewerCode}
                 />
                 {index === 7 &&
@@ -353,6 +357,7 @@ export function CommunityPostCard({
   highlighted,
   mode,
   post,
+  prioritizeMedia = false,
   returnTo = "/feed",
   showConversationLink = true,
   viewerCode,
@@ -361,6 +366,7 @@ export function CommunityPostCard({
   highlighted: boolean;
   mode: FeedMode;
   post: FeedItem;
+  prioritizeMedia?: boolean;
   returnTo?: string;
   showConversationLink?: boolean;
   viewerCode: string | null;
@@ -475,7 +481,9 @@ export function CommunityPostCard({
           text={post.body}
         />
       ) : null}
-      {post.media?.length ? <FeedMediaCarousel media={post.media} /> : null}
+      {post.media?.length ? (
+        <FeedMediaCarousel media={post.media} priority={prioritizeMedia} />
+      ) : null}
 
       {post.poll ? (
         <div

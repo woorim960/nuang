@@ -10,8 +10,7 @@ describe("claim result write contract", () => {
   it("keeps the server write order stable", () => {
     expect(claimResultWriteSteps.map((step) => step.id)).toEqual([
       "ensure_account",
-      "upsert_age_consent",
-      "record_required_consents",
+      "verify_required_consents",
       "create_assessment_attempt",
       "insert_assessment_responses",
       "create_score_snapshot",
@@ -66,5 +65,20 @@ describe("claim result write contract", () => {
 
     expect(payload.ok).toBe(true);
     expect(payload.result.restored).toBe(true);
+  });
+
+  it("treats a tombstoned result as terminal instead of retryable", () => {
+    expect(claimResultWriteFailures.result_deleted).toMatchObject({
+      httpStatus: 410,
+      retryable: false,
+      step: "create_assessment_attempt",
+    });
+    expect(
+      createClaimResultWriteFailurePayload("result_deleted"),
+    ).toMatchObject({
+      code: "result_deleted",
+      ok: false,
+      retryable: false,
+    });
   });
 });

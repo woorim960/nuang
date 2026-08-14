@@ -1,6 +1,7 @@
 import { z } from "zod";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { reportContentSnapshotSchema } from "@/features/result/unified-core-report/report-content-snapshot-contract";
+import { localResultIdSchema } from "@/features/result-persistence/local-result-id-contract";
 
 const responseValueSchema = z.union([
   z.literal(1),
@@ -73,7 +74,10 @@ const resultSnapshotSchema = z.object({
   resultStatus: z.enum(["ready", "insufficient_evidence"]),
   scoreResult: z.object({
     alternativeCodes: z.array(z.string().regex(/^[A-Z]{5}$/)).max(5),
-    code: z.string().regex(/^[A-Z]{5}$/).nullable(),
+    code: z
+      .string()
+      .regex(/^[A-Z]{5}$/)
+      .nullable(),
     domains: z.array(domainScoreSchema).max(5),
     facets: z.array(facetScoreSchema).max(10),
     profileName: z.string().min(1).max(120).nullable(),
@@ -115,26 +119,19 @@ const assessmentDefinitionSnapshotSchema = z.object({
 export const accountAssessmentProgressAttemptSchema = z
   .object({
     adaptiveItemIds: z.array(z.string().min(1).max(120)).max(20).optional(),
-    adaptiveStatus: z
-      .enum(["intro", "in_progress", "completed"])
-      .optional(),
+    adaptiveStatus: z.enum(["intro", "in_progress", "completed"]).optional(),
     assessmentId: z.enum(["nu-core-quick", "nu-core-full"]),
     assessmentContentReleaseId: z.string().uuid().optional(),
     assessmentSnapshot: assessmentDefinitionSnapshotSchema.optional(),
     completedAt: z.string().datetime().optional(),
     completionRequestId: z.string().min(1).max(128).optional(),
     completionStatus: z
-      .enum([
-        "submitting",
-        "completed",
-        "insufficient_evidence",
-        "failed",
-      ])
+      .enum(["submitting", "completed", "insufficient_evidence", "failed"])
       .optional(),
     createdAt: z.string().datetime(),
     currentIndex: z.number().int().min(0).max(99),
     expiresAt: z.string().datetime(),
-    id: z.string().min(6).max(128),
+    id: localResultIdSchema,
     itemIds: z.array(z.string().min(1).max(120)).min(1).max(80),
     localPersistStatus: z
       .enum(["idle", "saving", "saved", "failed"])
@@ -204,6 +201,8 @@ export type AccountAssessmentProgressEntry = {
 export type AccountAssessmentProgressGetSuccess = {
   accountId: string;
   attempts: AccountAssessmentProgressEntry[];
+  authUserId: string;
+  deletedLocalResultIds: string[];
   ok: true;
 };
 
@@ -231,6 +230,14 @@ export function createAssessmentProgressConflictFailure(
     error: "assessment_progress_conflict",
     message:
       "다른 기기에서 검사 기록이 변경됐어요. 최신 기록을 불러온 뒤 다시 시도해 주세요.",
+    ok: false,
+  } as const;
+}
+
+export function createAssessmentProgressDeletedFailure() {
+  return {
+    error: "assessment_progress_deleted",
+    message: "이미 삭제한 검사 기록은 다시 저장할 수 없어요.",
     ok: false,
   } as const;
 }

@@ -287,6 +287,15 @@
   font-weight: var(--nu-weight-bold);
 }
 
+.next > span {
+  display: block;
+  max-width: 19rem;
+  margin: 0.8rem auto 0;
+  color: var(--nu-color-text-subtle);
+  font-size: var(--nu-text-caption);
+  line-height: 1.6;
+}
+
 @media (max-width: 520px) {
   .report {
     padding-inline: 18px;

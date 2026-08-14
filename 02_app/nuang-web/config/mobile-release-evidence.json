@@ -1,0 +1,68 @@
+{
+  "schemaVersion": 1,
+  "status": "blocked",
+  "blockerEvidence": {},
+  "legalReview": {
+    "approved": false,
+    "reviewedAt": null,
+    "reviewer": null,
+    "scope": [
+      "unknown_and_guest_advertising",
+      "google_families",
+      "apple_age_rating",
+      "apple_user_generated_content",
+      "store_privacy_disclosures"
+    ],
+    "evidence": null
+  },
+  "questionnaires": {
+    "googleFamilies": {
+      "confirmed": false,
+      "confirmedAt": null,
+      "reviewer": null,
+      "evidence": null
+    },
+    "googlePlayContentRating": {
+      "confirmed": false,
+      "confirmedAt": null,
+      "reviewer": null,
+      "evidence": null
+    },
+    "googleDataSafety": {
+      "confirmed": false,
+      "confirmedAt": null,
+      "reviewer": null,
+      "evidence": null
+    },
+    "appleAgeRatingAndUgc": {
+      "confirmed": false,
+      "confirmedAt": null,
+      "reviewer": null,
+      "evidence": null
+    },
+    "appleAppPrivacy": {
+      "confirmed": false,
+      "confirmedAt": null,
+      "reviewer": null,
+      "evidence": null
+    }
+  },
+  "realDeviceQa": {
+    "passed": false,
+    "passedAt": null,
+    "reviewer": null,
+    "iosDevice": null,
+    "androidDevice": null,
+    "report": null
+  },
+  "screenshots": {
+    "captured": false,
+    "apple": [],
+    "google": []
+  },
+  "signedArtifacts": {
+    "verified": false,
+    "ios": null,
+    "android": null
+  }
+}

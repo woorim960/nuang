@@ -5,19 +5,14 @@ import {
   bottomNavigationItems,
 } from "@/components/layout/BottomNavigation";
 
-const navigationMock = vi.hoisted(() => ({
-  prefetch: vi.fn(),
-  usePathname: vi.fn(),
-}));
+const navigationMock = vi.hoisted(() => ({ usePathname: vi.fn() }));
 
 vi.mock("next/navigation", () => ({
   usePathname: navigationMock.usePathname,
-  useRouter: () => ({ prefetch: navigationMock.prefetch }),
 }));
 
 describe("BottomNavigation", () => {
   beforeEach(() => {
-    navigationMock.prefetch.mockClear();
     navigationMock.usePathname.mockReturnValue("/home");
   });
 
@@ -47,7 +42,6 @@ describe("BottomNavigation", () => {
     expect(
       screen.queryByRole("link", { name: "검사 탭" }),
     ).not.toBeInTheDocument();
-    expect(navigationMock.prefetch).toHaveBeenCalledWith("/feed");
   });
 
   it.each([
@@ -112,14 +106,14 @@ describe("BottomNavigation", () => {
     });
   });
 
-  it("keeps feed prefetching without visually emphasizing community", () => {
+  it("does not preload dynamic tabs before navigation intent", () => {
     render(<BottomNavigation />);
 
     const communityTab = screen.getByRole("link", {
       name: "커뮤니티 탭",
     });
 
-    expect(navigationMock.prefetch).toHaveBeenCalledWith("/feed");
+    expect(communityTab).toHaveAttribute("href", "/feed");
     expect(communityTab).not.toHaveAttribute("data-primary-navigation");
     expect(communityTab.className).not.toContain("translate-y");
   });

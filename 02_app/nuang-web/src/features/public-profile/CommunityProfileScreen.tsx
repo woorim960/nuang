@@ -109,6 +109,12 @@ export function CommunityProfileScreen({
       return formatMatches && topicMatches;
     });
   }, [activePostFormat, activePostTopic, posts]);
+  const prioritizedMediaPostId = useMemo(
+    () =>
+      visiblePosts.slice(0, 3).find((post) => (post.media?.length ?? 0) > 0)
+        ?.id ?? null,
+    [visiblePosts],
+  );
   const isCompareIntent = intent === "compare" && !isSelf && !isPreview;
   const codeIsVisible = profile.display.code !== "-----";
   const comparisonAvailable =
@@ -518,6 +524,7 @@ export function CommunityProfileScreen({
                   key={post.id}
                   mode="recommended"
                   post={post}
+                  prioritizeMedia={post.id === prioritizedMediaPostId}
                   returnTo={pathname}
                   viewerCode={
                     viewerCode ??

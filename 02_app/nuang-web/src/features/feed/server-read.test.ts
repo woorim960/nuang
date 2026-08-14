@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createServerFeedPostDetailPayload,
+  createServerOwnFeedItems,
   createServerFeedReadPayload,
   createServerFeedPlaygroundRecordsPayload,
   createServerFeedPollStatsPayload,
@@ -107,6 +108,43 @@ describe("feed server read model", () => {
       viewerCanManage: false,
       viewerHasLiked: false,
     });
+  });
+
+  it("reads only the requested account's posts for the self profile", async () => {
+    const operations: MockFeedReadOperation[] = [];
+    const items = await createServerOwnFeedItems({
+      accountId: "account-own",
+      client: createMockFeedReadClient({ operations }) as never,
+    });
+
+    expect(items.map((item) => item.id)).toEqual(["post-own"]);
+    expect(items[0]).toMatchObject({
+      authorName: "나",
+      viewerCanManage: true,
+      viewerIsAuthor: true,
+    });
+    expect(
+      operations.filter(
+        (operation) =>
+          operation.schema === "feed" && operation.table === "feed_post",
+      ),
+    ).toHaveLength(1);
+    expect(
+      operations.some(
+        (operation) =>
+          operation.table === "feed_preference" ||
+          operation.table === "auth_identity",
+      ),
+    ).toBe(false);
+    expect(
+      operations.find(
+        (operation) =>
+          operation.schema === "feed" && operation.table === "feed_post",
+      )?.limit,
+    ).toBe(50);
+    expect(
+      operations.filter((operation) => operation.table === "profile_block"),
+    ).toHaveLength(2);
   });
 
   it("keeps only report shares that use the current Nuang code", async () => {
@@ -335,6 +373,7 @@ describe("feed server read model", () => {
 
 type MockFeedReadOperation = {
   filters: Array<[string, string, unknown]>;
+  limit?: number;
   schema: string;
   table: string;
 };
@@ -345,6 +384,7 @@ function createMockFeedReadClient({
   hiddenSeedKeys = [],
   includeOriginalReportShare = false,
   originalReportPrivate = false,
+  operations,
   privateReportShare = false,
 }: {
   blockReadFailure?: boolean;
@@ -352,6 +392,7 @@ function createMockFeedReadClient({
   hiddenSeedKeys?: string[];
   includeOriginalReportShare?: boolean;
   originalReportPrivate?: boolean;
+  operations?: MockFeedReadOperation[];
   privateReportShare?: boolean;
 } = {}) {
   const options = {
@@ -372,6 +413,7 @@ function createMockFeedReadClient({
             schema,
             table,
           };
+          operations?.push(operation);
           const builder = {
             eq(column: string, value: unknown) {
               operation.filters.push(["eq", column, value]);
@@ -385,7 +427,8 @@ function createMockFeedReadClient({
               operation.filters.push(["is", column, value]);
               return builder;
             },
-            limit() {
+            limit(value: number) {
+              operation.limit = value;
               return builder;
             },
             maybeSingle() {

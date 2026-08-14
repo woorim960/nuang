@@ -1,7 +1,6 @@
 export type ClaimResultWriteStepId =
   | "ensure_account"
-  | "upsert_age_consent"
-  | "record_required_consents"
+  | "verify_required_consents"
   | "create_assessment_attempt"
   | "insert_assessment_responses"
   | "create_score_snapshot"
@@ -10,6 +9,7 @@ export type ClaimResultWriteStepId =
 export type ClaimResultWriteFailureCode =
   | "account_link_missing"
   | "age_or_required_consent_missing"
+  | "result_deleted"
   | "assessment_release_mismatch"
   | "assessment_response_invalid"
   | "assessment_attempt_write_failed"
@@ -33,14 +33,9 @@ export const claimResultWriteSteps = [
     operation: "read_or_create",
   },
   {
-    id: "upsert_age_consent",
+    id: "verify_required_consents",
     table: "consent.age_and_consent_status",
-    operation: "upsert",
-  },
-  {
-    id: "record_required_consents",
-    table: "consent.consent_record",
-    operation: "insert_required_versions",
+    operation: "read_current_required_versions",
   },
   {
     id: "create_assessment_attempt",
@@ -71,7 +66,7 @@ export const claimResultWriteSteps = [
 export const claimResultWriteFailures: Record<
   ClaimResultWriteFailureCode,
   {
-    httpStatus: 400 | 403 | 409 | 422 | 500;
+    httpStatus: 400 | 403 | 409 | 410 | 422 | 500;
     message: string;
     retryable: boolean;
     step: ClaimResultWriteStepId;
@@ -87,7 +82,13 @@ export const claimResultWriteFailures: Record<
     httpStatus: 400,
     message: "필수 동의가 확인되지 않아 결과를 저장하지 못했어요.",
     retryable: false,
-    step: "upsert_age_consent",
+    step: "verify_required_consents",
+  },
+  result_deleted: {
+    httpStatus: 410,
+    message: "이미 삭제한 결과는 다시 저장할 수 없어요.",
+    retryable: false,
+    step: "create_assessment_attempt",
   },
   assessment_release_mismatch: {
     httpStatus: 409,

@@ -1,5 +1,5 @@
 {
-  "asOf": "2026-08-05",
+  "asOf": "2026-08-15",
   "releaseName": "NUANG MVP",
   "domains": [
     {
@@ -276,11 +276,15 @@
       ],
       "surfacePatterns": [
         "^login/",
+        "^consent/",
         "^auth/",
+        "^mobile/auth/",
         "^onboarding/",
         "^api/auth/",
+        "^api/mobile/auth/",
         "^api/me/auth/",
-        "^api/me/consents/"
+        "^api/me/consents/",
+        "^api/me/required-consents/"
       ],
       "sourceRoots": [
         "src/features/auth",
@@ -415,12 +419,17 @@
         "^reports/layout\\.tsx$",
         "^assessments/topics/.+/result/"
       ],
-      "sourceRoots": ["src/features/result"],
+      "sourceRoots": [
+        "src/features/result",
+        "src/features/result-persistence"
+      ],
       "testEvidence": [
         "src/features/result/LocalResultView.test.tsx",
         "src/features/result/AccountResultView.test.tsx",
         "src/features/result/unified-core-report/CoreResultReportTemplate.test.tsx",
-        "src/features/result/report-copy.test.ts"
+        "src/features/result/report-copy.test.ts",
+        "src/features/result-persistence/ResultContinuityCard.test.tsx",
+        "src/features/result-persistence/result-continuity.test.ts"
       ]
     },
     {
@@ -463,11 +472,17 @@
         "전역 테마·금지 문구·이모지 회귀 검사",
         "404·오류·로딩·접근성 공통 상태"
       ],
-      "surfacePatterns": ["^policies/", "^api/security/"],
+      "surfacePatterns": [
+        "^policies/",
+        "^support/",
+        "^\\.well-known/",
+        "^api/security/"
+      ],
       "sourceRoots": [
         "src/features/policy",
         "src/features/copy",
         "src/features/seo",
+        "src/features/mobile",
         "src/lib/api",
         "src/lib/supabase"
       ],

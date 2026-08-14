@@ -17,6 +17,9 @@ const routerMock = vi.hoisted(() => ({
 const storageMock = vi.hoisted(() => ({
   deleteLocalAttempt: vi.fn(),
 }));
+const authScopeMock = vi.hoisted(() => ({
+  currentUserId: "auth-user-a" as string | null,
+}));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => routerMock,
@@ -26,15 +29,35 @@ vi.mock("@/features/assessment/assessment-storage", () => ({
   deleteLocalAttempt: storageMock.deleteLocalAttempt,
 }));
 
+vi.mock("@/features/result-persistence/client-result-scope", () => ({
+  readCurrentSupabaseUserId: vi.fn(async () => authScopeMock.currentUserId),
+  verifyStableResultAuthScope: vi.fn(
+    async ({
+      requestUserId,
+      responseUserId,
+    }: {
+      requestUserId: string | null;
+      responseUserId?: string | null;
+    }) =>
+      requestUserId &&
+      requestUserId === responseUserId &&
+      requestUserId === authScopeMock.currentUserId
+        ? requestUserId
+        : null,
+  ),
+}));
+
 describe("AccountResultView", () => {
   beforeEach(() => {
     fetchMock.mockReset();
     routerMock.replace.mockReset();
     storageMock.deleteLocalAttempt.mockReset();
     storageMock.deleteLocalAttempt.mockResolvedValue(undefined);
+    authScopeMock.currentUserId = "auth-user-a";
     fetchMock.mockResolvedValue(
       new Response(
         JSON.stringify({
+          authUserId: "auth-user-a",
           ok: true,
           results: [
             {
@@ -146,7 +169,11 @@ describe("AccountResultView", () => {
   it("deletes the merged local copy even when the server omits its id", async () => {
     fetchMock.mockResolvedValueOnce(
       new Response(
-        JSON.stringify({ ok: true, result: { localResultId: null } }),
+        JSON.stringify({
+          authUserId: "auth-user-a",
+          ok: true,
+          result: { localResultId: null },
+        }),
         {
           headers: { "content-type": "application/json" },
           status: 200,
@@ -169,6 +196,43 @@ describe("AccountResultView", () => {
       ),
     );
     expect(routerMock.replace).toHaveBeenCalledWith("/my/reports/history");
+    expect(fetchMock).toHaveBeenCalledWith(
+      "/api/account-results",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "x-nuang-auth-user-id": "auth-user-a",
+        }),
+      }),
+    );
+  });
+
+  it("keeps the local copy when the authenticated user changes during deletion", async () => {
+    fetchMock.mockImplementationOnce(async () => {
+      authScopeMock.currentUserId = "auth-user-b";
+      return new Response(
+        JSON.stringify({
+          authUserId: "auth-user-a",
+          ok: true,
+          result: { localResultId: "local-current" },
+        }),
+        { headers: { "content-type": "application/json" }, status: 200 },
+      );
+    });
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    render(
+      <AccountResultView
+        initialResult={buildCurrentAccountResult()}
+        resultReportId="22222222-2222-4222-8222-222222222222"
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "이 결과 삭제" }));
+
+    expect(
+      await screen.findByText(/결과를 삭제하지 못했어요/),
+    ).toBeInTheDocument();
+    expect(storageMock.deleteLocalAttempt).not.toHaveBeenCalled();
+    expect(routerMock.replace).not.toHaveBeenCalled();
   });
 });
 

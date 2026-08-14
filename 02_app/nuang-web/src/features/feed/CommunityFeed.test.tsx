@@ -52,6 +52,55 @@ const post: FeedItem = {
 };
 
 describe("CommunityFeed", () => {
+  it("prioritizes the first media-bearing card when the first post is text-only", () => {
+    const mediaPost: FeedItem = {
+      ...post,
+      body: "사진이 있는 두 번째 게시물이에요.",
+      id: "55555555-5555-4555-8555-555555555555",
+      media: [
+        {
+          alt: "두 번째 게시물 사진",
+          height: 800,
+          id: "media-1",
+          url: "https://images.example.com/second-post.jpg",
+          width: 1200,
+        },
+      ],
+    };
+
+    render(<CommunityFeed posts={[post, mediaPost]} />);
+
+    expect(
+      screen.getByRole("img", { name: "두 번째 게시물 사진" }),
+    ).toHaveAttribute("fetchpriority", "high");
+  });
+
+  it("does not eagerly load the first media card when it is below the initial viewport", () => {
+    const textPosts = Array.from({ length: 3 }, (_, index): FeedItem => ({
+      ...post,
+      id: `10000000-0000-4000-8000-${String(index + 1).padStart(12, "0")}`,
+    }));
+    const mediaPost: FeedItem = {
+      ...post,
+      id: "20000000-0000-4000-8000-000000000001",
+      media: [
+        {
+          alt: "화면 아래 게시물 사진",
+          height: 800,
+          id: "media-below-fold",
+          url: "https://images.example.com/below-fold.jpg",
+          width: 1200,
+        },
+      ],
+    };
+
+    render(<CommunityFeed posts={[...textPosts, mediaPost]} />);
+
+    expect(
+      screen.getByRole("img", { name: "화면 아래 게시물 사진" }),
+    ).toHaveAttribute("fetchpriority", "low");
+  });
+
   it("places one commerce card only after eight unfiltered recommended posts", () => {
     const posts = Array.from({ length: 9 }, (_, index): FeedItem => ({
       ...post,

@@ -309,6 +309,72 @@ export async function createServerFeedReadPayload({
     : payload;
 }
 
+export async function createServerOwnFeedItems({
+  accountId,
+  client,
+}: {
+  accountId: string;
+  client: SupabaseClient;
+}): Promise<FeedItem[]> {
+  const rows = await readOwnPosts(client, accountId, 50);
+  if (rows.length === 0) return [];
+
+  const [
+    authorProfilesByAccountId,
+    engagementByPostId,
+    pollByPostId,
+    mediaByPostId,
+    linksByPostId,
+    officialStateByPostId,
+    blockedAccountIdsResult,
+  ] = await Promise.all([
+    readPublicProfileCardsForAccounts({ accountIds: [accountId], client }),
+    readPostEngagements({ accountId, client, rows }),
+    readPollSummaries({ accountId, client, rows }),
+    readPostMedia({ client, rows }),
+    readExternalLinksForPosts({
+      client,
+      postIds: rows.map((row) => row.id),
+    }),
+    readOfficialContentStates({
+      client,
+      postIds: rows.map((row) => row.id),
+    }),
+    readBlockedCommunityAccountIds({ accountId, client }),
+  ]);
+  const inaccessibleOriginalReportPostIds =
+    blockedAccountIdsResult.state === "ready"
+      ? await readInaccessibleOriginalReportPostIds({
+          blockedAccountIds: blockedAccountIdsResult.blockedAccountIds,
+          client,
+          rows,
+          viewerAccountId: accountId,
+        })
+      : new Set(
+          rows
+            .filter((row) => row.source === "report_share")
+            .map((row) => row.id),
+        );
+  const authorProfile = authorProfilesByAccountId.get(accountId);
+
+  return rows
+    .filter((row) => !inaccessibleOriginalReportPostIds.has(row.id))
+    .map((row, index) =>
+      mapPostRowToFeedItem(
+        row,
+        accountId,
+        index,
+        engagementByPostId.get(row.id),
+        authorProfile,
+        pollByPostId.get(row.id),
+        mediaByPostId.get(row.id),
+        linksByPostId.get(row.id),
+        officialStateByPostId.get(row.id),
+      ),
+    )
+    .filter(isUsefulFeedItem);
+}
+
 async function ensureFeedPayloadIncludesPoll(
   payload: FeedReadPayload,
   pollId: string,
@@ -1458,7 +1524,11 @@ async function readPublishedPosts(client: SupabaseClient) {
   return response.data.map(normalizeFeedPostRow);
 }
 
-async function readOwnPosts(client: SupabaseClient, accountId: string) {
+async function readOwnPosts(
+  client: SupabaseClient,
+  accountId: string,
+  limit = 10,
+) {
   const response = await client
     .schema("feed")
     .from("feed_post")
@@ -1467,7 +1537,7 @@ async function readOwnPosts(client: SupabaseClient, accountId: string) {
     .in("moderation_status", ["pending_review", "published", "limited"])
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
-    .limit(10);
+    .limit(limit);
 
   if (isMissingFeedTopicColumns(response.error)) {
     const legacyResponse = await client
@@ -1478,7 +1548,7 @@ async function readOwnPosts(client: SupabaseClient, accountId: string) {
       .in("moderation_status", ["pending_review", "published", "limited"])
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
-      .limit(10);
+      .limit(limit);
 
     if (legacyResponse.error || !legacyResponse.data) return [];
     return legacyResponse.data.map(normalizeFeedPostRow);

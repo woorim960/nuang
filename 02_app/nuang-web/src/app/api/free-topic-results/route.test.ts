@@ -8,6 +8,7 @@ const routeMocks = vi.hoisted(() => ({
     user: { id: "supabase-user-1" },
   } as unknown,
   serviceClient: null as unknown,
+  serviceClientCalls: 0,
 }));
 
 vi.mock("@/features/auth/server-auth", () => ({
@@ -15,12 +16,16 @@ vi.mock("@/features/auth/server-auth", () => ({
 }));
 
 vi.mock("@/lib/supabase/service", () => ({
-  createSupabaseServiceClient: vi.fn(() => routeMocks.serviceClient),
+  createSupabaseServiceClient: vi.fn(() => {
+    routeMocks.serviceClientCalls += 1;
+    return routeMocks.serviceClient;
+  }),
 }));
 
 describe("free topic results API", () => {
   afterEach(() => {
     routeMocks.serviceClient = null;
+    routeMocks.serviceClientCalls = 0;
     vi.clearAllMocks();
   });
 
@@ -33,6 +38,7 @@ describe("free topic results API", () => {
 
     expect(response.status).toBe(200);
     expect(body.ok).toBe(true);
+    expect(body.authUserId).toBe("supabase-user-1");
     expect(mock.captured.upsertRow).toMatchObject({
       account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
       category_id: "relationship",
@@ -296,8 +302,34 @@ describe("free topic results API", () => {
     expect(mock.captured.upsertRow).toBeNull();
   });
 
+  it("rejects a local result id with outer whitespace instead of normalizing it", async () => {
+    const mock = createMockClient();
+    routeMocks.serviceClient = mock.client;
+
+    const response = await POST(
+      jsonRequest({
+        ...createPayload(),
+        localResultId: " topic_test_123 ",
+      }),
+    );
+
+    expect(response.status).toBe(422);
+    expect(mock.captured.upsertRow).toBeNull();
+  });
+
+  it("rejects an exact-result query id with outer whitespace", async () => {
+    const response = await GET(
+      authenticatedRequest(
+        "http://localhost:3000/api/free-topic-results?localResultId=%20topic_test_123%20",
+      ),
+    );
+
+    expect(response.status).toBe(422);
+  });
+
   it("reads synced free topic summaries without answers", async () => {
     const mock = createMockClient({
+      deletedLocalResultIds: ["topic_deleted_123"],
       resultRows: [
         {
           category_id: "relationship",
@@ -332,11 +364,13 @@ describe("free topic results API", () => {
     routeMocks.serviceClient = mock.client;
 
     const response = await GET(
-      new Request("http://localhost:3000/api/free-topic-results"),
+      authenticatedRequest("http://localhost:3000/api/free-topic-results"),
     );
     const body = await response.json();
 
     expect(response.status).toBe(200);
+    expect(body.authUserId).toBe("supabase-user-1");
+    expect(body.deletedLocalResultIds).toEqual(["topic_deleted_123"]);
     expect(body.results[0]).toMatchObject({
       assessment: {
         categoryId: "relationship",
@@ -380,7 +414,7 @@ describe("free topic results API", () => {
     routeMocks.serviceClient = mock.client;
 
     const response = await GET(
-      new Request(
+      authenticatedRequest(
         "http://localhost:3000/api/free-topic-results?localResultId=topic_test_123",
       ),
     );
@@ -437,7 +471,7 @@ describe("free topic results API", () => {
     routeMocks.serviceClient = mock.client;
 
     const response = await GET(
-      new Request("http://localhost:3000/api/free-topic-results"),
+      authenticatedRequest("http://localhost:3000/api/free-topic-results"),
     );
     const body = await response.json();
 
@@ -469,7 +503,7 @@ describe("free topic results API", () => {
     routeMocks.serviceClient = mock.client;
 
     const response = await GET(
-      new Request("http://localhost:3000/api/free-topic-results"),
+      authenticatedRequest("http://localhost:3000/api/free-topic-results"),
     );
     const body = await response.json();
 
@@ -482,7 +516,7 @@ describe("free topic results API", () => {
     routeMocks.serviceClient = mock.client;
 
     const response = await DELETE(
-      new Request("http://localhost:3000/api/free-topic-results", {
+      authenticatedRequest("http://localhost:3000/api/free-topic-results", {
         body: JSON.stringify({ localResultId: "topic_test_123" }),
         headers: { "content-type": "application/json" },
         method: "DELETE",
@@ -490,16 +524,58 @@ describe("free topic results API", () => {
     );
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ ok: true });
-    expect(mock.captured.eqCalls).toContainEqual([
-      "local_result_id",
-      "topic_test_123",
-    ]);
-    expect(mock.captured.updateRow).toMatchObject({
-      deleted_at: expect.any(String),
-      updated_at: expect.any(String),
+    expect(await response.json()).toEqual({
+      authUserId: "supabase-user-1",
+      ok: true,
+    });
+    expect(mock.captured.deleteRpcArgs).toEqual({
+      p_account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
+      p_local_result_id: "topic_test_123",
+      p_result_kind: "topic",
     });
   });
+
+  it.each(["GET", "POST", "DELETE"])(
+    "rejects a mismatched auth scope before service access for %s",
+    async (method) => {
+      const request =
+        method === "GET"
+          ? authenticatedRequest(
+              "http://localhost:3000/api/free-topic-results",
+              { headers: { "x-nuang-auth-user-id": "supabase-user-2" } },
+            )
+          : authenticatedRequest(
+              "http://localhost:3000/api/free-topic-results",
+              {
+                body: JSON.stringify(
+                  method === "POST"
+                    ? createPayload()
+                    : { localResultId: "topic_test_123" },
+                ),
+                headers: {
+                  "content-type": "application/json",
+                  "x-nuang-auth-user-id": "supabase-user-2",
+                },
+                method,
+              },
+            );
+
+      const response =
+        method === "GET"
+          ? await GET(request)
+          : method === "POST"
+            ? await POST(request)
+            : await DELETE(request);
+
+      expect(response.status).toBe(409);
+      expect(await response.json()).toMatchObject({
+        authUserId: "supabase-user-1",
+        error: "auth_scope_changed",
+        ok: false,
+      });
+      expect(routeMocks.serviceClientCalls).toBe(0);
+    },
+  );
 });
 
 function createPayload() {
@@ -570,18 +646,21 @@ function createComfortPayload() {
 
 function createMockClient({
   coreRows = [],
+  deletedLocalResultIds = [],
   profileUpsertError = false,
   releaseDocument,
   releaseId = "22222222-2222-4222-8222-222222222222",
   resultRows = [],
 }: {
   coreRows?: unknown[];
+  deletedLocalResultIds?: string[];
   profileUpsertError?: boolean;
   releaseDocument?: unknown;
   releaseId?: string;
   resultRows?: unknown[];
 } = {}) {
   const captured: {
+    deleteRpcArgs: null | Record<string, unknown>;
     eqCalls: Array<[string, unknown]>;
     insertCount: number;
     limitValue: null | number;
@@ -589,6 +668,7 @@ function createMockClient({
     updateRow: null | Record<string, unknown>;
     upsertRow: null | Record<string, unknown>;
   } = {
+    deleteRpcArgs: null,
     eqCalls: [],
     insertCount: 0,
     limitValue: null,
@@ -647,11 +727,36 @@ function createMockClient({
       },
       schema(schemaName: string) {
         return {
+          async rpc(name: string, args: Record<string, unknown>) {
+            if (
+              schemaName !== "assessment" ||
+              name !== "delete_persisted_result"
+            ) {
+              throw new Error(`Unexpected RPC ${schemaName}.${name}`);
+            }
+            captured.deleteRpcArgs = args;
+            return { data: true, error: null };
+          },
           from(tableName: string) {
             const key = `${schemaName}.${tableName}`;
 
             if (key === "identity.auth_identity") {
               return createAccountBuilder(accountResponse);
+            }
+
+            if (key === "assessment.result_deletion_tombstone") {
+              const tombstoneBuilder = {
+                eq: () => tombstoneBuilder,
+                limit: async () => ({
+                  data: deletedLocalResultIds.map((localResultId) => ({
+                    local_result_id: localResultId,
+                  })),
+                  error: null,
+                }),
+                order: () => tombstoneBuilder,
+                select: () => tombstoneBuilder,
+              };
+              return tombstoneBuilder;
             }
 
             const assessmentBuilder = {
@@ -762,11 +867,19 @@ function createAccountBuilder(response: unknown) {
 }
 
 function jsonRequest(body: unknown) {
-  return new Request("http://localhost:3000/api/free-topic-results", {
+  return authenticatedRequest("http://localhost:3000/api/free-topic-results", {
     body: JSON.stringify(body),
     headers: {
       "content-type": "application/json",
     },
     method: "POST",
   });
+}
+
+function authenticatedRequest(url: string, init: RequestInit = {}) {
+  const headers = new Headers(init.headers);
+  if (!headers.has("x-nuang-auth-user-id")) {
+    headers.set("x-nuang-auth-user-id", "supabase-user-1");
+  }
+  return new Request(url, { ...init, headers });
 }

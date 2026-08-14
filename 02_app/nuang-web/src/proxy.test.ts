@@ -9,7 +9,7 @@ vi.mock("@/lib/supabase/proxy", () => ({
   refreshSupabaseAuthSession: mocks.refreshSupabaseAuthSession,
 }));
 
-import { proxy } from "@/proxy";
+import { config, proxy } from "@/proxy";
 
 describe("global API request size guard", () => {
   beforeEach(() => {
@@ -90,6 +90,41 @@ describe("global API request size guard", () => {
       }),
     );
 
+    expect(mocks.refreshSupabaseAuthSession).toHaveBeenCalledOnce();
+  });
+});
+
+describe("proxy matcher", () => {
+  it("keeps platform association files outside session refresh middleware", () => {
+    expect(config.matcher[0]).toContain("\\.well-known/");
+  });
+});
+
+describe("mobile OAuth callback fallback", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    mocks.refreshSupabaseAuthSession.mockResolvedValue(NextResponse.next());
+  });
+
+  it("removes one-time OAuth parameters before rendering a browser fallback", async () => {
+    const response = await proxy(
+      new NextRequest(
+        "https://nuang.app/mobile/auth/callback?code=one-time-secret&state=opaque",
+      ),
+    );
+
+    expect(response.status).toBe(303);
+    expect(response.headers.get("location")).toBe(
+      "https://nuang.app/mobile/auth/callback",
+    );
+    expect(response.headers.get("cache-control")).toBe("private, no-store");
+    expect(response.headers.get("referrer-policy")).toBe("no-referrer");
+    expect(response.headers.get("location")).not.toContain("one-time-secret");
+    expect(mocks.refreshSupabaseAuthSession).not.toHaveBeenCalled();
+  });
+
+  it("renders the already-clean fallback through the normal session boundary", async () => {
+    await proxy(new NextRequest("https://nuang.app/mobile/auth/callback"));
     expect(mocks.refreshSupabaseAuthSession).toHaveBeenCalledOnce();
   });
 });

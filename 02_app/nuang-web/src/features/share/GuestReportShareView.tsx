@@ -134,11 +134,15 @@ export function GuestReportShareView({
         </aside>
 
         <section className={styles.next}>
-          <p>내 결과도 궁금하다면</p>
+          <p>나도 해보면 내 결과는 따로 만들어져요</p>
           <Link href="/home?view=self">
-            뉴앙 검사 둘러보기
+            내 결과 알아보기
             <ArrowRight aria-hidden="true" size={18} strokeWidth={1.8} />
           </Link>
+          <span>
+            로그인 없이 시작하고, 결과를 본 뒤 내 기록에 저장할지 정할 수
+            있어요.
+          </span>
         </section>
       </article>
 

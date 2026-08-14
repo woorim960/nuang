@@ -3,12 +3,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { readSelfProfilePayload } from "@/features/account/server-self-profile";
 
 const mocks = vi.hoisted(() => ({
-  createServerFeedReadPayload: vi.fn(),
+  createServerOwnFeedItems: vi.fn(),
   ensureCommunityProfile: vi.fn(),
   readAccountAssessmentProgress: vi.fn(),
+  readAccountTraitProfile: vi.fn(),
   readAccountResults: vi.fn(),
   readOriginalProfileReportSummaries: vi.fn(),
   resolveCommunityProfileImage: vi.fn(),
+  rebuildAccountTraitProfile: vi.fn(),
 }));
 
 vi.mock("@/features/account/server-community-profile", () => ({
@@ -24,8 +26,13 @@ vi.mock("@/features/assessment/server-account-assessment-progress", () => ({
   readAccountAssessmentProgress: mocks.readAccountAssessmentProgress,
 }));
 
+vi.mock("@/features/assessment/server-account-trait-profile", () => ({
+  readAccountTraitProfile: mocks.readAccountTraitProfile,
+  rebuildAccountTraitProfile: mocks.rebuildAccountTraitProfile,
+}));
+
 vi.mock("@/features/feed/server-read", () => ({
-  createServerFeedReadPayload: mocks.createServerFeedReadPayload,
+  createServerOwnFeedItems: mocks.createServerOwnFeedItems,
 }));
 
 vi.mock("@/features/public-profile/server-profile-reports", () => ({
@@ -55,18 +62,23 @@ describe("readSelfProfilePayload", () => {
       attempts: [],
       ok: true,
     });
-    mocks.createServerFeedReadPayload.mockResolvedValue({
-      items: [],
-      viewerCode: null,
-    });
+    mocks.createServerOwnFeedItems.mockResolvedValue([]);
+    mocks.readAccountTraitProfile.mockResolvedValue(null);
+    mocks.rebuildAccountTraitProfile.mockResolvedValue(null);
     mocks.readOriginalProfileReportSummaries.mockResolvedValue([]);
   });
 
   it("builds a real self profile before assessment without a public snapshot", async () => {
+    const client = createClient({ count: 0, snapshotId: null });
     const result = await readSelfProfilePayload({
-      client: createClient({ count: 0, snapshotId: null }),
+      client,
       showAdminEntry: false,
       user: { id: "user-1" } as never,
+    });
+
+    expect(mocks.createServerOwnFeedItems).toHaveBeenCalledWith({
+      accountId: "account-1",
+      client,
     });
 
     expect(result).toMatchObject({
@@ -92,7 +104,7 @@ describe("readSelfProfilePayload", () => {
     mocks.readAccountAssessmentProgress.mockRejectedValue(
       new Error("progress failed"),
     );
-    mocks.createServerFeedReadPayload.mockRejectedValue(
+    mocks.createServerOwnFeedItems.mockRejectedValue(
       new Error("feed failed"),
     );
     mocks.readOriginalProfileReportSummaries.mockRejectedValue(
@@ -120,6 +132,33 @@ describe("readSelfProfilePayload", () => {
           reports: null,
         },
       },
+      state: "ready",
+    });
+  });
+
+  it("reuses a fresh persisted trait profile without rebuilding on page reads", async () => {
+    mocks.readAccountTraitProfile.mockResolvedValue({
+      alternativeCodes: [],
+      baseResultReportId: "result-1",
+      code: "ENAKQ",
+      domains: [],
+      evidenceCount: 1,
+      profileName: "관계를 여는 선도자",
+      source: "core_only",
+      topicCount: 0,
+      updatedAt: new Date().toISOString(),
+      version: "dynamic-trait-evidence.v0.1",
+    });
+
+    const result = await readSelfProfilePayload({
+      client: createClient({ count: 0, snapshotId: null }),
+      showAdminEntry: false,
+      user: { id: "user-1" } as never,
+    });
+
+    expect(mocks.rebuildAccountTraitProfile).not.toHaveBeenCalled();
+    expect(result).toMatchObject({
+      payload: { trait: { code: "ENAKQ", source: "full" } },
       state: "ready",
     });
   });

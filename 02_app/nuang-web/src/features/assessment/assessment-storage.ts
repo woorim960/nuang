@@ -18,11 +18,15 @@ import {
   localInProgressRetentionDays,
 } from "@/features/account/local-retention-policy";
 import type { ReportContentSnapshot } from "@/features/result/unified-core-report/report-content-snapshot-contract";
+import { readCurrentSupabaseUserId } from "@/features/result-persistence/client-result-scope";
 
 const DB_NAME = "nuang-local";
 const DB_VERSION = 1;
 const ATTEMPT_STORE = "assessmentAttempts";
+const DELETION_TOMBSTONE_KEY = "nuang:assessment-attempt-deletions:v1";
 let visibleAccountId: string | null = null;
+let visibleAccountSupabaseUserId: string | null = null;
+const volatileDeletionTombstones = new Set<string>();
 
 interface NuangLocalDb extends DBSchema {
   assessmentAttempts: {
@@ -43,6 +47,28 @@ function getDb() {
   });
 }
 
+async function putLocalAttemptUnlessDeleted(
+  db: Awaited<ReturnType<typeof getDb>>,
+  attempt: LocalAssessmentAttempt,
+) {
+  if (isLocalAssessmentAttemptDeleted(attempt.id)) {
+    throw new Error("LOCAL_ATTEMPT_DELETED");
+  }
+
+  const transaction = db.transaction(ATTEMPT_STORE, "readwrite");
+  if (isLocalAssessmentAttemptDeleted(attempt.id)) {
+    await transaction.done;
+    throw new Error("LOCAL_ATTEMPT_DELETED");
+  }
+
+  await transaction.store.put(attempt);
+  await transaction.done;
+  if (!isLocalAssessmentAttemptDeleted(attempt.id)) return;
+
+  await db.delete(ATTEMPT_STORE, attempt.id);
+  throw new Error("LOCAL_ATTEMPT_DELETED");
+}
+
 export async function getOrCreateLocalAttempt(
   assessment: AssessmentDefinition,
   reuseSourceAttempt?: LocalAssessmentAttempt,
@@ -54,10 +80,11 @@ export async function getOrCreateLocalAttempt(
     "by-assessment-state",
     [assessment.assessmentId, "in_progress"],
   );
+  const currentSupabaseUserId = await readCurrentSupabaseUserId();
   const active = existing
     .filter(
       (attempt) =>
-        isAttemptVisibleToCurrentScope(attempt) &&
+        isAttemptVisibleToCurrentScope(attempt, currentSupabaseUserId) &&
         attempt.releaseId === assessment.releaseId &&
         attempt.itemIds.length === assessment.items.length &&
         attempt.itemIds.every(
@@ -79,7 +106,7 @@ export async function getOrCreateLocalAttempt(
         returnDestination: safeReturnDestination,
         updatedAt: new Date().toISOString(),
       };
-      await db.put(ATTEMPT_STORE, resumed);
+      await putLocalAttemptUnlessDeleted(db, resumed);
       return resumed;
     }
 
@@ -94,9 +121,10 @@ export async function getOrCreateLocalAttempt(
     assessment,
     reusableResponses,
     safeReturnDestination,
+    currentSupabaseUserId,
   );
 
-  await db.put(ATTEMPT_STORE, attempt);
+  await putLocalAttemptUnlessDeleted(db, attempt);
   return attempt;
 }
 
@@ -114,23 +142,28 @@ export async function createFreshLocalAttempt(
     "by-assessment-state",
     [assessment.assessmentId, "in_progress"],
   );
+  const currentSupabaseUserId = await readCurrentSupabaseUserId();
 
   await Promise.all(
     existing
       .filter(
         (attempt) =>
-          isAttemptVisibleToCurrentScope(attempt) &&
+          isAttemptVisibleToCurrentScope(attempt, currentSupabaseUserId) &&
           attempt.releaseId === assessment.releaseId,
       )
-      .map((attempt) => db.delete(ATTEMPT_STORE, attempt.id)),
+      .map(async (attempt) => {
+        markLocalAttemptDeleted(attempt.id);
+        await db.delete(ATTEMPT_STORE, attempt.id);
+      }),
   );
 
   const attempt = buildNewLocalAttempt(
     assessment,
     {},
     sanitizePrecisionDestination(returnDestination),
+    currentSupabaseUserId,
   );
-  await db.put(ATTEMPT_STORE, attempt);
+  await putLocalAttemptUnlessDeleted(db, attempt);
   return attempt;
 }
 
@@ -153,7 +186,7 @@ export async function saveLocalAnswer(
     localPersistStatus: "saved",
   };
 
-  await db.put(ATTEMPT_STORE, nextAttempt);
+  await putLocalAttemptUnlessDeleted(db, nextAttempt);
   return nextAttempt;
 }
 
@@ -171,7 +204,7 @@ export async function saveLocalProgress(
     localPersistStatus: "saved",
   };
 
-  await db.put(ATTEMPT_STORE, nextAttempt);
+  await putLocalAttemptUnlessDeleted(db, nextAttempt);
   return nextAttempt;
 }
 
@@ -199,7 +232,7 @@ export async function reopenLocalAttemptForReview(
   delete reopenedAttempt.adaptiveItemIds;
   delete reopenedAttempt.adaptiveStatus;
 
-  await db.put(ATTEMPT_STORE, reopenedAttempt);
+  await putLocalAttemptUnlessDeleted(db, reopenedAttempt);
   return reopenedAttempt;
 }
 
@@ -226,7 +259,7 @@ export async function startLocalAdaptiveFollowUp(
     expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
   };
 
-  await db.put(ATTEMPT_STORE, adaptiveAttempt);
+  await putLocalAttemptUnlessDeleted(db, adaptiveAttempt);
   return adaptiveAttempt;
 }
 
@@ -243,7 +276,7 @@ export async function beginLocalAdaptiveFollowUp(
     expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
   };
 
-  await db.put(ATTEMPT_STORE, activeAttempt);
+  await putLocalAttemptUnlessDeleted(db, activeAttempt);
   return activeAttempt;
 }
 
@@ -275,7 +308,7 @@ export async function saveLocalMilestone(
     expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
   };
 
-  await db.put(ATTEMPT_STORE, nextAttempt);
+  await putLocalAttemptUnlessDeleted(db, nextAttempt);
   return nextAttempt;
 }
 
@@ -350,7 +383,7 @@ export async function completeLocalAttempt(
     ).toISOString(),
   };
 
-  await db.put(ATTEMPT_STORE, completed);
+  await putLocalAttemptUnlessDeleted(db, completed);
   return completed;
 }
 
@@ -385,7 +418,7 @@ export async function attachLocalReportContentSnapshot(
     updatedAt: new Date().toISOString(),
   };
 
-  await db.put(ATTEMPT_STORE, updated);
+  await putLocalAttemptUnlessDeleted(db, updated);
   return updated;
 }
 
@@ -420,14 +453,16 @@ export async function beginLocalAttemptCompletion(
     expiresAt: addDays(now, localInProgressRetentionDays).toISOString(),
   };
 
-  await db.put(ATTEMPT_STORE, submitting);
+  await putLocalAttemptUnlessDeleted(db, submitting);
   return submitting;
 }
 
 export async function getLocalAttempt(id: string) {
   const db = await getDb();
   const attempt = await db.get(ATTEMPT_STORE, id);
-  return attempt && isAttemptVisibleToCurrentScope(attempt)
+  const currentSupabaseUserId = await readCurrentSupabaseUserId();
+  return attempt &&
+    isAttemptVisibleToCurrentScope(attempt, currentSupabaseUserId)
     ? attempt
     : undefined;
 }
@@ -442,8 +477,45 @@ export async function cacheLocalAssessmentAttempt(
   attempt: LocalAssessmentAttempt,
 ) {
   const db = await getDb();
-  await db.put(ATTEMPT_STORE, attempt);
+  await putLocalAttemptUnlessDeleted(db, attempt);
   return attempt;
+}
+
+/**
+ * Replaces one sync cache record only while the caller still owns the same
+ * local snapshot. The post-write tombstone check closes the delete/write race.
+ */
+export async function compareAndSwapStoredLocalAttempt({
+  attempt,
+  expected,
+}: {
+  attempt: LocalAssessmentAttempt;
+  expected: Pick<LocalAssessmentAttempt, "updatedAt"> & {
+    syncRequestId?: string | null;
+  };
+}) {
+  if (isLocalAssessmentAttemptDeleted(attempt.id)) return false;
+
+  const db = await getDb();
+  const transaction = db.transaction(ATTEMPT_STORE, "readwrite");
+  const current = await transaction.store.get(attempt.id);
+  if (
+    !current ||
+    current.updatedAt !== expected.updatedAt ||
+    (current.accountSync?.syncRequestId ?? null) !==
+      (expected.syncRequestId ?? null) ||
+    isLocalAssessmentAttemptDeleted(attempt.id)
+  ) {
+    await transaction.done;
+    return false;
+  }
+
+  await transaction.store.put(attempt);
+  await transaction.done;
+  if (!isLocalAssessmentAttemptDeleted(attempt.id)) return true;
+
+  await db.delete(ATTEMPT_STORE, attempt.id);
+  return false;
 }
 
 export async function listStoredLocalAttempts() {
@@ -456,8 +528,12 @@ export async function removeStoredLocalAttempt(id: string) {
   await db.delete(ATTEMPT_STORE, id);
 }
 
-export function setLocalAssessmentAccountScope(accountId: string | null) {
+export function setLocalAssessmentAccountScope(
+  accountId: string | null,
+  supabaseUserId: string | null = null,
+) {
   visibleAccountId = accountId;
+  visibleAccountSupabaseUserId = accountId ? supabaseUserId : null;
 }
 
 export async function saveLocalAttemptReturnDestination(
@@ -475,27 +551,35 @@ export async function saveLocalAttemptReturnDestination(
     delete updated.returnDestination;
   }
 
-  await db.put(ATTEMPT_STORE, updated);
+  await putLocalAttemptUnlessDeleted(db, updated);
   return updated;
 }
 
 export async function listLocalAttempts() {
   const db = await getDb();
   const attempts = await db.getAll(ATTEMPT_STORE);
+  const currentSupabaseUserId = await readCurrentSupabaseUserId();
   const now = Date.now();
 
   return attempts
     .filter(
       (attempt) =>
-        isAttemptVisibleToCurrentScope(attempt) &&
+        isAttemptVisibleToCurrentScope(attempt, currentSupabaseUserId) &&
         new Date(attempt.expiresAt).getTime() > now,
     )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 }
 
 export async function deleteLocalAttempt(id: string) {
+  markLocalAttemptDeleted(id);
   const db = await getDb();
   await db.delete(ATTEMPT_STORE, id);
+}
+
+export function isLocalAssessmentAttemptDeleted(id: string) {
+  if (volatileDeletionTombstones.has(id)) return true;
+  const tombstones = readDeletionTombstones();
+  return Boolean(tombstones[id]);
 }
 
 export async function getLatestCompletedAttempt(
@@ -507,11 +591,12 @@ export async function getLatestCompletedAttempt(
     "by-assessment-state",
     [assessmentId, "completed"],
   );
+  const currentSupabaseUserId = await readCurrentSupabaseUserId();
 
   return completed
     .filter(
       (attempt) =>
-        isAttemptVisibleToCurrentScope(attempt) &&
+        isAttemptVisibleToCurrentScope(attempt, currentSupabaseUserId) &&
         new Date(attempt.expiresAt).getTime() > Date.now(),
     )
     .sort((a, b) => b.updatedAt.localeCompare(a.updatedAt))[0];
@@ -527,6 +612,7 @@ function buildNewLocalAttempt(
   assessment: AssessmentDefinition,
   responses: LocalAssessmentAttempt["responses"],
   returnDestination: string | null,
+  ownerSupabaseUserId: string | null,
 ): LocalAssessmentAttempt {
   const now = new Date();
   const currentIndex = assessment.items.findIndex(
@@ -547,7 +633,10 @@ function buildNewLocalAttempt(
     currentIndex:
       currentIndex === -1 ? assessment.items.length - 1 : currentIndex,
     state: "in_progress",
-    accountSync: { status: "local_only" },
+    accountSync: {
+      ...(ownerSupabaseUserId ? { ownerSupabaseUserId } : {}),
+      status: "local_only",
+    },
     localPersistStatus: "saved",
     milestones: {},
     ...(returnDestination ? { returnDestination } : {}),
@@ -557,9 +646,23 @@ function buildNewLocalAttempt(
   };
 }
 
-function isAttemptVisibleToCurrentScope(attempt: LocalAssessmentAttempt) {
+function isAttemptVisibleToCurrentScope(
+  attempt: LocalAssessmentAttempt,
+  currentSupabaseUserId: string | null,
+) {
   const ownerAccountId = attempt.accountSync?.accountId;
-  return !ownerAccountId || ownerAccountId === visibleAccountId;
+  const ownerSupabaseUserId = attempt.accountSync?.ownerSupabaseUserId;
+  if (isLocalAssessmentAttemptDeleted(attempt.id)) return false;
+  if (ownerSupabaseUserId && ownerSupabaseUserId !== currentSupabaseUserId) {
+    return false;
+  }
+  if (!ownerAccountId) return true;
+
+  return Boolean(
+    currentSupabaseUserId &&
+    currentSupabaseUserId === visibleAccountSupabaseUserId &&
+    ownerAccountId === visibleAccountId,
+  );
 }
 
 function withoutCompletionResult(
@@ -576,4 +679,37 @@ function withoutCompletionResult(
   delete activeAttempt.resultSnapshot;
 
   return activeAttempt;
+}
+
+function markLocalAttemptDeleted(id: string) {
+  volatileDeletionTombstones.add(id);
+  const tombstones = readDeletionTombstones();
+  tombstones[id] = new Date().toISOString();
+
+  try {
+    localStorage.setItem(DELETION_TOMBSTONE_KEY, JSON.stringify(tombstones));
+  } catch {
+    // The in-memory tombstone still protects every in-flight write in this tab.
+  }
+}
+
+function readDeletionTombstones(): Record<string, string> {
+  try {
+    const value = localStorage.getItem(DELETION_TOMBSTONE_KEY);
+    if (!value) return {};
+    const parsed = JSON.parse(value) as unknown;
+    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
+      return {};
+
+    return Object.fromEntries(
+      Object.entries(parsed).filter(
+        ([id, deletedAt]) =>
+          id.length >= 6 &&
+          typeof deletedAt === "string" &&
+          Number.isFinite(Date.parse(deletedAt)),
+      ),
+    );
+  } catch {
+    return {};
+  }
 }

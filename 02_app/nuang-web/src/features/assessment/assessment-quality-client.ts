@@ -1,11 +1,13 @@
 "use client";
 
+import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import type { AssessmentQualityObservationInput } from "./assessment-quality-observation";
 
 type AssessmentQualityObservation =
   AssessmentQualityObservationInput["observations"][number];
 
 type QueuedAssessmentQualitySubmission = AssessmentQualityObservationInput & {
+  ownerSupabaseUserId: string;
   queuedAt: string;
 };
 
@@ -27,9 +29,40 @@ export function enqueueAssessmentQualityObservations({
   productReleaseId?: string;
 }) {
   if (typeof window === "undefined" || observations.length === 0) return;
+  void enqueueForCurrentUser({
+    assessmentSlug,
+    instrumentVersion,
+    localResultId,
+    observations,
+    productReleaseId,
+  });
+}
+
+async function enqueueForCurrentUser({
+  assessmentSlug,
+  instrumentVersion,
+  localResultId,
+  observations,
+  productReleaseId,
+}: {
+  assessmentSlug: string;
+  instrumentVersion: string;
+  localResultId?: string;
+  observations: AssessmentQualityObservation[];
+  productReleaseId?: string;
+}) {
   const localStorage = getUsableStorage("localStorage");
   const sessionStorage = getUsableStorage("sessionStorage");
   if (!localStorage || !sessionStorage) return;
+
+  const supabase = createBrowserSupabaseClient();
+  const session = supabase ? await supabase.auth.getSession() : null;
+  const ownerSupabaseUserId = session?.data.session?.user?.id;
+  if (!ownerSupabaseUserId) {
+    // 비회원 관찰값과 이전 버전의 소유자 없는 큐는 이후 계정에 귀속하지 않습니다.
+    writeQueue(localStorage, []);
+    return;
+  }
 
   const submission: QueuedAssessmentQualitySubmission = {
     assessmentSlug,
@@ -38,11 +71,12 @@ export function enqueueAssessmentQualityObservations({
     ...(localResultId ? { localResultId } : {}),
     ...(productReleaseId ? { productReleaseId } : {}),
     observations,
+    ownerSupabaseUserId,
     queuedAt: new Date().toISOString(),
     submissionId: crypto.randomUUID(),
   };
   writeQueue(localStorage, [submission, ...readQueue(localStorage)]);
-  void flushAssessmentQualityObservationQueue();
+  await flushAssessmentQualityObservationQueue();
 }
 
 export async function flushAssessmentQualityObservationQueue() {
@@ -56,17 +90,34 @@ export async function flushAssessmentQualityObservationQueue() {
   const localStorage = getUsableStorage("localStorage");
   if (!localStorage) return;
   const pending = readQueue(localStorage);
-  if (pending.length === 0) return;
+  if (pending.length === 0) {
+    writeQueue(localStorage, []);
+    return;
+  }
+
+  const supabase = createBrowserSupabaseClient();
+  const session = supabase ? await supabase.auth.getSession() : null;
+  const currentSupabaseUserId = session?.data.session?.user?.id;
+  if (!currentSupabaseUserId) {
+    // 비회원 행동은 로그인 뒤 소급 전송하지 않습니다.
+    writeQueue(localStorage, []);
+    return;
+  }
 
   const remaining: QueuedAssessmentQualitySubmission[] = [];
 
-  for (const submission of pending) {
+  for (const submission of pending.filter(
+    (item) => item.ownerSupabaseUserId === currentSupabaseUserId,
+  )) {
     try {
       const payload = toObservationInput(submission);
       const response = await fetch("/api/assessment-quality-observations", {
         body: JSON.stringify(payload),
         cache: "no-store",
-        headers: { "content-type": "application/json" },
+        headers: {
+          "content-type": "application/json",
+          "x-nuang-auth-user-id": submission.ownerSupabaseUserId,
+        },
         method: "POST",
       });
 
@@ -138,7 +189,8 @@ function readQueue(localStorage: Storage) {
           (item) =>
             item &&
             typeof item === "object" &&
-            typeof item.submissionId === "string",
+            typeof item.submissionId === "string" &&
+            typeof item.ownerSupabaseUserId === "string",
         ) as QueuedAssessmentQualitySubmission[])
       : [];
   } catch {

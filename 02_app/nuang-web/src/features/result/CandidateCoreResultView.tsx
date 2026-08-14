@@ -10,6 +10,7 @@ import {
   useRef,
   useState,
   type CSSProperties,
+  type ReactNode,
 } from "react";
 import { AssessmentCompletionState } from "@/features/assessment/AssessmentCompletionState";
 import {
@@ -51,6 +52,7 @@ import styles from "@/features/result/CandidateCoreResultView.module.css";
 type CandidateCoreResultViewProps = {
   attempt: LocalAssessmentAttempt;
   backHref?: string;
+  continuity?: ReactNode;
   deleteError?: string | null;
   deletePending?: boolean;
   onDelete?: () => void;
@@ -66,6 +68,7 @@ const candidateAxisTabLabels = ["사람", "생각", "관계", "일상", "마음"
 export function CandidateCoreResultView({
   attempt,
   backHref,
+  continuity,
   deleteError,
   deletePending,
   onDelete,
@@ -139,6 +142,7 @@ export function CandidateCoreResultView({
     return (
       <CoreResultReportTemplate
         backHref={backHref}
+        continuity={continuity}
         deleteError={deleteError}
         deletePending={deletePending}
         feedbackResultReportId={shareReportId}
@@ -224,6 +228,8 @@ export function CandidateCoreResultView({
             {formatCompletedDate(attempt.completedAt ?? attempt.updatedAt)} 검사
           </p>
         </section>
+
+        {continuity}
 
         <section
           aria-labelledby="candidate-profile-overview"

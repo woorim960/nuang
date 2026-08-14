@@ -353,9 +353,9 @@ function ActiveRoom({
       ownerIsInviting || (completed && room.resultStatus !== "final"),
     intervalMs: completed
       ? room.resultStatus === "waiting"
-        ? 1_500
-        : 2_500
-      : 3_000,
+        ? 4_000
+        : 5_000
+      : 5_000,
     onError: onRoomError,
     onRoomChange,
     roomCode: room.roomCode,
@@ -2011,7 +2011,6 @@ function useRoomPolling({
       }
     }
 
-    void refresh();
     const interval = window.setInterval(() => void refresh(), intervalMs);
     const handleVisibility = () => void refresh();
     document.addEventListener("visibilitychange", handleVisibility);

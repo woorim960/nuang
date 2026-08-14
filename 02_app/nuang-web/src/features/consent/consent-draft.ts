@@ -2,6 +2,12 @@ import { z } from "zod";
 
 export const consentIntentCookieName = "nuang-consent-intent";
 
+export const requiredConsentVersions = {
+  policy: "nuang-consent.v0.1",
+  privacy: "privacy.v0.1",
+  terms: "terms.v0.1",
+} as const;
+
 export const consentDraftSchema = z.object({
   analytics: z.boolean().default(false),
   is14OrOlder: z.literal(true),

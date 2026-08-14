@@ -16,6 +16,7 @@ import {
   type ReactNode,
 } from "react";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { listClientAccountResults } from "@/features/account/client-account-results";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
 import { PersonalityPlaygroundPost } from "@/features/feed/PersonalityPlaygroundPost";
 import {
@@ -68,7 +69,7 @@ export function HomeDashboard({
     }
 
     async function loadAccountState() {
-      const nextResults = await listAccountResults();
+      const nextResults = await listClientAccountResults();
       if (isMounted) setAccountResults(nextResults);
     }
 
@@ -550,22 +551,4 @@ function hashDateKey(value: string) {
   return value.split("").reduce((hash, character) => {
     return (hash * 31 + character.charCodeAt(0)) >>> 0;
   }, 17);
-}
-
-async function listAccountResults(): Promise<AccountResultSummary[]> {
-  try {
-    const response = await fetch("/api/account-results", {
-      cache: "no-store",
-      method: "GET",
-    });
-    if (!response.ok) return [];
-
-    const body = (await response.json()) as {
-      ok?: boolean;
-      results?: AccountResultSummary[];
-    };
-    return body.ok && Array.isArray(body.results) ? body.results : [];
-  } catch {
-    return [];
-  }
 }

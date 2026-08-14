@@ -1,0 +1,78 @@
+{
+  "schemaVersion": 1,
+  "locale": "ko-KR",
+  "capturePolicy": {
+    "actualAppUiOnly": true,
+    "noProductionPersonalData": true,
+    "noExternalBrandMarksWithoutPermission": true,
+    "fixedDemoAccount": true,
+    "statusBarTime": "09:41",
+    "applePortraitSize": {
+      "width": 1320,
+      "height": 2868,
+      "displayClass": "6.9-inch"
+    },
+    "googlePortraitSize": {
+      "width": 1080,
+      "height": 1920
+    }
+  },
+  "scenes": [
+    {
+      "order": 1,
+      "id": "home",
+      "title": "나를 알아가는 시작",
+      "route": "/home",
+      "requiredState": "demo_account_with_core_result",
+      "purpose": "홈에서 검사·함께하기·커뮤니티로 이어지는 전체 경험"
+    },
+    {
+      "order": 2,
+      "id": "core-result",
+      "title": "한눈에 보는 나의 성향",
+      "route": "/my/reports/history",
+      "requiredState": "demo_account_with_public_core_result",
+      "purpose": "뉴앙 코드와 상세 성향 리포트"
+    },
+    {
+      "order": 3,
+      "id": "topic-result",
+      "title": "상황마다 달라지는 내 모습",
+      "route": "/my/reports/history",
+      "requiredState": "demo_account_with_topic_results",
+      "purpose": "주제별 성향 설명과 누적 기록"
+    },
+    {
+      "order": 4,
+      "id": "balance-game",
+      "title": "함께 고르고 비교하는 밸런스 게임",
+      "route": "/assessments/together/balance-game",
+      "requiredState": "demo_room_with_participants",
+      "purpose": "양쪽 선택 UI와 관계형 재미"
+    },
+    {
+      "order": 5,
+      "id": "balance-result",
+      "title": "선택으로 발견하는 우리 관계",
+      "route": "/assessments/together/balance-game",
+      "requiredState": "completed_demo_room",
+      "purpose": "참여자 비교와 선택 비율 리포트"
+    },
+    {
+      "order": 6,
+      "id": "community",
+      "title": "생각과 경험이 이어지는 커뮤니티",
+      "route": "/feed",
+      "requiredState": "moderated_demo_feed",
+      "purpose": "게시물·댓글·관심사 기반 소셜 경험"
+    },
+    {
+      "order": 7,
+      "id": "my",
+      "title": "내 기록과 공개 범위를 한곳에서",
+      "route": "/my",
+      "requiredState": "demo_account_with_multiple_reports",
+      "purpose": "프로필·기록·공개 범위 관리"
+    }
+  ]
+}

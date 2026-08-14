@@ -8,6 +8,12 @@ export const socialAuthProviders = [
     collects: ["provider_subject", "email_optional", "profile_optional"],
   },
   {
+    id: "apple",
+    label: "Apple",
+    tone: "neutral",
+    collects: ["provider_subject", "email_optional", "profile_optional"],
+  },
+  {
     id: "naver",
     label: "네이버",
     tone: "forest",
@@ -22,9 +28,10 @@ export const socialAuthProviders = [
 ] as const;
 
 export type SocialAuthProviderId = (typeof socialAuthProviders)[number]["id"];
-export type SupabaseOAuthProvider = "google" | "kakao";
+export type SupabaseOAuthProvider = "apple" | "google" | "kakao";
 
 const supabaseOAuthProviderById = {
+  apple: "apple",
   google: "google",
   kakao: "kakao",
   naver: null,
@@ -41,6 +48,11 @@ export const forbiddenProviderFields = [
 
 export function getSupabaseOAuthProvider(providerId: SocialAuthProviderId) {
   return supabaseOAuthProviderById[providerId];
+}
+
+export function isSocialAuthProviderEnabled(providerId: SocialAuthProviderId) {
+  if (providerId === "apple") return false;
+  return getSupabaseOAuthProvider(providerId) !== null;
 }
 
 export { hasPublicSupabaseEnv };

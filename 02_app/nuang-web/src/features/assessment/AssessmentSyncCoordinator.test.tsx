@@ -54,4 +54,25 @@ describe("AssessmentSyncCoordinator", () => {
 
     expect(mocks.synchronizeAccountAssessmentAttempts).not.toHaveBeenCalled();
   });
+
+  it("throttles repeated visibility syncs but refreshes after one minute", async () => {
+    render(<AssessmentSyncCoordinator />);
+    await act(async () => {
+      vi.advanceTimersByTime(400);
+      await Promise.resolve();
+    });
+
+    await act(async () => {
+      document.dispatchEvent(new Event("visibilitychange"));
+      await Promise.resolve();
+    });
+    expect(mocks.synchronizeAccountAssessmentAttempts).toHaveBeenCalledOnce();
+
+    await act(async () => {
+      vi.advanceTimersByTime(60_000);
+      document.dispatchEvent(new Event("visibilitychange"));
+      await Promise.resolve();
+    });
+    expect(mocks.synchronizeAccountAssessmentAttempts).toHaveBeenCalledTimes(2);
+  });
 });

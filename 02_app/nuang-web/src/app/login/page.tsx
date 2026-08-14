@@ -36,6 +36,9 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
   const backHref = createBackHref(nextPath);
   const backLabel =
     backHref === "/home" ? "홈으로 돌아가기" : "이전 화면으로 돌아가기";
+  const backLinkLabel = reason.startsWith("result_")
+    ? "결과로 돌아가기"
+    : "로그인 없이 돌아가기";
 
   return (
     <main className={styles.page}>
@@ -71,7 +74,7 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       </section>
 
       <Link className={styles.backLink} href={backHref}>
-        로그인 없이 돌아가기
+        {backLinkLabel}
       </Link>
     </main>
   );
@@ -79,6 +82,11 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
 
 function getLoginCopy(reason: string) {
   const reasonCopy: Record<string, { description: string; title: string }> = {
+    account_delete: {
+      description:
+        "본인 계정을 확인한 뒤 계정과 연결된 데이터를 영구 삭제하는 화면으로 이동해요.",
+      title: "계정을 삭제하려면 먼저 로그인해 주세요",
+    },
     bookmark: {
       description: "로그인 후 저장한 글에서 다시 볼 수 있어요.",
       title: "이 글을 저장하려면 로그인해 주세요",
@@ -94,6 +102,11 @@ function getLoginCopy(reason: string) {
     event: {
       description: "로그인 후 완료한 리뷰의 이벤트 응모를 바로 이어갈게요.",
       title: "이벤트에 응모하려면 로그인해 주세요",
+    },
+    mobile_auth_fallback: {
+      description:
+        "앱 연결이 끝나지 않아 웹에서 안전하게 다시 시작해요. 로그인 후 뉴앙을 계속 이용할 수 있어요.",
+      title: "웹에서 뉴앙 로그인을 이어갈게요",
     },
     research: {
       description: "로그인 후 지금 보려던 검사 질문 리뷰로 바로 돌아갈게요.",
@@ -114,6 +127,15 @@ function getLoginCopy(reason: string) {
     reaction: {
       description: "로그인 후 방금 누른 반응을 이어갑니다.",
       title: "이 반응을 저장하려면 로그인해 주세요",
+    },
+    result_restore: {
+      description: "로그인하면 다른 기기에 저장한 내 결과를 확인할 수 있어요.",
+      title: "내 기록에서 결과를 찾아볼게요",
+    },
+    result_save: {
+      description:
+        "로그인 뒤 보고 있던 리포트로 돌아와 자동으로 저장해요. 다른 기기에서 다시 보고 공개 범위도 직접 관리할 수 있어요.",
+      title: "이번 결과를 내 기록으로 이어갈게요",
     },
     share: {
       description: "선택한 공유 방법을 유지한 채 이어갑니다.",

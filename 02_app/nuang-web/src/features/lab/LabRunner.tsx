@@ -17,6 +17,7 @@ import {
   saveLabResult,
   syncLabResult,
 } from "@/features/lab/lab-storage";
+import { readCurrentSupabaseUserId } from "@/features/result-persistence/client-result-scope";
 import { LabQuestionSurface } from "@/features/lab/LabQuestionSurface";
 
 export function LabRunner({
@@ -60,7 +61,7 @@ export function LabRunner({
     setCurrentIndex((index) => Math.max(0, index - 1));
   }
 
-  function goNext() {
+  async function goNext() {
     if (!canGoNext) return;
 
     if (!isLast) {
@@ -74,12 +75,14 @@ export function LabRunner({
     const result = calculateLabResult(assessment, finalAnswers);
     const localResultId = createLabLocalResultId();
     completionIdRef.current = localResultId;
+    const ownerSupabaseUserId = await readCurrentSupabaseUserId();
     const storedResult = saveLabResult({
       assessmentSnapshot: structuredClone(assessment),
       answers: finalAnswers,
       completedAt: new Date().toISOString(),
       contentVersion: assessment.contentVersion,
       localResultId,
+      ...(ownerSupabaseUserId ? { ownerSupabaseUserId } : {}),
       productReleaseId: releaseId ?? undefined,
       result,
       slug: assessment.slug,

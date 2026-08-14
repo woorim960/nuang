@@ -23,6 +23,7 @@ type ServiceClient = SupabaseClient;
 type ProgressFailureCode =
   | "account_link_missing"
   | "assessment_progress_conflict"
+  | "assessment_progress_deleted"
   | "assessment_progress_invalid"
   | "assessment_progress_read_failed"
   | "assessment_progress_write_failed";
@@ -31,6 +32,7 @@ export type AccountAssessmentProgressReadResult =
   | {
       accountId: string;
       attempts: AccountAssessmentProgressEntry[];
+      deletedLocalResultIds: string[];
       ok: true;
     }
   | { code: ProgressFailureCode; ok: false };
@@ -59,6 +61,10 @@ type SavedProgressRow = StoredProgressRow & {
   restored: boolean;
 };
 
+type DeletedProgressRow = {
+  local_result_id: string;
+};
+
 export async function readAccountAssessmentProgress({
   client,
   user,
@@ -81,6 +87,17 @@ export async function readAccountAssessmentProgress({
     .order("updated_at", { ascending: false });
 
   if (response.error) {
+    return { code: "assessment_progress_read_failed", ok: false };
+  }
+
+  const deletedResponse = await client
+    .schema("assessment")
+    .from("result_deletion_tombstone")
+    .select("local_result_id")
+    .eq("account_id", account.accountId)
+    .eq("result_kind", "core");
+
+  if (deletedResponse.error) {
     return { code: "assessment_progress_read_failed", ok: false };
   }
 
@@ -116,6 +133,9 @@ export async function readAccountAssessmentProgress({
   return {
     accountId: account.accountId,
     attempts: selectVisibleAccountAttempts(parsedEntries),
+    deletedLocalResultIds: (deletedResponse.data ?? []).map(
+      (row) => (row as DeletedProgressRow).local_result_id,
+    ),
     ok: true,
   };
 }
@@ -154,14 +174,29 @@ export async function saveAccountAssessmentProgress({
   );
 
   if (response.error) {
+    if (isDeletionTombstoneError(response.error)) {
+      return { code: "assessment_progress_deleted", ok: false };
+    }
+
     if (isRevisionConflict(response.error)) {
-      return {
-        code: "assessment_progress_conflict",
-        currentRevision: await readCurrentRevision({
+      const [currentRevision, deleted] = await Promise.all([
+        readCurrentRevision({
           accountId: account.accountId,
           client,
           clientAttemptId: canonical.attempt.id,
         }),
+        isPersistedResultDeleted({
+          accountId: account.accountId,
+          client,
+          clientAttemptId: canonical.attempt.id,
+        }),
+      ]);
+      if (deleted) {
+        return { code: "assessment_progress_deleted", ok: false };
+      }
+      return {
+        code: "assessment_progress_conflict",
+        currentRevision,
         ok: false,
       };
     }
@@ -439,6 +474,34 @@ function isRevisionConflict(error: { code?: string; message?: string }) {
     error.message?.includes("core_assessment_progress_revision_conflict") ===
       true
   );
+}
+
+function isDeletionTombstoneError(error: { code?: string; message?: string }) {
+  return (
+    error.code === "P0001" &&
+    error.message?.includes("persisted_result_deleted") === true
+  );
+}
+
+async function isPersistedResultDeleted({
+  accountId,
+  client,
+  clientAttemptId,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  clientAttemptId: string;
+}) {
+  const response = await client
+    .schema("assessment")
+    .from("result_deletion_tombstone")
+    .select("local_result_id")
+    .eq("account_id", accountId)
+    .eq("result_kind", "core")
+    .eq("local_result_id", clientAttemptId)
+    .maybeSingle();
+
+  return !response.error && Boolean(response.data);
 }
 
 async function readCurrentRevision({

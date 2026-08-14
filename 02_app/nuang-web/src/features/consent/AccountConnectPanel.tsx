@@ -1,12 +1,12 @@
 "use client";
 
 import type { User } from "@supabase/supabase-js";
-import { Check, CheckCircle2, LoaderCircle, LogOut } from "lucide-react";
+import { CheckCircle2, LoaderCircle, LogOut } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 import {
-  getSupabaseOAuthProvider,
+  isSocialAuthProviderEnabled,
   socialAuthProviders,
   type SocialAuthProviderId,
 } from "@/features/auth/auth-policy";
@@ -16,10 +16,13 @@ import {
   isRequiredConsentComplete,
   type ConsentDraft,
 } from "@/features/consent/consent-draft";
+import { ConsentCheck } from "@/features/consent/ConsentCheck";
 import { createApiClosedPayload } from "@/lib/api/closed-state-data";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import styles from "./AccountConnectPanel.module.css";
 import { clearAccountOwnedLocalAttempts } from "@/features/assessment/assessment-account-sync";
+import { clearAccountOwnedFreeTopicResults } from "@/features/assessment/free-topic-storage";
+import { clearAccountOwnedLabResults } from "@/features/lab/lab-storage";
 
 type ClosedState = ReturnType<typeof createApiClosedPayload>;
 type ConnectedAccount = {
@@ -171,6 +174,8 @@ export function AccountConnectPanel({
     }
 
     await clearAccountOwnedLocalAttempts();
+    clearAccountOwnedFreeTopicResults();
+    clearAccountOwnedLabResults();
     clearSavedConsentDraft();
     setConnectedAccount(null);
     setPendingProviderId(null);
@@ -217,7 +222,7 @@ export function AccountConnectPanel({
   }
 
   const availableProviders = socialAuthProviders.filter((provider) =>
-    getSupabaseOAuthProvider(provider.id),
+    isSocialAuthProviderEnabled(provider.id),
   );
 
   return (
@@ -405,7 +410,9 @@ function SocialAuthButton({
       ? "Google"
       : providerId === "kakao"
         ? "카카오"
-        : "네이버";
+        : providerId === "apple"
+          ? "Apple"
+          : "네이버";
 
   return (
     <button
@@ -473,6 +480,21 @@ function ProviderLogo({
     );
   }
 
+  if (providerId === "apple") {
+    return (
+      <svg
+        aria-hidden="true"
+        className={styles.providerLogo}
+        viewBox="0 0 24 24"
+      >
+        <path
+          d="M16.7 12.78c.02-2.02 1.66-2.99 1.73-3.03a3.72 3.72 0 0 0-2.92-1.58c-1.23-.13-2.43.74-3.06.74-.65 0-1.63-.73-2.68-.71a3.9 3.9 0 0 0-3.28 2c-1.42 2.45-.36 6.05 1 8.03.68.97 1.47 2.06 2.52 2.02 1.03-.04 1.42-.65 2.66-.65 1.23 0 1.6.65 2.67.63 1.11-.02 1.81-.98 2.46-1.96a8 8 0 0 0 1.13-2.3 3.48 3.48 0 0 1-2.23-3.19Zm-1.99-5.91a3.53 3.53 0 0 0 .8-2.54 3.6 3.6 0 0 0-2.34 1.21 3.38 3.38 0 0 0-.82 2.45 2.97 2.97 0 0 0 2.36-1.12Z"
+          fill="currentColor"
+        />
+      </svg>
+    );
+  }
+
   return (
     <span aria-hidden="true" className={styles.genericProviderLogo}>
       N
@@ -502,43 +524,6 @@ function readCurrentUserWithTimeout(
       .catch(() => resolve(null))
       .finally(() => window.clearTimeout(timeoutId));
   });
-}
-
-function ConsentCheck({
-  checked,
-  description,
-  emphasis = false,
-  label,
-  onChange,
-  optional = false,
-}: {
-  checked: boolean;
-  description?: string;
-  emphasis?: boolean;
-  label: string;
-  onChange: (checked: boolean) => void;
-  optional?: boolean;
-}) {
-  return (
-    <label
-      className={styles.consentRow}
-      data-emphasis={emphasis ? "true" : "false"}
-    >
-      <input
-        checked={checked}
-        onChange={(event) => onChange(event.target.checked)}
-        type="checkbox"
-      />
-      <span aria-hidden="true" className={styles.checkmark}>
-        {checked ? <Check size={14} strokeWidth={2.5} /> : null}
-      </span>
-      <span className={styles.consentLabel}>
-        <span>{label}</span>
-        {description ? <small>{description}</small> : null}
-      </span>
-      {optional ? <small>선택</small> : null}
-    </label>
-  );
 }
 
 function createConnectedAccount(user: User): ConnectedAccount {

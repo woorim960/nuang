@@ -26,6 +26,7 @@ import {
 import { buildReportContentSnapshot } from "@/features/result/unified-core-report/report-content-snapshot";
 import {
   isRequiredConsentComplete,
+  requiredConsentVersions,
   type ConsentDraft,
 } from "@/features/consent/consent-draft";
 import { optionalConsentVersions } from "@/features/consent/optional-consent-contract";
@@ -44,9 +45,9 @@ type DeleteAccountResultPayload = {
   resultReportId?: string;
 };
 
-const consentPolicyVersion = "nuang-consent.v0.1";
-const termsVersion = "terms.v0.1";
-const privacyVersion = "privacy.v0.1";
+const consentPolicyVersion = requiredConsentVersions.policy;
+const termsVersion = requiredConsentVersions.terms;
+const privacyVersion = requiredConsentVersions.privacy;
 
 export type ServerWriteResult<TSuccess, TFailureCode extends string> =
   { data: TSuccess; ok: true } | { code: TFailureCode; ok: false };
@@ -62,10 +63,6 @@ export async function claimResultToAccount({
 }): Promise<
   ServerWriteResult<ClaimResultWriteSuccessInput, ClaimResultWriteFailureCode>
 > {
-  if (!isRequiredConsentComplete(payload.consentDraft)) {
-    return { code: "age_or_required_consent_missing", ok: false };
-  }
-
   const trustedResult = deriveTrustedClaimResult(payload);
 
   if (!trustedResult) {
@@ -78,11 +75,7 @@ export async function claimResultToAccount({
     return { code: "account_link_missing", ok: false };
   }
 
-  const consent = await persistAccountConsent(
-    client,
-    account.accountId,
-    payload.consentDraft,
-  );
+  const consent = await readCurrentRequiredConsent(client, account.accountId);
 
   if (!consent.ok) {
     return { code: "age_or_required_consent_missing", ok: false };
@@ -110,7 +103,10 @@ export async function claimResultToAccount({
   });
 
   if (claimResponse.error || !Array.isArray(claimResponse.data)) {
-    return { code: "result_report_write_failed", ok: false };
+    return {
+      code: mapClaimResultRpcError(claimResponse.error),
+      ok: false,
+    };
   }
 
   const claimed = claimResponse.data[0] as
@@ -142,6 +138,43 @@ export async function claimResultToAccount({
     },
     ok: true,
   };
+}
+
+export function mapClaimResultRpcError(
+  error: { code?: string | null; message?: string | null } | null,
+): ClaimResultWriteFailureCode {
+  return error?.code === "P0001" && error.message === "persisted_result_deleted"
+    ? "result_deleted"
+    : "result_report_write_failed";
+}
+
+async function readCurrentRequiredConsent(
+  client: ServiceClient,
+  accountId: string,
+) {
+  const response = await client
+    .schema("consent")
+    .from("age_and_consent_status")
+    .select(
+      "is_14_or_older,policy_version,required_terms_version,required_privacy_version",
+    )
+    .eq("account_id", accountId)
+    .maybeSingle();
+  const data = response.data as {
+    is_14_or_older?: boolean;
+    policy_version?: string;
+    required_privacy_version?: string;
+    required_terms_version?: string;
+  } | null;
+
+  return {
+    ok:
+      !response.error &&
+      data?.is_14_or_older === true &&
+      data.policy_version === requiredConsentVersions.policy &&
+      data.required_terms_version === requiredConsentVersions.terms &&
+      data.required_privacy_version === requiredConsentVersions.privacy,
+  } as const;
 }
 
 export async function createShareLinkForResult({

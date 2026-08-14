@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  useEffect,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -9,7 +10,13 @@ import {
 import type { FeedPostMedia } from "@/features/feed/feed-seed";
 import styles from "./FeedMediaCarousel.module.css";
 
-export function FeedMediaCarousel({ media }: { media: FeedPostMedia[] }) {
+export function FeedMediaCarousel({
+  media,
+  priority = false,
+}: {
+  media: FeedPostMedia[];
+  priority?: boolean;
+}) {
   const trackRef = useRef<HTMLDivElement>(null);
   const dragRef = useRef<{
     pointerId: number;
@@ -102,15 +109,10 @@ export function FeedMediaCarousel({ media }: { media: FeedPostMedia[] }) {
         >
           {media.map((item, index) => (
             <figure className={styles.slide} key={item.id}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                alt={item.alt}
-                decoding="async"
-                draggable={false}
-                fetchPriority={index === 0 ? "high" : "low"}
-                loading={index === 0 ? "eager" : "lazy"}
-                onDragStart={(event) => event.preventDefault()}
-                src={item.url}
+              <DeferredFeedImage
+                defer={index > 0}
+                item={item}
+                priority={priority && index === 0}
               />
             </figure>
           ))}
@@ -125,4 +127,76 @@ export function FeedMediaCarousel({ media }: { media: FeedPostMedia[] }) {
       ) : null}
     </section>
   );
+}
+
+function DeferredFeedImage({
+  defer,
+  item,
+  priority,
+}: {
+  defer: boolean;
+  item: FeedPostMedia;
+  priority: boolean;
+}) {
+  const imageRef = useRef<HTMLImageElement>(null);
+  const [visible, setVisible] = useState(priority || !defer);
+  const shouldLoad = priority || visible;
+
+  useEffect(() => {
+    if (shouldLoad) return;
+
+    const image = imageRef.current;
+    if (!image) return;
+
+    if (typeof IntersectionObserver === "undefined") {
+      const timeout = window.setTimeout(() => setVisible(true), 0);
+      return () => window.clearTimeout(timeout);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((entry) => entry.isIntersecting)) return;
+        setVisible(true);
+        observer.disconnect();
+      },
+      { rootMargin: "400px 0px" },
+    );
+    observer.observe(image);
+    return () => observer.disconnect();
+  }, [shouldLoad]);
+
+  return (
+    // Keep every card's first image in the server-rendered HTML so hydration
+    // delays and expiring signed URLs cannot leave the feed blank. Only later
+    // carousel slides wait until they approach the viewport.
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      alt={item.alt}
+      decoding="async"
+      draggable={false}
+      fetchPriority={priority ? "high" : "low"}
+      height={item.height ?? undefined}
+      loading={priority ? "eager" : "lazy"}
+      onDragStart={(event) => event.preventDefault()}
+      ref={imageRef}
+      src={shouldLoad ? getOptimizedFeedImageUrl(item.url) : undefined}
+      width={item.width ?? undefined}
+    />
+  );
+}
+
+function getOptimizedFeedImageUrl(value: string) {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" || url.hostname !== "images.unsplash.com") {
+      return value;
+    }
+    url.searchParams.set("auto", "format");
+    url.searchParams.set("fit", "crop");
+    url.searchParams.set("q", "76");
+    url.searchParams.set("w", "960");
+    return url.toString();
+  } catch {
+    return value;
+  }
 }

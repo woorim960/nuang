@@ -1,10 +1,10 @@
 # NUANG MVP 출시 기능 인벤토리
 
-- 기준일: 2026-08-05
+- 기준일: 2026-08-15
 - 출시 후보: NUANG MVP
 - 기능 도메인: 18개
-- 앱 진입 표면: 186개 (화면 91, API·callback 86, layout 9)
-- 자동 테스트: 494개 파일, 정적 집계 2016개 테스트 케이스
+- 앱 진입 표면: 194개 (화면 95, API·callback 90, layout 9)
+- 자동 테스트: 527개 파일, 정적 집계 2223개 테스트 케이스
 
 이 문서는 `src/app`의 모든 `page.tsx`, `route.ts`, `layout.tsx`를 실제 파일에서 수집해 기능 도메인과 연결한 출시 인벤토리다. 기능·화면·API가 추가됐는데 분류나 테스트 근거가 없으면 `npm run release:inventory:check`가 실패한다.
 
@@ -24,14 +24,14 @@
 | `public_comparison`        | 1:1 성향 비교                |       6 |           4 |
 | `sharing`                  | 결과 공유                    |       6 |           6 |
 | `feedback_analytics`       | 피드백과 제품 분석           |       5 |           4 |
-| `auth_consent_onboarding`  | 온보딩·로그인·동의           |      10 |           4 |
+| `auth_consent_onboarding`  | 온보딩·로그인·동의           |      14 |           4 |
 | `account_my`               | 마이·계정·개인 데이터        |      22 |           4 |
 | `assessments`              | 코어·주제·친구 검사          |       6 |           4 |
-| `labs_help`                | 별난 성향 연구소와 도움 연결 |       5 |           4 |
+| `labs_help`                | 별난 성향 연구소와 도움 연결 |       6 |           4 |
 | `nuang_code_map`           | 뉴앙 코드와 성향지도         |       2 |           4 |
-| `result_reports`           | 결과 리포트                  |       6 |           4 |
+| `result_reports`           | 결과 리포트                  |       6 |           6 |
 | `home_navigation`          | 앱 셸·홈·주요 내비게이션     |       6 |           4 |
-| `policy_security_platform` | 정책·보안·플랫폼 기반        |       3 |           6 |
+| `policy_security_platform` | 정책·보안·플랫폼 기반        |       6 |           6 |
 
 ## 관리자와 운영 통제
 
@@ -521,9 +521,13 @@
 | `/api/me/auth/methods`            | GET         | `src/app/api/me/auth/methods/route.ts`            |
 | `/api/me/auth/methods/[provider]` | DELETE      | `src/app/api/me/auth/methods/[provider]/route.ts` |
 | `/api/me/consents`                | GET, PATCH  | `src/app/api/me/consents/route.ts`                |
+| `/api/me/required-consents`       | POST        | `src/app/api/me/required-consents/route.ts`       |
+| `/api/mobile/auth/finalize`       | POST        | `src/app/api/mobile/auth/finalize/route.ts`       |
 | `/auth/callback`                  | GET         | `src/app/auth/callback/route.ts`                  |
 | `/auth/link/callback`             | GET         | `src/app/auth/link/callback/route.ts`             |
+| `/consent/required`               | page        | `src/app/consent/required/page.tsx`               |
 | `/login`                          | page        | `src/app/login/page.tsx`                          |
+| `/mobile/auth/callback`           | page        | `src/app/mobile/auth/callback/page.tsx`           |
 | `/onboarding`                     | page        | `src/app/onboarding/page.tsx`                     |
 
 ## 마이·계정·개인 데이터
@@ -652,13 +656,14 @@
 
 ### 화면·API 진입점
 
-| 경로                  | 종류·메서드 | 소스                                    |
-| --------------------- | ----------- | --------------------------------------- |
-| `/api/lab-results`    | POST        | `src/app/api/lab-results/route.ts`      |
-| `/help`               | page        | `src/app/help/page.tsx`                 |
-| `/labs/[slug]`        | page        | `src/app/labs/[slug]/page.tsx`          |
-| `/labs/[slug]/result` | layout      | `src/app/labs/[slug]/result/layout.tsx` |
-| `/labs/[slug]/result` | page        | `src/app/labs/[slug]/result/page.tsx`   |
+| 경로                     | 종류·메서드       | 소스                                     |
+| ------------------------ | ----------------- | ---------------------------------------- |
+| `/api/lab-results`       | DELETE, GET, POST | `src/app/api/lab-results/route.ts`       |
+| `/help`                  | page              | `src/app/help/page.tsx`                  |
+| `/help/account-deletion` | page              | `src/app/help/account-deletion/page.tsx` |
+| `/labs/[slug]`           | page              | `src/app/labs/[slug]/page.tsx`           |
+| `/labs/[slug]/result`    | layout            | `src/app/labs/[slug]/result/layout.tsx`  |
+| `/labs/[slug]/result`    | page              | `src/app/labs/[slug]/result/page.tsx`    |
 
 ## 뉴앙 코드와 성향지도
 
@@ -714,6 +719,7 @@
 ### 구현 위치
 
 - `src/features/result`
+- `src/features/result-persistence`
 
 ### 자동 테스트 근거
 
@@ -721,6 +727,8 @@
 - `src/features/result/AccountResultView.test.tsx`
 - `src/features/result/unified-core-report/CoreResultReportTemplate.test.tsx`
 - `src/features/result/report-copy.test.ts`
+- `src/features/result-persistence/ResultContinuityCard.test.tsx`
+- `src/features/result-persistence/result-continuity.test.ts`
 
 ### 화면·API 진입점
 
@@ -795,6 +803,7 @@
 - `src/features/policy`
 - `src/features/copy`
 - `src/features/seo`
+- `src/features/mobile`
 - `src/lib/api`
 - `src/lib/supabase`
 
@@ -809,11 +818,14 @@
 
 ### 화면·API 진입점
 
-| 경로                       | 종류·메서드 | 소스                                       |
-| -------------------------- | ----------- | ------------------------------------------ |
-| `/api/security/csp-report` | POST        | `src/app/api/security/csp-report/route.ts` |
-| `/policies/privacy`        | page        | `src/app/policies/privacy/page.tsx`        |
-| `/policies/terms`          | page        | `src/app/policies/terms/page.tsx`          |
+| 경로                                      | 종류·메서드 | 소스                                                      |
+| ----------------------------------------- | ----------- | --------------------------------------------------------- |
+| `/.well-known/apple-app-site-association` | GET         | `src/app/.well-known/apple-app-site-association/route.ts` |
+| `/.well-known/assetlinks.json`            | GET         | `src/app/.well-known/assetlinks.json/route.ts`            |
+| `/api/security/csp-report`                | POST        | `src/app/api/security/csp-report/route.ts`                |
+| `/policies/privacy`                       | page        | `src/app/policies/privacy/page.tsx`                       |
+| `/policies/terms`                         | page        | `src/app/policies/terms/page.tsx`                         |
+| `/support`                                | page        | `src/app/support/page.tsx`                                |
 
 ## 출시 추적 규칙
 

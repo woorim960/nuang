@@ -214,7 +214,7 @@ async function checkServiceDeleteRpcNoop() {
     .schema("report")
     .rpc("delete_result_for_account", {
       p_account_id: "00000000-0000-4000-8000-000000000000",
-      p_local_result_id: "server_readiness_noop",
+      p_local_result_id: null,
       p_result_report_id: "00000000-0000-4000-8000-000000000001",
     });
 

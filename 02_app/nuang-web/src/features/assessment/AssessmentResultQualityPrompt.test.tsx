@@ -1,5 +1,21 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+
+vi.mock("@/lib/supabase/browser", () => ({
+  createBrowserSupabaseClient: () => ({
+    auth: {
+      getSession: vi.fn().mockResolvedValue({
+        data: {
+          session: {
+            access_token: "test-session",
+            user: { id: "10000000-0000-4000-8000-000000000002" },
+          },
+        },
+      }),
+    },
+  }),
+}));
+
 import { AssessmentResultQualityPrompt } from "./AssessmentResultQualityPrompt";
 
 describe("AssessmentResultQualityPrompt", () => {

@@ -64,6 +64,7 @@ export type CoreResultReportAction = {
 export type CoreResultReportTemplateProps = {
   backHref?: string;
   canonicalShareUrl?: string;
+  continuity?: ReactNode;
   deleteError?: string | null;
   deletePending?: boolean;
   feedbackResultReportId?: string;
@@ -85,6 +86,7 @@ const axisTabLabels = ["사람", "생각", "관계", "일상", "마음"];
 export function CoreResultReportTemplate({
   backHref,
   canonicalShareUrl,
+  continuity,
   deleteError,
   deletePending = false,
   feedbackResultReportId,
@@ -301,6 +303,8 @@ export function CoreResultReportTemplate({
             width={512}
           />
         </section>
+
+        {continuity}
 
         {isCandidateMeasurement ? (
           <div className={styles.partialNotice} role="note">

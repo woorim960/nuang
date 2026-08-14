@@ -5,14 +5,18 @@ import {
   beginLocalAdaptiveFollowUp,
   beginLocalAttemptCompletion,
   cacheLocalAssessmentAttempt,
+  compareAndSwapStoredLocalAttempt,
   completeLocalAttempt,
   createFreshLocalAttempt,
+  deleteLocalAttempt,
   getLocalAttempt,
   getOrCreateLocalAttempt,
   listLocalAttempts,
+  isLocalAssessmentAttemptDeleted,
   reopenLocalAttemptForReview,
   saveLocalAnswer,
   saveLocalAttemptReturnDestination,
+  saveLocalProgress,
   setLocalAssessmentAccountScope,
   startLocalAdaptiveFollowUp,
 } from "@/features/assessment/assessment-storage";
@@ -28,6 +32,13 @@ import { buildReportContentSnapshot } from "@/features/result/unified-core-repor
 const memoryDb = vi.hoisted(() => ({
   failNextPut: false,
   records: new Map<string, unknown>(),
+}));
+const authScope = vi.hoisted(() => ({
+  currentUserId: null as string | null,
+}));
+
+vi.mock("@/features/result-persistence/client-result-scope", () => ({
+  readCurrentSupabaseUserId: vi.fn(async () => authScope.currentUserId),
 }));
 
 vi.mock("idb", () => ({
@@ -54,6 +65,20 @@ vi.mock("idb", () => ({
       memoryDb.records.set(value.id, structuredClone(value));
       return value.id;
     },
+    transaction: () => ({
+      done: Promise.resolve(),
+      store: {
+        get: async (id: string) => memoryDb.records.get(id),
+        put: async (value: LocalAssessmentAttempt) => {
+          if (memoryDb.failNextPut) {
+            memoryDb.failNextPut = false;
+            throw new Error("quota");
+          }
+          memoryDb.records.set(value.id, structuredClone(value));
+          return value.id;
+        },
+      },
+    }),
   })),
 }));
 
@@ -61,7 +86,32 @@ describe("assessment completion storage", () => {
   beforeEach(() => {
     memoryDb.records.clear();
     memoryDb.failNextPut = false;
+    authScope.currentUserId = null;
     setLocalAssessmentAccountScope(null);
+  });
+
+  it("binds a new attempt to its authenticated creator before sync", async () => {
+    authScope.currentUserId = "supabase-user-a";
+
+    const attempt = await getOrCreateLocalAttempt(quickCoreAssessment);
+
+    expect(attempt.accountSync).toMatchObject({
+      ownerSupabaseUserId: "supabase-user-a",
+      status: "local_only",
+    });
+  });
+
+  it("hides an authenticated creator's provisional attempt after logout or account switch", async () => {
+    authScope.currentUserId = "supabase-user-a";
+    const attempt = await getOrCreateLocalAttempt(quickCoreAssessment);
+
+    authScope.currentUserId = "supabase-user-b";
+    expect(await getLocalAttempt(attempt.id)).toBeUndefined();
+    expect(await listLocalAttempts()).toEqual([]);
+
+    authScope.currentUserId = null;
+    expect(await getLocalAttempt(attempt.id)).toBeUndefined();
+    expect(await listLocalAttempts()).toEqual([]);
   });
 
   it("stores one versioned result atomically and returns it idempotently", async () => {
@@ -380,11 +430,77 @@ describe("assessment completion storage", () => {
     expect(await listLocalAttempts()).toEqual([]);
     expect(await getLocalAttempt(guest.id)).toBeUndefined();
 
-    setLocalAssessmentAccountScope("account-a");
+    authScope.currentUserId = "supabase-user-a";
+    setLocalAssessmentAccountScope("account-a", "supabase-user-a");
     expect((await listLocalAttempts()).map((attempt) => attempt.id)).toEqual([
       guest.id,
     ]);
     expect((await getLocalAttempt(guest.id))?.id).toBe(guest.id);
+  });
+
+  it("persists a deletion tombstone before removing an attempt", async () => {
+    const attempt = await getOrCreateLocalAttempt(quickCoreAssessment);
+
+    await deleteLocalAttempt(attempt.id);
+
+    expect(memoryDb.records.has(attempt.id)).toBe(false);
+    expect(isLocalAssessmentAttemptDeleted(attempt.id)).toBe(true);
+  });
+
+  it("rejects stale writes after deletion and never recreates the record", async () => {
+    const attempt = await getOrCreateLocalAttempt(quickCoreAssessment);
+    await deleteLocalAttempt(attempt.id);
+
+    await expect(saveLocalProgress(attempt, 1)).rejects.toThrow(
+      "LOCAL_ATTEMPT_DELETED",
+    );
+    await expect(cacheLocalAssessmentAttempt(attempt)).rejects.toThrow(
+      "LOCAL_ATTEMPT_DELETED",
+    );
+    expect(memoryDb.records.has(attempt.id)).toBe(false);
+  });
+
+  it("hides a tombstoned record even if another tab writes a stale snapshot", async () => {
+    const attempt = await getOrCreateLocalAttempt(quickCoreAssessment);
+    await deleteLocalAttempt(attempt.id);
+    memoryDb.records.set(attempt.id, structuredClone(attempt));
+
+    expect(await getLocalAttempt(attempt.id)).toBeUndefined();
+    expect(
+      (await listLocalAttempts()).some((item) => item.id === attempt.id),
+    ).toBe(false);
+  });
+
+  it("atomically replaces only the sync snapshot that still owns the record", async () => {
+    const attempt = await getOrCreateLocalAttempt(quickCoreAssessment);
+    const syncing: LocalAssessmentAttempt = {
+      ...attempt,
+      accountSync: {
+        accountId: "account-a",
+        status: "syncing",
+        syncRequestId: "sync-request-1",
+      },
+    };
+
+    await expect(
+      compareAndSwapStoredLocalAttempt({
+        attempt: syncing,
+        expected: { updatedAt: attempt.updatedAt },
+      }),
+    ).resolves.toBe(true);
+    await expect(
+      compareAndSwapStoredLocalAttempt({
+        attempt: { ...syncing, currentIndex: 9 },
+        expected: {
+          syncRequestId: "stale-request",
+          updatedAt: attempt.updatedAt,
+        },
+      }),
+    ).resolves.toBe(false);
+    expect(memoryDb.records.get(attempt.id)).toMatchObject({
+      accountSync: { syncRequestId: "sync-request-1" },
+      currentIndex: attempt.currentIndex,
+    });
   });
 
   it("stores only an approved internal return destination on a precision attempt", async () => {

@@ -1,6 +1,6 @@
 "use client";
 
-import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { readClientAccountResults } from "@/features/account/client-account-results";
 import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
 import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
@@ -39,33 +39,19 @@ async function loadAccountCodeState(): Promise<{
   candidates: CodeCandidate[];
   currentTraitProfile: AccountTraitProfile | null;
 }> {
-  try {
-    const response = await fetch("/api/account-results", {
-      cache: "no-store",
-      method: "GET",
-    });
-    if (!response.ok) return { candidates: [], currentTraitProfile: null };
-
-    const payload = (await response.json()) as {
-      ok?: boolean;
-      currentTraitProfile?: AccountTraitProfile | null;
-      results?: AccountResultSummary[];
-    };
-    if (!payload.ok || !Array.isArray(payload.results)) {
-      return { candidates: [], currentTraitProfile: null };
-    }
-
-    return {
-      candidates: payload.results.map((result) => ({
-        code: result.profileCode,
-        completedAt: result.completedAt,
-        kind: result.kind,
-      })),
-      currentTraitProfile: payload.currentTraitProfile ?? null,
-    };
-  } catch {
+  const accountRead = await readClientAccountResults();
+  if (accountRead.state !== "ready") {
     return { candidates: [], currentTraitProfile: null };
   }
+
+  return {
+    candidates: accountRead.results.map((result) => ({
+      code: result.profileCode,
+      completedAt: result.completedAt,
+      kind: result.kind,
+    })),
+    currentTraitProfile: accountRead.currentTraitProfile,
+  };
 }
 
 async function loadLocalCodeCandidates(): Promise<CodeCandidate[]> {

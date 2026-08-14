@@ -1,6 +1,5 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
-import sharp from "sharp";
 import {
   communityProfileAvatarBucket,
   communityProfileAvatarMaxBytes,
@@ -18,6 +17,9 @@ import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
 
 export const runtime = "nodejs";
+// Keep the native Sharp dependency out of Vercel's shared API function group.
+// Profile uploads are bounded to 5 MB and complete comfortably within a minute.
+export const maxDuration = 60;
 
 const maxMultipartBytes = communityProfileAvatarMaxBytes + 512 * 1024;
 const avatarOutputSize = 512;
@@ -262,6 +264,7 @@ async function processAvatar(file: File) {
   }
 
   try {
+    const { default: sharp } = await import("sharp");
     const input = Buffer.from(await file.arrayBuffer());
     const image = sharp(input, {
       failOn: "error",

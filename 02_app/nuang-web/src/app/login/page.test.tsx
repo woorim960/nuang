@@ -20,6 +20,30 @@ vi.mock("@/features/consent/AccountConnectPanel", () => ({
 }));
 
 describe("LoginPage", () => {
+  it("explains result preservation and returns to the exact report", async () => {
+    render(
+      await LoginPage({
+        searchParams: Promise.resolve({
+          next: "/results/local/local_result_123",
+          reason: "result_save",
+        }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "이번 결과를 내 기록으로 이어갈게요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/보고 있던 리포트로 돌아와 자동으로 저장해요/),
+    ).toBeInTheDocument();
+    expect(screen.getByText("결과로 돌아가기")).toHaveAttribute(
+      "href",
+      "/results/local/local_result_123",
+    );
+  });
+
   it("explains why login is needed without losing a pending poll", async () => {
     render(
       await LoginPage({
@@ -55,6 +79,44 @@ describe("LoginPage", () => {
     ).toBeInTheDocument();
     expect(screen.getByTestId("account-connect-context")).toHaveTextContent(
       "account",
+    );
+  });
+
+  it("explains the safe web recovery path when a native callback opens in a browser", async () => {
+    render(
+      await LoginPage({
+        searchParams: Promise.resolve({ reason: "mobile_auth_fallback" }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "웹에서 뉴앙 로그인을 이어갈게요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText(/앱 연결이 끝나지 않아 웹에서 안전하게 다시 시작해요/),
+    ).toBeInTheDocument();
+  });
+
+  it("returns account deletion requests to the authenticated deletion screen", async () => {
+    render(
+      await LoginPage({
+        searchParams: Promise.resolve({
+          next: "/my/settings/account/delete",
+          reason: "account_delete",
+        }),
+      }),
+    );
+
+    expect(
+      screen.getByRole("heading", {
+        name: "계정을 삭제하려면 먼저 로그인해 주세요",
+      }),
+    ).toBeInTheDocument();
+    expect(screen.getByTestId("account-connect-context")).toHaveAttribute(
+      "data-continue-href",
+      "/my/settings/account/delete",
     );
   });
 

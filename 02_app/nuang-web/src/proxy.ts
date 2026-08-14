@@ -2,6 +2,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { refreshSupabaseAuthSession } from "@/lib/supabase/proxy";
 
 export async function proxy(request: NextRequest) {
+  const mobileCallbackResponse = scrubMobileAuthCallbackQuery(request);
+  if (mobileCallbackResponse) return mobileCallbackResponse;
+
   const crossOriginApiResponse = rejectCrossOriginApiMutation(request);
   if (crossOriginApiResponse) return crossOriginApiResponse;
 
@@ -28,6 +31,26 @@ export async function proxy(request: NextRequest) {
     'nuang-csp="/api/security/csp-report"',
   );
   return response;
+}
+
+function scrubMobileAuthCallbackQuery(request: NextRequest) {
+  if (
+    request.method !== "GET" ||
+    request.nextUrl.pathname !== "/mobile/auth/callback" ||
+    !request.nextUrl.search
+  ) {
+    return null;
+  }
+
+  const cleanUrl = request.nextUrl.clone();
+  cleanUrl.search = "";
+  return NextResponse.redirect(cleanUrl, {
+    headers: {
+      "cache-control": "private, no-store",
+      "referrer-policy": "no-referrer",
+    },
+    status: 303,
+  });
 }
 
 function rejectCrossOriginApiMutation(request: NextRequest) {
@@ -120,6 +143,6 @@ function createAdvertisingReportOnlyPolicy(nonce: string) {
 
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/((?!_next/static|_next/image|\\.well-known/|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

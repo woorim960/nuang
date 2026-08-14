@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { IntentPrefetchLink as Link } from "@/components/navigation/IntentPrefetchLink";
 import { FeedActionButtons } from "@/features/feed/FeedActionButtons";
 import { FeedPollCard } from "@/features/feed/FeedPollCard";
 import type { FeedItem } from "@/features/feed/feed-seed";

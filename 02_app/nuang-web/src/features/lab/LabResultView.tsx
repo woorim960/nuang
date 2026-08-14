@@ -19,14 +19,19 @@ import {
   type LabAssessment,
 } from "@/features/lab/lab-assessments";
 import {
-  deleteLabResult,
-  loadLabResult,
-  loadLabResultById,
+  deleteLabResultEverywhere,
+  loadLabResultLocalFirst,
+  loadLatestLabResultLocalFirst,
   syncLabResult,
   type StoredLabResult,
 } from "@/features/lab/lab-storage";
 import { ReportShareSheet } from "@/features/share/ReportShareSheet";
 import { buildLabReportShareContent } from "@/features/share/report-share-contract";
+import { ResultContinuityCard } from "@/features/result-persistence/ResultContinuityCard";
+import {
+  buildResultSaveLoginHref,
+  type ResultContinuityState,
+} from "@/features/result-persistence/result-continuity";
 import styles from "./LabResultView.module.css";
 
 const motifBySlug: Record<string, NuangCharacterMotif> = {
@@ -64,30 +69,44 @@ export function LabResultView({
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isShareOpen, setIsShareOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteError, setDeleteError] = useState("");
+  const [deletePending, setDeletePending] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const hasAutoOpenedShareRef = useRef(false);
   const shareButtonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (initialResult) return;
 
-    window.setTimeout(() => {
-      const selectedResult = localResultId
-        ? loadLabResultById(localResultId)
-        : null;
+    let active = true;
+    void (localResultId
+      ? loadLabResultLocalFirst(localResultId)
+      : loadLatestLabResultLocalFirst(assessment.slug)
+    ).then((loadedResult) => {
+      if (!active) return;
       const nextResult =
-        selectedResult?.slug === assessment.slug
-          ? selectedResult
-          : loadLabResult(assessment.slug);
+        loadedResult?.slug === assessment.slug ? loadedResult : null;
       setStoredResult(nextResult);
       setLoaded(true);
       if (nextResult && nextResult.sync?.status !== "synced") {
+        setIsSyncing(true);
         void syncLabResult({
           ...nextResult,
           contentVersion:
             nextResult.contentVersion ?? assessment.contentVersion,
-        }).then(setStoredResult);
+        })
+          .then((syncedResult) => {
+            if (active) setStoredResult(syncedResult);
+          })
+          .finally(() => {
+            if (active) setIsSyncing(false);
+          });
       }
-    }, 0);
+    });
+
+    return () => {
+      active = false;
+    };
   }, [
     assessment.contentVersion,
     assessment.slug,
@@ -134,10 +153,17 @@ export function LabResultView({
         </header>
         <section className={styles.missing}>
           <NuangCharacter motif={motifBySlug[assessment.slug]} size="lg" />
-          <h1>아직 결과가 없어요</h1>
-          <p>짧게 답하고 지금 나와 가까운 생활 방식을 살펴보세요.</p>
+          <h1>이 브라우저에는 이 결과가 없어요</h1>
+          <p>
+            로그인하지 않고 만든 결과는 검사를 완료한 브라우저에 보관돼요.
+            다른 기기에서 보려면 로그인해 저장했거나 공유 버튼으로 만든 링크가
+            필요해요.
+          </p>
+          <Link href="/login?reason=result_restore&next=%2Fmy%2Freports%2Fhistory">
+            로그인하고 내 기록 확인하기
+          </Link>
           <Link href={`/labs/${assessment.slug}`}>
-            검사 시작하기
+            새 검사 시작하기
             <ArrowRight aria-hidden="true" size={17} strokeWidth={1.8} />
           </Link>
         </section>
@@ -179,8 +205,15 @@ export function LabResultView({
   });
   const canShare = shareEnabled;
 
-  function handleDelete() {
-    deleteLabResult(selectedLocalResultId);
+  async function handleDelete() {
+    setDeleteError("");
+    setDeletePending(true);
+    const outcome = await deleteLabResultEverywhere(selectedLocalResultId);
+    setDeletePending(false);
+    if (outcome === "error") {
+      setDeleteError("결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.");
+      return;
+    }
     router.replace("/home?view=lab");
   }
 
@@ -237,6 +270,17 @@ export function LabResultView({
           <section className={styles.tieNotice}>
             <strong>두 방식이 비슷하게 나타났어요</strong>
           </section>
+        ) : null}
+
+        {!readOnly ? (
+          <ResultContinuityCard
+            kind="lab"
+            loginHref={buildResultSaveLoginHref(
+              `/labs/${activeAssessment.slug}/result?localResultId=${encodeURIComponent(selectedLocalResultId)}`,
+            )}
+            modalOpen={isShareOpen || isMenuOpen || isDeleteOpen}
+            state={getLabContinuityState(storedResult, isSyncing)}
+          />
         ) : null}
 
         <section className={styles.section}>
@@ -341,15 +385,30 @@ export function LabResultView({
       {!readOnly && isDeleteOpen ? (
         <AssessmentBottomSheet
           copy="삭제한 결과는 다시 불러올 수 없어요."
-          onClose={() => setIsDeleteOpen(false)}
+          onClose={() => {
+            if (!deletePending) setIsDeleteOpen(false);
+          }}
           title="결과를 삭제할까요?"
         >
+          {deleteError ? (
+            <p aria-live="polite" className={styles.deleteError} role="status">
+              {deleteError}
+            </p>
+          ) : null}
           <div className={styles.deleteActions}>
-            <button onClick={() => setIsDeleteOpen(false)} type="button">
+            <button
+              disabled={deletePending}
+              onClick={() => setIsDeleteOpen(false)}
+              type="button"
+            >
               취소
             </button>
-            <button onClick={handleDelete} type="button">
-              삭제
+            <button
+              disabled={deletePending}
+              onClick={() => void handleDelete()}
+              type="button"
+            >
+              {deletePending ? "삭제 중" : "삭제"}
             </button>
           </div>
         </AssessmentBottomSheet>
@@ -415,4 +474,15 @@ function DistributionBar({
       </div>
     </div>
   );
+}
+
+function getLabContinuityState(
+  result: StoredLabResult,
+  isSyncing: boolean,
+): ResultContinuityState {
+  if (isSyncing) return "saving";
+  if (result.sync?.status === "synced") return "saved";
+  if (result.sync?.lastError === "login_required") return "guest";
+  if (result.sync?.status === "failed") return "error";
+  return "checking";
 }

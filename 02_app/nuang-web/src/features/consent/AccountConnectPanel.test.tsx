@@ -1,5 +1,5 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { AccountConnectPanel } from "@/features/consent/AccountConnectPanel";
 
 const { mockGetUser, mockReplace, mockSignOut } = vi.hoisted(() => ({
@@ -46,6 +46,10 @@ describe("AccountConnectPanel", () => {
     window.history.replaceState({}, "", "/login");
     mockGetUser.mockResolvedValue({ data: { user: null } });
     mockSignOut.mockResolvedValue({ error: null });
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it.each([
@@ -133,6 +137,21 @@ describe("AccountConnectPanel", () => {
     ).toBeEnabled();
     expect(
       screen.queryByRole("button", { name: /네이버/ }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("keeps Apple hidden while its database rollout remains deferred", async () => {
+    vi.stubEnv("NEXT_PUBLIC_APPLE_AUTH_ENABLED", "true");
+    render(<AccountConnectPanel />);
+
+    expect(
+      screen.queryByRole("button", { name: "Apple로 계속하기" }),
+    ).not.toBeInTheDocument();
+    fireEvent.click(
+      await screen.findByRole("checkbox", { name: "모든 항목 동의" }),
+    );
+    expect(
+      screen.queryByRole("button", { name: "Apple로 계속하기" }),
     ).not.toBeInTheDocument();
   });
 

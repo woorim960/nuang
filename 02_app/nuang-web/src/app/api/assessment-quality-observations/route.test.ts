@@ -75,6 +75,21 @@ describe("assessment quality observation API", () => {
     });
   });
 
+  it("rejects a queue item captured for another authenticated user", async () => {
+    const response = await POST(
+      request(validPayload(), {
+        "sec-fetch-site": "same-origin",
+        "x-nuang-auth-user-id": "10000000-0000-4000-8000-000000000099",
+      }),
+    );
+
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({
+      error: "assessment_quality_owner_changed",
+    });
+    expect(mocks.serviceClient).not.toHaveBeenCalled();
+  });
+
   it("rejects stale instrument versions and unknown question ids", async () => {
     const versionResponse = await POST(
       request({ ...validPayload(), instrumentVersion: "comfort-style-old" }),
@@ -163,7 +178,10 @@ function validPayload() {
 
 function request(
   body: unknown,
-  headers: Record<string, string> = { "sec-fetch-site": "same-origin" },
+  headers: Record<string, string> = {
+    "sec-fetch-site": "same-origin",
+    "x-nuang-auth-user-id": "10000000-0000-4000-8000-000000000002",
+  },
 ) {
   return new Request("http://localhost/api/assessment-quality-observations", {
     body: JSON.stringify(body),

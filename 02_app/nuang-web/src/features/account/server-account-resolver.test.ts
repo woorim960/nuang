@@ -88,9 +88,9 @@ describe("ensureAccountForUser atomic resolver", () => {
       id: "auth-user-1",
       identities: [
         {
-          id: "apple-subject",
-          identity_id: "identity-apple",
-          provider: "apple",
+          id: "github-subject",
+          identity_id: "identity-github",
+          provider: "github",
           user_id: "auth-user-1",
         },
       ],

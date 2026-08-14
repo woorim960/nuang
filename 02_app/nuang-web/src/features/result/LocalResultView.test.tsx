@@ -24,6 +24,7 @@ import type {
   LocalAssessmentAttempt,
 } from "@/features/assessment/types";
 import { LocalResultView } from "@/features/result/LocalResultView";
+import { buildRequiredConsentHref } from "@/features/consent/required-consent-contract";
 import { calculateCoreScore } from "@/lib/scoring/core";
 
 const storageMock = vi.hoisted(() => ({
@@ -36,6 +37,9 @@ const storageMock = vi.hoisted(() => ({
 const routerMock = vi.hoisted(() => ({
   push: vi.fn(),
   replace: vi.fn(),
+}));
+const authScopeMock = vi.hoisted(() => ({
+  currentUserId: "auth-user-a" as string | null,
 }));
 const fetchMock = vi.fn();
 
@@ -59,9 +63,28 @@ vi.mock("next/navigation", () => ({
   useRouter: () => routerMock,
 }));
 
+vi.mock("@/features/result-persistence/client-result-scope", () => ({
+  readCurrentSupabaseUserId: vi.fn(async () => authScopeMock.currentUserId),
+  verifyStableResultAuthScope: vi.fn(
+    async ({
+      requestUserId,
+      responseUserId,
+    }: {
+      requestUserId: string | null;
+      responseUserId: string | null | undefined;
+    }) =>
+      requestUserId &&
+      responseUserId === requestUserId &&
+      authScopeMock.currentUserId === requestUserId
+        ? requestUserId
+        : null,
+  ),
+}));
+
 describe("LocalResultView", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    authScopeMock.currentUserId = "auth-user-a";
     vi.stubGlobal("localStorage", {
       getItem: vi.fn(() => null),
       removeItem: vi.fn(),
@@ -69,10 +92,17 @@ describe("LocalResultView", () => {
     });
     fetchMock.mockReset();
     fetchMock.mockResolvedValue(
-      new Response(JSON.stringify({ ok: true, result: null }), {
-        headers: { "content-type": "application/json" },
-        status: 200,
-      }),
+      new Response(
+        JSON.stringify({
+          authUserId: "auth-user-a",
+          ok: true,
+          result: null,
+        }),
+        {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        },
+      ),
     );
     vi.stubGlobal("fetch", fetchMock);
     storageMock.startLocalAdaptiveFollowUp.mockImplementation(
@@ -158,6 +188,32 @@ describe("LocalResultView", () => {
     );
   });
 
+  it("offers an exact-return login action for a guest core result", async () => {
+    storageMock.getLocalAttempt.mockResolvedValue(
+      buildCompletedAttempt(candidateFullCoreAssessment),
+    );
+    fetchMock.mockResolvedValue(
+      new Response(JSON.stringify({ error: "unauthenticated" }), {
+        headers: { "content-type": "application/json" },
+        status: 401,
+      }),
+    );
+
+    render(<LocalResultView localResultId="local_full" />);
+
+    expect(
+      await screen.findByRole("heading", {
+        name: "로그인하고 이번 결과를 내 기록에 이어가세요",
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "로그인하고 결과 저장" }),
+    ).toHaveAttribute(
+      "href",
+      "/login?reason=result_save&next=%2Fresults%2Flocal%2Flocal_full",
+    );
+  });
+
   it("connects an eligible signed-in result in the background", async () => {
     storageMock.getLocalAttempt.mockResolvedValue(
       buildCompletedAttempt(candidateFullCoreAssessment),
@@ -177,14 +233,22 @@ describe("LocalResultView", () => {
     });
     fetchMock
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ ok: true, result: null }), {
-          headers: { "content-type": "application/json" },
-          status: 200,
-        }),
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            ok: true,
+            result: null,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
       )
       .mockResolvedValueOnce(
         new Response(
           JSON.stringify({
+            authUserId: "auth-user-a",
             ok: true,
             result: {
               restored: false,
@@ -227,8 +291,177 @@ describe("LocalResultView", () => {
     });
     expect(claimBody.resultSummary).not.toHaveProperty("facets");
     expect(claimBody).not.toHaveProperty("profileCode");
+    expect(claimCall?.[1]?.headers).toMatchObject({
+      "x-nuang-auth-user-id": "auth-user-a",
+    });
     expect(screen.queryByText(/계정에 저장/)).not.toBeInTheDocument();
   });
+
+  it("routes a missing required-consent claim to renewal without retrying or login looping", async () => {
+    storageMock.getLocalAttempt.mockResolvedValue(
+      buildCompletedAttempt(candidateFullCoreAssessment),
+    );
+    fetchMock
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            ok: true,
+            result: null,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            code: "age_or_required_consent_missing",
+            ok: false,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 400,
+          },
+        ),
+      );
+    const resultHref = "/results/local/local_consent?backTo=%2Fmap";
+
+    render(<LocalResultView backHref="/map" localResultId="local_consent" />);
+
+    expect(
+      await screen.findByText(
+        "계정에 저장하려면 현재 필수 항목을 확인해 주세요. 결과 요약은 지금도 공유할 수 있어요.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "다시 저장" })).toHaveAttribute(
+      "href",
+      buildRequiredConsentHref(resultHref),
+    );
+    await waitFor(() => {
+      expect(
+        fetchMock.mock.calls.filter(
+          ([url, init]) =>
+            url === "/api/claim-result" && init?.method === "POST",
+        ),
+      ).toHaveLength(1);
+    });
+  });
+
+  it("tombstones a server-deleted result instead of retrying its claim", async () => {
+    const attempt = buildCompletedAttempt(candidateFullCoreAssessment);
+    attempt.id = "local_deleted_claim";
+    storageMock.getLocalAttempt.mockResolvedValue(attempt);
+    fetchMock
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            ok: true,
+            result: null,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
+      )
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            code: "result_deleted",
+            ok: false,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 410,
+          },
+        ),
+      );
+
+    render(<LocalResultView localResultId="local_deleted_claim" />);
+
+    expect(
+      await screen.findByRole("heading", { name: "이미 삭제한 결과예요" }),
+    ).toBeInTheDocument();
+    expect(storageMock.deleteLocalAttempt).toHaveBeenCalledWith(
+      "local_deleted_claim",
+    );
+    expect(screen.queryByRole("link", { name: "다시 저장" })).toBeNull();
+    expect(
+      fetchMock.mock.calls.filter(
+        ([url, init]) => url === "/api/claim-result" && init?.method === "POST",
+      ),
+    ).toHaveLength(1);
+  });
+
+  it.each([
+    {
+      body: {
+        authUserId: "auth-user-a",
+        ok: true,
+        result: {
+          restored: false,
+          resultReportId: "22222222-2222-4222-8222-222222222222",
+        },
+      },
+      label: "saved",
+      status: 200,
+    },
+    {
+      body: {
+        authUserId: "auth-user-a",
+        code: "result_deleted",
+        ok: false,
+      },
+      label: "deleted",
+      status: 410,
+    },
+  ])(
+    "does not adopt a $label claim response after the signed-in user changes",
+    async ({ body, status }) => {
+      const attempt = buildCompletedAttempt(candidateFullCoreAssessment);
+      attempt.id = `local_scope_change_${status}`;
+      storageMock.getLocalAttempt.mockResolvedValue(attempt);
+      fetchMock
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              authUserId: "auth-user-a",
+              ok: true,
+              result: null,
+            }),
+            {
+              headers: { "content-type": "application/json" },
+              status: 200,
+            },
+          ),
+        )
+        .mockImplementationOnce(async () => {
+          authScopeMock.currentUserId = "auth-user-b";
+          return new Response(JSON.stringify(body), {
+            headers: { "content-type": "application/json" },
+            status,
+          });
+        });
+
+      render(<LocalResultView localResultId={attempt.id} />);
+
+      expect(
+        await screen.findByText(
+          "계정 저장은 잠시 뒤 다시 시도해요. 지금도 결과 요약은 공유할 수 있어요.",
+        ),
+      ).toBeInTheDocument();
+      expect(storageMock.deleteLocalAttempt).not.toHaveBeenCalled();
+      expect(
+        screen.queryByRole("heading", { name: "이미 삭제한 결과예요" }),
+      ).not.toBeInTheDocument();
+    },
+  );
 
   it("keeps summary sharing available after a temporary account-save error", async () => {
     const user = userEvent.setup();
@@ -250,13 +483,20 @@ describe("LocalResultView", () => {
     });
     fetchMock
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ ok: true, result: null }), {
-          headers: { "content-type": "application/json" },
-          status: 200,
-        }),
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            ok: true,
+            result: null,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
       )
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ ok: false }), {
+        new Response(JSON.stringify({ authUserId: "auth-user-a", ok: false }), {
           headers: { "content-type": "application/json" },
           status: 503,
         }),
@@ -264,6 +504,7 @@ describe("LocalResultView", () => {
       .mockResolvedValueOnce(
         new Response(
           JSON.stringify({
+            authUserId: "auth-user-a",
             ok: true,
             result: {
               resultReportId: "22222222-2222-4222-8222-222222222222",
@@ -290,8 +531,7 @@ describe("LocalResultView", () => {
     ).toBeInTheDocument();
     expect(
       fetchMock.mock.calls.filter(
-        ([url, init]) =>
-          url === "/api/claim-result" && init?.method === "POST",
+        ([url, init]) => url === "/api/claim-result" && init?.method === "POST",
       ),
     ).toHaveLength(1);
   });
@@ -321,14 +561,22 @@ describe("LocalResultView", () => {
     });
     fetchMock
       .mockResolvedValueOnce(
-        new Response(JSON.stringify({ ok: true, result: null }), {
-          headers: { "content-type": "application/json" },
-          status: 200,
-        }),
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            ok: true,
+            result: null,
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
       )
       .mockResolvedValueOnce(
         new Response(
           JSON.stringify({
+            authUserId: "auth-user-a",
             ok: true,
             result: {
               resultReportId: "22222222-2222-4222-8222-222222222222",
@@ -378,6 +626,7 @@ describe("LocalResultView", () => {
     fetchMock.mockResolvedValue(
       new Response(
         JSON.stringify({
+          authUserId: "auth-user-a",
           ok: true,
           result: {
             activeShareLinkCount: 2,
@@ -416,6 +665,63 @@ describe("LocalResultView", () => {
     expect(
       screen.queryByText(/계정에 저장|이 기기|로컬 결과/),
     ).not.toBeInTheDocument();
+  });
+
+  it("does not delete the local result when the signed-in user changes during server deletion", async () => {
+    const user = userEvent.setup();
+    const attempt = buildCompletedAttempt(candidateFullCoreAssessment);
+    storageMock.getLocalAttempt.mockResolvedValue(attempt);
+    vi.stubGlobal(
+      "confirm",
+      vi.fn(() => true),
+    );
+    fetchMock
+      .mockResolvedValueOnce(
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            ok: true,
+            result: {
+              resultReportId: "22222222-2222-4222-8222-222222222222",
+            },
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
+      )
+      .mockImplementationOnce(async () => {
+        authScopeMock.currentUserId = "auth-user-b";
+        return new Response(
+          JSON.stringify({ authUserId: "auth-user-a", ok: true }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        );
+      });
+
+    render(<LocalResultView localResultId={attempt.id} />);
+
+    await user.click(
+      await screen.findByRole("button", { name: "이 결과 삭제" }),
+    );
+
+    expect(
+      await screen.findByText(
+        "결과를 삭제하지 못했어요. 잠시 뒤 다시 시도해 주세요.",
+      ),
+    ).toBeInTheDocument();
+    expect(storageMock.deleteLocalAttempt).not.toHaveBeenCalled();
+    expect(routerMock.replace).not.toHaveBeenCalled();
+    const deleteCall = fetchMock.mock.calls.find(
+      ([url, init]) =>
+        url === "/api/account-results" && init?.method === "DELETE",
+    );
+    expect(deleteCall?.[1]?.headers).toMatchObject({
+      "x-nuang-auth-user-id": "auth-user-a",
+    });
   });
 
   it("does not recalculate, claim, or share a result without its versioned snapshot", async () => {
@@ -537,11 +843,13 @@ describe("LocalResultView", () => {
           String(url).includes("claim-result") && init?.method === "POST",
       ),
     ).toBe(false);
-    expect(
-      fetchMock.mock.calls.some(([url]) =>
-        String(url).includes("claim-result?localResultId="),
-      ),
-    ).toBe(true);
+    await waitFor(() => {
+      expect(
+        fetchMock.mock.calls.some(([url]) =>
+          String(url).includes("claim-result?localResultId="),
+        ),
+      ).toBe(true);
+    });
     expect(
       screen.queryByRole("button", { name: "공유" }),
     ).not.toBeInTheDocument();

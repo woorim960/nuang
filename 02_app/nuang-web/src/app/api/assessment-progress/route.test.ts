@@ -17,13 +17,10 @@ vi.mock("@/lib/supabase/service", () => ({
   createSupabaseServiceClient: mocks.createSupabaseServiceClient,
 }));
 
-vi.mock(
-  "@/features/assessment/server-account-assessment-progress",
-  () => ({
-    readAccountAssessmentProgress: mocks.readAccountAssessmentProgress,
-    saveAccountAssessmentProgress: mocks.saveAccountAssessmentProgress,
-  }),
-);
+vi.mock("@/features/assessment/server-account-assessment-progress", () => ({
+  readAccountAssessmentProgress: mocks.readAccountAssessmentProgress,
+  saveAccountAssessmentProgress: mocks.saveAccountAssessmentProgress,
+}));
 
 import { GET, PUT } from "@/app/api/assessment-progress/route";
 import { accountAssessmentProgressPutSchema } from "@/features/assessment/account-assessment-progress-contract";
@@ -62,9 +59,7 @@ describe("account assessment progress migration", () => {
 
   it("serializes writes and checks optimistic revisions", () => {
     expect(migration).toContain("pg_advisory_xact_lock");
-    expect(migration).toContain(
-      "core_assessment_progress_revision_conflict",
-    );
+    expect(migration).toContain("core_assessment_progress_revision_conflict");
     expect(migration).toContain("v_existing.attempt_payload = p_attempt");
   });
 
@@ -73,9 +68,7 @@ describe("account assessment progress migration", () => {
     expect(completionGuard).toContain(
       "new.attempt_payload is distinct from old.attempt_payload",
     );
-    expect(completionGuard).toContain(
-      "new.state is distinct from old.state",
-    );
+    expect(completionGuard).toContain("new.state is distinct from old.state");
     expect(completionGuard).toContain(
       "core_assessment_progress_revision_conflict",
     );
@@ -97,10 +90,11 @@ describe("/api/assessment-progress", () => {
     mocks.readAccountAssessmentProgress.mockResolvedValue({
       accountId,
       attempts: [{ attempt, revision: 3 }],
+      deletedLocalResultIds: [],
       ok: true,
     });
 
-    const response = await GET();
+    const response = await GET(getRequest());
 
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe(
@@ -109,6 +103,8 @@ describe("/api/assessment-progress", () => {
     await expect(response.json()).resolves.toEqual({
       accountId,
       attempts: [{ attempt, revision: 3 }],
+      authUserId: authenticatedUser.id,
+      deletedLocalResultIds: [],
       ok: true,
     });
   });
@@ -116,10 +112,13 @@ describe("/api/assessment-progress", () => {
   it("preserves the authentication boundary", async () => {
     mocks.requireAuthenticatedUser.mockResolvedValue({
       ok: false,
-      response: Response.json({ error: "unauthorized", ok: false }, { status: 401 }),
+      response: Response.json(
+        { error: "unauthorized", ok: false },
+        { status: 401 },
+      ),
     });
 
-    const response = await GET();
+    const response = await GET(getRequest());
 
     expect(response.status).toBe(401);
     expect(mocks.readAccountAssessmentProgress).not.toHaveBeenCalled();
@@ -135,9 +134,7 @@ describe("/api/assessment-progress", () => {
       revision: 4,
     });
 
-    const response = await PUT(
-      jsonRequest({ attempt, expectedRevision: 3 }),
-    );
+    const response = await PUT(jsonRequest({ attempt, expectedRevision: 3 }));
 
     expect(response.status).toBe(200);
     expect(mocks.saveAccountAssessmentProgress).toHaveBeenCalledWith({
@@ -149,10 +146,26 @@ describe("/api/assessment-progress", () => {
     await expect(response.json()).resolves.toEqual({
       accountId,
       attempt,
+      authUserId: authenticatedUser.id,
       ok: true,
       restored: false,
       revision: 4,
     });
+  });
+
+  it("rejects a request captured for another auth user before service access", async () => {
+    const response = await PUT(
+      jsonRequest({ attempt: buildAttempt() }, "another-authenticated-user"),
+    );
+
+    expect(response.status).toBe(409);
+    await expect(response.json()).resolves.toEqual({
+      authUserId: authenticatedUser.id,
+      error: "auth_scope_changed",
+      ok: false,
+    });
+    expect(mocks.createSupabaseServiceClient).not.toHaveBeenCalled();
+    expect(mocks.saveAccountAssessmentProgress).not.toHaveBeenCalled();
   });
 
   it("strips client-only sync metadata before server persistence", async () => {
@@ -201,13 +214,12 @@ describe("/api/assessment-progress", () => {
       ok: false,
     });
 
-    const response = await PUT(
-      jsonRequest({ attempt, expectedRevision: 2 }),
-    );
+    const response = await PUT(jsonRequest({ attempt, expectedRevision: 2 }));
     const body = await response.json();
 
     expect(response.status).toBe(409);
     expect(body).toEqual({
+      authUserId: authenticatedUser.id,
       currentRevision: 7,
       error: "assessment_progress_conflict",
       message:
@@ -216,6 +228,24 @@ describe("/api/assessment-progress", () => {
     });
     expect(body).not.toHaveProperty("attempt");
     expect(body).not.toHaveProperty("responses");
+  });
+
+  it("returns 410 when a deleted logical result id is retried", async () => {
+    const attempt = buildAttempt();
+    mocks.saveAccountAssessmentProgress.mockResolvedValue({
+      code: "assessment_progress_deleted",
+      ok: false,
+    });
+
+    const response = await PUT(jsonRequest({ attempt, expectedRevision: 2 }));
+
+    expect(response.status).toBe(410);
+    await expect(response.json()).resolves.toEqual({
+      authUserId: authenticatedUser.id,
+      error: "assessment_progress_deleted",
+      message: "이미 삭제한 검사 기록은 다시 저장할 수 없어요.",
+      ok: false,
+    });
   });
 
   it("maps a server-side official-release validation failure to 422", async () => {
@@ -239,7 +269,7 @@ describe("/api/assessment-progress", () => {
       ok: false,
     });
 
-    const response = await GET();
+    const response = await GET(getRequest());
 
     expect(response.status).toBe(500);
     await expect(response.json()).resolves.toEqual({
@@ -251,10 +281,19 @@ describe("/api/assessment-progress", () => {
   });
 });
 
-function jsonRequest(body: unknown) {
+function getRequest(authUserId = authenticatedUser.id) {
+  return new Request("http://localhost/api/assessment-progress", {
+    headers: { "x-nuang-auth-user-id": authUserId },
+  });
+}
+
+function jsonRequest(body: unknown, authUserId = authenticatedUser.id) {
   return new Request("http://localhost/api/assessment-progress", {
     body: JSON.stringify(body),
-    headers: { "content-type": "application/json" },
+    headers: {
+      "content-type": "application/json",
+      "x-nuang-auth-user-id": authUserId,
+    },
     method: "PUT",
   });
 }

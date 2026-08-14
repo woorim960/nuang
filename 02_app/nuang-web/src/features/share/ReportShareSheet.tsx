@@ -111,6 +111,7 @@ export function ReportShareSheet({
   const [status, setStatus] = useState<ShareStatus>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   const guestShareUrlRef = useRef<{ key: string; url: string } | null>(null);
+  const initialFocusFrameRef = useRef<number | null>(null);
   const isCriticalTransitionRef = useRef(false);
   const previousFocusRef = useRef<HTMLElement | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
@@ -182,9 +183,10 @@ export function ReportShareSheet({
     const returnFocusElement = returnFocusRef?.current;
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-    const focusFrame = requestAnimationFrame(() =>
-      dialogRef.current?.focus({ preventScroll: true }),
-    );
+    initialFocusFrameRef.current = requestAnimationFrame(() => {
+      initialFocusFrameRef.current = null;
+      dialogRef.current?.focus({ preventScroll: true });
+    });
 
     function handleKeyDown(event: KeyboardEvent) {
       if (event.key === "Escape") {
@@ -216,7 +218,10 @@ export function ReportShareSheet({
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      cancelAnimationFrame(focusFrame);
+      if (initialFocusFrameRef.current !== null) {
+        cancelAnimationFrame(initialFocusFrameRef.current);
+        initialFocusFrameRef.current = null;
+      }
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", handleKeyDown);
       (returnFocusElement ?? previousFocusRef.current)?.focus();
@@ -225,6 +230,10 @@ export function ReportShareSheet({
 
   useEffect(() => {
     if (!isOpen || step === "actions") return;
+    if (initialFocusFrameRef.current !== null) {
+      cancelAnimationFrame(initialFocusFrameRef.current);
+      initialFocusFrameRef.current = null;
+    }
     stepHeadingRef.current?.focus({ preventScroll: true });
   }, [isOpen, step]);
 

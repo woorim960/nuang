@@ -14,13 +14,38 @@ import {
   getFreeTopicScoringVersion,
 } from "@/features/assessment/free-topic-result-version";
 import {
+  clearAccountOwnedFreeTopicResults,
+  deleteFreeTopicResult,
+  deleteFreeTopicResultEverywhere,
   listFreeTopicResultsLocalFirst,
   loadFreeTopicResult,
   loadFreeTopicResultLocalFirst,
+  saveFreeTopicResult,
   syncFreeTopicResult,
   type StoredFreeTopicResult,
 } from "@/features/assessment/free-topic-storage";
 import type { TopicTraitImpactSnapshot } from "@/features/assessment/topic-trait-impact";
+
+const authScopeMocks = vi.hoisted(() => ({
+  userId: "auth-user-a" as string | null,
+}));
+
+vi.mock("@/lib/supabase/browser", () => ({
+  createBrowserSupabaseClient: () => ({
+    auth: {
+      getSession: vi.fn(async () => ({
+        data: {
+          session: authScopeMocks.userId
+            ? {
+                access_token: "test-session",
+                user: { id: authScopeMocks.userId },
+              }
+            : null,
+        },
+      })),
+    },
+  }),
+}));
 
 const resultPrefix = "nuang-free-topic-result:";
 const resultIndexKey = "nuang-free-topic-result:index";
@@ -38,6 +63,7 @@ const localStorageMock = {
 
 describe("free topic result storage", () => {
   beforeEach(() => {
+    authScopeMocks.userId = "auth-user-a";
     storage.clear();
     vi.clearAllMocks();
     vi.stubGlobal("localStorage", localStorageMock);
@@ -45,10 +71,18 @@ describe("free topic result storage", () => {
       "fetch",
       vi.fn(
         async () =>
-          new Response(JSON.stringify({ ok: true, results: [] }), {
-            headers: { "content-type": "application/json" },
-            status: 200,
-          }),
+          new Response(
+            JSON.stringify({
+              authUserId: "auth-user-a",
+              deletedLocalResultIds: [],
+              ok: true,
+              results: [],
+            }),
+            {
+              headers: { "content-type": "application/json" },
+              status: 200,
+            },
+          ),
       ),
     );
   });
@@ -61,6 +95,7 @@ describe("free topic result storage", () => {
     const local = createStoredResult({
       completedAt: "2026-07-28T08:00:00.000Z",
       localResultId: "topic_local",
+      syncStatus: "queued",
     });
     const server = createStoredResult({
       completedAt: "2026-07-28T09:00:00.000Z",
@@ -70,6 +105,8 @@ describe("free topic result storage", () => {
     vi.mocked(fetch).mockResolvedValue(
       new Response(
         JSON.stringify({
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [],
           ok: true,
           results: [{ ...server, answers: undefined, expiresAt: undefined }],
         }),
@@ -82,6 +119,13 @@ describe("free topic result storage", () => {
 
     const results = await listFreeTopicResultsLocalFirst();
 
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/free-topic-results",
+      expect.objectContaining({
+        headers: { "x-nuang-auth-user-id": "auth-user-a" },
+        method: "GET",
+      }),
+    );
     expect(results.map((result) => result.localResultId)).toEqual([
       "topic_server",
       "topic_local",
@@ -104,6 +148,8 @@ describe("free topic result storage", () => {
     vi.mocked(fetch).mockResolvedValue(
       new Response(
         JSON.stringify({
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [],
           ok: true,
           results: [{ ...server, answers: undefined, expiresAt: undefined }],
         }),
@@ -136,6 +182,8 @@ describe("free topic result storage", () => {
     vi.mocked(fetch).mockResolvedValue(
       new Response(
         JSON.stringify({
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [],
           ok: true,
           results: [{ ...server, answers: undefined, expiresAt: undefined }],
         }),
@@ -151,10 +199,13 @@ describe("free topic result storage", () => {
   });
 
   it("keeps a synced local result when the canonical server read fails", async () => {
-    const local = createStoredResult({
-      completedAt: "2026-07-28T09:00:00.000Z",
-      localResultId: "topic_offline",
-    });
+    const local = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_offline",
+      }),
+      ownerSupabaseUserId: "auth-user-a",
+    } satisfies StoredFreeTopicResult;
     storeLocalResults([local]);
     vi.mocked(fetch).mockRejectedValue(new Error("offline"));
 
@@ -170,7 +221,7 @@ describe("free topic result storage", () => {
       syncStatus: "queued",
     });
     vi.mocked(fetch).mockResolvedValue(
-      new Response(JSON.stringify({ ok: true }), {
+      new Response(JSON.stringify({ authUserId: "auth-user-a", ok: true }), {
         headers: { "content-type": "application/json" },
         status: 200,
       }),
@@ -178,10 +229,395 @@ describe("free topic result storage", () => {
 
     const result = await syncFreeTopicResult(local);
 
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/free-topic-results",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "x-nuang-auth-user-id": "auth-user-a",
+        }),
+        method: "POST",
+      }),
+    );
     expect(result.sync).toMatchObject({
       lastError: "invalid_success_response",
       status: "failed",
     });
+  });
+
+  it("preserves the authenticated creator scope and never uploads account A's offline result as account B", async () => {
+    const assessment = getFreeTopicAssessment("comfort-style")!;
+    const questions = getFreeTopicQuestions(assessment.slug);
+    const completedAt = "2026-08-15T00:00:00.000Z";
+    const answers = Object.fromEntries(
+      questions.map((question) => [
+        question.id,
+        {
+          answeredAt: completedAt,
+          questionId: question.id,
+          value: 4,
+        } satisfies FreeTopicAnswer,
+      ]),
+    );
+    const stored = saveFreeTopicResult({
+      answers,
+      assessment,
+      completedAt,
+      ownerSupabaseUserId: "auth-user-a",
+      questions,
+      result: calculateFreeTopicResult({
+        answers,
+        assessment,
+        observedAt: completedAt,
+        questions,
+      }),
+    });
+    authScopeMocks.userId = "auth-user-b";
+
+    await expect(syncFreeTopicResult(stored)).resolves.toMatchObject({
+      ownerSupabaseUserId: "auth-user-a",
+      sync: { status: "queued" },
+    });
+    expect(fetch).not.toHaveBeenCalled();
+  });
+
+  it("does not expose a cached result owned by another signed-in account", async () => {
+    const accountOwned = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_account_a",
+      }),
+      ownerAccountId: "account-a",
+    } satisfies StoredFreeTopicResult;
+    storeLocalResults([accountOwned]);
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          accountId: "account-b",
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [],
+          ok: true,
+          results: [],
+        }),
+        { headers: { "content-type": "application/json" }, status: 200 },
+      ),
+    );
+
+    await expect(listFreeTopicResultsLocalFirst()).resolves.toEqual([]);
+    await expect(
+      loadFreeTopicResultLocalFirst(accountOwned.localResultId),
+    ).resolves.toBeNull();
+  });
+
+  it("quarantines an ownerless legacy synced result until the server proves ownership", async () => {
+    const legacy = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_legacy_synced",
+    });
+    storeLocalResults([legacy]);
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          accountId: "account-b",
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [],
+          ok: true,
+          results: [],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    await expect(
+      loadFreeTopicResultLocalFirst(legacy.localResultId),
+    ).resolves.toBeNull();
+  });
+
+  it("backfills both account scopes after proving a legacy result belongs to the current account", async () => {
+    const legacy = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_legacy_owned",
+    });
+    storeLocalResults([legacy]);
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          accountId: "account-a",
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [],
+          ok: true,
+          results: [{ ...legacy, answers: undefined, expiresAt: undefined }],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    await loadFreeTopicResultLocalFirst(legacy.localResultId);
+
+    expect(loadFreeTopicResult(legacy.localResultId)).toMatchObject({
+      ownerAccountId: "account-a",
+      ownerSupabaseUserId: "auth-user-a",
+    });
+  });
+
+  it("discards a late account A read response after the browser switches to account B", async () => {
+    let resolveRequest!: (response: Response) => void;
+    vi.mocked(fetch).mockImplementation(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveRequest = resolve;
+        }),
+    );
+    const remote = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_account_a_remote",
+    });
+
+    const reading = listFreeTopicResultsLocalFirst();
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce());
+    authScopeMocks.userId = "auth-user-b";
+    resolveRequest(
+      new Response(
+        JSON.stringify({
+          accountId: "account-a",
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [],
+          ok: true,
+          results: [{ ...remote, answers: undefined, expiresAt: undefined }],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    await expect(reading).resolves.toEqual([]);
+    expect(loadFreeTopicResult(remote.localResultId)).toBeNull();
+  });
+
+  it("does not map a late account A sync response onto account B", async () => {
+    let resolveRequest!: (response: Response) => void;
+    vi.mocked(fetch).mockImplementation(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveRequest = resolve;
+        }),
+    );
+    const local = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_account_switch_sync",
+      syncStatus: "queued",
+    });
+    storeLocalResults([local]);
+
+    const syncing = syncFreeTopicResult(local);
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce());
+    authScopeMocks.userId = "auth-user-b";
+    resolveRequest(
+      new Response(
+        JSON.stringify({
+          accountId: "account-a",
+          authUserId: "auth-user-a",
+          ok: true,
+          result: local,
+        }),
+        { status: 200 },
+      ),
+    );
+
+    await expect(syncing).resolves.toMatchObject({
+      ownerSupabaseUserId: "auth-user-a",
+      sync: { lastError: "auth_scope_changed", status: "failed" },
+    });
+    const cached = loadFreeTopicResult(local.localResultId);
+    expect(cached?.ownerSupabaseUserId).toBe("auth-user-a");
+    expect(cached).not.toHaveProperty("ownerAccountId");
+    expect(cached).not.toHaveProperty("serverResultId");
+  });
+
+  it("removes server-tombstoned entries from the list and prevents re-upload", async () => {
+    const local = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_remote_deleted_list",
+      }),
+      ownerAccountId: "account-a",
+      ownerSupabaseUserId: "auth-user-a",
+    } satisfies StoredFreeTopicResult;
+    storeLocalResults([local]);
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          accountId: "account-a",
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [local.localResultId],
+          ok: true,
+          results: [],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    await expect(listFreeTopicResultsLocalFirst()).resolves.toEqual([]);
+    expect(loadFreeTopicResult(local.localResultId)).toBeNull();
+    await syncFreeTopicResult(local);
+    expect(fetch).toHaveBeenCalledOnce();
+  });
+
+  it("removes a server-tombstoned entry from the exact-result loader", async () => {
+    const local = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_remote_deleted_exact",
+      }),
+      ownerAccountId: "account-a",
+      ownerSupabaseUserId: "auth-user-a",
+    } satisfies StoredFreeTopicResult;
+    storeLocalResults([local]);
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          accountId: "account-a",
+          authUserId: "auth-user-a",
+          deletedLocalResultIds: [local.localResultId],
+          ok: true,
+          results: [],
+        }),
+        { status: 200 },
+      ),
+    );
+
+    await expect(
+      loadFreeTopicResultLocalFirst(local.localResultId),
+    ).resolves.toBeNull();
+    expect(loadFreeTopicResult(local.localResultId)).toBeNull();
+  });
+
+  it("deletes a guest-only result locally without requiring a network", async () => {
+    const guest = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_guest_delete",
+      syncStatus: "queued",
+    });
+    storeLocalResults([guest]);
+
+    await expect(
+      deleteFreeTopicResultEverywhere(guest.localResultId),
+    ).resolves.toBe("local_only");
+    expect(fetch).not.toHaveBeenCalled();
+    expect(loadFreeTopicResult(guest.localResultId)).toBeNull();
+  });
+
+  it("deletes an account result only after a stable authenticated response", async () => {
+    const local = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_account_delete",
+      }),
+      ownerSupabaseUserId: "auth-user-a",
+    } satisfies StoredFreeTopicResult;
+    storeLocalResults([local]);
+    vi.mocked(fetch).mockResolvedValue(
+      new Response(JSON.stringify({ authUserId: "auth-user-a", ok: true }), {
+        status: 200,
+      }),
+    );
+
+    await expect(
+      deleteFreeTopicResultEverywhere(local.localResultId),
+    ).resolves.toBe("deleted");
+    expect(fetch).toHaveBeenCalledWith(
+      "/api/free-topic-results",
+      expect.objectContaining({
+        headers: expect.objectContaining({
+          "x-nuang-auth-user-id": "auth-user-a",
+        }),
+        method: "DELETE",
+      }),
+    );
+    expect(loadFreeTopicResult(local.localResultId)).toBeNull();
+  });
+
+  it("keeps the local result when account A changes to B during deletion", async () => {
+    let resolveRequest!: (response: Response) => void;
+    const local = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_account_switch_delete",
+      }),
+      ownerSupabaseUserId: "auth-user-a",
+    } satisfies StoredFreeTopicResult;
+    storeLocalResults([local]);
+    vi.mocked(fetch).mockImplementation(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveRequest = resolve;
+        }),
+    );
+
+    const deleting = deleteFreeTopicResultEverywhere(local.localResultId);
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce());
+    authScopeMocks.userId = "auth-user-b";
+    resolveRequest(
+      new Response(JSON.stringify({ authUserId: "auth-user-a", ok: true }), {
+        status: 200,
+      }),
+    );
+
+    await expect(deleting).resolves.toBe("error");
+    expect(loadFreeTopicResult(local.localResultId)).not.toBeNull();
+  });
+
+  it("does not recreate a local result when a late sync succeeds after deletion", async () => {
+    let resolveRequest!: (response: Response) => void;
+    vi.mocked(fetch).mockImplementation(
+      () =>
+        new Promise<Response>((resolve) => {
+          resolveRequest = resolve;
+        }),
+    );
+    const local = createStoredResult({
+      completedAt: "2026-07-28T09:00:00.000Z",
+      localResultId: "topic_deleted_during_sync",
+      syncStatus: "queued",
+    });
+    storeLocalResults([local]);
+    const syncing = syncFreeTopicResult(local);
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalledOnce());
+
+    deleteFreeTopicResult(local.localResultId);
+    resolveRequest(
+      new Response(
+        JSON.stringify({
+          accountId: "account-a",
+          authUserId: "auth-user-a",
+          ok: true,
+          result: local,
+        }),
+        { status: 200 },
+      ),
+    );
+    await syncing;
+
+    expect(loadFreeTopicResult(local.localResultId)).toBeNull();
+  });
+
+  it("clears account-owned cache while preserving a guest result", () => {
+    const guest = createStoredResult({
+      completedAt: "2026-07-28T10:00:00.000Z",
+      localResultId: "topic_guest",
+      syncStatus: "queued",
+    });
+    const accountOwned = {
+      ...createStoredResult({
+        completedAt: "2026-07-28T09:00:00.000Z",
+        localResultId: "topic_account",
+      }),
+      ownerAccountId: "account-a",
+    } satisfies StoredFreeTopicResult;
+    storeLocalResults([guest, accountOwned]);
+
+    clearAccountOwnedFreeTopicResults();
+
+    expect(loadFreeTopicResult(guest.localResultId)).not.toBeNull();
+    expect(loadFreeTopicResult(accountOwned.localResultId)).toBeNull();
   });
 
   it("does not reopen a legacy result built from a different question set", () => {

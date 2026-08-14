@@ -82,7 +82,11 @@ export function buildTrustedOAuthIdentities(
 }
 
 function normalizeProvider(value: unknown) {
-  if (value === "email" || value === "google" || value === "kakao") {
+  if (
+    value === "email" ||
+    value === "google" ||
+    value === "kakao"
+  ) {
     return value;
   }
 

@@ -63,6 +63,7 @@ export default async function FeedPostDetailPage({
           highlighted={false}
           mode="recommended"
           post={payload.post}
+          prioritizeMedia
           returnTo={returnTo}
           showConversationLink={false}
           viewerCode={payload.viewer.nuangCode}

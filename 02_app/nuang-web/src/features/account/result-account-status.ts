@@ -19,8 +19,10 @@ export type ResultAccountStatusReadFailureCode =
 
 export function createResultAccountStatusPayload(
   result: ResultAccountStatus | null,
+  authUserId: string,
 ) {
   return {
+    authUserId,
     ok: true,
     result,
   } as const;
@@ -28,8 +30,10 @@ export function createResultAccountStatusPayload(
 
 export function createResultAccountStatusFailurePayload(
   code: ResultAccountStatusReadFailureCode,
+  authUserId: string,
 ) {
   return {
+    authUserId,
     code,
     error: "result_account_status_read_failed",
     message: "결과 상태를 확인하지 못했어요. 잠시 뒤 다시 시도해 주세요.",

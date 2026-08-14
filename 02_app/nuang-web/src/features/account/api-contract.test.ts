@@ -25,7 +25,6 @@ const validConsentDraft = {
 
 const validClaimPayload = {
   assessmentKind: "full",
-  consentDraft: validConsentDraft,
   localResultId: "local_test_123",
   responses: [
     {
@@ -87,16 +86,13 @@ describe("account api schemas", () => {
     expect(serialized).not.toContain("TVOAE");
   });
 
-  it("requires terms and privacy consent for claim-result", () => {
-    const parsed = claimResultRequestSchema.safeParse({
-      ...validClaimPayload,
-      consentDraft: {
-        ...validConsentDraft,
-        privacy: false,
-      },
-    });
+  it("does not require a browser consent draft for an authenticated claim", () => {
+    const parsed = claimResultRequestSchema.safeParse(validClaimPayload);
 
-    expect(parsed.success).toBe(false);
+    expect(parsed.success).toBe(true);
+    if (parsed.success) {
+      expect(parsed.data).not.toHaveProperty("consentDraft");
+    }
   });
 
   it("requires a result summary for claim-result server writes", () => {

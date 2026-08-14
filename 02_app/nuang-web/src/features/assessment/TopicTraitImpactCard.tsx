@@ -9,15 +9,18 @@ import styles from "./TopicTraitImpactCard.module.css";
 export function TopicTraitImpactCard({
   loginHref = "/login",
   onRetry,
+  showPending = true,
   snapshot,
   sync,
 }: {
   loginHref?: string;
   onRetry?: () => void;
+  showPending?: boolean;
   snapshot?: TopicTraitImpactSnapshot;
   sync: StoredFreeTopicResult["sync"];
 }) {
   if (!snapshot) {
+    if (!showPending) return null;
     const pending = getPendingPresentation(sync);
     if (!pending) return null;
 

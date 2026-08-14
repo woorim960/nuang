@@ -1,0 +1,233 @@
+.page {
+  width: min(100%, 430px);
+  min-height: 100dvh;
+  margin: 0 auto;
+  padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  color: var(--nu-color-text);
+  background: var(--nu-color-app-bg);
+  word-break: keep-all;
+}
+
+.header {
+  position: sticky;
+  z-index: 30;
+  top: 0;
+  display: grid;
+  min-height: calc(56px + env(safe-area-inset-top));
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  padding: env(safe-area-inset-top) 0.4rem 0;
+  border-bottom: 1px solid var(--nu-color-border);
+  background: color-mix(in srgb, var(--nu-color-surface) 96%, transparent);
+  backdrop-filter: blur(16px);
+}
+
+.header > a {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-color-text);
+}
+
+.header h1 {
+  margin: 0;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
+  text-align: center;
+}
+
+.hero {
+  padding: 1.8rem var(--nu-page-gutter) 1.55rem;
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  background:
+    radial-gradient(
+      circle at 93% 8%,
+      color-mix(in srgb, var(--nu-color-brand-surface) 70%, transparent),
+      transparent 42%
+    ),
+    var(--nu-color-surface);
+}
+
+.hero p,
+.hero h2,
+.hero span,
+.sectionTitle h2,
+.sectionTitle p,
+.operator h2,
+.operator p {
+  margin: 0;
+}
+
+.hero p {
+  color: var(--nu-color-brand-action);
+  font-size: var(--nu-text-label);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.hero h2 {
+  margin-top: 0.42rem;
+  font-size: var(--nu-text-fluid-title-lg);
+  font-weight: var(--nu-weight-semibold);
+  letter-spacing: -0.04em;
+  line-height: 1.28;
+}
+
+.hero span {
+  display: block;
+  margin-top: 0.8rem;
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-caption);
+}
+
+.section,
+.operator {
+  padding: 1.25rem var(--nu-page-gutter);
+  border-bottom: 8px solid var(--nu-color-app-bg);
+  background: var(--nu-color-surface);
+}
+
+.sectionTitle h2,
+.operator h2 {
+  font-size: var(--nu-text-body-lg);
+  font-weight: var(--nu-weight-semibold);
+  letter-spacing: -0.025em;
+}
+
+.sectionTitle p {
+  margin-top: 0.32rem;
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-caption);
+  line-height: var(--nu-leading-label);
+}
+
+.contactList,
+.linkList {
+  display: grid;
+  gap: 0.55rem;
+  margin-top: 1rem;
+}
+
+.contactList > a,
+.linkList > a {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  gap: 0.72rem;
+  padding: 0.7rem 0.82rem;
+  border: 1px solid var(--nu-color-border);
+  border-radius: 16px;
+  color: var(--nu-neutral-900);
+  background: var(--nu-color-surface);
+}
+
+.icon {
+  display: grid;
+  width: 40px;
+  height: 40px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--nu-color-brand-action);
+  background: var(--nu-color-brand-surface);
+}
+
+.contactList a > span:last-child,
+.linkList a > span {
+  display: grid;
+  min-width: 0;
+  gap: 0.16rem;
+}
+
+.contactList small,
+.linkList small {
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-caption);
+}
+
+.contactList strong,
+.linkList strong {
+  overflow-wrap: anywhere;
+  font-size: var(--nu-text-callout);
+  font-weight: var(--nu-weight-semibold);
+}
+
+.linkList > a {
+  justify-content: space-between;
+}
+
+.linkList svg {
+  flex: 0 0 auto;
+  color: var(--nu-neutral-400);
+}
+
+.operatorHeading {
+  display: flex;
+  align-items: center;
+  gap: 0.48rem;
+}
+
+.operatorHeading svg {
+  color: var(--nu-color-brand-action);
+}
+
+.operator dl {
+  display: grid;
+  gap: 0.7rem;
+  margin: 1rem 0 0;
+}
+
+.operator dl > div {
+  display: grid;
+  grid-template-columns: 7rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.operator dt,
+.operator dd {
+  margin: 0;
+  font-size: var(--nu-text-caption);
+  line-height: 1.6;
+}
+
+.operator dt {
+  color: var(--nu-neutral-500);
+}
+
+.operator dd {
+  color: var(--nu-neutral-800);
+  text-align: right;
+}
+
+.trustLine {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.4rem;
+  margin-top: 1rem !important;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--nu-color-border);
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-caption);
+  line-height: 1.5;
+}
+
+.trustLine svg {
+  flex: 0 0 auto;
+  margin-top: 0.05rem;
+  color: var(--nu-color-brand-action);
+}
+
+@media (hover: hover) {
+  .header > a:hover,
+  .contactList > a:hover,
+  .linkList > a:hover {
+    background: var(--nu-color-brand-surface);
+  }
+}
+
+@media (max-width: 340px) {
+  .operator dl > div {
+    grid-template-columns: 5.5rem minmax(0, 1fr);
+  }
+}

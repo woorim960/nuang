@@ -11,13 +11,16 @@ import {
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
 import { clearAccountOwnedLocalAttempts } from "@/features/assessment/assessment-account-sync";
+import { clearAccountOwnedFreeTopicResults } from "@/features/assessment/free-topic-storage";
+import { clearAccountOwnedLabResults } from "@/features/lab/lab-storage";
 import { readJsonResponse } from "@/features/account/response-json";
 import { getSupabaseOAuthProvider } from "@/features/auth/auth-policy";
+import type { SupportedIdentityProvider } from "@/features/auth/identity-link-contract";
 import { useModalDialog } from "@/hooks/useModalDialog";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import styles from "./AuthMethodsPanel.module.css";
 
-type AccountProvider = "google" | "kakao";
+type AccountProvider = SupportedIdentityProvider;
 
 type AuthMethod = {
   canUnlink: boolean;
@@ -308,6 +311,8 @@ export function AuthMethodsPanel() {
       return;
     }
     await clearAccountOwnedLocalAttempts();
+    clearAccountOwnedFreeTopicResults();
+    clearAccountOwnedLabResults();
     router.replace("/home");
     router.refresh();
   }

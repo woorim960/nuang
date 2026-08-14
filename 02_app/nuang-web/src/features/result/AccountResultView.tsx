@@ -7,9 +7,14 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
+import { readClientAccountResults } from "@/features/account/client-account-results";
 import { deleteLocalAttempt } from "@/features/assessment/assessment-storage";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
+import {
+  readCurrentSupabaseUserId,
+  verifyStableResultAuthScope,
+} from "@/features/result-persistence/client-result-scope";
 import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
 import { ReportShareSheet } from "@/features/share/ReportShareSheet";
 import { buildCoreReportShareContent } from "@/features/share/report-share-contract";
@@ -163,19 +168,30 @@ export function AccountResultView({
     setDeleteState("working");
 
     try {
+      const requestUserId = await readCurrentSupabaseUserId();
+      if (!requestUserId) {
+        setDeleteState("error");
+        return;
+      }
       const response = await fetch("/api/account-results", {
         body: JSON.stringify({ resultReportId }),
         headers: {
           "content-type": "application/json",
+          "x-nuang-auth-user-id": requestUserId,
         },
         method: "DELETE",
       });
       const body = (await response.json()) as {
+        authUserId?: string;
         ok?: boolean;
         result?: { localResultId?: string | null };
       };
+      const stableUserId = await verifyStableResultAuthScope({
+        requestUserId,
+        responseUserId: body.authUserId,
+      });
 
-      if (!response.ok || !body.ok) {
+      if (!response.ok || !body.ok || !stableUserId) {
         setDeleteState("error");
         return;
       }
@@ -461,29 +477,16 @@ function CenteredFacetBar({
 }
 
 async function readAccountResult(resultReportId: string) {
-  try {
-    const response = await fetch(
-      `/api/account-results?resultReportId=${encodeURIComponent(resultReportId)}`,
-      {
-        cache: "no-store",
-        method: "GET",
-      },
-    );
+  const accountRead = await readClientAccountResults({ resultReportId });
 
-    if (response.status === 404) return { state: "missing" as const };
-    if (!response.ok) return { state: "error" as const };
-
-    const body = (await response.json()) as {
-      ok?: boolean;
-      results?: AccountResultSummary[];
-    };
-
-    return body.ok && body.results?.length === 1
-      ? { result: body.results[0], state: "ready" as const }
-      : { state: "missing" as const };
-  } catch {
-    return { state: "error" as const };
+  if (accountRead.responseStatus === 404) {
+    return { state: "missing" as const };
   }
+  if (accountRead.state !== "ready") return { state: "error" as const };
+
+  return accountRead.results.length === 1
+    ? { result: accountRead.results[0], state: "ready" as const }
+    : { state: "missing" as const };
 }
 
 function formatDate(value: string) {

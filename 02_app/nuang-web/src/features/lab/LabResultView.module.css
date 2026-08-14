@@ -315,6 +315,13 @@
   gap: 0.6rem;
 }
 
+.deleteError {
+  margin: 0 0 0.75rem;
+  color: var(--nu-color-danger);
+  font-size: var(--nu-text-label);
+  line-height: 1.55;
+}
+
 .deleteActions button {
   min-height: 52px;
   border: 0;
@@ -332,6 +339,11 @@
 .deleteActions button:last-child {
   color: var(--nu-color-text-on-accent);
   background: var(--nu-color-danger);
+}
+
+.deleteActions button:disabled {
+  cursor: wait;
+  opacity: 0.55;
 }
 
 .loading,
@@ -363,6 +375,12 @@
 .missing > a {
   width: 100%;
   margin-top: 1.3rem;
+}
+
+.missing > a + a {
+  margin-top: 0.55rem;
+  color: var(--nu-color-text-secondary);
+  background: var(--nu-color-surface-muted);
 }
 
 @media (max-width: 340px) {

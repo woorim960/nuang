@@ -9,9 +9,15 @@ import {
   listFreeTopicResultsLocalFirst,
   type StoredFreeTopicResult,
 } from "@/features/assessment/free-topic-storage";
-import { deleteLabResult, listLabResults } from "@/features/lab/lab-storage";
+import {
+  deleteLabResultEverywhere,
+  listLabResultsLocalFirst,
+} from "@/features/lab/lab-storage";
 
 const fetchMock = vi.fn();
+const authScopeMocks = vi.hoisted(() => ({
+  userId: "auth-user-a" as string | null,
+}));
 
 vi.mock("@/features/assessment/assessment-storage", () => ({
   deleteLocalAttempt: vi.fn(),
@@ -26,7 +32,7 @@ vi.mock("@/features/assessment/assessment-account-sync", () => ({
 }));
 
 vi.mock("@/features/assessment/free-topic-storage", () => ({
-  deleteFreeTopicResult: vi.fn(),
+  deleteFreeTopicResultEverywhere: vi.fn(async () => "deleted"),
   listFreeTopicResultsLocalFirst: vi.fn(),
   syncQueuedFreeTopicResults: vi.fn(async () => ({ attempted: 0, synced: 0 })),
 }));
@@ -41,23 +47,49 @@ vi.mock("@/features/lab/lab-assessments", () => ({
 }));
 
 vi.mock("@/features/lab/lab-storage", () => ({
-  deleteLabResult: vi.fn(),
+  deleteLabResultEverywhere: vi.fn(async () => "deleted"),
   getLabExpiresAt: vi.fn((result) => result.expiresAt),
-  listLabResults: vi.fn(),
+  listLabResultsLocalFirst: vi.fn(),
+}));
+
+vi.mock("@/features/result-persistence/client-result-scope", () => ({
+  readCurrentSupabaseUserId: vi.fn(async () => authScopeMocks.userId),
+  verifyStableResultAuthScope: vi.fn(
+    async ({
+      requestUserId,
+      responseUserId,
+    }: {
+      requestUserId: string | null;
+      responseUserId?: string;
+    }) =>
+      requestUserId &&
+      responseUserId === requestUserId &&
+      authScopeMocks.userId === requestUserId
+        ? requestUserId
+        : null,
+  ),
 }));
 
 describe("LocalResultManager", () => {
   beforeEach(() => {
+    authScopeMocks.userId = "auth-user-a";
     vi.clearAllMocks();
     vi.mocked(listLocalAttempts).mockResolvedValue([]);
     vi.mocked(listFreeTopicResultsLocalFirst).mockResolvedValue([]);
-    vi.mocked(listLabResults).mockReturnValue([]);
+    vi.mocked(listLabResultsLocalFirst).mockResolvedValue([]);
     fetchMock.mockImplementation(() =>
       Promise.resolve(
-        new Response(JSON.stringify({ ok: true, results: [] }), {
-          headers: { "content-type": "application/json" },
-          status: 200,
-        }),
+        new Response(
+          JSON.stringify({
+            authUserId: "auth-user-a",
+            ok: true,
+            results: [],
+          }),
+          {
+            headers: { "content-type": "application/json" },
+            status: 200,
+          },
+        ),
       ),
     );
     vi.stubGlobal("fetch", fetchMock);
@@ -216,8 +248,141 @@ describe("LocalResultManager", () => {
     });
   });
 
+  it("binds an account result deletion to the stable signed-in user", async () => {
+    vi.mocked(listLocalAttempts).mockResolvedValue([createCoreAttempt()]);
+    fetchMock.mockImplementation(
+      (input: RequestInfo | URL, init?: RequestInit) => {
+        if (
+          String(input) === "/api/account-results" &&
+          init?.method === "DELETE"
+        ) {
+          return Promise.resolve(
+            new Response(
+              JSON.stringify({ authUserId: "auth-user-a", ok: true }),
+              { status: 200 },
+            ),
+          );
+        }
+
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              authUserId: "auth-user-a",
+              ok: true,
+              results: [createAccountResult()],
+            }),
+            { status: 200 },
+          ),
+        );
+      },
+    );
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+
+    render(<LocalResultManager />);
+    fireEvent.click(
+      await screen.findByRole("button", { name: "정밀 코어 삭제" }),
+    );
+
+    await waitFor(() => {
+      expect(fetchMock).toHaveBeenCalledWith(
+        "/api/account-results",
+        expect.objectContaining({
+          headers: expect.objectContaining({
+            "x-nuang-auth-user-id": "auth-user-a",
+          }),
+          method: "DELETE",
+        }),
+      );
+      expect(deleteLocalAttempt).toHaveBeenCalledWith("local_test_1");
+    });
+  });
+
+  it("keeps a core result when account A changes to B during deletion", async () => {
+    vi.mocked(listLocalAttempts).mockResolvedValue([createCoreAttempt()]);
+    fetchMock.mockImplementation(
+      (input: RequestInfo | URL, init?: RequestInit) => {
+        if (
+          String(input) === "/api/account-results" &&
+          init?.method === "DELETE"
+        ) {
+          authScopeMocks.userId = "auth-user-b";
+          return Promise.resolve(
+            new Response(
+              JSON.stringify({ authUserId: "auth-user-a", ok: true }),
+              { status: 200 },
+            ),
+          );
+        }
+
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              authUserId: "auth-user-a",
+              ok: true,
+              results: [createAccountResult()],
+            }),
+            { status: 200 },
+          ),
+        );
+      },
+    );
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+
+    render(<LocalResultManager />);
+    fireEvent.click(
+      await screen.findByRole("button", { name: "정밀 코어 삭제" }),
+    );
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "결과를 삭제하지 못했어요",
+    );
+    expect(deleteLocalAttempt).not.toHaveBeenCalled();
+    expect(screen.getByText("정밀 코어")).toBeInTheDocument();
+  });
+
+  it("keeps a core result when the deletion session has expired", async () => {
+    vi.mocked(listLocalAttempts).mockResolvedValue([createCoreAttempt()]);
+    fetchMock.mockImplementation(
+      (input: RequestInfo | URL, init?: RequestInit) => {
+        if (
+          String(input) === "/api/account-results" &&
+          init?.method === "DELETE"
+        ) {
+          return Promise.resolve(
+            new Response(JSON.stringify({ error: "unauthenticated" }), {
+              status: 401,
+            }),
+          );
+        }
+
+        return Promise.resolve(
+          new Response(
+            JSON.stringify({
+              authUserId: "auth-user-a",
+              ok: true,
+              results: [createAccountResult()],
+            }),
+            { status: 200 },
+          ),
+        );
+      },
+    );
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+
+    render(<LocalResultManager />);
+    fireEvent.click(
+      await screen.findByRole("button", { name: "정밀 코어 삭제" }),
+    );
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "결과를 삭제하지 못했어요",
+    );
+    expect(deleteLocalAttempt).not.toHaveBeenCalled();
+    expect(screen.getByText("정밀 코어")).toBeInTheDocument();
+  });
+
   it("deletes a lab result after confirmation", async () => {
-    vi.mocked(listLabResults).mockReturnValue([
+    vi.mocked(listLabResultsLocalFirst).mockResolvedValue([
       {
         answers: {},
         completedAt: "2026-07-08T00:00:00.000Z",
@@ -252,7 +417,9 @@ describe("LocalResultManager", () => {
       }),
     );
 
-    expect(deleteLabResult).toHaveBeenCalledWith("lab_result_attempt_1");
+    expect(deleteLabResultEverywhere).toHaveBeenCalledWith(
+      "lab_result_attempt_1",
+    );
   });
 
   it("merges matching local and account results into one row", async () => {
@@ -260,6 +427,7 @@ describe("LocalResultManager", () => {
     fetchMock.mockResolvedValue(
       new Response(
         JSON.stringify({
+          authUserId: "auth-user-a",
           ok: true,
           results: [
             createAccountResult({
@@ -315,6 +483,7 @@ describe("LocalResultManager", () => {
           return Promise.resolve(
             new Response(
               JSON.stringify({
+                authUserId: "auth-user-a",
                 comparisonReports: [
                   {
                     accessStatus: "active",
@@ -429,6 +598,7 @@ describe("LocalResultManager", () => {
     fetchMock.mockResolvedValue(
       new Response(
         JSON.stringify({
+          authUserId: "auth-user-a",
           ok: true,
           results: [
             {
