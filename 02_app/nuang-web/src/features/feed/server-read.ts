@@ -122,6 +122,10 @@ type PublicProfileSnapshotRow = {
   snapshot_payload: unknown;
 };
 
+type PublicProfileSnapshotPublicationRow = PublicProfileSnapshotRow & {
+  result_report_id: string | null;
+};
+
 type FeedEngagement = {
   likes: number;
   replyPreview: FeedReplyPreview[];
@@ -2284,7 +2288,7 @@ async function readPublicProfileCardsForAccounts({
   const response = await client
     .schema("profile")
     .from("profile_public_snapshot")
-    .select("id, account_id, snapshot_payload")
+    .select("id, account_id, result_report_id, snapshot_payload")
     .in("account_id", uniqueAccountIds)
     .eq("status", "active")
     .is("deleted_at", null)
@@ -2307,10 +2311,13 @@ async function readPublicProfileCardsForAccounts({
 
   const latestSnapshots = new Map<
     string,
-    { row: PublicProfileSnapshotRow; snapshot: PublicProfileSnapshotPayload }
+    {
+      row: PublicProfileSnapshotPublicationRow;
+      snapshot: PublicProfileSnapshotPayload;
+    }
   >();
 
-  for (const row of response.data as PublicProfileSnapshotRow[]) {
+  for (const row of response.data as PublicProfileSnapshotPublicationRow[]) {
     if (latestSnapshots.has(row.account_id)) continue;
 
     const snapshot = coercePublicProfileSnapshotPayload(
@@ -2329,6 +2336,13 @@ async function readPublicProfileCardsForAccounts({
         const snapshot = await mergeCommunityProfileIntoSnapshot({
           client,
           profile: communityProfile,
+          publicationTrace: row.result_report_id
+            ? {
+                accountId,
+                publicSnapshotId: row.id,
+                resultReportId: row.result_report_id,
+              }
+            : null,
           snapshot: baseSnapshot,
         });
 

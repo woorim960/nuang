@@ -318,6 +318,29 @@ describe("feed server read model", () => {
     ).toHaveLength(2);
   });
 
+  it("reads the trusted publication trace with each feed profile snapshot", async () => {
+    const operations: MockFeedReadOperation[] = [];
+
+    await createServerOwnFeedItems({
+      accountId: "account-own",
+      client: createMockFeedReadClient({ operations }) as never,
+    });
+
+    const snapshotReads = operations.filter(
+      (operation) =>
+        operation.schema === "profile" &&
+        operation.table === "profile_public_snapshot",
+    );
+    expect(snapshotReads.length).toBeGreaterThan(0);
+    expect(
+      snapshotReads.every(
+        (operation) =>
+          operation.select ===
+          "id, account_id, result_report_id, snapshot_payload",
+      ),
+    ).toBe(true);
+  });
+
   it("keeps only report shares that use the current Nuang code", async () => {
     supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient();

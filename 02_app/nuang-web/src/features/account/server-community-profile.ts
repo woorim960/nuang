@@ -1,7 +1,11 @@
 import "server-only";
 
 import type { SupabaseClient, User } from "@supabase/supabase-js";
-import { readPublicSnapshotPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
+import {
+  readCoreResultPublicationDecision,
+  readPublicSnapshotPublicationDecision,
+  type CoreResultPublicationDecision,
+} from "@/features/assessment/server-core-result-publication-policy";
 import { ensureAccountForUser } from "@/features/account/server-writes";
 import {
   communityProfileAvatarBucket,
@@ -19,6 +23,14 @@ import type { PublicProfileSnapshotPayload } from "@/features/together/public-co
 
 const communityProfileSelect =
   "id,account_id,handle,display_name,bio,avatar_bucket,avatar_object_path,avatar_revision,avatar_character_key,code_visibility,detail_visibility,comparison_enabled,status,revision";
+const canonicalUuidPattern =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+export type TrustedPublicSnapshotPublicationTrace = Readonly<{
+  accountId: string;
+  publicSnapshotId: string;
+  resultReportId: string;
+}>;
 
 export async function ensureCommunityProfile({
   client,
@@ -229,19 +241,24 @@ export async function createCommunityProfileEditorPayload({
 export async function mergeCommunityProfileIntoSnapshot({
   client,
   profile,
+  publicationTrace,
   snapshot,
 }: {
   client: SupabaseClient;
   profile: CommunityProfileRecord | null;
+  publicationTrace?: TrustedPublicSnapshotPublicationTrace | null;
   snapshot: PublicProfileSnapshotPayload;
 }) {
-  const publication = await readPublicSnapshotPublicationDecision({
+  const publication = await resolveSnapshotPublicationDecision({
     client,
-    ...(profile ? { ownerAccountId: profile.accountId } : {}),
-    publicSnapshotId: snapshot.snapshotId,
+    profile,
+    publicationTrace,
+    snapshot,
   });
   if (!profile) {
-    return publication.eligible ? snapshot : redactSnapshotMeasurement(snapshot);
+    return publication.eligible
+      ? snapshot
+      : redactSnapshotMeasurement(snapshot);
   }
 
   const includedFields = new Set(snapshot.visibility.includedFields);
@@ -289,6 +306,57 @@ export async function mergeCommunityProfileIntoSnapshot({
       }),
     },
   } satisfies PublicProfileSnapshotPayload;
+}
+
+async function resolveSnapshotPublicationDecision({
+  client,
+  profile,
+  publicationTrace,
+  snapshot,
+}: {
+  client: SupabaseClient;
+  profile: CommunityProfileRecord | null;
+  publicationTrace?: TrustedPublicSnapshotPublicationTrace | null;
+  snapshot: PublicProfileSnapshotPayload;
+}): Promise<CoreResultPublicationDecision> {
+  if (publicationTrace === undefined) {
+    return readPublicSnapshotPublicationDecision({
+      client,
+      ...(profile ? { ownerAccountId: profile.accountId } : {}),
+      publicSnapshotId: snapshot.snapshotId,
+    });
+  }
+
+  if (
+    !isTrustedPublicSnapshotPublicationTrace(
+      publicationTrace,
+      profile,
+      snapshot,
+    )
+  ) {
+    return { eligible: false, reason: "snapshot_not_publicable" };
+  }
+
+  return readCoreResultPublicationDecision({
+    client,
+    ownerAccountId: publicationTrace.accountId,
+    resultReportId: publicationTrace.resultReportId,
+  });
+}
+
+function isTrustedPublicSnapshotPublicationTrace(
+  publicationTrace: TrustedPublicSnapshotPublicationTrace | null,
+  profile: CommunityProfileRecord | null,
+  snapshot: PublicProfileSnapshotPayload,
+): publicationTrace is TrustedPublicSnapshotPublicationTrace {
+  return Boolean(
+    publicationTrace &&
+    canonicalUuidPattern.test(publicationTrace.accountId) &&
+    canonicalUuidPattern.test(publicationTrace.publicSnapshotId) &&
+    canonicalUuidPattern.test(publicationTrace.resultReportId) &&
+    publicationTrace.publicSnapshotId === snapshot.snapshotId &&
+    (!profile || profile.accountId === publicationTrace.accountId),
+  );
 }
 
 function redactSnapshotMeasurement(
