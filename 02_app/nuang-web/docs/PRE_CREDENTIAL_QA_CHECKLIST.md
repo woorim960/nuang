@@ -62,7 +62,7 @@ build만 분리해서 확인할 때는 아래 명령을 사용한다.
 npm run qa:precredential:build
 ```
 
-Codex 샌드박스에서 Turbopack build가 내부 포트 바인딩 권한 때문에 실패하면, `npm run build`만 샌드박스 밖 권한으로 재실행해 확인한다. 일반 로컬 터미널에서는 `qa:precredential` 전체가 통과해야 한다.
+Codex 샌드박스에서 기본 Next.js build가 내부 포트 바인딩 권한 때문에 실패하면, `npm run build`만 샌드박스 밖 권한으로 재실행해 확인한다. 일반 로컬 터미널에서는 `qa:precredential` 전체가 통과해야 한다. `--webpack` 강제는 8GB heap 소진 회귀가 있어 사용하지 않는다.
 
 ## Credential 없이 통과해야 하는 조건
 

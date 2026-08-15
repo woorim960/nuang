@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "databaseHistoryCount": 94,
+  "databaseHistoryCount": 95,
   "verifiedAt": "2026-08-15",
   "migrations": [
     {
@@ -472,6 +472,11 @@
       "version": "202608150003",
       "file": "202608150003_feed_media_storage_provider.sql",
       "sha256": "692acab4726f0b425f867c2c4e9dfc9b278a45dfebcfe89c6b4cc9681b1cc8d2"
+    },
+    {
+      "version": "202608150004",
+      "file": "202608150004_feed_post_media_atomic_publication.sql",
+      "sha256": "a373963cd2ac47a9a0cc16ed34e70535ad240cab719d637002d8ab79b442c15a"
     }
   ]
 }

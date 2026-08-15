@@ -7,11 +7,13 @@ const inheritedNodeOptions = process.env.NODE_OPTIONS?.trim() ?? "";
 const memoryOption = /--max-old-space-size(?:=|\s)/.test(inheritedNodeOptions)
   ? ""
   : "--max-old-space-size=8192";
-const nodeOptions = [inheritedNodeOptions, memoryOption].filter(Boolean).join(" ");
+const nodeOptions = [inheritedNodeOptions, memoryOption]
+  .filter(Boolean)
+  .join(" ");
 
 const result = spawnSync(
   process.execPath,
-  [resolve(root, "node_modules/next/dist/bin/next"), "build", "--webpack"],
+  [resolve(root, "node_modules/next/dist/bin/next"), "build"],
   {
     cwd: root,
     env: { ...process.env, NODE_OPTIONS: nodeOptions },
