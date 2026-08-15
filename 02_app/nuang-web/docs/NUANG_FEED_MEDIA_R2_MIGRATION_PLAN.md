@@ -53,7 +53,7 @@ Supabase와 R2의 객체 키를 URL로 직접 신뢰하지 않는다. 앱은 DB�
 12. 동일 초안 재시도는 같은 요청 ID를 사용하고, 네트워크 응답 유실이나 중복 클릭으로 같은 게시물이 두 번 만들어지지 않게 한다.
 13. 피드 카드가 화면에 가까워지면 현재 사진과 다음 사진만 미리 불러오며, 사진을 누르면 잘리지 않은 원본 비율 뷰어를 제공한다.
 
-8GB hard guard는 **저장 바이트**를 보호한다. R2의 Class A/B 요청 무료량은 별도 한도이며 Cloudflare가 초과 요청을 자동 차단하지 않는다. 따라서 R2 쓰기 전환 전 Cloudflare Usage에서 월간 Class A/B 사용량을 수집하고 70%·85% 알림, 공개 경로 rate limit, 비공개 링크 남용 차단을 함께 켠다. 이 관측이 없으면 저장 용량이 8GB 이하여도 “항상 무료”라고 판단하지 않는다.
+8GB hard guard는 **저장 바이트**를 보호한다. R2의 Class A/B 요청 무료량은 계정 전체에 적용되는 별도 한도이며 Cloudflare가 초과 요청을 자동 차단하지 않는다. 따라서 R2 쓰기 전환 전 객체 S3 자격 증명과 분리되고 `Account Analytics Read`와 `Workers R2 Storage Read`만 가진 `CLOUDFLARE_R2_ANALYTICS_API_TOKEN`으로 계정 전체의 최근 31일 Class A/B 사용량과 대상 버킷·계정 저장량을 수집한다. billing cycle을 누락하지 않는 보수적 상한으로 70%·85% 알림, 공개 경로 rate limit, 비공개 링크 남용 차단을 함께 켠다. 이 관측이 없으면 저장 용량이 8GB 이하여도 “항상 무료”라고 판단하지 않는다.
 
 ## 보안·개인정보 계약
 
@@ -61,9 +61,12 @@ Supabase와 R2의 객체 키를 URL로 직접 신뢰하지 않는다. 앱은 DB�
 - R2 버킷은 private이며 Worker binding 또는 제한된 S3 API 자격증명만 접근한다.
 - 브라우저에 R2 API access key와 signing secret을 노출하지 않는다.
 - Worker URL은 bearer URL이므로 경로, 만료 시각, 캐시 모드를 HMAC에 묶는다.
+- Worker는 R2 객체의 `Content-Type`이 JPEG, PNG, WebP 중 하나인지 다시 확인하고 모든 응답에 `Cross-Origin-Resource-Policy: same-site`를 적용한다.
 - 객체 키에 이메일, 닉네임, 전화번호를 넣지 않는다.
 - R2 API 토큰은 대상 버킷 object read/write/delete로만 제한한다.
-- 활성화 전에 개인정보 처리방침의 국외 처리·수탁자 문구와 Cloudflare DPA를 운영자가 검토한다.
+- 객체 S3 secret, Worker delivery signing secret, read-only analytics token은 서로 다른 값으로 발급한다. Access Key ID는 16~128자의 영문·숫자 형식만 허용한다.
+- signing secret을 회전할 때는 순차 `secret put`을 사용하지 않는다. 저장소 밖 권한 `0600` 임시 secrets 파일로 `current=새 값`, `previous=기존 값`을 한 Worker version에 원자 업로드·배포하고, 앱 signer를 새 값으로 전환한 뒤 기존 1시간 링크가 만료되면 `wrangler secret bulk` 한 요청에서 `current=새 값`, `previous=null`로 정리한다. current와 previous가 같거나 previous가 32자 미만이면 Worker는 503으로 닫힌다.
+- 활성화 전에 개인정보 처리방침의 국외 처리·수탁자 문구와 Cloudflare DPA를 운영자가 검토하고, 완료 뒤에만 `FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED=true`로 설정한다. 코드와 환경 검증은 이 값이 없으면 카나리 쓰기도 닫는다.
 
 ## 무중단 전환 단계
 
@@ -95,13 +98,17 @@ Supabase와 R2의 객체 키를 URL로 직접 신뢰하지 않는다. 앱은 DB�
 ### 2. R2 암전 배포
 
 - APAC R2 버킷과 `media.nuang.app` Worker를 만든다.
-- 운영 앱에 R2 환경값을 넣되 쓰기 공급자는 `supabase`로 유지한다.
+- 운영 앱에 완전한 R2 환경값과 별도 read-only analytics token을 넣되 쓰기 공급자는 `supabase`로 유지한다. 운영 delivery origin은 정확히 `https://media.nuang.app`이어야 한다.
+- `FEED_MEDIA_R2_ALL_CUSTOMERS=false`와 `FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED=false`를 함께 유지한다.
+- Cloudflare DPA와 개인정보 문구 검토가 끝나기 전에는 `FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED=false`를 유지한다.
 - 고정된 시험 객체로 Worker의 서명 거부, 만료, HIT/MISS, 삭제 동작을 확인한다.
 
 ### 3. 제한 전환
 
 - `FEED_MEDIA_WRITE_PROVIDER=cloudflare_r2`를 설정하되
-  `FEED_MEDIA_R2_ALL_CUSTOMERS=false`를 유지한다.
+  `FEED_MEDIA_R2_ALL_CUSTOMERS=false`와
+  `FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED=false`를 유지한다.
+- Cloudflare DPA와 개인정보 처리방침 검토를 완료하고 `FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED=true`로 승인한 뒤에만 카나리 계정을 추가한다.
 - `FEED_MEDIA_R2_CANARY_ACCOUNT_IDS`에 검증된 운영자 account UUID만 명시해 시험
   게시물부터 R2로 쓴다. 목록에 없는 고객은 같은 배포에서 계속 Supabase에 쓴다.
 - 카나리 대상 판정은 인증 사용자의 뉴앙 account 연결과 게시물 소유권을 확인한 뒤에만
@@ -111,10 +118,11 @@ Supabase와 R2의 객체 키를 URL로 직접 신뢰하지 않는다. 앱은 DB�
 
 ### 4. 신규 쓰기 전환
 
-- 카나리의 업로드·조회·삭제·정리·용량 지표가 승인 기준을 만족한 뒤에만
-  `FEED_MEDIA_R2_ALL_CUSTOMERS=true`로 신규 피드 사진 전체를 전환한다.
+- 카나리의 업로드·조회·삭제·정리·용량 지표가 승인 기준을 만족하고 별도 운영 승인을 기록한 뒤에만 `FEED_MEDIA_R2_ALL_CUSTOMERS=true`와
+  `FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED=true`를 같은 배포에서 설정해 신규 피드 사진 전체를 전환한다. 첫 번째 값만 true이면 환경 검증이 실패한다.
 - 기존 Supabase 행은 계속 Supabase signed URL로 읽는다.
 - 롤백 시 먼저 `FEED_MEDIA_R2_ALL_CUSTOMERS=false`로 전체 전환을 닫고,
+  `FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED=false`로 승인을 회수한 뒤
   `FEED_MEDIA_WRITE_PROVIDER=supabase`로 되돌린다. 이미 생성된 R2 행의 읽기 경로는 유지한다.
 
 ### 5. 직접 업로드
@@ -133,6 +141,7 @@ Supabase와 R2의 객체 키를 URL로 직접 신뢰하지 않는다. 앱은 DB�
 - soft delete 시점에 아직 공급자 PUT을 확정하지 않은 `storage_ready=false` 행은 외부 DELETE를 시도하지 않는다. 대신 행을 물리 삭제하면 BEFORE DELETE 트리거가 DB 트랜잭션 안에서 용량 계정을 cleanup queue로 옮기고 15분 유예를 설정해, 늦게 완료된 PUT까지 안전하게 제거한다.
 - `deleted_at` 기준 30분 이상 남은 숨김 미디어는 `optimized_at`이 없는 과거 행까지 정리 worker가 객체 삭제를 재확인한 뒤에만 용량에서 제외한다.
 - R2 읽기 설정이 없으면 해당 미디어를 노출하지 않으며 Supabase의 같은 경로로 추측해 읽지 않는다.
+- R2 행이 한 건이라도 생긴 뒤에는 `FEED_MEDIA_R2_ENABLED=true`, Worker, bucket, 현재 R2 읽기 코드를 유지한다. 신규 쓰기 롤백을 이유로 dual-read 도입 이전 앱 배포로 되돌리거나 R2 자격 증명을 제거하지 않는다.
 - 물리 삭제되는 `storage_accounted=true` 미디어 행은 `BEFORE DELETE` 트리거가 같은 DB 트랜잭션에서 정리 큐로 넘긴다. `storage_ready=false`만 늦은 immutable PUT에 대비해 15분 유예하고, 활성화가 끝난 `storage_ready=true` 객체는 즉시 정리 대상으로 둔다.
 - 게시물 삭제 후 객체 제거 실패는 본문 공개를 복구하지 않고 정리 대상에 남겨 재시도한다.
 
@@ -148,6 +157,9 @@ Supabase와 R2의 객체 키를 URL로 직접 신뢰하지 않는다. 앱은 DB�
 - R2 warm GET이 Supabase보다 느리지 않거나, 용량·비용 이점으로 허용 가능한 범위임을 확인
 - R2 사용량 70%·85% 경고와 8GB 애플리케이션 hard guard 확인
 - R2 저장 바이트뿐 아니라 월간 Class A/B 요청량도 70%·85% 경고와 남용 방지 규칙으로 관찰
+- 카나리 활성 객체 전체(최대 100개)의 private HEAD가 DB 크기·MIME과 일치하며, 100개를 넘기기 전 확장 가능한 표본·전체 sweep 운영안을 별도 승인
+- 계정 전체 Standard 저장량을 판정하고 Infrequent Access 사용이 0임을 fail-closed로 확인
+- 운영 환경 검증에서 exact delivery origin, Access Key ID 형식, 서로 다른 storage/delivery/analytics secret, 전체 고객 이중 승인 게이트 확인
 - 개인정보 문서와 삭제 절차 운영 검수 완료
 - cleanup endpoint의 secret·호출 스케줄·실패 경보가 준비되기 전에는 R2 쓰기 전환 금지
 

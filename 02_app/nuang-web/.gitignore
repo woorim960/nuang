@@ -59,6 +59,10 @@ yarn-error.log*
 .env*
 !.env.example
 !.env.*.example
+.dev.vars*
+
+# Cloudflare Wrangler local authentication, state, and generated artifacts
+.wrangler/
 
 # vercel
 .vercel

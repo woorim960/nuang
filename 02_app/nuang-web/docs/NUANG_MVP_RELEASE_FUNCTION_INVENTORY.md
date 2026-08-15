@@ -4,7 +4,7 @@
 - 출시 후보: NUANG MVP
 - 기능 도메인: 18개
 - 앱 진입 표면: 195개 (화면 95, API·callback 91, layout 9)
-- 자동 테스트: 540개 파일, 정적 집계 2387개 테스트 케이스
+- 자동 테스트: 540개 파일, 정적 집계 2399개 테스트 케이스
 
 이 문서는 `src/app`의 모든 `page.tsx`, `route.ts`, `layout.tsx`를 실제 파일에서 수집해 기능 도메인과 연결한 출시 인벤토리다. 기능·화면·API가 추가됐는데 분류나 테스트 근거가 없으면 `npm run release:inventory:check`가 실패한다.
 

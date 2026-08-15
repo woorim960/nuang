@@ -62,6 +62,16 @@ export function resolveFeedMediaStorageWriteTarget({
   if (allCustomersValue !== "true" && allCustomersValue !== "false") {
     return { ok: false, reason: "configuration_invalid" };
   }
+  const allCustomersApprovedValue =
+    environment.FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED?.trim().toLowerCase() ||
+    "false";
+  if (
+    (allCustomersApprovedValue !== "true" &&
+      allCustomersApprovedValue !== "false") ||
+    (allCustomersValue === "true" && allCustomersApprovedValue !== "true")
+  ) {
+    return { ok: false, reason: "configuration_invalid" };
+  }
 
   const canaryAccountIds = new Set<string>();
   const canaryValue = environment.FEED_MEDIA_R2_CANARY_ACCOUNT_IDS?.trim();
@@ -80,11 +90,17 @@ export function resolveFeedMediaStorageWriteTarget({
     return { ok: false, reason: "configuration_invalid" };
   }
   const shouldWriteToR2 =
-    allCustomersValue === "true" ||
+    (allCustomersValue === "true" && allCustomersApprovedValue === "true") ||
     (normalizedAccountId !== undefined &&
       canaryAccountIds.has(normalizedAccountId));
   if (!shouldWriteToR2) {
     return { ok: true, provider: "supabase", r2: null };
+  }
+  const privacyReviewApproved =
+    environment.FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED?.trim().toLowerCase() ||
+    "false";
+  if (privacyReviewApproved !== "true") {
+    return { ok: false, reason: "configuration_invalid" };
   }
   if (!normalizedAccountId) {
     return { ok: false, reason: "configuration_invalid" };

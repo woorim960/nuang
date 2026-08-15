@@ -2,6 +2,9 @@
   "name": "nuang-web",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
   "scripts": {
     "dev": "next dev",
     "prebuild": "node scripts/check-supabase-migrations.mjs --require-no-pending",
@@ -33,9 +36,14 @@
     "mobile:release:prepare": "npm run mobile:release:preflight && node scripts/build-configured-mobile.mjs --release --sync",
     "mobile:doctor": "npm --prefix mobile run doctor",
     "monitor:production": "node scripts/check-production-health.mjs",
-    "monitor:production:test": "node --test scripts/test/production-health-monitor.test.mjs",
+    "monitor:production:test": "node --test scripts/test/production-health-monitor.test.mjs scripts/test/cloudflare-r2-usage-monitor.test.mjs scripts/test/cloudflare-r2-object-reconciliation.test.mjs",
     "monitor:production:email": "node scripts/send-production-health-email.mjs",
     "monitor:production:email:test": "node --test scripts/test/production-health-email.test.mjs",
+    "r2:worker:validate": "WRANGLER_WRITE_LOGS=false WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config cloudflare/feed-media-worker/wrangler.toml",
+    "r2:worker:deploy": "WRANGLER_SEND_METRICS=false wrangler deploy --config cloudflare/feed-media-worker/wrangler.toml",
+    "r2:smoke": "node scripts/smoke-feed-media-r2.mjs --execute",
+    "r2:smoke:dry-run": "node scripts/smoke-feed-media-r2.mjs --dry-run",
+    "r2:smoke:test": "node --test scripts/test/smoke-feed-media-r2.test.mjs",
     "release:inventory": "node scripts/generate-mvp-release-inventory.mjs",
     "release:inventory:check": "node scripts/generate-mvp-release-inventory.mjs --check",
     "release:go-live:check": "node scripts/check-mvp-go-live.mjs",
@@ -43,7 +51,7 @@
     "db:mvp-security:check": "node scripts/apply-mvp-security-migrations.mjs",
     "db:mvp-security:apply": "node scripts/apply-mvp-security-migrations.mjs --apply",
     "harness:check": "node scripts/check-product-harness.mjs && node scripts/generate-core-expert-review-kit.mjs --check && node scripts/check-core-expert-review-intake.mjs && npm run research:core:review-web-forms:check && npm run research:core:gate-c-kit:check && npm run research:enakq:check",
-    "qa:mvp": "npm run lockfile:check && npm run monitor:production:test && npm run monitor:production:email:test && npm run harness:check && npm run release:inventory:check && npm run env:check && npm run theme:check && npm run typecheck && npm run lint && npm run test && npm run build",
+    "qa:mvp": "npm run lockfile:check && npm run monitor:production:test && npm run monitor:production:email:test && npm run r2:smoke:test && npm run r2:worker:validate && npm run harness:check && npm run release:inventory:check && npm run env:check && npm run theme:check && npm run typecheck && npm run lint && npm run test && npm run build",
     "qa:mvp:complete": "npm run qa:mvp && npm run e2e",
     "qa:mvp:release": "npm run release:go-live:check && npm run env:check:server && npm run qa:mvp:complete && npm run smoke:server:readiness && npm run smoke:community:authenticated",
     "qa:precredential": "npm run env:check && npm run theme:check && npm run typecheck && npm run lint && npm run test && npm run build",
@@ -577,6 +585,8 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@emnapi/core": "1.11.1",
+    "@emnapi/runtime": "1.11.1",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4",
     "@testing-library/jest-dom": "^6.9.1",
@@ -595,7 +605,8 @@
     "prettier": "^3.9.4",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.1.9"
+    "vitest": "^4.1.9",
+    "wrangler": "4.123.0"
   },
   "overrides": {
     "nanoid": "3.3.18",

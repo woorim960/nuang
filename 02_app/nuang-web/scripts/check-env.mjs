@@ -72,13 +72,17 @@ const optionalByMode = {
     "FEED_MEDIA_WRITE_PROVIDER",
     "FEED_MEDIA_R2_ENABLED",
     "FEED_MEDIA_R2_ALL_CUSTOMERS",
+    "FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED",
+    "FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED",
     "FEED_MEDIA_R2_CANARY_ACCOUNT_IDS",
     "CLOUDFLARE_R2_ACCOUNT_ID",
     "CLOUDFLARE_R2_BUCKET_NAME",
     "CLOUDFLARE_R2_ACCESS_KEY_ID",
     "CLOUDFLARE_R2_SECRET_ACCESS_KEY",
+    "CLOUDFLARE_R2_ANALYTICS_API_TOKEN",
     "FEED_MEDIA_R2_DELIVERY_ORIGIN",
     "FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET",
+    "FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET_PREVIOUS",
     "FEED_MEDIA_R2_REQUEST_TIMEOUT_MS",
     "FEED_MEDIA_R2_MAX_MANAGED_BYTES",
   ],
@@ -189,6 +193,32 @@ function validateFeedMediaEnvironment(environment) {
     errors.push("FEED_MEDIA_R2_ALL_CUSTOMERS");
   }
 
+  const allCustomersApproved =
+    environment.FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED?.trim().toLowerCase();
+  if (
+    allCustomersApproved &&
+    allCustomersApproved !== "true" &&
+    allCustomersApproved !== "false"
+  ) {
+    errors.push("FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED");
+  }
+  if (allCustomers === "true" && allCustomersApproved !== "true") {
+    errors.push("R2 all-customer rollout requires explicit approval");
+  }
+
+  const privacyReviewApproved =
+    environment.FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED?.trim().toLowerCase();
+  if (
+    privacyReviewApproved &&
+    privacyReviewApproved !== "true" &&
+    privacyReviewApproved !== "false"
+  ) {
+    errors.push("FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED");
+  }
+  if (writeProvider === "cloudflare_r2" && privacyReviewApproved !== "true") {
+    errors.push("R2 write provider requires completed privacy review");
+  }
+
   const canaryAccountIds = environment.FEED_MEDIA_R2_CANARY_ACCOUNT_IDS?.trim();
   if (
     canaryAccountIds &&
@@ -209,6 +239,7 @@ function validateFeedMediaEnvironment(environment) {
     "CLOUDFLARE_R2_BUCKET_NAME",
     "CLOUDFLARE_R2_ACCESS_KEY_ID",
     "CLOUDFLARE_R2_SECRET_ACCESS_KEY",
+    "CLOUDFLARE_R2_ANALYTICS_API_TOKEN",
     "FEED_MEDIA_R2_DELIVERY_ORIGIN",
     "FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET",
   ];
@@ -242,6 +273,13 @@ function validateFeedMediaEnvironment(environment) {
       errors.push("CLOUDFLARE_R2_BUCKET_NAME format");
     }
     if (
+      !/^[A-Za-z0-9]{16,128}$/.test(
+        environment.CLOUDFLARE_R2_ACCESS_KEY_ID?.trim() ?? "",
+      )
+    ) {
+      errors.push("CLOUDFLARE_R2_ACCESS_KEY_ID format");
+    }
+    if (
       (environment.CLOUDFLARE_R2_SECRET_ACCESS_KEY?.trim().length ?? 0) < 32
     ) {
       errors.push("CLOUDFLARE_R2_SECRET_ACCESS_KEY length");
@@ -254,6 +292,48 @@ function validateFeedMediaEnvironment(environment) {
     }
     if (!isHttpsOrigin(environment.FEED_MEDIA_R2_DELIVERY_ORIGIN)) {
       errors.push("FEED_MEDIA_R2_DELIVERY_ORIGIN format");
+    }
+    if (
+      isProductionAppOrigin(environment.NEXT_PUBLIC_APP_ORIGIN) &&
+      environment.FEED_MEDIA_R2_DELIVERY_ORIGIN?.trim() !==
+        "https://media.nuang.app"
+    ) {
+      errors.push("FEED_MEDIA_R2_DELIVERY_ORIGIN production origin");
+    }
+    const r2Secret = environment.CLOUDFLARE_R2_SECRET_ACCESS_KEY?.trim();
+    const signingSecret =
+      environment.FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET?.trim();
+    const previousSigningSecret =
+      environment.FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET_PREVIOUS?.trim();
+    const analyticsToken =
+      environment.CLOUDFLARE_R2_ANALYTICS_API_TOKEN?.trim();
+    if (r2Secret && signingSecret && r2Secret === signingSecret) {
+      errors.push("R2 signing secret must differ from R2 secret");
+    }
+    if (
+      r2Secret &&
+      previousSigningSecret &&
+      r2Secret === previousSigningSecret
+    ) {
+      errors.push("R2 previous signing secret must differ from R2 secret");
+    }
+    if (previousSigningSecret && previousSigningSecret.length < 32) {
+      errors.push("FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET_PREVIOUS length");
+    }
+    if (
+      previousSigningSecret &&
+      signingSecret &&
+      previousSigningSecret === signingSecret
+    ) {
+      errors.push("R2 current and previous signing secrets must differ");
+    }
+    if (
+      analyticsToken &&
+      ((r2Secret && analyticsToken === r2Secret) ||
+        (signingSecret && analyticsToken === signingSecret) ||
+        (previousSigningSecret && analyticsToken === previousSigningSecret))
+    ) {
+      errors.push("R2 analytics token must differ from storage secrets");
     }
     if (
       !isIntegerInRange(
@@ -301,6 +381,15 @@ function isHttpsOrigin(value) {
       !url.search &&
       !url.hash
     );
+  } catch {
+    return false;
+  }
+}
+
+function isProductionAppOrigin(value) {
+  if (!nonEmpty(value)) return false;
+  try {
+    return new URL(value).origin === "https://nuang.app";
   } catch {
     return false;
   }

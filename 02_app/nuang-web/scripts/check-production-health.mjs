@@ -1,6 +1,12 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import pg from "pg";
+import { reconcileCloudflareR2Objects } from "./lib/cloudflare-r2-object-reconciliation.mjs";
+import {
+  evaluateCloudflareR2Usage,
+  probeCloudflareR2Delivery,
+  readCloudflareR2Usage,
+} from "./lib/cloudflare-r2-usage-monitor.mjs";
 import {
   createHealthReport,
   evaluateDatabaseSnapshot,
@@ -35,6 +41,7 @@ const feedMediaR2MaxManagedBytes = parseIntegerInRange(
   8_000_000_000,
 );
 const checks = [];
+let databaseSnapshot = null;
 
 try {
   checks.push(...(await runHttpChecks(origin)));
@@ -56,17 +63,84 @@ if (!httpOnly) {
   } else {
     try {
       const databaseCa = readFileSync(databaseCaPath, "utf8");
-      const snapshot = await readDatabaseSnapshot(
+      databaseSnapshot = await readDatabaseSnapshot(
         connectionString,
         lookbackMinutes,
         databaseCa,
         feedMediaR2MaxManagedBytes,
       );
-      checks.push(...evaluateDatabaseSnapshot(snapshot));
+      checks.push(...evaluateDatabaseSnapshot(databaseSnapshot));
     } catch (error) {
       checks.push({
         detail: `read-only database probe failed (${safeErrorCode(error)})`,
         id: "database:probe",
+        status: "fail",
+      });
+    }
+  }
+}
+
+if (!httpOnly) {
+  const r2Enabled = parseOptionalBoolean(env.FEED_MEDIA_R2_ENABLED);
+  if (r2Enabled === null) {
+    checks.push({
+      detail: "FEED_MEDIA_R2_ENABLED must be true or false",
+      id: "storage:r2-provider-configuration",
+      status: "fail",
+    });
+  } else if (r2Enabled) {
+    try {
+      checks.push(
+        await reconcileCloudflareR2Objects({
+          objects: databaseSnapshot?.r2ActiveObjects,
+          origin: env.FEED_MEDIA_R2_DELIVERY_ORIGIN,
+          signingSecret: env.FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET,
+        }),
+      );
+    } catch (error) {
+      checks.push({
+        detail: `Cloudflare R2 object reconciliation failed (${safeErrorCode(error)})`,
+        id: "storage:r2-object-reconciliation",
+        status: "fail",
+      });
+    }
+    try {
+      checks.push(
+        await probeCloudflareR2Delivery({
+          origin: env.FEED_MEDIA_R2_DELIVERY_ORIGIN,
+          signingSecret: env.FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET,
+        }),
+      );
+    } catch (error) {
+      checks.push({
+        detail: `Cloudflare R2 delivery probe failed (${safeErrorCode(error)})`,
+        id: "storage:r2-delivery-boundary",
+        status: "fail",
+      });
+    }
+    try {
+      const usage = await readCloudflareR2Usage({
+        accountId: env.CLOUDFLARE_R2_ACCOUNT_ID,
+        apiToken: env.CLOUDFLARE_R2_ANALYTICS_API_TOKEN,
+        bucketName: env.CLOUDFLARE_R2_BUCKET_NAME,
+      });
+      checks.push(
+        ...evaluateCloudflareR2Usage(usage, {
+          ledgerActiveBytes: nonNegativeNumber(
+            databaseSnapshot?.mediaStorage?.activeBytes,
+          ),
+          ledgerCleanupBytes: nonNegativeNumber(
+            databaseSnapshot?.mediaStorage?.cleanupBytes,
+          ),
+          ledgerStableActiveBytes: nonNegativeNumber(
+            databaseSnapshot?.mediaStorage?.stableActiveBytes,
+          ),
+        }),
+      );
+    } catch (error) {
+      checks.push({
+        detail: `Cloudflare R2 analytics probe failed (${safeErrorCode(error)})`,
+        id: "storage:r2-provider-probe",
         status: "fail",
       });
     }
@@ -310,11 +384,15 @@ async function readDatabaseSnapshot(
         and exists (
           select 1 from pg_attribute
           where attrelid = to_regclass('feed.feed_post_media')
-            and attname in ('storage_provider', 'storage_accounted')
+            and attname in (
+              'storage_provider',
+              'storage_accounted',
+              'storage_ready'
+            )
             and attnum > 0
             and not attisdropped
           group by attrelid
-          having count(*) = 2
+          having count(*) = 3
         ) as ready
     `);
     const mediaStorage = mediaSchema.rows[0]?.ready
@@ -328,6 +406,15 @@ async function readDatabaseSnapshot(
             where media.storage_provider = 'cloudflare_r2'
               and media.storage_accounted
           ), 0)::text as "activeBytes",
+          coalesce((
+            select sum(media.byte_size::bigint)
+            from feed.feed_post_media media
+            where media.storage_provider = 'cloudflare_r2'
+              and media.storage_accounted
+              and media.storage_ready
+              and media.deleted_at is null
+              and media.created_at <= now() - interval '6 hours'
+          ), 0)::text as "stableActiveBytes",
           coalesce((
             select sum(reservation.byte_size)
             from feed.feed_media_storage_reservation reservation
@@ -378,15 +465,32 @@ async function readDatabaseSnapshot(
               pendingUploadCount: 0,
               pendingUploadOldestAt: null,
               reservedBytes: "0",
+              stableActiveBytes: "0",
             },
           ],
         };
+    const r2ActiveObjects = mediaSchema.rows[0]?.ready
+      ? await client.query(`
+          select
+            media.storage_path as "storagePath",
+            media.byte_size::text as "byteSize",
+            media.mime_type as "mimeType"
+          from feed.feed_post_media media
+          where media.storage_provider = 'cloudflare_r2'
+            and media.storage_accounted
+            and media.storage_ready
+            and media.deleted_at is null
+          order by media.created_at, media.id
+          limit 101
+        `)
+      : null;
 
     await client.query("rollback");
     return {
       capacity: capacity.rows[0],
       cronJobs: cronJobs.rows,
       queues: queues.rows[0],
+      r2ActiveObjects: r2ActiveObjects?.rows ?? null,
       mediaStorage: mediaStorage.rows[0],
       tombstones: tombstones.rows[0],
     };
@@ -442,4 +546,16 @@ function parseIntegerInRange(value, minimum, maximum, fallback) {
   return Number.isSafeInteger(parsed) && parsed >= minimum && parsed <= maximum
     ? parsed
     : fallback;
+}
+
+function parseOptionalBoolean(value) {
+  if (value === undefined || value === "") return false;
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return null;
+}
+
+function nonNegativeNumber(value) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : 0;
 }

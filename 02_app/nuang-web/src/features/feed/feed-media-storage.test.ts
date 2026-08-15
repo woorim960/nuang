@@ -30,6 +30,7 @@ describe("feed media storage routing", () => {
         accountId: canaryAccountId,
         environment: {
           FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: ` ${otherAccountId},${canaryAccountId.toUpperCase()} `,
+          FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED: "true",
           FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
         },
         r2,
@@ -50,8 +51,21 @@ describe("feed media storage routing", () => {
     ).toEqual({ ok: true, provider: "supabase", r2: null });
   });
 
-  it("requires an explicit all-customers flag before routing outside the allowlist", () => {
+  it("requires rollout and approval flags before routing all customers", () => {
     const r2 = readyR2Adapter();
+
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: otherAccountId,
+        environment: {
+          FEED_MEDIA_R2_ALL_CUSTOMERS: "true",
+          FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED: "true",
+          FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED: "true",
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2,
+      }),
+    ).toEqual({ ok: true, provider: "cloudflare_r2", r2 });
 
     expect(
       resolveFeedMediaStorageWriteTarget({
@@ -62,7 +76,21 @@ describe("feed media storage routing", () => {
         },
         r2,
       }),
-    ).toEqual({ ok: true, provider: "cloudflare_r2", r2 });
+    ).toEqual({ ok: false, reason: "configuration_invalid" });
+  });
+
+  it("requires a completed privacy review before any canary R2 write", () => {
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: canaryAccountId,
+        environment: {
+          FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: canaryAccountId,
+          FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED: "false",
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2: readyR2Adapter(),
+      }),
+    ).toEqual({ ok: false, reason: "configuration_invalid" });
   });
 
   it("fails closed for malformed rollout settings and unready canary R2", () => {
@@ -100,7 +128,19 @@ describe("feed media storage routing", () => {
       resolveFeedMediaStorageWriteTarget({
         accountId: canaryAccountId,
         environment: {
+          FEED_MEDIA_R2_ALL_CUSTOMERS_APPROVED: "yes",
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2: readyR2Adapter(),
+      }),
+    ).toEqual({ ok: false, reason: "configuration_invalid" });
+
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: canaryAccountId,
+        environment: {
           FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: canaryAccountId,
+          FEED_MEDIA_R2_PRIVACY_REVIEW_APPROVED: "true",
           FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
         },
         r2: unavailableR2Adapter("misconfigured"),

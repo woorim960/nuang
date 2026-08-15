@@ -1,0 +1,17 @@
+name = "nuang-feed-media"
+main = "src/index.ts"
+compatibility_date = "2026-08-15"
+workers_dev = false
+
+# The bucket must remain private: do not enable r2.dev or attach an R2 custom
+# domain. Public and private reads are served only through the signed Worker.
+[[r2_buckets]]
+binding = "FEED_MEDIA"
+bucket_name = "nuang-feed-media"
+
+[[routes]]
+pattern = "media.nuang.app"
+custom_domain = true
+
+# FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET is installed with `wrangler secret put`.
+# Never add the secret or a Cloudflare account identifier to this file.

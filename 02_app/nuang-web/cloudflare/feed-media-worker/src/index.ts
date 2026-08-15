@@ -5,7 +5,13 @@ const CLOCK_SKEW_SECONDS = 60;
 const MAX_OBJECT_KEY_BYTES = 512;
 const SIGNATURE_VERSION = "1";
 const CACHE_STATUS_HEADER = "X-Nuang-Cache";
+const CROSS_ORIGIN_RESOURCE_POLICY = "same-site";
 const OBJECT_KEY_SEGMENT_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,127}$/;
+const SUPPORTED_IMAGE_MEDIA_TYPES = new Set([
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+]);
 
 type DeliveryMode = "private" | "public";
 
@@ -27,6 +33,7 @@ type R2BucketLike = {
 type WorkerEnvironment = {
   FEED_MEDIA: R2BucketLike;
   FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET: string;
+  FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET_PREVIOUS?: string;
 };
 
 type ExecutionContextLike = {
@@ -57,7 +64,16 @@ export async function handleFeedMediaRequest(
 
   const signingSecret =
     environment.FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET?.trim();
-  if (!environment.FEED_MEDIA || !signingSecret || signingSecret.length < 32) {
+  const previousSigningSecret =
+    environment.FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET_PREVIOUS?.trim();
+  if (
+    !environment.FEED_MEDIA ||
+    !signingSecret ||
+    signingSecret.length < 32 ||
+    (previousSigningSecret !== undefined &&
+      (previousSigningSecret.length < 32 ||
+        previousSigningSecret === signingSecret))
+  ) {
     return errorResponse(503, "Media delivery unavailable");
   }
 
@@ -80,14 +96,22 @@ export async function handleFeedMediaRequest(
     return errorResponse(401, "Expired media link");
   }
 
-  const signatureValid = await verifySignature({
-    expiresAt: authorization.expiresAt,
-    mode: authorization.mode,
-    pathname: url.pathname,
-    providedSignature: authorization.signature,
-    signingSecret,
-  });
-  if (!signatureValid) return errorResponse(401, "Invalid media link");
+  const signatureChecks = await Promise.all(
+    [signingSecret, previousSigningSecret]
+      .filter((secret): secret is string => Boolean(secret))
+      .map((secret) =>
+        verifySignature({
+          expiresAt: authorization.expiresAt,
+          mode: authorization.mode,
+          pathname: url.pathname,
+          providedSignature: authorization.signature,
+          signingSecret: secret,
+        }),
+      ),
+  );
+  if (!signatureChecks.some(Boolean)) {
+    return errorResponse(401, "Invalid media link");
+  }
 
   try {
     if (authorization.mode === "private") {
@@ -132,7 +156,12 @@ async function readPublicObject({
   if (availableCache) {
     try {
       const cached = await availableCache.match(cacheKey);
-      if (cached) return decorateResponse(cached, method, "HIT");
+      if (
+        cached &&
+        isSupportedImageMediaType(cached.headers.get("Content-Type"))
+      ) {
+        return decorateResponse(cached, method, "HIT");
+      }
     } catch {
       // Media delivery remains available when the optional edge cache is down.
       availableCache = null;
@@ -162,7 +191,7 @@ async function readPublicObject({
   }
 
   const cacheableResponse = objectResponse(object, object.body, "public");
-  if (availableCache) {
+  if (availableCache && cacheableResponse.ok) {
     context.waitUntil(
       availableCache.put(cacheKey, cacheableResponse.clone()).catch(() => {
         // A failed cache fill must not turn a successful R2 read into an error.
@@ -212,6 +241,11 @@ function objectResponse(
 ) {
   const headers = new Headers();
   object.writeHttpMetadata(headers);
+  if (!isSupportedImageMediaType(headers.get("Content-Type"))) {
+    return errorResponse(415, "Unsupported media type", {
+      ...(cacheStatus ? { [CACHE_STATUS_HEADER]: cacheStatus } : {}),
+    });
+  }
   headers.set(
     "Cache-Control",
     mode === "public"
@@ -222,6 +256,7 @@ function objectResponse(
   headers.set("Content-Length", String(object.size));
   headers.set("ETag", object.httpEtag);
   headers.set("Last-Modified", object.uploaded.toUTCString());
+  headers.set("Cross-Origin-Resource-Policy", CROSS_ORIGIN_RESOURCE_POLICY);
   headers.set("X-Content-Type-Options", "nosniff");
   if (cacheStatus) headers.set(CACHE_STATUS_HEADER, cacheStatus);
   return new Response(body, { headers, status: 200 });
@@ -234,6 +269,7 @@ function decorateResponse(
 ) {
   const headers = new Headers(response.headers);
   headers.set(CACHE_STATUS_HEADER, cacheStatus);
+  headers.set("Cross-Origin-Resource-Policy", CROSS_ORIGIN_RESOURCE_POLICY);
   return new Response(method === "HEAD" ? null : response.body, {
     headers,
     status: response.status,
@@ -369,6 +405,11 @@ function constantTimeEqual(expected: Uint8Array, supplied: Uint8Array) {
   return difference === 0;
 }
 
+function isSupportedImageMediaType(value: string | null) {
+  const mediaType = value?.split(";", 1)[0]?.trim().toLowerCase();
+  return Boolean(mediaType && SUPPORTED_IMAGE_MEDIA_TYPES.has(mediaType));
+}
+
 function readDefaultCache(): CacheLike | null {
   const cacheStorage = globalThis.caches as CacheStorage & {
     default?: CacheLike;
@@ -384,6 +425,7 @@ function errorResponse(
   const headers = new Headers(extraHeaders);
   headers.set("Cache-Control", "private, no-store");
   headers.set("Content-Type", "text/plain; charset=utf-8");
+  headers.set("Cross-Origin-Resource-Policy", CROSS_ORIGIN_RESOURCE_POLICY);
   headers.set("X-Content-Type-Options", "nosniff");
   return new Response(message, { headers, status });
 }

@@ -32,6 +32,7 @@ describe("feed media R2 Worker delivery contract", () => {
     expect(first.headers.get("Cache-Control")).toBe(
       "public, max-age=60, s-maxage=60, immutable",
     );
+    expect(first.headers.get("Cross-Origin-Resource-Policy")).toBe("same-site");
     expect(await first.text()).toBe("image-bytes");
     expect(bucket.get).toHaveBeenCalledTimes(1);
     await context.settle();
@@ -68,6 +69,9 @@ describe("feed media R2 Worker delivery contract", () => {
       expect(response.status).toBe(200);
       expect(response.headers.get("X-Nuang-Cache")).toBe("BYPASS");
       expect(response.headers.get("Cache-Control")).toBe("private, no-store");
+      expect(response.headers.get("Cross-Origin-Resource-Policy")).toBe(
+        "same-site",
+      );
       expect(await response.text()).toBe("image-bytes");
     }
 
@@ -156,6 +160,60 @@ describe("feed media R2 Worker delivery contract", () => {
     expect(bucket.head).not.toHaveBeenCalled();
   });
 
+  it("accepts the optional previous secret only during a valid rotation", async () => {
+    const previousSecret = "worker-previous-signing-secret-123456789";
+    const bucket = createBucket();
+    const response = await handleFeedMediaRequest(
+      new Request(createDeliveryUrl("private", previousSecret)),
+      workerEnvironment(bucket, previousSecret),
+      new TestExecutionContext(),
+      { now: () => fixedNow.getTime() },
+    );
+
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe("image-bytes");
+    expect(bucket.get).toHaveBeenCalledTimes(1);
+  });
+
+  it("fails closed when the optional previous secret is short or unchanged", async () => {
+    for (const previousSecret of ["short", signingSecret]) {
+      const bucket = createBucket();
+      const response = await handleFeedMediaRequest(
+        new Request(createDeliveryUrl("public")),
+        workerEnvironment(bucket, previousSecret),
+        new TestExecutionContext(),
+        { cache: new MemoryCache(), now: () => fixedNow.getTime() },
+      );
+
+      expect(response.status).toBe(503);
+      expect(response.headers.get("Cross-Origin-Resource-Policy")).toBe(
+        "same-site",
+      );
+      expect(bucket.get).not.toHaveBeenCalled();
+    }
+  });
+
+  it("rejects non-image R2 metadata without caching the response", async () => {
+    const bucket = createBucket("text/html; charset=utf-8");
+    const cache = new MemoryCache();
+    const context = new TestExecutionContext();
+    const response = await handleFeedMediaRequest(
+      new Request(createDeliveryUrl("public")),
+      workerEnvironment(bucket),
+      context,
+      { cache, now: () => fixedNow.getTime() },
+    );
+
+    expect(response.status).toBe(415);
+    expect(response.headers.get("Cache-Control")).toBe("private, no-store");
+    expect(response.headers.get("Cross-Origin-Resource-Policy")).toBe(
+      "same-site",
+    );
+    expect(await response.text()).toBe("Unsupported media type");
+    await context.settle();
+    expect(cache.put).not.toHaveBeenCalled();
+  });
+
   it("supports HEAD without downloading the object and rejects every write method", async () => {
     const bucket = createBucket();
     const url = createDeliveryUrl("public");
@@ -208,7 +266,10 @@ describe("feed media R2 Worker delivery contract", () => {
   });
 });
 
-function createDeliveryUrl(mode: "private" | "public") {
+function createDeliveryUrl(
+  mode: "private" | "public",
+  deliverySigningSecret = signingSecret,
+) {
   const adapter = createFeedMediaR2Adapter({
     environment: {
       CLOUDFLARE_R2_ACCESS_KEY_ID: "access-key",
@@ -216,7 +277,7 @@ function createDeliveryUrl(mode: "private" | "public") {
       CLOUDFLARE_R2_BUCKET_NAME: "nuang-feed-media",
       CLOUDFLARE_R2_SECRET_ACCESS_KEY: "s".repeat(40),
       FEED_MEDIA_R2_DELIVERY_ORIGIN: "https://media.nuang.app",
-      FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET: signingSecret,
+      FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET: deliverySigningSecret,
       FEED_MEDIA_R2_ENABLED: "true",
     },
     signedFetch: vi.fn(),
@@ -230,13 +291,13 @@ function createDeliveryUrl(mode: "private" | "public") {
   return url;
 }
 
-function createBucket() {
+function createBucket(contentType = "image/webp") {
   const metadata = {
     httpEtag: '"etag-1"',
     size: 11,
     uploaded: new Date("2026-08-15T00:00:00.000Z"),
     writeHttpMetadata(headers: Headers) {
-      headers.set("Content-Type", "image/webp");
+      headers.set("Content-Type", contentType);
     },
   };
   return {
@@ -245,10 +306,18 @@ function createBucket() {
   };
 }
 
-function workerEnvironment(bucket: ReturnType<typeof createBucket>) {
+function workerEnvironment(
+  bucket: ReturnType<typeof createBucket>,
+  previousSigningSecret?: string,
+) {
   return {
     FEED_MEDIA: bucket,
     FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET: signingSecret,
+    ...(previousSigningSecret === undefined
+      ? {}
+      : {
+          FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET_PREVIOUS: previousSigningSecret,
+        }),
   };
 }
 
