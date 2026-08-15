@@ -3,18 +3,21 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   createMonitorEmailPayload,
+  createScheduledMonitorEmailIdempotencyScope,
   DEFAULT_MONITOR_EMAIL_CONFIG,
   parseProductionHealthReport,
-  sendMonitorEmail,
+  sendMonitorEmailWithRetry,
 } from "./lib/production-health-email.mjs";
 
+const executionStartedAt = new Date().toISOString();
+const args = new Set(process.argv.slice(2));
+const scheduled = args.has("--scheduled");
+const scheduledStartedAt = scheduled ? executionStartedAt : null;
 const env = {
   ...readEnvFile(".env"),
   ...readEnvFile(".env.local"),
   ...process.env,
 };
-const args = new Set(process.argv.slice(2));
-const scheduled = args.has("--scheduled");
 const retryDelayMs = 10_000;
 
 const firstAttempt = await runMonitor();
@@ -41,25 +44,33 @@ const deliveryPayload = {
   subject: rendered.subject,
   text: rendered.text,
 };
+const monitorEmailTo =
+  env.NUANG_MONITOR_EMAIL_TO?.trim() || DEFAULT_MONITOR_EMAIL_CONFIG.to;
 
 try {
-  await sendEmailWithRetry({
+  const delivery = await sendMonitorEmailWithRetry({
     apiKey: env.RESEND_API_KEY?.trim(),
     from:
       env.NUANG_MONITOR_EMAIL_FROM?.trim() || DEFAULT_MONITOR_EMAIL_CONFIG.from,
     idempotencyScope: scheduled
-      ? createHourlyIdempotencyScope(report.checkedAt)
+      ? createScheduledMonitorEmailIdempotencyScope({
+          checks: report.checks,
+          presentationKey: rendered.presentationKey,
+          startedAt: scheduledStartedAt,
+          to: monitorEmailTo,
+        })
       : undefined,
     payload: deliveryPayload,
     replyTo:
       env.NUANG_MONITOR_EMAIL_REPLY_TO?.trim() ||
       DEFAULT_MONITOR_EMAIL_CONFIG.replyTo,
-    to: env.NUANG_MONITOR_EMAIL_TO?.trim() || DEFAULT_MONITOR_EMAIL_CONFIG.to,
+    to: monitorEmailTo,
   });
 
   console.log(
     JSON.stringify({
       checkedAt: report.checkedAt,
+      deduplicated: delivery.deduplicated,
       delivery: "sent",
       firstAttemptFailed: shouldRetry,
       issues: report.checks
@@ -81,16 +92,6 @@ try {
     }),
   );
   process.exitCode = 1;
-}
-
-async function sendEmailWithRetry(options) {
-  try {
-    return await sendMonitorEmail(options);
-  } catch (error) {
-    if (!isRetryableEmailError(error)) throw error;
-    await delay(2_000);
-    return sendMonitorEmail(options);
-  }
 }
 
 async function runMonitor() {
@@ -196,18 +197,4 @@ function safeErrorCode(error) {
   if (typeof error?.code === "string") return error.code;
   if (typeof error?.name === "string") return error.name;
   return "unavailable";
-}
-
-function isRetryableEmailError(error) {
-  const message = typeof error?.message === "string" ? error.message : "";
-  if (message.startsWith("monitor_email_network_")) return true;
-  const status = Number(message.match(/^monitor_email_http_(\d{3})$/)?.[1]);
-  return status === 429 || status >= 500;
-}
-
-function createHourlyIdempotencyScope(value) {
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return value;
-  date.setUTCMinutes(0, 0, 0);
-  return `scheduled-hour:${date.toISOString()}`;
 }

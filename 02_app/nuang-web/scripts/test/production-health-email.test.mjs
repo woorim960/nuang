@@ -1,11 +1,14 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   createMonitorEmailIdempotencyKey,
   createMonitorEmailPayload,
+  createScheduledMonitorEmailIdempotencyScope,
   DEFAULT_MONITOR_EMAIL_CONFIG,
   parseProductionHealthReport,
   sendMonitorEmail,
+  sendMonitorEmailWithRetry,
 } from "../lib/production-health-email.mjs";
 
 test("healthy report renders a branded Korean HTML and text email", () => {
@@ -83,6 +86,7 @@ test("delivery uses the Nuang sender, recipient, and an idempotency key", async 
   ]);
   assert.match(request.init.headers["idempotency-key"], /^nuang-health-/);
   assert.equal(result.ok, true);
+  assert.equal(result.deduplicated, false);
 });
 
 test("idempotency key is stable and recipient-sensitive", () => {
@@ -102,40 +106,288 @@ test("idempotency key is stable and recipient-sensitive", () => {
   );
 });
 
-test("scheduled idempotency scope deduplicates reports in the same slot", () => {
-  const base = {
-    checkedAt: "2026-08-15T01:52:00.000Z",
-    idempotencyScope: "scheduled-hour:2026-08-15T01:00:00.000Z",
-    status: "pass",
-    to: "woorimprog@gmail.com",
-  };
+test("scheduled entrypoint freezes its start before setup and monitoring", () => {
+  const source = readFileSync(
+    new URL("../send-production-health-email.mjs", import.meta.url),
+    "utf8",
+  );
+  const startCaptureIndex = source.indexOf("const executionStartedAt");
+  const environmentSetupIndex = source.indexOf("const env =");
+  const monitorStartIndex = source.indexOf(
+    "const firstAttempt = await runMonitor()",
+  );
 
+  assert.notEqual(startCaptureIndex, -1);
+  assert.notEqual(environmentSetupIndex, -1);
+  assert.notEqual(monitorStartIndex, -1);
+  assert.ok(startCaptureIndex < environmentSetupIndex);
+  assert.ok(startCaptureIndex < monitorStartIndex);
+  assert.match(source, /scheduled \? executionStartedAt : null/);
+  assert.match(source, /startedAt: scheduledStartedAt/);
+});
+
+test("scheduled pass keys follow the minute-52 occurrence boundary", () => {
+  const passAt0610 = scheduledScope({
+    startedAt: "2026-08-15T06:10:00.000Z",
+    to: "WOORIMPROG@GMAIL.COM",
+  });
+  const passAt0651 = scheduledScope({
+    startedAt: "2026-08-15T06:51:59.999Z",
+  });
+  const passAt0652 = scheduledScope({
+    startedAt: "2026-08-15T06:52:00.000Z",
+  });
+  const passAt0653 = scheduledScope({
+    startedAt: "2026-08-15T06:53:00.000Z",
+  });
+  const otherRecipient = scheduledScope({
+    startedAt: "2026-08-15T06:10:00.000Z",
+    to: "other@example.com",
+  });
+
+  assert.match(passAt0610, /^scheduled-pass-dedupe:v3:/);
+  assert.match(passAt0610, /2026-08-15T05:52:00\.000Z/);
+  assert.match(passAt0653, /2026-08-15T06:52:00\.000Z/);
   assert.equal(
-    createMonitorEmailIdempotencyKey(base),
-    createMonitorEmailIdempotencyKey({
-      ...base,
-      checkedAt: "2026-08-15T01:58:00.000Z",
-      status: "fail",
+    scheduledKey(passAt0610, "2026-08-15T06:10:30.000Z"),
+    scheduledKey(passAt0651, "2026-08-15T06:51:30.000Z"),
+  );
+  assert.notEqual(
+    scheduledKey(passAt0610, "2026-08-15T06:10:30.000Z"),
+    scheduledKey(passAt0653, "2026-08-15T06:53:30.000Z"),
+  );
+  assert.equal(
+    scheduledKey(passAt0652, "2026-08-15T06:52:30.000Z"),
+    scheduledKey(passAt0653, "2026-08-15T06:53:30.000Z"),
+  );
+  assert.notEqual(passAt0610, otherRecipient);
+});
+
+test("scheduled alerts use frozen start as a nonce across recovery and re-failure", () => {
+  const failedChecks = [
+    { detail: "first", id: "http:feed", status: "fail" },
+    { id: "http:landing", status: "pass" },
+  ];
+  const firstFailure = scheduledScope({
+    checks: failedChecks,
+    presentationKey: "fail",
+    startedAt: "2026-08-15T06:53:00.000Z",
+  });
+  const sameAttempt = scheduledScope({
+    checks: [...failedChecks]
+      .reverse()
+      .map((check) => ({ ...check, detail: "changed" })),
+    presentationKey: "fail",
+    startedAt: "2026-08-15T06:53:00.000Z",
+  });
+  const recovered = scheduledScope({
+    presentationKey: "recovered",
+    startedAt: "2026-08-15T06:54:00.000Z",
+  });
+  const passed = scheduledScope({
+    presentationKey: "pass",
+    startedAt: "2026-08-15T06:55:00.000Z",
+  });
+  const secondFailure = scheduledScope({
+    checks: failedChecks,
+    presentationKey: "fail",
+    startedAt: "2026-08-15T06:56:00.000Z",
+  });
+  const differentIssue = scheduledScope({
+    checks: [{ id: "database:probe", status: "fail" }],
+    presentationKey: "fail",
+    startedAt: "2026-08-15T06:53:00.000Z",
+  });
+
+  assert.match(firstFailure, /^scheduled-alert:v3:/);
+  assert.match(recovered, /^scheduled-alert:v3:/);
+  assert.equal(
+    scheduledKey(firstFailure, "2026-08-15T06:53:30.000Z", "fail"),
+    scheduledKey(sameAttempt, "2026-08-15T06:53:40.000Z", "fail"),
+  );
+  const transitionKeys = [
+    scheduledKey(firstFailure, "2026-08-15T06:53:30.000Z", "fail"),
+    scheduledKey(recovered, "2026-08-15T06:54:30.000Z"),
+    scheduledKey(passed, "2026-08-15T06:55:30.000Z"),
+    scheduledKey(secondFailure, "2026-08-15T06:56:30.000Z", "fail"),
+  ];
+  assert.equal(new Set(transitionKeys).size, transitionKeys.length);
+  assert.notEqual(firstFailure, differentIssue);
+});
+
+test("scheduled pass payload conflicts become deduplicated success", async () => {
+  let requestCount = 0;
+  let waitCount = 0;
+  const result = await sendMonitorEmailWithRetry({
+    apiKey: "test-api-key",
+    delayImpl: async () => {
+      waitCount += 1;
+    },
+    fetchImpl: async () => {
+      requestCount += 1;
+      return Response.json(
+        {
+          message: "provider detail must stay private",
+          name: "invalid_idempotent_request",
+        },
+        { status: 409 },
+      );
+    },
+    idempotencyScope: scheduledScope(),
+    payload: testDeliveryPayload(),
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.deduplicated, true);
+  assert.equal(requestCount, 1);
+  assert.equal(waitCount, 0);
+});
+
+test("scheduled alert payload conflicts fail closed", async () => {
+  let requestCount = 0;
+  let waitCount = 0;
+  await assert.rejects(
+    sendMonitorEmailWithRetry({
+      apiKey: "test-api-key",
+      delayImpl: async () => {
+        waitCount += 1;
+      },
+      fetchImpl: async () => {
+        requestCount += 1;
+        return Response.json(
+          { name: "invalid_idempotent_request" },
+          { status: 409 },
+        );
+      },
+      idempotencyScope: scheduledScope({
+        checks: [{ id: "http:feed", status: "fail" }],
+        presentationKey: "fail",
+        startedAt: "2026-08-15T06:53:00.000Z",
+      }),
+      payload: testDeliveryPayload({ status: "fail" }),
     }),
+    /monitor_email_resend_invalid_idempotent_request/,
+  );
+  assert.equal(requestCount, 1);
+  assert.equal(waitCount, 0);
+});
+
+test("unscheduled invalid idempotency conflicts still fail closed", async () => {
+  await assert.rejects(
+    sendMonitorEmailWithRetry({
+      apiKey: "test-api-key",
+      fetchImpl: async () =>
+        Response.json({ name: "invalid_idempotent_request" }, { status: 409 }),
+      payload: testDeliveryPayload(),
+    }),
+    /monitor_email_resend_invalid_idempotent_request/,
   );
 });
 
-test("scheduled idempotency conflicts fail closed", async () => {
+test("concurrent idempotency conflicts retry once with the exact request", async () => {
+  const requests = [];
+  const waits = [];
+  const result = await sendMonitorEmailWithRetry({
+    apiKey: "test-api-key",
+    delayImpl: async (ms) => {
+      waits.push(ms);
+    },
+    fetchImpl: async (url, init) => {
+      requests.push({
+        body: init.body,
+        idempotencyKey: init.headers["idempotency-key"],
+        url,
+      });
+      return requests.length === 1
+        ? Response.json(
+            { name: "concurrent_idempotent_requests" },
+            { status: 409 },
+          )
+        : Response.json({ id: "email-id" });
+    },
+    idempotencyScope: scheduledScope(),
+    payload: testDeliveryPayload(),
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.deduplicated, false);
+  assert.deepEqual(waits, [2_000]);
+  assert.equal(requests.length, 2);
+  assert.deepEqual(requests[0], requests[1]);
+});
+
+test("persistent concurrent idempotency conflicts fail after one retry", async () => {
+  let requestCount = 0;
   await assert.rejects(
-    sendMonitorEmail({
+    sendMonitorEmailWithRetry({
       apiKey: "test-api-key",
-      fetchImpl: async () => new Response(null, { status: 409 }),
-      idempotencyScope: "scheduled-hour:2026-08-15T01:00:00.000Z",
-      payload: {
-        checkedAt: "2026-08-15T01:52:00.000Z",
-        html: "<p>test</p>",
-        status: "pass",
-        subject: "test",
-        text: "test",
+      delayImpl: async () => undefined,
+      fetchImpl: async () => {
+        requestCount += 1;
+        return Response.json(
+          { name: "concurrent_idempotent_requests" },
+          { status: 409 },
+        );
       },
+      idempotencyScope: scheduledScope(),
+      payload: testDeliveryPayload(),
     }),
-    /monitor_email_http_409/,
+    /monitor_email_resend_concurrent_idempotent_requests/,
   );
+  assert.equal(requestCount, 2);
+});
+
+test("a concurrent duplicate that completes becomes deduplicated success", async () => {
+  let requestCount = 0;
+  const result = await sendMonitorEmailWithRetry({
+    apiKey: "test-api-key",
+    delayImpl: async () => undefined,
+    fetchImpl: async () => {
+      requestCount += 1;
+      return Response.json(
+        {
+          name:
+            requestCount === 1
+              ? "concurrent_idempotent_requests"
+              : "invalid_idempotent_request",
+        },
+        { status: 409 },
+      );
+    },
+    idempotencyScope: scheduledScope(),
+    payload: testDeliveryPayload(),
+  });
+
+  assert.equal(result.ok, true);
+  assert.equal(result.deduplicated, true);
+  assert.equal(requestCount, 2);
+});
+
+test("unknown and non-JSON 409 responses fail without exposing the body", async () => {
+  const responses = [
+    () =>
+      Response.json(
+        { message: "private provider detail", name: "unknown_conflict" },
+        { status: 409 },
+      ),
+    () => new Response("private non-json provider detail", { status: 409 }),
+  ];
+
+  for (const createResponse of responses) {
+    await assert.rejects(
+      sendMonitorEmailWithRetry({
+        apiKey: "test-api-key",
+        fetchImpl: async () => createResponse(),
+        idempotencyScope: scheduledScope(),
+        payload: testDeliveryPayload(),
+      }),
+      (error) => {
+        assert.equal(error.message, "monitor_email_http_409");
+        assert.doesNotMatch(error.message, /private|provider/i);
+        return true;
+      },
+    );
+  }
 });
 
 test("failed HTTP probes do not report a misleading zero millisecond latency", () => {
@@ -224,6 +476,40 @@ function healthyReport() {
     ],
     counts: { fail: 0, pass: 4, warn: 0 },
     status: "pass",
+  };
+}
+
+function scheduledKey(idempotencyScope, checkedAt, status = "pass") {
+  return createMonitorEmailIdempotencyKey({
+    checkedAt,
+    idempotencyScope,
+    status,
+    to: DEFAULT_MONITOR_EMAIL_CONFIG.to,
+  });
+}
+
+function scheduledScope({
+  checks = [{ id: "http:landing", status: "pass" }],
+  presentationKey = "pass",
+  startedAt = "2026-08-15T01:52:00.000Z",
+  to = DEFAULT_MONITOR_EMAIL_CONFIG.to,
+} = {}) {
+  return createScheduledMonitorEmailIdempotencyScope({
+    checks,
+    presentationKey,
+    startedAt,
+    to,
+  });
+}
+
+function testDeliveryPayload(overrides = {}) {
+  return {
+    checkedAt: "2026-08-15T01:52:00.000Z",
+    html: "<p>test</p>",
+    status: "pass",
+    subject: "test",
+    text: "test",
+    ...overrides,
   };
 }
 

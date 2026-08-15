@@ -6,6 +6,15 @@ export const DEFAULT_MONITOR_EMAIL_CONFIG = Object.freeze({
   to: "woorimprog@gmail.com",
 });
 
+const RESEND_ERROR_BODY_LIMIT_BYTES = 4_096;
+const RESEND_IDEMPOTENCY_ERROR_NAMES = new Set([
+  "concurrent_idempotent_requests",
+  "invalid_idempotent_request",
+]);
+const SCHEDULED_ALERT_SCOPE_PREFIX = "scheduled-alert:v3:";
+const SCHEDULED_OCCURRENCE_MINUTE_UTC = 52;
+const SCHEDULED_PASS_DEDUPE_SCOPE_PREFIX = "scheduled-pass-dedupe:v3:";
+
 const STATUS_PRESENTATION = Object.freeze({
   fail: {
     accent: "#963548",
@@ -282,16 +291,49 @@ export async function sendMonitorEmail({
       signal: controller.signal,
     });
   } catch (error) {
-    throw new Error(`monitor_email_network_${safeErrorCode(error)}`);
-  } finally {
     clearTimeout(timeout);
+    throw new Error(`monitor_email_network_${safeErrorCode(error)}`);
   }
 
   if (!response.ok) {
+    let resendErrorName = null;
+    try {
+      resendErrorName =
+        response.status === 409 ? await readResendErrorName(response) : null;
+    } finally {
+      clearTimeout(timeout);
+    }
+    if (resendErrorName) {
+      throw new Error(`monitor_email_resend_${resendErrorName}`);
+    }
     throw new Error(`monitor_email_http_${response.status}`);
   }
 
-  return { idempotencyKey, ok: true };
+  clearTimeout(timeout);
+  return { deduplicated: false, idempotencyKey, ok: true };
+}
+
+export async function sendMonitorEmailWithRetry({
+  delayImpl = delay,
+  retryDelayMs = 2_000,
+  ...options
+}) {
+  try {
+    return await sendMonitorEmail(options);
+  } catch (error) {
+    const deduplicated = createDeduplicatedDelivery(error, options);
+    if (deduplicated) return deduplicated;
+    if (!isRetryableEmailError(error)) throw error;
+
+    await delayImpl(retryDelayMs);
+    try {
+      return await sendMonitorEmail(options);
+    } catch (retryError) {
+      const retryDeduplicated = createDeduplicatedDelivery(retryError, options);
+      if (retryDeduplicated) return retryDeduplicated;
+      throw retryError;
+    }
+  }
 }
 
 export function createMonitorEmailIdempotencyKey({
@@ -305,6 +347,55 @@ export function createMonitorEmailIdempotencyKey({
     : `${checkedAt}|${status}|${to.toLowerCase()}`;
   const digest = createHash("sha256").update(scope).digest("hex").slice(0, 32);
   return `nuang-health-${digest}`;
+}
+
+export function createScheduledMonitorEmailIdempotencyScope({
+  checks,
+  presentationKey,
+  startedAt,
+  to,
+}) {
+  const frozenStart = new Date(startedAt);
+  if (!Number.isFinite(frozenStart.getTime())) {
+    throw new Error("monitor_email_schedule_invalid");
+  }
+  const checksValid =
+    Array.isArray(checks) &&
+    checks.every(
+      (check) =>
+        check &&
+        typeof check.id === "string" &&
+        ["pass", "warn", "fail"].includes(check.status),
+    );
+  if (!checksValid || !STATUS_PRESENTATION[presentationKey]) {
+    throw new Error("monitor_email_schedule_invalid");
+  }
+
+  const recipient = String(to).trim().toLowerCase();
+  if (!isEmailAddress(recipient)) {
+    throw new Error("monitor_email_address_invalid");
+  }
+
+  const abnormalIssues = checks
+    .filter((check) => check.status !== "pass")
+    .map((check) => `${check.status}:${check.id}`)
+    .sort();
+  const occurrenceSlot = createScheduledOccurrenceSlot(frozenStart);
+
+  if (presentationKey === "pass") {
+    return `${SCHEDULED_PASS_DEDUPE_SCOPE_PREFIX}${JSON.stringify({
+      occurrenceSlot,
+      recipient,
+    })}`;
+  }
+
+  return `${SCHEDULED_ALERT_SCOPE_PREFIX}${JSON.stringify({
+    abnormalIssues,
+    occurrenceSlot,
+    presentationKey,
+    recipient,
+    startedAt: frozenStart.toISOString(),
+  })}`;
 }
 
 function metricRow(label, value, hint, accent) {
@@ -353,6 +444,95 @@ function isNuangSender(value) {
     isEmailAddress(email) &&
     (domain === "nuang.app" || Boolean(domain?.endsWith(".nuang.app")))
   );
+}
+
+function createDeduplicatedDelivery(error, options) {
+  if (
+    error?.message !== "monitor_email_resend_invalid_idempotent_request" ||
+    !options.idempotencyScope?.startsWith(SCHEDULED_PASS_DEDUPE_SCOPE_PREFIX)
+  ) {
+    return null;
+  }
+
+  return {
+    deduplicated: true,
+    idempotencyKey: createMonitorEmailIdempotencyKey({
+      checkedAt: options.payload.checkedAt,
+      idempotencyScope: options.idempotencyScope,
+      status: options.payload.status,
+      to: options.to ?? DEFAULT_MONITOR_EMAIL_CONFIG.to,
+    }),
+    ok: true,
+  };
+}
+
+function createScheduledOccurrenceSlot(frozenStart) {
+  const occurrenceSlot = new Date(frozenStart);
+  const startedMinute = occurrenceSlot.getUTCMinutes();
+  occurrenceSlot.setUTCMinutes(SCHEDULED_OCCURRENCE_MINUTE_UTC, 0, 0);
+  if (startedMinute < SCHEDULED_OCCURRENCE_MINUTE_UTC) {
+    occurrenceSlot.setUTCHours(occurrenceSlot.getUTCHours() - 1);
+  }
+  return occurrenceSlot.toISOString();
+}
+
+function isRetryableEmailError(error) {
+  const message = typeof error?.message === "string" ? error.message : "";
+  if (message.startsWith("monitor_email_network_")) return true;
+  if (message === "monitor_email_resend_concurrent_idempotent_requests") {
+    return true;
+  }
+  const status = Number(message.match(/^monitor_email_http_(\d{3})$/)?.[1]);
+  return status === 429 || status >= 500;
+}
+
+async function readResendErrorName(response) {
+  const body = await readBoundedResponseText(
+    response,
+    RESEND_ERROR_BODY_LIMIT_BYTES,
+  );
+  if (body === null) return null;
+
+  try {
+    const parsed = JSON.parse(body);
+    const name = typeof parsed?.name === "string" ? parsed.name : null;
+    return RESEND_IDEMPOTENCY_ERROR_NAMES.has(name) ? name : null;
+  } catch {
+    return null;
+  }
+}
+
+async function readBoundedResponseText(response, maximumBytes) {
+  if (!response.body || typeof response.body.getReader !== "function") {
+    return null;
+  }
+
+  const decoder = new TextDecoder();
+  const reader = response.body.getReader();
+  let size = 0;
+  let text = "";
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > maximumBytes) {
+        await reader.cancel();
+        return null;
+      }
+      text += decoder.decode(value, { stream: true });
+    }
+    return text + decoder.decode();
+  } catch {
+    return null;
+  } finally {
+    reader.releaseLock();
+  }
+}
+
+function delay(ms) {
+  return new Promise((resolveDelay) => setTimeout(resolveDelay, ms));
 }
 
 function safeErrorCode(error) {
