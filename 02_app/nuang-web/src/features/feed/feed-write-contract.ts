@@ -30,6 +30,7 @@ export type FeedWriteFailureCode =
   | "feed_required_consent_missing"
   | "feed_write_guard_unavailable"
   | "feed_duplicate_content"
+  | "feed_request_conflict"
   | "feed_external_link_blocked"
   | "feed_result_release_not_publicable"
   | "feed_already_reported"
@@ -44,6 +45,7 @@ export type FeedWriteFailureCode =
   | "feed_poll_write_failed"
   | "feed_poll_vote_write_failed"
   | "feed_media_capacity_reached"
+  | "feed_media_upload_in_progress"
   | "feed_media_processing_failed"
   | "feed_media_upload_failed"
   | "feed_reaction_remove_failed"
@@ -52,7 +54,9 @@ export type FeedWriteFailureCode =
 export type FeedWriteSuccessInput = {
   action: FeedWriteRequest["action"];
   id: string;
+  mediaUploadState?: "pending" | "ready";
   moderationStatus?: "pending_review" | "published" | "limited" | "removed";
+  requestReused?: boolean;
   targetType?: string;
 };
 
@@ -138,6 +142,13 @@ export const feedWriteFailures: Record<
     retryable: false,
     step: "validate_target",
   },
+  feed_request_conflict: {
+    httpStatus: 409,
+    message:
+      "게시 요청 정보가 달라졌어요. 내용을 다시 확인한 뒤 등록해 주세요.",
+    retryable: false,
+    step: "insert_feed_post",
+  },
   feed_external_link_blocked: {
     httpStatus: 400,
     message: "안전이 확인되지 않은 링크가 포함되어 있어 등록할 수 없어요.",
@@ -221,6 +232,13 @@ export const feedWriteFailures: Record<
     message:
       "사진 저장 공간을 안전하게 확보하고 있어요. 잠시 뒤 다시 시도해 주세요.",
     retryable: false,
+    step: "upload_feed_media",
+  },
+  feed_media_upload_in_progress: {
+    httpStatus: 409,
+    message:
+      "같은 사진 게시물을 올리고 있어요. 잠시 뒤 게시 상태를 다시 확인해 주세요.",
+    retryable: true,
     step: "upload_feed_media",
   },
   feed_media_processing_failed: {

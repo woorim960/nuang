@@ -15,6 +15,7 @@ import {
   feedWriteFailures,
 } from "@/features/feed/feed-write-contract";
 import { writeFeedRequestForAccount } from "@/features/feed/server-writes";
+import { createFeedCreateRequestHash } from "@/features/feed/server-feed-request-idempotency";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { readValidatedJson } from "@/lib/api/request";
@@ -59,8 +60,34 @@ export async function POST(request: Request) {
     return createApiClosedResponse("supabase_env_missing");
   }
 
+  const isMediaPost =
+    payload.files.length > 0 && payload.data.action === "create_post";
+  let clientRequestHash: string | undefined;
+  if (
+    isMediaPost &&
+    payload.data.action === "create_post" &&
+    payload.data.source === "free_text" &&
+    payload.data.clientRequestId
+  ) {
+    try {
+      clientRequestHash = await createFeedCreateRequestHash({
+        files: payload.files,
+        payload: payload.data,
+      });
+    } catch {
+      return NextResponse.json(
+        createFeedWriteFailurePayload("feed_media_processing_failed"),
+        {
+          status: feedWriteFailures.feed_media_processing_failed.httpStatus,
+        },
+      );
+    }
+  }
+
   const result = await writeFeedRequestForAccount({
     client: serviceClient,
+    clientRequestHash,
+    deferMediaPublication: isMediaPost,
     payload: payload.data,
     user: auth.user,
   });
@@ -71,7 +98,18 @@ export async function POST(request: Request) {
     });
   }
 
-  if (payload.files.length > 0 && payload.data.action === "create_post") {
+  if (
+    isMediaPost &&
+    result.data.requestReused &&
+    result.data.mediaUploadState === "pending"
+  ) {
+    const code = "feed_media_upload_in_progress" as const;
+    return NextResponse.json(createFeedWriteFailurePayload(code), {
+      status: feedWriteFailures[code].httpStatus,
+    });
+  }
+
+  if (isMediaPost && result.data.mediaUploadState !== "ready") {
     const mediaResult = await uploadFeedPostMedia({
       client: serviceClient,
       files: payload.files,

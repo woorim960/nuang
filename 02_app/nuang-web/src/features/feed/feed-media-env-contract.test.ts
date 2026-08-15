@@ -18,6 +18,8 @@ const clearedFeedMediaEnvironment = Object.fromEntries(
     "FEED_MEDIA_R2_DELIVERY_ORIGIN",
     "FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET",
     "FEED_MEDIA_R2_ENABLED",
+    "FEED_MEDIA_R2_ALL_CUSTOMERS",
+    "FEED_MEDIA_R2_CANARY_ACCOUNT_IDS",
     "FEED_MEDIA_R2_MAX_MANAGED_BYTES",
     "FEED_MEDIA_R2_REQUEST_TIMEOUT_MS",
     "FEED_MEDIA_WRITE_PROVIDER",
@@ -84,6 +86,25 @@ describe("feed media environment contract", () => {
     expect(`${result.stdout}\n${result.stderr}`).not.toContain(sensitiveValue);
   });
 
+  it("fails closed for malformed R2 canary rollout settings", () => {
+    const malformedAccountId = "not-a-customer-uuid";
+    const result = runEnvironmentCheck({
+      FEED_MEDIA_R2_ALL_CUSTOMERS: "yes",
+      FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: malformedAccountId,
+    });
+
+    expect(result.status).toBe(1);
+    expect(`${result.stdout}\n${result.stderr}`).toContain(
+      "FEED_MEDIA_R2_ALL_CUSTOMERS",
+    );
+    expect(`${result.stdout}\n${result.stderr}`).toContain(
+      "FEED_MEDIA_R2_CANARY_ACCOUNT_IDS format",
+    );
+    expect(`${result.stdout}\n${result.stderr}`).not.toContain(
+      malformedAccountId,
+    );
+  });
+
   it("accepts a complete bounded R2 server configuration", () => {
     const result = runEnvironmentCheck({
       CLOUDFLARE_R2_ACCESS_KEY_ID: "test-access-key",
@@ -94,6 +115,8 @@ describe("feed media environment contract", () => {
       FEED_MEDIA_R2_DELIVERY_ORIGIN: "https://media.nuang.app",
       FEED_MEDIA_R2_DELIVERY_SIGNING_SECRET: "h".repeat(48),
       FEED_MEDIA_R2_ENABLED: "true",
+      FEED_MEDIA_R2_ALL_CUSTOMERS: "false",
+      FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: "019fff4b-285d-7111-9c6c-48ced670a41b",
       FEED_MEDIA_R2_MAX_MANAGED_BYTES: "8000000000",
       FEED_MEDIA_R2_REQUEST_TIMEOUT_MS: "5000",
       FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",

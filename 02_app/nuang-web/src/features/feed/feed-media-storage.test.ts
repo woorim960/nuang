@@ -8,19 +8,67 @@ import {
   uploadFeedMediaObject,
 } from "@/features/feed/feed-media-storage";
 
+const canaryAccountId = "019fff4b-285d-7111-9c6c-48ced670a41b";
+const otherAccountId = "550e8400-e29b-41d4-a716-446655440000";
+
 describe("feed media storage routing", () => {
-  it("uses Supabase by default without requiring R2 readiness", () => {
+  it("uses Supabase by default while R2 is disabled", () => {
     expect(
       resolveFeedMediaStorageWriteTarget({
+        accountId: canaryAccountId,
         environment: {},
         r2: unavailableR2Adapter("disabled"),
       }),
     ).toEqual({ ok: true, provider: "supabase", r2: null });
   });
 
-  it("fails closed for an invalid provider or an R2 target that is not ready", () => {
+  it("routes only an explicitly allowlisted account to a ready R2 target", () => {
+    const r2 = readyR2Adapter();
+
     expect(
       resolveFeedMediaStorageWriteTarget({
+        accountId: canaryAccountId,
+        environment: {
+          FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: ` ${otherAccountId},${canaryAccountId.toUpperCase()} `,
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2,
+      }),
+    ).toEqual({ ok: true, provider: "cloudflare_r2", r2 });
+  });
+
+  it("keeps non-allowlisted customers on Supabase without requiring R2 readiness", () => {
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: otherAccountId,
+        environment: {
+          FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: canaryAccountId,
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2: unavailableR2Adapter("misconfigured"),
+      }),
+    ).toEqual({ ok: true, provider: "supabase", r2: null });
+  });
+
+  it("requires an explicit all-customers flag before routing outside the allowlist", () => {
+    const r2 = readyR2Adapter();
+
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: otherAccountId,
+        environment: {
+          FEED_MEDIA_R2_ALL_CUSTOMERS: "true",
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2,
+      }),
+    ).toEqual({ ok: true, provider: "cloudflare_r2", r2 });
+  });
+
+  it("fails closed for malformed rollout settings and unready canary R2", () => {
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: canaryAccountId,
         environment: { FEED_MEDIA_WRITE_PROVIDER: "unknown" },
         r2: readyR2Adapter(),
       }),
@@ -28,7 +76,33 @@ describe("feed media storage routing", () => {
 
     expect(
       resolveFeedMediaStorageWriteTarget({
-        environment: { FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2" },
+        accountId: canaryAccountId,
+        environment: {
+          FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: "not-a-uuid",
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2: readyR2Adapter(),
+      }),
+    ).toEqual({ ok: false, reason: "configuration_invalid" });
+
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: canaryAccountId,
+        environment: {
+          FEED_MEDIA_R2_ALL_CUSTOMERS: "yes",
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
+        r2: readyR2Adapter(),
+      }),
+    ).toEqual({ ok: false, reason: "configuration_invalid" });
+
+    expect(
+      resolveFeedMediaStorageWriteTarget({
+        accountId: canaryAccountId,
+        environment: {
+          FEED_MEDIA_R2_CANARY_ACCOUNT_IDS: canaryAccountId,
+          FEED_MEDIA_WRITE_PROVIDER: "cloudflare_r2",
+        },
         r2: unavailableR2Adapter("misconfigured"),
       }),
     ).toEqual({ ok: false, reason: "configuration_invalid" });

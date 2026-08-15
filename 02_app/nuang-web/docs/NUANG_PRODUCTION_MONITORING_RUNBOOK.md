@@ -8,7 +8,8 @@
 
 - 주요 공개 화면과 피드 API의 상태 코드·응답 시간
 - 비로그인 요청이 계정 전용 API에서 계속 안전하게 차단되는지
-- Supabase DB 크기와 연결 사용률
+- Supabase DB 크기, 현재 프로젝트 Storage 객체 크기와 연결 사용률
+- R2 관리 바이트, 숨김 업로드와 미디어 정리 적체
 - 활성 NUANG 크론의 최근 실패·장기 실행·마지막 성공
 - 광고·마케팅 메일 큐의 due·stale·terminal failure
 - 예약된 공식 콘텐츠의 게시·마감 지연
@@ -27,12 +28,15 @@ npm run monitor:production:email
 
 `monitor:production:email`은 동일 점검을 실행하고 최종 결과를 `NUANG_MONITOR_EMAIL_TO`로 보낸다. 실패 또는 실행 오류는 10초 뒤 한 번 재확인하며, 메일은 최종 상태 한 통만 발송한다. 발송 네트워크 오류나 Resend 429·5xx는 같은 idempotency key로 한 번만 재시도해 중복을 방지한다. 자동화에서는 `npm run monitor:production:email -- --scheduled`를 사용해 같은 시간대의 중복 실행도 한 통으로 제한한다. 수신자·발신자·답장 주소는 각각 `NUANG_MONITOR_EMAIL_TO`, `NUANG_MONITOR_EMAIL_FROM`, `NUANG_MONITOR_EMAIL_REPLY_TO`로 변경할 수 있고, 발신자는 인증된 `nuang.app` 하위 도메인만 허용한다. HTML과 plain text에는 집계된 운영 지표만 포함하며 환경변수, credential, 응답 본문, 사용자 정보는 넣지 않는다.
 
+HTTP 응답이 임계값만 넘긴 `warn`이면 10초를 한 번만 기다린 뒤 해당 경로만 순차 재확인한다. 재확인에서 정상으로 돌아오면 일시적인 콜드 연결로 기록하고 정상 처리하며, 두 번 연속 느린 경로만 주의로 남긴다. 상태 코드·본문·보안 헤더 실패는 처음부터 `fail`이며 이 지연 확인으로 완화하지 않는다.
+
 ## 판정 기준
 
 | 항목               | 경고                         | 실패                                               |
 | ------------------ | ---------------------------- | -------------------------------------------------- |
 | HTTP 전체 응답     | 1.5초 이상                   | 5초 이상, timeout, 예상하지 않은 상태·본문         |
 | DB 크기            | 350MB 이상                   | 425MB 이상                                         |
+| Supabase Storage   | 현재 프로젝트 700MB 이상     | 현재 프로젝트 850MB 이상                           |
 | DB 연결            | `max_connections`의 50% 이상 | 75% 이상                                           |
 | 매분 크론          | 최근 실패 후 복구됨          | 마지막 성공 5분 초과, 마지막 실행 실패·stuck       |
 | 일일 크론          | 최근 실패 후 복구됨          | 마지막 성공 36시간 초과, 마지막 실행 실패·stuck    |
@@ -40,7 +44,7 @@ npm run monitor:production:email
 | 메일 큐            | due 행 존재                  | 5분 이상 due, stale sending, 최근 terminal failure |
 | 공식 콘텐츠        | 게시·마감 due 행 존재        | 5분 이상 게시·마감 지연                            |
 
-Supabase 무료 플랜은 DB가 500MB를 넘으면 read-only 상태가 될 수 있으므로 70%와 85%에서 미리 경고한다. 정확한 egress·MAU·Storage 사용량은 DB SQL로 알 수 없으므로 시작 시점, 24시간, 48시간에 Supabase Usage 화면에서 확인한다.
+Supabase 무료 플랜은 DB가 500MB를 넘으면 read-only 상태가 될 수 있으므로 70%와 85%에서 미리 경고한다. Storage는 `storage.objects`의 현재 프로젝트 객체 크기를 합산해 공식 1GB 조직 한도보다 이른 700MB·850MB에 경고한다. 다른 프로젝트까지 합친 조직 전체 Storage와 egress·MAU는 이 SQL로 알 수 없으므로 시작 시점, 24시간, 48시간에 Supabase Usage 화면에서 함께 확인한다.
 
 마케팅 큐의 due 시간은 KST 08:00~21:00 발송 창 밖이거나 긴급 중지 중이면 판정에서 제외한다. 이미 15분 넘게 `sending`인 행과 최근 terminal failure는 중지 상태와 관계없이 실패로 판정한다.
 
@@ -60,7 +64,8 @@ Vercel Hobby 런타임 로그는 1시간만 보관된다. 이 모니터는 사�
 2. 크론 실패가 있으면 해당 `cron.job_run_details`의 오류와 마지막 성공을 확인한다.
 3. due queue가 5분 넘게 남으면 outbox worker 설정과 Vault origin/secret을 확인한다.
 4. DB가 350MB를 넘으면 증가량과 큰 테이블을 확인하고 보존 정책을 검토한다.
-5. 기능 확인이 필요해도 먼저 읽기 전용 readiness를 실행하고, 쓰기 smoke는 배포 직후 한 번만 수행한다.
+5. 현재 프로젝트 Storage가 700MB를 넘으면 R2 제한 전환 또는 Supabase Pro 전환을 결정하고, 850MB 전에는 실행한다.
+6. 기능 확인이 필요해도 먼저 읽기 전용 readiness를 실행하고, 쓰기 smoke는 배포 직후 한 번만 수행한다.
 
 ## 공식 무료 한도 근거
 

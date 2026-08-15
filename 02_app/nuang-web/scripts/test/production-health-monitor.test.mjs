@@ -100,6 +100,34 @@ test("HTTP probes cap request concurrency at two", async () => {
   assert.equal(maxActive, 2);
 });
 
+test("HTTP probes confirm a latency warning once before reporting it", async () => {
+  const waits = [];
+  const timings = [0, 2, 4, 10, 10.2, 10.4];
+  const checks = await runHttpProbes({
+    confirmationDelayMs: 10_000,
+    fetchImpl: async () => new Response("ok"),
+    now: () => timings.shift() ?? 10.4,
+    origin: "https://nuang.app",
+    probes: [
+      {
+        id: "transient-latency",
+        kind: "status",
+        path: "/transient",
+        status: 200,
+      },
+    ],
+    thresholds: { httpFailMs: 100, httpWarnMs: 1 },
+    wait: async (milliseconds) => {
+      waits.push(milliseconds);
+    },
+  });
+
+  assert.deepEqual(waits, [10_000]);
+  assert.equal(checks[0].status, "pass");
+  assert.equal(checks[0].firstTotalMs, 4);
+  assert.match(checks[0].detail, /recovered=true/);
+});
+
 test("database snapshot stays healthy for current low-load state", () => {
   const checks = evaluateDatabaseSnapshot(healthySnapshot(), {
     now: new Date("2026-08-15T01:00:00.000Z"),
@@ -123,6 +151,35 @@ test("database snapshot warns before the free database quota", () => {
   assert.equal(
     report.checks.find((check) => check.id === "database:size")?.status,
     "warn",
+  );
+});
+
+test("Supabase project storage warns before the free organization quota", () => {
+  const snapshot = healthySnapshot();
+  snapshot.capacity.supabaseStorageBytes = 700_000_000;
+  let report = createHealthReport(
+    evaluateDatabaseSnapshot(snapshot, {
+      now: new Date("2026-08-15T01:00:00.000Z"),
+    }),
+  );
+
+  const warning = report.checks.find(
+    (check) => check.id === "storage:supabase-project-capacity",
+  );
+  assert.equal(warning?.status, "warn");
+  assert.match(warning?.detail ?? "", /project_only=true/);
+
+  snapshot.capacity.supabaseStorageBytes = 850_000_000;
+  report = createHealthReport(
+    evaluateDatabaseSnapshot(snapshot, {
+      now: new Date("2026-08-15T01:00:00.000Z"),
+    }),
+  );
+  assert.equal(
+    report.checks.find(
+      (check) => check.id === "storage:supabase-project-capacity",
+    )?.status,
+    "fail",
   );
 });
 
@@ -360,6 +417,8 @@ function healthySnapshot() {
       cronHistoryBytes: 2 * 1024 * 1024,
       databaseBytes: 100 * 1024 * 1024,
       maxConnections: 60,
+      supabaseStorageBytes: 0,
+      supabaseStorageObjects: 0,
       transactionReadOnly: true,
     },
     cronJobs: Object.entries(EXPECTED_CRON_SCHEDULES).map(

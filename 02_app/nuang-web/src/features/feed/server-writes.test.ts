@@ -18,6 +18,13 @@ const publicationMocks = vi.hoisted(() => ({
     }),
   ),
 }));
+const notificationMocks = vi.hoisted(() => ({
+  sendAdminReviewNotification: vi.fn(),
+}));
+
+vi.mock("@/features/admin/server-admin-review-notification", () => ({
+  sendAdminReviewNotification: notificationMocks.sendAdminReviewNotification,
+}));
 
 vi.mock("@/features/assessment/server-core-result-publication-policy", () => ({
   readCoreResultPublicationDecision:
@@ -72,6 +79,465 @@ const user = {
 
 describe("feed server writes", () => {
   beforeEach(() => vi.clearAllMocks());
+
+  it("keeps a photo post private until its media is atomically activated", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        if (operation.method === "maybeSingle" && !operation.insertRow) {
+          return { data: null, error: null };
+        }
+        return {
+          data: {
+            client_request_hash: "a".repeat(64),
+            created_at: "2026-08-15T00:00:00.000Z",
+            id: "22222222-2222-4222-8222-222222222222",
+            media_final_moderation_status: "published",
+            media_upload_state: "pending",
+            moderation_status: "pending_review",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      clientRequestHash: "a".repeat(64),
+      deferMediaPublication: true,
+      payload: {
+        action: "create_post",
+        body: "사진과 함께 올려요.",
+        clientRequestId: "feed-photo-request-001",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: {
+        mediaUploadState: "pending",
+        moderationStatus: "published",
+      },
+      ok: true,
+    });
+    expect(
+      operations.find(
+        (operation) =>
+          operation.table === "feed_post" && Boolean(operation.insertRow),
+      )?.insertRow,
+    ).toMatchObject({
+      client_request_hash: "a".repeat(64),
+      client_request_id: "feed-photo-request-001",
+      media_final_moderation_status: "published",
+      media_upload_state: "pending",
+      moderation_status: "pending_review",
+      published_at: null,
+    });
+    expect(
+      notificationMocks.sendAdminReviewNotification,
+    ).not.toHaveBeenCalled();
+  });
+
+  it("leaves text-only free-writing posts on the existing duplicate guard", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        return {
+          data: {
+            id: "22222222-2222-4222-8222-222222222222",
+            media_upload_state: "ready",
+            moderation_status: "published",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      clientRequestHash: "9".repeat(64),
+      deferMediaPublication: false,
+      payload: {
+        action: "create_post",
+        body: "사진 없는 글은 기존 저장 흐름을 사용해요.",
+        clientRequestId: "feed-text-request-001",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result.ok).toBe(true);
+    const insert = operations.find((operation) => operation.insertRow);
+    expect(insert?.insertRow).not.toHaveProperty("client_request_id");
+    expect(insert?.insertRow).not.toHaveProperty("client_request_hash");
+    expect(
+      operations.some(
+        (operation) =>
+          operation.table === "feed_post" && operation.method === "maybeSingle",
+      ),
+    ).toBe(false);
+  });
+
+  it("returns the canonical post for a byte-identical request retry", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        if (operation.insertRow) {
+          return { data: null, error: { code: "23505" } };
+        }
+        return {
+          data: {
+            client_request_hash: "b".repeat(64),
+            id: "22222222-2222-4222-8222-222222222222",
+            media_final_moderation_status: null,
+            media_upload_state: "ready",
+            moderation_status: "published",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      clientRequestHash: "b".repeat(64),
+      deferMediaPublication: true,
+      payload: {
+        action: "create_post",
+        body: "같은 요청이에요.",
+        clientRequestId: "feed-photo-request-002",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: {
+        id: "22222222-2222-4222-8222-222222222222",
+        mediaUploadState: "ready",
+        requestReused: true,
+      },
+      ok: true,
+    });
+    expect(
+      operations.some(
+        (operation) =>
+          operation.table === "feed_external_link" ||
+          operation.table === "feed_poll",
+      ),
+    ).toBe(false);
+  });
+
+  it("rejects reuse of a request id with different content", async () => {
+    const { client } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        if (operation.insertRow) {
+          return { data: null, error: { code: "23505" } };
+        }
+        return {
+          data: {
+            client_request_hash: "c".repeat(64),
+            id: "22222222-2222-4222-8222-222222222222",
+            media_final_moderation_status: "published",
+            media_upload_state: "pending",
+            moderation_status: "pending_review",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    await expect(
+      writeFeedRequestForAccount({
+        client,
+        clientRequestHash: "d".repeat(64),
+        deferMediaPublication: true,
+        payload: {
+          action: "create_post",
+          body: "달라진 요청이에요.",
+          clientRequestId: "feed-photo-request-003",
+          source: "free_text",
+          visibility: "public",
+        },
+        user,
+      }),
+    ).resolves.toEqual({ code: "feed_request_conflict", ok: false });
+  });
+
+  it("keeps a recent identical pending photo request out of the uploader race", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        return {
+          data: {
+            client_request_hash: "e".repeat(64),
+            created_at: new Date().toISOString(),
+            id: "22222222-2222-4222-8222-222222222222",
+            media_final_moderation_status: "published",
+            media_upload_state: "pending",
+            moderation_status: "pending_review",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      clientRequestHash: "e".repeat(64),
+      deferMediaPublication: true,
+      payload: {
+        action: "create_post",
+        body: "같은 사진을 아직 올리는 중이에요.",
+        clientRequestId: "feed-photo-request-004",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      code: "feed_media_upload_in_progress",
+      ok: false,
+    });
+    expect(operations.some((operation) => operation.insertRow)).toBe(false);
+    expect(operations.some((operation) => operation.deleteRow)).toBe(false);
+  });
+
+  it("takes over one exact stale pending request before creating a replacement", async () => {
+    const { client, operations } = createMockClient(
+      (operation) => {
+        if (
+          operation.schema === "identity" &&
+          operation.table === "auth_identity"
+        ) {
+          return { data: { account_id: accountId }, error: null };
+        }
+        if (operation.schema === "feed" && operation.table === "feed_post") {
+          if (operation.deleteRow) {
+            return {
+              data: { id: "22222222-2222-4222-8222-222222222222" },
+              error: null,
+            };
+          }
+          if (operation.insertRow) {
+            return {
+              data: {
+                client_request_hash: "f".repeat(64),
+                created_at: "2026-08-15T01:00:00.000Z",
+                id: "33333333-3333-4333-8333-333333333333",
+                media_final_moderation_status: "published",
+                media_upload_state: "pending",
+                moderation_status: "pending_review",
+              },
+              error: null,
+            };
+          }
+          return {
+            data: {
+              client_request_hash: "f".repeat(64),
+              created_at: "2000-01-01T00:00:00.000Z",
+              id: "22222222-2222-4222-8222-222222222222",
+              limited_at: null,
+              media_final_moderation_status: "published",
+              media_upload_state: "pending",
+              moderation_status: "pending_review",
+              published_at: null,
+              removed_at: null,
+            },
+            error: null,
+          };
+        }
+        return { data: null, error: { message: "unexpected operation" } };
+      },
+      (operation) => ({
+        data:
+          operation.name === "check_community_mutation_guard"
+            ? "duplicate_content"
+            : null,
+        error: null,
+      }),
+    );
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      clientRequestHash: "f".repeat(64),
+      deferMediaPublication: true,
+      payload: {
+        action: "create_post",
+        body: "멈춘 사진 게시를 안전하게 다시 올려요.",
+        clientRequestId: "feed-photo-request-005",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: {
+        id: "33333333-3333-4333-8333-333333333333",
+        mediaUploadState: "pending",
+      },
+      ok: true,
+    });
+    const deletion = operations.find((operation) => operation.deleteRow);
+    expect(deletion?.filters).toEqual(
+      expect.arrayContaining([
+        ["eq", "client_request_hash", "f".repeat(64)],
+        ["eq", "media_upload_state", "pending"],
+        ["eq", "media_final_moderation_status", "published"],
+        ["eq", "moderation_status", "pending_review"],
+        ["eq", "created_at", "2000-01-01T00:00:00.000Z"],
+        ["is", "published_at", null],
+        ["is", "limited_at", null],
+        ["is", "removed_at", null],
+      ]),
+    );
+    expect(operations.filter((operation) => operation.insertRow)).toHaveLength(
+      1,
+    );
+  });
+
+  it("never takes over a stale pending post after a terminal safety decision", async () => {
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        return {
+          data: {
+            client_request_hash: "a".repeat(64),
+            created_at: "2000-01-01T00:00:00.000Z",
+            id: "55555555-5555-4555-8555-555555555555",
+            limited_at: null,
+            media_final_moderation_status: "published",
+            media_upload_state: "pending",
+            moderation_status: "removed",
+            published_at: null,
+            removed_at: "2026-08-15T01:01:00.000Z",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      clientRequestHash: "a".repeat(64),
+      deferMediaPublication: true,
+      payload: {
+        action: "create_post",
+        body: "안전 판정이 끝난 게시물은 다시 만들지 않아요.",
+        clientRequestId: "feed-photo-request-007",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      code: "feed_media_upload_in_progress",
+      ok: false,
+    });
+    expect(operations.some((operation) => operation.deleteRow)).toBe(false);
+    expect(operations.some((operation) => operation.insertRow)).toBe(false);
+  });
+
+  it("resolves an insert-race winner without assembling a second post", async () => {
+    let existingReads = 0;
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (operation.schema === "feed" && operation.table === "feed_post") {
+        if (operation.insertRow) {
+          return { data: null, error: { code: "23505" } };
+        }
+        existingReads += 1;
+        if (existingReads === 1) return { data: null, error: null };
+        return {
+          data: {
+            client_request_hash: "1".repeat(64),
+            created_at: "2026-08-15T01:00:00.000Z",
+            id: "44444444-4444-4444-8444-444444444444",
+            media_final_moderation_status: null,
+            media_upload_state: "ready",
+            moderation_status: "published",
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      clientRequestHash: "1".repeat(64),
+      deferMediaPublication: true,
+      payload: {
+        action: "create_post",
+        body: "동시에 도착한 같은 요청이에요.",
+        clientRequestId: "feed-photo-request-006",
+        source: "free_text",
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: {
+        id: "44444444-4444-4444-8444-444444444444",
+        mediaUploadState: "ready",
+        requestReused: true,
+      },
+      ok: true,
+    });
+    expect(operations.filter((operation) => operation.insertRow)).toHaveLength(
+      1,
+    );
+  });
 
   it("stores an original topic report as a verified canonical reference", async () => {
     const reportId = "44444444-4444-4444-8444-444444444444";
@@ -223,9 +689,9 @@ describe("feed server writes", () => {
       code: "feed_result_release_not_publicable",
       ok: false,
     });
-    expect(operations.some((operation) => operation.table === "feed_post")).toBe(
-      false,
-    );
+    expect(
+      operations.some((operation) => operation.table === "feed_post"),
+    ).toBe(false);
   });
 
   it("allows a validated core result attachment", async () => {
@@ -283,9 +749,9 @@ describe("feed server writes", () => {
     });
 
     expect(result.ok).toBe(true);
-    expect(operations.some((operation) => operation.table === "feed_post")).toBe(
-      true,
-    );
+    expect(
+      operations.some((operation) => operation.table === "feed_post"),
+    ).toBe(true);
   });
 
   it("stores new feed posts with public projection only", async () => {
@@ -382,10 +848,7 @@ describe("feed server writes", () => {
         };
       }
 
-      if (
-        operation.schema === "feed" &&
-        operation.table === "content_report"
-      ) {
+      if (operation.schema === "feed" && operation.table === "content_report") {
         return {
           data: { id: "33333333-3333-4333-8333-333333333333" },
           error: null,
@@ -428,6 +891,10 @@ describe("feed server writes", () => {
       severity: "low",
       status: "queued",
       target_author_account_id: targetAuthorId,
+    });
+    expect(notificationMocks.sendAdminReviewNotification).toHaveBeenCalledWith({
+      id: "33333333-3333-4333-8333-333333333333",
+      kind: "content_report",
     });
   });
 
@@ -490,9 +957,8 @@ describe("feed server writes", () => {
       published_at: null,
     });
     expect(
-      operations.find(
-        (operation) => operation.table === "feed_external_link",
-      )?.insertRow,
+      operations.find((operation) => operation.table === "feed_external_link")
+        ?.insertRow,
     ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -714,7 +1180,9 @@ describe("feed server writes", () => {
     expect(
       operations.some((operation) => operation.table === "feed_poll_vote"),
     ).toBe(false);
-    expect(publicationMocks.readCoreResultPublicationDecision).not.toHaveBeenCalled();
+    expect(
+      publicationMocks.readCoreResultPublicationDecision,
+    ).not.toHaveBeenCalled();
   });
 
   it("removes a partially created balance post when its choices fail to save", async () => {
@@ -784,9 +1252,9 @@ describe("feed server writes", () => {
     );
     expect(rollback).toBeDefined();
     expect(hasFilter(rollback!, "eq", "id", postId)).toBe(true);
-    expect(
-      hasFilter(rollback!, "eq", "author_account_id", accountId),
-    ).toBe(true);
+    expect(hasFilter(rollback!, "eq", "author_account_id", accountId)).toBe(
+      true,
+    );
   });
 
   it("keeps a balance game's question and choices immutable after voting starts", async () => {
@@ -822,10 +1290,7 @@ describe("feed server writes", () => {
           error: null,
         };
       }
-      if (
-        operation.schema === "feed" &&
-        operation.table === "feed_poll_vote"
-      ) {
+      if (operation.schema === "feed" && operation.table === "feed_poll_vote") {
         return { count: 1, data: null, error: null };
       }
       return { data: null, error: { message: "unexpected operation" } };
@@ -902,10 +1367,7 @@ describe("feed server writes", () => {
           error: null,
         };
       }
-      if (
-        operation.schema === "feed" &&
-        operation.table === "feed_poll_vote"
-      ) {
+      if (operation.schema === "feed" && operation.table === "feed_poll_vote") {
         return { count: 0, data: null, error: null };
       }
       if (
@@ -1875,10 +2337,7 @@ describe("feed server writes", () => {
           error: null,
         };
       }
-      if (
-        operation.schema === "feed" &&
-        operation.table === "feed_comment"
-      ) {
+      if (operation.schema === "feed" && operation.table === "feed_comment") {
         return { count: 1, data: null, error: null };
       }
       return { data: null, error: { message: "unexpected operation" } };
@@ -1905,9 +2364,9 @@ describe("feed server writes", () => {
       code: "feed_question_audience_locked",
       ok: false,
     });
-    expect(
-      operations.some((operation) => Boolean(operation.updateRow)),
-    ).toBe(false);
+    expect(operations.some((operation) => Boolean(operation.updateRow))).toBe(
+      false,
+    );
   });
 
   it("does not let a viewer delete another account's post", async () => {
@@ -1918,10 +2377,7 @@ describe("feed server writes", () => {
       ) {
         return { data: { account_id: accountId }, error: null };
       }
-      if (
-        operation.schema === "feed" &&
-        operation.table === "feed_post"
-      ) {
+      if (operation.schema === "feed" && operation.table === "feed_post") {
         return { data: null, error: null };
       }
       return { data: null, error: { message: "unexpected operation" } };
@@ -1937,9 +2393,9 @@ describe("feed server writes", () => {
     });
 
     expect(result).toEqual({ code: "feed_target_invalid", ok: false });
-    expect(
-      operations.some((operation) => Boolean(operation.updateRow)),
-    ).toBe(false);
+    expect(operations.some((operation) => Boolean(operation.updateRow))).toBe(
+      false,
+    );
   });
 });
 

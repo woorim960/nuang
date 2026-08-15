@@ -38,7 +38,29 @@
   scroll-snap-stop: always;
 }
 
-.slide img {
+.imageButton {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: zoom-in;
+  touch-action: pan-x pan-y;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.imageButton:focus-visible {
+  outline: 3px solid var(--nu-color-brand-action);
+  outline-offset: -4px;
+}
+
+.track[data-dragging="true"] .imageButton {
+  cursor: grabbing;
+}
+
+.imageButton img {
   display: block;
   width: 100%;
   height: 100%;
@@ -88,8 +110,155 @@
   background: var(--nu-color-brand-action);
 }
 
+.viewerBackdrop {
+  position: fixed;
+  z-index: 100;
+  inset: 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: max(0.75rem, env(safe-area-inset-top))
+    max(0.75rem, env(safe-area-inset-right))
+    max(0.75rem, env(safe-area-inset-bottom))
+    max(0.75rem, env(safe-area-inset-left));
+  background: color-mix(in srgb, var(--nu-neutral-900) 94%, transparent);
+  backdrop-filter: blur(16px);
+  animation: viewer-backdrop-in 160ms ease-out both;
+}
+
+.viewerDialog {
+  position: relative;
+  display: grid;
+  width: min(100%, 80rem);
+  min-width: 0;
+  min-height: 0;
+  grid-template-rows: 3rem minmax(0, 1fr);
+  outline: none;
+}
+
+.viewerToolbar {
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nu-color-surface);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
+.viewerToolbar > span {
+  display: inline-flex;
+  min-height: 28px;
+  align-items: center;
+  padding: 0 0.65rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--nu-neutral-900) 64%, transparent);
+}
+
+.viewerClose,
+.viewerNav {
+  display: grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  color: var(--nu-color-surface);
+  background: color-mix(in srgb, var(--nu-neutral-900) 64%, transparent);
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    transform 160ms ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.viewerClose {
+  position: absolute;
+  top: 0.125rem;
+  right: 0;
+}
+
+.viewerNav {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.viewerPrevious {
+  left: 0;
+}
+
+.viewerNext {
+  right: 0;
+}
+
+.viewerClose:hover,
+.viewerNav:hover {
+  background: color-mix(in srgb, var(--nu-color-surface) 24%, transparent);
+}
+
+.viewerClose:focus-visible,
+.viewerNav:focus-visible {
+  outline: 3px solid var(--nu-color-surface);
+  outline-offset: 2px;
+}
+
+.viewerNav:active {
+  transform: translateY(-50%) scale(0.94);
+}
+
+.viewerImageFrame {
+  display: grid;
+  min-width: 0;
+  min-height: 0;
+  place-items: center;
+  padding: 0 3.5rem 0.5rem;
+}
+
+.viewerImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+}
+
+@keyframes viewer-backdrop-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (max-width: 35rem) {
+  .viewerImageFrame {
+    padding-inline: 0;
+  }
+
+  .viewerNav {
+    top: auto;
+    bottom: 0.25rem;
+    transform: none;
+  }
+
+  .viewerNav:active {
+    transform: scale(0.94);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .dots span {
+  .dots span,
+  .viewerClose,
+  .viewerNav {
     transition: none;
+  }
+
+  .viewerBackdrop {
+    animation: none;
   }
 }

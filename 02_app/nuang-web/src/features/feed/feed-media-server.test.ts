@@ -8,6 +8,8 @@ type MockStoredObject = {
   storagePath: string;
 };
 
+const accountId = "019fff4b-285d-7111-9c6c-48ced670a41b";
+
 const mocks = vi.hoisted(() => ({
   createFeedMediaObjectKey: vi.fn(
     ({
@@ -322,7 +324,7 @@ describe("uploadFeedPostMedia", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mocks.ensureAccountForUser.mockResolvedValue({
-      accountId: "account-1",
+      accountId,
       ok: true,
     });
     mocks.resolveFeedMediaStorageWriteTarget.mockReturnValue({
@@ -334,6 +336,101 @@ describe("uploadFeedPostMedia", () => {
       failedObjects: [],
       ok: true,
     });
+  });
+
+  it("rolls back the created post when the account link cannot be confirmed", async () => {
+    mocks.ensureAccountForUser.mockResolvedValue({
+      code: "account_link_missing",
+      ok: false,
+    });
+    const harness = createClient();
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({ code: "account_link_missing", ok: false });
+
+    expect(mocks.resolveFeedMediaStorageWriteTarget).not.toHaveBeenCalled();
+    expect(mocks.optimizeFeedMediaImage).not.toHaveBeenCalled();
+    expect(harness.postDelete).toHaveBeenCalledOnce();
+    expect(harness.postDeleteEq).toHaveBeenCalledWith("id", "post-1");
+  });
+
+  it("rolls back the created post when its ownership read fails", async () => {
+    const harness = createClient({
+      postReadError: { code: "PGRST500", message: "post read failed" },
+    });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({ code: "feed_target_invalid", ok: false });
+
+    expect(mocks.resolveFeedMediaStorageWriteTarget).not.toHaveBeenCalled();
+    expect(mocks.optimizeFeedMediaImage).not.toHaveBeenCalled();
+    expect(harness.postDelete).toHaveBeenCalledOnce();
+    expect(harness.postDeleteEq).toHaveBeenCalledWith("id", "post-1");
+  });
+
+  it("rolls back the created post when the R2 write target is misconfigured", async () => {
+    mocks.resolveFeedMediaStorageWriteTarget.mockReturnValue({
+      ok: false,
+      reason: "configuration_invalid",
+    });
+    const harness = createClient({
+      postDeleteError: { code: "PGRST500", message: "delete failed" },
+    });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({ code: "feed_media_upload_failed", ok: false });
+
+    expect(harness.listBuckets).not.toHaveBeenCalled();
+    expect(mocks.resolveFeedMediaStorageWriteTarget).toHaveBeenCalledWith({
+      accountId,
+    });
+    expect(mocks.optimizeFeedMediaImage).not.toHaveBeenCalled();
+    expect(harness.postDelete).toHaveBeenCalledOnce();
+    expect(harness.postDeleteEq).toHaveBeenCalledWith("id", "post-1");
+    expect(harness.postUpdate).toHaveBeenCalledWith({
+      deleted_at: expect.any(String),
+      moderation_status: "removed",
+      removed_at: expect.any(String),
+    });
+    expect(harness.postUpdateEq).toHaveBeenCalledWith("id", "post-1");
+  });
+
+  it("rolls back the created post when the Supabase media bucket check fails", async () => {
+    const harness = createClient({
+      listBucketsError: { message: "bucket lookup failed" },
+    });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({ code: "feed_media_upload_failed", ok: false });
+
+    expect(harness.listBuckets).toHaveBeenCalledOnce();
+    expect(mocks.optimizeFeedMediaImage).not.toHaveBeenCalled();
+    expect(harness.postDelete).toHaveBeenCalledOnce();
+    expect(harness.postDeleteEq).toHaveBeenCalledWith("id", "post-1");
   });
 
   it("optimizes sequentially, uploads in parallel, and inserts WebP provider metadata", async () => {
@@ -451,6 +548,148 @@ describe("uploadFeedPostMedia", () => {
       rows[0].storage_path,
       rows[1].storage_path,
     ]);
+  });
+
+  it("does not delete the winner post when media sort-order slots already exist", async () => {
+    mocks.optimizeFeedMediaImage.mockResolvedValue(optimizedImage(1));
+    const harness = createClient({
+      mediaInsertError: { code: "23505", message: "unique violation" },
+    });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({
+      code: "feed_media_upload_in_progress",
+      ok: false,
+    });
+
+    expect(mocks.uploadFeedMediaObject).not.toHaveBeenCalled();
+    expect(harness.postDelete).not.toHaveBeenCalled();
+    expect(mocks.deleteFeedMediaObjects).not.toHaveBeenCalled();
+  });
+
+  it("keeps a commit-ambiguous media insert behind the pending barrier", async () => {
+    mocks.optimizeFeedMediaImage.mockResolvedValue(optimizedImage(1));
+    const harness = createClient({ mediaInsertThrows: true });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({
+      code: "feed_media_upload_in_progress",
+      ok: false,
+    });
+
+    expect(harness.postDelete).not.toHaveBeenCalled();
+    expect(mocks.deleteFeedMediaObjects).not.toHaveBeenCalled();
+  });
+
+  it("retries the idempotent activation RPC after a lost response", async () => {
+    mocks.optimizeFeedMediaImage.mockResolvedValue(optimizedImage(1));
+    mocks.uploadFeedMediaObject.mockResolvedValue({ ok: true });
+    const harness = createClient({
+      activationSequence: [
+        new Error("activation response lost"),
+        { data: true, error: null },
+      ],
+      postReadSequence: [
+        { data: { attachment_payload: [], id: "post-1" }, error: null },
+        {
+          data: { id: "post-1", media_upload_state: "pending" },
+          error: null,
+        },
+      ],
+    });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({ ok: true });
+
+    expect(
+      harness.rpc.mock.calls.filter(
+        ([name]) => name === "activate_feed_post_media",
+      ),
+    ).toHaveLength(2);
+    expect(harness.postDelete).not.toHaveBeenCalled();
+  });
+
+  it("accepts an exact ready state when the activation success response is lost", async () => {
+    mocks.optimizeFeedMediaImage.mockResolvedValue(optimizedImage(1));
+    mocks.uploadFeedMediaObject.mockResolvedValue({ ok: true });
+    const harness = createClient({
+      activationSequence: [new Error("activation response lost")],
+      postReadSequence: [
+        { data: { attachment_payload: [], id: "post-1" }, error: null },
+        {
+          data: { id: "post-1", media_upload_state: "ready" },
+          error: null,
+        },
+      ],
+    });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({ ok: true });
+
+    expect(harness.postDelete).not.toHaveBeenCalled();
+    expect(mocks.deleteFeedMediaObjects).not.toHaveBeenCalled();
+  });
+
+  it("leaves accounted rows intact when activation remains ambiguous", async () => {
+    mocks.optimizeFeedMediaImage.mockResolvedValue(optimizedImage(1));
+    mocks.uploadFeedMediaObject.mockResolvedValue({ ok: true });
+    const harness = createClient({
+      activationSequence: [
+        new Error("first activation response lost"),
+        new Error("retry activation response lost"),
+      ],
+      postReadSequence: [
+        { data: { attachment_payload: [], id: "post-1" }, error: null },
+        {
+          data: { id: "post-1", media_upload_state: "pending" },
+          error: null,
+        },
+        {
+          data: { id: "post-1", media_upload_state: "pending" },
+          error: null,
+        },
+      ],
+    });
+
+    await expect(
+      uploadFeedPostMedia({
+        client: harness.client,
+        files: [imageFile("one.jpg", 1)],
+        postId: "post-1",
+        user: { id: "user-1" } as User,
+      }),
+    ).resolves.toEqual({
+      code: "feed_media_upload_in_progress",
+      ok: false,
+    });
+
+    expect(harness.postDelete).not.toHaveBeenCalled();
+    expect(harness.mediaUpdate).not.toHaveBeenCalled();
+    expect(mocks.deleteFeedMediaObjects).not.toHaveBeenCalled();
   });
 
   it("rolls back the post without uploading when optimization fails", async () => {
@@ -836,36 +1075,81 @@ function createCleanupClient({
 
 function createClient({
   activationResult = true,
+  activationSequence,
   cleanupQueueId = "cleanup-queue-1",
+  listBucketsError = null,
+  mediaInsertError = null,
+  mediaInsertThrows = false,
+  postDeleteError = null,
+  postReadData = { attachment_payload: [], id: "post-1" },
+  postReadError = null,
+  postReadSequence,
   releaseResult = true,
   reserveResult = true,
 }: {
   activationResult?: boolean;
+  activationSequence?: Array<Error | { data: boolean | null; error: unknown }>;
   cleanupQueueId?: string | null;
+  listBucketsError?: unknown;
+  mediaInsertError?: unknown;
+  mediaInsertThrows?: boolean;
+  postDeleteError?: unknown;
+  postReadData?: Record<string, unknown> | null;
+  postReadError?: unknown;
+  postReadSequence?: Array<{
+    data: Record<string, unknown> | null;
+    error: unknown;
+  }>;
   releaseResult?: boolean;
   reserveResult?: boolean;
 } = {}) {
+  let postReadIndex = 0;
   const postReadBuilder = {
     eq: vi.fn(),
     is: vi.fn(),
-    maybeSingle: vi.fn(async () => ({
-      data: { attachment_payload: [], id: "post-1" },
-      error: null,
-    })),
+    maybeSingle: vi.fn(async () => {
+      const sequenced = postReadSequence?.[postReadIndex];
+      postReadIndex += 1;
+      return (
+        sequenced ?? {
+          data: postReadData,
+          error: postReadError,
+        }
+      );
+    }),
     select: vi.fn(),
   };
   postReadBuilder.select.mockReturnValue(postReadBuilder);
   postReadBuilder.eq.mockReturnValue(postReadBuilder);
   postReadBuilder.is.mockReturnValue(postReadBuilder);
 
-  const postDeleteEq = vi.fn(async () => ({ error: null }));
+  const postDeleteEq = vi.fn(async () => ({ error: postDeleteError }));
   const postDelete = vi.fn(() => ({ eq: postDeleteEq }));
   const postUpdateEq = vi.fn(async () => ({ error: null }));
   const postUpdate = vi.fn(() => ({ eq: postUpdateEq }));
+  let insertedMediaRows: Array<Record<string, unknown>> = [];
   const mediaInsert = vi.fn(async (rows: unknown) => {
-    void rows;
-    return { error: null };
+    if (mediaInsertThrows) throw new Error("media insert response unavailable");
+    insertedMediaRows = Array.isArray(rows)
+      ? (rows as Array<Record<string, unknown>>)
+      : [];
+    return { error: mediaInsertError };
   });
+  const mediaReadBuilder = {
+    eq: vi.fn(),
+    order: vi.fn(async () => ({
+      data: insertedMediaRows.map((row) => ({
+        deleted_at: null,
+        storage_accounted: true,
+        storage_path: row.storage_path,
+        storage_ready: true,
+      })),
+      error: null,
+    })),
+    select: vi.fn(),
+  };
+  mediaReadBuilder.select.mockReturnValue(mediaReadBuilder);
+  mediaReadBuilder.eq.mockReturnValue(mediaReadBuilder);
   const mediaUpdateIn = vi.fn(async () => ({ error: null }));
   const mediaUpdateEq = vi.fn(() => ({ in: mediaUpdateIn }));
   const mediaUpdate = vi.fn(() => ({ eq: mediaUpdateEq, in: mediaUpdateIn }));
@@ -884,14 +1168,17 @@ function createClient({
           : { data: null, error: { code: "cleanup_enqueue_failed" } };
       }
       if (functionName === "activate_feed_post_media") {
+        const sequenced = activationSequence?.shift();
+        if (sequenced instanceof Error) throw sequenced;
+        if (sequenced) return sequenced;
         return { data: activationResult, error: null };
       }
       return { data: null, error: { code: "unexpected_rpc" } };
     },
   );
   const listBuckets = vi.fn(async () => ({
-    data: [{ id: "feed-media" }],
-    error: null,
+    data: listBucketsError ? [] : [{ id: "feed-media" }],
+    error: listBucketsError,
   }));
   const client = {
     schema: () => ({
@@ -903,7 +1190,11 @@ function createClient({
             update: postUpdate,
           };
         }
-        return { insert: mediaInsert, update: mediaUpdate };
+        return {
+          ...mediaReadBuilder,
+          insert: mediaInsert,
+          update: mediaUpdate,
+        };
       },
       rpc,
     }),

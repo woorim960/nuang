@@ -803,6 +803,7 @@ export async function createServerFeedPostDetailPayload(
     .from("feed_post")
     .select(feedPostSelectWithTopics)
     .eq("id", postId)
+    .eq("media_upload_state", "ready")
     .is("deleted_at", null)
     .maybeSingle();
 
@@ -812,6 +813,7 @@ export async function createServerFeedPostDetailPayload(
       .from("feed_post")
       .select(feedPostSelectLegacy)
       .eq("id", postId)
+      .eq("media_upload_state", "ready")
       .is("deleted_at", null)
       .maybeSingle();
   }
@@ -1148,6 +1150,7 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
           .from("feed_post")
           .select("id, topic_category, topic_tags")
           .in("id", postIds)
+          .eq("media_upload_state", "ready")
           .is("deleted_at", null)
       : Promise.resolve({ data: [], error: null }),
   ]);
@@ -1323,6 +1326,7 @@ export async function createServerFeedReportSharePayload(
     )
     .eq("id", postId)
     .eq("source", "report_share")
+    .eq("media_upload_state", "ready")
     .is("deleted_at", null)
     .maybeSingle();
 
@@ -1503,6 +1507,7 @@ async function readPublishedPosts(client: SupabaseClient) {
     .from("feed_post")
     .select(feedPostSelectWithTopics)
     .eq("moderation_status", "published")
+    .eq("media_upload_state", "ready")
     .eq("visibility", "public")
     .is("deleted_at", null)
     .order("published_at", { ascending: false })
@@ -1514,6 +1519,7 @@ async function readPublishedPosts(client: SupabaseClient) {
       .from("feed_post")
       .select(feedPostSelectLegacy)
       .eq("moderation_status", "published")
+      .eq("media_upload_state", "ready")
       .eq("visibility", "public")
       .is("deleted_at", null)
       .order("published_at", { ascending: false })
@@ -1540,6 +1546,7 @@ async function readOwnPosts(
     .from("feed_post")
     .select(feedPostSelectWithTopics)
     .eq("author_account_id", accountId)
+    .eq("media_upload_state", "ready")
     .in("moderation_status", ["pending_review", "published", "limited"])
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
@@ -1551,6 +1558,7 @@ async function readOwnPosts(
       .from("feed_post")
       .select(feedPostSelectLegacy)
       .eq("author_account_id", accountId)
+      .eq("media_upload_state", "ready")
       .in("moderation_status", ["pending_review", "published", "limited"])
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
@@ -1581,6 +1589,7 @@ async function readProfilePosts({
     .from("feed_post")
     .select(feedPostSelectWithTopics)
     .eq("author_account_id", accountId)
+    .eq("media_upload_state", "ready")
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .limit(50);
@@ -1597,6 +1606,7 @@ async function readProfilePosts({
       .from("feed_post")
       .select(feedPostSelectLegacy)
       .eq("author_account_id", accountId)
+      .eq("media_upload_state", "ready")
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
       .limit(50);

@@ -85,13 +85,44 @@ const uuidPattern =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 const feedSeedCardIds = new Set(feedItems.map((item) => item.id));
+const pendingMediaTakeoverAgeMs = 2 * 60 * 1_000;
+
+type FeedPostWriteRow = {
+  client_request_hash: string | null;
+  created_at: string;
+  id: string;
+  limited_at: string | null;
+  media_final_moderation_status:
+    FeedWriteSuccessInput["moderationStatus"] | null;
+  media_upload_state: "pending" | "ready";
+  moderation_status: FeedWriteSuccessInput["moderationStatus"];
+  published_at: string | null;
+  removed_at: string | null;
+};
+
+type FeedPostIdempotency = {
+  clientRequestHash: string;
+  clientRequestId: string;
+};
+
+type ExistingFeedPostResolution =
+  | { kind: "none" }
+  | { kind: "takeover" }
+  | {
+      kind: "result";
+      result: ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>;
+    };
 
 export async function writeFeedRequestForAccount({
   client,
+  clientRequestHash,
+  deferMediaPublication = false,
   payload,
   user,
 }: {
   client: ServiceClient;
+  clientRequestHash?: string;
+  deferMediaPublication?: boolean;
   payload: FeedWriteRequest;
   user: User;
 }): Promise<ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>> {
@@ -102,7 +133,13 @@ export async function writeFeedRequestForAccount({
   }
 
   if (payload.action === "create_post") {
-    return writeFeedPost({ accountId: account.accountId, client, payload });
+    return writeFeedPost({
+      accountId: account.accountId,
+      client,
+      clientRequestHash,
+      deferMediaPublication,
+      payload,
+    });
   }
 
   if (payload.action === "update_post") {
@@ -419,10 +456,7 @@ async function updateBalanceGamePollContent({
 
   if (pollResponse.error || !pollResponse.data) {
     return {
-      code: getFeedDbFailureCode(
-        pollResponse.error,
-        "feed_post_update_failed",
-      ),
+      code: getFeedDbFailureCode(pollResponse.error, "feed_post_update_failed"),
       ok: false,
     };
   }
@@ -440,10 +474,7 @@ async function updateBalanceGamePollContent({
 
   if (voteResponse.error) {
     return {
-      code: getFeedDbFailureCode(
-        voteResponse.error,
-        "feed_post_update_failed",
-      ),
+      code: getFeedDbFailureCode(voteResponse.error, "feed_post_update_failed"),
       ok: false,
     };
   }
@@ -569,14 +600,38 @@ async function deleteFeedPost({
 async function writeFeedPost({
   accountId,
   client,
+  clientRequestHash,
+  deferMediaPublication,
   payload,
 }: {
   accountId: string;
   client: ServiceClient;
+  clientRequestHash?: string;
+  deferMediaPublication: boolean;
   payload: Extract<FeedWriteRequest, { action: "create_post" }>;
 }): Promise<ServerWriteResult<FeedWriteSuccessInput, FeedWriteFailureCode>> {
   if (!isValidPostSourcePayload(payload)) {
     return { code: "feed_target_invalid", ok: false };
+  }
+
+  // Idempotency v1 is intentionally limited to free-writing posts. Other
+  // sources can own dependent poll/vote rows that need a separate atomic
+  // assembly contract before an existing parent can be returned as complete.
+  const idempotency = getFeedPostIdempotency({
+    clientRequestHash,
+    deferMediaPublication,
+    payload,
+  });
+  let tookOverStalePending = false;
+  if (idempotency) {
+    const existing = await resolveExistingIdempotentFeedPost({
+      accountId,
+      client,
+      idempotency,
+      payload,
+    });
+    if (existing.kind === "result") return existing.result;
+    tookOverStalePending = existing.kind === "takeover";
   }
 
   if (
@@ -604,7 +659,32 @@ async function writeFeedPost({
     client,
   });
   if (guardFailure) {
-    return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+    // A concurrent identical request can insert between the fast-path read and
+    // the duplicate guard. Resolve that canonical row before reporting a
+    // duplicate. An exact stale pending row may be taken over once.
+    if (
+      guardFailure === "duplicate_content" &&
+      idempotency &&
+      !tookOverStalePending
+    ) {
+      const existing = await resolveExistingIdempotentFeedPost({
+        accountId,
+        client,
+        idempotency,
+        payload,
+      });
+      if (existing.kind === "result") return existing.result;
+      if (existing.kind !== "takeover") {
+        return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+      }
+      tookOverStalePending = true;
+    } else if (
+      guardFailure !== "duplicate_content" ||
+      !idempotency ||
+      !tookOverStalePending
+    ) {
+      return { code: mapCommunityGuardFailure(guardFailure), ok: false };
+    }
   }
 
   const externalLinks = await prepareExternalLinks({
@@ -620,57 +700,70 @@ async function writeFeedPost({
     ? "pending_review"
     : "published";
   const publishedAt = new Date().toISOString();
+  const requestIdentity = idempotency
+    ? {
+        client_request_hash: idempotency.clientRequestHash,
+        client_request_id: idempotency.clientRequestId,
+      }
+    : {};
+  const mediaPublication = deferMediaPublication
+    ? {
+        media_final_moderation_status: moderationStatus,
+        media_upload_state: "pending",
+      }
+    : {};
   const sharedRow = {
     attachment_payload: payload.attachments ?? [],
     author_account_id: accountId,
     body: payload.body,
-    moderation_status: moderationStatus,
-    published_at: moderationStatus === "published" ? publishedAt : null,
+    ...requestIdentity,
+    ...mediaPublication,
+    moderation_status: deferMediaPublication
+      ? "pending_review"
+      : moderationStatus,
+    published_at:
+      !deferMediaPublication && moderationStatus === "published"
+        ? publishedAt
+        : null,
     public_projection_payload: publicProjection,
     source: payload.source,
     source_id:
       publicProjection.reportShare?.reportKey ?? payload.sourceId ?? null,
     visibility: payload.visibility,
   };
-  let response = await client
-    .schema("feed")
-    .from("feed_post")
-    .insert({
-      ...sharedRow,
-      topic_category: payload.topic?.category ?? null,
-      topic_source: payload.topic?.source ?? "manual",
-      topic_tags: payload.topic?.tags ?? [],
-    })
-    .select("id, moderation_status")
-    .single();
+  let row: FeedPostWriteRow | null = null;
+  for (let insertAttempt = 0; insertAttempt < 2; insertAttempt += 1) {
+    const response = await insertFeedPostRow({ client, payload, sharedRow });
+    if (!response.error && response.data) {
+      row = response.data;
+      break;
+    }
 
-  if (isMissingFeedTopicColumns(response.error)) {
-    response = await client
-      .schema("feed")
-      .from("feed_post")
-      .insert({
-        ...sharedRow,
-        body:
-          payload.body.trim() ||
-          (payload.source === "balance_game"
-            ? ""
-            : "사진을 공유했어요."),
-      })
-      .select("id, moderation_status")
-      .single();
-  }
+    if (response.error && isUniqueViolation(response.error) && idempotency) {
+      const existing = await resolveExistingIdempotentFeedPost({
+        accountId,
+        client,
+        idempotency,
+        payload,
+      });
+      if (existing.kind === "result") return existing.result;
+      if (insertAttempt === 0) continue;
+    }
 
-  if (response.error || !response.data) {
     return {
       code: getFeedDbFailureCode(response.error, "feed_post_insert_failed"),
       ok: false,
     };
   }
 
-  const row = response.data as {
-    id: string;
-    moderation_status: FeedWriteSuccessInput["moderationStatus"];
-  };
+  if (!row) {
+    return { code: "feed_post_insert_failed", ok: false };
+  }
+
+  const finalModerationStatus =
+    row.media_upload_state === "pending"
+      ? (row.media_final_moderation_status ?? moderationStatus)
+      : row.moderation_status;
 
   await persistExternalLinks({
     client,
@@ -696,19 +789,211 @@ async function writeFeedPost({
     }
   }
 
-  await sendAdminReviewNotification({
-    id: String(response.data.id),
-    kind: "content_report",
-  });
-
   return {
     data: {
       action: payload.action,
       id: row.id,
-      moderationStatus: row.moderation_status,
+      ...(deferMediaPublication
+        ? { mediaUploadState: row.media_upload_state }
+        : {}),
+      moderationStatus: finalModerationStatus,
       targetType: "feed_post",
     },
     ok: true,
+  };
+}
+
+function getFeedPostIdempotency({
+  clientRequestHash,
+  deferMediaPublication,
+  payload,
+}: {
+  clientRequestHash?: string;
+  deferMediaPublication: boolean;
+  payload: Extract<FeedWriteRequest, { action: "create_post" }>;
+}): FeedPostIdempotency | null {
+  if (
+    !deferMediaPublication ||
+    payload.source !== "free_text" ||
+    !payload.clientRequestId ||
+    !clientRequestHash
+  ) {
+    return null;
+  }
+
+  return {
+    clientRequestHash,
+    clientRequestId: payload.clientRequestId,
+  };
+}
+
+async function resolveExistingIdempotentFeedPost({
+  accountId,
+  client,
+  idempotency,
+  payload,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  idempotency: FeedPostIdempotency;
+  payload: Extract<FeedWriteRequest, { action: "create_post" }>;
+}): Promise<ExistingFeedPostResolution> {
+  const response = await client
+    .schema("feed")
+    .from("feed_post")
+    .select(
+      "id,created_at,moderation_status,published_at,limited_at,removed_at,media_upload_state,media_final_moderation_status,client_request_hash",
+    )
+    .eq("author_account_id", accountId)
+    .eq("client_request_id", idempotency.clientRequestId)
+    .is("deleted_at", null)
+    .maybeSingle();
+
+  if (response.error) {
+    return {
+      kind: "result",
+      result: {
+        code: getFeedDbFailureCode(response.error, "feed_post_insert_failed"),
+        ok: false,
+      },
+    };
+  }
+  if (!response.data) return { kind: "none" };
+
+  const row = response.data as FeedPostWriteRow;
+  if (row.client_request_hash !== idempotency.clientRequestHash) {
+    return {
+      kind: "result",
+      result: { code: "feed_request_conflict", ok: false },
+    };
+  }
+
+  if (row.media_upload_state === "ready") {
+    return {
+      kind: "result",
+      result: {
+        data: createReusedFeedPostResult(payload, row),
+        ok: true,
+      },
+    };
+  }
+
+  if (row.media_upload_state !== "pending" || !isStalePendingMediaPost(row)) {
+    return {
+      kind: "result",
+      result: { code: "feed_media_upload_in_progress", ok: false },
+    };
+  }
+
+  // This exact delete is the takeover compare-and-swap. A concurrent winner
+  // that finalized or replaced the row makes it return no data, and this
+  // request then fails closed. Physical deletion lets the media-row trigger
+  // durably own late or ambiguous object cleanup before the key is reused.
+  const deletion = await client
+    .schema("feed")
+    .from("feed_post")
+    .delete()
+    .eq("id", row.id)
+    .eq("author_account_id", accountId)
+    .eq("client_request_id", idempotency.clientRequestId)
+    .eq("client_request_hash", idempotency.clientRequestHash)
+    .eq("media_upload_state", "pending")
+    .eq("media_final_moderation_status", row.media_final_moderation_status!)
+    .eq("moderation_status", "pending_review")
+    .eq("created_at", row.created_at)
+    .is("published_at", null)
+    .is("limited_at", null)
+    .is("removed_at", null)
+    .is("deleted_at", null)
+    .select("id")
+    .maybeSingle();
+
+  if (deletion.error || !deletion.data) {
+    return {
+      kind: "result",
+      result: { code: "feed_media_upload_in_progress", ok: false },
+    };
+  }
+
+  return { kind: "takeover" };
+}
+
+function isStalePendingMediaPost(row: FeedPostWriteRow) {
+  const createdAt = Date.parse(row.created_at);
+  return (
+    row.moderation_status === "pending_review" &&
+    (row.media_final_moderation_status === "pending_review" ||
+      row.media_final_moderation_status === "published") &&
+    row.published_at === null &&
+    row.limited_at === null &&
+    row.removed_at === null &&
+    Number.isFinite(createdAt) &&
+    Date.now() - createdAt >= pendingMediaTakeoverAgeMs
+  );
+}
+
+function createReusedFeedPostResult(
+  payload: Extract<FeedWriteRequest, { action: "create_post" }>,
+  row: FeedPostWriteRow,
+): FeedWriteSuccessInput {
+  return {
+    action: payload.action,
+    id: row.id,
+    mediaUploadState: row.media_upload_state,
+    moderationStatus:
+      row.media_upload_state === "pending"
+        ? (row.media_final_moderation_status ?? "pending_review")
+        : row.moderation_status,
+    requestReused: true,
+    targetType: "feed_post",
+  };
+}
+
+async function insertFeedPostRow({
+  client,
+  payload,
+  sharedRow,
+}: {
+  client: ServiceClient;
+  payload: Extract<FeedWriteRequest, { action: "create_post" }>;
+  sharedRow: Record<string, unknown>;
+}): Promise<{
+  data: FeedPostWriteRow | null;
+  error: { code?: string; message?: string } | null;
+}> {
+  let response = await client
+    .schema("feed")
+    .from("feed_post")
+    .insert({
+      ...sharedRow,
+      topic_category: payload.topic?.category ?? null,
+      topic_source: payload.topic?.source ?? "manual",
+      topic_tags: payload.topic?.tags ?? [],
+    })
+    .select(
+      "id,created_at,moderation_status,published_at,limited_at,removed_at,media_upload_state,media_final_moderation_status,client_request_hash",
+    )
+    .single();
+
+  if (isMissingFeedTopicColumns(response.error)) {
+    response = await client
+      .schema("feed")
+      .from("feed_post")
+      .insert({
+        ...sharedRow,
+        body:
+          payload.body.trim() ||
+          (payload.source === "balance_game" ? "" : "사진을 공유했어요."),
+      })
+      .select(
+        "id,created_at,moderation_status,published_at,limited_at,removed_at,media_upload_state,media_final_moderation_status,client_request_hash",
+      )
+      .single();
+  }
+
+  return response as {
+    data: FeedPostWriteRow | null;
+    error: { code?: string; message?: string } | null;
   };
 }
 
@@ -722,8 +1007,7 @@ async function canPublishCoreReportAttachment({
   payload: Extract<FeedWriteRequest, { action: "create_post" }>;
 }) {
   const attachment = payload.attachments?.find(
-    (item) =>
-      item.type === "result_summary" || item.type === "original_report",
+    (item) => item.type === "result_summary" || item.type === "original_report",
   );
   if (!attachment) return false;
 
@@ -769,6 +1053,14 @@ function isMissingFeedTopicColumns(error: unknown) {
     message.includes("topic_category") ||
     message.includes("topic_source") ||
     message.includes("topic_tags")
+  );
+}
+
+function isUniqueViolation(error: unknown) {
+  return Boolean(
+    error &&
+    typeof error === "object" &&
+    (error as { code?: unknown }).code === "23505",
   );
 }
 
@@ -1090,6 +1382,11 @@ async function writeFeedContentReport({
     };
   }
 
+  await sendAdminReviewNotification({
+    id: response.data.id,
+    kind: "content_report",
+  });
+
   return {
     data: {
       action: payload.action,
@@ -1101,10 +1398,7 @@ async function writeFeedContentReport({
 }
 
 function getContentReportSeverity(
-  reason: Extract<
-    FeedWriteRequest,
-    { action: "report_content" }
-  >["reason"],
+  reason: Extract<FeedWriteRequest, { action: "report_content" }>["reason"],
 ) {
   if (
     ["hate", "sexual_content", "violence", "privacy", "self_harm"].includes(
@@ -2215,13 +2509,13 @@ async function buildPostProjection({
           version: "user-balance-game.v1",
         }
       : balanceGame
-      ? {
-          promptId: balanceGame.id,
-          question: balanceGame.question,
-          selectedOptionKey: payload.pollOptionKey ?? null,
-          version: balanceGame.version,
-        }
-      : null,
+        ? {
+            promptId: balanceGame.id,
+            question: balanceGame.question,
+            selectedOptionKey: payload.pollOptionKey ?? null,
+            version: balanceGame.version,
+          }
+        : null,
     reportShare,
     source: payload.source,
     sourceId: reportShare?.reportKey ?? payload.sourceId ?? null,
@@ -2391,9 +2685,9 @@ async function hasProfileBlockBetween({
 
   return Boolean(
     blockedByViewer.error ||
-      blockedViewer.error ||
-      blockedByViewer.data ||
-      blockedViewer.data,
+    blockedViewer.error ||
+    blockedByViewer.data ||
+    blockedViewer.data,
   );
 }
 
@@ -2422,8 +2716,7 @@ function createOriginalReportProjection({
       : original.summary.assessmentTitle;
 
   return {
-    assessmentKind:
-      original.kind === "core" ? original.result.kind : "full",
+    assessmentKind: original.kind === "core" ? original.result.kind : "full",
     assessmentTitle: original.summary.assessmentTitle,
     completedAt: original.summary.completedAt,
     domains:
@@ -2556,8 +2849,8 @@ function isValidPostSourcePayload(
     if (attachment.type === "original_report") {
       return Boolean(
         attachment.profileId &&
-          parseProfileReportKey(attachment.id) &&
-          (!payload.sourceId || payload.sourceId === attachment.id),
+        parseProfileReportKey(attachment.id) &&
+        (!payload.sourceId || payload.sourceId === attachment.id),
       );
     }
 
@@ -2574,11 +2867,7 @@ function createPostModerationText(
 ) {
   if (!payload.poll) return payload.body;
 
-  return [
-    payload.poll.question,
-    ...payload.poll.options,
-    payload.body,
-  ]
+  return [payload.poll.question, ...payload.poll.options, payload.body]
     .filter(Boolean)
     .join("\n");
 }
@@ -2603,7 +2892,18 @@ function isValidQuestionAudienceSourceId(sourceId: string) {
     .slice("ask_trait_".length)
     .split("_")
     .map((symbol) => symbol.toUpperCase());
-  const allowedSymbols = new Set(["E", "I", "R", "N", "G", "A", "K", "M", "C", "Q"]);
+  const allowedSymbols = new Set([
+    "E",
+    "I",
+    "R",
+    "N",
+    "G",
+    "A",
+    "K",
+    "M",
+    "C",
+    "Q",
+  ]);
 
   return (
     symbols.length >= 1 &&

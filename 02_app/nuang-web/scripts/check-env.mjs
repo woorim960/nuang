@@ -71,6 +71,8 @@ const optionalByMode = {
     "FEED_MEDIA_CLEANUP_SECRET",
     "FEED_MEDIA_WRITE_PROVIDER",
     "FEED_MEDIA_R2_ENABLED",
+    "FEED_MEDIA_R2_ALL_CUSTOMERS",
+    "FEED_MEDIA_R2_CANARY_ACCOUNT_IDS",
     "CLOUDFLARE_R2_ACCOUNT_ID",
     "CLOUDFLARE_R2_BUCKET_NAME",
     "CLOUDFLARE_R2_ACCESS_KEY_ID",
@@ -179,6 +181,27 @@ function validateFeedMediaEnvironment(environment) {
   const enabled = environment.FEED_MEDIA_R2_ENABLED?.trim().toLowerCase();
   if (enabled && enabled !== "true" && enabled !== "false") {
     errors.push("FEED_MEDIA_R2_ENABLED");
+  }
+
+  const allCustomers =
+    environment.FEED_MEDIA_R2_ALL_CUSTOMERS?.trim().toLowerCase();
+  if (allCustomers && allCustomers !== "true" && allCustomers !== "false") {
+    errors.push("FEED_MEDIA_R2_ALL_CUSTOMERS");
+  }
+
+  const canaryAccountIds = environment.FEED_MEDIA_R2_CANARY_ACCOUNT_IDS?.trim();
+  if (
+    canaryAccountIds &&
+    canaryAccountIds
+      .split(",")
+      .some(
+        (accountId) =>
+          !/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(
+            accountId.trim(),
+          ),
+      )
+  ) {
+    errors.push("FEED_MEDIA_R2_CANARY_ACCOUNT_IDS format");
   }
 
   const requiredR2Keys = [

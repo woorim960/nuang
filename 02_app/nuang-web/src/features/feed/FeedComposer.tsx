@@ -30,10 +30,11 @@ import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { FeedTopicSelector } from "@/features/feed/FeedTopicSelector";
 import { extractExternalLinks } from "@/features/feed/link-safety";
 import { analyzeLocalFeedImages } from "@/features/feed/feed-image-analysis";
+import { maxFeedPhotoCount } from "@/features/feed/feed-media";
 import {
-  maxFeedPhotoCount,
-  validateFeedPhotoFiles,
-} from "@/features/feed/feed-media";
+  getFeedMediaClientOptimizationMessage,
+  prepareFeedMediaFiles,
+} from "@/features/feed/feed-media-client-optimizer";
 import {
   extractCompletedFeedTags,
   feedPostTopicCategories,
@@ -51,6 +52,7 @@ import styles from "./FeedComposer.module.css";
 type ComposerStatus =
   | { status: "idle" }
   | { status: "pending" }
+  | { status: "preparing" }
   | { message: string; status: "notice" }
   | { message: string; status: "error" };
 
@@ -69,16 +71,18 @@ type FeedComposerResponse =
 type ComposerPhoto = {
   file: File;
   id: string;
+  originalFile: File;
   previewUrl: string;
 };
 
 type ComposerStep = "edit" | "preview";
 type ComposerSpace = "daily" | "playground";
-
-type FeedVisibility = Extract<
+type CreateFeedPostRequest = Extract<
   FeedWriteRequest,
   { action: "create_post" }
->["visibility"];
+>;
+
+type FeedVisibility = CreateFeedPostRequest["visibility"];
 
 const pendingPostStorageKey = "nuang:feed:pending-post";
 const playgroundComposerTypes = [
@@ -130,12 +134,19 @@ export function FeedComposer({
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const objectUrlsRef = useRef<string[]>([]);
+  const photoPreparationGenerationRef = useRef(0);
+  const photoPreparationPendingRef = useRef(false);
+  const clientRequestRef = useRef<{
+    fingerprint: string;
+    id: string;
+  } | null>(null);
   const [body, setBody] = useState("");
   const [open, setOpen] = useState(standalone);
   const [audienceOpen, setAudienceOpen] = useState(false);
   const [photos, setPhotos] = useState<ComposerPhoto[]>([]);
   const [selectedPhotoId, setSelectedPhotoId] = useState<string | null>(null);
   const [status, setStatus] = useState<ComposerStatus>({ status: "idle" });
+  const [isPhotoPreparing, setIsPhotoPreparing] = useState(false);
   const [selectedCategory, setSelectedCategory] =
     useState<FeedPostTopicCategory | null>(null);
   const [tags, setTags] = useState<string[]>([]);
@@ -154,16 +165,22 @@ export function FeedComposer({
     "전체 공개";
   const canSubmit =
     status.status !== "pending" &&
+    !isPhotoPreparing &&
     (trimmedBody.length >= 2 || photos.length > 0);
   const canRecommendCategory =
-    !recommendingTopic && (trimmedBody.length > 0 || photos.length > 0);
+    !isPhotoPreparing &&
+    !recommendingTopic &&
+    (trimmedBody.length > 0 || photos.length > 0);
   const pendingExternalLinkCount = extractExternalLinks(body).filter(
     (link) => link.status === "pending",
   ).length;
 
   useEffect(() => {
-    const objectUrls = objectUrlsRef.current;
-    return () => objectUrls.forEach((url) => URL.revokeObjectURL(url));
+    return () => {
+      photoPreparationGenerationRef.current += 1;
+      photoPreparationPendingRef.current = false;
+      objectUrlsRef.current.forEach((url) => URL.revokeObjectURL(url));
+    };
   }, []);
 
   useEffect(() => {
@@ -228,6 +245,7 @@ export function FeedComposer({
         returnToEdit();
         return;
       }
+      clientRequestRef.current = null;
       if (standalone) {
         router.push("/feed");
         return;
@@ -243,16 +261,11 @@ export function FeedComposer({
       if (focusTimer) window.clearTimeout(focusTimer);
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [
-    audienceOpen,
-    composerSpace,
-    composerStep,
-    open,
-    router,
-    standalone,
-  ]);
+  }, [audienceOpen, composerSpace, composerStep, open, router, standalone]);
 
   async function handleUpload() {
+    if (photoPreparationPendingRef.current) return;
+
     if (!canSubmit) {
       setStatus({
         message: "글이나 사진을 하나 이상 추가해 주세요.",
@@ -264,13 +277,30 @@ export function FeedComposer({
     setStatus({ status: "pending" });
 
     try {
-      const requestBody = buildCreatePostRequest({
+      const draftRequestBody = buildCreatePostRequest({
         body: trimmedBody,
         category: selectedCategory,
         tags,
         topicSource,
         visibility,
       });
+      const fingerprint = createPostRequestFingerprint(
+        draftRequestBody,
+        photos,
+      );
+      const currentRequest = clientRequestRef.current;
+      const clientRequest =
+        currentRequest?.fingerprint === fingerprint
+          ? currentRequest
+          : {
+              fingerprint,
+              id: createClientRequestId(),
+            };
+      clientRequestRef.current = clientRequest;
+      const requestBody: CreateFeedPostRequest = {
+        ...draftRequestBody,
+        clientRequestId: clientRequest.id,
+      };
       const response = await fetch(
         "/api/feed",
         createPostRequestInit(requestBody, photos),
@@ -343,8 +373,8 @@ export function FeedComposer({
         pendingReview
           ? "/feed?review=pending"
           : createdPostId
-          ? `/feed?posted=${encodeURIComponent(createdPostId)}`
-          : "/feed?posted=complete",
+            ? `/feed?posted=${encodeURIComponent(createdPostId)}`
+            : "/feed?posted=complete",
       );
     } catch {
       setStatus({
@@ -355,7 +385,7 @@ export function FeedComposer({
   }
 
   function openPreview() {
-    if (!canSubmit) return;
+    if (photoPreparationPendingRef.current || !canSubmit) return;
 
     const url = new URL(window.location.href);
     url.searchParams.set("preview", "post");
@@ -377,33 +407,67 @@ export function FeedComposer({
     }
   }
 
-  function handlePhotoSelection(event: ChangeEvent<HTMLInputElement>) {
+  async function handlePhotoSelection(event: ChangeEvent<HTMLInputElement>) {
     const selectedFiles = Array.from(event.target.files ?? []);
     event.target.value = "";
 
-    if (selectedFiles.length === 0) return;
-
-    const allFiles = [...photos.map((photo) => photo.file), ...selectedFiles];
-    const validationMessage = validateFeedPhotoFiles(allFiles);
-
-    if (validationMessage) {
-      setStatus({ message: validationMessage, status: "error" });
+    if (selectedFiles.length === 0 || photoPreparationPendingRef.current)
       return;
-    }
 
-    const createdPhotos = selectedFiles.map((file) => {
-      const previewUrl = URL.createObjectURL(file);
-      objectUrlsRef.current.push(previewUrl);
-      return {
+    const existingPhotos = photos;
+    const originalFiles = [
+      ...existingPhotos.map((photo) => photo.originalFile),
+      ...selectedFiles,
+    ];
+    const generation = photoPreparationGenerationRef.current + 1;
+    photoPreparationGenerationRef.current = generation;
+    photoPreparationPendingRef.current = true;
+    setIsPhotoPreparing(true);
+    setStatus({ status: "preparing" });
+
+    try {
+      const prepared = await prepareFeedMediaFiles(originalFiles);
+      if (photoPreparationGenerationRef.current !== generation) return;
+      if (prepared.files.length !== originalFiles.length) {
+        throw new Error(
+          "Prepared photo count does not match the source batch.",
+        );
+      }
+
+      const nextUrls: string[] = [];
+      try {
+        prepared.files.forEach((file) => {
+          nextUrls.push(URL.createObjectURL(file));
+        });
+      } catch (error) {
+        nextUrls.forEach((url) => URL.revokeObjectURL(url));
+        throw error;
+      }
+
+      const nextPhotos = prepared.files.map((file, index) => ({
         file,
-        id: createPhotoId(),
-        previewUrl,
-      };
-    });
-
-    setPhotos((current) => [...current, ...createdPhotos]);
-    setSelectedPhotoId((current) => current ?? createdPhotos[0]?.id ?? null);
-    setStatus({ status: "idle" });
+        id: existingPhotos[index]?.id ?? createPhotoId(),
+        originalFile: originalFiles[index],
+        previewUrl: nextUrls[index],
+      }));
+      const previousUrls = objectUrlsRef.current;
+      objectUrlsRef.current = nextUrls;
+      setPhotos(nextPhotos);
+      setSelectedPhotoId((current) => current ?? nextPhotos[0]?.id ?? null);
+      setStatus({ status: "idle" });
+      previousUrls.forEach((url) => URL.revokeObjectURL(url));
+    } catch (error) {
+      if (photoPreparationGenerationRef.current !== generation) return;
+      setStatus({
+        message: getFeedMediaClientOptimizationMessage(error),
+        status: "error",
+      });
+    } finally {
+      if (photoPreparationGenerationRef.current === generation) {
+        photoPreparationPendingRef.current = false;
+        setIsPhotoPreparing(false);
+      }
+    }
   }
 
   function handleBodyChange(value: string) {
@@ -426,7 +490,7 @@ export function FeedComposer({
   }
 
   function removeSelectedPhoto() {
-    if (!selectedPhoto) return;
+    if (!selectedPhoto || photoPreparationPendingRef.current) return;
     URL.revokeObjectURL(selectedPhoto.previewUrl);
     objectUrlsRef.current = objectUrlsRef.current.filter(
       (url) => url !== selectedPhoto.previewUrl,
@@ -441,7 +505,13 @@ export function FeedComposer({
   }
 
   function setSelectedPhotoAsCover() {
-    if (!selectedPhoto || photos[0]?.id === selectedPhoto.id) return;
+    if (
+      !selectedPhoto ||
+      photoPreparationPendingRef.current ||
+      photos[0]?.id === selectedPhoto.id
+    ) {
+      return;
+    }
     setPhotos((current) => [
       selectedPhoto,
       ...current.filter((photo) => photo.id !== selectedPhoto.id),
@@ -504,6 +574,7 @@ export function FeedComposer({
 
   function closeComposer() {
     setAudienceOpen(false);
+    clientRequestRef.current = null;
     if (standalone) {
       router.push("/feed");
       return;
@@ -518,6 +589,7 @@ export function FeedComposer({
   }
 
   function clearPhotos() {
+    clientRequestRef.current = null;
     for (const photo of photos) URL.revokeObjectURL(photo.previewUrl);
     objectUrlsRef.current = [];
     setPhotos([]);
@@ -739,7 +811,9 @@ export function FeedComposer({
                     </div>
                     <div className={styles.photoActions}>
                       <button
-                        disabled={photos[0]?.id === selectedPhoto.id}
+                        disabled={
+                          isPhotoPreparing || photos[0]?.id === selectedPhoto.id
+                        }
                         onClick={setSelectedPhotoAsCover}
                         type="button"
                       >
@@ -748,7 +822,11 @@ export function FeedComposer({
                           ? "대표 사진"
                           : "대표로 설정"}
                       </button>
-                      <button onClick={removeSelectedPhoto} type="button">
+                      <button
+                        disabled={isPhotoPreparing}
+                        onClick={removeSelectedPhoto}
+                        type="button"
+                      >
                         <Trash2 aria-hidden="true" size={16} />
                         삭제
                       </button>
@@ -772,6 +850,7 @@ export function FeedComposer({
                         <button
                           aria-label="사진 더 추가"
                           className={styles.addPhotoTile}
+                          disabled={isPhotoPreparing}
                           onClick={() => fileInputRef.current?.click()}
                           type="button"
                         >
@@ -794,6 +873,7 @@ export function FeedComposer({
                     <button
                       aria-label="사진 추가"
                       className={styles.emptyPhotoTile}
+                      disabled={isPhotoPreparing}
                       onClick={() => fileInputRef.current?.click()}
                       type="button"
                     >
@@ -857,9 +937,10 @@ export function FeedComposer({
 
               {composerSpace === "daily" ? (
                 <input
-                  accept="image/jpeg,image/png,image/webp"
+                  accept="image/jpeg,image/png,image/webp,image/heic,image/heif"
                   aria-label="게시물 사진 선택"
                   className="sr-only"
+                  disabled={isPhotoPreparing}
                   multiple
                   onChange={handlePhotoSelection}
                   ref={fileInputRef}
@@ -1047,7 +1128,7 @@ function buildCreatePostRequest({
   tags: string[];
   topicSource: FeedPostTopicSource;
   visibility: FeedVisibility;
-}): FeedWriteRequest {
+}): CreateFeedPostRequest {
   return {
     action: "create_post",
     body,
@@ -1058,6 +1139,21 @@ function buildCreatePostRequest({
         : undefined,
     visibility,
   };
+}
+
+function createPostRequestFingerprint(
+  requestBody: CreateFeedPostRequest,
+  photos: ComposerPhoto[],
+) {
+  return JSON.stringify({
+    photos: photos.map((photo) => ({
+      id: photo.id,
+      lastModified: photo.file.lastModified,
+      size: photo.file.size,
+      type: photo.file.type,
+    })),
+    requestBody,
+  });
 }
 
 function createPostRequestInit(
@@ -1100,7 +1196,9 @@ function ComposerStatusMessage({ status }: { status: ComposerStatus }) {
     >
       {status.status === "pending"
         ? "게시물을 업로드하고 있어요"
-        : status.message}
+        : status.status === "preparing"
+          ? "사진을 빠르게 올릴 수 있게 준비하고 있어요"
+          : status.message}
     </p>
   );
 }
@@ -1171,4 +1269,19 @@ function createPhotoId() {
   return (
     globalThis.crypto?.randomUUID?.() ?? `photo-${Date.now()}-${Math.random()}`
   );
+}
+
+function createClientRequestId() {
+  const randomUuid = globalThis.crypto?.randomUUID?.();
+  if (randomUuid) return `feed-${randomUuid}`;
+
+  const randomBytes = new Uint8Array(16);
+  if (globalThis.crypto?.getRandomValues) {
+    globalThis.crypto.getRandomValues(randomBytes);
+    return `feed-${Array.from(randomBytes, (byte) =>
+      byte.toString(16).padStart(2, "0"),
+    ).join("")}`;
+  }
+
+  return `feed-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 }

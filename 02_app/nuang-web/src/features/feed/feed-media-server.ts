@@ -245,35 +245,65 @@ export async function uploadFeedPostMedia({
 }): Promise<FeedMediaWriteResult> {
   if (files.length === 0) return { ok: true };
   if (validateFeedPhotoFiles(files)) {
+    await rollbackPostWithMedia({ client, objects: [], postId });
     return { code: "feed_target_invalid", ok: false };
   }
 
-  const account = await ensureAccountForUser(client, user);
+  let account: Awaited<ReturnType<typeof ensureAccountForUser>>;
+  try {
+    account = await ensureAccountForUser(client, user);
+  } catch {
+    await rollbackPostWithMedia({ client, objects: [], postId });
+    return { code: "feed_media_upload_failed", ok: false };
+  }
 
   if (!account.ok) {
+    await rollbackPostWithMedia({ client, objects: [], postId });
     return { code: "account_link_missing", ok: false };
   }
 
-  const postResponse = await client
-    .schema("feed")
-    .from("feed_post")
-    .select("id, attachment_payload")
-    .eq("id", postId)
-    .eq("author_account_id", account.accountId)
-    .is("deleted_at", null)
-    .maybeSingle();
+  let postResponse: {
+    data: { attachment_payload: unknown; id: string } | null;
+    error: unknown;
+  };
+  try {
+    postResponse = (await client
+      .schema("feed")
+      .from("feed_post")
+      .select("id, attachment_payload")
+      .eq("id", postId)
+      .eq("author_account_id", account.accountId)
+      .is("deleted_at", null)
+      .maybeSingle()) as typeof postResponse;
+  } catch {
+    await rollbackPostWithMedia({ client, objects: [], postId });
+    return { code: "feed_media_upload_failed", ok: false };
+  }
 
   if (postResponse.error || !postResponse.data) {
+    await rollbackPostWithMedia({ client, objects: [], postId });
     return { code: "feed_target_invalid", ok: false };
   }
 
-  const target = resolveFeedMediaStorageWriteTarget();
+  let target: ReturnType<typeof resolveFeedMediaStorageWriteTarget>;
+  try {
+    target = resolveFeedMediaStorageWriteTarget({
+      accountId: account.accountId,
+    });
+  } catch {
+    await rollbackPostWithMedia({ client, objects: [], postId });
+    return { code: "feed_media_upload_failed", ok: false };
+  }
   if (!target.ok) {
+    await rollbackPostWithMedia({ client, objects: [], postId });
     return { code: "feed_media_upload_failed", ok: false };
   }
   if (target.provider === "supabase") {
     const bucketReady = await ensureFeedMediaBucket(client);
-    if (!bucketReady) return { code: "feed_media_upload_failed", ok: false };
+    if (!bucketReady) {
+      await rollbackPostWithMedia({ client, objects: [], postId });
+      return { code: "feed_media_upload_failed", ok: false };
+    }
   }
 
   const optimizedImages: OptimizedFeedMediaImage[] = [];
@@ -350,10 +380,19 @@ export async function uploadFeedPostMedia({
     }
   }
 
-  let mediaResponse = await client
-    .schema("feed")
-    .from("feed_post_media")
-    .insert(mediaRows);
+  let mediaResponse: { error: unknown };
+  try {
+    mediaResponse = await client
+      .schema("feed")
+      .from("feed_post_media")
+      .insert(mediaRows);
+  } catch {
+    // The insert may have committed even though its response was lost. Never
+    // delete the parent here: a canonical concurrent/committed request owns
+    // that row set. The pending barrier and stale takeover provide recovery.
+    await releaseProviderReservation(client, reservation);
+    return { code: "feed_media_upload_in_progress", ok: false };
+  }
   let usesDurablePendingMediaRows = !mediaResponse.error;
 
   if (
@@ -361,17 +400,33 @@ export async function uploadFeedPostMedia({
     isMissingMediaStorageColumns(mediaResponse.error)
   ) {
     usesDurablePendingMediaRows = false;
-    mediaResponse = await client
-      .schema("feed")
-      .from("feed_post_media")
-      .insert(mediaRows.map(toLegacyMediaRow));
+    try {
+      mediaResponse = await client
+        .schema("feed")
+        .from("feed_post_media")
+        .insert(mediaRows.map(toLegacyMediaRow));
+    } catch {
+      await releaseProviderReservation(client, reservation);
+      return { code: "feed_media_upload_in_progress", ok: false };
+    }
   }
 
   const usesLegacyAttachmentFallback =
     target.provider === "supabase" && isMissingMediaTable(mediaResponse.error);
-  if (mediaResponse.error && !usesLegacyAttachmentFallback) {
+  if (isUniqueViolation(mediaResponse.error)) {
+    // Another request already owns this post's unique sort-order slots. It is
+    // unsafe for the loser to roll back the shared parent.
     await releaseProviderReservation(client, reservation);
-    await rollbackPostWithMedia({ client, objects: [], postId });
+    return { code: "feed_media_upload_in_progress", ok: false };
+  }
+  if (mediaResponse.error && !usesLegacyAttachmentFallback) {
+    await rollbackPostWithMedia({
+      client,
+      objects: [],
+      postId,
+      reservation,
+      ...(target.r2 ? { r2: target.r2 } : {}),
+    });
     return { code: "feed_media_upload_failed", ok: false };
   }
 
@@ -426,24 +481,29 @@ export async function uploadFeedPostMedia({
     )
       ? postResponse.data.attachment_payload
       : [];
-    const fallbackResponse = await client
-      .schema("feed")
-      .from("feed_post")
-      .update({
-        attachment_payload: [
-          ...previousAttachments,
-          ...mediaRows.map((row, index) => ({
-            alt: `게시물 사진 ${index + 1}`,
-            byteSize: row.byte_size,
-            id: randomUUID(),
-            mimeType: row.mime_type,
-            sortOrder: row.sort_order,
-            storagePath: row.storage_path,
-            type: "image",
-          })),
-        ],
-      })
-      .eq("id", postId);
+    let fallbackResponse: { error: unknown };
+    try {
+      fallbackResponse = await client
+        .schema("feed")
+        .from("feed_post")
+        .update({
+          attachment_payload: [
+            ...previousAttachments,
+            ...mediaRows.map((row, index) => ({
+              alt: `게시물 사진 ${index + 1}`,
+              byteSize: row.byte_size,
+              id: randomUUID(),
+              mimeType: row.mime_type,
+              sortOrder: row.sort_order,
+              storagePath: row.storage_path,
+              type: "image",
+            })),
+          ],
+        })
+        .eq("id", postId);
+    } catch {
+      fallbackResponse = { error: new Error("feed media fallback failed") };
+    }
 
     if (!fallbackResponse.error) return { ok: true };
     await rollbackPostWithMedia({
@@ -457,13 +517,13 @@ export async function uploadFeedPostMedia({
     return { code: "feed_media_upload_failed", ok: false };
   }
 
-  const activation = await client
-    .schema("feed")
-    .rpc("activate_feed_post_media", {
-      p_post_id: postId,
-      p_storage_paths: mediaRows.map((row) => row.storage_path),
-    });
-  if (activation.error || activation.data !== true) {
+  const storagePaths = mediaRows.map((row) => row.storage_path);
+  const activation = await activateFeedPostMediaSafely({
+    client,
+    postId,
+    storagePaths,
+  });
+  if (activation === "rejected") {
     await rollbackPostWithMedia({
       client,
       mediaRows,
@@ -475,6 +535,12 @@ export async function uploadFeedPostMedia({
     });
     return { code: "feed_media_upload_failed", ok: false };
   }
+  if (activation === "unknown") {
+    // All objects and their hidden rows remain quota-accounted. Deleting them
+    // would be unsafe because the first RPC may have committed atomically.
+    await releaseProviderReservation(client, reservation);
+    return { code: "feed_media_upload_in_progress", ok: false };
+  }
 
   if (!(await releaseProviderReservation(client, reservation))) {
     console.warn("[feed-media] storage reservation will expire automatically");
@@ -484,16 +550,111 @@ export async function uploadFeedPostMedia({
 }
 
 async function ensureFeedMediaBucket(client: SupabaseClient) {
-  const buckets = await client.storage.listBuckets();
-  if (buckets.error) return false;
-  if (buckets.data.some((bucket) => bucket.id === feedMediaBucket)) return true;
+  try {
+    const buckets = await client.storage.listBuckets();
+    if (buckets.error) return false;
+    if (buckets.data.some((bucket) => bucket.id === feedMediaBucket))
+      return true;
 
-  const created = await client.storage.createBucket(feedMediaBucket, {
-    allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
-    fileSizeLimit: 8 * 1024 * 1024,
-    public: false,
-  });
-  return !created.error;
+    const created = await client.storage.createBucket(feedMediaBucket, {
+      allowedMimeTypes: ["image/jpeg", "image/png", "image/webp"],
+      fileSizeLimit: 8 * 1024 * 1024,
+      public: false,
+    });
+    return !created.error;
+  } catch {
+    return false;
+  }
+}
+
+async function activateFeedPostMediaSafely({
+  client,
+  postId,
+  storagePaths,
+}: {
+  client: SupabaseClient;
+  postId: string;
+  storagePaths: string[];
+}): Promise<"activated" | "rejected" | "unknown"> {
+  const first = await callFeedMediaActivation({ client, postId, storagePaths });
+  if (!first.error && first.data === true) return "activated";
+  if (!first.error && first.data === false) return "rejected";
+  if (await confirmFeedPostMediaActivated({ client, postId, storagePaths })) {
+    return "activated";
+  }
+
+  // The 004 RPC is idempotent for the exact already-active set. Retrying the
+  // same call resolves a lost-success response without exposing a second set.
+  const retry = await callFeedMediaActivation({ client, postId, storagePaths });
+  if (!retry.error && retry.data === true) return "activated";
+  if (await confirmFeedPostMediaActivated({ client, postId, storagePaths })) {
+    return "activated";
+  }
+  if (!retry.error && retry.data === false) return "rejected";
+  return "unknown";
+}
+
+async function callFeedMediaActivation({
+  client,
+  postId,
+  storagePaths,
+}: {
+  client: SupabaseClient;
+  postId: string;
+  storagePaths: string[];
+}): Promise<{ data: unknown; error: unknown }> {
+  try {
+    return await client.schema("feed").rpc("activate_feed_post_media", {
+      p_post_id: postId,
+      p_storage_paths: storagePaths,
+    });
+  } catch {
+    return {
+      data: null,
+      error: new Error("feed media activation response unavailable"),
+    };
+  }
+}
+
+async function confirmFeedPostMediaActivated({
+  client,
+  postId,
+  storagePaths,
+}: {
+  client: SupabaseClient;
+  postId: string;
+  storagePaths: string[];
+}) {
+  try {
+    const post = await client
+      .schema("feed")
+      .from("feed_post")
+      .select("id,media_upload_state")
+      .eq("id", postId)
+      .is("deleted_at", null)
+      .maybeSingle();
+    if (post.error || post.data?.media_upload_state !== "ready") return false;
+
+    const media = await client
+      .schema("feed")
+      .from("feed_post_media")
+      .select("storage_path,storage_ready,storage_accounted,deleted_at")
+      .eq("post_id", postId)
+      .order("sort_order", { ascending: true });
+    if (media.error || !Array.isArray(media.data)) return false;
+    if (media.data.length !== storagePaths.length) return false;
+
+    const expected = new Set(storagePaths);
+    return media.data.every(
+      (row) =>
+        expected.has(row.storage_path) &&
+        row.storage_ready === true &&
+        row.storage_accounted === true &&
+        row.deleted_at === null,
+    );
+  } catch {
+    return false;
+  }
 }
 
 function isMissingMediaTable(error: unknown) {
@@ -507,6 +668,14 @@ function isMissingMediaTable(error: unknown) {
     candidate.code === "PGRST205" ||
     candidate.code === "42P01" ||
     message.includes("feed_post_media")
+  );
+}
+
+function isUniqueViolation(error: unknown) {
+  return Boolean(
+    error &&
+    typeof error === "object" &&
+    (error as { code?: unknown }).code === "23505",
   );
 }
 
@@ -541,14 +710,18 @@ async function reserveProviderCapacity({
   postId: string;
   reservation: StorageReservation;
 }) {
-  const response = await client.schema("feed").rpc("reserve_media_storage", {
-    p_byte_size: byteSize,
-    p_max_byte_size: maxByteSize,
-    p_post_id: postId,
-    p_reservation_id: reservation.id,
-    p_storage_provider: reservation.provider,
-  });
-  return !response.error && response.data === true;
+  try {
+    const response = await client.schema("feed").rpc("reserve_media_storage", {
+      p_byte_size: byteSize,
+      p_max_byte_size: maxByteSize,
+      p_post_id: postId,
+      p_reservation_id: reservation.id,
+      p_storage_provider: reservation.provider,
+    });
+    return !response.error && response.data === true;
+  } catch {
+    return false;
+  }
 }
 
 async function releaseProviderReservation(
@@ -556,13 +729,17 @@ async function releaseProviderReservation(
   reservation: StorageReservation | null,
 ) {
   if (!reservation) return true;
-  const response = await client
-    .schema("feed")
-    .rpc("release_media_storage_reservation", {
-      p_reservation_id: reservation.id,
-      p_storage_provider: reservation.provider,
-    });
-  return !response.error && response.data === true;
+  try {
+    const response = await client
+      .schema("feed")
+      .rpc("release_media_storage_reservation", {
+        p_reservation_id: reservation.id,
+        p_storage_provider: reservation.provider,
+      });
+    return !response.error && response.data === true;
+  } catch {
+    return false;
+  }
 }
 
 async function rollbackPostWithMedia({

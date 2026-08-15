@@ -14,6 +14,9 @@ import {
 
 type Environment = Record<string, string | undefined>;
 
+const canonicalUuidPattern =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export type FeedMediaStoredObject = {
   provider: FeedMediaStorageProvider;
   storagePath: string;
@@ -36,12 +39,14 @@ export type FeedMediaStorageWriteTarget =
     };
 
 export function resolveFeedMediaStorageWriteTarget({
+  accountId,
   environment = process.env,
-  r2 = createFeedMediaR2Adapter({ environment }),
+  r2,
 }: {
+  accountId: string;
   environment?: Environment;
   r2?: FeedMediaR2Adapter;
-} = {}): FeedMediaStorageWriteTarget {
+}): FeedMediaStorageWriteTarget {
   const configuredProvider =
     environment.FEED_MEDIA_WRITE_PROVIDER?.trim() || "supabase";
 
@@ -51,10 +56,48 @@ export function resolveFeedMediaStorageWriteTarget({
   if (configuredProvider === "supabase") {
     return { ok: true, provider: "supabase", r2: null };
   }
-  if (r2.readiness.status !== "ready" || r2.maxManagedBytes === null) {
+
+  const allCustomersValue =
+    environment.FEED_MEDIA_R2_ALL_CUSTOMERS?.trim().toLowerCase() || "false";
+  if (allCustomersValue !== "true" && allCustomersValue !== "false") {
     return { ok: false, reason: "configuration_invalid" };
   }
-  return { ok: true, provider: "cloudflare_r2", r2 };
+
+  const canaryAccountIds = new Set<string>();
+  const canaryValue = environment.FEED_MEDIA_R2_CANARY_ACCOUNT_IDS?.trim();
+  if (canaryValue) {
+    for (const candidate of canaryValue.split(",")) {
+      const normalizedCandidate = candidate.trim().toLowerCase();
+      if (!canonicalUuidPattern.test(normalizedCandidate)) {
+        return { ok: false, reason: "configuration_invalid" };
+      }
+      canaryAccountIds.add(normalizedCandidate);
+    }
+  }
+
+  const normalizedAccountId = accountId?.trim().toLowerCase();
+  if (normalizedAccountId && !canonicalUuidPattern.test(normalizedAccountId)) {
+    return { ok: false, reason: "configuration_invalid" };
+  }
+  const shouldWriteToR2 =
+    allCustomersValue === "true" ||
+    (normalizedAccountId !== undefined &&
+      canaryAccountIds.has(normalizedAccountId));
+  if (!shouldWriteToR2) {
+    return { ok: true, provider: "supabase", r2: null };
+  }
+  if (!normalizedAccountId) {
+    return { ok: false, reason: "configuration_invalid" };
+  }
+
+  const readyR2 = r2 ?? createFeedMediaR2Adapter({ environment });
+  if (
+    readyR2.readiness.status !== "ready" ||
+    readyR2.maxManagedBytes === null
+  ) {
+    return { ok: false, reason: "configuration_invalid" };
+  }
+  return { ok: true, provider: "cloudflare_r2", r2: readyR2 };
 }
 
 export function createFeedMediaObjectKey({

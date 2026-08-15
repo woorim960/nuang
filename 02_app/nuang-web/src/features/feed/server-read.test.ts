@@ -540,6 +540,32 @@ describe("feed server read model", () => {
 
     expect(payload).toBeNull();
   });
+
+  it("keeps every customer-facing post read behind the ready media barrier", async () => {
+    const operations: MockFeedReadOperation[] = [];
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({ operations });
+
+    await createServerFeedReadPayload();
+    await createServerFeedPostDetailPayload(
+      "44444444-4444-4444-8444-444444444444",
+    );
+    await createServerFeedReportSharePayload(
+      "33333333-3333-4333-8333-333333333333",
+    );
+    await createServerFeedPlaygroundRecordsPayload();
+
+    const postReads = operations.filter(
+      (operation) =>
+        operation.schema === "feed" && operation.table === "feed_post",
+    );
+    expect(postReads.length).toBeGreaterThan(0);
+    expect(
+      postReads.every((operation) =>
+        hasFilter(operation, "eq", "media_upload_state", "ready"),
+      ),
+    ).toBe(true);
+  });
 });
 
 type MockFeedReadOperation = {

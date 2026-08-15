@@ -64,6 +64,9 @@ export const DEFAULT_THRESHOLDS = Object.freeze({
   mediaPendingUploadFailAgeMs: 30 * 60 * 1000,
   mediaStorageFailRatio: 0.85,
   mediaStorageWarnRatio: 0.7,
+  supabaseStorageFailBytes: 850_000_000,
+  supabaseStorageQuotaBytes: 1_000_000_000,
+  supabaseStorageWarnBytes: 700_000_000,
   queueMaxAgeMs: 5 * 60 * 1000,
   recentCronFailMs: 5_000,
   recentCronWarnMs: 1_000,
@@ -84,6 +87,8 @@ export const EXPECTED_CRON_SCHEDULES = Object.freeze({
 });
 
 export async function runHttpProbes({
+  confirmLatencyWarnings = true,
+  confirmationDelayMs = 10_000,
   concurrency = 2,
   fetchImpl = fetch,
   now = () => performance.now(),
@@ -91,6 +96,7 @@ export async function runHttpProbes({
   probes = DEFAULT_HTTP_PROBES,
   thresholds = DEFAULT_THRESHOLDS,
   timeoutMs = 8_000,
+  wait = delay,
 }) {
   const normalizedOrigin = normalizeOrigin(origin);
   const checks = new Array(probes.length);
@@ -116,6 +122,36 @@ export async function runHttpProbes({
   }
 
   await Promise.all(Array.from({ length: workerCount }, () => worker()));
+  const warningIndexes = checks.flatMap((check, index) =>
+    check.status === "warn" ? [index] : [],
+  );
+  if (!confirmLatencyWarnings || warningIndexes.length === 0) return checks;
+
+  // A single cold connection or transient body-transfer stall should not page
+  // the operator as a persistent customer-facing slowdown. Wait once, then
+  // recheck only the affected endpoints sequentially to keep probe load low.
+  await wait(confirmationDelayMs);
+  for (const index of warningIndexes) {
+    const first = checks[index];
+    const confirmation = await runHttpProbe({
+      fetchImpl,
+      normalizedOrigin,
+      now,
+      probe: probes[index],
+      thresholds,
+      timeoutMs,
+    });
+    checks[index] = {
+      ...confirmation,
+      detail: `first_total=${first.totalMs ?? "unknown"}ms retry_${confirmation.detail}${confirmation.status === "pass" ? " recovered=true" : ""}`,
+      ...(confirmation.status === "pass"
+        ? { firstTotalMs: first.totalMs }
+        : {
+            status: maxStatus(first.status, confirmation.status),
+            totalMs: Math.max(first.totalMs ?? 0, confirmation.totalMs ?? 0),
+          }),
+    };
+  }
   return checks;
 }
 
@@ -225,6 +261,19 @@ export function evaluateDatabaseSnapshot(
     detail: formatBytes(toFiniteNumber(snapshot.capacity.cronHistoryBytes)),
     id: "database:cron-history-size",
     status: "pass",
+  });
+  const supabaseStorageBytes = toFiniteNumber(
+    snapshot.capacity.supabaseStorageBytes,
+  );
+  checks.push({
+    detail: `${formatBytes(supabaseStorageBytes)} / ${formatBytes(thresholds.supabaseStorageQuotaBytes)} objects=${toFiniteNumber(snapshot.capacity.supabaseStorageObjects)} project_only=true`,
+    id: "storage:supabase-project-capacity",
+    status: classifyUpperBound(
+      supabaseStorageBytes,
+      thresholds.supabaseStorageWarnBytes,
+      thresholds.supabaseStorageFailBytes,
+    ),
+    value: supabaseStorageBytes,
   });
 
   checks.push(evaluateCronInventory(snapshot.cronJobs));
@@ -608,4 +657,8 @@ function formatDuration(value) {
   if (value < 1_000) return `${Math.round(value)}ms`;
   if (value < 60_000) return `${Math.round(value / 1_000)}s`;
   return `${Math.round(value / 60_000)}m`;
+}
+
+function delay(milliseconds) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
 }

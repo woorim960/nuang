@@ -108,7 +108,23 @@ async function readDatabaseSnapshot(
           ) as "connectionCount",
           current_setting('max_connections')::integer as "maxConnections",
           current_setting('transaction_read_only')::boolean as "transactionReadOnly",
-          pg_total_relation_size('cron.job_run_details'::regclass)::text as "cronHistoryBytes"
+          pg_total_relation_size('cron.job_run_details'::regclass)::text as "cronHistoryBytes",
+          (
+            select coalesce(sum(
+              case
+                when coalesce(object.metadata ->> 'size', '') ~ '^[0-9]+$'
+                  then (object.metadata ->> 'size')::bigint
+                when coalesce(object.metadata ->> 'contentLength', '') ~ '^[0-9]+$'
+                  then (object.metadata ->> 'contentLength')::bigint
+                else 0
+              end
+            ), 0)::text
+            from storage.objects as object
+          ) as "supabaseStorageBytes",
+          (
+            select count(*)::integer
+            from storage.objects
+          ) as "supabaseStorageObjects"
       `);
     const cronJobs = await client.query(
       `
