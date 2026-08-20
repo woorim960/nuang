@@ -2,10 +2,6 @@ import { feedWriteRequestSchema } from "@/features/feed/feed-contract";
 import { revalidateTag } from "next/cache";
 import { validateFeedPhotoFiles } from "@/features/feed/feed-media";
 import {
-  cleanupDeletedFeedPostMedia,
-  uploadFeedPostMedia,
-} from "@/features/feed/feed-media-server";
-import {
   communityFeedCacheTag,
   createServerFeedReadPayload,
 } from "@/features/feed/server-read";
@@ -118,6 +114,8 @@ export async function POST(request: Request) {
   }
 
   if (isMediaPost && result.data.mediaUploadState !== "ready") {
+    const { uploadFeedPostMedia } =
+      await import("@/features/feed/feed-media-server");
     const mediaResult = await uploadFeedPostMedia({
       client: serviceClient,
       files: payload.files,
@@ -136,6 +134,8 @@ export async function POST(request: Request) {
   }
 
   if (payload.data.action === "delete_post") {
+    const { cleanupDeletedFeedPostMedia } =
+      await import("@/features/feed/feed-media-server");
     const cleanup = await cleanupDeletedFeedPostMedia({
       client: serviceClient,
       postId: result.data.id,

@@ -29,4 +29,14 @@ describe("next config security headers", () => {
       },
     ]);
   });
+
+  it("packages the Linux sharp runtime for feed image uploads", () => {
+    expect(nextConfig.outputFileTracingIncludes).toMatchObject({
+      "/api/feed": [
+        "node_modules/sharp/**/*",
+        "node_modules/@img/sharp-linux-x64/**/*",
+        "node_modules/@img/sharp-libvips-linux-x64/**/*",
+      ],
+    });
+  });
 });

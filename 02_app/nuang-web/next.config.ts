@@ -2,6 +2,13 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   devIndicators: false,
+  outputFileTracingIncludes: {
+    "/api/feed": [
+      "node_modules/sharp/**/*",
+      "node_modules/@img/sharp-linux-x64/**/*",
+      "node_modules/@img/sharp-libvips-linux-x64/**/*",
+    ],
+  },
   async headers() {
     return [
       {

@@ -1,7 +1,7 @@
 import "server-only";
 
 import { createHash } from "node:crypto";
-import sharp, { type Metadata } from "sharp";
+import type { Metadata } from "sharp";
 
 export const feedMediaImageMaxInputPixels = 40_000_000;
 export const feedMediaImageMaxLongEdge = 1_600;
@@ -63,6 +63,7 @@ export async function optimizeFeedMediaImage(
     );
   }
 
+  const { default: sharp } = await import("sharp");
   const image = sharp(source, {
     failOn: "warning",
     limitInputPixels: feedMediaImageMaxInputPixels,
