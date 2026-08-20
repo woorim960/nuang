@@ -7,7 +7,8 @@ import {
   CircleHelp,
   X,
 } from "lucide-react";
-import { type ReactNode, useEffect, useId, useRef } from "react";
+import { type ReactNode, useEffect, useId } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import { responseOptions } from "@/features/assessment/quick-core-seed";
 import type { AssessmentUnsureReason } from "@/features/assessment/types";
 import type { ResponseValue } from "@/lib/scoring/types";
@@ -65,11 +66,7 @@ export function AssessmentQuestionContent({
   );
 }
 
-export function AssessmentQuestionGuide({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function AssessmentQuestionGuide({ children }: { children: ReactNode }) {
   return <p className={styles.guide}>{children}</p>;
 }
 
@@ -97,9 +94,7 @@ export function AssessmentQuestionPrompt({
           : styles.questionForward,
       )}
     >
-      {contextLabel ? (
-        <p className={styles.context}>{contextLabel}</p>
-      ) : null}
+      {contextLabel ? <p className={styles.context}>{contextLabel}</p> : null}
       <Heading
         className={cn(
           styles.question,
@@ -383,9 +378,7 @@ export function AssessmentUnsureSheet({
           </button>
         ))}
       </div>
-      <p className={styles.sheetNote}>
-        {note}
-      </p>
+      <p className={styles.sheetNote}>{note}</p>
     </AssessmentBottomSheet>
   );
 }
@@ -438,106 +431,46 @@ export function AssessmentBottomSheet({
   onClose: () => void;
   title: string;
 }) {
-  const onCloseRef = useRef(onClose);
-  const sheetRef = useRef<HTMLElement>(null);
   const copyId = useId();
   const titleId = useId();
 
-  useEffect(() => {
-    onCloseRef.current = onClose;
-  }, [onClose]);
-
-  useEffect(() => {
-    const previousFocus = document.activeElement as HTMLElement | null;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    sheetRef.current?.focus();
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        onCloseRef.current();
-        return;
-      }
-      if (event.key !== "Tab") return;
-
-      const focusable = Array.from(
-        sheetRef.current?.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-        ) ?? [],
-      );
-      if (focusable.length === 0) {
-        event.preventDefault();
-        return;
-      }
-
-      const first = focusable[0];
-      const last = focusable[focusable.length - 1];
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.body.style.overflow = previousOverflow;
-      previousFocus?.focus?.();
-    };
-  }, []);
-
   return (
-    <div className={styles.layer} role="presentation">
-      <button
-        aria-label="닫기"
-        className={styles.backdropButton}
-        onClick={onClose}
-        type="button"
-      />
-      <section
-        aria-describedby={copy ? copyId : undefined}
-        aria-labelledby={titleId}
-        aria-modal="true"
-        className={styles.sheet}
-        ref={sheetRef}
-        role="dialog"
-        tabIndex={-1}
-      >
-        <div className={styles.sheetHeader}>
-          <div>
-            <h2 className={styles.sheetTitle} id={titleId}>
-              {title}
-            </h2>
-            {copy ? (
-              <p className={styles.sheetCopy} id={copyId}>
-                {copy}
-              </p>
-            ) : null}
-          </div>
-          <button
-            aria-label="닫기"
-            className={styles.sheetClose}
-            onClick={onClose}
-            type="button"
-          >
-            <X aria-hidden="true" size={19} strokeWidth={1.8} />
-          </button>
+    <BottomSheet
+      backdropLabel="닫기"
+      className={styles.sheet}
+      dialogProps={{
+        "aria-describedby": copy ? copyId : undefined,
+        "aria-labelledby": titleId,
+      }}
+      initialFocus="dialog"
+      onClose={onClose}
+    >
+      <div className={styles.sheetHeader}>
+        <div>
+          <h2 className={styles.sheetTitle} id={titleId}>
+            {title}
+          </h2>
+          {copy ? (
+            <p className={styles.sheetCopy} id={copyId}>
+              {copy}
+            </p>
+          ) : null}
         </div>
-        <div className={styles.sheetBody}>{children}</div>
-      </section>
-    </div>
+        <button
+          aria-label="닫기"
+          className={styles.sheetClose}
+          onClick={onClose}
+          type="button"
+        >
+          <X aria-hidden="true" size={19} strokeWidth={1.8} />
+        </button>
+      </div>
+      <div className={styles.sheetBody}>{children}</div>
+    </BottomSheet>
   );
 }
 
-export function AssessmentSheetActions({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function AssessmentSheetActions({ children }: { children: ReactNode }) {
   return <div className={styles.sheetActions}>{children}</div>;
 }
 

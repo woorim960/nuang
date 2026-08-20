@@ -417,24 +417,6 @@
   font-style: normal;
 }
 
-.sheetBackdrop {
-  position: fixed;
-  z-index: 90;
-  inset: 0;
-  display: grid;
-  align-items: end;
-  justify-items: center;
-  background: var(--nu-color-overlay);
-}
-
-.backdropDismiss {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  border: 0;
-  background: transparent;
-}
-
 .sheet {
   position: relative;
   display: grid;

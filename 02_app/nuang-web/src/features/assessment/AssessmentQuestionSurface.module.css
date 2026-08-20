@@ -54,7 +54,9 @@
   background: transparent;
   color: var(--nu-color-text-muted);
   cursor: pointer;
-  transition: background-color 170ms ease, color 170ms ease;
+  transition:
+    background-color 170ms ease,
+    color 170ms ease;
 }
 
 .closeButton:hover {
@@ -280,7 +282,9 @@
   content: "";
   opacity: 0;
   transform: scale(0.55);
-  transition: opacity 150ms ease, transform 150ms ease;
+  transition:
+    opacity 150ms ease,
+    transform 150ms ease;
 }
 
 .radio:checked {
@@ -324,7 +328,9 @@
   font-size: var(--nu-text-callout);
   font-weight: var(--nu-weight-medium);
   cursor: pointer;
-  transition: background-color 170ms ease, color 170ms ease;
+  transition:
+    background-color 170ms ease,
+    color 170ms ease;
 }
 
 .unsureButton:hover {
@@ -473,46 +479,14 @@
   box-shadow: none;
 }
 
-.layer {
-  position: fixed;
-  z-index: 50;
-  inset: 0;
-  display: grid;
-  align-items: end;
-  justify-items: center;
-  padding: 0 0.75rem max(0.75rem, env(safe-area-inset-bottom));
-  background: var(--nu-assessment-overlay);
-  backdrop-filter: blur(3px);
-  -webkit-backdrop-filter: blur(3px);
-  animation: backdrop-in 180ms ease-out both;
-}
-
-.backdropButton {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  border: 0;
-  background: transparent;
-  cursor: default;
-}
-
 .sheet {
-  position: relative;
-  z-index: 1;
-  width: 100%;
   max-width: var(--nu-assessment-width);
-  padding: 1.125rem;
-  max-height: calc(100dvh - 24px);
-  overflow-y: auto;
-  overscroll-behavior: contain;
+  padding: 1.125rem 1.125rem calc(1.125rem + env(safe-area-inset-bottom));
   scrollbar-width: none;
   border: 1px solid var(--nu-assessment-line);
-  border-radius: 22px;
+  border-bottom: 0;
   background: var(--nu-assessment-surface);
   color: var(--nu-color-text);
-  box-shadow: var(--nu-assessment-sheet-shadow);
-  outline: none;
-  animation: sheet-in 240ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
 }
 
 .sheet::before {
@@ -722,26 +696,6 @@
   }
 }
 
-@keyframes sheet-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes backdrop-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 @keyframes loading-sweep {
   from {
     transform: translateX(-110%);
@@ -778,8 +732,7 @@
   }
 
   .sheet {
-    padding: 1rem;
-    border-radius: 20px;
+    padding: 1rem 1rem calc(1rem + env(safe-area-inset-bottom));
   }
 }
 
@@ -787,7 +740,6 @@
   .runner *,
   .runner *::before,
   .runner *::after,
-  .layer,
   .sheet,
   .loadingLine::after {
     animation-duration: 1ms !important;

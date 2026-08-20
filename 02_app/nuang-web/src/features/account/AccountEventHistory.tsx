@@ -10,11 +10,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import type {
   AccountEventEntryStatus,
   AccountEventHistoryPayload,
 } from "@/features/account/account-event-contract";
-import { useModalDialog } from "@/hooks/useModalDialog";
 import styles from "./AccountEventHistory.module.css";
 
 const statusCopy: Record<
@@ -63,10 +63,6 @@ export function AccountEventHistory() {
   const [message, setMessage] = useState("");
   const [confirmId, setConfirmId] = useState<string | null>(null);
   const confirmTitleId = useId();
-  const confirmDialogRef = useModalDialog<HTMLElement>({
-    onClose: closeConfirm,
-    open: Boolean(confirmId),
-  });
 
   useEffect(() => {
     let active = true;
@@ -238,37 +234,34 @@ export function AccountEventHistory() {
       ) : null}
 
       {confirmId ? (
-        <div className={styles.backdrop} data-modal-layer="true">
-          <section
-            aria-labelledby={confirmTitleId}
-            aria-modal="true"
-            className={styles.dialog}
-            ref={confirmDialogRef}
-            role="dialog"
-            tabIndex={-1}
-          >
-            <strong id={confirmTitleId}>이벤트 응모를 취소할까요?</strong>
-            <p>
-              응모만 취소돼요. 프로필에 등록한 휴대전화번호는 그대로 유지됩니다.
-            </p>
-            <div>
-              <button
-                data-modal-initial-focus="true"
-                onClick={closeConfirm}
-                type="button"
-              >
-                계속 참여
-              </button>
-              <button
-                disabled={state === "withdrawing"}
-                onClick={() => withdraw(confirmId)}
-                type="button"
-              >
-                {state === "withdrawing" ? "취소 중" : "응모 취소"}
-              </button>
-            </div>
-          </section>
-        </div>
+        <BottomSheet
+          backdropDisabled
+          backdropLabel="이벤트 응모 취소 확인 창"
+          className={styles.dialog}
+          dialogProps={{ "aria-labelledby": confirmTitleId }}
+          onClose={closeConfirm}
+        >
+          <strong id={confirmTitleId}>이벤트 응모를 취소할까요?</strong>
+          <p>
+            응모만 취소돼요. 프로필에 등록한 휴대전화번호는 그대로 유지됩니다.
+          </p>
+          <div>
+            <button
+              data-modal-initial-focus="true"
+              onClick={closeConfirm}
+              type="button"
+            >
+              계속 참여
+            </button>
+            <button
+              disabled={state === "withdrawing"}
+              onClick={() => withdraw(confirmId)}
+              type="button"
+            >
+              {state === "withdrawing" ? "취소 중" : "응모 취소"}
+            </button>
+          </div>
+        </BottomSheet>
       ) : null}
     </>
   );

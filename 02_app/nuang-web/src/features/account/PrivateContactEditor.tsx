@@ -11,13 +11,13 @@ import {
   Trash2,
 } from "lucide-react";
 import { useEffect, useId, useState } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import {
   type PrivateContactPayload,
   privateContactConsentVersion,
   privateEmailRegistrationVersion,
 } from "@/features/account/private-contact-contract";
 import { readJsonResponse } from "@/features/account/response-json";
-import { useModalDialog } from "@/hooks/useModalDialog";
 import styles from "./PrivateContactEditor.module.css";
 
 type ContactField = "email" | "mobile_phone";
@@ -26,34 +26,34 @@ type ContactResponse =
   | { code?: string; message?: string; ok: false };
 type VerificationRequestResponse =
   | {
-    ok: true;
-    verification: {
-      challengeId: string;
-      emailMasked: string;
-      expiresAt: string;
-      resendAfterSeconds: number;
-    };
-  }
+      ok: true;
+      verification: {
+        challengeId: string;
+        emailMasked: string;
+        expiresAt: string;
+        resendAfterSeconds: number;
+      };
+    }
   | {
-    code?: string;
-    message?: string;
-    ok: false;
-    retryAfterSeconds?: number;
-  };
+      code?: string;
+      message?: string;
+      ok: false;
+      retryAfterSeconds?: number;
+    };
 type VerificationConfirmResponse =
   | {
-    ok: true;
-    verification: {
-      emailStatus: "verified";
-      verifiedAt: string;
-    };
-  }
+      ok: true;
+      verification: {
+        emailStatus: "verified";
+        verifiedAt: string;
+      };
+    }
   | {
-    attemptsRemaining?: number;
-    code?: string;
-    message?: string;
-    ok: false;
-  };
+      attemptsRemaining?: number;
+      code?: string;
+      message?: string;
+      ok: false;
+    };
 
 export function PrivateContactEditor() {
   const [contact, setContact] = useState<PrivateContactPayload | null>(null);
@@ -75,10 +75,6 @@ export function PrivateContactEditor() {
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const [activeEntryWarning, setActiveEntryWarning] = useState(false);
   const deleteTitleId = useId();
-  const deleteDialogRef = useModalDialog<HTMLElement>({
-    onClose: closeDeleteConfirm,
-    open: deleteConfirmOpen && Boolean(deleteField),
-  });
 
   useEffect(() => {
     let active = true;
@@ -125,8 +121,7 @@ export function PrivateContactEditor() {
   const digits = mobilePhone.replace(/\D/g, "");
   const canSavePhone = digits.length === 11 && state !== "saving";
   const canSaveEmail =
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) &&
-    state !== "saving";
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim()) && state !== "saving";
 
   async function saveContact(field: ContactField) {
     if (
@@ -143,15 +138,15 @@ export function PrivateContactEditor() {
       body: JSON.stringify(
         field === "email"
           ? {
-            consentVersion: privateEmailRegistrationVersion,
-            email,
-            source: "account_security",
-          }
+              consentVersion: privateEmailRegistrationVersion,
+              email,
+              source: "account_security",
+            }
           : {
-            consentVersion: privateContactConsentVersion,
-            mobilePhone,
-            source: "account_security",
-          },
+              consentVersion: privateContactConsentVersion,
+              mobilePhone,
+              source: "account_security",
+            },
       ),
       headers: { "content-type": "application/json" },
       method: "PATCH",
@@ -265,10 +260,10 @@ export function PrivateContactEditor() {
     setContact((current) =>
       current
         ? {
-          ...current,
-          emailStatus: "verified",
-          emailVerifiedAt: payload.verification.verifiedAt,
-        }
+            ...current,
+            emailStatus: "verified",
+            emailVerifiedAt: payload.verification.verifiedAt,
+          }
         : current,
     );
     setVerificationCode("");
@@ -445,9 +440,9 @@ export function PrivateContactEditor() {
                     </div>
                   )}
                   {contact.emailStatus !== "verified" &&
-                    (verificationState === "code" ||
-                      verificationState === "confirming" ||
-                      Boolean(verificationChallengeId)) ? (
+                  (verificationState === "code" ||
+                    verificationState === "confirming" ||
+                    Boolean(verificationChallengeId)) ? (
                     <div
                       aria-labelledby="email-verification-title"
                       className={styles.verificationPanel}
@@ -644,9 +639,7 @@ export function PrivateContactEditor() {
                         inputMode="tel"
                         maxLength={13}
                         onChange={(event) =>
-                          setMobilePhone(
-                            formatKoreanMobile(event.target.value),
-                          )
+                          setMobilePhone(formatKoreanMobile(event.target.value))
                         }
                         placeholder="010-0000-0000"
                         type="tel"
@@ -703,47 +696,44 @@ export function PrivateContactEditor() {
       ) : null}
 
       {deleteConfirmOpen && deleteField ? (
-        <div className={styles.backdrop} data-modal-layer="true">
-          <section
-            aria-labelledby={deleteTitleId}
-            aria-modal="true"
-            className={styles.dialog}
-            ref={deleteDialogRef}
-            role="dialog"
-            tabIndex={-1}
-          >
-            <strong id={deleteTitleId}>
-              {activeEntryWarning
-                ? "연락처와 이벤트 응모를 함께 삭제할까요?"
-                : deleteField === "email"
-                  ? "이메일을 삭제할까요?"
-                  : "휴대전화번호를 삭제할까요?"}
-            </strong>
-            <p>
-              {activeEntryWarning
-                ? "번호를 삭제하면 참여 중인 이벤트의 당첨 안내를 받을 수 없어 응모도 함께 취소됩니다."
-                : deleteField === "email"
-                  ? "필요할 때 언제든 새 이메일을 다시 등록할 수 있어요."
-                  : "삭제한 뒤 이벤트에 응모하려면 번호를 다시 등록해야 해요."}
-            </p>
-            <div>
-              <button
-                data-modal-initial-focus="true"
-                onClick={closeDeleteConfirm}
-                type="button"
-              >
-                유지하기
-              </button>
-              <button
-                disabled={state === "deleting"}
-                onClick={() => deleteContact(activeEntryWarning)}
-                type="button"
-              >
-                {state === "deleting" ? "삭제 중" : "삭제하기"}
-              </button>
-            </div>
-          </section>
-        </div>
+        <BottomSheet
+          backdropDisabled
+          backdropLabel="연락처 삭제 확인 창"
+          className={styles.dialog}
+          dialogProps={{ "aria-labelledby": deleteTitleId }}
+          onClose={closeDeleteConfirm}
+        >
+          <strong id={deleteTitleId}>
+            {activeEntryWarning
+              ? "연락처와 이벤트 응모를 함께 삭제할까요?"
+              : deleteField === "email"
+                ? "이메일을 삭제할까요?"
+                : "휴대전화번호를 삭제할까요?"}
+          </strong>
+          <p>
+            {activeEntryWarning
+              ? "번호를 삭제하면 참여 중인 이벤트의 당첨 안내를 받을 수 없어 응모도 함께 취소됩니다."
+              : deleteField === "email"
+                ? "필요할 때 언제든 새 이메일을 다시 등록할 수 있어요."
+                : "삭제한 뒤 이벤트에 응모하려면 번호를 다시 등록해야 해요."}
+          </p>
+          <div>
+            <button
+              data-modal-initial-focus="true"
+              onClick={closeDeleteConfirm}
+              type="button"
+            >
+              유지하기
+            </button>
+            <button
+              disabled={state === "deleting"}
+              onClick={() => deleteContact(activeEntryWarning)}
+              type="button"
+            >
+              {state === "deleting" ? "삭제 중" : "삭제하기"}
+            </button>
+          </div>
+        </BottomSheet>
       ) : null}
     </section>
   );

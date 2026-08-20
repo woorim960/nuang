@@ -1,13 +1,9 @@
 "use client";
 
-import {
-  ArrowLeft,
-  ChevronDown,
-  LockKeyhole,
-  Trash2,
-} from "lucide-react";
+import { ArrowLeft, ChevronDown, LockKeyhole, Trash2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import { CommunityTagInput } from "@/features/feed/CommunityTagInput";
 import { FeedTopicSelector } from "@/features/feed/FeedTopicSelector";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
@@ -15,7 +11,6 @@ import {
   maxFeedTagCount,
   type FeedPostTopicCategory,
 } from "@/features/feed/feed-topic";
-import { useModalDialog } from "@/hooks/useModalDialog";
 import styles from "./CommunityBalanceGameComposer.module.css";
 
 type BalanceGameEditValue = {
@@ -48,7 +43,7 @@ export function CommunityBalanceGameComposer({
   const isEditing = Boolean(initialValue);
   const pollLocked = Boolean(
     initialValue &&
-      (initialValue.totalVotes > 0 || initialValue.pollStatus === "closed"),
+    (initialValue.totalVotes > 0 || initialValue.pollStatus === "closed"),
   );
   const [question, setQuestion] = useState(initialValue?.question ?? "");
   const [optionA, setOptionA] = useState(initialValue?.options[0] ?? "");
@@ -63,10 +58,6 @@ export function CommunityBalanceGameComposer({
   const [lockDetailOpen, setLockDetailOpen] = useState(false);
   const [status, setStatus] = useState<ComposerStatus>({ status: "idle" });
   const closeConfirm = useCallback(() => setConfirmMode(null), []);
-  const confirmDialogRef = useModalDialog<HTMLElement>({
-    onClose: closeConfirm,
-    open: confirmMode !== null,
-  });
 
   const trimmedQuestion = question.trim();
   const trimmedOptionA = optionA.trim();
@@ -138,9 +129,7 @@ export function CommunityBalanceGameComposer({
           <LockedBalancePreview
             detailOpen={lockDetailOpen}
             initialValue={initialValue}
-            onToggleDetail={() =>
-              setLockDetailOpen((current) => !current)
-            }
+            onToggleDetail={() => setLockDetailOpen((current) => !current)}
           />
         ) : (
           <section className={styles.pollEditor}>
@@ -199,9 +188,7 @@ export function CommunityBalanceGameComposer({
                   ) : null}
                 </label>
                 <label
-                  data-error={
-                    attempted && (!trimmedOptionB || !optionsDiffer)
-                  }
+                  data-error={attempted && (!trimmedOptionB || !optionsDiffer)}
                 >
                   <span aria-hidden="true" className={styles.optionMarker}>
                     B
@@ -226,9 +213,7 @@ export function CommunityBalanceGameComposer({
                 <p className={styles.fieldError}>
                   두 선택지를 모두 적어 주세요.
                 </p>
-              ) : !optionsDiffer &&
-                trimmedOptionA &&
-                trimmedOptionB ? (
+              ) : !optionsDiffer && trimmedOptionA && trimmedOptionB ? (
                 <p className={styles.fieldError}>
                   서로 다른 선택지를 적어 주세요.
                 </p>
@@ -240,8 +225,7 @@ export function CommunityBalanceGameComposer({
         <section className={styles.noteSection}>
           <label>
             <span>
-              {pollLocked ? "게시글 설명" : "덧붙일 말"}{" "}
-              <small>선택</small>
+              {pollLocked ? "게시글 설명" : "덧붙일 말"} <small>선택</small>
             </span>
             <textarea
               aria-label="투표 설명"
@@ -257,10 +241,7 @@ export function CommunityBalanceGameComposer({
           </label>
         </section>
 
-        <FeedTopicSelector
-          onChange={setCategory}
-          selectedCategory={category}
-        />
+        <FeedTopicSelector onChange={setCategory} selectedCategory={category} />
 
         <CommunityTagInput
           onChange={(nextTags) => {
@@ -298,54 +279,45 @@ export function CommunityBalanceGameComposer({
       </form>
 
       {confirmMode ? (
-        <div className={styles.confirmBackdrop} data-modal-layer="true">
-          <button
-            aria-label="확인창 닫기"
-            onClick={closeConfirm}
-            type="button"
-          />
-          <section
-            aria-labelledby="balance-confirm-title"
-            aria-modal="true"
-            className={styles.confirmSheet}
-            ref={confirmDialogRef}
-            role="dialog"
-            tabIndex={-1}
-          >
-            <div>
-              <strong id="balance-confirm-title">
-                {confirmMode === "delete"
-                  ? "투표를 삭제할까요?"
-                  : "작성 중인 내용을 나갈까요?"}
-              </strong>
-              <p>
-                {confirmMode === "delete"
-                  ? "피드와 내 프로필에서 사라지고, 투표 결과도 더 이상 볼 수 없어요."
-                  : "나가면 바뀐 내용이 저장되지 않아요."}
-              </p>
-            </div>
-            <div>
-              <button
-                data-modal-initial-focus="true"
-                onClick={closeConfirm}
-                type="button"
-              >
-                {confirmMode === "delete" ? "계속 두기" : "계속 작성"}
-              </button>
-              <button
-                disabled={status.status === "pending"}
-                onClick={() =>
-                  confirmMode === "delete"
-                    ? void deleteBalanceGame()
-                    : router.push(returnTo)
-                }
-                type="button"
-              >
-                {confirmMode === "delete" ? "삭제" : "나가기"}
-              </button>
-            </div>
-          </section>
-        </div>
+        <BottomSheet
+          backdropLabel="확인창 닫기"
+          className={styles.confirmSheet}
+          dialogProps={{ "aria-labelledby": "balance-confirm-title" }}
+          onClose={closeConfirm}
+        >
+          <div>
+            <strong id="balance-confirm-title">
+              {confirmMode === "delete"
+                ? "투표를 삭제할까요?"
+                : "작성 중인 내용을 나갈까요?"}
+            </strong>
+            <p>
+              {confirmMode === "delete"
+                ? "피드와 내 프로필에서 사라지고, 투표 결과도 더 이상 볼 수 없어요."
+                : "나가면 바뀐 내용이 저장되지 않아요."}
+            </p>
+          </div>
+          <div>
+            <button
+              data-modal-initial-focus="true"
+              onClick={closeConfirm}
+              type="button"
+            >
+              {confirmMode === "delete" ? "계속 두기" : "계속 작성"}
+            </button>
+            <button
+              disabled={status.status === "pending"}
+              onClick={() =>
+                confirmMode === "delete"
+                  ? void deleteBalanceGame()
+                  : router.push(returnTo)
+              }
+              type="button"
+            >
+              {confirmMode === "delete" ? "삭제" : "나가기"}
+            </button>
+          </div>
+        </BottomSheet>
       ) : null}
     </main>
   );
@@ -411,9 +383,7 @@ export function CommunityBalanceGameComposer({
         const next = isEditing
           ? `/feed/balance/${initialValue?.postId}/edit`
           : "/feed/balance/new";
-        router.push(
-          `/login?next=${encodeURIComponent(next)}&reason=community`,
-        );
+        router.push(`/login?next=${encodeURIComponent(next)}&reason=community`);
         return;
       }
       if (!response.ok || !payload?.feedWrite?.id) {
@@ -514,8 +484,7 @@ function LockedBalancePreview({
       </button>
       {detailOpen ? (
         <p className={styles.lockDetail}>
-          참여한 사람의 선택이 달라지지 않도록 질문과 선택지는 수정할 수
-          없어요.
+          참여한 사람의 선택이 달라지지 않도록 질문과 선택지는 수정할 수 없어요.
         </p>
       ) : null}
 

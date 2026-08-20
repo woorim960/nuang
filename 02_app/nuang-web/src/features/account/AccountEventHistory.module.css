@@ -227,22 +227,9 @@
   font-size: var(--nu-text-caption);
 }
 
-.backdrop {
-  position: fixed;
-  z-index: 95;
-  inset: 0;
-  display: grid;
-  place-items: end center;
-  padding: 1rem;
-  background: var(--nu-color-overlay);
-}
-
 .dialog {
-  width: min(100%, 398px);
-  padding: 1.15rem;
-  border-radius: 22px;
-  background: var(--nu-color-surface);
-  box-shadow: var(--nu-shadow-lg);
+  max-width: 398px;
+  padding: 1.15rem 1.15rem calc(1.15rem + env(safe-area-inset-bottom));
 }
 
 .dialog > strong {

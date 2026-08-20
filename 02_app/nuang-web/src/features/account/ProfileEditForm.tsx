@@ -11,6 +11,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import {
   nuangCharacterAssetPaths,
   nuangCharacterMotifs,
@@ -516,39 +517,32 @@ export function ProfileEditForm() {
       )}
 
       {exitConfirmOpen ? (
-        <div
-          className={styles.dialogBackdrop}
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) setExitConfirmOpen(false);
-          }}
+        <BottomSheet
+          backdropLabel="프로필 수정 나가기 확인 창 닫기"
+          className={styles.dialog}
+          dialogProps={{ "aria-labelledby": "profile-exit-title" }}
+          onClose={() => setExitConfirmOpen(false)}
         >
-          <section
-            aria-labelledby="profile-exit-title"
-            aria-modal="true"
-            className={styles.dialog}
-            role="dialog"
-          >
-            <strong id="profile-exit-title">수정한 내용을 나갈까요?</strong>
-            <p>아직 저장하지 않은 변경 사항은 사라져요.</p>
-            <div>
-              <button
-                className={styles.exitButton}
-                onClick={() => router.push("/my")}
-                type="button"
-              >
-                나가기
-              </button>
-              <button
-                autoFocus
-                className={styles.keepEditingButton}
-                onClick={() => setExitConfirmOpen(false)}
-                type="button"
-              >
-                계속 편집
-              </button>
-            </div>
-          </section>
-        </div>
+          <strong id="profile-exit-title">수정한 내용을 나갈까요?</strong>
+          <p>아직 저장하지 않은 변경 사항은 사라져요.</p>
+          <div>
+            <button
+              className={styles.exitButton}
+              onClick={() => router.push("/my")}
+              type="button"
+            >
+              나가기
+            </button>
+            <button
+              className={styles.keepEditingButton}
+              data-modal-initial-focus="true"
+              onClick={() => setExitConfirmOpen(false)}
+              type="button"
+            >
+              계속 편집
+            </button>
+          </div>
+        </BottomSheet>
       ) : null}
     </main>
   );

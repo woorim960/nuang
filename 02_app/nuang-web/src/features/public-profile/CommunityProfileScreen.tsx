@@ -14,6 +14,7 @@ import {
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import type { CommunityProfileSocialState } from "@/features/feed/community-social-contract";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import {
@@ -551,74 +552,72 @@ export function CommunityProfileScreen({
       )}
 
       {moreOpen ? (
-        <div className={styles.actionBackdrop}>
-          <button
-            aria-label="프로필 메뉴 닫기"
-            onClick={() => setMoreOpen(false)}
-            type="button"
-          />
-          <section aria-label="프로필 메뉴" className={styles.actionSheet}>
-            {blockConfirmOpen ? (
-              <>
-                <div className={styles.confirmCopy}>
-                  <strong>{profile.display.displayName}님을 차단할까요?</strong>
-                  <p>
-                    이 사용자의 게시물과 프로필이 내 커뮤니티에서 보이지 않아요.
-                    차단 사실은 상대에게 알리지 않아요.
-                  </p>
-                </div>
-                <button
-                  className={styles.dangerAction}
-                  disabled={safetyPending}
-                  onClick={blockProfile}
-                  type="button"
-                >
-                  <Ban aria-hidden="true" size={18} />
-                  {safetyPending ? "차단 중" : "차단하기"}
-                </button>
-                <button
-                  disabled={safetyPending}
-                  onClick={() => setBlockConfirmOpen(false)}
-                  type="button"
-                >
-                  <X aria-hidden="true" size={18} />
-                  취소
-                </button>
-              </>
-            ) : (
-              <>
-                <strong>{profile.display.displayName} 프로필</strong>
-                <button onClick={shareProfile} type="button">
-                  <Share2 aria-hidden="true" size={18} />
-                  프로필 공유하기
-                </button>
-                {!initialSocialState.isOwnProfile ? (
-                  <>
-                    <Link
-                      href={`${pathname}/report`}
-                      onClick={() => setMoreOpen(false)}
-                    >
-                      <Flag aria-hidden="true" size={18} />
-                      신고하기
-                    </Link>
-                    <button
-                      className={styles.dangerAction}
-                      onClick={() => setBlockConfirmOpen(true)}
-                      type="button"
-                    >
-                      <Ban aria-hidden="true" size={18} />
-                      차단하기
-                    </button>
-                  </>
-                ) : null}
-                <button onClick={() => setMoreOpen(false)} type="button">
-                  <X aria-hidden="true" size={18} />
-                  취소
-                </button>
-              </>
-            )}
-          </section>
-        </div>
+        <BottomSheet
+          backdropLabel="프로필 메뉴 닫기"
+          className={styles.actionSheet}
+          dialogProps={{ "aria-label": "프로필 메뉴" }}
+          onClose={() => setMoreOpen(false)}
+        >
+          {blockConfirmOpen ? (
+            <>
+              <div className={styles.confirmCopy}>
+                <strong>{profile.display.displayName}님을 차단할까요?</strong>
+                <p>
+                  이 사용자의 게시물과 프로필이 내 커뮤니티에서 보이지 않아요.
+                  차단 사실은 상대에게 알리지 않아요.
+                </p>
+              </div>
+              <button
+                className={styles.dangerAction}
+                disabled={safetyPending}
+                onClick={blockProfile}
+                type="button"
+              >
+                <Ban aria-hidden="true" size={18} />
+                {safetyPending ? "차단 중" : "차단하기"}
+              </button>
+              <button
+                disabled={safetyPending}
+                onClick={() => setBlockConfirmOpen(false)}
+                type="button"
+              >
+                <X aria-hidden="true" size={18} />
+                취소
+              </button>
+            </>
+          ) : (
+            <>
+              <strong>{profile.display.displayName} 프로필</strong>
+              <button onClick={shareProfile} type="button">
+                <Share2 aria-hidden="true" size={18} />
+                프로필 공유하기
+              </button>
+              {!initialSocialState.isOwnProfile ? (
+                <>
+                  <Link
+                    href={`${pathname}/report`}
+                    onClick={() => setMoreOpen(false)}
+                  >
+                    <Flag aria-hidden="true" size={18} />
+                    신고하기
+                  </Link>
+                  <button
+                    className={styles.dangerAction}
+                    onClick={() => setBlockConfirmOpen(true)}
+                    type="button"
+                  >
+                    <Ban aria-hidden="true" size={18} />
+                    차단하기
+                  </button>
+                </>
+              ) : null}
+              <button onClick={() => setMoreOpen(false)} type="button">
+                <X aria-hidden="true" size={18} />
+                취소
+              </button>
+            </>
+          )}
+        </BottomSheet>
       ) : null}
     </CommunityScreenShell>
   );

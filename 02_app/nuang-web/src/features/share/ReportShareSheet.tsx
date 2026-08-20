@@ -13,10 +13,9 @@ import {
   useEffect,
   useRef,
   useState,
-  useSyncExternalStore,
   type RefObject,
 } from "react";
-import { createPortal } from "react-dom";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import {
   prepareKakaoReportShareImage,
   sendReportToKakaoTalk,
@@ -82,10 +81,6 @@ const publishActionLabels: Record<ShareActionId, string> = {
   native_share: "공개하고 공유",
 };
 
-const subscribeToClient = () => () => undefined;
-const getClientSnapshot = () => true;
-const getServerSnapshot = () => false;
-
 export function ReportShareSheet({
   canonicalUrl,
   content,
@@ -109,17 +104,10 @@ export function ReportShareSheet({
     startInCommunity ? "community" : "actions",
   );
   const [status, setStatus] = useState<ShareStatus>(null);
-  const dialogRef = useRef<HTMLDivElement>(null);
+  const dialogRef = useRef<HTMLElement>(null);
   const guestShareUrlRef = useRef<{ key: string; url: string } | null>(null);
-  const initialFocusFrameRef = useRef<number | null>(null);
   const isCriticalTransitionRef = useRef(false);
-  const previousFocusRef = useRef<HTMLElement | null>(null);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
-  const isClient = useSyncExternalStore(
-    subscribeToClient,
-    getClientSnapshot,
-    getServerSnapshot,
-  );
   const isCriticalTransition =
     step === "publish-confirm" && activeAction !== null;
 
@@ -174,66 +162,7 @@ export function ReportShareSheet({
   }, [onClose]);
 
   useEffect(() => {
-    if (!isOpen) return;
-
-    previousFocusRef.current =
-      document.activeElement instanceof HTMLElement
-        ? document.activeElement
-        : null;
-    const returnFocusElement = returnFocusRef?.current;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    initialFocusFrameRef.current = requestAnimationFrame(() => {
-      initialFocusFrameRef.current = null;
-      dialogRef.current?.focus({ preventScroll: true });
-    });
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        event.preventDefault();
-        closeSheet();
-        return;
-      }
-
-      if (event.key !== "Tab" || !dialogRef.current) return;
-
-      const focusable = Array.from(
-        dialogRef.current.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), a[href], input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [contenteditable="true"], [tabindex]:not([tabindex="-1"])',
-        ),
-      );
-      const first = focusable[0];
-      const last = focusable.at(-1);
-
-      if (!first || !last) return;
-      if (event.shiftKey && document.activeElement === first) {
-        event.preventDefault();
-        last.focus();
-      } else if (!event.shiftKey && document.activeElement === last) {
-        event.preventDefault();
-        first.focus();
-      }
-    }
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      if (initialFocusFrameRef.current !== null) {
-        cancelAnimationFrame(initialFocusFrameRef.current);
-        initialFocusFrameRef.current = null;
-      }
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleKeyDown);
-      (returnFocusElement ?? previousFocusRef.current)?.focus();
-    };
-  }, [closeSheet, isOpen, returnFocusRef]);
-
-  useEffect(() => {
     if (!isOpen || step === "actions") return;
-    if (initialFocusFrameRef.current !== null) {
-      cancelAnimationFrame(initialFocusFrameRef.current);
-      initialFocusFrameRef.current = null;
-    }
     stepHeadingRef.current?.focus({ preventScroll: true });
   }, [isOpen, step]);
 
@@ -254,7 +183,7 @@ export function ReportShareSheet({
     };
   }, [content.reportType, isOpen]);
 
-  if (!isClient || !isOpen) return null;
+  if (!isOpen) return null;
 
   function requestPublication(action: ShareActionId) {
     setPendingPrivateAction(action);
@@ -567,33 +496,180 @@ export function ReportShareSheet({
         ? "공개 범위를 확인해 주세요."
         : "결과 요약을 안전하게 공유해요.";
 
-  return createPortal(
-    <div className={styles.layer}>
-      <button
-        aria-label="공유 창 닫기"
-        className={styles.backdrop}
-        disabled={isCriticalTransition}
-        onClick={closeSheet}
-        tabIndex={-1}
-        type="button"
-      />
-      <div
-        aria-describedby="report-share-description"
-        aria-labelledby="report-share-title"
-        aria-modal="true"
-        className={styles.sheet}
-        data-report-type={content.reportType}
-        data-step={step}
-        ref={dialogRef}
-        role="dialog"
-        tabIndex={-1}
-      >
-        <div aria-hidden="true" className={styles.handle} />
-        <header className={styles.header}>
-          {step !== "actions" ? (
+  return (
+    <BottomSheet
+      backdropDisabled={isCriticalTransition}
+      backdropLabel="공유 창 닫기"
+      className={styles.sheet}
+      dialogProps={{
+        "aria-describedby": "report-share-description",
+        "aria-labelledby": "report-share-title",
+        "data-report-type": content.reportType,
+        "data-step": step,
+      }}
+      dialogRef={dialogRef}
+      initialFocus="dialog"
+      onClose={closeSheet}
+      returnFocusRef={returnFocusRef}
+    >
+      <div aria-hidden="true" className={styles.handle} />
+      <header className={styles.header}>
+        {step !== "actions" ? (
+          <button
+            aria-label="공유 방식 선택으로 돌아가기"
+            className={styles.backButton}
+            disabled={isCriticalTransition}
+            onClick={() => {
+              setPendingPrivateAction(null);
+              setStatus(null);
+              setStep("actions");
+            }}
+            type="button"
+          >
+            <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.8} />
+          </button>
+        ) : null}
+        <div className={styles.headerCopy}>
+          <h2 id="report-share-title" ref={stepHeadingRef} tabIndex={-1}>
+            {step === "community"
+              ? "커뮤니티에 공유"
+              : step === "publish-confirm"
+                ? "공개 후 공유"
+                : "결과 공유"}
+          </h2>
+          <p id="report-share-description">{headerCopy}</p>
+        </div>
+        <button
+          aria-label="공유 창 닫기"
+          className={styles.closeButton}
+          disabled={isCriticalTransition}
+          onClick={closeSheet}
+          type="button"
+        >
+          <X aria-hidden="true" size={20} strokeWidth={1.8} />
+        </button>
+      </header>
+
+      {step === "actions" ? (
+        <>
+          <ReportIdentity content={content} />
+          <section aria-label="공유 방법" className={styles.actionSection}>
             <button
-              aria-label="공유 방식 선택으로 돌아가기"
-              className={styles.backButton}
+              aria-busy={activeAction === "kakao_share"}
+              aria-label="카카오톡으로 보내기"
+              className={styles.kakaoAction}
+              disabled={activeAction !== null}
+              onClick={() => void handleKakaoShare()}
+              type="button"
+            >
+              <span className={styles.kakaoIcon}>
+                {activeAction === "kakao_share" ? (
+                  <LoaderCircle
+                    aria-hidden="true"
+                    className={styles.spinner}
+                    size={19}
+                  />
+                ) : (
+                  <KakaoBubbleIcon />
+                )}
+              </span>
+              <strong>카카오톡으로 보내기</strong>
+            </button>
+            <p className={styles.kakaoHelp}>
+              카카오톡에서 보낼 대화방을 직접 선택해요.
+            </p>
+            <div className={styles.secondaryActions}>
+              {secondaryActions.map((action) => {
+                const Icon =
+                  action.id === "copy_link"
+                    ? Copy
+                    : action.id === "native_share"
+                      ? ExternalLink
+                      : MessagesSquare;
+                const isWorking = activeAction === action.id;
+                return (
+                  <button
+                    aria-busy={isWorking}
+                    aria-label={action.label}
+                    data-action={action.id}
+                    disabled={activeAction !== null}
+                    key={action.id}
+                    onClick={() => void actionHandlers[action.id]()}
+                    type="button"
+                  >
+                    {isWorking ? (
+                      <LoaderCircle
+                        aria-hidden="true"
+                        className={styles.spinner}
+                        size={19}
+                      />
+                    ) : (
+                      <Icon aria-hidden="true" size={19} strokeWidth={1.8} />
+                    )}
+                    <strong>{action.label}</strong>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        </>
+      ) : step === "community" ? (
+        <section className={styles.communityStep}>
+          <ReportIdentity compact content={content} />
+          <label className={styles.noteField}>
+            <span>
+              한마디 덧붙이기 <small>선택</small>
+            </span>
+            <textarea
+              maxLength={120}
+              onChange={(event) => setCommunityNote(event.target.value)}
+              placeholder="이 결과를 보고 든 생각을 남겨보세요."
+              rows={3}
+              value={communityNote}
+            />
+            <small>{communityNote.length} / 120</small>
+          </label>
+          <button
+            aria-busy={activeAction === "feed_share"}
+            className={styles.confirmButton}
+            disabled={activeAction !== null}
+            onClick={() => void handleFeedShare()}
+            type="button"
+          >
+            {activeAction === "feed_share" ? (
+              <LoaderCircle
+                aria-hidden="true"
+                className={styles.spinner}
+                size={18}
+              />
+            ) : null}
+            {activeAction === "feed_share" ? "공유 중" : "커뮤니티에 공유"}
+          </button>
+        </section>
+      ) : (
+        <section className={styles.publishConfirm}>
+          <ReportIdentity compact content={content} />
+          <span className={styles.privateStatus}>현재 비공개</span>
+          <h3>이 결과를 공개하고 공유할까요?</h3>
+          <p className={styles.publishCopy}>
+            공개하면 프로필과 링크를 받은 사람 누구나 결과 요약을 볼 수 있어요.
+          </p>
+          <div className={styles.disclosure}>
+            <p>
+              <span>공개됨</span>
+              <strong>결과 이름과 요약</strong>
+            </p>
+            <p>
+              <span>공개되지 않음</span>
+              <strong>내 답변과 원점수</strong>
+            </p>
+          </div>
+          <p className={styles.publishNote}>
+            마이 &gt; 검사 결과에서 언제든 다시 비공개로 바꿀 수 있어요.
+          </p>
+          <div className={styles.publishConfirmActions}>
+            <button
+              className={styles.cancelButton}
               disabled={isCriticalTransition}
               onClick={() => {
                 setPendingPrivateAction(null);
@@ -602,206 +678,49 @@ export function ReportShareSheet({
               }}
               type="button"
             >
-              <ArrowLeft aria-hidden="true" size={20} strokeWidth={1.8} />
+              취소
             </button>
-          ) : null}
-          <div className={styles.headerCopy}>
-            <h2 id="report-share-title" ref={stepHeadingRef} tabIndex={-1}>
-              {step === "community"
-                ? "커뮤니티에 공유"
-                : step === "publish-confirm"
-                  ? "공개 후 공유"
-                  : "결과 공유"}
-            </h2>
-            <p id="report-share-description">{headerCopy}</p>
-          </div>
-          <button
-            aria-label="공유 창 닫기"
-            className={styles.closeButton}
-            disabled={isCriticalTransition}
-            onClick={closeSheet}
-            type="button"
-          >
-            <X aria-hidden="true" size={20} strokeWidth={1.8} />
-          </button>
-        </header>
-
-        {step === "actions" ? (
-          <>
-            <ReportIdentity content={content} />
-            <section aria-label="공유 방법" className={styles.actionSection}>
-              <button
-                aria-busy={activeAction === "kakao_share"}
-                aria-label="카카오톡으로 보내기"
-                className={styles.kakaoAction}
-                disabled={activeAction !== null}
-                onClick={() => void handleKakaoShare()}
-                type="button"
-              >
-                <span className={styles.kakaoIcon}>
-                  {activeAction === "kakao_share" ? (
-                    <LoaderCircle
-                      aria-hidden="true"
-                      className={styles.spinner}
-                      size={19}
-                    />
-                  ) : (
-                    <KakaoBubbleIcon />
-                  )}
-                </span>
-                <strong>카카오톡으로 보내기</strong>
-              </button>
-              <p className={styles.kakaoHelp}>
-                카카오톡에서 보낼 대화방을 직접 선택해요.
-              </p>
-              <div className={styles.secondaryActions}>
-                {secondaryActions.map((action) => {
-                  const Icon =
-                    action.id === "copy_link"
-                      ? Copy
-                      : action.id === "native_share"
-                        ? ExternalLink
-                        : MessagesSquare;
-                  const isWorking = activeAction === action.id;
-                  return (
-                    <button
-                      aria-busy={isWorking}
-                      aria-label={action.label}
-                      data-action={action.id}
-                      disabled={activeAction !== null}
-                      key={action.id}
-                      onClick={() => void actionHandlers[action.id]()}
-                      type="button"
-                    >
-                      {isWorking ? (
-                        <LoaderCircle
-                          aria-hidden="true"
-                          className={styles.spinner}
-                          size={19}
-                        />
-                      ) : (
-                        <Icon aria-hidden="true" size={19} strokeWidth={1.8} />
-                      )}
-                      <strong>{action.label}</strong>
-                    </button>
-                  );
-                })}
-              </div>
-            </section>
-          </>
-        ) : step === "community" ? (
-          <section className={styles.communityStep}>
-            <ReportIdentity compact content={content} />
-            <label className={styles.noteField}>
-              <span>
-                한마디 덧붙이기 <small>선택</small>
-              </span>
-              <textarea
-                maxLength={120}
-                onChange={(event) => setCommunityNote(event.target.value)}
-                placeholder="이 결과를 보고 든 생각을 남겨보세요."
-                rows={3}
-                value={communityNote}
-              />
-              <small>{communityNote.length} / 120</small>
-            </label>
             <button
-              aria-busy={activeAction === "feed_share"}
-              className={styles.confirmButton}
-              disabled={activeAction !== null}
-              onClick={() => void handleFeedShare()}
+              aria-busy={isCriticalTransition}
+              className={styles.publishButton}
+              disabled={isCriticalTransition}
+              onClick={() => void handlePublishAndContinue()}
               type="button"
             >
-              {activeAction === "feed_share" ? (
+              {isCriticalTransition ? (
                 <LoaderCircle
                   aria-hidden="true"
                   className={styles.spinner}
                   size={18}
                 />
               ) : null}
-              {activeAction === "feed_share" ? "공유 중" : "커뮤니티에 공유"}
+              {publishProgress === "publishing"
+                ? "공개 설정 중"
+                : publishProgress === "preparing"
+                  ? "공유 준비 중"
+                  : publishActionLabels[pendingPrivateAction ?? "kakao_share"]}
             </button>
-          </section>
-        ) : (
-          <section className={styles.publishConfirm}>
-            <ReportIdentity compact content={content} />
-            <span className={styles.privateStatus}>현재 비공개</span>
-            <h3>이 결과를 공개하고 공유할까요?</h3>
-            <p className={styles.publishCopy}>
-              공개하면 프로필과 링크를 받은 사람 누구나 결과 요약을 볼 수
-              있어요.
-            </p>
-            <div className={styles.disclosure}>
-              <p>
-                <span>공개됨</span>
-                <strong>결과 이름과 요약</strong>
-              </p>
-              <p>
-                <span>공개되지 않음</span>
-                <strong>내 답변과 원점수</strong>
-              </p>
-            </div>
-            <p className={styles.publishNote}>
-              마이 &gt; 검사 결과에서 언제든 다시 비공개로 바꿀 수 있어요.
-            </p>
-            <div className={styles.publishConfirmActions}>
-              <button
-                className={styles.cancelButton}
-                disabled={isCriticalTransition}
-                onClick={() => {
-                  setPendingPrivateAction(null);
-                  setStatus(null);
-                  setStep("actions");
-                }}
-                type="button"
-              >
-                취소
-              </button>
-              <button
-                aria-busy={isCriticalTransition}
-                className={styles.publishButton}
-                disabled={isCriticalTransition}
-                onClick={() => void handlePublishAndContinue()}
-                type="button"
-              >
-                {isCriticalTransition ? (
-                  <LoaderCircle
-                    aria-hidden="true"
-                    className={styles.spinner}
-                    size={18}
-                  />
-                ) : null}
-                {publishProgress === "publishing"
-                  ? "공개 설정 중"
-                  : publishProgress === "preparing"
-                    ? "공유 준비 중"
-                    : publishActionLabels[
-                        pendingPrivateAction ?? "kakao_share"
-                      ]}
-              </button>
-            </div>
-          </section>
-        )}
+          </div>
+        </section>
+      )}
 
-        {status ? (
-          <p
-            aria-live="polite"
-            className={styles.status}
-            data-kind={status.kind}
-            role={status.kind === "error" ? "alert" : "status"}
-          >
-            {status.message}
-          </p>
-        ) : null}
+      {status ? (
+        <p
+          aria-live="polite"
+          className={styles.status}
+          data-kind={status.kind}
+          role={status.kind === "error" ? "alert" : "status"}
+        >
+          {status.message}
+        </p>
+      ) : null}
 
-        {step === "actions" ? (
-          <p className={styles.privacyNote}>
-            답변, 연락처와 계정 정보는 공유되지 않아요.
-          </p>
-        ) : null}
-      </div>
-    </div>,
-    document.body,
+      {step === "actions" ? (
+        <p className={styles.privacyNote}>
+          답변, 연락처와 계정 정보는 공유되지 않아요.
+        </p>
+      ) : null}
+    </BottomSheet>
   );
 }
 

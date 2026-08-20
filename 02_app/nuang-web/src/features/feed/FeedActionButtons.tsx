@@ -12,6 +12,7 @@ import {
 import { useRouter } from "next/navigation";
 import type { FormEvent, ReactNode } from "react";
 import { useEffect, useState } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import type { FeedReplyPreview } from "@/features/feed/feed-seed";
 import { FeedMoreMenu } from "@/features/feed/FeedMoreMenu";
@@ -677,11 +678,7 @@ function FeedReplyPreviewList({
             ) : null}
           </p>
           {reply.reportable ? (
-            <FeedMoreMenu
-              compact
-              postId={reply.id}
-              targetType="feed_comment"
-            />
+            <FeedMoreMenu compact postId={reply.id} targetType="feed_comment" />
           ) : null}
         </div>
       ))}
@@ -808,52 +805,45 @@ function ShareActionSheet({
   onSelect: (option: "copy" | "feed" | "kakao") => Promise<void>;
 }) {
   return (
-    <div
-      className="fixed inset-0 z-[100] flex items-end justify-center bg-[var(--nu-neutral-900)]/35 px-3 pb-[calc(12px+env(safe-area-inset-bottom))] backdrop-blur-[2px]"
-      onClick={(event) => {
-        if (event.currentTarget === event.target) onClose();
-      }}
+    <BottomSheet
+      backdropLabel="게시물 공유 닫기"
+      className="w-full max-w-[496px]"
+      dialogProps={{ "aria-label": "게시물 공유" }}
+      onClose={onClose}
     >
-      <section
-        aria-label="게시물 공유"
-        aria-modal="true"
-        className="w-full max-w-[496px] overflow-hidden rounded-[22px] bg-white shadow-sheet"
-        role="dialog"
-      >
-        <header className="flex min-h-14 items-center justify-between border-b border-[var(--nu-neutral-150)] px-4">
-          <strong className="text-sm font-bold text-[var(--nu-neutral-800)]">
-            공유하기
-          </strong>
-          <button
-            aria-label="공유 닫기"
-            className="grid h-10 w-10 place-items-center rounded-full text-[var(--nu-neutral-600)] hover:bg-[var(--nu-brand-100)]"
-            onClick={onClose}
-            type="button"
-          >
-            <X aria-hidden="true" size={19} strokeWidth={1.9} />
-          </button>
-        </header>
-        <div className="grid divide-y divide-[var(--nu-neutral-75)] px-1 pb-1">
-          <ShareOption
-            icon={<Link2 aria-hidden="true" size={20} strokeWidth={1.9} />}
-            label="링크 복사"
-            onClick={() => void onSelect("copy")}
-          />
-          <ShareOption
-            icon={
-              <MessageCircle aria-hidden="true" size={20} strokeWidth={1.9} />
-            }
-            label="카카오톡으로 공유"
-            onClick={() => void onSelect("kakao")}
-          />
-          <ShareOption
-            icon={<Repeat2 aria-hidden="true" size={20} strokeWidth={1.9} />}
-            label="내 피드에 공유"
-            onClick={() => void onSelect("feed")}
-          />
-        </div>
-      </section>
-    </div>
+      <header className="flex min-h-14 items-center justify-between border-b border-[var(--nu-neutral-150)] px-4">
+        <strong className="text-sm font-bold text-[var(--nu-neutral-800)]">
+          공유하기
+        </strong>
+        <button
+          aria-label="공유 닫기"
+          className="grid h-10 w-10 place-items-center rounded-full text-[var(--nu-neutral-600)] hover:bg-[var(--nu-brand-100)]"
+          onClick={onClose}
+          type="button"
+        >
+          <X aria-hidden="true" size={19} strokeWidth={1.9} />
+        </button>
+      </header>
+      <div className="grid divide-y divide-[var(--nu-neutral-75)] px-1 pb-[calc(4px+env(safe-area-inset-bottom))]">
+        <ShareOption
+          icon={<Link2 aria-hidden="true" size={20} strokeWidth={1.9} />}
+          label="링크 복사"
+          onClick={() => void onSelect("copy")}
+        />
+        <ShareOption
+          icon={
+            <MessageCircle aria-hidden="true" size={20} strokeWidth={1.9} />
+          }
+          label="카카오톡으로 공유"
+          onClick={() => void onSelect("kakao")}
+        />
+        <ShareOption
+          icon={<Repeat2 aria-hidden="true" size={20} strokeWidth={1.9} />}
+          label="내 피드에 공유"
+          onClick={() => void onSelect("feed")}
+        />
+      </div>
+    </BottomSheet>
   );
 }
 

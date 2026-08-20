@@ -17,11 +17,15 @@ type InertRecord = {
 };
 
 export function useModalDialog<T extends HTMLElement>({
+  initialFocus = "first",
   onClose,
   open,
+  returnFocusRef,
 }: {
+  initialFocus?: "dialog" | "first";
   onClose: () => void;
   open: boolean;
+  returnFocusRef?: RefObject<HTMLElement | null>;
 }): RefObject<T | null> {
   const dialogRef = useRef<T>(null);
   const onCloseRef = useRef(onClose);
@@ -40,6 +44,7 @@ export function useModalDialog<T extends HTMLElement>({
       document.activeElement instanceof HTMLElement
         ? document.activeElement
         : null;
+    const preferredReturnFocus = returnFocusRef?.current;
     const previousBodyOverflow = document.body.style.overflow;
     const previousBodyOverscrollBehavior =
       document.body.style.overscrollBehavior;
@@ -48,11 +53,15 @@ export function useModalDialog<T extends HTMLElement>({
     document.body.style.overflow = "hidden";
     document.body.style.overscrollBehavior = "none";
 
-    const initialFocus =
-      dialog.querySelector<HTMLElement>('[data-modal-initial-focus="true"]') ??
-      getFocusableElements(dialog)[0] ??
-      dialog;
-    initialFocus.focus({ preventScroll: true });
+    const initialFocusTarget =
+      initialFocus === "dialog"
+        ? dialog
+        : (dialog.querySelector<HTMLElement>(
+            '[data-modal-initial-focus="true"]',
+          ) ??
+          getFocusableElements(dialog)[0] ??
+          dialog);
+    initialFocusTarget.focus({ preventScroll: true });
 
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -95,11 +104,12 @@ export function useModalDialog<T extends HTMLElement>({
       document.body.style.overscrollBehavior = previousBodyOverscrollBehavior;
       restoreBackgroundInteraction(inertRecords);
 
-      if (previouslyFocused?.isConnected) {
-        previouslyFocused.focus({ preventScroll: true });
+      const returnFocusTarget = preferredReturnFocus ?? previouslyFocused;
+      if (returnFocusTarget?.isConnected) {
+        returnFocusTarget.focus({ preventScroll: true });
       }
     };
-  }, [open]);
+  }, [initialFocus, open, returnFocusRef]);
 
   return dialogRef;
 }
@@ -121,7 +131,11 @@ function suppressBackgroundInteraction(dialog: HTMLElement) {
     const parentElement = currentElement.parentElement;
 
     for (const sibling of parentElement.children) {
-      if (!(sibling instanceof HTMLElement) || sibling === currentElement) {
+      if (
+        !(sibling instanceof HTMLElement) ||
+        sibling === currentElement ||
+        sibling.hasAttribute("data-modal-backdrop")
+      ) {
         continue;
       }
 

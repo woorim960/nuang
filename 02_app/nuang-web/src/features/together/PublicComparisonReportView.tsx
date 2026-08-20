@@ -9,6 +9,7 @@ import {
   SlidersHorizontal,
   X,
 } from "lucide-react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import { getCandidateDirectionCopy } from "@/features/nuang-code/candidate-profile-names";
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
@@ -690,45 +691,42 @@ function RelationshipSheet({
   selected: RelationshipContext;
 }) {
   return (
-    <div className={styles.sheetBackdrop} onClick={onClose} role="presentation">
-      <section
-        aria-label="관계 선택"
-        aria-modal="true"
-        className={styles.sheet}
-        onClick={(event) => event.stopPropagation()}
-        role="dialog"
-      >
-        <header>
-          <div>
-            <h2>어떤 관계에서 살펴볼까요?</h2>
-          </div>
-          <button aria-label="닫기" onClick={onClose} type="button">
-            <X size={20} />
-          </button>
-        </header>
-        <p className={styles.sheetGuide}>
-          상황별 안내만 달라지며, 선택한 관계는 상대에게 알려지지 않아요.
-        </p>
-        <div className={styles.contextOptions}>
-          {relationshipContexts.map((item) => (
-            <button
-              aria-pressed={selected === item.id}
-              key={item.id}
-              onClick={() => onSelect(item.id)}
-              type="button"
-            >
-              <span>
-                <strong>{item.label}</strong>
-                <small>{item.note}</small>
-              </span>
-              {selected === item.id ? (
-                <Check aria-hidden="true" size={18} />
-              ) : null}
-            </button>
-          ))}
+    <BottomSheet
+      backdropLabel="관계 선택 닫기"
+      className={styles.sheet}
+      dialogProps={{ "aria-label": "관계 선택" }}
+      onClose={onClose}
+    >
+      <header>
+        <div>
+          <h2>어떤 관계에서 살펴볼까요?</h2>
         </div>
-      </section>
-    </div>
+        <button aria-label="닫기" onClick={onClose} type="button">
+          <X size={20} />
+        </button>
+      </header>
+      <p className={styles.sheetGuide}>
+        상황별 안내만 달라지며, 선택한 관계는 상대에게 알려지지 않아요.
+      </p>
+      <div className={styles.contextOptions}>
+        {relationshipContexts.map((item) => (
+          <button
+            aria-pressed={selected === item.id}
+            key={item.id}
+            onClick={() => onSelect(item.id)}
+            type="button"
+          >
+            <span>
+              <strong>{item.label}</strong>
+              <small>{item.note}</small>
+            </span>
+            {selected === item.id ? (
+              <Check aria-hidden="true" size={18} />
+            ) : null}
+          </button>
+        ))}
+      </div>
+    </BottomSheet>
   );
 }
 

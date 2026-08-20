@@ -26,6 +26,7 @@ import {
   type MouseEvent,
 } from "react";
 import { IntentPrefetchLink as Link } from "@/components/navigation/IntentPrefetchLink";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { FeedTopicSelector } from "@/features/feed/FeedTopicSelector";
 import { extractExternalLinks } from "@/features/feed/link-safety";
@@ -949,50 +950,44 @@ export function FeedComposer({
               ) : null}
 
               {composerSpace === "daily" && audienceOpen ? (
-                <div
-                  className={styles.audienceBackdrop}
-                  onMouseDown={(event) => {
-                    if (event.target === event.currentTarget)
-                      setAudienceOpen(false);
-                  }}
+                <BottomSheet
+                  backdropLabel="공개 범위 닫기"
+                  className={styles.audienceSheet}
+                  dialogProps={{ "aria-label": "게시물 공개 범위" }}
+                  onClose={() => setAudienceOpen(false)}
                 >
-                  <section
-                    aria-label="게시물 공개 범위"
-                    className={styles.audienceSheet}
-                  >
-                    <header>
-                      <strong>공개 범위</strong>
-                      <button
-                        aria-label="공개 범위 닫기"
-                        onClick={() => setAudienceOpen(false)}
-                        type="button"
-                      >
-                        <X aria-hidden="true" size={19} />
-                      </button>
-                    </header>
-                    {visibilityOptions.map((option) => (
-                      <button
-                        aria-pressed={visibility === option.value}
-                        className={styles.audienceOption}
-                        key={option.value}
-                        onClick={() => {
-                          setVisibility(option.value);
-                          setAudienceOpen(false);
-                        }}
-                        type="button"
-                      >
-                        <span>
-                          <strong>{option.label}</strong>
-                          <small>{option.description}</small>
-                        </span>
-                        <span
-                          aria-hidden="true"
-                          className={styles.audienceCheck}
-                        />
-                      </button>
-                    ))}
-                  </section>
-                </div>
+                  <header>
+                    <strong>공개 범위</strong>
+                    <button
+                      aria-label="공개 범위 닫기"
+                      onClick={() => setAudienceOpen(false)}
+                      type="button"
+                    >
+                      <X aria-hidden="true" size={19} />
+                    </button>
+                  </header>
+                  {visibilityOptions.map((option) => (
+                    <button
+                      aria-pressed={visibility === option.value}
+                      className={styles.audienceOption}
+                      key={option.value}
+                      onClick={() => {
+                        setVisibility(option.value);
+                        setAudienceOpen(false);
+                      }}
+                      type="button"
+                    >
+                      <span>
+                        <strong>{option.label}</strong>
+                        <small>{option.description}</small>
+                      </span>
+                      <span
+                        aria-hidden="true"
+                        className={styles.audienceCheck}
+                      />
+                    </button>
+                  ))}
+                </BottomSheet>
               ) : null}
             </section>
           )}

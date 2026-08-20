@@ -676,28 +676,10 @@
   line-height: var(--nu-leading-label);
 }
 
-.sheetBackdrop {
-  position: fixed;
-  z-index: 80;
-  inset: 0;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  padding-top: 72px;
-  background: color-mix(in srgb, var(--nu-info-700) 35%, transparent);
-  animation: fadeIn 170ms ease both;
-}
-
 .sheet {
-  width: min(100%, 520px);
+  max-width: 520px;
   max-height: calc(100dvh - 72px);
-  overflow-y: auto;
   padding: 18px 16px calc(20px + env(safe-area-inset-bottom));
-  border-radius: 24px 24px 0 0;
-  background: var(--nu-color-surface);
-  box-shadow: 0 -10px 35px
-    color-mix(in srgb, var(--nu-info-700) 14%, transparent);
-  animation: sheetUp 210ms ease both;
 }
 
 .sheet header {
@@ -786,30 +768,10 @@
   }
 }
 
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes sheetUp {
-  from {
-    transform: translateY(18px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   .axisToggle svg,
   .track > span,
-  .axisDetails,
-  .sheetBackdrop,
-  .sheet {
+  .axisDetails {
     animation: none;
     transition: none;
   }

@@ -208,24 +208,9 @@
   animation: auth-method-spin 800ms linear infinite;
 }
 
-.backdrop {
-  position: fixed;
-  z-index: 90;
-  inset: 0;
-  display: grid;
-  place-items: end center;
-  padding: 0.8rem;
-  background: var(--nu-color-overlay);
-  backdrop-filter: blur(2px);
-}
-
 .dialog {
-  width: min(100%, 406px);
-  padding: 1.2rem 1rem 1rem;
-  border-radius: 24px;
-  background: var(--nu-color-surface);
-  box-shadow: var(--nu-shadow-lg);
-  animation: auth-dialog-in 180ms ease-out both;
+  max-width: 406px;
+  padding: 1.2rem 1rem calc(1rem + env(safe-area-inset-bottom));
 }
 
 .dialogIcon {
@@ -294,13 +279,6 @@
 @keyframes auth-method-spin {
   to {
     transform: rotate(360deg);
-  }
-}
-
-@keyframes auth-dialog-in {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
   }
 }
 

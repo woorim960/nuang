@@ -105,6 +105,8 @@ describe("AssessmentQuestionControls", () => {
     const dialog = screen.getByRole("dialog", {
       name: "검사를 잠시 멈출까요?",
     });
+    expect(dialog.parentElement).toHaveAttribute("data-modal-layer", "true");
+    expect(dialog.parentElement?.parentElement).toBe(document.body);
     expect(document.body.style.overflow).toBe("hidden");
     expect(dialog).toHaveAttribute("aria-describedby");
     expect(

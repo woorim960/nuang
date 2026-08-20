@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { NuangOperatorBadge } from "@/components/identity/NuangOperatorBadge";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import { PublicProfileImageView } from "@/features/public-profile/PublicProfileImageView";
 import type { PublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import { profileVisibilityPolicyVersion } from "@/features/together/profile-visibility-policy";
@@ -99,15 +100,13 @@ export function PublicProfileModal({
         },
         method: "POST",
       });
-      const body = (await response.json().catch(() => null)) as
-        | {
-            code?: string;
-            comparisonReportId?: string;
-            comparison?: { id?: string };
-            message?: string;
-            ok?: boolean;
-          }
-        | null;
+      const body = (await response.json().catch(() => null)) as {
+        code?: string;
+        comparisonReportId?: string;
+        comparison?: { id?: string };
+        message?: string;
+        ok?: boolean;
+      } | null;
 
       if (response.status === 401) {
         const nextPath = `${window.location.pathname}${window.location.search}`;
@@ -115,7 +114,8 @@ export function PublicProfileModal({
         return;
       }
 
-      const comparisonReportId = body?.comparisonReportId ?? body?.comparison?.id;
+      const comparisonReportId =
+        body?.comparisonReportId ?? body?.comparison?.id;
 
       if (response.ok && comparisonReportId) {
         router.push(`/reports/comparison/${comparisonReportId}`);
@@ -141,89 +141,82 @@ export function PublicProfileModal({
   }
 
   return (
-    <div
-      aria-labelledby="public-profile-title"
-      aria-modal="true"
-      className="fixed inset-0 z-50 flex items-end justify-center bg-black/35 px-3 pb-3 pt-12 backdrop-blur-[2px] sm:items-center sm:p-6"
-      role="dialog"
+    <BottomSheet
+      backdropLabel="프로필 닫기"
+      className="w-full max-w-[430px] overflow-hidden"
+      dialogProps={{ "aria-labelledby": "public-profile-title" }}
+      onClose={onClose}
     >
-      <button
-        aria-label="프로필 닫기"
-        className="absolute inset-0 cursor-default"
-        onClick={onClose}
-        type="button"
-      />
-      <section className="relative w-full max-w-[430px] overflow-hidden rounded-[28px] bg-white shadow-sheet">
-        <header className="flex items-center justify-between border-b border-[var(--nu-neutral-75)] px-5 py-4">
-          <p className="text-callout font-extrabold text-[var(--nu-color-text-strong)]">프로필</p>
-          <button
-            aria-label="닫기"
-            className="-mr-2 grid h-9 w-9 place-items-center rounded-full text-[var(--nu-color-text-strong)] hover:bg-[var(--nu-neutral-25)]"
-            onClick={onClose}
-            type="button"
-          >
-            <X aria-hidden="true" size={20} strokeWidth={2} />
-          </button>
-        </header>
+      <header className="flex items-center justify-between border-b border-[var(--nu-neutral-75)] px-5 py-4">
+        <p className="text-callout font-extrabold text-[var(--nu-color-text-strong)]">
+          프로필
+        </p>
+        <button
+          aria-label="닫기"
+          className="-mr-2 grid h-9 w-9 place-items-center rounded-full text-[var(--nu-color-text-strong)] hover:bg-[var(--nu-neutral-25)]"
+          onClick={onClose}
+          type="button"
+        >
+          <X aria-hidden="true" size={20} strokeWidth={2} />
+        </button>
+      </header>
 
-        <div className="px-5 pb-5 pt-6">
-          <div className="flex items-start gap-4">
-            <PublicProfileImageView
-              image={profile.display.profileImage}
-              priority
-              size="lg"
-            />
-            <div className="min-w-0 flex-1 pt-1">
-              <div className="flex min-w-0 items-center gap-2">
-                <h2
-                  className="min-w-0 truncate text-2xl font-black leading-7 tracking-normal text-[var(--nu-color-text-strong)]"
-                  id="public-profile-title"
-                >
-                  {profile.display.displayName}
-                </h2>
-                {profile.operator ? <NuangOperatorBadge /> : null}
-              </div>
-              <p className="mt-1 text-sm font-bold text-[var(--nu-neutral-600)]">
-                {profile.display.code}
-              </p>
-              <p className="mt-3 text-lg font-extrabold leading-6 text-[var(--nu-color-text-strong)]">
-                {profile.display.profileName}
-              </p>
+      <div className="px-5 pb-[calc(20px+env(safe-area-inset-bottom))] pt-6">
+        <div className="flex items-start gap-4">
+          <PublicProfileImageView
+            image={profile.display.profileImage}
+            priority
+            size="lg"
+          />
+          <div className="min-w-0 flex-1 pt-1">
+            <div className="flex min-w-0 items-center gap-2">
+              <h2
+                className="min-w-0 truncate text-2xl font-black leading-7 tracking-normal text-[var(--nu-color-text-strong)]"
+                id="public-profile-title"
+              >
+                {profile.display.displayName}
+              </h2>
+              {profile.operator ? <NuangOperatorBadge /> : null}
             </div>
-          </div>
-
-          <div className="mt-6 border-y border-[var(--nu-neutral-75)] py-4">
-            <p className="text-sm leading-6 text-[var(--nu-neutral-700)]">
-              공개된 성향 정보를 기준으로 상대의 리듬을 간단히 확인할 수
-              있어요.
+            <p className="mt-1 text-sm font-bold text-[var(--nu-neutral-600)]">
+              {profile.display.code}
             </p>
-            <div className="mt-4 grid gap-3">
-              {primaryHighlight ? <AxisLine axis={primaryHighlight} /> : null}
-              {secondaryHighlight ? <AxisLine axis={secondaryHighlight} /> : null}
-            </div>
-          </div>
-
-          {message ? (
-            <p className="mt-4 rounded-lg bg-[var(--nu-neutral-25)] px-4 py-3 text-sm font-semibold leading-5 text-[var(--nu-neutral-700)]">
-              {message}
+            <p className="mt-3 text-lg font-extrabold leading-6 text-[var(--nu-color-text-strong)]">
+              {profile.display.profileName}
             </p>
-          ) : null}
-
-          <button
-            className="mt-5 flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-[var(--nu-color-text-strong)] text-callout font-extrabold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
-            disabled={submitting}
-            onClick={compareWithMe}
-            type="button"
-          >
-            {submitting ? "준비 중" : "나와 비교하기"}
-            <ChevronRight aria-hidden="true" size={18} strokeWidth={2.2} />
-          </button>
-          <p className="mt-3 text-center text-xs font-medium leading-5 text-[var(--nu-neutral-500)]">
-            비공개 항목은 비교에 사용하지 않아요.
-          </p>
+          </div>
         </div>
-      </section>
-    </div>
+
+        <div className="mt-6 border-y border-[var(--nu-neutral-75)] py-4">
+          <p className="text-sm leading-6 text-[var(--nu-neutral-700)]">
+            공개된 성향 정보를 기준으로 상대의 리듬을 간단히 확인할 수 있어요.
+          </p>
+          <div className="mt-4 grid gap-3">
+            {primaryHighlight ? <AxisLine axis={primaryHighlight} /> : null}
+            {secondaryHighlight ? <AxisLine axis={secondaryHighlight} /> : null}
+          </div>
+        </div>
+
+        {message ? (
+          <p className="mt-4 rounded-lg bg-[var(--nu-neutral-25)] px-4 py-3 text-sm font-semibold leading-5 text-[var(--nu-neutral-700)]">
+            {message}
+          </p>
+        ) : null}
+
+        <button
+          className="mt-5 flex h-12 w-full items-center justify-center gap-1.5 rounded-full bg-[var(--nu-color-text-strong)] text-callout font-extrabold text-white transition-opacity disabled:cursor-not-allowed disabled:opacity-60"
+          disabled={submitting}
+          onClick={compareWithMe}
+          type="button"
+        >
+          {submitting ? "준비 중" : "나와 비교하기"}
+          <ChevronRight aria-hidden="true" size={18} strokeWidth={2.2} />
+        </button>
+        <p className="mt-3 text-center text-xs font-medium leading-5 text-[var(--nu-neutral-500)]">
+          비공개 항목은 비교에 사용하지 않아요.
+        </p>
+      </div>
+    </BottomSheet>
   );
 }
 

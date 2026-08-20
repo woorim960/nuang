@@ -1,41 +1,13 @@
-.layer {
-  position: fixed;
-  z-index: 1200;
-  inset: 0;
-  display: grid;
-  align-items: end;
-  justify-items: center;
-  box-sizing: border-box;
-  font-family: var(--nu-font-sans);
-}
-
-.backdrop {
-  position: absolute;
-  inset: 0;
-  border: 0;
-  background: var(--nu-color-overlay);
-  backdrop-filter: blur(2px);
-  animation: backdrop-in var(--nu-duration-fast) ease-out both;
-}
-
 .sheet {
   --share-accent: var(--nu-color-brand-strong);
 
-  position: relative;
   box-sizing: border-box;
-  width: min(100%, var(--nu-content-width));
   max-height: min(92dvh, 720px);
-  overflow-y: auto;
   padding: 0.5rem var(--nu-page-gutter)
     calc(1rem + env(safe-area-inset-bottom, 0px));
   border: 1px solid var(--nu-color-border-soft);
-  border-radius: 24px 24px 0 0;
+  border-bottom: 0;
   color: var(--nu-color-text);
-  background: var(--nu-color-surface);
-  box-shadow: var(--nu-shadow-sheet);
-  animation: sheet-in 200ms var(--nu-ease-standard) both;
-  overscroll-behavior: contain;
-  scrollbar-width: thin;
 }
 
 .sheet:focus {
@@ -544,36 +516,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sheet,
-  .backdrop,
   .spinner {
     animation: none;
   }
 
   .kakaoAction {
     transition: none;
-  }
-}
-
-@keyframes backdrop-in {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes sheet-in {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }
 

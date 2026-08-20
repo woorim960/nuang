@@ -10,13 +10,13 @@ import {
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
+import { BottomSheet } from "@/components/ui/BottomSheet";
 import { clearAccountOwnedLocalAttempts } from "@/features/assessment/assessment-account-sync";
 import { clearAccountOwnedFreeTopicResults } from "@/features/assessment/free-topic-storage";
 import { clearAccountOwnedLabResults } from "@/features/lab/lab-storage";
 import { readJsonResponse } from "@/features/account/response-json";
 import { getSupabaseOAuthProvider } from "@/features/auth/auth-policy";
 import type { SupportedIdentityProvider } from "@/features/auth/identity-link-contract";
-import { useModalDialog } from "@/hooks/useModalDialog";
 import { createBrowserSupabaseClient } from "@/lib/supabase/browser";
 import styles from "./AuthMethodsPanel.module.css";
 
@@ -70,10 +70,6 @@ export function AuthMethodsPanel() {
   const [unlinkTarget, setUnlinkTarget] = useState<AuthMethod | null>(null);
   const unlinkTitleId = useId();
   const unlinkTriggerRef = useRef<HTMLButtonElement | null>(null);
-  const unlinkDialogRef = useModalDialog<HTMLElement>({
-    onClose: closeUnlinkDialog,
-    open: Boolean(unlinkTarget),
-  });
 
   useEffect(() => {
     let active = true;
@@ -433,41 +429,39 @@ export function AuthMethodsPanel() {
       </button>
 
       {unlinkTarget ? (
-        <div className={styles.backdrop} data-modal-layer="true">
-          <section
-            aria-labelledby={unlinkTitleId}
-            aria-modal="true"
-            className={styles.dialog}
-            ref={unlinkDialogRef}
-            role="dialog"
-            tabIndex={-1}
-          >
-            <span className={styles.dialogIcon} aria-hidden="true">
-              <Unlink size={20} />
-            </span>
-            <h3 id={unlinkTitleId}>{unlinkTarget.label} 연결을 해제할까요?</h3>
-            <p>
-              뉴앙 기록은 삭제되지 않지만, 다시 연결하기 전까지 이 방법으로
-              로그인할 수 없어요.
-            </p>
-            <div className={styles.dialogActions}>
-              <button
-                data-modal-initial-focus="true"
-                onClick={closeUnlinkDialog}
-                type="button"
-              >
-                유지하기
-              </button>
-              <button
-                disabled={pending !== null}
-                onClick={() => void unlinkProvider()}
-                type="button"
-              >
-                {pending ? "해제 중" : "연결 해제"}
-              </button>
-            </div>
-          </section>
-        </div>
+        <BottomSheet
+          backdropDisabled
+          backdropLabel="로그인 방법 연결 해제 창"
+          className={styles.dialog}
+          dialogProps={{ "aria-labelledby": unlinkTitleId }}
+          onClose={closeUnlinkDialog}
+          returnFocusRef={unlinkTriggerRef}
+        >
+          <span className={styles.dialogIcon} aria-hidden="true">
+            <Unlink size={20} />
+          </span>
+          <h3 id={unlinkTitleId}>{unlinkTarget.label} 연결을 해제할까요?</h3>
+          <p>
+            뉴앙 기록은 삭제되지 않지만, 다시 연결하기 전까지 이 방법으로
+            로그인할 수 없어요.
+          </p>
+          <div className={styles.dialogActions}>
+            <button
+              data-modal-initial-focus="true"
+              onClick={closeUnlinkDialog}
+              type="button"
+            >
+              유지하기
+            </button>
+            <button
+              disabled={pending !== null}
+              onClick={() => void unlinkProvider()}
+              type="button"
+            >
+              {pending ? "해제 중" : "연결 해제"}
+            </button>
+          </div>
+        </BottomSheet>
       ) : null}
     </section>
   );
@@ -487,10 +481,22 @@ function ProviderLogo({ provider }: { provider: AccountProvider }) {
   return (
     <span className={styles.providerLogo} data-provider="google">
       <svg aria-hidden="true" viewBox="0 0 24 24">
-        <path d="M21.35 12.23c0-.71-.06-1.23-.2-1.78H12v3.32h5.37a4.7 4.7 0 0 1-1.99 3.03l-.02.11 2.88 2.23.2.02c1.84-1.69 2.91-4.18 2.91-6.93Z" fill="#4285F4" />
-        <path d="M12 21.75c2.62 0 4.82-.86 6.43-2.59l-3.06-2.36c-.82.56-1.92.95-3.37.95-2.52 0-4.67-1.7-5.44-4.05l-.11.01-3 2.32-.04.1A9.72 9.72 0 0 0 12 21.75Z" fill="#34A853" />
-        <path d="M6.56 13.7A5.87 5.87 0 0 1 6.23 12c0-.59.11-1.16.32-1.7v-.12L3.5 7.82l-.1.05A9.74 9.74 0 0 0 2.25 12c0 1.49.42 2.89 1.16 4.13l3.15-2.43Z" fill="#FBBC05" />
-        <path d="M12 6.25c1.83 0 3.06.79 3.76 1.44l2.74-2.67A9.22 9.22 0 0 0 12 2.25a9.72 9.72 0 0 0-8.59 5.62l3.14 2.43C7.33 7.95 9.48 6.25 12 6.25Z" fill="#EB4335" />
+        <path
+          d="M21.35 12.23c0-.71-.06-1.23-.2-1.78H12v3.32h5.37a4.7 4.7 0 0 1-1.99 3.03l-.02.11 2.88 2.23.2.02c1.84-1.69 2.91-4.18 2.91-6.93Z"
+          fill="#4285F4"
+        />
+        <path
+          d="M12 21.75c2.62 0 4.82-.86 6.43-2.59l-3.06-2.36c-.82.56-1.92.95-3.37.95-2.52 0-4.67-1.7-5.44-4.05l-.11.01-3 2.32-.04.1A9.72 9.72 0 0 0 12 21.75Z"
+          fill="#34A853"
+        />
+        <path
+          d="M6.56 13.7A5.87 5.87 0 0 1 6.23 12c0-.59.11-1.16.32-1.7v-.12L3.5 7.82l-.1.05A9.74 9.74 0 0 0 2.25 12c0 1.49.42 2.89 1.16 4.13l3.15-2.43Z"
+          fill="#FBBC05"
+        />
+        <path
+          d="M12 6.25c1.83 0 3.06.79 3.76 1.44l2.74-2.67A9.22 9.22 0 0 0 12 2.25a9.72 9.72 0 0 0-8.59 5.62l3.14 2.43C7.33 7.95 9.48 6.25 12 6.25Z"
+          fill="#EB4335"
+        />
       </svg>
     </span>
   );
