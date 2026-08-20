@@ -28,9 +28,27 @@ npm run monitor:production:email
 
 `FEED_MEDIA_R2_ENABLED=true`일 때는 DB에 활성·accounted·ready 상태로 기록된 R2 객체를 최대 100개까지 모두 읽고, 현재 HMAC으로 서명한 private `HEAD`를 동시 4개 이하로 보낸다. 정확한 200·바이트 크기·이미지 MIME·`no-store`·same-site CORP·cache BYPASS가 모두 일치해야 통과한다. 누락·불일치·100개 초과는 카나리 확대를 막는 실패다. 이어 고정된 비존재 키에 서명된 private GET을 보내 Worker·현재 signing secret·R2 binding이 함께 404를 반환하고 같은 보안 헤더를 지키는지 확인한다. 영구 시험 객체나 DB 행은 만들지 않는다. 마지막으로 계정 범위의 `Account Analytics Read`와 `Workers R2 Storage Read`만 허용한 하나의 읽기 전용 토큰 `CLOUDFLARE_R2_ANALYTICS_API_TOKEN`으로 Cloudflare GraphQL Analytics와 `GET /accounts/{account_id}/r2/metrics`를 각각 한 번 조회한다. 대상 버킷 저장량과 DB ledger의 차이, 계정 전체 Standard 저장량, 무료 구간이 없는 Infrequent Access 사용, 계정 전체의 최근 31일 Class A/B 요청량, 알 수 없는 operation type, 401 요청량, 분석 데이터 신선도를 함께 확인한다. 토큰·서명 URL·Cloudflare 응답 본문·객체 경로는 출력하지 않으며 R2가 꺼져 있으면 Cloudflare 요청도 하지 않는다.
 
-`monitor:production:email`은 동일 점검을 실행하고 최종 결과를 `NUANG_MONITOR_EMAIL_TO`로 보낸다. 실패 또는 실행 오류는 10초 뒤 한 번 재확인하며, 메일은 최종 상태 한 통만 발송한다. 발송 네트워크 오류나 Resend 429·5xx는 같은 idempotency key로 한 번만 재시도해 중복을 방지한다. 자동화에서는 `npm run monitor:production:email -- --scheduled`를 사용하며 자동화 예약 시각인 매시 52분을 기준으로 회차를 계산한다. 실행 시작 시각의 분이 52보다 작으면 이전 시간의 `:52`, 52 이상이면 현재 시간의 `:52` 회차에 속한다. `pass`만 같은 회차·수신자의 프로세스 간 중복을 기존 발송으로 처리한다. `recovered`·`warn`·`fail`은 알림 유실 방지를 우선해 고정된 실행 시작 시각을 nonce로 사용하고 표시 분류, 정렬된 비정상 issue의 `status:id`, 수신자를 key에 함께 반영하므로 프로세스 간 중복 억제를 하지 않는다. Resend의 `invalid_idempotent_request`도 v3 `pass` 중복 scope에서만 발송 성공으로 처리하며 알림 scope, 다른 409, 해석할 수 없는 오류 응답은 실패-폐쇄한다. `concurrent_idempotent_requests`는 같은 본문과 key로 한 번만 재시도한 뒤 실패-폐쇄한다. 공급자 응답 본문이나 message는 출력하지 않는다. 수신자·발신자·답장 주소는 각각 `NUANG_MONITOR_EMAIL_TO`, `NUANG_MONITOR_EMAIL_FROM`, `NUANG_MONITOR_EMAIL_REPLY_TO`로 변경할 수 있고, 발신자는 인증된 `nuang.app` 하위 도메인만 허용한다. HTML과 plain text에는 집계된 운영 지표만 포함하며 환경변수, credential, 응답 본문, 사용자 정보는 넣지 않는다.
+`monitor:production:email`은 동일 점검을 실행하고 최종 결과를 `NUANG_MONITOR_EMAIL_TO`로 보낸다. 실패 또는 실행 오류는 10초 뒤 한 번 재확인하며, 메일은 최종 상태 한 통만 발송한다. 자식 모니터의 전체 실행 예산은 180초이고 출력은 1MB로 제한한다. 예산 초과는 `monitor_timeout`, 출력 초과는 `monitor_output_too_large`, 외부 signal은 `monitor_signal_*`, spawn 실패는 `monitor_spawn_*`로 구분한다. 종료 요청 후 5초 안에 자식이 끝나지 않으면 강제 종료하므로 래퍼가 영구 정체되지 않는다. 유일한 실패가 `monitor:execution`이면 이메일 제목과 배지는 `긴급`이 아니라 `점검 실패`로 표시하되, 실제 페이지·API·DB·queue 실패는 기존 `긴급`을 유지한다. 발송 네트워크 오류나 Resend 429·5xx는 같은 idempotency key로 한 번만 재시도해 중복을 방지한다. 자동화에서는 `npm run monitor:production:email -- --scheduled`를 사용하며 자동화 예약 시각인 매시 52분을 기준으로 회차를 계산한다. 실행 시작 시각의 분이 52보다 작으면 이전 시간의 `:52`, 52 이상이면 현재 시간의 `:52` 회차에 속한다. `pass`만 같은 회차·수신자의 프로세스 간 중복을 기존 발송으로 처리한다. `recovered`·`warn`·`fail`·`monitor-unavailable`은 알림 유실 방지를 우선해 고정된 실행 시작 시각을 nonce로 사용하고 표시 분류, 정렬된 비정상 issue의 `status:id`, 수신자를 key에 함께 반영하므로 프로세스 간 중복 억제를 하지 않는다. Resend의 `invalid_idempotent_request`도 v3 `pass` 중복 scope에서만 발송 성공으로 처리하며 알림 scope, 다른 409, 해석할 수 없는 오류 응답은 실패-폐쇄한다. `concurrent_idempotent_requests`는 같은 본문과 key로 한 번만 재시도한 뒤 실패-폐쇄한다. 공급자 응답 본문이나 message는 출력하지 않는다. 수신자·발신자·답장 주소는 각각 `NUANG_MONITOR_EMAIL_TO`, `NUANG_MONITOR_EMAIL_FROM`, `NUANG_MONITOR_EMAIL_REPLY_TO`로 변경할 수 있고, 발신자는 인증된 `nuang.app` 하위 도메인만 허용한다. HTML과 plain text에는 집계된 운영 지표만 포함하며 환경변수, credential, 응답 본문, 사용자 정보는 넣지 않는다.
 
-HTTP 응답이 임계값만 넘긴 `warn`이면 10초를 한 번만 기다린 뒤 해당 경로만 순차 재확인한다. 재확인에서 정상으로 돌아오면 일시적인 콜드 연결로 기록하고 정상 처리하며, 두 번 연속 느린 경로만 주의로 남긴다. 상태 코드·본문·보안 헤더 실패는 처음부터 `fail`이며 이 지연 확인으로 완화하지 않는다.
+HTTP 응답이 임계값만 넘긴 `warn`이면 10초를 한 번만 기다린 뒤 해당 경로만 동시 2개 이하로 재확인한다. 재확인에서 정상으로 돌아오면 일시적인 콜드 연결로 기록하고 정상 처리하며, 두 번 연속 느린 경로만 주의로 남긴다. 상태 코드·본문·보안 헤더 실패는 처음부터 `fail`이며 이 지연 확인으로 완화하지 않는다. 각 결과에는 `ttfb`, `transfer`, `total`, 검증한 응답 바이트가 분리되어 기록된다. `/api/feed`는 숫자 하나로 제한한 `Server-Timing: app;dur=...`을 제공하므로 `app`과 `total`의 차이로 서버 처리와 전송 지연을 구분한다. 헤더 전 실패는 `phase=headers`, 본문 읽기 실패는 `phase=body`로 표시하고, 임의의 Server-Timing 설명 문자열은 기록하지 않는다.
+
+## 매일 수동 비용·용량 체크리스트
+
+자동 SQL은 현재 프로젝트 내부 지표만 확인하므로 아래 항목은 같은 KST 날짜로 하루 한 번 기록한다. 값 자체가 아니라 사용량/현재 플랜 한도와 판정만 운영 기록에 남기며, 결제수단·계정 ID·사용자 목록은 캡처하거나 공유하지 않는다.
+
+| 서비스     | 확인 위치                  | 기록 항목                               | 주의 / 중단 기준                                              |
+| ---------- | -------------------------- | --------------------------------------- | ------------------------------------------------------------- |
+| Supabase   | Organization/Project Usage | Egress, MAU, 조직 전체 Storage, DB 크기 | 현재 플랜 한도의 70% 주의, 85% 확대 중단·요금제/감축 결정     |
+| Resend     | Usage                      | 일일·월간 발송량, 실패율                | 무료 한도 70% 주의, 85%에서 비필수 메일 중단 검토             |
+| Cloudflare | R2 Analytics/Billing       | Standard, IA, Class A/B, USD 비용       | IA 1개 이상 또는 70%에서 확대 중단, 85%에서 신규 R2 쓰기 중지 |
+
+기록 형식:
+
+```text
+YYYY-MM-DD KST | Supabase Egress __% / MAU __% / Storage __% | Resend day __% / month __% | R2 off 또는 Standard __% / A __% / B __% / IA 0 | 판정 pass|warn|stop
+```
+
+Supabase 대시보드 값이 갱신 지연·확인 불가이면 `pass`로 추정하지 않고 `manual_check_unavailable`로 남긴다. 고객 R2 쓰기는 Cloudflare 개인정보 회신과 고지 승인이 끝날 때까지 계속 비활성으로 유지한다.
 
 ## 판정 기준
 

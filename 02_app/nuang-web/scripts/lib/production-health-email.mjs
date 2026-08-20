@@ -30,6 +30,13 @@ const STATUS_PRESENTATION = Object.freeze({
     heading: "뉴앙 서비스가 안정적으로 운영 중이에요",
     subjectLabel: "정상",
   },
+  "monitor-unavailable": {
+    accent: "#7c571e",
+    badgeBackground: "#fff6df",
+    badgeText: "점검 실패",
+    heading: "서비스 상태를 확인하는 점검 도구가 완료되지 않았어요",
+    subjectLabel: "점검 실패",
+  },
   recovered: {
     accent: "#6658d7",
     badgeBackground: "#f0edff",
@@ -52,10 +59,16 @@ export function createMonitorEmailPayload({
   report,
 }) {
   const summary = summarizeProductionHealthReport(report);
+  const monitorUnavailable =
+    report.status === "fail" &&
+    report.checks.length === 1 &&
+    report.checks[0]?.id === "monitor:execution";
   const presentationKey =
     firstAttemptFailed && report.status === "pass"
       ? "recovered"
-      : report.status;
+      : monitorUnavailable
+        ? "monitor-unavailable"
+        : report.status;
   const presentation = STATUS_PRESENTATION[presentationKey];
   const formattedTime = formatKoreanDateTime(checkedAt);
   const issues = report.checks.filter((check) => check.status !== "pass");
@@ -66,8 +79,8 @@ export function createMonitorEmailPayload({
             (issue) => `
               <tr>
                 <td style="padding:0 0 10px">
-                  <div style="padding:14px 16px;border:1px solid ${issue.status === "fail" ? "#f3c9d0" : "#f0dfb5"};border-radius:14px;background:${issue.status === "fail" ? "#fff8f9" : "#fffbf2"}">
-                    <p style="margin:0 0 5px;color:${issue.status === "fail" ? "#a72f45" : "#8a5708"};font-size:12px;font-weight:800;letter-spacing:.03em">${issue.status === "fail" ? "긴급 확인" : "주의 확인"}</p>
+                  <div style="padding:14px 16px;border:1px solid ${issue.status === "fail" && !monitorUnavailable ? "#f3c9d0" : "#f0dfb5"};border-radius:14px;background:${issue.status === "fail" && !monitorUnavailable ? "#fff8f9" : "#fffbf2"}">
+                    <p style="margin:0 0 5px;color:${issue.status === "fail" && !monitorUnavailable ? "#a72f45" : "#8a5708"};font-size:12px;font-weight:800;letter-spacing:.03em">${issue.status === "fail" && !monitorUnavailable ? "긴급 확인" : monitorUnavailable ? "점검 도구 확인" : "주의 확인"}</p>
                     <p style="margin:0 0 4px;color:#302d39;font-size:14px;font-weight:750;line-height:1.5">${escapeHtml(issue.id)}</p>
                     <p style="margin:0;color:#6b6575;font-size:13px;line-height:1.65">${escapeHtml(issue.detail)}</p>
                   </div>

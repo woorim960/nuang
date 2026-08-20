@@ -1,7 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { POST } from "@/app/api/feed/route";
+import { GET, POST } from "@/app/api/feed/route";
+import { createFeedReadPayload } from "@/features/feed/feed-contract";
 import { uploadFeedPostMedia } from "@/features/feed/feed-media-server";
 import { createFeedCreateRequestHash } from "@/features/feed/server-feed-request-idempotency";
+import { createServerFeedReadPayload } from "@/features/feed/server-read";
 import { writeFeedRequestForAccount } from "@/features/feed/server-writes";
 
 const routeMocks = vi.hoisted(() => ({
@@ -192,6 +194,30 @@ describe("feed photo post route", () => {
       }),
     );
     expect(uploadFeedPostMedia).not.toHaveBeenCalled();
+  });
+});
+
+describe("feed read route timing", () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("reports only a bounded application duration in Server-Timing", async () => {
+    vi.mocked(createServerFeedReadPayload).mockResolvedValueOnce({
+      ...createFeedReadPayload(),
+      items: [],
+    });
+
+    const response = await GET();
+
+    expect(response.status).toBe(200);
+    expect(response.headers.get("server-timing")).toMatch(
+      /^app;dur=\d+(?:\.\d)$/,
+    );
+    expect(await response.json()).toMatchObject({
+      ok: true,
+      result: { items: [] },
+    });
   });
 });
 

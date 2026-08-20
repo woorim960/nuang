@@ -38,7 +38,7 @@
     "monitor:production": "node scripts/check-production-health.mjs",
     "monitor:production:test": "node --test scripts/test/production-health-monitor.test.mjs scripts/test/cloudflare-r2-usage-monitor.test.mjs scripts/test/cloudflare-r2-object-reconciliation.test.mjs",
     "monitor:production:email": "node scripts/send-production-health-email.mjs",
-    "monitor:production:email:test": "node --test scripts/test/production-health-email.test.mjs",
+    "monitor:production:email:test": "node --test scripts/test/production-health-email.test.mjs scripts/test/production-health-runner.test.mjs",
     "r2:worker:validate": "WRANGLER_WRITE_LOGS=false WRANGLER_SEND_METRICS=false wrangler deploy --dry-run --config cloudflare/feed-media-worker/wrangler.toml",
     "r2:worker:deploy": "WRANGLER_SEND_METRICS=false wrangler deploy --config cloudflare/feed-media-worker/wrangler.toml",
     "r2:smoke": "node scripts/smoke-feed-media-r2.mjs --execute",

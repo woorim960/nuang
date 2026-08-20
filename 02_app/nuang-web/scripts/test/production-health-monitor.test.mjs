@@ -100,6 +100,99 @@ test("HTTP probes cap request concurrency at two", async () => {
   assert.equal(maxActive, 2);
 });
 
+test("HTTP probes keep latency confirmations within the same concurrency cap", async () => {
+  let confirming = false;
+  let confirmationActive = 0;
+  let confirmationMaxActive = 0;
+  const probes = Array.from({ length: 5 }, (_, index) => ({
+    id: `slow-${index}`,
+    kind: "status",
+    path: `/slow-${index}`,
+    status: 200,
+  }));
+
+  const checks = await runHttpProbes({
+    concurrency: 2,
+    fetchImpl: async () => {
+      if (confirming) {
+        confirmationActive += 1;
+        confirmationMaxActive = Math.max(
+          confirmationMaxActive,
+          confirmationActive,
+        );
+        await new Promise((resolve) => setTimeout(resolve, 5));
+        confirmationActive -= 1;
+      }
+      return new Response("ok");
+    },
+    origin: "https://nuang.app",
+    probes,
+    thresholds: { httpFailMs: 60_000, httpWarnMs: 0 },
+    wait: async () => {
+      confirming = true;
+    },
+  });
+
+  assert.equal(
+    checks.every((check) => check.status === "warn"),
+    true,
+  );
+  assert.equal(confirmationMaxActive, 2);
+});
+
+test("HTTP probes distinguish body failures and expose transfer timing", async () => {
+  const healthy = await runHttpProbes({
+    fetchImpl: async () => new Response("ok"),
+    now: sequenceClock([0, 10, 14]),
+    origin: "https://nuang.app",
+    probes: [{ id: "healthy", kind: "status", path: "/healthy", status: 200 }],
+    thresholds: { httpFailMs: 60_000, httpWarnMs: 30_000 },
+  });
+
+  assert.equal(healthy[0].transferMs, 4);
+  assert.match(healthy[0].detail, /ttfb=10ms transfer=4ms total=14ms/);
+  assert.match(healthy[0].detail, /bytes=2/);
+
+  const bodyFailure = await runHttpProbes({
+    fetchImpl: async () => ({
+      headers: new Headers(),
+      status: 200,
+      text: async () => {
+        throw new DOMException("aborted", "AbortError");
+      },
+    }),
+    origin: "https://nuang.app",
+    probes: [
+      { id: "body-timeout", kind: "status", path: "/body", status: 200 },
+    ],
+    thresholds: { httpFailMs: 60_000, httpWarnMs: 30_000 },
+  });
+
+  assert.equal(bodyFailure[0].status, "fail");
+  assert.equal(
+    bodyFailure[0].detail,
+    "request failed (phase=body code=timeout)",
+  );
+});
+
+test("HTTP probes read only the numeric app Server-Timing metric", async () => {
+  const checks = await runHttpProbes({
+    fetchImpl: async () =>
+      new Response("ok", {
+        headers: {
+          "server-timing":
+            'db;dur=44, app;dur=123.46, private;desc="do-not-log"',
+        },
+      }),
+    origin: "https://nuang.app",
+    probes: [{ id: "timed", kind: "status", path: "/timed", status: 200 }],
+    thresholds: { httpFailMs: 60_000, httpWarnMs: 30_000 },
+  });
+
+  assert.match(checks[0].detail, /app=123\.5ms/);
+  assert.doesNotMatch(checks[0].detail, /private|do-not-log|db=/);
+});
+
 test("HTTP probes confirm a latency warning once before reporting it", async () => {
   const waits = [];
   const timings = [0, 2, 4, 10, 10.2, 10.4];
@@ -464,4 +557,9 @@ function queueChecks(report) {
       check.id,
     ),
   );
+}
+
+function sequenceClock(values) {
+  let cursor = 0;
+  return () => values[cursor++] ?? values.at(-1) ?? 0;
 }

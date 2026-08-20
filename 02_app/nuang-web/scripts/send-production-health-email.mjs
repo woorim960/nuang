@@ -1,13 +1,12 @@
-import { spawn } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
   createMonitorEmailPayload,
   createScheduledMonitorEmailIdempotencyScope,
   DEFAULT_MONITOR_EMAIL_CONFIG,
-  parseProductionHealthReport,
   sendMonitorEmailWithRetry,
 } from "./lib/production-health-email.mjs";
+import { runProductionHealthMonitor } from "./lib/production-health-runner.mjs";
 
 const executionStartedAt = new Date().toISOString();
 const args = new Set(process.argv.slice(2));
@@ -20,14 +19,14 @@ const env = {
 };
 const retryDelayMs = 10_000;
 
-const firstAttempt = await runMonitor();
+const firstAttempt = await runProductionHealthMonitor();
 const shouldRetry =
   !firstAttempt.report || firstAttempt.report.status === "fail";
 let finalAttempt = firstAttempt;
 
 if (shouldRetry) {
   await delay(retryDelayMs);
-  finalAttempt = await runMonitor();
+  finalAttempt = await runProductionHealthMonitor();
 }
 
 const report =
@@ -94,60 +93,6 @@ try {
   process.exitCode = 1;
 }
 
-async function runMonitor() {
-  const scriptPath = resolve("scripts/check-production-health.mjs");
-  return new Promise((resolveRun) => {
-    const child = spawn(process.execPath, [scriptPath, "--json"], {
-      cwd: process.cwd(),
-      env: process.env,
-      stdio: ["ignore", "pipe", "pipe"],
-    });
-    let stdout = "";
-    let overflow = false;
-    const timeout = setTimeout(() => {
-      child.kill("SIGTERM");
-    }, 90_000);
-
-    child.stdout.on("data", (chunk) => {
-      if (stdout.length + chunk.length > 1_000_000) {
-        overflow = true;
-        child.kill("SIGTERM");
-        return;
-      }
-      stdout += chunk.toString("utf8");
-    });
-    child.stderr.resume();
-    child.on("error", (error) => {
-      clearTimeout(timeout);
-      resolveRun({ errorCode: safeErrorCode(error), report: null });
-    });
-    child.on("close", (code, signal) => {
-      clearTimeout(timeout);
-      if (overflow) {
-        resolveRun({ errorCode: "monitor_output_too_large", report: null });
-        return;
-      }
-      const report = parseMonitorReport(stdout);
-      resolveRun({
-        errorCode: report
-          ? null
-          : signal
-            ? `monitor_signal_${signal}`
-            : `monitor_exit_${code ?? "unknown"}`,
-        report,
-      });
-    });
-  });
-}
-
-function parseMonitorReport(output) {
-  try {
-    return parseProductionHealthReport(JSON.parse(output.trim()));
-  } catch {
-    return null;
-  }
-}
-
 function createUnavailableReport(errorCode) {
   return {
     checkedAt: new Date().toISOString(),
@@ -195,6 +140,9 @@ function safeErrorCode(error) {
   const message = typeof error?.message === "string" ? error.message : "";
   if (/^monitor_email_[a-z0-9_]+$/.test(message)) return message;
   if (typeof error?.code === "string") return error.code;
-  if (typeof error?.name === "string") return error.name;
+  if (typeof error?.name === "string" && error.name !== "Error") {
+    return error.name;
+  }
+  if (error?.name === "Error") return "monitor_email_unavailable";
   return "unavailable";
 }

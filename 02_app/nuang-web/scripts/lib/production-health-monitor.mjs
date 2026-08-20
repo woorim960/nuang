@@ -129,29 +129,40 @@ export async function runHttpProbes({
 
   // A single cold connection or transient body-transfer stall should not page
   // the operator as a persistent customer-facing slowdown. Wait once, then
-  // recheck only the affected endpoints sequentially to keep probe load low.
+  // recheck only the affected endpoints with the same low concurrency bound.
+  // This keeps the total monitor budget finite when several routes are slow.
   await wait(confirmationDelayMs);
-  for (const index of warningIndexes) {
-    const first = checks[index];
-    const confirmation = await runHttpProbe({
-      fetchImpl,
-      normalizedOrigin,
-      now,
-      probe: probes[index],
-      thresholds,
-      timeoutMs,
-    });
-    checks[index] = {
-      ...confirmation,
-      detail: `first_total=${first.totalMs ?? "unknown"}ms retry_${confirmation.detail}${confirmation.status === "pass" ? " recovered=true" : ""}`,
-      ...(confirmation.status === "pass"
-        ? { firstTotalMs: first.totalMs }
-        : {
-            status: maxStatus(first.status, confirmation.status),
-            totalMs: Math.max(first.totalMs ?? 0, confirmation.totalMs ?? 0),
-          }),
-    };
+  let confirmationCursor = 0;
+  async function confirmationWorker() {
+    while (confirmationCursor < warningIndexes.length) {
+      const warningIndex = warningIndexes[confirmationCursor];
+      confirmationCursor += 1;
+      const first = checks[warningIndex];
+      const confirmation = await runHttpProbe({
+        fetchImpl,
+        normalizedOrigin,
+        now,
+        probe: probes[warningIndex],
+        thresholds,
+        timeoutMs,
+      });
+      checks[warningIndex] = {
+        ...confirmation,
+        detail: `first_total=${first.totalMs ?? "unknown"}ms retry_${confirmation.detail}${confirmation.status === "pass" ? " recovered=true" : ""}`,
+        ...(confirmation.status === "pass"
+          ? { firstTotalMs: first.totalMs }
+          : {
+              status: maxStatus(first.status, confirmation.status),
+              totalMs: Math.max(first.totalMs ?? 0, confirmation.totalMs ?? 0),
+            }),
+      };
+    }
   }
+  await Promise.all(
+    Array.from({ length: Math.min(workerCount, warningIndexes.length) }, () =>
+      confirmationWorker(),
+    ),
+  );
   return checks;
 }
 
@@ -166,6 +177,7 @@ async function runHttpProbe({
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   const startedAt = now();
+  let phase = "headers";
 
   try {
     const response = await fetchImpl(`${normalizedOrigin}${probe.path}`, {
@@ -175,12 +187,18 @@ async function runHttpProbe({
       signal: controller.signal,
     });
     const headersAt = now();
+    phase = "body";
     const validation = await validateResponseBody(response, probe.kind);
     const completedAt = now();
     const ttfbMs = Math.round(headersAt - startedAt);
+    const transferMs = Math.round(completedAt - headersAt);
     const totalMs = Math.round(completedAt - startedAt);
     const statusMatches = response.status === probe.status;
     const cacheControl = response.headers.get("cache-control") ?? "";
+    const applicationDurationMs = readServerTimingDuration(
+      response.headers.get("server-timing"),
+      "app",
+    );
     const cacheMatches =
       !probe.cacheNoStore || cacheControl.toLowerCase().includes("no-store");
     const latencyStatus = classifyUpperBound(
@@ -197,7 +215,11 @@ async function runHttpProbe({
       detail: [
         `http=${response.status}`,
         `ttfb=${ttfbMs}ms`,
+        `transfer=${transferMs}ms`,
         `total=${totalMs}ms`,
+        applicationDurationMs === null
+          ? null
+          : `app=${applicationDurationMs}ms`,
         validation.detail,
         probe.cacheNoStore
           ? `cache=${cacheMatches ? "no-store" : "unsafe"}`
@@ -209,10 +231,11 @@ async function runHttpProbe({
       status,
       totalMs,
       ttfbMs,
+      transferMs,
     };
   } catch (error) {
     return {
-      detail: `request failed (${safeErrorCode(error)})`,
+      detail: `request failed (phase=${phase} code=${safeErrorCode(error)})`,
       id: `http:${probe.id}`,
       status: "fail",
     };
@@ -584,24 +607,31 @@ function marketingSuppressionReason(queues) {
 }
 
 async function validateResponseBody(response, kind) {
+  const body = await response.text();
+  const bytes = Buffer.byteLength(body);
+
   if (kind === "feed-json") {
-    const payload = await response.json().catch(() => null);
+    let payload = null;
+    try {
+      payload = JSON.parse(body);
+    } catch {
+      return { detail: `bytes=${bytes} invalid_feed_json`, ok: false };
+    }
     return {
       detail: Array.isArray(payload?.result?.items)
-        ? `items=${payload.result.items.length}`
-        : "invalid_feed_payload",
+        ? `bytes=${bytes} items=${payload.result.items.length}`
+        : `bytes=${bytes} invalid_feed_payload`,
       ok: Array.isArray(payload?.result?.items),
     };
   }
 
-  const body = await response.text().catch(() => "");
   if (kind === "html") {
     return {
-      detail: `bytes=${Buffer.byteLength(body)}`,
+      detail: `bytes=${bytes}`,
       ok: body.length >= 500 && /<!doctype html/i.test(body),
     };
   }
-  return { detail: null, ok: body.length >= 0 };
+  return { detail: `bytes=${bytes}`, ok: true };
 }
 
 function isLocalHttp(url) {
@@ -638,6 +668,24 @@ function toFiniteNumber(value) {
 function safeErrorCode(error) {
   if (error?.name === "AbortError") return "timeout";
   return typeof error?.code === "string" ? error.code : "unavailable";
+}
+
+function readServerTimingDuration(value, metricName) {
+  if (typeof value !== "string" || value.length > 1_000) return null;
+  const metric = value
+    .split(",")
+    .map((entry) => entry.trim())
+    .find((entry) => entry.startsWith(`${metricName};`));
+  if (!metric) return null;
+  const duration = metric
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith("dur="));
+  if (!duration || !/^dur=\d+(?:\.\d+)?$/.test(duration)) return null;
+  const parsed = Number(duration.slice(4));
+  return Number.isFinite(parsed) && parsed >= 0
+    ? Math.round(parsed * 10) / 10
+    : null;
 }
 
 function formatBytes(value) {

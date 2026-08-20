@@ -24,10 +24,18 @@ import { isAllowedGateCRequest } from "@/features/research/gate-c/gate-c-server-
 import { NextResponse } from "next/server";
 
 export async function GET() {
-  return Response.json({
-    ok: true,
-    result: await createServerFeedReadPayload(),
-  });
+  const startedAt = performance.now();
+  const result = await createServerFeedReadPayload();
+  const applicationDurationMs = Math.max(0, performance.now() - startedAt);
+
+  return Response.json(
+    { ok: true, result },
+    {
+      headers: {
+        "server-timing": `app;dur=${applicationDurationMs.toFixed(1)}`,
+      },
+    },
+  );
 }
 
 export async function POST(request: Request) {

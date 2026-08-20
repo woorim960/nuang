@@ -57,6 +57,28 @@ test("a recovered retry is presented separately from a clean pass", () => {
   assert.equal(rendered.presentationKey, "recovered");
 });
 
+test("monitor execution failure is distinct from a customer-facing outage", () => {
+  const rendered = createMonitorEmailPayload({
+    report: {
+      checkedAt: "2026-08-21T01:00:00.000Z",
+      checks: [
+        {
+          detail: "monitor execution unavailable (monitor_timeout)",
+          id: "monitor:execution",
+          status: "fail",
+        },
+      ],
+      counts: { fail: 1, pass: 0, warn: 0 },
+      status: "fail",
+    },
+  });
+
+  assert.match(rendered.subject, /^\[뉴앙 운영\] 점검 실패/);
+  assert.match(rendered.html, /점검 도구 확인/);
+  assert.doesNotMatch(rendered.html, /긴급 확인/);
+  assert.equal(rendered.presentationKey, "monitor-unavailable");
+});
+
 test("delivery uses the Nuang sender, recipient, and an idempotency key", async () => {
   let request = null;
   const payload = createMonitorEmailPayload({ report: healthyReport() });
@@ -114,7 +136,7 @@ test("scheduled entrypoint freezes its start before setup and monitoring", () =>
   const startCaptureIndex = source.indexOf("const executionStartedAt");
   const environmentSetupIndex = source.indexOf("const env =");
   const monitorStartIndex = source.indexOf(
-    "const firstAttempt = await runMonitor()",
+    "const firstAttempt = await runProductionHealthMonitor()",
   );
 
   assert.notEqual(startCaptureIndex, -1);
