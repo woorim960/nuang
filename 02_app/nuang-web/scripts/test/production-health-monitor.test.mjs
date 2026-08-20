@@ -150,6 +150,8 @@ test("HTTP probes distinguish body failures and expose transfer timing", async (
   });
 
   assert.equal(healthy[0].transferMs, 4);
+  assert.equal(healthy[0].bytes, 2);
+  assert.equal(healthy[0].httpStatus, 200);
   assert.match(healthy[0].detail, /ttfb=10ms transfer=4ms total=14ms/);
   assert.match(healthy[0].detail, /bytes=2/);
 
@@ -190,6 +192,7 @@ test("HTTP probes read only the numeric app Server-Timing metric", async () => {
   });
 
   assert.match(checks[0].detail, /app=123\.5ms/);
+  assert.equal(checks[0].applicationDurationMs, 123.5);
   assert.doesNotMatch(checks[0].detail, /private|do-not-log|db=/);
 });
 
@@ -218,6 +221,7 @@ test("HTTP probes confirm a latency warning once before reporting it", async () 
   assert.deepEqual(waits, [10_000]);
   assert.equal(checks[0].status, "pass");
   assert.equal(checks[0].firstTotalMs, 4);
+  assert.equal(checks[0].totalMs, 0);
   assert.match(checks[0].detail, /recovered=true/);
 });
 

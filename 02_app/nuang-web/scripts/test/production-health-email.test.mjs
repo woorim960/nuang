@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
+  createMonitorExecutionObservation,
   createMonitorEmailIdempotencyKey,
   createMonitorEmailPayload,
   createScheduledMonitorEmailIdempotencyScope,
@@ -20,6 +21,42 @@ test("healthy report renders a branded Korean HTML and text email", () => {
   assert.match(rendered.html, /48\.2 MB \/ 500 MB/);
   assert.match(rendered.text, /가장 느린 응답: 754ms/);
   assert.equal(rendered.presentationKey, "pass");
+  assert.deepEqual(rendered.summary.feedApi, {
+    appMs: 320.4,
+    firstTotalMs: null,
+    httpStatus: 200,
+    status: "pass",
+    totalMs: 754,
+    transferMs: 14,
+    ttfbMs: 740,
+  });
+});
+
+test("automation observation exposes only safe monitor execution codes", () => {
+  assert.deepEqual(
+    createMonitorExecutionObservation({
+      finalAttemptErrorCode: "monitor_timeout",
+      firstAttemptErrorCode: "credential=do-not-log",
+    }),
+    {
+      finalAttemptErrorCode: "monitor_timeout",
+      firstAttemptErrorCode: null,
+    },
+  );
+});
+
+test("summary keeps the first slow sample when a latency retry recovers", () => {
+  const report = healthyReport();
+  const feedApi = report.checks.find((check) => check.id === "http:feed-api");
+  feedApi.firstTotalMs = 1_250;
+  feedApi.totalMs = 620;
+
+  const rendered = createMonitorEmailPayload({ report });
+
+  assert.equal(rendered.summary.maxHttpTotalMs, 1_250);
+  assert.equal(rendered.summary.feedApi.firstTotalMs, 1_250);
+  assert.equal(rendered.summary.feedApi.totalMs, 620);
+  assert.match(rendered.text, /가장 느린 응답: 1250ms/);
 });
 
 test("warning and failure details are escaped and visible", () => {
@@ -440,6 +477,16 @@ test("malformed monitor reports fail closed before rendering or delivery", () =>
     counts: { fail: 0, pass: 1, warn: 0 },
   });
   expectInvalid({ ...healthyReport(), status: "warn" });
+  for (const invalidFields of [
+    { applicationDurationMs: "320.4" },
+    { bytes: 1.5 },
+    { httpStatus: 700 },
+    { totalMs: Number.POSITIVE_INFINITY },
+  ]) {
+    const report = healthyReport();
+    report.checks[1] = { ...report.checks[1], ...invalidFields };
+    expectInvalid(report);
+  }
   assert.equal(parseProductionHealthReport(healthyReport())?.status, "pass");
 });
 
@@ -478,10 +525,15 @@ function healthyReport() {
         totalMs: 548,
       },
       {
-        detail: "http=200 ttfb=70ms total=754ms items=0",
+        applicationDurationMs: 320.4,
+        detail:
+          "http=200 ttfb=740ms transfer=14ms total=754ms app=320.4ms items=0",
+        httpStatus: 200,
         id: "http:feed-api",
         status: "pass",
         totalMs: 754,
+        transferMs: 14,
+        ttfbMs: 740,
       },
       {
         detail: "48.2 MB / 500 MB",

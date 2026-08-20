@@ -1,6 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import {
+  createMonitorExecutionObservation,
   createMonitorEmailPayload,
   createScheduledMonitorEmailIdempotencyScope,
   DEFAULT_MONITOR_EMAIL_CONFIG,
@@ -35,6 +36,10 @@ const rendered = createMonitorEmailPayload({
   checkedAt: report.checkedAt,
   firstAttemptFailed: shouldRetry && report.status === "pass",
   report,
+});
+const execution = createMonitorExecutionObservation({
+  finalAttemptErrorCode: finalAttempt.errorCode,
+  firstAttemptErrorCode: firstAttempt.errorCode,
 });
 const deliveryPayload = {
   checkedAt: report.checkedAt,
@@ -71,6 +76,7 @@ try {
       checkedAt: report.checkedAt,
       deduplicated: delivery.deduplicated,
       delivery: "sent",
+      execution,
       firstAttemptFailed: shouldRetry,
       issues: report.checks
         .filter((check) => check.status !== "pass")
@@ -86,6 +92,7 @@ try {
       checkedAt: report.checkedAt,
       delivery: "failed",
       errorCode: safeErrorCode(error),
+      execution,
       status: report.status,
       summary: rendered.summary,
     }),

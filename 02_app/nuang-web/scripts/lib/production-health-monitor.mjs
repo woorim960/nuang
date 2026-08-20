@@ -149,12 +149,10 @@ export async function runHttpProbes({
       checks[warningIndex] = {
         ...confirmation,
         detail: `first_total=${first.totalMs ?? "unknown"}ms retry_${confirmation.detail}${confirmation.status === "pass" ? " recovered=true" : ""}`,
+        firstTotalMs: first.totalMs,
         ...(confirmation.status === "pass"
-          ? { firstTotalMs: first.totalMs }
-          : {
-              status: maxStatus(first.status, confirmation.status),
-              totalMs: Math.max(first.totalMs ?? 0, confirmation.totalMs ?? 0),
-            }),
+          ? {}
+          : { status: maxStatus(first.status, confirmation.status) }),
       };
     }
   }
@@ -212,6 +210,8 @@ async function runHttpProbe({
         : latencyStatus;
 
     return {
+      applicationDurationMs,
+      bytes: validation.bytes,
       detail: [
         `http=${response.status}`,
         `ttfb=${ttfbMs}ms`,
@@ -228,6 +228,7 @@ async function runHttpProbe({
         .filter(Boolean)
         .join(" "),
       id: `http:${probe.id}`,
+      httpStatus: response.status,
       status,
       totalMs,
       ttfbMs,
@@ -615,9 +616,14 @@ async function validateResponseBody(response, kind) {
     try {
       payload = JSON.parse(body);
     } catch {
-      return { detail: `bytes=${bytes} invalid_feed_json`, ok: false };
+      return {
+        bytes,
+        detail: `bytes=${bytes} invalid_feed_json`,
+        ok: false,
+      };
     }
     return {
+      bytes,
       detail: Array.isArray(payload?.result?.items)
         ? `bytes=${bytes} items=${payload.result.items.length}`
         : `bytes=${bytes} invalid_feed_payload`,
@@ -627,11 +633,12 @@ async function validateResponseBody(response, kind) {
 
   if (kind === "html") {
     return {
+      bytes,
       detail: `bytes=${bytes}`,
       ok: body.length >= 500 && /<!doctype html/i.test(body),
     };
   }
-  return { detail: `bytes=${bytes}`, ok: true };
+  return { bytes, detail: `bytes=${bytes}`, ok: true };
 }
 
 function isLocalHttp(url) {

@@ -32,6 +32,12 @@ npm run monitor:production:email
 
 HTTP 응답이 임계값만 넘긴 `warn`이면 10초를 한 번만 기다린 뒤 해당 경로만 동시 2개 이하로 재확인한다. 재확인에서 정상으로 돌아오면 일시적인 콜드 연결로 기록하고 정상 처리하며, 두 번 연속 느린 경로만 주의로 남긴다. 상태 코드·본문·보안 헤더 실패는 처음부터 `fail`이며 이 지연 확인으로 완화하지 않는다. 각 결과에는 `ttfb`, `transfer`, `total`, 검증한 응답 바이트가 분리되어 기록된다. `/api/feed`는 숫자 하나로 제한한 `Server-Timing: app;dur=...`을 제공하므로 `app`과 `total`의 차이로 서버 처리와 전송 지연을 구분한다. 헤더 전 실패는 `phase=headers`, 본문 읽기 실패는 `phase=body`로 표시하고, 임의의 Server-Timing 설명 문자열은 기록하지 않는다.
 
+예약 이메일 명령의 최종 JSON은 정상 회차에도 `summary.feedApi`를 포함한다. 필드는
+`status`, `httpStatus`, `appMs`, `ttfbMs`, `transferMs`, `totalMs`,
+`firstTotalMs`이며 값이 없으면 `null`이다. `execution.firstAttemptErrorCode`와
+`execution.finalAttemptErrorCode`는 허용된 `monitor_*` 코드만 제공한다. 자동화는 이
+구조화 필드만 사용해 추세를 집계하고 `detail` 문자열이나 응답 본문을 재파싱하지 않는다.
+
 ## 매일 수동 비용·용량 체크리스트
 
 자동 SQL은 현재 프로젝트 내부 지표만 확인하므로 아래 항목은 같은 KST 날짜로 하루 한 번 기록한다. 값 자체가 아니라 사용량/현재 플랜 한도와 판정만 운영 기록에 남기며, 결제수단·계정 ID·사용자 목록은 캡처하거나 공유하지 않는다.

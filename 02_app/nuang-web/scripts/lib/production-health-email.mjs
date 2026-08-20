@@ -191,8 +191,11 @@ export function summarizeProductionHealthReport(report) {
     check.id.startsWith("http:"),
   );
   const httpTotalValues = httpChecks
-    .map((check) => Number(check.totalMs))
-    .filter(Number.isFinite);
+    .flatMap((check) => [check.totalMs, check.firstTotalMs])
+    .filter(
+      (value) =>
+        typeof value === "number" && Number.isFinite(value) && value >= 0,
+    );
   const maxHttpTotalMs =
     httpTotalValues.length > 0 ? Math.max(...httpTotalValues) : null;
   const databaseSize =
@@ -201,15 +204,29 @@ export function summarizeProductionHealthReport(report) {
   const databaseConnections =
     report.checks.find((check) => check.id === "database:connections")
       ?.detail ?? "확인 불가";
+  const feedApi = summarizeHttpCheck(
+    report.checks.find((check) => check.id === "http:feed-api"),
+  );
 
   return {
     databaseConnections,
     databaseSize,
     failCount: report.counts.fail,
+    feedApi,
     maxHttpDisplay:
       maxHttpTotalMs === null ? "확인 불가" : `${maxHttpTotalMs}ms`,
     maxHttpTotalMs,
     warnCount: report.counts.warn,
+  };
+}
+
+export function createMonitorExecutionObservation({
+  finalAttemptErrorCode,
+  firstAttemptErrorCode,
+}) {
+  return {
+    finalAttemptErrorCode: safeMonitorExecutionCode(finalAttemptErrorCode),
+    firstAttemptErrorCode: safeMonitorExecutionCode(firstAttemptErrorCode),
   };
 }
 
@@ -237,8 +254,28 @@ export function parseProductionHealthReport(value) {
       typeof check.detail === "string" &&
       check.detail.length <= 2_000 &&
       ["pass", "warn", "fail"].includes(check.status) &&
-      (check.totalMs === undefined ||
-        (Number.isFinite(Number(check.totalMs)) && Number(check.totalMs) >= 0)),
+      [
+        "applicationDurationMs",
+        "firstTotalMs",
+        "totalMs",
+        "transferMs",
+        "ttfbMs",
+      ].every(
+        (key) =>
+          check[key] === undefined ||
+          check[key] === null ||
+          (typeof check[key] === "number" &&
+            Number.isFinite(check[key]) &&
+            check[key] >= 0),
+      ) &&
+      (check.bytes === undefined ||
+        check.bytes === null ||
+        (Number.isSafeInteger(check.bytes) && check.bytes >= 0)) &&
+      (check.httpStatus === undefined ||
+        check.httpStatus === null ||
+        (Number.isInteger(check.httpStatus) &&
+          check.httpStatus >= 100 &&
+          check.httpStatus <= 599)),
   );
   if (!checksValid) return null;
 
@@ -258,6 +295,31 @@ export function parseProductionHealthReport(value) {
   }
 
   return value;
+}
+
+function summarizeHttpCheck(check) {
+  if (!check) return null;
+  return {
+    appMs: safeObservationNumber(check.applicationDurationMs),
+    firstTotalMs: safeObservationNumber(check.firstTotalMs),
+    httpStatus: safeObservationNumber(check.httpStatus),
+    status: check.status,
+    totalMs: safeObservationNumber(check.totalMs),
+    transferMs: safeObservationNumber(check.transferMs),
+    ttfbMs: safeObservationNumber(check.ttfbMs),
+  };
+}
+
+function safeObservationNumber(value) {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0
+    ? value
+    : null;
+}
+
+function safeMonitorExecutionCode(value) {
+  return typeof value === "string" && /^monitor_[A-Za-z0-9_]+$/.test(value)
+    ? value
+    : null;
 }
 
 export async function sendMonitorEmail({
