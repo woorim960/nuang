@@ -1,5 +1,11 @@
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { createHmac } from "node:crypto";
+import { deflateRawSync } from "node:zlib";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { readPublicShareToken } from "@/features/share/public-share-server";
+import {
+  buildCoreReportShareContent,
+  type ReportShareContent,
+} from "@/features/share/report-share-contract";
 
 const browserAuthMocks = vi.hoisted(() => ({
   userId: null as string | null,
@@ -38,9 +44,30 @@ describe("public share server read", () => {
   beforeEach(() => {
     browserAuthMocks.userId = null;
     serviceMocks.client = null;
+    vi.stubEnv("SHARE_TOKEN_PEPPER", "public-share-guest-test-pepper");
   });
 
-  it("resolves an active token without requiring a public profile", async () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it("closes an already-issued g1 core token instead of rendering it", async () => {
+    const issuedAt = new Date();
+    const coreContent = buildCoreReportShareContent({
+      code: "ENAKQ",
+      highlights: ["혼자 정리한 뒤 대화를 시작해요"],
+      profileName: "차분한 탐색가",
+      resultLabel: "나의 뉴앙 코드 결과",
+      summary: "생각을 충분히 정리한 뒤 움직이는 편이에요.",
+    });
+    const token = createPreviouslyIssuedGuestToken(coreContent, issuedAt);
+
+    await expect(readPublicShareToken(token)).resolves.toEqual({
+      status: "closed",
+    });
+  });
+
+  it("hides a catalog-active account core token while the exact allowlist is empty", async () => {
     serviceMocks.client = createMockShareClient({
       attempt: { completed_at: "2026-07-04T00:00:00.000Z" },
       report: {
@@ -61,13 +88,9 @@ describe("public share server read", () => {
       },
     });
 
-    const result = await readPublicShareToken("public-token");
-
-    expect(result.status).toBe("active");
-    if (result.status !== "active" || result.shareKind !== "account_core") return;
-    expect(result.model.result.code).toBe("ENAKQ");
-    expect(result.model.result.domains).toEqual([]);
-    expect(result.model.identity.originResultId).toBeNull();
+    await expect(readPublicShareToken("public-token")).resolves.toEqual({
+      status: "not_found",
+    });
   });
 
   it.each([
@@ -193,16 +216,16 @@ function createMockShareClient({
                         },
                         error: null,
                       }
-                : key === "assessment.assessment_attempt"
-                  ? { data: attempt, error: null }
-                  : key === "identity.auth_identity"
-                    ? { data: identity, error: null }
-                    : key === "feed.profile_block"
-                      ? { data: block, error: blockError }
-                      : {
-                          data: null,
-                          error: { message: `Unexpected table ${key}` },
-                        };
+                    : key === "assessment.assessment_attempt"
+                      ? { data: attempt, error: null }
+                      : key === "identity.auth_identity"
+                        ? { data: identity, error: null }
+                        : key === "feed.profile_block"
+                          ? { data: block, error: blockError }
+                          : {
+                              data: null,
+                              error: { message: `Unexpected table ${key}` },
+                            };
           const builder = {
             eq: () => builder,
             is: () => builder,
@@ -229,4 +252,26 @@ function createShare(
     status: "active",
     ...override,
   };
+}
+
+function createPreviouslyIssuedGuestToken(
+  content: ReportShareContent,
+  issuedAt: Date,
+) {
+  const issuedAtSeconds = Math.floor(issuedAt.getTime() / 1_000);
+  const payload = deflateRawSync(
+    Buffer.from(
+      JSON.stringify({
+        content,
+        expiresAt: issuedAtSeconds + 180 * 24 * 60 * 60,
+        issuedAt: issuedAtSeconds,
+        version: 1,
+      }),
+      "utf8",
+    ),
+  ).toString("base64url");
+  const signature = createHmac("sha256", "public-share-guest-test-pepper")
+    .update(`nuang:guest-report-share:v1:${payload}`)
+    .digest("base64url");
+  return `g1.${payload}.${signature}`;
 }

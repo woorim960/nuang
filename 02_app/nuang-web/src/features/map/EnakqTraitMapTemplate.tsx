@@ -4,6 +4,7 @@ import { ArrowLeft, Check, ChevronDown, ExternalLink, X } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
 import { candidateAxisCopy } from "@/features/nuang-code/candidate-profile-names";
 import type {
   TraitMapCustomerGuide,
@@ -23,6 +24,7 @@ export function TraitMapDetailTemplate({
   editor,
   embedded = false,
   guide,
+  showLegacyBetaNotice = false,
 }: {
   editor?: Readonly<{
     activeRevisionCount: number;
@@ -32,6 +34,7 @@ export function TraitMapDetailTemplate({
   }>;
   embedded?: boolean;
   guide: TraitMapCustomerGuide;
+  showLegacyBetaNotice?: boolean;
 }) {
   const [renderedGuide, setRenderedGuide] = useState(guide);
   const [sessionEditedUnitKeys, setSessionEditedUnitKeys] = useState<
@@ -295,6 +298,13 @@ export function TraitMapDetailTemplate({
         <span>성향지도 상세</span>
         <span aria-hidden="true" className={styles.headerSpacer} />
       </header>
+
+      {showLegacyBetaNotice ? (
+        <LegacyCoreBetaNotice
+          className={styles.legacyBetaNotice}
+          context="map"
+        />
+      ) : null}
 
       <section className={styles.hero}>
         <div className={styles.heroCopy}>

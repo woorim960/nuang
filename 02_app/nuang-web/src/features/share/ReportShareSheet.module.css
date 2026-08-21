@@ -190,6 +190,34 @@
   margin-top: 0.8rem;
 }
 
+.containmentNotice {
+  margin-top: 0.8rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--nu-color-border-soft);
+  border-radius: 14px;
+  background: var(--nu-color-surface-muted);
+}
+
+.containmentNotice strong,
+.containmentNotice p {
+  display: block;
+  margin: 0;
+  word-break: keep-all;
+}
+
+.containmentNotice strong {
+  color: var(--nu-color-text);
+  font-size: var(--nu-text-label);
+  line-height: 1.45;
+}
+
+.containmentNotice p {
+  margin-top: 0.38rem;
+  color: var(--nu-color-text-secondary);
+  font-size: var(--nu-text-caption);
+  line-height: 1.55;
+}
+
 .kakaoAction {
   display: flex;
   width: 100%;

@@ -15,6 +15,7 @@ import {
   readAccountTraitProfile,
   rebuildAccountTraitProfile,
 } from "@/features/assessment/server-account-trait-profile";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import { createServerOwnFeedItems } from "@/features/feed/server-read";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { readOriginalProfileReportSummaries } from "@/features/public-profile/server-profile-reports";
@@ -93,12 +94,25 @@ export async function readSelfProfilePayload({
       : { followers: null, following: null, posts: null, reports: null };
   const publicSnapshotId =
     snapshotRead.status === "fulfilled" ? snapshotRead.value : null;
+  const representativeResults = accountResults.filter((result) =>
+    canPromoteCoreResultToRepresentative({
+      assessmentReleaseId: result.versionBundle?.assessmentReleaseId,
+    }),
+  );
   const representativeResult =
-    accountResults.find((result) => result.kind === "full") ??
-    accountResults[0] ??
+    representativeResults.find((result) => result.kind === "full") ??
+    representativeResults[0] ??
     null;
-  const dynamicTraitProfile =
+  const storedTraitProfile =
     traitProfileRead.status === "fulfilled" ? traitProfileRead.value : null;
+  const dynamicTraitProfile =
+    storedTraitProfile &&
+    representativeResults.some(
+      (result) =>
+        result.resultReportId === storedTraitProfile.baseResultReportId,
+    )
+      ? storedTraitProfile
+      : null;
   const trait = dynamicTraitProfile
     ? {
         code: dynamicTraitProfile.code,

@@ -64,12 +64,14 @@ describe("free topic results API", () => {
         "facet:SE-AI": 50,
       },
       scoringVersion: "server-v2-missing-aware",
-      traitImpactSnapshot: {
-        degree: "none",
-        state: "no_baseline",
-        version: "topic-trait-impact.v1",
-      },
     });
+    expect(mock.captured.upsertRow).toMatchObject({
+      profile_code_at_completion: null,
+    });
+    expect(
+      (mock.captured.upsertRow?.evidence_payload as Record<string, unknown>)
+        .traitImpactSnapshot,
+    ).toBeUndefined();
     expect(JSON.stringify(mock.captured.upsertRow)).not.toContain(
       "조작된 결과",
     );
@@ -117,7 +119,7 @@ describe("free topic results API", () => {
     ).toEqual({ "facet:RO-EC": 50 });
   });
 
-  it("freezes the owner's Nuang code with the topic report", async () => {
+  it("does not persist or expose a core code with a topic report", async () => {
     const mock = createMockClient({
       coreRows: [
         {
@@ -134,12 +136,9 @@ describe("free topic results API", () => {
 
     expect(response.status).toBe(200);
     expect(mock.captured.upsertRow).toMatchObject({
-      profile_code_at_completion: "INGMC",
+      profile_code_at_completion: null,
     });
-    expect(body.result.nuangCodeContext).toEqual({
-      capturedAt: "2026-07-28T00:01:00.000Z",
-      code: "INGMC",
-    });
+    expect(body.result.nuangCodeContext).toBeUndefined();
     expect(
       (
         mock.captured.upsertRow?.evidence_payload as {
@@ -147,65 +146,28 @@ describe("free topic results API", () => {
             nuangCodeSection?: { title?: string };
           };
         }
-      ).reportSnapshot?.nuangCodeSection?.title,
-    ).toContain("INGMC");
+      ).reportSnapshot?.nuangCodeSection,
+    ).toBeUndefined();
   });
 
-  it("freezes the before and after trait profile used for this result", async () => {
+  it("keeps topic persistence independent from the account trait profile", async () => {
     const mock = createMockClient({ coreRows: [createDynamicCoreRow()] });
     routeMocks.serviceClient = mock.client;
 
     const response = await POST(jsonRequest(createPayload()));
     const body = await response.json();
-    const snapshot = (
-      mock.captured.upsertRow?.evidence_payload as {
-        traitImpactSnapshot?: {
-          after?: {
-            code?: string;
-            domains?: Array<{
-              domainId: string;
-              score: number;
-              symbol: string;
-            }>;
-          };
-          before?: { code?: string; domains?: unknown[] };
-          state?: string;
-        };
-      }
-    ).traitImpactSnapshot;
 
     expect(response.status).toBe(200);
-    expect(snapshot).toMatchObject({
-      after: { code: expect.any(String), domains: expect.any(Array) },
-      before: { code: "ENAKQ", domains: expect.any(Array) },
-      state: "insufficient_evidence",
-    });
-    expect(body.result.traitImpactSnapshot).toEqual(snapshot);
-    expect(mock.captured.profileUpsertRow).toMatchObject({
-      account_id: "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa",
-      profile_code: snapshot?.after?.code,
-    });
     expect(
-      (
-        mock.captured.profileUpsertRow?.domains as Array<{
-          domainId: string;
-          score: number;
-          symbol: string;
-        }>
-      ).map(({ domainId, score, symbol }) => ({ domainId, score, symbol })),
-    ).toEqual(
-      snapshot?.after?.domains?.map((domain) => ({
-        domainId: domain.domainId,
-        score: domain.score,
-        symbol: domain.symbol,
-      })),
-    );
-    expect(mock.captured.upsertRow?.profile_code_at_completion).toBe(
-      snapshot?.after?.code,
-    );
+      (mock.captured.upsertRow?.evidence_payload as Record<string, unknown>)
+        .traitImpactSnapshot,
+    ).toBeUndefined();
+    expect(body.result.traitImpactSnapshot).toBeUndefined();
+    expect(mock.captured.profileUpsertRow).toBeNull();
+    expect(mock.captured.upsertRow?.profile_code_at_completion).toBeNull();
   });
 
-  it("keeps the local result queued when the current trait profile cannot be persisted", async () => {
+  it("does not let an unrelated profile write failure block topic storage", async () => {
     const mock = createMockClient({
       coreRows: [createDynamicCoreRow()],
       profileUpsertError: true,
@@ -215,18 +177,12 @@ describe("free topic results API", () => {
     const response = await POST(jsonRequest(createPayload()));
     const body = await response.json();
 
-    expect(response.status).toBe(503);
-    expect(body.error).toBe("account_trait_profile_write_failed");
-    expect(
-      (
-        mock.captured.upsertRow?.evidence_payload as {
-          traitImpactSnapshot?: { state?: string };
-        }
-      ).traitImpactSnapshot?.state,
-    ).toBe("insufficient_evidence");
+    expect(response.status).toBe(200);
+    expect(body.ok).toBe(true);
+    expect(mock.captured.profileUpsertRow).toBeNull();
   });
 
-  it("repairs the current trait profile when a completed result is retried", async () => {
+  it("returns the archived topic result on retry without rebuilding a profile", async () => {
     const mock = createMockClient({ coreRows: [createDynamicCoreRow()] });
     routeMocks.serviceClient = mock.client;
 
@@ -236,10 +192,10 @@ describe("free topic results API", () => {
     expect(first.status).toBe(200);
     expect(retry.status).toBe(200);
     expect(mock.captured.insertCount).toBe(2);
-    expect(mock.captured.profileUpsertRow?.profile_code).toBeTruthy();
+    expect(mock.captured.profileUpsertRow).toBeNull();
   });
 
-  it("keeps a conflict retry queued when trait-profile repair still fails", async () => {
+  it("does not attempt trait-profile repair on a conflict retry", async () => {
     const mock = createMockClient({
       coreRows: [createDynamicCoreRow()],
       profileUpsertError: true,
@@ -248,11 +204,9 @@ describe("free topic results API", () => {
 
     const first = await POST(jsonRequest(createPayload()));
     const retry = await POST(jsonRequest(createPayload()));
-    const retryBody = await retry.json();
-
-    expect(first.status).toBe(503);
-    expect(retry.status).toBe(503);
-    expect(retryBody.error).toBe("account_trait_profile_write_failed");
+    expect(first.status).toBe(200);
+    expect(retry.status).toBe(200);
+    expect(mock.captured.profileUpsertRow).toBeNull();
   });
 
   it("does not copy a legacy code into the current-code snapshot column", async () => {
@@ -338,6 +292,19 @@ describe("free topic results API", () => {
           evidence_payload: {
             instrumentVersion: "conversation-temperature-2026-07-28",
             observations: [{ label: "표현", targetId: "SE-AI" }],
+            reportSnapshot: {
+              averageScore: 72,
+              confidenceCopy: "충분한 응답",
+              confidenceLabel: "참고 가능",
+              headline: "대화를 천천히 데우는 편이에요.",
+              longReportSections: [],
+              nuangCodeSection: {
+                body: "legacy code section",
+                claimIds: ["legacy-code"],
+                title: "검사 당시 뉴앙 코드 INGMC",
+              },
+              signals: [],
+            },
             scoringVersion: "server-v2-missing-aware",
             scoresByTargetId: { "SE-AI": 72 },
             traitImpactSnapshot: {
@@ -353,6 +320,7 @@ describe("free topic results API", () => {
             },
           },
           local_result_id: "topic_test_123",
+          profile_code_at_completion: "INGMC",
           result_summary: {
             summary: "대화를 천천히 데우는 편이에요.",
             title: "대화 온도 검사",
@@ -386,6 +354,8 @@ describe("free topic results API", () => {
       sync: { status: "synced" },
     });
     expect(body.results[0].answers).toBeUndefined();
+    expect(body.results[0].nuangCodeContext).toBeUndefined();
+    expect(body.results[0].reportSnapshot.nuangCodeSection).toBeUndefined();
     expect(body.results[0].traitImpactSnapshot).toBeUndefined();
   });
 
@@ -533,6 +503,7 @@ describe("free topic results API", () => {
       p_local_result_id: "topic_test_123",
       p_result_kind: "topic",
     });
+    expect(mock.captured.profileUpsertRow).toBeNull();
   });
 
   it.each(["GET", "POST", "DELETE"])(

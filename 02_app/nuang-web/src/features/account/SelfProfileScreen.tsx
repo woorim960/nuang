@@ -16,6 +16,7 @@ import type {
   SelfAssessmentJourney,
   SelfProfilePayload,
 } from "@/features/account/self-profile-contract";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
 import {
   CommunityPostCard,
   getFeedPostFormat,
@@ -77,16 +78,19 @@ export function SelfProfileScreen({
   const connectionsHrefBase = payload.profile.publicSnapshotId
     ? `/feed/profiles/${payload.profile.publicSnapshotId}/connections`
     : null;
+  const canShareProfile = payload.capabilities.canShare && !payload.trait;
 
   async function shareProfile() {
-    if (!payload.capabilities.canShare) return;
+    if (!canShareProfile) return;
 
     const url = new URL(
       `/feed/profiles/${payload.profile.publicId}`,
       window.location.origin,
     ).toString();
     const shareData = {
-      text: `${payload.profile.displayName}님의 뉴앙 코드 ${payload.trait?.code}`,
+      text: payload.trait
+        ? `${payload.profile.displayName}님의 뉴앙 코드 ${payload.trait.code}`
+        : `${payload.profile.displayName}님의 뉴앙 프로필`,
       title: `${payload.profile.displayName}님의 뉴앙 프로필`,
       url,
     };
@@ -133,10 +137,7 @@ export function SelfProfileScreen({
       <section className={styles.hero}>
         <ProfileIdentitySurface
           actions={
-            <div
-              className={styles.actions}
-              data-single={!payload.capabilities.canShare}
-            >
+            <div className={styles.actions} data-single={!canShareProfile}>
               <Link
                 className={styles.editProfileButton}
                 href="/my/profile/edit"
@@ -144,7 +145,7 @@ export function SelfProfileScreen({
                 <Pencil aria-hidden="true" size={16} strokeWidth={1.7} />
                 프로필 편집
               </Link>
-              {payload.capabilities.canShare ? (
+              {canShareProfile ? (
                 <button onClick={() => void shareProfile()} type="button">
                   <Share2 aria-hidden="true" size={16} strokeWidth={1.7} />
                   프로필 공유
@@ -163,6 +164,11 @@ export function SelfProfileScreen({
           operator={payload.capabilities.showAdminEntry}
           postCount={payload.stats.posts}
           trait={trait}
+        />
+
+        <LegacyCoreBetaNotice
+          className={styles.legacyBetaNotice}
+          context="my"
         />
 
         <AssessmentNextAction journey={payload.assessmentJourney} />
@@ -350,6 +356,17 @@ function getAssessmentActionView(journey: SelfAssessmentJourney) {
       href: journey.reportHref,
       label: "내 결과 보기",
       title: "나를 설명하는 성향 리포트가 준비됐어요",
+    };
+  }
+
+  if (journey.state === "exploratory_beta_history") {
+    return {
+      description:
+        "검사 당시 응답을 바탕으로 보존한 참고용 결과예요. 대표 코드나 공개·공유·비교에는 사용되지 않아요.",
+      eyebrow: "탐색적 베타 결과",
+      href: journey.reportHref,
+      label: "베타 결과 보기",
+      title: "이전 탐색 결과를 보관하고 있어요",
     };
   }
 

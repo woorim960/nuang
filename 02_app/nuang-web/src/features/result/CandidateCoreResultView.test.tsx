@@ -51,6 +51,14 @@ describe("CandidateCoreResultView", () => {
 
     expect(result.code).toBe("ENAKQ");
     expect(screen.getByText("정밀 성향 결과")).toBeInTheDocument();
+    expect(
+      screen.getByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).toHaveTextContent("참고용 · 공유 불가");
+    expect(
+      screen.queryByRole("button", { name: /검사 결과 공유|^공유$/ }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText(/연구 중인|예비 결과/)).not.toBeInTheDocument();
     expect(
       screen.getByRole("heading", {
@@ -251,6 +259,7 @@ describe("CandidateCoreResultView", () => {
     render(<CandidateCoreResultView attempt={attempt} result={result} />);
 
     expect(screen.getByText("첫 성향 결과")).toBeInTheDocument();
+    expect(screen.getByText("참고용 · 공유 불가")).toBeInTheDocument();
     expect(
       screen.getByRole("heading", { name: "첫 답에서 보인 내 모습" }),
     ).toBeInTheDocument();

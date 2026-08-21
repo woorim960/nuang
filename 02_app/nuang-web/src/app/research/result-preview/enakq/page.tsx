@@ -1,3 +1,5 @@
+import { notFound } from "next/navigation";
+
 import { CandidateCoreResultView } from "@/features/result/CandidateCoreResultView";
 import { prepareAssessmentCompletion } from "@/features/assessment/assessment-completion";
 import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
@@ -6,6 +8,10 @@ import { coreResultCopyVersion } from "@/features/result/report-copy";
 
 /** 내부 검토용: ENAKQ 정밀 결과 화면을 실제 결과 컴포넌트로 확인합니다. */
 export default function EnakqResultPreviewPage() {
+  if (process.env.NODE_ENV !== "development") {
+    notFound();
+  }
+
   const completedAt = "2026-07-22T00:00:00.000Z";
   const responses = Object.fromEntries(
     candidateFullCoreAssessment.items.map((item) => [

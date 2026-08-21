@@ -3,7 +3,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { CodePerspectiveExplorer } from "./CodePerspectiveExplorer";
-import { feedCodeStatsDisplayThreshold } from "@/features/feed/feed-privacy";
+import {
+  feedCodeStatsDisplayThreshold,
+  feedCodeStatsEnabled,
+} from "@/features/feed/feed-privacy";
 import { createServerFeedPollStatsPayload } from "@/features/feed/server-read";
 import styles from "./page.module.css";
 
@@ -30,7 +33,8 @@ export default async function FeedPollStatsPage({
   if (!payload) notFound();
 
   const hasVoted = Boolean(payload.viewer.voteOptionId);
-  const codeCount = payload.codeRows.length;
+  const codeRows = feedCodeStatsEnabled ? payload.codeRows : [];
+  const codeCount = codeRows.length;
 
   return (
     <main className={styles.page}>
@@ -59,7 +63,7 @@ export default async function FeedPollStatsPage({
             </section>
 
             {codeCount > 0 ? (
-              <CodePerspectiveExplorer rows={payload.codeRows} />
+              <CodePerspectiveExplorer rows={codeRows} />
             ) : (
               <section className={styles.codeLocked}>
                 <span aria-hidden="true">

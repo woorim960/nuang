@@ -127,6 +127,29 @@
   white-space: nowrap;
 }
 
+.betaLabel {
+  width: fit-content;
+  border-radius: 999px;
+  padding: 0.16rem 0.48rem;
+  color: var(--nu-warm-700);
+  background: var(--nu-warm-100);
+  font-size: var(--nu-text-caption);
+  font-style: normal;
+  font-weight: var(--nu-weight-bold);
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+}
+
+.betaNote {
+  overflow: hidden;
+  color: var(--nu-neutral-500);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-medium);
+  line-height: var(--nu-leading-label);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .latestIdentity p {
   color: var(--nu-neutral-500);
   font-size: var(--nu-text-caption);
@@ -261,6 +284,10 @@
   min-width: 0;
   align-items: center;
   gap: 0.4rem;
+}
+
+.rowCopy .betaLabel {
+  flex: 0 0 auto;
 }
 
 .rowCopy strong,

@@ -18,10 +18,23 @@ vi.mock("next/navigation", () => ({
 const post = feedItems.find((item) => item.authorProfile);
 if (!post?.authorProfile) throw new Error("public profile fixture missing");
 const profile = post.authorProfile;
+const profileWithStableId = {
+  ...profile,
+  source: {
+    ...profile.source,
+    communityProfileId: "22222222-2222-4222-8222-222222222222",
+  },
+};
+const readyProfileActions = {
+  block: "ready",
+  follow: "ready",
+  report: "ready",
+} as const;
 const topicReport: OriginalProfileReportSummary = {
   assessmentSlug: "comfort-style",
   assessmentTitle: "위로받을 때 필요한 것",
   completedAt: "2026-07-28T10:00:00.000Z",
+  isExploratoryBeta: false,
   reportKey: "topic_11111111-1111-4111-8111-111111111111",
   resultName: "방법은 같이 찾고, 속도는 내가 정하고 싶어요",
   summary: "검사 당시의 답을 바탕으로 만든 원본 결과예요.",
@@ -33,6 +46,7 @@ const labReport: OriginalProfileReportSummary = {
   assessmentSlug: "recharge-ritual",
   assessmentTitle: "나는 왜 쉬어도 안 풀릴까?",
   completedAt: "2026-07-27T10:00:00.000Z",
+  isExploratoryBeta: false,
   reportKey: "lab_22222222-2222-4222-8222-222222222222",
   resultName: "조용히 충전하는 밤 산책가",
   summary: "지친 뒤 회복하는 나만의 방식을 정리했어요.",
@@ -86,13 +100,14 @@ describe("CommunityProfileScreen", () => {
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
           isOwnProfile: false,
         }}
         posts={[post]}
-        profile={profile}
+        profile={profileWithStableId}
       />,
     );
 
@@ -112,12 +127,19 @@ describe("CommunityProfileScreen", () => {
       "href",
       expect.stringContaining("/connections?tab=following"),
     );
+    const followRequest = vi.mocked(fetch).mock.calls[0]?.[1];
+    expect(JSON.parse(String(followRequest?.body))).toMatchObject({
+      action: "follow",
+      communityProfileId: profileWithStableId.source.communityProfileId,
+      publicSnapshotId: profileWithStableId.source.publicSnapshotId,
+    });
   });
 
   it("shows the operation center only on an authorized self profile", () => {
     const { rerender } = render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
@@ -136,6 +158,7 @@ describe("CommunityProfileScreen", () => {
     rerender(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
@@ -173,6 +196,7 @@ describe("CommunityProfileScreen", () => {
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: true,
           followingCount: 8,
@@ -198,6 +222,95 @@ describe("CommunityProfileScreen", () => {
     expect(screen.getByRole("button", { name: "팔로우" })).not.toBePressed();
   });
 
+  it("keeps a general profile and its relationships visible while new actions are unavailable", () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <CommunityProfileScreen
+        initialSocialState={{
+          actions: {
+            block: "unavailable",
+            follow: "unavailable",
+            report: "unavailable",
+          },
+          followerCount: 12,
+          following: false,
+          followingCount: 8,
+          isOwnProfile: false,
+        }}
+        posts={[post]}
+        profile={profile}
+      />,
+    );
+
+    expect(
+      screen.getAllByText(profile.display.displayName).length,
+    ).toBeGreaterThan(0);
+    expect(screen.getByRole("link", { name: "12팔로워" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "8팔로잉" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "팔로우 사용 불가" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByText(/이 일반 프로필에서는 새 팔로우·신고·차단 기능/),
+    ).toBeInTheDocument();
+
+    fireEvent.click(screen.getByRole("button", { name: "프로필 더보기" }));
+    expect(
+      screen.getByRole("button", { name: "신고하기 · 사용 불가" }),
+    ).toBeDisabled();
+    expect(
+      screen.getByRole("button", { name: "차단하기 · 사용 불가" }),
+    ).toBeDisabled();
+    expect(screen.queryByRole("link", { name: "신고하기" })).toBeNull();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("allows only unfollow after a public snapshot is no longer available", async () => {
+    const fetchMock = vi.fn<typeof fetch>(
+      async () =>
+        new Response(JSON.stringify({ followerCount: 11, following: false }), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        }),
+    );
+    vi.stubGlobal("fetch", fetchMock);
+
+    render(
+      <CommunityProfileScreen
+        initialSocialState={{
+          actions: {
+            block: "unavailable",
+            follow: "unfollow_only",
+            report: "unavailable",
+          },
+          followerCount: 12,
+          following: true,
+          followingCount: 8,
+          isOwnProfile: false,
+        }}
+        posts={[post]}
+        profile={profile}
+      />,
+    );
+
+    fireEvent.click(screen.getByRole("button", { name: "팔로잉" }));
+
+    await waitFor(() => {
+      expect(
+        screen.getByRole("button", { name: "팔로우 사용 불가" }),
+      ).toBeDisabled();
+    });
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(
+      JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body)),
+    ).toMatchObject({
+      action: "unfollow",
+      publicSnapshotId: profile.source.publicSnapshotId,
+    });
+  });
+
   it("creates a privacy-scoped comparison and opens its report", async () => {
     vi.stubGlobal(
       "fetch",
@@ -215,6 +328,7 @@ describe("CommunityProfileScreen", () => {
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
@@ -237,27 +351,26 @@ describe("CommunityProfileScreen", () => {
   });
 
   it("links reporting to a dedicated screen and blocks after confirmation", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(
-        async () =>
-          new Response(JSON.stringify({ blocked: true }), {
-            headers: { "content-type": "application/json" },
-            status: 200,
-          }),
-      ),
+    const fetchMock = vi.fn(
+      async () =>
+        new Response(JSON.stringify({ blocked: true }), {
+          headers: { "content-type": "application/json" },
+          status: 200,
+        }),
     );
+    vi.stubGlobal("fetch", fetchMock);
 
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
           isOwnProfile: false,
         }}
         posts={[post]}
-        profile={profile}
+        profile={profileWithStableId}
       />,
     );
 
@@ -277,12 +390,20 @@ describe("CommunityProfileScreen", () => {
       expect(navigationMock.push).toHaveBeenCalledWith("/feed");
       expect(navigationMock.refresh).toHaveBeenCalled();
     });
+    expect(
+      JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body)),
+    ).toMatchObject({
+      action: "block",
+      communityProfileId: profileWithStableId.source.communityProfileId,
+      publicSnapshotId: profileWithStableId.source.publicSnapshotId,
+    });
   });
 
   it("continues comparison intent into the public profile action", () => {
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
@@ -313,6 +434,7 @@ describe("CommunityProfileScreen", () => {
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 2,
           following: false,
           followingCount: 3,
@@ -353,6 +475,7 @@ describe("CommunityProfileScreen", () => {
       <CommunityProfileScreen
         initialContent="reports"
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
@@ -384,6 +507,7 @@ describe("CommunityProfileScreen", () => {
       <CommunityProfileScreen
         initialContent="reports"
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 12,
           following: false,
           followingCount: 8,
@@ -408,6 +532,12 @@ describe("CommunityProfileScreen", () => {
     expect(
       screen.getByRole("button", { name: "별난 연구소" }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        "주제 검사와 별난 연구소 결과는 기본으로 프로필에 공개돼요.",
+      ),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole("switch")).toHaveLength(2);
 
     fireEvent.click(screen.getByRole("button", { name: "나 알아보기" }));
     expect(screen.getByText(topicReport.assessmentTitle)).toBeInTheDocument();
@@ -431,6 +561,7 @@ describe("CommunityProfileScreen", () => {
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 2,
           following: false,
           followingCount: 3,
@@ -454,9 +585,7 @@ describe("CommunityProfileScreen", () => {
       screen.getByText("지금의 나와 닮은 검사 결과를 공유해요."),
     ).toBeInTheDocument();
     expect(screen.queryByText("일반 게시물 내용")).not.toBeInTheDocument();
-    expect(
-      screen.getByLabelText("게시물 주제"),
-    ).toHaveTextContent("리포트");
+    expect(screen.getByLabelText("게시물 주제")).toHaveTextContent("리포트");
     expect(screen.getByRole("link", { name: /리포트 보기/ })).toHaveAttribute(
       "href",
       reportPost.reportShare?.href,
@@ -492,6 +621,7 @@ describe("CommunityProfileScreen", () => {
     render(
       <CommunityProfileScreen
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 2,
           following: false,
           followingCount: 3,
@@ -528,6 +658,7 @@ describe("CommunityProfileScreen", () => {
       <CommunityProfileScreen
         initialContent="reports"
         initialSocialState={{
+          actions: readyProfileActions,
           followerCount: 2,
           following: false,
           followingCount: 3,

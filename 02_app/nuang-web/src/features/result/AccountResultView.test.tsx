@@ -166,6 +166,31 @@ describe("AccountResultView", () => {
     expect(screen.queryByText(/계정 결과|로컬 결과/)).not.toBeInTheDocument();
   });
 
+  it("default-denies share UI for an unknown nonlegacy account release", () => {
+    const result = buildCurrentAccountResult();
+    result.versionBundle = {
+      assessmentReleaseId: "NUANG-CORE-ACTIVE-2.0",
+      codeSchemeVersion: "NUANG-CODE-UNKNOWN-2.0",
+      scoringModelVersion: "NUANG-SCORING-MODEL-UNKNOWN-2.0",
+      scoringReleaseId: "NUANG-SCORING-UNKNOWN-2.0",
+    };
+
+    render(
+      <AccountResultView
+        initialResult={result}
+        resultReportId="22222222-2222-4222-8222-222222222222"
+      />,
+    );
+
+    expect(
+      screen.queryByRole("button", { name: "검사 결과 공유" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "이 문장 공유" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("참고용 · 공유 불가")).toBeInTheDocument();
+  });
+
   it("deletes the merged local copy even when the server omits its id", async () => {
     fetchMock.mockResolvedValueOnce(
       new Response(

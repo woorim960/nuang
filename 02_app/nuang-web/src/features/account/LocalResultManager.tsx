@@ -30,6 +30,7 @@ import {
 import { calculateLocalAttemptScore } from "@/features/assessment/local-attempt-score";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { synchronizeAccountAssessmentAttempts } from "@/features/assessment/assessment-account-sync";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import { labAssessments } from "@/features/lab/lab-assessments";
 import {
   deleteLabResultEverywhere,
@@ -56,6 +57,7 @@ type ResultEntry =
       expiresAt?: string;
       href: string;
       id: string;
+      isExploratoryBeta: boolean;
       kind: "core";
       state: "completed" | "in_progress";
       storage: "account" | "both" | "device";
@@ -204,6 +206,12 @@ export function LocalResultManager() {
             })
           : `/assessments/${attempt.assessmentId}`,
         id: attempt.id,
+        isExploratoryBeta: !canPromoteCoreResultToRepresentative({
+          assessmentReleaseId:
+            accountResult?.versionBundle?.assessmentReleaseId ??
+            attempt.resultSnapshot?.assessmentReleaseId ??
+            attempt.releaseId,
+        }),
         kind: "core",
         state: attempt.state,
         storage:
@@ -236,6 +244,9 @@ export function LocalResultManager() {
             resultReportId: result.resultReportId,
           }),
           id: result.resultReportId,
+          isExploratoryBeta: !canPromoteCoreResultToRepresentative({
+            assessmentReleaseId: result.versionBundle?.assessmentReleaseId,
+          }),
           kind: "core",
           state: "completed",
           storage: "account",
@@ -520,8 +531,16 @@ function LatestReport({
           <FlaskConical aria-hidden="true" size={26} strokeWidth={1.55} />
         )}
         <div>
+          {entry.kind === "core" && entry.isExploratoryBeta ? (
+            <span className={styles.betaLabel}>탐색적 베타 결과</span>
+          ) : null}
           <p>{entry.title}</p>
           <h3>{entry.subtitle}</h3>
+          {entry.kind === "core" && entry.isExploratoryBeta ? (
+            <small className={styles.betaNote}>
+              참고용 · 대표 코드로 사용되지 않음 · 공유 불가
+            </small>
+          ) : null}
         </div>
       </div>
       <div className={styles.latestActions}>
@@ -663,8 +682,14 @@ function ReportRow({
           <div>
             <strong>{entry.title}</strong>
             {entry.kind === "core" && entry.code ? <b>{entry.code}</b> : null}
+            {entry.kind === "core" && entry.isExploratoryBeta ? (
+              <em className={styles.betaLabel}>탐색적 베타</em>
+            ) : null}
           </div>
           <p>{entry.subtitle}</p>
+          {entry.kind === "core" && entry.isExploratoryBeta ? (
+            <small className={styles.betaNote}>참고용 · 공유 불가</small>
+          ) : null}
           <span>{formatEntryDate(entry)}</span>
         </div>
         <div className={styles.rowEnd}>

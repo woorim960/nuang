@@ -59,10 +59,10 @@ const editorPayload = {
     src: "/assets/characters/nuang-character-purple.webp",
   },
   bio: profile.bio,
-  code: "ENAKQ",
+  code: null,
   displayName: profile.displayName,
   handle: profile.handle,
-  profileName: "관계를 여는 선도자",
+  profileName: null,
   publicId: profile.id,
   revision: profile.revision,
 };
@@ -116,6 +116,8 @@ describe("my community profile api", () => {
     expect(response.status).toBe(200);
     expect(response.headers.get("cache-control")).toBe("private, no-store");
     expect(body).toEqual({ ok: true, profile: editorPayload });
+    expect(JSON.stringify(body)).not.toContain("ENAKQ");
+    expect(JSON.stringify(body)).not.toContain("관계를 여는 선도자");
     expect(mocks.sharp).not.toHaveBeenCalled();
   });
 

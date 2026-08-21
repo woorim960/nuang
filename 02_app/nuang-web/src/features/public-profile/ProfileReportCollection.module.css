@@ -146,6 +146,19 @@
   font-weight: var(--nu-weight-semibold);
 }
 
+.betaLabel {
+  width: max-content;
+  margin-top: 0.42rem;
+  padding: 0.18rem 0.48rem;
+  border: 1px solid
+    color-mix(in srgb, var(--nu-warning-500, #b56812) 28%, transparent);
+  border-radius: 999px;
+  color: var(--nu-warning-700, #8a4907);
+  background: var(--nu-warning-50, #fff8e8);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-bold);
+}
+
 .copy strong {
   margin-top: 0.18rem;
   overflow: hidden;
@@ -176,6 +189,15 @@
   word-break: keep-all;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
+}
+
+.betaNote {
+  margin-top: 0.55rem;
+  color: var(--nu-warning-700, #8a4907);
+  font-size: var(--nu-text-caption);
+  font-weight: var(--nu-weight-semibold);
+  line-height: var(--nu-leading-label);
+  word-break: keep-all;
 }
 
 .chevron {

@@ -35,6 +35,22 @@ describe("TraitMapDetailTemplate", () => {
     expect(guide.totalCharacters).toBeGreaterThan(10_000);
   });
 
+  it("shows the legacy beta label only when the direct customer route requests it", () => {
+    const { rerender } = render(<TraitMapDetailTemplate guide={guide} />);
+    expect(
+      screen.queryByRole("complementary", {
+        name: "이전 베타 성향지도 안내",
+      }),
+    ).not.toBeInTheDocument();
+
+    rerender(<TraitMapDetailTemplate guide={guide} showLegacyBetaNotice />);
+    expect(
+      screen.getByRole("complementary", {
+        name: "이전 베타 성향지도 안내",
+      }),
+    ).toHaveTextContent("검색 결과에는 노출하지 않아요");
+  });
+
   it("opens the table of contents and moves to a selected chapter", async () => {
     const user = userEvent.setup();
     const scrollIntoView = vi.fn();

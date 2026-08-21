@@ -20,7 +20,7 @@ describe("MyOverview", () => {
     myOverviewMocks.localAttempts = [];
   });
 
-  it("keeps the signed-in profile structure while showing a local result", async () => {
+  it("keeps a candidate local result as exploratory beta history without promoting it", async () => {
     myOverviewMocks.localAttempts = [createCompletedAttempt()];
 
     render(<MyOverview initialContent="reports" />);
@@ -28,13 +28,22 @@ describe("MyOverview", () => {
     expect(
       await screen.findByRole("heading", { name: "나의 뉴앙" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("정밀 코어 검사 완료")).toBeInTheDocument();
-    expect(screen.getByText("ENAKQ")).toBeInTheDocument();
-    expect(screen.getByText("관계를 여는 선도자")).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "내 결과 보기" })).toHaveAttribute(
-      "href",
-      "/my/reports",
-    );
+    expect(screen.getByText("탐색적 베타 기록 있음")).toBeInTheDocument();
+    expect(screen.getByText("탐색적 베타 결과")).toBeInTheDocument();
+    expect(
+      screen.getByText("이전 탐색 결과를 보관하고 있어요"),
+    ).toBeInTheDocument();
+    expect(screen.queryByText("정밀 코어 검사 완료")).not.toBeInTheDocument();
+    expect(screen.queryByText("ENAKQ")).not.toBeInTheDocument();
+    expect(screen.queryByText("관계를 여는 선도자")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).toHaveTextContent("대표 코드로 확정되거나");
+    expect(
+      screen.getByRole("link", { name: "베타 결과 보기" }),
+    ).toHaveAttribute("href", "/my/reports");
     expect(screen.getByRole("link", { name: "내 성향 상세" })).toHaveAttribute(
       "href",
       "/my/reports",

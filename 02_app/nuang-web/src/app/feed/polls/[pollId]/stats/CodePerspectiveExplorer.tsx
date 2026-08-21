@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState, type CSSProperties } from "react";
+import { feedCodeStatsEnabled } from "@/features/feed/feed-privacy";
 import type { FeedPollStatsPayload } from "@/features/feed/server-read";
 import styles from "./page.module.css";
 
@@ -15,7 +16,7 @@ export function CodePerspectiveExplorer({ rows }: { rows: CodeRow[] }) {
     [selectedRow],
   );
 
-  if (!selectedRow) return null;
+  if (!feedCodeStatsEnabled || !selectedRow) return null;
 
   return (
     <>

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { legacyCoreContainmentPolicy } from "./legacy-core-containment-policy";
 import {
   readCoreResultPublicationDecision,
   readPublicSnapshotPublicationDecision,
@@ -6,9 +7,12 @@ import {
 
 describe("core result publication policy", () => {
   it.each(["validated", "active"] as const)(
-    "allows a %s item and code release",
+    "rejects catalog-%s releases when the exact public allowlist is empty",
     async (status) => {
-      const client = createPolicyClient({ codeStatus: status, itemStatus: status });
+      const client = createPolicyClient({
+        codeStatus: status,
+        itemStatus: status,
+      });
 
       await expect(
         readCoreResultPublicationDecision({
@@ -16,14 +20,51 @@ describe("core result publication policy", () => {
           ownerAccountId: "account-1",
           resultReportId: "report-1",
         }),
-      ).resolves.toEqual({ eligible: true, resultReportId: "report-1" });
+      ).resolves.toEqual({
+        eligible: false,
+        reason: legacyCoreContainmentPolicy.publicDenyReason,
+      });
+      expect(client.catalogReads).toBe(0);
+      expect(client.mutations).toBe(0);
     },
   );
 
-  it.each(["candidate", "beta", "retired"])(
-    "rejects a %s release without mutating the private result",
-    async (status) => {
-      const client = createPolicyClient({ codeStatus: "candidate", itemStatus: status });
+  it.each([
+    {
+      codeSchemeVersion: "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+      measurementReleaseId: "ITEM-1",
+      scoringReleaseId: "SCORING-1",
+    },
+    {
+      codeSchemeVersion: "CODE-1",
+      measurementReleaseId: "NUANG-CORE-QUICK-CANDIDATE-1.0",
+      scoringReleaseId: "SCORING-1",
+    },
+    {
+      codeSchemeVersion: "CODE-1",
+      measurementReleaseId: "NUANG-CORE-CANDIDATE-BANK-M03-150",
+      scoringReleaseId: "SCORING-1",
+    },
+    {
+      codeSchemeVersion: "CODE-1",
+      measurementReleaseId: "ITEM-1",
+      scoringReleaseId: "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0",
+    },
+  ])(
+    "explicitly contains a legacy release trace before catalog publication lookup",
+    async ({ codeSchemeVersion, measurementReleaseId, scoringReleaseId }) => {
+      const client = createPolicyClient({
+        codeStatus: "active",
+        itemStatus: "active",
+        report: {
+          account_id: "account-1",
+          code_scheme_version: codeSchemeVersion,
+          id: "report-1",
+          measurement_release_id: measurementReleaseId,
+          report_kind: "full",
+          scoring_release_id: scoringReleaseId,
+        },
+      });
 
       await expect(
         readCoreResultPublicationDecision({
@@ -32,15 +73,49 @@ describe("core result publication policy", () => {
         }),
       ).resolves.toEqual({
         eligible: false,
-        reason: "release_not_publicable",
+        reason: legacyCoreContainmentPolicy.publicDenyReason,
       });
+      expect(client.catalogReads).toBe(0);
       expect(client.mutations).toBe(0);
     },
   );
 
-  it("fails closed when release traceability or lookup is missing", async () => {
+  it.each(["candidate", "beta", "retired"])(
+    "does not consult a %s catalog release without an exact allowlist trace",
+    async (status) => {
+      const client = createPolicyClient({
+        codeStatus: "candidate",
+        itemStatus: status,
+      });
+
+      await expect(
+        readCoreResultPublicationDecision({
+          client: client as never,
+          resultReportId: "report-1",
+        }),
+      ).resolves.toEqual({
+        eligible: false,
+        reason: legacyCoreContainmentPolicy.publicDenyReason,
+      });
+      expect(client.catalogReads).toBe(0);
+      expect(client.mutations).toBe(0);
+    },
+  );
+
+  it("fails closed when the private result lookup or release trace is missing", async () => {
     const missing = createPolicyClient({ report: null });
-    const lookupFailure = createPolicyClient({ itemError: { message: "down" } });
+    const lookupFailure = createPolicyClient({
+      reportError: { message: "down" },
+    });
+    const missingTrace = createPolicyClient({
+      report: {
+        account_id: "account-1",
+        code_scheme_version: "CODE-1",
+        id: "report-1",
+        measurement_release_id: "ITEM-1",
+        report_kind: "full",
+      },
+    });
 
     await expect(
       readCoreResultPublicationDecision({
@@ -57,17 +132,32 @@ describe("core result publication policy", () => {
       eligible: false,
       reason: "policy_lookup_failed",
     });
+    await expect(
+      readCoreResultPublicationDecision({
+        client: missingTrace as never,
+        resultReportId: "report-1",
+      }),
+    ).resolves.toMatchObject({
+      eligible: false,
+      reason: "release_trace_missing",
+    });
   });
 
-  it("resolves a public snapshot through the same result release policy", async () => {
-    const client = createPolicyClient({ codeStatus: "active", itemStatus: "active" });
+  it("contains an existing public snapshot through the same empty allowlist", async () => {
+    const client = createPolicyClient({
+      codeStatus: "active",
+      itemStatus: "active",
+    });
 
     await expect(
       readPublicSnapshotPublicationDecision({
         client: client as never,
         publicSnapshotId: "snapshot-1",
       }),
-    ).resolves.toEqual({ eligible: true, resultReportId: "report-1" });
+    ).resolves.toEqual({
+      eligible: false,
+      reason: legacyCoreContainmentPolicy.publicDenyReason,
+    });
   });
 });
 
@@ -81,22 +171,32 @@ function createPolicyClient({
     id: "report-1",
     measurement_release_id: "ITEM-1",
     report_kind: "full",
+    scoring_release_id: "SCORING-1",
   },
+  reportError = null,
 }: {
   codeStatus?: string;
   itemError?: unknown;
   itemStatus?: string;
   report?: unknown;
+  reportError?: unknown;
 } = {}) {
   const client = {
+    catalogReads: 0,
     mutations: 0,
     schema(schemaName: string) {
       return {
         from(tableName: string) {
           const key = `${schemaName}.${tableName}`;
+          if (
+            key === "assessment.item_bank_release" ||
+            key === "scoring.code_scheme_release"
+          ) {
+            client.catalogReads += 1;
+          }
           const response =
             key === "report.result_report"
-              ? { data: report, error: null }
+              ? { data: report, error: reportError }
               : key === "assessment.item_bank_release"
                 ? {
                     data: {

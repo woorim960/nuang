@@ -4,6 +4,10 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 import { deflateRawSync, inflateRawSync } from "node:zlib";
 import { z } from "zod";
 import {
+  isLegacyCoreShareContent,
+  sanitizeLegacyCodeFromTopicShareContent,
+} from "@/features/assessment/legacy-core-containment-policy";
+import {
   reportShareContentSchema,
   type ReportShareContent,
 } from "@/features/share/report-share-contract";
@@ -23,20 +27,25 @@ type GuestSharePayload = z.infer<typeof guestSharePayloadSchema>;
 
 export type GuestReportShareTokenReadResult =
   | { content: ReportShareContent; status: "active" }
-  | { status: "expired" | "invalid" | "not_guest" | "unavailable" };
+  | {
+      status: "closed" | "expired" | "invalid" | "not_guest" | "unavailable";
+    };
 
 export function createGuestReportShareToken(
   content: ReportShareContent,
   now = new Date(),
 ) {
+  const parsedContent = reportShareContentSchema.parse(content);
+  if (isLegacyCoreShareContent(parsedContent)) return null;
+
   const pepper = readSharePepper();
   if (!pepper) return null;
 
   const issuedAt = Math.floor(now.getTime() / 1_000);
-  const parsedContent = reportShareContentSchema.parse(content);
+  const publicContent = sanitizeLegacyCodeFromTopicShareContent(parsedContent);
   const payload: GuestSharePayload = {
     content: {
-      ...parsedContent,
+      ...publicContent,
       // 상세 문장은 검수된 원본에서 다시 구성해 URL 길이와 개인정보 노출을 줄입니다.
       sections: undefined,
     },
@@ -86,10 +95,16 @@ export function readGuestReportShareToken(
       maxOutputLength: 8_192,
     }).toString("utf8");
     const payload = guestSharePayloadSchema.parse(JSON.parse(decoded));
+    if (isLegacyCoreShareContent(payload.content)) {
+      return { status: "closed" };
+    }
     if (payload.expiresAt <= Math.floor(now.getTime() / 1_000)) {
       return { status: "expired" };
     }
-    return { content: payload.content, status: "active" };
+    return {
+      content: sanitizeLegacyCodeFromTopicShareContent(payload.content),
+      status: "active",
+    };
   } catch {
     return { status: "invalid" };
   }

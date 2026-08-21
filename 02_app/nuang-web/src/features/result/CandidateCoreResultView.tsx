@@ -1,18 +1,12 @@
 "use client";
 
-import { ArrowRight, ChevronDown, Share2, ShieldCheck } from "lucide-react";
+import { ArrowRight, ChevronDown, ShieldCheck } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  useCallback,
-  useId,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { useId, useState, type CSSProperties, type ReactNode } from "react";
 import { AssessmentCompletionState } from "@/features/assessment/AssessmentCompletionState";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
 import {
   getAdaptiveItemsForDomains,
   getDisplayedTieDomainIds,
@@ -43,8 +37,6 @@ import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { CoreScoreResult } from "@/lib/scoring/types";
 import { TraitMapResultBridge } from "@/features/result/TraitMapResultBridge";
-import { ReportShareSheet } from "@/features/share/ReportShareSheet";
-import { buildCoreReportShareContent } from "@/features/share/report-share-contract";
 import { CoreResultReportTemplate } from "@/features/result/unified-core-report/CoreResultReportTemplate";
 import { adaptValidatedLocalCoreResult } from "@/features/result/unified-core-report/core-result-report-adapter";
 import styles from "@/features/result/CandidateCoreResultView.module.css";
@@ -56,8 +48,6 @@ type CandidateCoreResultViewProps = {
   deleteError?: string | null;
   deletePending?: boolean;
   onDelete?: () => void;
-  onShareRequest?: () => void;
-  openShareOnMount?: boolean;
   result: CoreScoreResult;
   shareReportId?: string;
   statusMessage?: string | null;
@@ -72,17 +62,12 @@ export function CandidateCoreResultView({
   deleteError,
   deletePending,
   onDelete,
-  onShareRequest,
-  openShareOnMount,
   result,
   shareReportId,
   statusMessage,
 }: CandidateCoreResultViewProps) {
   const [selectedPosition, setSelectedPosition] = useState(0);
   const [isTrustOpen, setIsTrustOpen] = useState(false);
-  const [isShareOpen, setIsShareOpen] = useState(false);
-  const shareButtonRef = useRef<HTMLButtonElement>(null);
-  const closeShare = useCallback(() => setIsShareOpen(false), []);
   const detailId = useId();
   const trustId = useId();
   const profile = getCandidateProfileDefinition(result.code ?? "");
@@ -126,9 +111,6 @@ export function CandidateCoreResultView({
   const selectedRightDirection = selectedAxis.directions[selectedRightSymbol];
   const nextPosition = (selectedPosition + 1) % candidateAxisCopy.length;
   const isQuickResult = isCandidateQuickRelease(attempt);
-  const isShareAvailable =
-    isQuickResult || isCandidateFullRelease(attempt);
-  const resultLabel = isQuickResult ? "첫 성향 결과" : "정밀 성향 결과";
   const precisionHref = isQuickResult
     ? buildPrecisionIntroHref({
         backDestination: `/results/local/${attempt.id}`,
@@ -148,11 +130,9 @@ export function CandidateCoreResultView({
         feedbackResultReportId={shareReportId}
         model={unifiedModel}
         onDelete={onDelete}
-        onShareUnavailable={onShareRequest}
-        openShareOnMount={openShareOnMount}
         originalReportKey={shareReportId ? `core_${shareReportId}` : undefined}
         precisionHref={precisionHref}
-        shareEnabled={isShareAvailable}
+        shareEnabled={false}
         statusMessage={statusMessage}
         surface="completion"
       />
@@ -162,38 +142,17 @@ export function CandidateCoreResultView({
   if (!result.code || !profile || !selectedDirection || !selectedDomain) {
     return null;
   }
-  const shareContent = buildCoreReportShareContent({
-    code: result.code,
-    highlights: profile.overview
-      .slice(0, 3)
-      .map((item) => `${item.label}: ${item.text}`),
-    profileName: profile.displayName,
-    resultLabel,
-    summary: profile.summary,
-  });
-
   return (
     <main className={styles.root}>
       <header className={styles.appBar}>
         <span aria-hidden="true" />
         <p>검사 결과</p>
-        {isShareAvailable ? (
-          <button
-            aria-haspopup="dialog"
-            className={styles.shareButton}
-            onClick={() => setIsShareOpen(true)}
-            ref={shareButtonRef}
-            type="button"
-          >
-            <Share2 aria-hidden="true" size={16} strokeWidth={1.9} />
-            공유
-          </button>
-        ) : (
-          <span aria-hidden="true" />
-        )}
+        <span aria-hidden="true" />
       </header>
 
       <div className={styles.content}>
+        <LegacyCoreBetaNotice className={styles.betaNotice} context="result" />
+
         <section className={styles.hero}>
           <div className={styles.heroGlow} />
           <div className={styles.heroCopy}>
@@ -521,8 +480,8 @@ export function CandidateCoreResultView({
               <p>능력, 좋고 나쁨, 정신건강을 판단하는 결과는 아니에요.</p>
               <p>
                 현재 코어 측정 모형은 검증 중인 후보 버전이에요. 이 결과는
-                자기이해를 위한 참고 자료이며, 사람 연구와 정량 검증이 끝난
-                확정 판정이 아니에요.
+                자기이해를 위한 참고 자료이며, 사람 연구와 정량 검증이 끝난 확정
+                판정이 아니에요.
               </p>
               <Link
                 className={styles.codeIntroLink}
@@ -564,13 +523,6 @@ export function CandidateCoreResultView({
           )}
         </section>
       </div>
-      <ReportShareSheet
-        content={shareContent}
-        isOpen={isShareOpen}
-        onClose={closeShare}
-        originalReportKey={shareReportId ? `core_${shareReportId}` : undefined}
-        returnFocusRef={shareButtonRef}
-      />
     </main>
   );
 }
@@ -634,6 +586,12 @@ export function CandidateUndeterminedResultView({
       actionError={actionError}
       isWorking={isWorking}
       mode={attempt.mode}
+      notice={
+        <LegacyCoreBetaNotice
+          className={styles.completionBetaNotice}
+          context="result"
+        />
+      }
       onLeave={() => router.push("/home")}
       onReviewAnswers={() => void reviewAnswers()}
       onRetry={() => undefined}
@@ -672,6 +630,12 @@ export function CandidateResponseReviewResultView({
       actionError={actionError}
       isWorking={isWorking}
       mode={attempt.mode}
+      notice={
+        <LegacyCoreBetaNotice
+          className={styles.completionBetaNotice}
+          context="result"
+        />
+      }
       onLeave={() => router.push("/home")}
       onReviewAnswers={() => void reviewAnswers()}
       onRetry={() => undefined}

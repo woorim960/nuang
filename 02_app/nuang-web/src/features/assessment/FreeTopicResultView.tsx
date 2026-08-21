@@ -14,7 +14,6 @@ import { useEffect, useRef, useState } from "react";
 import { AssessmentEvidenceSources } from "@/features/assessment/AssessmentEvidenceSources";
 import { AssessmentReportRichText } from "@/features/assessment/AssessmentReportRichText";
 import { AssessmentResultQualityPrompt } from "@/features/assessment/AssessmentResultQualityPrompt";
-import { TopicTraitImpactCard } from "@/features/assessment/TopicTraitImpactCard";
 import {
   buildFreeTopicResultReport,
   getFreeTopicAssessment,
@@ -31,7 +30,6 @@ import { AssessmentBottomSheet } from "@/features/assessment/AssessmentQuestionC
 import { getFreeTopicInstrumentVersion } from "@/features/assessment/free-topic-result-version";
 import {
   buildFreeTopicLongReportSections,
-  buildFreeTopicNuangCodeSection,
   buildFreeTopicPersonalizedSummary,
 } from "@/features/assessment/free-topic-long-report";
 import {
@@ -91,26 +89,13 @@ export function FreeTopicResultView({
   const shareButtonRef = useRef<HTMLButtonElement>(null);
   const currentPublishedAssessment =
     !previewMode && isTopicAssessmentPublished(slug)
-    ? getFreeTopicAssessment(slug)
-    : null;
+      ? getFreeTopicAssessment(slug)
+      : null;
   const assessment =
     assessmentOverride ??
     currentPublishedAssessment ??
     result?.assessmentSnapshot ??
     getFreeTopicAssessment(slug);
-  const currentNuangCode = result?.nuangCodeContext?.code ?? null;
-  const retryTraitSync = () => {
-    if (!result || result.sync.status === "synced") return;
-    const queuedResult: StoredFreeTopicResult = {
-      ...result,
-      sync: { status: "queued" },
-    };
-    setResult(queuedResult);
-    setIsSyncing(true);
-    void syncFreeTopicResult(queuedResult)
-      .then(setResult)
-      .finally(() => setIsSyncing(false));
-  };
 
   useEffect(() => {
     if (initialResult) return;
@@ -228,8 +213,8 @@ export function FreeTopicResultView({
         <section className={styles.missing}>
           <h1>이 브라우저에는 이 결과가 없어요</h1>
           <p>
-            로그인하지 않고 만든 결과는 검사를 완료한 브라우저에 보관돼요.
-            다른 기기에서 보려면 로그인해 저장했거나 공유 버튼으로 만든 링크가
+            로그인하지 않고 만든 결과는 검사를 완료한 브라우저에 보관돼요. 다른
+            기기에서 보려면 로그인해 저장했거나 공유 버튼으로 만든 링크가
             필요해요.
           </p>
           <Link href="/login?reason=result_restore&next=%2Fmy%2Freports%2Fhistory">
@@ -301,15 +286,6 @@ export function FreeTopicResultView({
 
     return [...groups, { label, signals: [signal] }];
   }, []);
-  const nuangCodeSection =
-    report.nuangCodeSection ??
-    (currentNuangCode
-      ? buildFreeTopicNuangCodeSection({
-          assessment: activeAssessment,
-          code: currentNuangCode,
-          scoresByScaleId: result.result.scoresByScaleId,
-        })
-      : null);
   const closePersonSection = personalizedSummary
     ? report.longReportSections.find(
         (section) =>
@@ -327,17 +303,17 @@ export function FreeTopicResultView({
   // 베타에서는 현재 공개 검수를 통과한 상세 진단을 과거 결과에도 보완합니다.
   // 원점수나 답변은 바꾸지 않고, 같은 점수에서 파생되는 설명만 최신화합니다.
   const latestDiagnosticSections = buildFreeTopicLongReportSections({
-        assessment: activeAssessment,
-        questions: currentQuestions,
-        scaleStatisticsById: result.result.scaleStatisticsById,
-        scoresByQuestionId: result.result.scoresByQuestionId,
-        scoresByScaleId: result.result.scoresByScaleId,
-        validResponsesByScaleId: result.result.validResponsesByScaleId,
-      }).filter((section) =>
-        section.claimIds.some((claimId) =>
-          /direct-feedback|direct-fit|maintenance-rhythm/.test(claimId),
-        ),
-      );
+    assessment: activeAssessment,
+    questions: currentQuestions,
+    scaleStatisticsById: result.result.scaleStatisticsById,
+    scoresByQuestionId: result.result.scoresByQuestionId,
+    scoresByScaleId: result.result.scoresByScaleId,
+    validResponsesByScaleId: result.result.validResponsesByScaleId,
+  }).filter((section) =>
+    section.claimIds.some((claimId) =>
+      /direct-feedback|direct-fit|maintenance-rhythm/.test(claimId),
+    ),
+  );
   const baseClaimIds = new Set(
     baseDetailedReportSections.flatMap((section) => section.claimIds),
   );
@@ -350,7 +326,7 @@ export function FreeTopicResultView({
   const shareContent = buildTopicReportShareContent({
     assessmentSlug: activeAssessment.slug,
     assessmentTitle: activeAssessment.title,
-    code: currentNuangCode,
+    code: null,
     highlights:
       report.signals.length > 0
         ? report.signals
@@ -366,10 +342,7 @@ export function FreeTopicResultView({
     scoresByScaleId: result.result.scoresByScaleId,
     summary: personalizedSummary?.body ?? report.headline,
   });
-  const canShare = Boolean(
-    !previewMode &&
-    shareEnabled,
-  );
+  const canShare = Boolean(!previewMode && shareEnabled);
 
   return (
     <main className={styles.root}>
@@ -531,14 +504,6 @@ export function FreeTopicResultView({
           </section>
         )}
 
-        <TopicTraitImpactCard
-          loginHref={`/login?next=${encodeURIComponent(`/assessments/topics/${slug}/result/${localResultId}`)}`}
-          onRetry={retryTraitSync}
-          showPending={previewMode}
-          snapshot={result.traitImpactSnapshot}
-          sync={result.sync}
-        />
-
         {closePersonSection ? (
           <section
             aria-labelledby="comfort-share-script"
@@ -550,29 +515,6 @@ export function FreeTopicResultView({
               labelLayout="wide"
               section={closePersonSection}
             />
-          </section>
-        ) : null}
-
-        {nuangCodeSection ? (
-          <section
-            aria-labelledby="comfort-code-insight"
-            className={styles.codeInsight}
-          >
-            <header>
-              <p>검사 당시 뉴앙 코드</p>
-              <h2 id="comfort-code-insight">{nuangCodeSection.title}</h2>
-            </header>
-            <AssessmentReportRichText
-              labelLayout="wide"
-              section={nuangCodeSection}
-            />
-            <Link
-              className={styles.codeDetailLink}
-              href={`/map/${currentNuangCode}`}
-              onClick={previewMode ? preventPreviewNavigation : undefined}
-            >
-              내 성향지도에서 더 자세히 보기
-            </Link>
           </section>
         ) : null}
 
@@ -948,9 +890,7 @@ function getFreeTopicReportDisplay(
     confidenceCopy: replaceFocusSwitchLegacyCopy(report.confidenceCopy),
     headline: replaceFocusSwitchLegacyCopy(report.headline),
     longReportSections: report.longReportSections.map(mapSection),
-    nuangCodeSection: report.nuangCodeSection
-      ? mapSection(report.nuangCodeSection)
-      : undefined,
+    nuangCodeSection: undefined,
     personalizedSummary: getPersonalizedSummaryDisplay(
       slug,
       report.personalizedSummary,

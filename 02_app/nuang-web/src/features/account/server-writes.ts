@@ -34,6 +34,7 @@ import { buildTrustedOAuthIdentities } from "@/features/auth/oauth-identity-poli
 import { getAppOrigin } from "@/lib/supabase/env";
 import { getSupabaseServiceEnv } from "@/lib/supabase/service";
 import { rebuildAccountTraitProfile } from "@/features/assessment/server-account-trait-profile";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 
 type ServiceClient = SupabaseClient;
@@ -123,10 +124,12 @@ export async function claimResultToAccount({
     return { code: "result_report_write_failed", ok: false };
   }
 
-  await rebuildAccountTraitProfile({
-    accountId: account.accountId,
-    client,
-  });
+  if (shouldRebuildRepresentativeProfileAfterClaim(trustedResult)) {
+    await rebuildAccountTraitProfile({
+      accountId: account.accountId,
+      client,
+    });
+  }
 
   return {
     data: {
@@ -138,6 +141,14 @@ export async function claimResultToAccount({
     },
     ok: true,
   };
+}
+
+export function shouldRebuildRepresentativeProfileAfterClaim(
+  trustedResult: Pick<TrustedClaimResult, "trustedRelease">,
+) {
+  return canPromoteCoreResultToRepresentative({
+    assessmentReleaseId: trustedResult.trustedRelease.assessmentReleaseId,
+  });
 }
 
 export function mapClaimResultRpcError(

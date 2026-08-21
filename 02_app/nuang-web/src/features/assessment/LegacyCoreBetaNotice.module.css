@@ -1,0 +1,40 @@
+.notice {
+  min-width: 0;
+  padding: 0.8rem 0.9rem;
+  border: 1px solid
+    color-mix(in srgb, var(--nu-warning-500, #b56812) 28%, transparent);
+  border-radius: 0.8rem;
+  color: var(--nu-color-text-secondary, var(--muted));
+  background: color-mix(
+    in srgb,
+    var(--nu-warning-50, #fff8e8) 88%,
+    var(--nu-color-surface, #fff)
+  );
+  font-size: var(--nu-text-label, 0.8125rem);
+  line-height: 1.55;
+  word-break: keep-all;
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.35rem 0.75rem;
+}
+
+.heading strong {
+  color: var(--nu-color-text-strong, var(--foreground));
+  font-size: var(--nu-text-body-sm, 0.875rem);
+  font-weight: var(--nu-weight-bold, 700);
+}
+
+.heading span {
+  color: var(--nu-warning-700, #8a4907);
+  font-size: var(--nu-text-caption, 0.75rem);
+  font-weight: var(--nu-weight-bold, 700);
+}
+
+.notice p {
+  margin: 0.35rem 0 0;
+}

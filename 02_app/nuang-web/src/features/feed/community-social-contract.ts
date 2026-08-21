@@ -1,10 +1,17 @@
 import { z } from "zod";
 import type { PublicProfileImage } from "@/features/public-profile/profile-image";
 
-export const profileFollowRequestSchema = z.object({
-  action: z.enum(["follow", "unfollow"]),
-  publicSnapshotId: z.string().uuid(),
-});
+const profileMutationTargetFields = {
+  communityProfileId: z.string().uuid().optional(),
+  publicSnapshotId: z.string().uuid().optional(),
+};
+
+export const profileFollowRequestSchema = requireProfileMutationTarget(
+  z.object({
+    action: z.enum(["follow", "unfollow"]),
+    ...profileMutationTargetFields,
+  }),
+);
 
 export const profileReportReasons = [
   "privacy",
@@ -14,18 +21,20 @@ export const profileReportReasons = [
   "other",
 ] as const;
 
-export const profileSafetyActionRequestSchema = z.discriminatedUnion("action", [
-  z.object({
-    action: z.enum(["block", "unblock"]),
-    publicSnapshotId: z.string().uuid(),
-  }),
-  z.object({
-    action: z.literal("report"),
-    details: z.string().trim().max(500).optional(),
-    publicSnapshotId: z.string().uuid(),
-    reason: z.enum(profileReportReasons),
-  }),
-]);
+export const profileSafetyActionRequestSchema = requireProfileMutationTarget(
+  z.discriminatedUnion("action", [
+    z.object({
+      action: z.enum(["block", "unblock"]),
+      ...profileMutationTargetFields,
+    }),
+    z.object({
+      action: z.literal("report"),
+      details: z.string().trim().max(500).optional(),
+      reason: z.enum(profileReportReasons),
+      ...profileMutationTargetFields,
+    }),
+  ]),
+);
 
 export type CommunityNotification = {
   actorDisplayName: string;
@@ -44,6 +53,11 @@ export type CommunityNotificationsResult = {
 };
 
 export type CommunityProfileSocialState = {
+  actions: {
+    block: "ready" | "unavailable";
+    follow: "ready" | "unfollow_only" | "unavailable";
+    report: "ready" | "unavailable";
+  };
   followerCount: number;
   followingCount: number;
   following: boolean;
@@ -51,12 +65,12 @@ export type CommunityProfileSocialState = {
 };
 
 export type CommunityProfileConnection = {
-  code: string;
+  code: string | null;
   communityProfileId?: string;
   connectedAt: string;
   displayName: string;
   profileImage: PublicProfileImage;
-  profileName: string;
+  profileName: string | null;
   publicSnapshotId: string;
 };
 
@@ -67,3 +81,19 @@ export type CommunityProfileConnectionsResult = {
   ownerPublicSnapshotId: string;
   state: "profile_not_found" | "ready" | "unavailable";
 };
+
+function requireProfileMutationTarget<T extends z.ZodType>(schema: T) {
+  return schema.refine(
+    (value) => {
+      const target = value as {
+        communityProfileId?: string;
+        publicSnapshotId?: string;
+      };
+      return Boolean(target.communityProfileId || target.publicSnapshotId);
+    },
+    {
+      message: "communityProfileId or publicSnapshotId is required",
+      path: ["communityProfileId"],
+    },
+  );
+}

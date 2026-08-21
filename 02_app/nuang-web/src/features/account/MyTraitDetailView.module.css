@@ -135,6 +135,10 @@
   background: color-mix(in srgb, var(--nu-neutral-0) 82%, transparent);
 }
 
+.legacyBetaNotice {
+  margin: 1rem 1.15rem;
+}
+
 .section {
   padding: 1.35rem 1.15rem 1.45rem;
   border-bottom: 8px solid var(--nu-color-app-bg);

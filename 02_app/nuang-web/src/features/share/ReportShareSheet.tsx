@@ -17,6 +17,12 @@ import {
 } from "react";
 import { BottomSheet } from "@/components/ui/BottomSheet";
 import {
+  isLegacyCoreShareContent,
+  legacyCoreContainmentPolicyReleaseId,
+  legacyCorePublicDenyReason,
+  legacyCorePublicSharingMessage,
+} from "@/features/assessment/legacy-core-containment-policy";
+import {
   prepareKakaoReportShareImage,
   sendReportToKakaoTalk,
 } from "@/features/share/kakao-talk-share";
@@ -92,6 +98,7 @@ export function ReportShareSheet({
   returnFocusRef,
   startInCommunity = false,
 }: ReportShareSheetProps) {
+  const isCoreShareContained = isLegacyCoreShareContent(content);
   const [activeAction, setActiveAction] = useState<ShareActionId | null>(null);
   const [communityNote, setCommunityNote] = useState("");
   const [kakaoPreparation, setKakaoPreparation] = useState<
@@ -109,13 +116,22 @@ export function ReportShareSheet({
   const isCriticalTransitionRef = useRef(false);
   const stepHeadingRef = useRef<HTMLHeadingElement>(null);
   const isCriticalTransition =
-    step === "publish-confirm" && activeAction !== null;
+    !isCoreShareContained &&
+    step === "publish-confirm" &&
+    activeAction !== null;
 
   useEffect(() => {
     isCriticalTransitionRef.current = isCriticalTransition;
   }, [isCriticalTransition]);
 
   const getFreshShareUrl = useCallback(async () => {
+    if (isCoreShareContained) {
+      throw new ReportShareRequestError(
+        legacyCorePublicDenyReason,
+        legacyCorePublicSharingMessage,
+      );
+    }
+
     if (originalReportKey) {
       const response = await fetch("/api/report-share-links", {
         body: JSON.stringify({ reportKey: originalReportKey }),
@@ -148,7 +164,7 @@ export function ReportShareSheet({
     }
 
     return createGuestShareUrl(content, guestShareUrlRef);
-  }, [canonicalUrl, content, originalReportKey]);
+  }, [canonicalUrl, content, isCoreShareContained, originalReportKey]);
 
   const closeSheet = useCallback(() => {
     if (isCriticalTransitionRef.current) return;
@@ -167,7 +183,7 @@ export function ReportShareSheet({
   }, [isOpen, step]);
 
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || isCoreShareContained) return;
     let cancelled = false;
 
     void prepareKakaoReportShareImage(content.reportType)
@@ -181,7 +197,7 @@ export function ReportShareSheet({
     return () => {
       cancelled = true;
     };
-  }, [content.reportType, isOpen]);
+  }, [content.reportType, isCoreShareContained, isOpen]);
 
   if (!isOpen) return null;
 
@@ -290,6 +306,13 @@ export function ReportShareSheet({
   }
 
   async function handlePublishAndContinue() {
+    if (isCoreShareContained) {
+      setPendingPrivateAction(null);
+      setStatus({ kind: "error", message: legacyCorePublicSharingMessage });
+      setStep("actions");
+      return;
+    }
+
     const action = pendingPrivateAction;
     if (!originalReportKey || !action) {
       setStatus({
@@ -490,11 +513,13 @@ export function ReportShareSheet({
     native_share: handleNativeShare,
   };
   const headerCopy =
-    step === "community"
-      ? "글을 덧붙여 커뮤니티에 올려요."
-      : step === "publish-confirm"
-        ? "공개 범위를 확인해 주세요."
-        : "결과 요약을 안전하게 공유해요.";
+    isCoreShareContained
+      ? "탐색적 비검증 베타 결과의 외부 전파를 제한하고 있어요."
+      : step === "community"
+        ? "글을 덧붙여 커뮤니티에 올려요."
+        : step === "publish-confirm"
+          ? "공개 범위를 확인해 주세요."
+          : "결과 요약을 안전하게 공유해요.";
 
   return (
     <BottomSheet
@@ -504,8 +529,14 @@ export function ReportShareSheet({
       dialogProps={{
         "aria-describedby": "report-share-description",
         "aria-labelledby": "report-share-title",
+        "data-policy-release": isCoreShareContained
+          ? legacyCoreContainmentPolicyReleaseId
+          : undefined,
+        "data-public-deny-reason": isCoreShareContained
+          ? legacyCorePublicDenyReason
+          : undefined,
         "data-report-type": content.reportType,
-        "data-step": step,
+        "data-step": isCoreShareContained ? "contained" : step,
       }}
       dialogRef={dialogRef}
       initialFocus="dialog"
@@ -514,7 +545,7 @@ export function ReportShareSheet({
     >
       <div aria-hidden="true" className={styles.handle} />
       <header className={styles.header}>
-        {step !== "actions" ? (
+        {!isCoreShareContained && step !== "actions" ? (
           <button
             aria-label="공유 방식 선택으로 돌아가기"
             className={styles.backButton}
@@ -531,11 +562,13 @@ export function ReportShareSheet({
         ) : null}
         <div className={styles.headerCopy}>
           <h2 id="report-share-title" ref={stepHeadingRef} tabIndex={-1}>
-            {step === "community"
-              ? "커뮤니티에 공유"
-              : step === "publish-confirm"
-                ? "공개 후 공유"
-                : "결과 공유"}
+            {isCoreShareContained
+              ? "코어 결과 공유 제한"
+              : step === "community"
+                ? "커뮤니티에 공유"
+                : step === "publish-confirm"
+                  ? "공개 후 공유"
+                  : "결과 공유"}
           </h2>
           <p id="report-share-description">{headerCopy}</p>
         </div>
@@ -550,7 +583,19 @@ export function ReportShareSheet({
         </button>
       </header>
 
-      {step === "actions" ? (
+      {isCoreShareContained ? (
+        <>
+          <ReportIdentity content={content} />
+          <section
+            aria-label="코어 결과 공유 제한 안내"
+            className={styles.containmentNotice}
+            role="status"
+          >
+            <strong>이 결과는 본인 화면에서만 확인할 수 있어요.</strong>
+            <p>{legacyCorePublicSharingMessage}</p>
+          </section>
+        </>
+      ) : step === "actions" ? (
         <>
           <ReportIdentity content={content} />
           <section aria-label="공유 방법" className={styles.actionSection}>
@@ -715,7 +760,7 @@ export function ReportShareSheet({
         </p>
       ) : null}
 
-      {step === "actions" ? (
+      {!isCoreShareContained && step === "actions" ? (
         <p className={styles.privacyNote}>
           답변, 연락처와 계정 정보는 공유되지 않아요.
         </p>

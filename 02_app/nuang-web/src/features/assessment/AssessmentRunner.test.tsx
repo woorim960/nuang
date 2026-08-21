@@ -243,6 +243,20 @@ describe("AssessmentRunner", () => {
     expect(screen.queryByText(/자동 저장/)).not.toBeInTheDocument();
   });
 
+  it("keeps the candidate status and sharing limit visible in the runner", async () => {
+    vi.mocked(getOrCreateLocalAttempt).mockResolvedValue(
+      createAttempt(candidateQuickCoreAssessment),
+    );
+
+    render(<AssessmentRunner assessment={candidateQuickCoreAssessment} />);
+
+    const notice = await screen.findByRole("complementary", {
+      name: "탐색적 비검증 베타 안내",
+    });
+    expect(notice).toHaveTextContent("참고용 · 공유 불가");
+    expect(notice).toHaveTextContent("대표 뉴앙 코드로 확정되거나");
+  });
+
   it("saves a selected answer and opens the next action", async () => {
     render(<AssessmentRunner assessment={quickCoreAssessment} />);
 

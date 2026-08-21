@@ -22,6 +22,10 @@
   backdrop-filter: blur(16px);
 }
 
+.legacyBetaNotice {
+  margin: 0.85rem 1rem;
+}
+
 .eyebrow {
   margin: 0;
   color: var(--nu-color-brand-action);

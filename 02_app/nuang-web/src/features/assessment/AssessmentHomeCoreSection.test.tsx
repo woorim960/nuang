@@ -107,8 +107,14 @@ describe("buildCoreJourneyState", () => {
       [createAccountResult("full")],
     );
 
-    expect(journey.cta).toBe("내 성향 결과 보기");
-    expect(journey.eyebrow).toBe("정밀 성향 검사 완료");
+    expect(journey.cta).toBe("탐색적 베타 결과 보기");
+    expect(journey.eyebrow).toBe("탐색적 베타 결과");
+    expect(journey.description).toContain("대표 코드나 공개·공유·비교");
+    expect(
+      [journey.cta, journey.description, journey.eyebrow, journey.title].join(
+        " ",
+      ),
+    ).not.toMatch(/내 뉴앙 코드|현재 코드/);
     expect(journey.href).toBe("/results/account/account-full?backTo=%2Fhome");
     expect(journey.secondaryAction).toMatchObject({
       assessmentKind: "full",
@@ -124,6 +130,8 @@ describe("buildCoreJourneyState", () => {
     );
 
     expect(journey.cta).toBe("정밀 성향 검사 시작하기");
+    expect(journey.eyebrow).toBe("탐색적 베타 결과");
+    expect(journey.title).toContain("이전 베타 결과");
     expect(journey.href).toContain("backTo=%2Fhome");
     expect(journey.href).toContain("returnTo=%2Fhome");
   });
@@ -243,6 +251,11 @@ describe("AssessmentHomeCoreSection", () => {
       screen.getByRole("link", { name: "첫 성향 검사 시작하기" }),
     ).toHaveAttribute("href", "/assessments/nu-core-quick?returnTo=%2Fhome");
     expect(
+      screen.getByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).toHaveTextContent("참고용 · 공유 불가");
+    expect(
       coreMocks.synchronizeAccountAssessmentAttempts.mock
         .invocationCallOrder[0],
     ).toBeLessThan(coreMocks.listLocalAttempts.mock.invocationCallOrder[0]);
@@ -261,7 +274,7 @@ describe("AssessmentHomeCoreSection", () => {
     expect(illustration).not.toBeNull();
     expect(
       heading.compareDocumentPosition(illustration!) &
-      Node.DOCUMENT_POSITION_FOLLOWING,
+        Node.DOCUMENT_POSITION_FOLLOWING,
     ).toBeTruthy();
     expect(illustration).toHaveAttribute("aria-hidden", "true");
     expect(illustration?.querySelector("img")).toHaveAttribute(
@@ -307,7 +320,7 @@ describe("AssessmentHomeCoreSection", () => {
     });
     expect(actionGroup).toHaveAttribute("data-split", "true");
     expect(
-      screen.getByRole("link", { name: "내 성향 결과 보기" }),
+      screen.getByRole("link", { name: "탐색적 베타 결과 보기" }),
     ).toHaveAttribute("href", "/results/account/account-full?backTo=%2Fhome");
     expect(
       screen.getByRole("button", { name: "정밀 검사 다시하기" }),

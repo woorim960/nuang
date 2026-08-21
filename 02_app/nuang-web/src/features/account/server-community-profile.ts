@@ -19,7 +19,11 @@ import {
   createCharacterProfileImage,
   type PublicProfileImage,
 } from "@/features/public-profile/profile-image";
-import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
+import {
+  publicProfileSnapshotContractVersion,
+  type PublicProfileSnapshotPayload,
+} from "@/features/together/public-comparison-contract";
+import { profileVisibilityPolicyVersion } from "@/features/together/profile-visibility-policy";
 
 const communityProfileSelect =
   "id,account_id,handle,display_name,bio,avatar_bucket,avatar_object_path,avatar_revision,avatar_character_key,code_visibility,detail_visibility,comparison_enabled,status,revision";
@@ -207,20 +211,28 @@ export async function createCommunityProfileEditorPayload({
   client: SupabaseClient;
   profile: CommunityProfileRecord;
 }): Promise<CommunityProfileEditorPayload> {
-  const snapshot = await readLatestSnapshot({
+  const snapshotRecord = await readLatestSnapshot({
     accountId: profile.accountId,
     client,
   });
-  const code = snapshot?.profile.code ?? null;
-  const motif =
-    profile.avatarCharacterKey ?? snapshot?.displayProfile.motif ?? "purple";
+  const snapshot = snapshotRecord?.snapshot ?? null;
+  const publication = snapshotRecord
+    ? await readPublicSnapshotPublicationDecision({
+        client,
+        ownerAccountId: profile.accountId,
+        publicSnapshotId: snapshotRecord.id,
+      })
+    : null;
+  const code = publication?.eligible ? (snapshot?.profile.code ?? null) : null;
   const avatar = await resolveCommunityProfileImage({
     client,
     fallback:
-      snapshot?.displayProfile.profileImage ??
+      (publication?.eligible
+        ? snapshot?.displayProfile.profileImage
+        : undefined) ??
       createCharacterProfileImage({
         alt: `${profile.displayName} 프로필 이미지`,
-        motif,
+        motif: profile.avatarCharacterKey,
       }),
     profile,
   });
@@ -232,7 +244,7 @@ export async function createCommunityProfileEditorPayload({
     code,
     displayName: profile.displayName,
     handle: profile.handle,
-    profileName: snapshot?.profile.name ?? null,
+    profileName: code ? (snapshot?.profile.name ?? null) : null,
     publicId: profile.id,
     revision: profile.revision,
   };
@@ -249,17 +261,14 @@ export async function mergeCommunityProfileIntoSnapshot({
   publicationTrace?: TrustedPublicSnapshotPublicationTrace | null;
   snapshot: PublicProfileSnapshotPayload;
 }) {
+  if (!profile) return redactSnapshotMeasurement(snapshot);
+
   const publication = await resolveSnapshotPublicationDecision({
     client,
     profile,
     publicationTrace,
     snapshot,
   });
-  if (!profile) {
-    return publication.eligible
-      ? snapshot
-      : redactSnapshotMeasurement(snapshot);
-  }
 
   const includedFields = new Set(snapshot.visibility.includedFields);
   const measurementVisible = publication.eligible;
@@ -279,6 +288,7 @@ export async function mergeCommunityProfileIntoSnapshot({
       ...snapshot.displayProfile,
       displayName: profile.displayName,
       handle: profile.handle,
+      motif: profile.avatarCharacterKey,
       profileImage: await resolveCommunityProfileImage({
         client,
         fallback: createCharacterProfileImage({
@@ -306,6 +316,51 @@ export async function mergeCommunityProfileIntoSnapshot({
       }),
     },
   } satisfies PublicProfileSnapshotPayload;
+}
+
+export async function createNeutralCommunityProfileSnapshot({
+  client,
+  profile,
+  snapshotId = profile.id,
+}: {
+  client: SupabaseClient;
+  profile: CommunityProfileRecord;
+  snapshotId?: string;
+}): Promise<PublicProfileSnapshotPayload> {
+  const motif = profile.avatarCharacterKey;
+
+  return {
+    contractVersion: publicProfileSnapshotContractVersion,
+    createdAt: new Date().toISOString(),
+    displayProfile: {
+      displayName: profile.displayName,
+      handle: profile.handle,
+      motif,
+      profileImage: await resolveCommunityProfileImage({
+        client,
+        fallback: createCharacterProfileImage({
+          alt: `${profile.displayName} 프로필 이미지`,
+          motif,
+        }),
+        profile,
+      }),
+      profileMessage: profile.bio,
+    },
+    privacy: {
+      includesAccountIdentity: false,
+      includesCrisisHelpInteractions: false,
+      includesDirectResponses: false,
+      includesRawScorePayload: false,
+      includesSensitiveAssessments: false,
+    },
+    profile: { code: "-----", name: "비공개 성향" },
+    publicData: { coreDomainMap: [], coreFacetSummary: [] },
+    snapshotId,
+    visibility: {
+      includedFields: ["display_profile"],
+      policyVersion: profileVisibilityPolicyVersion,
+    },
+  };
 }
 
 async function resolveSnapshotPublicationDecision({
@@ -362,8 +417,17 @@ function isTrustedPublicSnapshotPublicationTrace(
 function redactSnapshotMeasurement(
   snapshot: PublicProfileSnapshotPayload,
 ): PublicProfileSnapshotPayload {
+  const motif = "purple";
   return {
     ...snapshot,
+    displayProfile: {
+      ...snapshot.displayProfile,
+      motif,
+      profileImage: createCharacterProfileImage({
+        alt: `${snapshot.displayProfile.displayName} 프로필 이미지`,
+        motif,
+      }),
+    },
     profile: { code: "-----", name: "비공개 성향" },
     publicData: { coreDomainMap: [], coreFacetSummary: [] },
     visibility: {
@@ -429,7 +493,7 @@ async function readLatestSnapshot({
   const snapshot = response.data
     .snapshot_payload as PublicProfileSnapshotPayload;
   if (!snapshot.profile?.code || !snapshot.displayProfile?.motif) return null;
-  return snapshot;
+  return { id: String(response.data.id), snapshot };
 }
 
 function getInitialDisplayName(user: User) {

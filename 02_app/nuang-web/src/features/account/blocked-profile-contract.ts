@@ -4,6 +4,7 @@ export type BlockedProfile = {
   blockedAccountId: string;
   blockedAt: string;
   code: string | null;
+  communityProfileId: string | null;
   displayName: string;
   profileImage: PublicProfileImage;
   profileName: string | null;

@@ -4,10 +4,12 @@ import { Bookmark, ChevronRight, Search } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { readClientAccountResults } from "@/features/account/client-account-results";
 import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import {
   candidateAxisCopy,
@@ -227,6 +229,8 @@ export function TraitMapExplorer({ initialCode }: TraitMapExplorerProps) {
           <h1>성향지도</h1>
         </div>
       </header>
+
+      <LegacyCoreBetaNotice className={styles.legacyBetaNotice} context="map" />
 
       <MapStartPanel
         isLoading={!initialCode && !viewerProfileLoaded}
@@ -612,24 +616,46 @@ function buildMapViewerProfile({
   currentTraitProfile: AccountTraitProfile | null;
   localAttempts: LocalAssessmentAttempt[];
 }): MapViewerProfile | null {
-  if (currentTraitProfile) {
+  const collection = collectValidatedCoreResultCandidates({
+    accountReadState,
+    accountResults,
+    localAttempts,
+  });
+  const representativeCandidates = collection.candidates.filter(
+    (candidate) =>
+      candidate.renderable &&
+      candidate.model &&
+      canPromoteCoreResultToRepresentative({
+        assessmentReleaseId: candidate.model.measurement.assessmentReleaseId,
+      }),
+  );
+  const representativeResultReportIds = new Set(
+    representativeCandidates.flatMap((candidate) => {
+      const resultReportId = candidate.model?.identity.accountResultReportId;
+      return resultReportId ? [resultReportId] : [];
+    }),
+  );
+  const applicableTraitProfile =
+    currentTraitProfile &&
+    representativeResultReportIds.has(currentTraitProfile.baseResultReportId)
+      ? currentTraitProfile
+      : null;
+
+  if (applicableTraitProfile) {
     return {
-      code: currentTraitProfile.code,
-      displayName: currentTraitProfile.profileName,
+      code: applicableTraitProfile.code,
+      displayName: applicableTraitProfile.profileName,
       sourceLabel:
-        currentTraitProfile.source === "core_and_topics"
-          ? `내 현재 코드 · 주제 검사 ${currentTraitProfile.topicCount}개 반영`
+        applicableTraitProfile.source === "core_and_topics"
+          ? `내 현재 코드 · 주제 검사 ${applicableTraitProfile.topicCount}개 반영`
           : "내 대표 코드 · 코어 검사 기준",
     };
   }
 
-  const representative = selectRepresentativeCoreResult(
-    collectValidatedCoreResultCandidates({
-      accountReadState,
-      accountResults,
-      localAttempts,
-    }),
-  );
+  const representative = selectRepresentativeCoreResult({
+    ...collection,
+    candidates: representativeCandidates,
+  });
 
   if (!representative) return null;
 

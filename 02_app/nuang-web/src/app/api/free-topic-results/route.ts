@@ -2,10 +2,6 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { canAccessTopicAssessmentRoute } from "@/features/assessment/assessment-catalog";
 import {
-  buildTopicDomainObservations,
-  type TopicTraitEvidenceResult,
-} from "@/features/assessment/account-dynamic-trait-profile";
-import {
   buildFreeTopicResultReport,
   calculateFreeTopicResult,
   getFreeTopicAssessment,
@@ -22,25 +18,14 @@ import {
   getFreeTopicReportContentVersion,
   getFreeTopicScoringVersion,
 } from "@/features/assessment/free-topic-result-version";
-import { buildFreeTopicNuangCodeSection } from "@/features/assessment/free-topic-long-report";
-import {
-  buildTopicTraitImpactSnapshot,
-  readTopicTraitImpactSnapshot,
-  type TopicTraitImpactSnapshot,
-} from "@/features/assessment/topic-trait-impact";
 import {
   resolveAssessmentReleaseById,
   resolveAssessmentRuntimeContent,
 } from "@/features/assessment/server-assessment-content-runtime";
 import { requireAuthenticatedUser } from "@/features/auth/server-auth";
-import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
 import { localResultIdSchema } from "@/features/result-persistence/local-result-id-contract";
 import { createApiClosedResponse } from "@/lib/api/closed-state";
 import { createSupabaseServiceClient } from "@/lib/supabase/service";
-import {
-  calculateAccountTraitProfileTransition,
-  rebuildAccountTraitProfile,
-} from "@/features/assessment/server-account-trait-profile";
 
 const privateNoStoreHeaders = {
   "cache-control": "private, no-store, max-age=0",
@@ -238,64 +223,8 @@ export async function POST(request: Request) {
 
   const accountId = (accountResponse.data as { account_id: string }).account_id;
   const canonicalResultId = crypto.randomUUID();
-  const calculatedAt = new Date();
-  const candidateTopicResult: TopicTraitEvidenceResult = {
-    assessment,
-    completedAt: payload.completedAt,
-    questions,
-    resultId: canonicalResultId,
-    scoresByQuestionId: result.scoresByQuestionId ?? {},
-    scoresByTargetId: result.scoresByTargetId,
-    slug: assessment.slug,
-  };
-  const transition = await calculateAccountTraitProfileTransition({
-    accountId,
-    candidateTopicResult,
-    client: serviceClient,
-    now: calculatedAt,
-  });
-
-  if (!transition) {
-    return NextResponse.json(
-      { error: "account_trait_transition_read_failed" },
-      { status: 503 },
-    );
-  }
-
-  const fallbackProfileCode =
-    transition.before?.code ??
-    (await readCoreProfileCodeAtCompletion({
-      accountId,
-      client: serviceClient,
-      completedAt: payload.completedAt,
-    }));
-  const currentProfileCode = transition.after?.code ?? fallbackProfileCode;
-  const topicEvidence = buildTopicDomainObservations(
-    candidateTopicResult,
-    calculatedAt,
-  );
-  const traitImpactSnapshot = buildTopicTraitImpactSnapshot({
-    affectedDomainIds: topicEvidence.map(
-      (observation) => observation.target.id,
-    ),
-    after: transition.after,
-    before: transition.before,
-    calculatedAt: calculatedAt.toISOString(),
-    evidenceApplied: topicEvidence.length > 0,
-    isRetest: transition.isRetest,
-    selectedAsLatest: transition.selectedAsLatest,
-  });
-  const nuangCodeSection = currentProfileCode
-    ? buildFreeTopicNuangCodeSection({
-        assessment,
-        code: currentProfileCode,
-        scoresByScaleId: result.scoresByScaleId,
-      })
-    : null;
-  const reportSnapshot: FreeTopicResultReport = {
-    ...baseReportSnapshot,
-    ...(nuangCodeSection ? { nuangCodeSection } : {}),
-  };
+  const reportSnapshot =
+    redactLegacyCoreContextFromTopicReport(baseReportSnapshot);
   const evidencePayload = {
     assessmentSnapshot: assessment,
     evidenceVersion,
@@ -311,7 +240,6 @@ export async function POST(request: Request) {
     scoresByQuestionId: result.scoresByQuestionId,
     scoresByTargetId: result.scoresByTargetId,
     scoringVersion,
-    traitImpactSnapshot,
     validResponsesByScaleId: result.validResponsesByScaleId,
   };
   const insertResponse = await serviceClient
@@ -326,7 +254,7 @@ export async function POST(request: Request) {
       completed_at: payload.completedAt,
       evidence_payload: evidencePayload,
       local_result_id: payload.localResultId,
-      profile_code_at_completion: currentProfileCode,
+      profile_code_at_completion: null,
       result_summary: {
         summary: result.summary,
         title: assessment.title,
@@ -356,20 +284,6 @@ export async function POST(request: Request) {
     if (existingResponse.error || !existingResult) {
       return NextResponse.json(
         { error: "free_topic_result_read_after_conflict_failed" },
-        { status: 503 },
-      );
-    }
-
-    // 직전 요청이 결과 저장 뒤 중단됐더라도 현재 대표 프로필을 다시 수선합니다.
-    const repairedTraitProfile = await rebuildAccountTraitProfile({
-      accountId,
-      client: serviceClient,
-      now: calculatedAt,
-    });
-
-    if (existingResult.traitImpactSnapshot?.after && !repairedTraitProfile) {
-      return NextResponse.json(
-        { error: "account_trait_profile_write_failed" },
         { status: 503 },
       );
     }
@@ -405,19 +319,6 @@ export async function POST(request: Request) {
   }
 
   const inserted = insertResponse.data as { id: string; updated_at: string };
-  const persistedTraitProfile = await rebuildAccountTraitProfile({
-    accountId,
-    client: serviceClient,
-    now: calculatedAt,
-  });
-
-  if (transition.after && !persistedTraitProfile) {
-    return NextResponse.json(
-      { error: "account_trait_profile_write_failed" },
-      { status: 503 },
-    );
-  }
-
   const syncedAt = inserted.updated_at;
 
   return NextResponse.json({
@@ -433,14 +334,12 @@ export async function POST(request: Request) {
       localResultId: payload.localResultId,
       productReleaseId: runtime.releaseId,
       questions,
-      profileCodeAtCompletion: currentProfileCode,
       reportContentVersion,
       reportSnapshot,
       result,
       scoringVersion,
       serverResultId: inserted.id,
       syncedAt,
-      traitImpactSnapshot,
     }),
     resultId: inserted.id,
     syncedAt,
@@ -649,10 +548,6 @@ export async function DELETE(request: Request) {
     );
   }
 
-  if (deleteResponse.data === true) {
-    await rebuildAccountTraitProfile({ accountId, client: serviceClient });
-  }
-
   return NextResponse.json(
     { authUserId: auth.user.id, ok: true },
     { headers: privateNoStoreHeaders },
@@ -684,14 +579,12 @@ function serializeFreeTopicResult({
   localResultId,
   productReleaseId,
   questions,
-  profileCodeAtCompletion,
   reportContentVersion,
   reportSnapshot,
   result,
   scoringVersion,
   serverResultId,
   syncedAt,
-  traitImpactSnapshot,
 }: {
   assessment: NonNullable<ReturnType<typeof getFreeTopicAssessment>>;
   completedAt: string;
@@ -701,14 +594,12 @@ function serializeFreeTopicResult({
   localResultId: string;
   productReleaseId?: string | null;
   questions: FreeTopicQuestion[];
-  profileCodeAtCompletion: string | null;
   reportContentVersion: string;
   reportSnapshot: FreeTopicResultReport;
   result: FreeTopicScoreResult;
   scoringVersion: string;
   serverResultId: string;
   syncedAt: string;
-  traitImpactSnapshot?: TopicTraitImpactSnapshot;
 }) {
   return {
     assessment: {
@@ -725,20 +616,11 @@ function serializeFreeTopicResult({
     localResultId,
     ...(productReleaseId ? { productReleaseId } : {}),
     questionsSnapshot: questions,
-    ...(profileCodeAtCompletion
-      ? {
-          nuangCodeContext: {
-            capturedAt: completedAt,
-            code: profileCodeAtCompletion,
-          },
-        }
-      : {}),
     reportContentVersion,
-    reportSnapshot,
+    reportSnapshot: redactLegacyCoreContextFromTopicReport(reportSnapshot),
     result,
     scoringVersion,
     serverResultId,
-    ...(traitImpactSnapshot ? { traitImpactSnapshot } : {}),
     sync: { status: "synced", syncedAt },
   };
 }
@@ -825,10 +707,6 @@ async function serializeStoredFreeTopicResult(row: FreeTopicResultRow) {
     localResultId: row.local_result_id,
     productReleaseId,
     questions,
-    profileCodeAtCompletion:
-      typeof row.profile_code_at_completion === "string"
-        ? row.profile_code_at_completion
-        : null,
     reportContentVersion:
       reportContentVersion || getFreeTopicReportContentVersion(assessment.slug),
     reportSnapshot,
@@ -836,8 +714,6 @@ async function serializeStoredFreeTopicResult(row: FreeTopicResultRow) {
     scoringVersion,
     serverResultId: row.id,
     syncedAt: row.updated_at ?? row.completed_at,
-    traitImpactSnapshot:
-      readTopicTraitImpactSnapshot(evidence.traitImpactSnapshot) ?? undefined,
   });
 }
 
@@ -867,37 +743,12 @@ function readQuestionSnapshot(value: unknown): FreeTopicQuestion[] | null {
   return questions.length === value.length ? questions : null;
 }
 
-async function readCoreProfileCodeAtCompletion({
-  accountId,
-  client,
-  completedAt,
-}: {
-  accountId: string;
-  client: NonNullable<ReturnType<typeof createSupabaseServiceClient>>;
-  completedAt: string;
-}) {
-  const response = await client
-    .schema("report")
-    .from("result_report")
-    .select("profile_code, report_kind, created_at")
-    .eq("account_id", accountId)
-    .is("deleted_at", null)
-    .lte("created_at", completedAt)
-    .order("created_at", { ascending: false })
-    .limit(20);
-
-  if (response.error) return null;
-  const rows = (response.data ?? []) as Array<{
-    created_at: string;
-    profile_code: string;
-    report_kind: "full" | "quick";
-  }>;
-  const full = rows.find((row) => row.report_kind === "full");
-  const selected = full ?? rows[0];
-
-  return isCurrentNuangCode(selected?.profile_code)
-    ? selected.profile_code
-    : null;
+function redactLegacyCoreContextFromTopicReport(
+  report: FreeTopicResultReport,
+): FreeTopicResultReport {
+  const redactedReport = { ...report };
+  delete redactedReport.nuangCodeSection;
+  return redactedReport;
 }
 
 function readSummary(value: unknown) {

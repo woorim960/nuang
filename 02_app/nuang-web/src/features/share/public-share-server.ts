@@ -40,6 +40,7 @@ export async function readPublicShareToken(
       status: "active",
     };
   }
+  if (guestShare.status === "closed") return { status: "closed" };
   if (guestShare.status === "expired") return { status: "expired" };
   if (guestShare.status === "invalid") return { status: "not_found" };
   if (guestShare.status === "unavailable") return { status: "closed" };

@@ -608,7 +608,9 @@ describe("feed server writes", () => {
       public_projection_payload: {
         reportShare: {
           assessmentTitle: "위로받을 때 필요한 것",
+          profileCode: "",
           profileId,
+          profileName: "위로받을 때 필요한 것",
           reportKey,
           reportType: "topic",
           resultLabel: "위로받을 때 필요한 것",
@@ -694,7 +696,7 @@ describe("feed server writes", () => {
     ).toBe(false);
   });
 
-  it("allows a validated core result attachment", async () => {
+  it("allows a core result attachment only when the server policy authorizes it", async () => {
     const reportId = "44444444-4444-4444-8444-444444444444";
     const { client, operations } = createMockClient((operation) => {
       if (
@@ -969,7 +971,7 @@ describe("feed server writes", () => {
     );
   });
 
-  it("stores balance game posts with poll options and an anonymous code vote", async () => {
+  it("stores a balance vote without copying a contained code identity", async () => {
     const { client, operations } = createMockClient((operation) => {
       if (
         operation.schema === "identity" &&
@@ -1090,11 +1092,18 @@ describe("feed server writes", () => {
       operations.find((item) => item.table === "feed_poll_vote")?.insertRow,
     ).toMatchObject({
       account_id: accountId,
-      nuang_code: "ENAKQ",
+      nuang_code: null,
       option_id: "44444444-4444-4444-8444-444444444444",
       poll_id: "33333333-3333-4333-8333-333333333333",
-      profile_name: "관계를 여는 선도자",
+      profile_name: null,
     });
+    expect(
+      operations.some(
+        (operation) =>
+          operation.table === "profile_public_snapshot" ||
+          operation.table === "result_report",
+      ),
+    ).toBe(false);
     expect(JSON.stringify(operations)).not.toContain("direct_response");
     expect(JSON.stringify(operations)).not.toContain("raw_score");
   });
@@ -1433,7 +1442,7 @@ describe("feed server writes", () => {
     ).toEqual([{ label: "새 선택 A" }, { label: "새 선택 B" }]);
   });
 
-  it("updates an existing balance vote when the viewer changes their choice", async () => {
+  it("updates an existing balance vote while clearing untraced code identity", async () => {
     const pollId = "33333333-3333-4333-8333-333333333333";
     const optionId = "55555555-5555-4555-8555-555555555555";
     const voteId = "66666666-6666-4666-8666-666666666666";
@@ -1541,9 +1550,9 @@ describe("feed server writes", () => {
     });
     const updateOperation = operations.find((operation) => operation.updateRow);
     expect(updateOperation?.updateRow).toEqual({
-      nuang_code: "ENAKQ",
+      nuang_code: null,
       option_id: optionId,
-      profile_name: "관계를 여는 선도자",
+      profile_name: null,
     });
     expect(updateOperation?.filters).toEqual(
       expect.arrayContaining([
@@ -2250,6 +2259,237 @@ describe("feed server writes", () => {
     expect(
       hasFilter(updateOperation!, "eq", "author_account_id", accountId),
     ).toBe(true);
+  });
+
+  it("does not republish an existing result-summary core share", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const resultReportId = "44444444-4444-4444-8444-444444444444";
+    publicationMocks.readCoreResultPublicationDecision.mockResolvedValueOnce({
+      eligible: false,
+      reason: "legacy_core_public_propagation_blocked",
+    });
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            attachment_payload: [
+              { id: resultReportId, type: "result_summary" },
+            ],
+            id: postId,
+            public_projection_payload: {
+              reportShare: {
+                profileCode: "INGMC",
+                profileName: "이전 코어 결과",
+              },
+            },
+            published_at: "2026-07-28T00:00:00.000Z",
+            source: "report_share",
+            source_id: null,
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "update_post",
+        body: "이전 코어 결과를 다시 공개해요.",
+        postId,
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      code: "feed_result_release_not_publicable",
+      ok: false,
+    });
+    expect(
+      publicationMocks.readCoreResultPublicationDecision,
+    ).toHaveBeenCalledWith({
+      client,
+      ownerAccountId: accountId,
+      resultReportId,
+    });
+    expect(operations.some((operation) => operation.updateRow)).toBe(false);
+  });
+
+  it("does not republish a provenance-free projected core share", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            attachment_payload: [],
+            id: postId,
+            public_projection_payload: {
+              reportShare: {
+                profileCode: "INGMC",
+                profileName: "이전 코어 결과",
+                reportType: "core",
+              },
+            },
+            published_at: "2026-07-28T00:00:00.000Z",
+            source: "report_share",
+            source_id: null,
+          },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "update_post",
+        body: "이전 코어 결과를 다시 공개해요.",
+        postId,
+        visibility: "profile_public",
+      },
+      user,
+    });
+
+    expect(result).toEqual({
+      code: "feed_result_release_not_publicable",
+      ok: false,
+    });
+    expect(
+      publicationMocks.readCoreResultPublicationDecision,
+    ).not.toHaveBeenCalled();
+    expect(operations.some((operation) => operation.updateRow)).toBe(false);
+  });
+
+  it("removes a contained code before republishing a stored topic report share", async () => {
+    const postId = "22222222-2222-4222-8222-222222222222";
+    const reportId = "44444444-4444-4444-8444-444444444444";
+    const reportKey = `topic_${reportId}`;
+    const profileId = "55555555-5555-4555-8555-555555555555";
+    const { client, operations } = createMockClient((operation) => {
+      if (
+        operation.schema === "identity" &&
+        operation.table === "auth_identity"
+      ) {
+        return { data: { account_id: accountId }, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "maybeSingle"
+      ) {
+        return {
+          data: {
+            attachment_payload: [
+              { id: reportKey, profileId, type: "original_report" },
+            ],
+            id: postId,
+            public_projection_payload: {
+              bodyPreview: "내 위로 결과를 공유해요.",
+              reportShare: {
+                assessmentKind: "full",
+                assessmentTitle: "위로받을 때 필요한 것",
+                completedAt: "2026-07-28T09:00:00.000Z",
+                domains: [],
+                profileCode: "INGMC",
+                profileId,
+                profileName: "조용한 곁 지킴",
+                reportKey,
+                reportType: "topic",
+                resultLabel: "위로받을 때 필요한 것",
+              },
+            },
+            published_at: null,
+            source: "report_share",
+            source_id: reportKey,
+          },
+          error: null,
+        };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "link_domain_policy"
+      ) {
+        return { data: [], error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_external_link"
+      ) {
+        return { data: null, error: null };
+      }
+      if (
+        operation.schema === "feed" &&
+        operation.table === "feed_post" &&
+        operation.method === "single"
+      ) {
+        return {
+          data: { id: postId, moderation_status: "published" },
+          error: null,
+        };
+      }
+      return { data: null, error: { message: "unexpected operation" } };
+    });
+
+    const result = await writeFeedRequestForAccount({
+      client,
+      payload: {
+        action: "update_post",
+        body: "내 위로 결과를 다시 공개해요.",
+        postId,
+        visibility: "public",
+      },
+      user,
+    });
+
+    expect(result).toMatchObject({
+      data: {
+        action: "update_post",
+        id: postId,
+        moderationStatus: "published",
+      },
+      ok: true,
+    });
+    const updateOperation = operations.find(
+      (operation) =>
+        operation.table === "feed_post" && Boolean(operation.updateRow),
+    );
+    expect(updateOperation?.updateRow?.public_projection_payload).toMatchObject(
+      {
+        bodyPreview: "내 위로 결과를 공유해요.",
+        reportShare: {
+          profileCode: "",
+          profileName: "위로받을 때 필요한 것",
+          reportKey,
+          reportType: "topic",
+        },
+      },
+    );
+    expect(
+      JSON.stringify(updateOperation?.updateRow?.public_projection_payload),
+    ).not.toContain("INGMC");
   });
 
   it("soft deletes an owned post and preserves it for operational recovery", async () => {

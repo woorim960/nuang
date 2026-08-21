@@ -43,9 +43,16 @@ export function ProfileReportCollection({
           ),
     [activeFilter, items],
   );
+  const hasExploratoryCore = items.some(isExploratoryCoreReport);
+  const hasValidatedCore = items.some(
+    (report) => report.type === "core" && !isExploratoryCoreReport(report),
+  );
+  const hasVisibilityManagedReport = items.some(
+    (report) => !isExploratoryCoreReport(report),
+  );
 
   async function toggleVisibility(report: OriginalProfileReportSummary) {
-    if (pendingKey) return;
+    if (pendingKey || isExploratoryCoreReport(report)) return;
     const nextVisibility =
       report.visibility === "profile_public" ? "private" : "profile_public";
     setPendingKey(report.reportKey);
@@ -93,21 +100,29 @@ export function ProfileReportCollection({
 
   return (
     <section className={styles.collection}>
-      {isSelf ? (
+      {isSelf && hasVisibilityManagedReport ? (
         <div className={styles.visibilityGuide}>
           <Eye aria-hidden="true" size={18} strokeWidth={1.75} />
           <p>
-            <strong>검사 결과는 기본으로 프로필에 공개돼요.</strong>
+            <strong>
+              주제 검사와 별난 연구소 결과는 기본으로 프로필에 공개돼요.
+            </strong>
             공개하고 싶지 않은 결과는 아래 스위치를 끄면 바로 비공개로 바뀌어요.
             검사에서 고른 답과 원점수는 공개되지 않아요.
           </p>
         </div>
       ) : null}
-      {isSelf && items.some((report) => report.type === "core") ? (
+      {isSelf && (hasExploratoryCore || hasValidatedCore) ? (
         <Link className={styles.latestCoreLink} href="/my/reports">
           <span>
-            <small>내 결과 리포트</small>
-            <strong>가장 최근 코어 결과 보기</strong>
+            <small>
+              {hasValidatedCore ? "내 결과 리포트" : "탐색적 베타 기록"}
+            </small>
+            <strong>
+              {hasValidatedCore
+                ? "가장 최근 코어 결과 보기"
+                : "이전 코어 결과 보기"}
+            </strong>
           </span>
           <ChevronRight aria-hidden="true" size={19} strokeWidth={1.65} />
         </Link>
@@ -134,6 +149,7 @@ export function ProfileReportCollection({
       {visibleReports.length > 0 ? (
         <div className={styles.list}>
           {visibleReports.map((report) => {
+            const isExploratoryBeta = isExploratoryCoreReport(report);
             const isPublic = report.visibility === "profile_public";
             const visibilityStatus = isPublic
               ? "프로필 방문자와 공유 링크를 받은 사람이 볼 수 있어요"
@@ -146,7 +162,7 @@ export function ProfileReportCollection({
                 key={report.reportKey}
               >
                 <Link
-                  aria-label={`${report.assessmentTitle}, ${report.resultName} 리포트 보기`}
+                  aria-label={`${report.assessmentTitle}, ${report.resultName}${isExploratoryBeta ? ", 탐색적 베타" : ""} 리포트 보기`}
                   className={styles.reportLink}
                   href={getReportHref({ isSelf, profileId, report })}
                 >
@@ -155,9 +171,17 @@ export function ProfileReportCollection({
                       {getProfileReportKindLabel(report.type)} ·{" "}
                       {formatDate(report.completedAt)}
                     </small>
+                    {isExploratoryBeta ? (
+                      <span className={styles.betaLabel}>탐색적 베타</span>
+                    ) : null}
                     <strong>{report.assessmentTitle}</strong>
                     <b>{report.resultName}</b>
                     <p>{report.summary}</p>
+                    {isExploratoryBeta ? (
+                      <span className={styles.betaNote}>
+                        참고용 · 대표 코드로 사용되지 않음 · 공개·공유 불가
+                      </span>
+                    ) : null}
                   </span>
                   <ChevronRight
                     aria-hidden="true"
@@ -167,7 +191,7 @@ export function ProfileReportCollection({
                   />
                 </Link>
 
-                {isSelf ? (
+                {isSelf && !isExploratoryBeta ? (
                   <button
                     aria-busy={pendingKey === report.reportKey}
                     aria-checked={isPublic}
@@ -216,6 +240,10 @@ function getReportExperienceSection(
   report: OriginalProfileReportSummary,
 ): AssessmentExperienceSectionId {
   return report.type === "lab" ? "lab" : "self";
+}
+
+function isExploratoryCoreReport(report: OriginalProfileReportSummary) {
+  return report.type === "core" && report.isExploratoryBeta !== false;
 }
 
 function getReportHref({

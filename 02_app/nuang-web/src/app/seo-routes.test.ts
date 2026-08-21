@@ -8,7 +8,7 @@ describe("search crawler routes", () => {
     const entries = sitemap();
     const urls = entries.map((entry) => entry.url);
 
-    expect(entries).toHaveLength(50);
+    expect(entries).toHaveLength(17);
     expect(new Set(urls).size).toBe(entries.length);
     expect(urls.every((url) => url.startsWith("https://nuang.app/"))).toBe(
       true,
@@ -17,7 +17,9 @@ describe("search crawler routes", () => {
     expect(urls).toContain(
       "https://nuang.app/assessments/together/balance-game",
     );
-    expect(urls).toContain("https://nuang.app/map/ENAKQ");
+    expect(urls.some((url) => new URL(url).pathname.startsWith("/map"))).toBe(
+      false,
+    );
     expect(urls.some((url) => /admin|api|results|rooms/iu.test(url))).toBe(
       false,
     );

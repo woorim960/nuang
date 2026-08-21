@@ -28,6 +28,11 @@ import {
 import { nextNuangCodeScheme } from "@/features/nuang-code/next-code-scheme";
 import { ReportShareSheet } from "@/features/share/ReportShareSheet";
 import { AssessmentRestartSheet } from "@/features/assessment/AssessmentRestartSheet";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
+import {
+  canPublishCoreResult,
+  isLegacyCoreReleaseTrace,
+} from "@/features/assessment/legacy-core-containment-policy";
 import {
   createFreshLocalAttempt,
   listLocalAttempts,
@@ -115,8 +120,22 @@ export function CoreResultReportTemplate({
   const content = assembleCoreResultContent(model);
   const isOwner = surfacePolicy.isOwner;
   const isPrecision = model.identity.kind === "full";
-  const isCandidateMeasurement =
-    model.measurement.codeSchemeVersion === nextNuangCodeScheme.version;
+  const isLegacyCoreMeasurement =
+    model.identity.sourceState === "legacy_partial" ||
+    isLegacyCoreReleaseTrace({
+      assessmentReleaseId: model.measurement.assessmentReleaseId,
+      codeSchemeVersion: model.measurement.codeSchemeVersion,
+      scoringReleaseId: model.measurement.scoringReleaseId,
+    });
+  const isCorePublicationAllowed = canPublishCoreResult({
+    assessmentReleaseId: model.measurement.assessmentReleaseId,
+    codeSchemeVersion: model.measurement.codeSchemeVersion,
+    scoringReleaseId: model.measurement.scoringReleaseId,
+  });
+  const effectiveShareEnabled = shareEnabled && isCorePublicationAllowed;
+  const effectiveShareUnavailable = !isCorePublicationAllowed
+    ? undefined
+    : onShareUnavailable;
   const resolvedFeedbackResultReportId =
     feedbackResultReportId ?? model.identity.accountResultReportId;
   const feedbackSurface =
@@ -176,7 +195,7 @@ export function CoreResultReportTemplate({
 
   useEffect(() => {
     let active = true;
-    if (openShareOnMount && shareEnabled) {
+    if (openShareOnMount && effectiveShareEnabled) {
       void Promise.resolve().then(() => {
         if (active) {
           activeShareButtonRef.current = shareButtonRef.current;
@@ -187,7 +206,7 @@ export function CoreResultReportTemplate({
     return () => {
       active = false;
     };
-  }, [openShareOnMount, shareEnabled]);
+  }, [effectiveShareEnabled, openShareOnMount]);
 
   async function openRestartSheet() {
     const attempts = await listLocalAttempts().catch(() => []);
@@ -238,17 +257,17 @@ export function CoreResultReportTemplate({
           <span aria-hidden="true" />
         )}
         <p>결과 리포트</p>
-        {shareEnabled || onShareUnavailable ? (
+        {effectiveShareEnabled || effectiveShareUnavailable ? (
           <button
             aria-haspopup="dialog"
             aria-label="검사 결과 공유"
             className={styles.iconButton}
             onClick={() => {
-              if (shareEnabled) {
+              if (effectiveShareEnabled) {
                 activeShareButtonRef.current = shareButtonRef.current;
                 setSelectedShareContent(null);
                 setIsShareOpen(true);
-              } else onShareUnavailable?.();
+              } else effectiveShareUnavailable?.();
             }}
             ref={shareButtonRef}
             type="button"
@@ -306,12 +325,11 @@ export function CoreResultReportTemplate({
 
         {continuity}
 
-        {isCandidateMeasurement ? (
-          <div className={styles.partialNotice} role="note">
-            현재 코어 측정 모형은 검증 중인 후보 버전이에요. 이번 답을
-            돌아보기 위한 참고이며, 사람 연구·집단별 공정성 검토·정량 검증을
-            마친 확정 판정이 아니에요.
-          </div>
+        {isLegacyCoreMeasurement ? (
+          <LegacyCoreBetaNotice
+            className={styles.legacyBetaNotice}
+            context="result"
+          />
         ) : null}
 
         {model.completeness.state === "partial" && isOwner ? (
@@ -343,7 +361,7 @@ export function CoreResultReportTemplate({
                 <article key={item.label}>
                   <p>{item.label}</p>
                   <span>{item.text}</span>
-                  {isOwner && shareEnabled ? (
+                  {isOwner && effectiveShareEnabled ? (
                     <button
                       className={styles.sentenceShare}
                       onClick={(event) => {
@@ -412,8 +430,8 @@ export function CoreResultReportTemplate({
         ) : null}
 
         {content.showFiveLetterExplorer &&
-          model.result.code.length === 5 &&
-          (hasCompleteDomains || !surfacePolicy.showMeasurementDetails) ? (
+        model.result.code.length === 5 &&
+        (hasCompleteDomains || !surfacePolicy.showMeasurementDetails) ? (
           <ReportSection
             id="report-code"
             intro={
@@ -675,7 +693,7 @@ export function CoreResultReportTemplate({
         ) : null}
       </div>
 
-      {shareEnabled ? (
+      {effectiveShareEnabled ? (
         <ReportShareSheet
           canonicalUrl={canonicalShareUrl}
           content={selectedShareContent ?? shareContent}

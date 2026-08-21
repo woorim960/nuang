@@ -15,13 +15,16 @@ import {
   getFreeTopicAssessment,
   getFreeTopicQuestions,
 } from "@/features/assessment/free-topic-assessments";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
 
 type ServiceClient = SupabaseClient;
 
 type CoreRow = {
+  code_scheme_version: string | null;
   created_at: string;
   id: string;
+  measurement_release_id: string | null;
   profile_code: string;
   report_kind: "full" | "quick";
   summary: unknown;
@@ -72,7 +75,9 @@ export async function readAccountTraitProfile({
     .maybeSingle();
 
   if (response.error || !response.data) return null;
-  return parseStoredAccountTraitProfile(response.data as AccountTraitProfileRow);
+  return parseStoredAccountTraitProfile(
+    response.data as AccountTraitProfileRow,
+  );
 }
 
 export async function calculateAccountTraitProfileTransition({
@@ -137,10 +142,9 @@ export async function rebuildAccountTraitProfile({
   });
 
   if (!profile) {
-    const profileTable = client.schema("scoring").from("account_trait_profile");
-    if ("delete" in profileTable && typeof profileTable.delete === "function") {
-      await profileTable.delete().eq("account_id", accountId);
-    }
+    // G00-D06 preserves historical rows for audit while keeping them out of
+    // the current resolver. A missing eligible baseline must never delete or
+    // overwrite the archived account-level profile.
     return null;
   }
 
@@ -178,7 +182,9 @@ async function readAccountTraitEvidence({
     client
       .schema("report")
       .from("result_report")
-      .select("id, report_kind, profile_code, summary, created_at")
+      .select(
+        "id, report_kind, profile_code, summary, created_at, measurement_release_id, code_scheme_version",
+      )
       .eq("account_id", accountId)
       .is("deleted_at", null)
       .order("created_at", { ascending: false })
@@ -205,6 +211,16 @@ async function readAccountTraitEvidence({
 }
 
 function parseCoreResult(row: CoreRow): CoreTraitEvidenceResult[] {
+  if (
+    typeof row.measurement_release_id !== "string" ||
+    typeof row.code_scheme_version !== "string" ||
+    !canPromoteCoreResultToRepresentative({
+      assessmentReleaseId: row.measurement_release_id,
+    })
+  ) {
+    return [];
+  }
+
   const summary = asRecord(row.summary);
   const domains = Array.isArray(summary.domains)
     ? summary.domains.flatMap((value) => {

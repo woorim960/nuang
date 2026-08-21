@@ -63,6 +63,14 @@
     calc(1.25rem + env(safe-area-inset-bottom));
 }
 
+.betaNotice {
+  margin-top: 1rem;
+}
+
+.completionBetaNotice {
+  margin: 1rem clamp(1rem, 5.2vw, 1.5rem) 0;
+}
+
 .hero {
   position: relative;
   display: grid;

@@ -18,6 +18,7 @@ describe("BlockedProfilesScreen", () => {
               blockedAccountId: "11111111-1111-4111-8111-111111111111",
               blockedAt: "2026-07-21T00:00:00.000Z",
               code: "ENAKQ",
+              communityProfileId: "33333333-3333-4333-8333-333333333333",
               displayName: "여름",
               profileImage: createCharacterProfileImage({
                 alt: "여름 프로필 이미지",
@@ -50,6 +51,11 @@ describe("BlockedProfilesScreen", () => {
       "/api/community/blocks",
       expect.objectContaining({ method: "DELETE" }),
     );
+    expect(JSON.parse(String(fetchMock.mock.calls[1]?.[1]?.body))).toEqual({
+      blockedAccountId: "11111111-1111-4111-8111-111111111111",
+      communityProfileId: "33333333-3333-4333-8333-333333333333",
+      publicSnapshotId: "22222222-2222-4222-8222-222222222222",
+    });
   });
 
   it("shows a useful empty state without adding another setting task", async () => {

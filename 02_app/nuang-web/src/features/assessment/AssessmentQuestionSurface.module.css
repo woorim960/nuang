@@ -115,6 +115,15 @@
   padding: clamp(1.35rem, 5.6vw, 1.9rem) var(--nu-assessment-gutter) 1.25rem;
 }
 
+.legacyBetaNotice {
+  margin: 1rem var(--nu-assessment-gutter) 1.1rem;
+}
+
+.mainContent > .legacyBetaNotice {
+  margin-top: 0;
+  margin-inline: 0;
+}
+
 .guide {
   max-width: 31rem;
   margin: 0 0 1.5rem;

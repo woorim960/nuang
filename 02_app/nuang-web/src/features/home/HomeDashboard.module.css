@@ -142,6 +142,10 @@
   margin-top: 0.75rem;
 }
 
+.legacyBetaNotice {
+  margin-top: 0.85rem;
+}
+
 .characterGlow {
   position: absolute;
   width: 78px;

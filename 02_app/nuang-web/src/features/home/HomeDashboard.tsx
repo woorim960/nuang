@@ -24,6 +24,7 @@ import {
   listHomeFeedPreviewItems,
 } from "@/features/feed/feed-seed";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import {
   buildHomeDashboardModel,
@@ -286,6 +287,10 @@ function HeroLayout({
         <HeroCharacter />
         <div className={styles.heroCopy}>{children}</div>
       </div>
+      <LegacyCoreBetaNotice
+        className={styles.legacyBetaNotice}
+        context="home"
+      />
       <div className={styles.heroActions}>{actions}</div>
     </section>
   );

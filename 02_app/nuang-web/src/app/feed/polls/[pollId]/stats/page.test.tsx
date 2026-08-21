@@ -1,4 +1,4 @@
-import { fireEvent, render, screen } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import FeedPollStatsPage, {
   metadata,
@@ -22,7 +22,7 @@ vi.mock("next/navigation", () => ({
 }));
 
 describe("FeedPollStatsPage", () => {
-  it("shows the V12 code perspective explorer from the first vote", async () => {
+  it("fails closed for injected legacy code rows", async () => {
     feedReadMocks.createServerFeedPollStatsPayload.mockResolvedValue({
       codeRows: [
         {
@@ -103,20 +103,14 @@ describe("FeedPollStatsPage", () => {
     expect(
       screen.getByRole("heading", { name: "코드별 관점" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("2개 코드가 참여했어요")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /ENAKQ.*1명/ })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
-    expect(screen.getByText("ENAKQ의 관점")).toBeInTheDocument();
-    expect(screen.getByText("100%")).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /IRGMC.*1명/ }));
-    expect(screen.getByText("IRGMC의 관점")).toBeInTheDocument();
-    expect(screen.getByText("100%")).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /IRGMC.*1명/ })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
+    expect(screen.getByText("코드별 관점을 모으고 있어요")).toBeInTheDocument();
+    expect(
+      screen.getByText("아직 공개할 수 있는 코드별 결과가 없어요"),
+    ).toBeInTheDocument();
+    expect(document.body).not.toHaveTextContent("ENAKQ");
+    expect(document.body).not.toHaveTextContent("IRGMC");
+    expect(document.body).not.toHaveTextContent("관계를 여는 선도자");
+    expect(document.body).not.toHaveTextContent("단서로 답을 찾는 탐구자");
     expect(document.body).not.toHaveTextContent("누가 투표");
   });
 

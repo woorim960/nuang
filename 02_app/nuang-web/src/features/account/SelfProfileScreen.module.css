@@ -50,6 +50,14 @@
   );
 }
 
+.legacyBetaNotice {
+  margin-top: 1rem;
+}
+
+.legacyBetaNotice + .assessmentAction {
+  margin-top: 0.75rem;
+}
+
 .assessmentCopy {
   display: grid;
   gap: 0.25rem;

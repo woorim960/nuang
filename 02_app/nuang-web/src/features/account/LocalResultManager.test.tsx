@@ -174,6 +174,10 @@ describe("LocalResultManager", () => {
 
     expect(await screen.findByText("최근 검사 결과")).toBeInTheDocument();
     expect(screen.getByText("정밀 코어")).toBeInTheDocument();
+    expect(screen.getByText("탐색적 베타 결과")).toBeVisible();
+    expect(
+      screen.getByText("참고용 · 대표 코드로 사용되지 않음 · 공유 불가"),
+    ).toBeVisible();
     expect(
       screen.getByRole("link", { name: /정밀 코어 결과 열기/ }),
     ).toHaveAttribute(
@@ -456,6 +460,8 @@ describe("LocalResultManager", () => {
       screen.getByRole("heading", { name: "지난 검사 결과" }),
     ).toBeInTheDocument();
     expect(screen.getAllByText("정밀 코어")).toHaveLength(1);
+    expect(screen.getAllByText(/탐색적 베타/)).toHaveLength(2);
+    expect(screen.getAllByText(/참고용 · 공유 불가/)).toHaveLength(1);
     expect(screen.queryByText(/계정|기기|로컬/)).not.toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: /정밀 코어 결과 열기/ }),
@@ -620,6 +626,10 @@ describe("LocalResultManager", () => {
     expect(
       await screen.findByText("이전에 저장한 코어 검사 결과"),
     ).toBeInTheDocument();
+    expect(screen.getByText("탐색적 베타 결과")).toBeVisible();
+    expect(
+      screen.getByText(/참고용 · 대표 코드로 사용되지 않음 · 공유 불가/),
+    ).toBeVisible();
     expect(screen.queryByText("TVOAE")).not.toBeInTheDocument();
     expect(screen.queryByText("불꽃의 온기 탐험가")).not.toBeInTheDocument();
     expect(
@@ -701,5 +711,11 @@ function createAccountResult(
     resultLabel: "현재 대표 성향",
     resultReportId:
       overrides.resultReportId ?? "22222222-2222-4222-8222-222222222222",
+    versionBundle: {
+      assessmentReleaseId: "NUANG-CORE-FULL-CANDIDATE-1.0",
+      codeSchemeVersion: "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+      scoringModelVersion: "NUANG-SCORING-MODEL-CANDIDATE-1.0",
+      scoringReleaseId: "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0",
+    },
   };
 }

@@ -29,6 +29,7 @@ export default async function CommunityProfilePage({
   if (!payload) notFound();
 
   const socialState = await resolveSocialState(
+    payload.profile.source.communityProfileId,
     payload.profile.source.publicSnapshotId,
   );
 
@@ -50,7 +51,10 @@ export default async function CommunityProfilePage({
   );
 }
 
-async function resolveSocialState(publicSnapshotId: string) {
+async function resolveSocialState(
+  communityProfileId: string | undefined,
+  publicSnapshotId: string,
+) {
   const [serverClient, serviceClient] = await Promise.all([
     createServerSupabaseClient(),
     Promise.resolve(createSupabaseServiceClient()),
@@ -58,6 +62,11 @@ async function resolveSocialState(publicSnapshotId: string) {
 
   if (!serverClient || !serviceClient) {
     return {
+      actions: {
+        block: "unavailable" as const,
+        follow: "unavailable" as const,
+        report: "unavailable" as const,
+      },
       followerCount: 0,
       following: false,
       followingCount: 0,
@@ -69,6 +78,7 @@ async function resolveSocialState(publicSnapshotId: string) {
 
   return readCommunityProfileSocialState({
     client: serviceClient,
+    communityProfileId,
     publicSnapshotId,
     user: data.user ?? null,
   });

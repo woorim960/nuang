@@ -5,8 +5,16 @@ import {
 } from "@/features/account/server-writes";
 import { sendAdminReviewNotification } from "@/features/admin/server-admin-review-notification";
 import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
+import {
+  canPromoteCoreResultToRepresentative,
+  legacyCoreContainmentPolicy,
+} from "@/features/assessment/legacy-core-containment-policy";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
 import { isUserManageableFeedPostSource } from "@/features/feed/feed-post-management";
+import {
+  sanitizeNonCoreReportShareInPublicProjection,
+  sanitizeNonCoreReportShareProjection,
+} from "@/features/feed/report-share-projection-containment";
 import {
   getBalanceGameOption,
   getBalanceGameTemplate,
@@ -244,6 +252,14 @@ async function updateFeedPost({
     return { code: "feed_target_not_supported", ok: false };
   }
 
+  if (
+    existing.source === "report_share" &&
+    payload.visibility !== "private_draft" &&
+    !(await canPublishStoredReportShare({ accountId, client, row: existing }))
+  ) {
+    return { code: "feed_result_release_not_publicable", ok: false };
+  }
+
   if (payload.poll && existing.source !== "balance_game") {
     return { code: "feed_target_invalid", ok: false };
   }
@@ -334,10 +350,14 @@ async function updateFeedPost({
     existing.public_projection_payload &&
     typeof existing.public_projection_payload === "object" &&
     !Array.isArray(existing.public_projection_payload)
-      ? existing.public_projection_payload
+      ? (existing.public_projection_payload as Record<string, unknown>)
       : {};
+  const releaseSafeExistingProjection =
+    existing.source === "report_share" && payload.visibility !== "private_draft"
+      ? sanitizeNonCoreReportShareInPublicProjection(existingProjection)
+      : existingProjection;
   const publicProjection = {
-    ...existingProjection,
+    ...releaseSafeExistingProjection,
     ...(payload.poll
       ? {
           balanceGame: {
@@ -1039,6 +1059,148 @@ async function canPublishCoreReportAttachment({
   return publication.eligible;
 }
 
+async function canPublishStoredReportShare({
+  accountId,
+  client,
+  row,
+}: {
+  accountId: string;
+  client: ServiceClient;
+  row: {
+    attachment_payload: unknown;
+    public_projection_payload: unknown;
+    source_id: string | null;
+  };
+}) {
+  const attachments = Array.isArray(row.attachment_payload)
+    ? row.attachment_payload
+    : [];
+  const originalAttachments = attachments.filter(
+    (value) =>
+      value &&
+      typeof value === "object" &&
+      (value as { type?: unknown }).type === "original_report",
+  ) as Array<{ id?: unknown; profileId?: unknown }>;
+  const resultAttachments = attachments.filter(
+    (value) =>
+      value &&
+      typeof value === "object" &&
+      (value as { type?: unknown }).type === "result_summary",
+  ) as Array<{ id?: unknown }>;
+
+  if (originalAttachments.length > 1 || resultAttachments.length > 1) {
+    return false;
+  }
+  if (originalAttachments.length === 1 && resultAttachments.length === 1) {
+    return false;
+  }
+
+  const original = originalAttachments[0];
+  if (original) {
+    if (
+      typeof original.id !== "string" ||
+      typeof original.profileId !== "string" ||
+      !uuidPattern.test(original.profileId) ||
+      row.source_id !== original.id
+    ) {
+      return false;
+    }
+    const key = parseProfileReportKey(original.id);
+    if (!key) return false;
+    if (key.kind !== "core") return true;
+
+    const ownerAccountId = await resolveProfileOwnerAccountId({
+      client,
+      profileId: original.profileId,
+    });
+    if (!ownerAccountId) return false;
+    const publication = await readCoreResultPublicationDecision({
+      client,
+      ownerAccountId,
+      resultReportId: key.sourceId,
+    });
+    return publication.eligible;
+  }
+
+  const resultSummary = resultAttachments[0];
+  if (resultSummary) {
+    if (
+      typeof resultSummary.id !== "string" ||
+      !uuidPattern.test(resultSummary.id) ||
+      (row.source_id !== null && row.source_id !== resultSummary.id)
+    ) {
+      return false;
+    }
+    const publication = await readCoreResultPublicationDecision({
+      client,
+      ownerAccountId: accountId,
+      resultReportId: resultSummary.id,
+    });
+    return publication.eligible;
+  }
+
+  const projection = readStoredReportShareProjection(
+    row.public_projection_payload,
+  );
+  if (!projection) return false;
+  if (projection.reportType === "topic" || projection.reportType === "lab") {
+    return true;
+  }
+  if (
+    projection.reportType !== "core" &&
+    typeof projection.profileCode !== "string"
+  ) {
+    return false;
+  }
+
+  const sourceId = readStoredCoreResultId({
+    reportKey: projection.reportKey,
+    sourceId: row.source_id,
+  });
+  if (!sourceId) return false;
+  const publication = await readCoreResultPublicationDecision({
+    client,
+    ownerAccountId: accountId,
+    resultReportId: sourceId,
+  });
+  return publication.eligible;
+}
+
+function readStoredReportShareProjection(value: unknown) {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const reportShare = (value as { reportShare?: unknown }).reportShare;
+  if (
+    !reportShare ||
+    typeof reportShare !== "object" ||
+    Array.isArray(reportShare)
+  ) {
+    return null;
+  }
+  return reportShare as {
+    profileCode?: unknown;
+    reportKey?: unknown;
+    reportType?: unknown;
+  };
+}
+
+function readStoredCoreResultId({
+  reportKey,
+  sourceId,
+}: {
+  reportKey: unknown;
+  sourceId: string | null;
+}) {
+  if (typeof sourceId === "string" && uuidPattern.test(sourceId)) {
+    return sourceId;
+  }
+  const parsedSource =
+    typeof sourceId === "string" ? parseProfileReportKey(sourceId) : null;
+  if (parsedSource?.kind === "core") return parsedSource.sourceId;
+  const parsedReportKey =
+    typeof reportKey === "string" ? parseProfileReportKey(reportKey) : null;
+  return parsedReportKey?.kind === "core" ? parsedReportKey.sourceId : null;
+}
+
 function isMissingFeedTopicColumns(error: unknown) {
   if (!error || typeof error !== "object") return false;
   const candidate = error as { code?: unknown; message?: unknown };
@@ -1719,7 +1881,7 @@ async function writePollVote({
       optionId: payload.optionId,
       pollId: payload.pollId,
     }),
-    readCurrentNuangCodeSnapshot({ accountId, client }),
+    readRepresentativeNuangCodeForPoll({ accountId, client }),
   ]);
 
   if (guardFailure) {
@@ -1767,7 +1929,7 @@ async function insertPollVote({
   optionId: string;
   pollId: string;
   preferUpdate?: boolean;
-  profile?: Awaited<ReturnType<typeof readCurrentNuangCodeSnapshot>>;
+  profile?: Awaited<ReturnType<typeof readRepresentativeNuangCodeForPoll>>;
 }): Promise<ServerWriteResult<{ id: string }, FeedWriteFailureCode>> {
   if (
     enforceOpen &&
@@ -1782,7 +1944,7 @@ async function insertPollVote({
 
   const profile =
     suppliedProfile ??
-    (await readCurrentNuangCodeSnapshot({ accountId, client }));
+    (await readRepresentativeNuangCodeForPoll({ accountId, client }));
   const voteRow = {
     nuang_code: profile.code,
     option_id: optionId,
@@ -1977,40 +2139,29 @@ async function isPollOptionOpen({
   }));
 }
 
-async function readCurrentNuangCodeSnapshot({
+async function readRepresentativeNuangCodeForPoll({
   accountId,
   client,
 }: {
   accountId: string;
   client: ServiceClient;
 }) {
-  const publicSnapshotResponse = await client
-    .schema("profile")
-    .from("profile_public_snapshot")
-    .select("snapshot_payload")
-    .eq("account_id", accountId)
-    .eq("status", "active")
-    .is("deleted_at", null)
-    .order("created_at", { ascending: false })
-    .limit(1)
-    .maybeSingle();
-
-  const publicSnapshotProfile = parseNuangCodeFromPublicSnapshot(
-    publicSnapshotResponse.data
-      ? (publicSnapshotResponse.data as { snapshot_payload?: unknown })
-          .snapshot_payload
-      : null,
-  );
-
-  if (publicSnapshotProfile.code) {
-    return publicSnapshotProfile;
+  // G00-D06 has an intentionally empty representative allowlist. Poll votes
+  // remain writable, but an unvalidated snapshot/latest-result code must not
+  // be copied into the long-lived vote row. Keep this short circuit so the raw
+  // candidate identity is not even read while containment is active.
+  if (legacyCoreContainmentPolicy.representativeReleaseIds.length === 0) {
+    return { code: null, name: null };
   }
 
   const reportResponse = await client
     .schema("report")
     .from("result_report")
-    .select("profile_code, profile_name")
+    .select("profile_code, profile_name, measurement_release_id")
     .eq("account_id", accountId)
+    .in("measurement_release_id", [
+      ...legacyCoreContainmentPolicy.representativeReleaseIds,
+    ])
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
     .limit(1)
@@ -2020,11 +2171,17 @@ async function readCurrentNuangCodeSnapshot({
     const report = reportResponse.data as {
       profile_code?: unknown;
       profile_name?: unknown;
+      measurement_release_id?: unknown;
     };
     const code =
       typeof report.profile_code === "string" ? report.profile_code : null;
 
-    if (isCurrentNuangCode(code)) {
+    if (
+      isCurrentNuangCode(code) &&
+      canPromoteCoreResultToRepresentative({
+        assessmentReleaseId: report.measurement_release_id,
+      })
+    ) {
       return {
         code,
         name:
@@ -2038,39 +2195,6 @@ async function readCurrentNuangCodeSnapshot({
   return {
     code: null,
     name: null,
-  };
-}
-
-function parseNuangCodeFromPublicSnapshot(value: unknown) {
-  if (!value || typeof value !== "object") {
-    return {
-      code: null,
-      name: null,
-    };
-  }
-
-  const snapshot = value as {
-    profile?: {
-      code?: unknown;
-      name?: unknown;
-    };
-  };
-  const code =
-    typeof snapshot.profile?.code === "string" ? snapshot.profile.code : null;
-
-  if (!isCurrentNuangCode(code)) {
-    return {
-      code: null,
-      name: null,
-    };
-  }
-
-  return {
-    code,
-    name:
-      typeof snapshot.profile?.name === "string" && snapshot.profile.name.trim()
-        ? snapshot.profile.name.trim()
-        : getCurrentNuangProfileName(code),
   };
 }
 
@@ -2701,11 +2825,7 @@ function createOriginalReportProjection({
   reportKey: string;
 }): ReportShareProjection {
   const profileCode =
-    original.kind === "core"
-      ? original.result.profileCode
-      : original.kind === "topic"
-        ? (original.result.nuangCodeContext?.code ?? "")
-        : "";
+    original.kind === "core" ? original.result.profileCode : "";
   const profileName =
     original.kind === "core"
       ? original.result.profileName
@@ -2715,7 +2835,7 @@ function createOriginalReportProjection({
       ? original.result.resultLabel
       : original.summary.assessmentTitle;
 
-  return {
+  return sanitizeNonCoreReportShareProjection({
     assessmentKind: original.kind === "core" ? original.result.kind : "full",
     assessmentTitle: original.summary.assessmentTitle,
     completedAt: original.summary.completedAt,
@@ -2733,7 +2853,7 @@ function createOriginalReportProjection({
     reportType: original.kind,
     resultLabel,
     summary: original.summary.summary,
-  };
+  });
 }
 
 function parseReportShareSummary(value: unknown): ReportShareProjection | null {

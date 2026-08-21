@@ -24,6 +24,7 @@ export type OriginalProfileReportSummary = {
   assessmentSlug: string;
   assessmentTitle: string;
   completedAt: string;
+  isExploratoryBeta: boolean;
   reportKey: string;
   resultName: string;
   summary: string;

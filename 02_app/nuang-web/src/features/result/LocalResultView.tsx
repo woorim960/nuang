@@ -107,7 +107,6 @@ const facetShortLabel: Record<string, string> = {
 export function LocalResultView({
   backHref,
   localResultId,
-  openShareOnMount = false,
 }: LocalResultViewProps) {
   const router = useRouter();
   const [attempt, setAttempt] = useState<LocalAssessmentAttempt | null>(null);
@@ -356,7 +355,6 @@ export function LocalResultView({
           }
           deletePending={deleteState === "working"}
           onDelete={() => void handleDeleteResult()}
-          openShareOnMount={false}
           result={result}
         />
       );
@@ -374,7 +372,6 @@ export function LocalResultView({
         }
         deletePending={deleteState === "working"}
         onDelete={() => void handleDeleteResult()}
-        openShareOnMount={openShareOnMount}
         result={result}
         shareReportId={serverResultReportId ?? undefined}
         statusMessage={getClaimStatusMessage(claimState)}
@@ -1023,10 +1020,10 @@ function getClaimStatusMessage(
   if (state === "saving")
     return "다른 기기에서도 볼 수 있도록 저장하고 있어요.";
   if (state === "error") {
-    return "계정 저장은 잠시 뒤 다시 시도해요. 지금도 결과 요약은 공유할 수 있어요.";
+    return "계정 저장은 잠시 뒤 다시 시도해요. 이 베타 결과는 참고용이며 공유할 수 없어요.";
   }
   if (state === "missing_consent") {
-    return "계정에 저장하려면 현재 필수 항목을 확인해 주세요. 결과 요약은 지금도 공유할 수 있어요.";
+    return "계정에 저장하려면 현재 필수 항목을 확인해 주세요. 이 베타 결과는 참고용이며 공유할 수 없어요.";
   }
   return null;
 }

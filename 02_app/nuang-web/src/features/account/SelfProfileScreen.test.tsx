@@ -31,6 +31,11 @@ describe("SelfProfileScreen", () => {
     expect(
       screen.queryByRole("button", { name: "프로필 공유" }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).toHaveTextContent("참고용 · 공유 불가");
 
     expect(screen.getByRole("tab", { name: /게시물/ })).toHaveAttribute(
       "aria-selected",
@@ -47,7 +52,7 @@ describe("SelfProfileScreen", () => {
     ).toBeInTheDocument();
   });
 
-  it("keeps the same profile layout and enables sharing after assessment", () => {
+  it("keeps the same profile layout while containing candidate-code sharing", () => {
     render(
       <SelfProfileScreen
         payload={createPayload({
@@ -80,8 +85,9 @@ describe("SelfProfileScreen", () => {
     expect(screen.getByText("ENAKQ")).toBeInTheDocument();
     expect(screen.getByText("다정한 탐험가")).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "프로필 공유" }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: "프로필 공유" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("참고용 · 공유 불가")).toBeInTheDocument();
     expect(
       screen.getByRole("link", { name: "프로필 편집" }),
     ).toBeInTheDocument();
@@ -113,6 +119,57 @@ describe("SelfProfileScreen", () => {
     expect(
       screen.getByRole("link", { name: "8번부터 이어하기" }),
     ).toBeInTheDocument();
+  });
+
+  it("presents a legacy core result as owner-only exploratory beta history", () => {
+    render(
+      <SelfProfileScreen
+        initialContent="reports"
+        payload={createPayload({
+          assessmentJourney: {
+            assessmentKind: "full",
+            reportHref: "/results/account/11111111-1111-4111-8111-111111111111",
+            state: "exploratory_beta_history",
+          },
+          reports: [
+            {
+              assessmentSlug: "nu-core-full",
+              assessmentTitle: "정밀 코어 검사",
+              completedAt: "2026-08-01T00:00:00.000Z",
+              isExploratoryBeta: true,
+              reportKey: "core_11111111-1111-4111-8111-111111111111",
+              resultName: "다정한 탐험가",
+              summary: "검사 당시 답을 바탕으로 보관한 참고용 결과예요.",
+              type: "core",
+              viewerCanManage: true,
+              visibility: "private",
+            },
+          ],
+          stats: { followers: 0, following: 0, posts: 0, reports: 1 },
+        })}
+      />,
+    );
+
+    expect(screen.getByText("탐색적 베타 결과")).toBeInTheDocument();
+    expect(
+      screen.getByText("이전 탐색 결과를 보관하고 있어요"),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", { name: "베타 결과 보기" }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("link", {
+        name: /정밀 코어 검사.*탐색적 베타.*리포트 보기/,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByText("참고용 · 대표 코드로 사용되지 않음 · 공개·공유 불가"),
+    ).toBeInTheDocument();
+    expect(screen.queryByRole("switch")).not.toBeInTheDocument();
+    expect(
+      screen.queryByText(/검사 결과는 기본으로 프로필에 공개/),
+    ).not.toBeInTheDocument();
+    expect(screen.queryByText(/내 뉴앙 코드와/)).not.toBeInTheDocument();
   });
 
   it("shows unknown values and an area recovery message without fabricating zero", () => {

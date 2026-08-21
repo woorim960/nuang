@@ -1,4 +1,5 @@
 import Image from "next/image";
+import type { ReactNode } from "react";
 import type { AssessmentMode } from "@/features/assessment/types";
 import styles from "@/features/assessment/AssessmentCompletionState.module.css";
 
@@ -19,6 +20,7 @@ type AssessmentCompletionStateProps = {
   adaptiveQuestionCount?: number;
   isWorking: boolean;
   mode: AssessmentMode;
+  notice?: ReactNode;
   onLeave: () => void;
   onReviewAnswers: () => void;
   onRetry: () => void;
@@ -32,6 +34,7 @@ export function AssessmentCompletionState({
   adaptiveQuestionCount = 0,
   isWorking,
   mode,
+  notice,
   onLeave,
   onReviewAnswers,
   onRetry,
@@ -96,6 +99,8 @@ export function AssessmentCompletionState({
       >
         <span className={styles.progressValue} />
       </div>
+
+      {notice}
 
       <section className={styles.content}>
         <div aria-hidden="true" className={styles.visual}>

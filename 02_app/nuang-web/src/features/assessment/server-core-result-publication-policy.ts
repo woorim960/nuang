@@ -1,6 +1,11 @@
 import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
+import {
+  canPublishCoreResult,
+  legacyCoreContainmentPolicy,
+  type LegacyCorePublicDenyReason,
+} from "@/features/assessment/legacy-core-containment-policy";
 
 type ServiceClient = SupabaseClient;
 type PublicableReleaseStatus = "active" | "validated";
@@ -18,7 +23,8 @@ export type CoreResultPublicationDecision =
         | "release_not_publicable"
         | "release_trace_missing"
         | "result_not_found"
-        | "snapshot_not_publicable";
+        | "snapshot_not_publicable"
+        | LegacyCorePublicDenyReason;
     };
 
 const publicableReleaseStatuses = new Set<PublicableReleaseStatus>([
@@ -29,7 +35,7 @@ const publicableReleaseStatuses = new Set<PublicableReleaseStatus>([
 /**
  * 코어 결과가 공개 프로필·공유·피드·사람 비교로 전파될 수 있는지 판정합니다.
  * 개인 저장과 본인 조회에는 사용하지 않습니다. DB 조회가 불완전하면 fail closed
- * 하며 candidate, beta, legacy, retired release는 허용하지 않습니다.
+ * 하며 중앙 exact public allowlist에 없는 모든 release는 허용하지 않습니다.
  */
 export async function readCoreResultPublicationDecision({
   client,
@@ -44,7 +50,7 @@ export async function readCoreResultPublicationDecision({
     .schema("report")
     .from("result_report")
     .select(
-      "id,account_id,report_kind,measurement_release_id,code_scheme_version",
+      "id,account_id,report_kind,measurement_release_id,code_scheme_version,scoring_release_id",
     )
     .eq("id", resultReportId)
     .is("deleted_at", null);
@@ -66,13 +72,28 @@ export async function readCoreResultPublicationDecision({
     id?: unknown;
     measurement_release_id?: unknown;
     report_kind?: unknown;
+    scoring_release_id?: unknown;
   };
   if (
     (report.report_kind !== "quick" && report.report_kind !== "full") ||
     typeof report.measurement_release_id !== "string" ||
-    typeof report.code_scheme_version !== "string"
+    typeof report.code_scheme_version !== "string" ||
+    typeof report.scoring_release_id !== "string"
   ) {
     return { eligible: false, reason: "release_trace_missing" };
+  }
+
+  if (
+    !canPublishCoreResult({
+      codeSchemeVersion: report.code_scheme_version,
+      measurementReleaseId: report.measurement_release_id,
+      scoringReleaseId: report.scoring_release_id,
+    })
+  ) {
+    return {
+      eligible: false,
+      reason: legacyCoreContainmentPolicy.publicDenyReason,
+    };
   }
 
   const [itemReleaseResponse, codeSchemeResponse] = await Promise.all([
@@ -118,7 +139,10 @@ export async function readCoreResultPublicationDecision({
     return { eligible: false, reason: "release_not_publicable" };
   }
 
-  return { eligible: true, resultReportId: String(report.id ?? resultReportId) };
+  return {
+    eligible: true,
+    resultReportId: String(report.id ?? resultReportId),
+  };
 }
 
 export async function readPublicSnapshotPublicationDecision({
@@ -144,9 +168,10 @@ export async function readPublicSnapshotPublicationDecision({
   if (snapshotResponse.error) {
     return { eligible: false, reason: "policy_lookup_failed" };
   }
-  const snapshot = snapshotResponse.data as
-    | { account_id?: unknown; result_report_id?: unknown }
-    | null;
+  const snapshot = snapshotResponse.data as {
+    account_id?: unknown;
+    result_report_id?: unknown;
+  } | null;
   if (
     !snapshot ||
     typeof snapshot.result_report_id !== "string" ||

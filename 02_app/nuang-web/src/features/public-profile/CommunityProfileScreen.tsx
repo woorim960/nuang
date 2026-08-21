@@ -122,9 +122,16 @@ export function CommunityProfileScreen({
     profile.visibility.includedFields.includes("representative_profile") &&
     profile.visibility.includedFields.includes("core_domain_map") &&
     profile.visibility.includedFields.includes("core_facet_summary");
+  const followAvailable =
+    initialSocialState.actions.follow === "ready" ||
+    (initialSocialState.actions.follow === "unfollow_only" && following);
+  const hasUnavailableActions =
+    initialSocialState.actions.block === "unavailable" ||
+    initialSocialState.actions.follow !== "ready" ||
+    initialSocialState.actions.report === "unavailable";
 
   async function toggleFollow() {
-    if (followPending) return;
+    if (followPending || !followAvailable) return;
     setFollowPending(true);
     setMessage(null);
 
@@ -132,6 +139,7 @@ export function CommunityProfileScreen({
       const response = await fetch("/api/community/follow", {
         body: JSON.stringify({
           action: following ? "unfollow" : "follow",
+          communityProfileId: profile.source.communityProfileId,
           publicSnapshotId: profile.source.publicSnapshotId,
         }),
         headers: { "content-type": "application/json" },
@@ -245,7 +253,9 @@ export function CommunityProfileScreen({
   }
 
   async function blockProfile() {
-    if (safetyPending) return;
+    if (safetyPending || initialSocialState.actions.block === "unavailable") {
+      return;
+    }
     setSafetyPending(true);
     setMessage(null);
 
@@ -253,6 +263,7 @@ export function CommunityProfileScreen({
       const response = await fetch("/api/community/profile-safety", {
         body: JSON.stringify({
           action: "block",
+          communityProfileId: profile.source.communityProfileId,
           publicSnapshotId: profile.source.publicSnapshotId,
         }),
         headers: { "content-type": "application/json" },
@@ -364,11 +375,17 @@ export function CommunityProfileScreen({
                   aria-pressed={following}
                   className={styles.followButton}
                   data-following={following}
-                  disabled={followPending}
+                  disabled={followPending || !followAvailable}
                   onClick={toggleFollow}
                   type="button"
                 >
-                  {followPending ? "저장 중" : following ? "팔로잉" : "팔로우"}
+                  {followPending
+                    ? "저장 중"
+                    : following
+                      ? "팔로잉"
+                      : followAvailable
+                        ? "팔로우"
+                        : "팔로우 사용 불가"}
                 </button>
                 <button
                   className={styles.compareButton}
@@ -388,7 +405,9 @@ export function CommunityProfileScreen({
             )
           }
           bio={profile.display.profileMessage}
-          connectionsHrefBase={`/feed/profiles/${profile.source.publicSnapshotId}/connections`}
+          connectionsHrefBase={`/feed/profiles/${
+            profile.source.communityProfileId ?? profile.source.publicSnapshotId
+          }/connections`}
           displayName={profile.display.displayName}
           emptyBio={
             isSelf
@@ -436,6 +455,16 @@ export function CommunityProfileScreen({
         ) : !isPreview && !comparisonAvailable ? (
           <p className={styles.comparisonNotice}>
             이 사용자는 상세 성향 비교를 공개하지 않았어요.
+          </p>
+        ) : null}
+
+        {!isSelf && !isPreview && hasUnavailableActions ? (
+          <p className={styles.message} role="status">
+            이 일반 프로필에서는 새 팔로우·신고·차단 기능을 아직 사용할 수
+            없어요.
+            {initialSocialState.actions.follow === "unfollow_only"
+              ? " 기존 팔로우는 해제할 수 있어요."
+              : ""}
           </p>
         ) : null}
 
@@ -594,20 +623,32 @@ export function CommunityProfileScreen({
               </button>
               {!initialSocialState.isOwnProfile ? (
                 <>
-                  <Link
-                    href={`${pathname}/report`}
-                    onClick={() => setMoreOpen(false)}
-                  >
-                    <Flag aria-hidden="true" size={18} />
-                    신고하기
-                  </Link>
+                  {initialSocialState.actions.report === "ready" ? (
+                    <Link
+                      href={`${pathname}/report`}
+                      onClick={() => setMoreOpen(false)}
+                    >
+                      <Flag aria-hidden="true" size={18} />
+                      신고하기
+                    </Link>
+                  ) : (
+                    <button disabled type="button">
+                      <Flag aria-hidden="true" size={18} />
+                      신고하기 · 사용 불가
+                    </button>
+                  )}
                   <button
                     className={styles.dangerAction}
+                    disabled={
+                      initialSocialState.actions.block === "unavailable"
+                    }
                     onClick={() => setBlockConfirmOpen(true)}
                     type="button"
                   >
                     <Ban aria-hidden="true" size={18} />
-                    차단하기
+                    {initialSocialState.actions.block === "ready"
+                      ? "차단하기"
+                      : "차단하기 · 사용 불가"}
                   </button>
                 </>
               ) : null}

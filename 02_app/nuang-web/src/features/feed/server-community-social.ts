@@ -10,6 +10,7 @@ import type {
 } from "@/features/feed/community-social-contract";
 import { ensureAccountForUser } from "@/features/account/server-writes";
 import {
+  createNeutralCommunityProfileSnapshot,
   mergeCommunityProfileIntoSnapshot,
   readCommunityProfilesForAccounts,
 } from "@/features/account/server-community-profile";
@@ -17,8 +18,24 @@ import { getModerationSeverity } from "@/features/moderation/moderation-queue-co
 import { isCurrentNuangCode } from "@/features/nuang-code/profile-name-resolution";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import type { PublicProfileSnapshotPayload } from "@/features/together/public-comparison-contract";
+import {
+  callCommunityStableProfileMutationRpc,
+  readCommunityStableProfileMutationReadiness,
+} from "@/features/feed/server-community-stable-mutations";
 
 type ServiceClient = SupabaseClient;
+type PublicSnapshotConnectionRow = {
+  account_id: string;
+  id: string;
+  snapshot_payload: unknown;
+};
+
+type CommunityProfileMutationTarget = {
+  accountId: string;
+  communityProfileId: string | null;
+  displayName: string | null;
+  publicSnapshotId: string | null;
+};
 
 export type BlockedCommunityAccountIdsResult =
   | {
@@ -31,17 +48,24 @@ export type BlockedCommunityAccountIdsResult =
 
 export async function readCommunityProfileSocialState({
   client,
+  communityProfileId,
   publicSnapshotId,
   user,
 }: {
   client: ServiceClient;
+  communityProfileId?: string;
   publicSnapshotId: string;
   user: User | null;
 }): Promise<CommunityProfileSocialState> {
-  const snapshot = await readSnapshotOwner(client, publicSnapshotId);
+  const snapshot = await resolveCommunityProfileMutationTarget({
+    client,
+    communityProfileId,
+    publicSnapshotId,
+  });
 
   if (!snapshot) {
     return {
+      actions: createProfileActionAvailability(null, false),
       followerCount: 0,
       following: false,
       followingCount: 0,
@@ -49,25 +73,37 @@ export async function readCommunityProfileSocialState({
     };
   }
 
-  const [followerResponse, followingResponse, viewerAccountId] =
-    await Promise.all([
-      client
-        .schema("feed")
-        .from("profile_follow")
-        .select("id", { count: "exact", head: true })
-        .eq("target_account_id", snapshot.accountId)
-        .is("deleted_at", null),
-      client
-        .schema("feed")
-        .from("profile_follow")
-        .select("id", { count: "exact", head: true })
-        .eq("follower_account_id", snapshot.accountId)
-        .is("deleted_at", null),
-      user ? readAccountId(client, user.id) : Promise.resolve(null),
-    ]);
+  const [
+    followerResponse,
+    followingResponse,
+    viewerAccountId,
+    stableMutationReadiness,
+  ] = await Promise.all([
+    client
+      .schema("feed")
+      .from("profile_follow")
+      .select("id", { count: "exact", head: true })
+      .eq("target_account_id", snapshot.accountId)
+      .is("deleted_at", null),
+    client
+      .schema("feed")
+      .from("profile_follow")
+      .select("id", { count: "exact", head: true })
+      .eq("follower_account_id", snapshot.accountId)
+      .is("deleted_at", null),
+    user ? readAccountId(client, user.id) : Promise.resolve(null),
+    snapshot.communityProfileId
+      ? readCommunityStableProfileMutationReadiness({ client })
+      : Promise.resolve({ state: "disabled" as const }),
+  ]);
 
   if (!viewerAccountId) {
     return {
+      actions: createProfileActionAvailability(
+        snapshot.publicSnapshotId,
+        false,
+        stableMutationReadiness.state,
+      ),
       followerCount: followerResponse.count ?? 0,
       following: false,
       followingCount: followingResponse.count ?? 0,
@@ -77,6 +113,11 @@ export async function readCommunityProfileSocialState({
 
   if (viewerAccountId === snapshot.accountId) {
     return {
+      actions: createProfileActionAvailability(
+        snapshot.publicSnapshotId,
+        false,
+        stableMutationReadiness.state,
+      ),
       followerCount: followerResponse.count ?? 0,
       following: false,
       followingCount: followingResponse.count ?? 0,
@@ -93,9 +134,16 @@ export async function readCommunityProfileSocialState({
     .is("deleted_at", null)
     .maybeSingle();
 
+  const following = Boolean(followResponse.data);
+
   return {
+    actions: createProfileActionAvailability(
+      snapshot.publicSnapshotId,
+      following,
+      stableMutationReadiness.state,
+    ),
     followerCount: followerResponse.count ?? 0,
-    following: Boolean(followResponse.data),
+    following,
     followingCount: followingResponse.count ?? 0,
     isOwnProfile: false,
   };
@@ -111,7 +159,7 @@ export async function readCommunityProfileConnections({
   user: User | null;
 }): Promise<CommunityProfileConnectionsResult> {
   const [snapshot, viewerAccount] = await Promise.all([
-    readSnapshotOwner(client, publicSnapshotId),
+    readPublicProfileOwner(client, publicSnapshotId),
     user
       ? readAccountIdResult(client, user.id)
       : Promise.resolve({ accountId: null, state: "ready" } as const),
@@ -202,7 +250,10 @@ export async function readCommunityProfileConnections({
   return {
     followers: mapConnectionRows(followerRows, profilesByAccountId),
     following: mapConnectionRows(followingRows, profilesByAccountId),
-    ownerDisplayName: ownerPayload?.displayProfile.displayName ?? "프로필",
+    ownerDisplayName:
+      snapshot.displayName ??
+      ownerPayload?.displayProfile.displayName ??
+      "프로필",
     ownerPublicSnapshotId: publicSnapshotId,
     state: "ready",
   };
@@ -253,16 +304,23 @@ export async function readCommunityNotifications({
 export async function writeProfileFollow({
   action,
   client,
+  communityProfileId,
   publicSnapshotId,
   user,
 }: {
   action: "follow" | "unfollow";
   client: ServiceClient;
-  publicSnapshotId: string;
+  communityProfileId?: string;
+  publicSnapshotId?: string;
   user: User;
 }) {
   const [snapshot, followerAccountId] = await Promise.all([
-    readSnapshotOwner(client, publicSnapshotId),
+    resolveCommunityProfileMutationTarget({
+      allowInactiveTarget: action === "unfollow",
+      client,
+      communityProfileId,
+      publicSnapshotId,
+    }),
     ensureAccountForUser(client, user).then((result) =>
       result.ok ? result.accountId : null,
     ),
@@ -276,25 +334,55 @@ export async function writeProfileFollow({
     return { code: "cannot_follow_self" as const, ok: false as const };
   }
 
-  const blockRelationship = await readBlockRelationship({
-    accountId: followerAccountId,
-    client,
-    targetAccountId: snapshot.accountId,
-  });
-  if (blockRelationship.state === "unavailable") {
-    return { code: "follow_write_failed" as const, ok: false as const };
-  }
-  if (blockRelationship.blocked) {
-    return { code: "profile_not_found" as const, ok: false as const };
+  if (snapshot.communityProfileId) {
+    const readiness = await readCommunityStableProfileMutationReadiness({
+      client,
+    });
+    if (readiness.state === "ready") {
+      return writeStableProfileFollow({
+        action,
+        client,
+        followerAccountId,
+        target: {
+          ...snapshot,
+          communityProfileId: snapshot.communityProfileId,
+        },
+      });
+    }
+    if (readiness.state === "unavailable" && action === "follow") {
+      return {
+        code: "profile_action_unavailable" as const,
+        ok: false as const,
+      };
+    }
   }
 
   if (action === "follow") {
+    if (!snapshot.publicSnapshotId) {
+      return {
+        code: "profile_action_unavailable" as const,
+        ok: false as const,
+      };
+    }
+
+    const blockRelationship = await readBlockRelationship({
+      accountId: followerAccountId,
+      client,
+      targetAccountId: snapshot.accountId,
+    });
+    if (blockRelationship.state === "unavailable") {
+      return { code: "follow_write_failed" as const, ok: false as const };
+    }
+    if (blockRelationship.blocked) {
+      return { code: "profile_not_found" as const, ok: false as const };
+    }
+
     const guardFailure = await checkCommunityWriteGuard({
       accountId: followerAccountId,
       action: "follow_profile",
       client,
       target: {
-        id: publicSnapshotId,
+        id: snapshot.publicSnapshotId,
         key: null,
         type: "public_profile",
       },
@@ -314,7 +402,7 @@ export async function writeProfileFollow({
         deleted_at: action === "follow" ? null : now,
         follower_account_id: followerAccountId,
         target_account_id: snapshot.accountId,
-        target_public_snapshot_id: publicSnapshotId,
+        target_public_snapshot_id: snapshot.publicSnapshotId,
         updated_at: now,
       },
       { onConflict: "follower_account_id,target_account_id" },
@@ -365,7 +453,10 @@ export async function writeProfileFollow({
         event_type: "follow",
         preview_text: "새로운 팔로우가 시작됐어요.",
         recipient_account_id: snapshot.accountId,
-        target_id: publicSnapshotId,
+        target_id:
+          snapshot.communityProfileId ??
+          snapshot.publicSnapshotId ??
+          snapshot.accountId,
         target_type: "public_profile",
       });
 
@@ -392,6 +483,66 @@ export async function writeProfileFollow({
     .select("id", { count: "exact", head: true })
     .eq("target_account_id", snapshot.accountId)
     .is("deleted_at", null);
+
+  return {
+    data: {
+      followerCount: countResponse.count ?? 0,
+      following: action === "follow",
+    },
+    ok: true as const,
+  };
+}
+
+async function writeStableProfileFollow({
+  action,
+  client,
+  followerAccountId,
+  target,
+}: {
+  action: "follow" | "unfollow";
+  client: ServiceClient;
+  followerAccountId: string;
+  target: CommunityProfileMutationTarget & { communityProfileId: string };
+}) {
+  const response = await callCommunityStableProfileMutationRpc({
+    client,
+    name: "set_profile_follow_v2",
+    params: {
+      p_expected_target_account_id: target.accountId,
+      p_follower_account_id: followerAccountId,
+      p_following: action === "follow",
+      p_target_community_profile_id: target.communityProfileId,
+    },
+  });
+
+  if (response.state !== "ready") {
+    return { code: "follow_write_failed" as const, ok: false as const };
+  }
+  if (!response.result.ok) {
+    return response.result.code === "blocked_relationship" ||
+      response.result.code === "target_invalid"
+      ? { code: "profile_not_found" as const, ok: false as const }
+      : { code: "follow_write_failed" as const, ok: false as const };
+  }
+
+  const expectedCode = action === "follow" ? "following" : "unfollowed";
+  if (
+    response.result.code !== expectedCode ||
+    response.result.following !== (action === "follow")
+  ) {
+    return { code: "follow_write_failed" as const, ok: false as const };
+  }
+
+  const countResponse = await client
+    .schema("feed")
+    .from("profile_follow")
+    .select("id", { count: "exact", head: true })
+    .eq("target_account_id", target.accountId)
+    .is("deleted_at", null);
+
+  if (countResponse.error) {
+    return { code: "follow_write_failed" as const, ok: false as const };
+  }
 
   return {
     data: {
@@ -484,6 +635,7 @@ async function readBlockRelationship({
 export async function writeProfileSafetyAction({
   action,
   client,
+  communityProfileId,
   details,
   publicSnapshotId,
   reason,
@@ -491,13 +643,19 @@ export async function writeProfileSafetyAction({
 }: {
   action: "block" | "report" | "unblock";
   client: ServiceClient;
+  communityProfileId?: string;
   details?: string;
-  publicSnapshotId: string;
+  publicSnapshotId?: string;
   reason?: "privacy" | "harassment" | "sensitive_content" | "spam" | "other";
   user: User;
 }) {
   const [snapshot, viewerAccountId] = await Promise.all([
-    readSnapshotOwner(client, publicSnapshotId),
+    resolveCommunityProfileMutationTarget({
+      allowInactiveTarget: action === "unblock",
+      client,
+      communityProfileId,
+      publicSnapshotId,
+    }),
     readAccountId(client, user.id),
   ]);
 
@@ -509,10 +667,41 @@ export async function writeProfileSafetyAction({
     return { code: "cannot_target_self" as const, ok: false as const };
   }
 
+  if (snapshot.communityProfileId) {
+    const readiness = await readCommunityStableProfileMutationReadiness({
+      client,
+    });
+    if (readiness.state === "ready") {
+      return writeStableProfileSafetyAction({
+        action,
+        client,
+        details,
+        reason,
+        target: {
+          ...snapshot,
+          communityProfileId: snapshot.communityProfileId,
+        },
+        viewerAccountId,
+      });
+    }
+    if (readiness.state === "unavailable" && action !== "unblock") {
+      return {
+        code: "profile_action_unavailable" as const,
+        ok: false as const,
+      };
+    }
+  }
+
   if (action === "report") {
     const now = new Date().toISOString();
     if (!reason) {
       return { code: "report_reason_required" as const, ok: false as const };
+    }
+    if (!snapshot.publicSnapshotId) {
+      return {
+        code: "profile_action_unavailable" as const,
+        ok: false as const,
+      };
     }
 
     const guardFailure = await checkCommunityWriteGuard({
@@ -520,7 +709,7 @@ export async function writeProfileSafetyAction({
       action: "report_profile",
       client,
       target: {
-        id: publicSnapshotId,
+        id: snapshot.publicSnapshotId,
         key: null,
         type: "public_profile",
       },
@@ -546,7 +735,7 @@ export async function writeProfileSafetyAction({
         severity: getModerationSeverity(reason),
         status: "queued",
         target_account_id: snapshot.accountId,
-        target_public_snapshot_id: publicSnapshotId,
+        target_public_snapshot_id: snapshot.publicSnapshotId,
       })
       .select("id,created_at")
       .single();
@@ -571,11 +760,18 @@ export async function writeProfileSafetyAction({
     return { data: { reported: true }, ok: true as const };
   }
 
+  if (!snapshot.publicSnapshotId) {
+    return {
+      code: "profile_action_unavailable" as const,
+      ok: false as const,
+    };
+  }
+
   const response = await client.schema("feed").rpc("set_profile_block", {
     p_blocked: action === "block",
     p_blocked_account_id: snapshot.accountId,
     p_blocker_account_id: viewerAccountId,
-    p_target_public_snapshot_id: publicSnapshotId,
+    p_target_public_snapshot_id: snapshot.publicSnapshotId,
   });
 
   return response.error || response.data !== (action === "block")
@@ -583,22 +779,307 @@ export async function writeProfileSafetyAction({
     : { data: { blocked: action === "block" }, ok: true as const };
 }
 
-async function readSnapshotOwner(
+async function writeStableProfileSafetyAction({
+  action,
+  client,
+  details,
+  reason,
+  target,
+  viewerAccountId,
+}: {
+  action: "block" | "report" | "unblock";
+  client: ServiceClient;
+  details?: string;
+  reason?: "privacy" | "harassment" | "sensitive_content" | "spam" | "other";
+  target: CommunityProfileMutationTarget & { communityProfileId: string };
+  viewerAccountId: string;
+}) {
+  if (action === "report") {
+    if (!reason) {
+      return { code: "report_reason_required" as const, ok: false as const };
+    }
+
+    const response = await callCommunityStableProfileMutationRpc({
+      client,
+      name: "create_profile_report_v2",
+      params: {
+        p_details: details?.trim() || null,
+        p_expected_target_account_id: target.accountId,
+        p_reason: reason,
+        p_reporter_account_id: viewerAccountId,
+        p_target_community_profile_id: target.communityProfileId,
+      },
+    });
+
+    if (response.state !== "ready") {
+      return { code: "profile_report_failed" as const, ok: false as const };
+    }
+    if (!response.result.ok) {
+      if (response.result.code === "rate_limited") {
+        return {
+          code: "profile_report_rate_limited" as const,
+          ok: false as const,
+        };
+      }
+      return response.result.code === "target_invalid"
+        ? { code: "profile_not_found" as const, ok: false as const }
+        : { code: "profile_report_failed" as const, ok: false as const };
+    }
+    if (
+      (response.result.code !== "reported" &&
+        response.result.code !== "already_reported") ||
+      response.result.reported !== true
+    ) {
+      return { code: "profile_report_failed" as const, ok: false as const };
+    }
+
+    if (response.result.code === "reported") {
+      if (
+        !response.result.changed ||
+        !response.result.reportId ||
+        !response.result.createdAt
+      ) {
+        return { code: "profile_report_failed" as const, ok: false as const };
+      }
+      await sendAdminReviewNotification({
+        id: response.result.reportId,
+        kind: "profile_report",
+        occurredAt: response.result.createdAt,
+      });
+    }
+
+    return { data: { reported: true }, ok: true as const };
+  }
+
+  const response = await callCommunityStableProfileMutationRpc({
+    client,
+    name: "set_profile_block_v2",
+    params: {
+      p_blocked: action === "block",
+      p_blocker_account_id: viewerAccountId,
+      p_expected_target_account_id: target.accountId,
+      p_target_community_profile_id: target.communityProfileId,
+    },
+  });
+
+  if (response.state !== "ready") {
+    return { code: "profile_block_failed" as const, ok: false as const };
+  }
+  if (!response.result.ok) {
+    if (response.result.code === "rate_limited") {
+      return {
+        code: "profile_block_rate_limited" as const,
+        ok: false as const,
+      };
+    }
+    return response.result.code === "target_invalid"
+      ? { code: "profile_not_found" as const, ok: false as const }
+      : { code: "profile_block_failed" as const, ok: false as const };
+  }
+
+  const blocked = action === "block";
+  const expectedCode = blocked ? "blocked" : "unblocked";
+  if (
+    response.result.code !== expectedCode ||
+    response.result.blocked !== blocked
+  ) {
+    return { code: "profile_block_failed" as const, ok: false as const };
+  }
+
+  return { data: { blocked }, ok: true as const };
+}
+
+function createProfileActionAvailability(
+  publicSnapshotId: string | null,
+  following: boolean,
+  stableMutationState: "disabled" | "ready" | "unavailable" = "disabled",
+): CommunityProfileSocialState["actions"] {
+  if (stableMutationState === "ready") {
+    return { block: "ready", follow: "ready", report: "ready" };
+  }
+
+  if (stableMutationState === "unavailable") {
+    return {
+      block: "unavailable",
+      follow: following ? "unfollow_only" : "unavailable",
+      report: "unavailable",
+    };
+  }
+
+  if (publicSnapshotId) {
+    return { block: "ready", follow: "ready", report: "ready" };
+  }
+
+  return {
+    block: "unavailable",
+    follow: following ? "unfollow_only" : "unavailable",
+    report: "unavailable",
+  };
+}
+
+async function readPublicProfileOwner(
   client: ServiceClient,
   publicSnapshotId: string,
 ) {
-  const response = await client
+  return resolveCommunityProfileMutationTarget({ client, publicSnapshotId });
+}
+
+async function resolveCommunityProfileMutationTarget({
+  allowInactiveTarget = false,
+  client,
+  communityProfileId,
+  publicSnapshotId,
+}: {
+  allowInactiveTarget?: boolean;
+  client: ServiceClient;
+  communityProfileId?: string;
+  publicSnapshotId?: string;
+}): Promise<CommunityProfileMutationTarget | null> {
+  if (communityProfileId) {
+    const communityProfile = await readCommunityProfileById({
+      allowInactiveTarget,
+      client,
+      communityProfileId,
+    });
+    if (communityProfile.state === "unavailable") return null;
+
+    if (communityProfile.data) {
+      const snapshot =
+        publicSnapshotId && publicSnapshotId !== communityProfileId
+          ? await readProfileSnapshotById({
+              allowInactiveTarget,
+              client,
+              publicSnapshotId,
+            })
+          : ({ data: null, state: "ready" } as const);
+      if (snapshot.state === "unavailable") return null;
+      if (
+        publicSnapshotId &&
+        publicSnapshotId !== communityProfileId &&
+        !snapshot.data
+      ) {
+        return null;
+      }
+      if (
+        snapshot.data &&
+        snapshot.data.accountId !== communityProfile.data.accountId
+      ) {
+        return null;
+      }
+
+      return {
+        accountId: communityProfile.data.accountId,
+        communityProfileId,
+        displayName: communityProfile.data.displayName,
+        publicSnapshotId: snapshot.data?.publicSnapshotId ?? null,
+      };
+    }
+
+    // Existing clients used the snapshot UUID as a communityProfileId
+    // fallback. Accept that rolling shape only when both identifiers match.
+    if (!publicSnapshotId || publicSnapshotId !== communityProfileId) {
+      return null;
+    }
+  }
+
+  if (!publicSnapshotId) return null;
+
+  const snapshot = await readProfileSnapshotById({
+    allowInactiveTarget,
+    client,
+    publicSnapshotId,
+  });
+  if (snapshot.state === "unavailable") return null;
+  if (snapshot.data) {
+    return {
+      accountId: snapshot.data.accountId,
+      // A legacy request may only carry a snapshot UUID. Do not invent a
+      // canonical stable target from another lookup during rolling deploy.
+      communityProfileId: null,
+      displayName: null,
+      publicSnapshotId: snapshot.data.publicSnapshotId,
+    };
+  }
+
+  const communityProfile = await readCommunityProfileById({
+    allowInactiveTarget,
+    client,
+    communityProfileId: publicSnapshotId,
+  });
+  if (communityProfile.state === "unavailable" || !communityProfile.data) {
+    return null;
+  }
+
+  return {
+    accountId: communityProfile.data.accountId,
+    communityProfileId: publicSnapshotId,
+    displayName: communityProfile.data.displayName,
+    publicSnapshotId: null,
+  };
+}
+
+async function readProfileSnapshotById({
+  allowInactiveTarget,
+  client,
+  publicSnapshotId,
+}: {
+  allowInactiveTarget: boolean;
+  client: ServiceClient;
+  publicSnapshotId: string;
+}) {
+  const query = client
     .schema("profile")
     .from("profile_public_snapshot")
     .select("account_id,status")
     .eq("id", publicSnapshotId)
-    .eq("status", "active")
-    .is("deleted_at", null)
-    .maybeSingle();
+    .is("revoked_at", null);
+  const response = allowInactiveTarget
+    ? await query.maybeSingle()
+    : await query.eq("status", "active").is("deleted_at", null).maybeSingle();
 
-  if (response.error || !response.data) return null;
+  if (response.error) return { state: "unavailable" as const };
+  return {
+    data: response.data
+      ? {
+          accountId: String(response.data.account_id),
+          publicSnapshotId,
+        }
+      : null,
+    state: "ready" as const,
+  };
+}
 
-  return { accountId: String(response.data.account_id) };
+async function readCommunityProfileById({
+  allowInactiveTarget,
+  client,
+  communityProfileId,
+}: {
+  allowInactiveTarget: boolean;
+  client: ServiceClient;
+  communityProfileId: string;
+}) {
+  const query = client
+    .schema("profile")
+    .from("community_profile")
+    .select("account_id,display_name")
+    .eq("id", communityProfileId);
+  const response = allowInactiveTarget
+    ? await query.maybeSingle()
+    : await query.eq("status", "active").is("deleted_at", null).maybeSingle();
+
+  if (response.error) return { state: "unavailable" as const };
+  return {
+    data: response.data
+      ? {
+          accountId: String(response.data.account_id),
+          displayName:
+            typeof response.data.display_name === "string"
+              ? response.data.display_name
+              : null,
+        }
+      : null,
+    state: "ready" as const,
+  };
 }
 
 async function readAccountId(client: ServiceClient, supabaseUserId: string) {
@@ -669,41 +1150,60 @@ async function readConnectionProfiles({
     .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
-  if (response.error) return null;
-
   const communityProfiles = await readCommunityProfilesForAccounts({
     accountIds: uniqueAccountIds,
     client,
   });
 
-  for (const row of response.data ?? []) {
+  const latestSnapshotByAccountId = new Map<
+    string,
+    PublicSnapshotConnectionRow
+  >();
+  for (const row of (response.error
+    ? []
+    : (response.data ?? [])) as PublicSnapshotConnectionRow[]) {
     const accountId = String(row.account_id);
-    if (profilesByAccountId.has(accountId)) continue;
-
-    const publicSnapshotId = String(row.id);
-    const baseSnapshot = coerceSnapshotPayload(
-      row.snapshot_payload,
-      publicSnapshotId,
-    );
-    if (!baseSnapshot || !isCurrentNuangCode(baseSnapshot.profile.code)) {
-      continue;
+    if (!latestSnapshotByAccountId.has(accountId)) {
+      latestSnapshotByAccountId.set(accountId, row);
     }
+  }
 
-    const communityProfile = communityProfiles.get(accountId) ?? null;
-    const snapshot = await mergeCommunityProfileIntoSnapshot({
-      client,
-      profile: communityProfile,
-      snapshot: baseSnapshot,
-    });
-    if (!isCurrentNuangCode(snapshot.profile.code)) continue;
+  for (const accountId of uniqueAccountIds) {
+    const communityProfile = communityProfiles.get(accountId);
+    if (!communityProfile) continue;
+    const row = latestSnapshotByAccountId.get(accountId);
+
+    const publicSnapshotId = row ? String(row.id) : communityProfile.id;
+    const baseSnapshot = row
+      ? coerceSnapshotPayload(row.snapshot_payload, publicSnapshotId)
+      : null;
+
+    const snapshot = baseSnapshot
+      ? await mergeCommunityProfileIntoSnapshot({
+          client,
+          profile: communityProfile,
+          snapshot: baseSnapshot,
+        })
+      : await createNeutralCommunityProfileSnapshot({
+          client,
+          profile: communityProfile,
+        });
+    const mayExposeCode = isCurrentNuangCode(snapshot.profile.code);
 
     profilesByAccountId.set(accountId, {
-      code: snapshot.profile.code,
-      communityProfileId: communityProfile?.id,
+      code: mayExposeCode ? snapshot.profile.code : null,
+      communityProfileId: communityProfile.id,
       connectedAt: "",
       displayName: snapshot.displayProfile.displayName,
-      profileImage: snapshot.displayProfile.profileImage,
-      profileName: snapshot.profile.name,
+      profileImage:
+        !mayExposeCode &&
+        snapshot.displayProfile.profileImage.source === "trait_image"
+          ? createCharacterProfileImage({
+              alt: `${snapshot.displayProfile.displayName} 프로필 이미지`,
+              motif: snapshot.displayProfile.motif,
+            })
+          : snapshot.displayProfile.profileImage,
+      profileName: mayExposeCode ? snapshot.profile.name : null,
       publicSnapshotId,
     });
   }
@@ -731,14 +1231,16 @@ function coerceSnapshotPayload(
   const displayName = snapshot.displayProfile?.displayName;
   const motif = snapshot.displayProfile?.motif;
 
-  if (
-    !displayName ||
-    !motif ||
-    !snapshot.profile?.code ||
-    !snapshot.profile.name
-  ) {
-    return null;
-  }
+  if (!displayName || !motif) return null;
+
+  const code =
+    typeof snapshot.profile?.code === "string" && snapshot.profile.code
+      ? snapshot.profile.code
+      : "-----";
+  const profileName =
+    typeof snapshot.profile?.name === "string" && snapshot.profile.name
+      ? snapshot.profile.name
+      : "비공개 성향";
 
   return {
     ...snapshot,
@@ -751,6 +1253,7 @@ function coerceSnapshotPayload(
           motif,
         }),
     },
+    profile: { code, name: profileName },
     snapshotId: snapshot.snapshotId || fallbackSnapshotId,
   };
 }

@@ -88,7 +88,7 @@ export function createPublicProfileCardPayload({
         }
       : {}),
     source: {
-      communityProfileId: communityProfileId ?? snapshot.snapshotId,
+      ...(communityProfileId ? { communityProfileId } : {}),
       publicSnapshotContractVersion: snapshot.contractVersion,
       publicSnapshotId: snapshot.snapshotId,
     },

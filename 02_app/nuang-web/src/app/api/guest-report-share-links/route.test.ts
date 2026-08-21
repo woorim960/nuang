@@ -1,6 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { POST } from "@/app/api/guest-report-share-links/route";
-import { buildLabReportShareContent } from "@/features/share/report-share-contract";
+import {
+  legacyCoreContainmentPolicyReleaseId,
+  legacyCorePublicDenyReason,
+  legacyCorePublicSharingMessage,
+} from "@/features/assessment/legacy-core-containment-policy";
+import {
+  buildCoreReportShareContent,
+  buildLabReportShareContent,
+} from "@/features/share/report-share-contract";
 
 vi.mock("server-only", () => ({}));
 
@@ -34,6 +42,32 @@ describe("POST /api/guest-report-share-links", () => {
       persistent: false,
     });
     expect(payload.url).toMatch(/^https:\/\/nuang\.app\/share\/g1\./);
+  });
+
+  it("fails closed instead of minting a new guest core token", async () => {
+    const response = await POST(
+      new Request("http://localhost/api/guest-report-share-links", {
+        body: JSON.stringify({
+          content: buildCoreReportShareContent({
+            code: "ENAKQ",
+            highlights: ["혼자 정리한 뒤 대화를 시작해요"],
+            profileName: "차분한 탐색가",
+            resultLabel: "나의 뉴앙 코드 결과",
+            summary: "생각을 충분히 정리한 뒤 움직이는 편이에요.",
+          }),
+        }),
+        headers: { "content-type": "application/json" },
+        method: "POST",
+      }),
+    );
+
+    expect(response.status).toBe(409);
+    await expect(response.json()).resolves.toEqual({
+      error: legacyCorePublicDenyReason,
+      message: legacyCorePublicSharingMessage,
+      ok: false,
+      policyReleaseId: legacyCoreContainmentPolicyReleaseId,
+    });
   });
 
   it("rejects private or oversized fields", async () => {

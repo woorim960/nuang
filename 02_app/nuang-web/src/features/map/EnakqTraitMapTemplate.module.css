@@ -24,6 +24,10 @@
   background: var(--nu-info-50);
 }
 
+.legacyBetaNotice {
+  margin: 0.85rem 1rem;
+}
+
 .editorModeBar span {
   color: var(--nu-info-600);
   font-size: var(--nu-text-caption);

@@ -2,6 +2,8 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 import { describe, expect, it } from "vitest";
 import type { CommunityProfileRecord } from "@/features/account/community-profile";
 import {
+  createCommunityProfileEditorPayload,
+  createNeutralCommunityProfileSnapshot,
   mergeCommunityProfileIntoSnapshot,
   readCommunityProfileForAccount,
   type TrustedPublicSnapshotPublicationTrace,
@@ -45,7 +47,7 @@ describe("community profile server reads", () => {
     });
   });
 
-  it("uses a trusted feed trace without reading the active snapshot again", async () => {
+  it("uses a trusted feed trace but redacts it while the exact allowlist is empty", async () => {
     const mock = createPublicationPolicyClient();
 
     const snapshot = await mergeCommunityProfileIntoSnapshot({
@@ -59,7 +61,11 @@ describe("community profile server reads", () => {
       snapshot: createPublicSnapshot(),
     });
 
-    expect(snapshot.profile.code).toBe("INGMC");
+    expect(snapshot.profile).toEqual({ code: "-----", name: "비공개 성향" });
+    expect(snapshot.publicData).toEqual({
+      coreDomainMap: [],
+      coreFacetSummary: [],
+    });
     expect(
       mock.operations.some(
         (operation) => operation.table === "profile_public_snapshot",
@@ -75,13 +81,9 @@ describe("community profile server reads", () => {
         ["is", "deleted_at", null],
       ]),
     );
-    expect(mock.operations.map((operation) => operation.table)).toEqual(
-      expect.arrayContaining([
-        "result_report",
-        "item_bank_release",
-        "code_scheme_release",
-      ]),
-    );
+    expect(mock.operations.map((operation) => operation.table)).toEqual([
+      "result_report",
+    ]);
   });
 
   it.each([
@@ -131,7 +133,7 @@ describe("community profile server reads", () => {
     },
   );
 
-  it("keeps the existing snapshot lookup for callers without a feed trace", async () => {
+  it("keeps the snapshot lookup but redacts callers without an allowlisted trace", async () => {
     const mock = createPublicationPolicyClient();
 
     const snapshot = await mergeCommunityProfileIntoSnapshot({
@@ -140,7 +142,7 @@ describe("community profile server reads", () => {
       snapshot: createPublicSnapshot(),
     });
 
-    expect(snapshot.profile.code).toBe("INGMC");
+    expect(snapshot.profile).toEqual({ code: "-----", name: "비공개 성향" });
     const snapshotRead = mock.operations.find(
       (operation) => operation.table === "profile_public_snapshot",
     );
@@ -152,6 +154,84 @@ describe("community profile server reads", () => {
         ["is", "deleted_at", null],
       ]),
     );
+  });
+
+  it("redacts a contained snapshot code from the owner editor payload", async () => {
+    const mock = createContainedEditorClient();
+
+    const editor = await createCommunityProfileEditorPayload({
+      client: mock.client,
+      profile: createActiveCommunityProfile(),
+    });
+
+    expect(editor).toMatchObject({
+      code: null,
+      displayName: "활성 프로필",
+      handle: "active.profile",
+      profileName: null,
+    });
+    expect(editor.avatar).toMatchObject({ source: "character" });
+    expect(JSON.stringify(editor)).not.toContain("INGMC");
+    expect(JSON.stringify(editor)).not.toContain("/legacy/INGMC.webp");
+    expect(mock.operations.map((operation) => operation.table)).toEqual([
+      "profile_public_snapshot",
+      "profile_public_snapshot",
+      "result_report",
+    ]);
+  });
+
+  it("creates a general profile payload without any candidate measurement", async () => {
+    const profile = {
+      ...createActiveCommunityProfile(),
+      bio: "산책을 좋아해요.",
+    };
+
+    const snapshot = await createNeutralCommunityProfileSnapshot({
+      client: {} as SupabaseClient,
+      profile,
+    });
+
+    expect(snapshot).toMatchObject({
+      displayProfile: {
+        displayName: "활성 프로필",
+        handle: "active.profile",
+        motif: "purple",
+        profileMessage: "산책을 좋아해요.",
+      },
+      profile: { code: "-----", name: "비공개 성향" },
+      publicData: { coreDomainMap: [], coreFacetSummary: [] },
+      snapshotId: profile.id,
+      visibility: { includedFields: ["display_profile"] },
+    });
+  });
+
+  it("neutralizes an archived candidate image and motif when no active overlay is available", async () => {
+    const snapshot = createPublicSnapshot();
+    snapshot.displayProfile = {
+      ...snapshot.displayProfile,
+      motif: "flame",
+      profileImage: {
+        alt: "INGMC 전용 성향 이미지",
+        source: "trait_image",
+        src: "/legacy/INGMC.webp",
+      },
+    };
+
+    const redacted = await mergeCommunityProfileIntoSnapshot({
+      client: {} as SupabaseClient,
+      profile: null,
+      publicationTrace: null,
+      snapshot,
+    });
+
+    expect(redacted.displayProfile).toMatchObject({
+      motif: "purple",
+      profileImage: { motif: "purple", source: "character" },
+    });
+    expect(redacted.displayProfile.profileImage.src).not.toBe(
+      "/legacy/INGMC.webp",
+    );
+    expect(redacted.profile.code).toBe("-----");
   });
 });
 
@@ -198,6 +278,104 @@ function createPublicationPolicyClient() {
   return { client, operations };
 }
 
+function createContainedEditorClient() {
+  const operations: PolicyReadOperation[] = [];
+  const client = {
+    schema(schema: string) {
+      return {
+        from(table: string) {
+          const operation: PolicyReadOperation = {
+            filters: [],
+            schema,
+            table,
+          };
+          operations.push(operation);
+          const builder = {
+            eq(column: string, value: unknown) {
+              operation.filters.push(["eq", column, value]);
+              return builder;
+            },
+            is(column: string, value: unknown) {
+              operation.filters.push(["is", column, value]);
+              return builder;
+            },
+            limit() {
+              return builder;
+            },
+            maybeSingle() {
+              if (
+                operation.schema === "profile" &&
+                operation.table === "profile_public_snapshot"
+              ) {
+                const readsPublicationTrace = operation.filters.some(
+                  ([kind, column]) => kind === "eq" && column === "id",
+                );
+                return Promise.resolve({
+                  data: readsPublicationTrace
+                    ? {
+                        account_id: accountId,
+                        result_report_id: resultReportId,
+                        status: "active",
+                      }
+                    : {
+                        id: snapshotId,
+                        snapshot_payload: createContainedPublicSnapshot(),
+                      },
+                  error: null,
+                });
+              }
+              if (
+                operation.schema === "report" &&
+                operation.table === "result_report"
+              ) {
+                return Promise.resolve({
+                  data: {
+                    account_id: accountId,
+                    code_scheme_version: "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+                    id: resultReportId,
+                    measurement_release_id: "NUANG-CORE-FULL-CANDIDATE-1.0",
+                    report_kind: "full",
+                    scoring_release_id: "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0",
+                  },
+                  error: null,
+                });
+              }
+              return Promise.resolve({
+                data: null,
+                error: { message: "unexpected operation" },
+              });
+            },
+            order() {
+              return builder;
+            },
+            select() {
+              return builder;
+            },
+          };
+          return builder;
+        },
+      };
+    },
+  } as unknown as SupabaseClient;
+
+  return { client, operations };
+}
+
+function createContainedPublicSnapshot(): PublicProfileSnapshotPayload {
+  const snapshot = createPublicSnapshot();
+  return {
+    ...snapshot,
+    displayProfile: {
+      ...snapshot.displayProfile,
+      profileImage: {
+        alt: "INGMC 전용 성향 이미지",
+        source: "trait_image",
+        src: "/legacy/INGMC.webp",
+      },
+    },
+  };
+}
+
 function resolvePublicationPolicyRead(operation: PolicyReadOperation) {
   const key = `${operation.schema}.${operation.table}`;
 
@@ -219,6 +397,7 @@ function resolvePublicationPolicyRead(operation: PolicyReadOperation) {
         id: resultReportId,
         measurement_release_id: "ITEM-1",
         report_kind: "full",
+        scoring_release_id: "SCORING-1",
       },
       error: null,
     };

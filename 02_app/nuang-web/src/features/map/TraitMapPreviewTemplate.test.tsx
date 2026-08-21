@@ -29,4 +29,19 @@ describe("TraitMapPreviewTemplate", () => {
     expect(screen.getByText("N · 가능성형")).toBeInTheDocument();
     expect(screen.getByText("Q · 빠른반응형")).toBeInTheDocument();
   });
+
+  it("labels a directly preserved route as an earlier unvalidated beta", () => {
+    render(
+      <TraitMapPreviewTemplate
+        profile={candidateProfileDefinitions.INAKQ}
+        showLegacyBetaNotice
+      />,
+    );
+
+    expect(
+      screen.getByRole("complementary", {
+        name: "이전 베타 성향지도 안내",
+      }),
+    ).toHaveTextContent("참고용 · 공유 불가");
+  });
 });

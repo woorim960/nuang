@@ -17,7 +17,6 @@ import {
   getFreeTopicScoringVersion,
 } from "@/features/assessment/free-topic-result-version";
 import type { StoredFreeTopicResult } from "@/features/assessment/free-topic-storage";
-import { readTopicTraitImpactSnapshot } from "@/features/assessment/topic-trait-impact";
 import {
   getLabAssessment,
   type LabAssessment,
@@ -108,6 +107,8 @@ export async function readOriginalProfileReportSummaries({
           assessmentTitle:
             result.kind === "full" ? "정밀 코어 검사" : "빠른 코어 검사",
           completedAt: result.completedAt,
+          isExploratoryBeta:
+            corePublication.get(result.resultReportId) !== true,
           reportKey: createProfileReportKey("core", result.resultReportId),
           resultName: profile?.displayName ?? result.profileName,
           summary:
@@ -138,6 +139,7 @@ export async function readOriginalProfileReportSummaries({
           assessmentSlug: result.assessment.slug,
           assessmentTitle: result.assessment.title,
           completedAt: result.completedAt,
+          isExploratoryBeta: false,
           reportKey: createProfileReportKey("topic", String(row.id)),
           resultName:
             result.reportSnapshot.personalizedSummary?.title ??
@@ -165,6 +167,7 @@ export async function readOriginalProfileReportSummaries({
           assessmentSlug: assessment.slug,
           assessmentTitle: assessment.title,
           completedAt: String(row.completed_at),
+          isExploratoryBeta: false,
           reportKey: createProfileReportKey("lab", String(row.id)),
           resultName: result.profile.title,
           summary: result.profile.summary,
@@ -286,6 +289,7 @@ export async function readOriginalProfileReport({
         assessmentSlug: result.assessment.slug,
         assessmentTitle: result.assessment.title,
         completedAt: result.completedAt,
+        isExploratoryBeta: false,
         reportKey,
         resultName:
           result.reportSnapshot.personalizedSummary?.title ??
@@ -331,6 +335,7 @@ export async function readOriginalProfileReport({
       assessmentSlug: assessment.slug,
       assessmentTitle: assessment.title,
       completedAt: String(response.data.completed_at),
+      isExploratoryBeta: false,
       reportKey,
       resultName: result.profile.title,
       summary: result.profile.summary,
@@ -526,20 +531,24 @@ function mapCoreRow(row: Record<string, unknown>) {
   } satisfies AccountResultSummary;
 }
 
-function mapTopicRow(row: Record<string, unknown>) {
+export function mapTopicRow(row: Record<string, unknown>) {
   const evidence = readRecord(row.evidence_payload);
   const assessment =
     readTopicAssessment(evidence.assessmentSnapshot) ??
     getFreeTopicAssessment(String(row.topic_slug ?? ""));
-  const reportSnapshot = readReportSnapshot(evidence.reportSnapshot);
+  const storedReportSnapshot = readReportSnapshot(evidence.reportSnapshot);
   const result = readTopicScoreResult(evidence);
-  if (!assessment || !reportSnapshot || !result || typeof row.id !== "string") {
+  if (
+    !assessment ||
+    !storedReportSnapshot ||
+    !result ||
+    typeof row.id !== "string"
+  ) {
     return null;
   }
+  const reportSnapshot = { ...storedReportSnapshot };
+  delete reportSnapshot.nuangCodeSection;
   const completedAt = String(row.completed_at);
-  const traitImpactSnapshot = readTopicTraitImpactSnapshot(
-    evidence.traitImpactSnapshot,
-  );
 
   return {
     answers: {},
@@ -563,14 +572,6 @@ function mapTopicRow(row: Record<string, unknown>) {
     ...(readTopicQuestions(evidence.questionsSnapshot)
       ? { questionsSnapshot: readTopicQuestions(evidence.questionsSnapshot)! }
       : {}),
-    ...(typeof row.profile_code_at_completion === "string"
-      ? {
-          nuangCodeContext: {
-            capturedAt: completedAt,
-            code: row.profile_code_at_completion,
-          },
-        }
-      : {}),
     reportContentVersion:
       stringValue(evidence.reportContentVersion) ??
       getFreeTopicReportContentVersion(assessment.slug),
@@ -580,7 +581,6 @@ function mapTopicRow(row: Record<string, unknown>) {
       stringValue(evidence.scoringVersion) ??
       getFreeTopicScoringVersion(assessment.slug),
     serverResultId: row.id,
-    ...(traitImpactSnapshot ? { traitImpactSnapshot } : {}),
     sync: { status: "synced", syncedAt: completedAt },
   } satisfies StoredFreeTopicResult;
 }

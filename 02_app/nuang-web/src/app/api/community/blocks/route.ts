@@ -12,6 +12,8 @@ import { isAllowedGateCRequest } from "@/features/research/gate-c/gate-c-server-
 
 const unblockRequestSchema = z.object({
   blockedAccountId: z.string().uuid(),
+  communityProfileId: z.string().uuid().nullish(),
+  publicSnapshotId: z.string().uuid().nullish(),
 });
 
 export async function GET() {
@@ -62,6 +64,9 @@ export async function DELETE(request: Request) {
   const result = await unblockProfileByAccountId({
     blockedAccountId: payload.data.blockedAccountId,
     client,
+    ...(payload.data.communityProfileId
+      ? { communityProfileId: payload.data.communityProfileId }
+      : {}),
     user: auth.user,
   });
 

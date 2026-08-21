@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import {
   AssessmentQuestionContent,
   AssessmentQuestionDock,
@@ -38,6 +39,7 @@ export function CoreAssessmentQuestionSurface({
   isAdaptiveQuestion,
   nextDisabled,
   nextLabel,
+  notice,
   onAnswer,
   onClose,
   onGuideOpen,
@@ -62,6 +64,7 @@ export function CoreAssessmentQuestionSurface({
   isAdaptiveQuestion: boolean;
   nextDisabled: boolean;
   nextLabel: string;
+  notice?: ReactNode;
   onAnswer: (value: ResponseValue) => void;
   onClose: () => void;
   onGuideOpen: () => void;
@@ -91,6 +94,8 @@ export function CoreAssessmentQuestionSurface({
       />
 
       <AssessmentQuestionContent>
+        {notice}
+
         <AssessmentQuestionGuideButton onClick={onGuideOpen}>
           {guideLabel}
         </AssessmentQuestionGuideButton>

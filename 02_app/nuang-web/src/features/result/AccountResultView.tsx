@@ -10,6 +10,11 @@ import type { AccountResultSummary } from "@/features/account/account-result-con
 import { readClientAccountResults } from "@/features/account/client-account-results";
 import { deleteLocalAttempt } from "@/features/assessment/assessment-storage";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
+import {
+  canPublishCoreResult,
+  isLegacyCoreReleaseTrace,
+} from "@/features/assessment/legacy-core-containment-policy";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import {
   readCurrentSupabaseUserId,
@@ -128,6 +133,19 @@ export function AccountResultView({
   }
 
   const unifiedModel = adaptAccountCoreResult(result);
+  const isLegacyCoreResult =
+    !result.versionBundle ||
+    isLegacyCoreReleaseTrace({
+      assessmentReleaseId: result.versionBundle?.assessmentReleaseId,
+      codeSchemeVersion: result.versionBundle?.codeSchemeVersion,
+      scoringReleaseId: result.versionBundle?.scoringReleaseId,
+    });
+  const isCorePublicationAllowed = canPublishCoreResult({
+    assessmentReleaseId: result.versionBundle?.assessmentReleaseId,
+    codeSchemeVersion: result.versionBundle?.codeSchemeVersion,
+    scoringReleaseId: result.versionBundle?.scoringReleaseId,
+  });
+  const effectiveShareEnabled = shareEnabled && isCorePublicationAllowed;
   const profile = getCandidateProfileDefinition(result.profileCode);
   const profileName = profile?.displayName ?? result.profileName;
   const resultKindLabel =
@@ -238,7 +256,7 @@ export function AccountResultView({
             ? { href: backHref, label: "프로필로 돌아가기" }
             : { href: "/my/reports/history", label: "지난 결과 보기" }
         }
-        shareEnabled={shareEnabled}
+        shareEnabled={effectiveShareEnabled}
         surface={readOnly ? "profile" : "my"}
       />
     );
@@ -255,7 +273,7 @@ export function AccountResultView({
           <ArrowLeft aria-hidden="true" size={21} strokeWidth={1.9} />
         </Link>
         <p>결과 리포트</p>
-        {shareEnabled ? (
+        {effectiveShareEnabled ? (
           <button
             aria-haspopup="dialog"
             aria-label="검사 결과 공유"
@@ -272,6 +290,13 @@ export function AccountResultView({
       </header>
 
       <div className={styles.content}>
+        {isLegacyCoreResult ? (
+          <LegacyCoreBetaNotice
+            className={styles.betaNotice}
+            context="result"
+          />
+        ) : null}
+
         <section className={styles.hero}>
           <div className={styles.heroGlow} />
           <div className={styles.heroCopy}>
@@ -420,7 +445,7 @@ export function AccountResultView({
           </section>
         ) : null}
       </div>
-      {shareEnabled ? (
+      {effectiveShareEnabled ? (
         <ReportShareSheet
           canonicalUrl={canonicalShareUrl}
           content={shareContent}

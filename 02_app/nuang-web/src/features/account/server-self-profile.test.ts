@@ -104,9 +104,7 @@ describe("readSelfProfilePayload", () => {
     mocks.readAccountAssessmentProgress.mockRejectedValue(
       new Error("progress failed"),
     );
-    mocks.createServerOwnFeedItems.mockRejectedValue(
-      new Error("feed failed"),
-    );
+    mocks.createServerOwnFeedItems.mockRejectedValue(new Error("feed failed"));
     mocks.readOriginalProfileReportSummaries.mockRejectedValue(
       new Error("reports failed"),
     );
@@ -136,7 +134,7 @@ describe("readSelfProfilePayload", () => {
     });
   });
 
-  it("reuses a fresh persisted trait profile without rebuilding on page reads", async () => {
+  it("keeps a fresh legacy trait profile archived without promoting it on page reads", async () => {
     mocks.readAccountTraitProfile.mockResolvedValue({
       alternativeCodes: [],
       baseResultReportId: "result-1",
@@ -158,7 +156,59 @@ describe("readSelfProfilePayload", () => {
 
     expect(mocks.rebuildAccountTraitProfile).not.toHaveBeenCalled();
     expect(result).toMatchObject({
-      payload: { trait: { code: "ENAKQ", source: "full" } },
+      payload: {
+        capabilities: { canShare: false },
+        trait: null,
+        viewerCode: null,
+      },
+      state: "ready",
+    });
+  });
+
+  it("keeps a legacy account result in exploratory beta history instead of representative completion", async () => {
+    mocks.readAccountResults.mockResolvedValue({
+      data: [
+        {
+          assessmentAttemptId: "attempt-1",
+          completedAt: "2026-08-01T00:00:00.000Z",
+          createdAt: "2026-08-01T00:00:00.000Z",
+          domains: [],
+          facets: [],
+          kind: "full",
+          localResultId: null,
+          profileCode: "ENAKQ",
+          profileName: "관계를 여는 선도자",
+          resultLabel: "현재 대표 성향",
+          resultReportId: "11111111-1111-4111-8111-111111111111",
+          versionBundle: {
+            assessmentReleaseId: "NUANG-CORE-FULL-CANDIDATE-1.0",
+            codeSchemeVersion: "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+            scoringModelVersion: "candidate-scoring-model.v1",
+            scoringReleaseId: "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0",
+          },
+        },
+      ],
+      ok: true,
+    });
+
+    const result = await readSelfProfilePayload({
+      client: createClient({ count: 0, snapshotId: null }),
+      showAdminEntry: false,
+      user: { id: "user-1" } as never,
+    });
+
+    expect(result).toMatchObject({
+      payload: {
+        assessmentJourney: {
+          assessmentKind: "full",
+          reportHref:
+            "/results/account/11111111-1111-4111-8111-111111111111?backTo=%2Fmy%3Ftab%3Dreports",
+          state: "exploratory_beta_history",
+        },
+        capabilities: { canShare: false },
+        trait: null,
+        viewerCode: null,
+      },
       state: "ready",
     });
   });

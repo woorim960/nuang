@@ -9,6 +9,8 @@ import { TraitRadarChart } from "@/components/ui/TraitRadarChart";
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import { readClientAccountResults } from "@/features/account/client-account-results";
 import type { AccountTraitProfile } from "@/features/assessment/account-trait-profile-contract";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import {
   listFreeTopicResultsLocalFirst,
   syncQueuedFreeTopicResults,
@@ -48,6 +50,7 @@ type TraitDetail = {
   completedAt: string;
   domains: TraitDomain[];
   facets: TraitFacet[];
+  isExploratoryBeta: boolean;
   profileName: string;
   resultHref: string;
   sourceLabel: string;
@@ -137,13 +140,19 @@ export function MyTraitDetailView() {
             <NuangCharacter motif={motif} size="md" />
           </div>
           <div className={styles.heroCopy}>
-            <p>{detail.sourceLabel} 검사 기준</p>
+            <p>
+              {detail.isExploratoryBeta
+                ? "이전 탐색적 베타 결과"
+                : `${detail.sourceLabel} 검사 기준`}
+            </p>
             <strong>{detail.code}</strong>
             <h1>{detail.profileName}</h1>
           </div>
         </div>
         <p className={styles.heroDescription}>
-          평소 어느 방향을 더 자주 사용하는지 보여줘요.
+          {detail.isExploratoryBeta
+            ? "검사 당시 응답에서 어느 방향이 더 자주 나타났는지 참고용으로 보여줘요."
+            : "평소 어느 방향을 더 자주 사용하는지 보여줘요."}
         </p>
         <div className={styles.heroMeta}>
           <span>{formatLongDate(detail.completedAt)} 검사</span>
@@ -155,6 +164,13 @@ export function MyTraitDetailView() {
           </Link>
         </div>
       </section>
+
+      {detail.isExploratoryBeta ? (
+        <LegacyCoreBetaNotice
+          className={styles.legacyBetaNotice}
+          context="my"
+        />
+      ) : null}
 
       <section className={styles.section}>
         <SectionHeading
@@ -242,8 +258,9 @@ export function MyTraitDetailView() {
       </section>
 
       <p className={styles.trustNote}>
-        이 화면은 코어 검사와 완료한 주제 검사를 함께 살펴 현재 성향을 정리한
-        내용이며, 의료·임상 진단을 대신하지 않아요.
+        {detail.isExploratoryBeta
+          ? "이 화면은 이전 탐색적 베타 코어 결과와 완료한 주제 검사 기록을 본인에게 보존해 보여주며, 현재 성향이나 대표 코드를 확정하지 않고 의료·임상 진단을 대신하지 않아요."
+          : "이 화면은 코어 검사와 완료한 주제 검사를 함께 살펴 현재 성향을 정리한 내용이며, 의료·임상 진단을 대신하지 않아요."}
       </p>
     </div>
   );
@@ -394,10 +411,10 @@ function TraitDetailEmpty() {
       <div className={styles.characterWrap}>
         <NuangCharacter motif="forest" size="md" />
       </div>
-      <h1>코어 검사로 내 성향의 기준을 만들어보세요</h1>
+      <h1>코어 검사로 탐색적 베타 결과를 확인해 보세요</h1>
       <span>
-        검사를 완료하면 대표 코드, 5개 축의 비율과 세부 반응을 이 화면에서
-        확인할 수 있어요.
+        검사를 완료하면 참고용 5글자 코드와 5개 축의 비율, 세부 반응을 확인할 수
+        있어요. 대표 코드나 공개·공유에는 사용되지 않아요.
       </span>
       <Link href="/assessments/nu-core-quick?returnTo=%2Fmy%2Fprofile">
         코어 검사 시작하기
@@ -413,12 +430,18 @@ function buildLocalTraitDetail({
   attempt: LocalAssessmentAttempt;
   result: CoreScoreResult;
 }): TraitDetail {
+  const isExploratoryBeta = !canPromoteCoreResultToRepresentative({
+    assessmentReleaseId:
+      attempt.resultSnapshot?.assessmentReleaseId ?? attempt.releaseId,
+  });
+
   return {
     code: result.code ?? "-----",
     completedAt: attempt.completedAt ?? attempt.updatedAt,
     domains: result.domains,
     facets: result.facets,
-    profileName: result.profileName ?? "대표 성향 계산 중",
+    isExploratoryBeta,
+    profileName: result.profileName ?? "베타 결과 계산 중",
     resultHref: `/results/local/${attempt.id}`,
     sourceLabel:
       attempt.assessmentId === "nu-core-full" ? "정밀 코어" : "빠른 코어",
@@ -429,20 +452,28 @@ function buildAccountTraitDetail(
   result: AccountResultSummary,
   currentTraitProfile: AccountTraitProfile | null,
 ): TraitDetail {
-  const usesTopicEvidence = currentTraitProfile?.source === "core_and_topics";
+  const isExploratoryBeta = !canPromoteCoreResultToRepresentative({
+    assessmentReleaseId: result.versionBundle?.assessmentReleaseId,
+  });
+  const applicableTraitProfile = isExploratoryBeta ? null : currentTraitProfile;
+  const usesTopicEvidence =
+    applicableTraitProfile?.source === "core_and_topics";
 
   return {
-    code: currentTraitProfile?.code ?? result.profileCode,
-    completedAt: currentTraitProfile?.updatedAt ?? result.completedAt,
-    domains: currentTraitProfile?.domains ?? result.domains,
+    code: applicableTraitProfile?.code ?? result.profileCode,
+    completedAt: applicableTraitProfile?.updatedAt ?? result.completedAt,
+    domains: applicableTraitProfile?.domains ?? result.domains,
     facets: result.facets,
-    profileName: currentTraitProfile?.profileName ?? result.profileName,
-    resultHref: `/results/account/${currentTraitProfile?.baseResultReportId ?? result.resultReportId}`,
-    sourceLabel: usesTopicEvidence
-      ? `코어 + 주제 ${currentTraitProfile.topicCount}개`
-      : result.kind === "full"
-        ? "정밀 코어"
-        : "빠른 코어",
+    isExploratoryBeta,
+    profileName: applicableTraitProfile?.profileName ?? result.profileName,
+    resultHref: `/results/account/${applicableTraitProfile?.baseResultReportId ?? result.resultReportId}`,
+    sourceLabel: isExploratoryBeta
+      ? "이전 탐색적 베타"
+      : usesTopicEvidence
+        ? `코어 + 주제 ${applicableTraitProfile.topicCount}개`
+        : result.kind === "full"
+          ? "정밀 코어"
+          : "빠른 코어",
   };
 }
 

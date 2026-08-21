@@ -24,22 +24,28 @@ export default async function CommunityProfileReportPage({
     createServerSupabaseClient(),
     Promise.resolve(createSupabaseServiceClient()),
   ]);
+  let reportAvailability: "ready" | "unavailable" = "unavailable";
   if (serverClient && serviceClient) {
     const { data } = await serverClient.auth.getUser();
     const socialState = await readCommunityProfileSocialState({
       client: serviceClient,
-      publicSnapshotId,
+      communityProfileId: payload.profile.source.communityProfileId,
+      publicSnapshotId: payload.profile.source.publicSnapshotId,
       user: data.user ?? null,
     });
     if (socialState.isOwnProfile) {
       redirect(`/feed/profiles/${publicSnapshotId}`);
     }
+    reportAvailability = socialState.actions.report;
   }
 
   return (
     <CommunityProfileReportScreen
+      availability={reportAvailability}
+      communityProfileId={payload.profile.source.communityProfileId}
       displayName={payload.profile.display.displayName}
-      publicSnapshotId={publicSnapshotId}
+      profileId={publicSnapshotId}
+      publicSnapshotId={payload.profile.source.publicSnapshotId}
     />
   );
 }

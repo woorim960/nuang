@@ -71,6 +71,18 @@ describe("MyTraitDetailView", () => {
           new Response(
             JSON.stringify({
               authUserId: "auth-user-a",
+              currentTraitProfile: {
+                alternativeCodes: [],
+                baseResultReportId: "11111111-1111-4111-8111-111111111111",
+                code: "ENAKQ",
+                domains: [],
+                evidenceCount: 4,
+                profileName: "관계를 여는 선도자",
+                source: "core_and_topics",
+                topicCount: 3,
+                updatedAt: "2026-07-30T03:00:00.000Z",
+                version: "legacy-current-profile-v1",
+              },
               ok: true,
               results: [createAccountResult()],
             }),
@@ -84,6 +96,17 @@ describe("MyTraitDetailView", () => {
     expect(
       await screen.findByText("새 가능성을 찾는 탐험가"),
     ).toBeInTheDocument();
+    expect(screen.getByText("이전 탐색적 베타 결과")).toBeVisible();
+    expect(
+      screen.getByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).toHaveTextContent("대표 코드로 확정되거나 공개 프로필·공유·비교");
+    expect(
+      screen.getByText(/현재 성향이나 대표 코드를 확정하지 않고/),
+    ).toBeVisible();
+    expect(screen.queryByText("관계를 여는 선도자")).not.toBeInTheDocument();
+    expect(screen.queryByText("ENAKQ")).not.toBeInTheDocument();
     expect(screen.getAllByText("INGMC")).toHaveLength(2);
     expect(screen.getAllByTestId("trait-axis-row")).toHaveLength(5);
     expect(screen.getByText("사람 사이 에너지")).toBeInTheDocument();
@@ -134,9 +157,12 @@ describe("MyTraitDetailView", () => {
 
     expect(
       await screen.findByRole("heading", {
-        name: "코어 검사로 내 성향의 기준을 만들어보세요",
+        name: "코어 검사로 탐색적 베타 결과를 확인해 보세요",
       }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByText(/대표 코드나 공개·공유에는 사용되지 않아요/),
+    ).toBeVisible();
     const startLink = screen.getByRole("link", {
       name: "코어 검사 시작하기",
     });
@@ -201,5 +227,11 @@ function createAccountResult(): AccountResultSummary {
     profileName: "새 가능성을 찾는 탐험가",
     resultLabel: "현재 가장 가까운 대표 성향",
     resultReportId: "4292e0e7-0353-43f0-9132-f90149badee5",
+    versionBundle: {
+      assessmentReleaseId: "NUANG-CORE-FULL-CANDIDATE-1.0",
+      codeSchemeVersion: "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+      scoringModelVersion: "NUANG-SCORING-MODEL-CANDIDATE-1.0",
+      scoringReleaseId: "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0",
+    },
   };
 }

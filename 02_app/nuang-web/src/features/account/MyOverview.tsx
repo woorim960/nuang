@@ -12,6 +12,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState, type KeyboardEvent } from "react";
 import type { NuangCharacterMotif } from "@/components/character/nuang-character-assets";
 import { listLocalAttempts } from "@/features/assessment/assessment-storage";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import { CommunityScreenShell } from "@/features/feed/CommunityScreenShell";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
@@ -27,6 +29,7 @@ type MyProfileSummary = {
   code: string;
   completedAt: string;
   href: string;
+  isExploratoryBeta: boolean;
   motif: NuangCharacterMotif;
   name: string;
   source: string;
@@ -126,7 +129,9 @@ export function MyOverview({
               }
               bio={
                 profile
-                  ? "검사 결과는 지금 이 기기에 저장돼 있어요. 로그인하면 어디서나 이어볼 수 있어요."
+                  ? profile.isExploratoryBeta
+                    ? "탐색적 베타 결과는 지금 이 기기에 참고 기록으로 저장돼 있어요."
+                    : "검사 결과는 지금 이 기기에 저장돼 있어요. 로그인하면 어디서나 이어볼 수 있어요."
                   : "로그인하면 프로필과 활동을 한곳에서 관리할 수 있어요."
               }
               displayName="나의 뉴앙"
@@ -138,14 +143,22 @@ export function MyOverview({
               operator={showAdminEntry}
               postCount={0}
               trait={
-                profile
+                profile && !profile.isExploratoryBeta
                   ? {
                       code: profile.code,
                       label: profile.name,
                       type: "code",
                     }
-                  : { label: "첫 검사 전", type: "status" }
+                  : {
+                      label: profile ? "탐색적 베타 기록 있음" : "첫 검사 전",
+                      type: "status",
+                    }
               }
+            />
+
+            <LegacyCoreBetaNotice
+              className={profileStyles.legacyBetaNotice}
+              context="my"
             />
 
             <GuestAssessmentAction profile={profile} />
@@ -169,11 +182,7 @@ export function MyOverview({
                   />
                 </span>
                 <strong>관리자 운영 센터</strong>
-                <ChevronRight
-                  aria-hidden="true"
-                  size={17}
-                  strokeWidth={1.65}
-                />
+                <ChevronRight aria-hidden="true" size={17} strokeWidth={1.65} />
               </Link>
             ) : null}
           </section>
@@ -258,6 +267,25 @@ function GuestAssessmentAction({
 }: {
   profile: MyProfileSummary | null;
 }) {
+  if (profile?.isExploratoryBeta) {
+    return (
+      <section className={profileStyles.assessmentAction}>
+        <div className={profileStyles.assessmentCopy}>
+          <small>탐색적 베타 결과</small>
+          <strong>이전 탐색 결과를 보관하고 있어요</strong>
+          <p>
+            검사 당시 응답을 바탕으로 보존한 참고용 결과예요. 대표 코드나
+            공개·공유·비교에는 사용되지 않아요.
+          </p>
+        </div>
+        <Link className={profileStyles.assessmentButton} href={profile.href}>
+          베타 결과 보기
+          <ChevronRight aria-hidden="true" size={18} strokeWidth={1.8} />
+        </Link>
+      </section>
+    );
+  }
+
   const isFullResult = profile?.source === "정밀 코어";
   const href = profile
     ? isFullResult
@@ -268,11 +296,7 @@ function GuestAssessmentAction({
   return (
     <section className={profileStyles.assessmentAction}>
       <div className={profileStyles.assessmentCopy}>
-        <small>
-          {profile
-            ? `${profile.source} 검사 완료`
-            : "첫 검사 전"}
-        </small>
+        <small>{profile ? `${profile.source} 검사 완료` : "첫 검사 전"}</small>
         <strong>
           {profile
             ? isFullResult
@@ -368,6 +392,9 @@ function buildProfileSummary(
     code: representative.result.code,
     completedAt: representative.identity.completedAt,
     href: "/my/reports",
+    isExploratoryBeta: !canPromoteCoreResultToRepresentative({
+      assessmentReleaseId: representative.measurement.assessmentReleaseId,
+    }),
     motif: "purple",
     name: representative.result.currentProfileName,
     source: representative.identity.kind === "full" ? "정밀 코어" : "빠른 코어",

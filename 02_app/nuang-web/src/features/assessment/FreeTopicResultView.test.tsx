@@ -211,9 +211,7 @@ describe("FreeTopicResultView", () => {
       await screen.findByRole("button", { name: "커뮤니티에 공유" }),
     );
     await screen.findByRole("dialog", { name: "커뮤니티에 공유" });
-    fireEvent.click(
-      screen.getByRole("button", { name: "커뮤니티에 공유" }),
-    );
+    fireEvent.click(screen.getByRole("button", { name: "커뮤니티에 공유" }));
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledWith(
@@ -300,7 +298,8 @@ describe("FreeTopicResultView", () => {
     );
     expect(scale).toBeDefined();
     scale!.highStrength = "책임을 구체적으로 인정해 대화의 출발점을 만들어요.";
-    scale!.highWatch = "모든 책임을 혼자 떠안는 방식으로 흐르지 않도록 살펴보세요.";
+    scale!.highWatch =
+      "모든 책임을 혼자 떠안는 방식으로 흐르지 않도록 살펴보세요.";
     scale!.highAction = "인정한 내용과 다음 행동을 한 문장씩 나눠 말해 보세요.";
     const stored = createStoredResult({ syncStatus: "synced" });
     stored.assessment = {
@@ -624,7 +623,7 @@ describe("FreeTopicResultView", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("keeps the owner code frozen in the original report", async () => {
+  it("redacts legacy core identity from an older local topic report", async () => {
     const stored = createComfortStoredResult();
     stored.nuangCodeContext = {
       capturedAt: stored.completedAt,
@@ -640,20 +639,15 @@ describe("FreeTopicResultView", () => {
     );
 
     expect(
-      await screen.findByRole("heading", {
-        name: "검사를 마쳤을 때의 뉴앙 코드 INGMC로 함께 보면",
-      }),
+      await screen.findByRole("heading", { name: "위로받을 때 필요한 것" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("I · 내향형")).toBeInTheDocument();
-    expect(screen.getByText("N · 가능성형")).toBeInTheDocument();
-    expect(screen.getByText("G · 해결형")).toBeInTheDocument();
-    expect(document.body.textContent).not.toContain("ENGMQ");
+    expect(document.body.textContent).not.toContain("INGMC");
     expect(
-      screen.getByRole("link", { name: "내 성향지도에서 더 자세히 보기" }),
-    ).toHaveAttribute("href", "/map/INGMC");
+      screen.queryByRole("link", { name: "내 성향지도에서 더 자세히 보기" }),
+    ).not.toBeInTheDocument();
   });
 
-  it("does not replace a shared INGMC report with the viewer local result", async () => {
+  it("redacts both owner and viewer core codes from a shared topic report", async () => {
     const ownerResult = createComfortStoredResult();
     ownerResult.nuangCodeContext = {
       capturedAt: ownerResult.completedAt,
@@ -677,10 +671,9 @@ describe("FreeTopicResultView", () => {
     );
 
     expect(
-      await screen.findByRole("heading", {
-        name: "검사를 마쳤을 때의 뉴앙 코드 INGMC로 함께 보면",
-      }),
+      await screen.findByRole("heading", { name: "위로받을 때 필요한 것" }),
     ).toBeInTheDocument();
+    expect(document.body.textContent).not.toContain("INGMC");
     expect(document.body.textContent).not.toContain("ENGMQ");
     expect(storageMock.loadFreeTopicResultLocalFirst).not.toHaveBeenCalled();
     expect(

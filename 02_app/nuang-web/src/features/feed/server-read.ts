@@ -1,11 +1,13 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { unstable_cache } from "next/cache";
 import {
+  createNeutralCommunityProfileSnapshot,
   mergeCommunityProfileIntoSnapshot,
   readCommunityProfileForAccount,
   readCommunityProfilesForAccounts,
 } from "@/features/account/server-community-profile";
 import { readOperatorAccountIds } from "@/features/admin/server-operator-identity";
+import { readCoreResultPublicationDecision } from "@/features/assessment/server-core-result-publication-policy";
 import { createPublicProfileCardPayload } from "@/features/public-profile/public-profile-card-contract";
 import { createCharacterProfileImage } from "@/features/public-profile/profile-image";
 import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
@@ -23,7 +25,6 @@ import type {
   FeedPollSummary,
   FeedReplyPreview,
 } from "@/features/feed/feed-seed";
-import { feedCodeStatsDisplayThreshold } from "@/features/feed/feed-privacy";
 import {
   feedMediaBucket,
   isFeedMediaStorageProvider,
@@ -35,6 +36,7 @@ import {
   type FeedPostTopicCategory,
 } from "@/features/feed/feed-topic";
 import { isUserManageableFeedPostSource } from "@/features/feed/feed-post-management";
+import { sanitizeNonCoreReportShareProjection } from "@/features/feed/report-share-projection-containment";
 import { getCandidateProfileDefinition } from "@/features/nuang-code/candidate-profile-names";
 import { getCurrentNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
 import { readOriginalProfileReportSummaries } from "@/features/public-profile/server-profile-reports";
@@ -158,10 +160,8 @@ type FeedPollOptionRow = {
 
 type FeedPollVoteRow = {
   account_id: string;
-  nuang_code: string | null;
   option_id: string;
   poll_id: string;
-  profile_name: string | null;
 };
 
 type FeedPlaygroundVoteRow = FeedPollVoteRow & {
@@ -352,9 +352,9 @@ export async function createServerOwnFeedItems({
     }),
     readBlockedCommunityAccountIds({ accountId, client }),
   ]);
-  const inaccessibleOriginalReportPostIds =
+  const inaccessibleReportSharePostIds =
     blockedAccountIdsResult.state === "ready"
-      ? await readInaccessibleOriginalReportPostIds({
+      ? await readInaccessibleReportSharePostIds({
           blockedAccountIds: blockedAccountIdsResult.blockedAccountIds,
           client,
           rows,
@@ -368,7 +368,7 @@ export async function createServerOwnFeedItems({
   const authorProfile = authorProfilesByAccountId.get(accountId);
 
   return rows
-    .filter((row) => !inaccessibleOriginalReportPostIds.has(row.id))
+    .filter((row) => !inaccessibleReportSharePostIds.has(row.id))
     .map((row, index) =>
       mapPostRowToFeedItem(
         row,
@@ -496,8 +496,8 @@ async function createFeedReadPayloadForViewer(
     };
   }
   const { blockedAccountIds } = blockedAccountIdsResult;
-  const inaccessibleOriginalReportPostIds =
-    await readInaccessibleOriginalReportPostIds({
+  const inaccessibleReportSharePostIds =
+    await readInaccessibleReportSharePostIds({
       blockedAccountIds,
       client: serviceClient,
       rows: mergedRows,
@@ -507,7 +507,7 @@ async function createFeedReadPayloadForViewer(
     (row) =>
       !hiddenTargets.postIds.has(row.id) &&
       !blockedAccountIds.has(row.author_account_id) &&
-      !inaccessibleOriginalReportPostIds.has(row.id),
+      !inaccessibleReportSharePostIds.has(row.id),
   );
   const dbItems = visibleRows
     .map((row, index) =>
@@ -550,14 +550,15 @@ export async function createServerCommunityProfilePayload(
   });
   if (!source) return null;
 
-  const baseSnapshot = coercePublicProfileSnapshotPayload(
-    source.snapshot.snapshot_payload,
-    source.snapshot.id,
-  );
-
-  if (!baseSnapshot || !isCurrentNuangCode(baseSnapshot.profile.code)) {
-    return null;
-  }
+  const baseSnapshot =
+    coercePublicProfileSnapshotPayload(
+      source.snapshot.snapshot_payload,
+      source.snapshot.id,
+    ) ??
+    (await createNeutralCommunityProfileSnapshot({
+      client: serviceClient,
+      profile: source.communityProfile,
+    }));
 
   const snapshot = await mergeCommunityProfileIntoSnapshot({
     client: serviceClient,
@@ -622,15 +623,15 @@ export async function createServerCommunityProfilePayload(
       postIds: postRows.map((row) => row.id),
     }),
   ]);
-  const inaccessibleOriginalReportPostIds =
-    await readInaccessibleOriginalReportPostIds({
+  const inaccessibleReportSharePostIds =
+    await readInaccessibleReportSharePostIds({
       blockedAccountIds,
       client: serviceClient,
       rows: postRows,
       viewerAccountId: accountId,
     });
   const posts = postRows
-    .filter((row) => !inaccessibleOriginalReportPostIds.has(row.id))
+    .filter((row) => !inaccessibleReportSharePostIds.has(row.id))
     .map((postRow, index) =>
       mapPostRowToFeedItem(
         postRow,
@@ -681,6 +682,12 @@ export async function readCommunityProfileSource({
 
   if (communityResponse.data?.account_id) {
     const accountId = String(communityResponse.data.account_id);
+    const communityProfile = await readCommunityProfileForAccount({
+      accountId,
+      client,
+    });
+    if (!communityProfile) return null;
+
     const snapshotResponse = await client
       .schema("profile")
       .from("profile_public_snapshot")
@@ -692,13 +699,21 @@ export async function readCommunityProfileSource({
       .limit(1)
       .maybeSingle();
 
-    if (snapshotResponse.error || !snapshotResponse.data) return null;
+    if (snapshotResponse.error) return null;
 
-    const communityProfile = await readCommunityProfileForAccount({
-      accountId,
-      client,
-    });
-    if (!communityProfile) return null;
+    if (!snapshotResponse.data) {
+      return {
+        communityProfile,
+        snapshot: {
+          account_id: accountId,
+          id: communityProfile.id,
+          snapshot_payload: await createNeutralCommunityProfileSnapshot({
+            client,
+            profile: communityProfile,
+          }),
+        } satisfies PublicProfileSnapshotRow,
+      };
+    }
 
     return {
       communityProfile,
@@ -843,14 +858,14 @@ export async function createServerFeedPostDetailPayload(
   if (!isOwnPost && !isPublicPost) {
     return null;
   }
-  const inaccessibleOriginalReportPostIds =
-    await readInaccessibleOriginalReportPostIds({
+  const inaccessibleReportSharePostIds =
+    await readInaccessibleReportSharePostIds({
       blockedAccountIds,
       client: serviceClient,
       rows: [row],
       viewerAccountId: accountId,
     });
-  if (inaccessibleOriginalReportPostIds.has(row.id)) return null;
+  if (inaccessibleReportSharePostIds.has(row.id)) return null;
 
   const [
     authorProfiles,
@@ -968,7 +983,7 @@ export async function createServerFeedPollStatsPayload(
     serviceClient
       .schema("feed")
       .from("feed_poll_vote")
-      .select("poll_id, option_id, account_id, nuang_code, profile_name")
+      .select("poll_id, option_id, account_id")
       .eq("poll_id", pollId)
       .is("deleted_at", null),
   ]);
@@ -993,49 +1008,13 @@ export async function createServerFeedPollStatsPayload(
       voteCount,
     };
   });
-  const votesByCode = groupBy(
-    votes.filter((vote) => isCurrentNuangCode(vote.nuang_code)),
-    (vote) => String(vote.nuang_code),
-  );
-  const codeRows = [...votesByCode.entries()]
-    .filter(
-      ([, codeVotes]) => codeVotes.length >= feedCodeStatsDisplayThreshold,
-    )
-    .sort(
-      ([leftCode, leftVotes], [rightCode, rightVotes]) =>
-        rightVotes.length - leftVotes.length ||
-        leftCode.localeCompare(rightCode),
-    )
-    .map(([code, codeVotes]) => {
-      const codeTotal = codeVotes.length;
-
-      return {
-        code,
-        name:
-          getCurrentNuangProfileName(code) ??
-          codeVotes.find((vote) => vote.profile_name)?.profile_name ??
-          "뉴앙 코드",
-        options: options.map((option) => {
-          const voteCount = codeVotes.filter(
-            (vote) => vote.option_id === option.id,
-          ).length;
-
-          return {
-            label: option.label,
-            ratio:
-              codeTotal > 0 ? Math.round((voteCount / codeTotal) * 100) : 0,
-            voteCount,
-          };
-        }),
-        totalVotes: codeTotal,
-      };
-    });
+  // Historical poll rows carry only a raw code/name and no trusted release
+  // provenance. G00-D06 therefore keeps aggregate voting available while all
+  // code cohorts remain fail-closed.
+  const codeRows: FeedPollStatsPayload["codeRows"] = [];
   const accountId = await getCurrentAccountId(serviceClient);
   const viewerVote = accountId
     ? (votes.find((vote) => vote.account_id === accountId) ?? null)
-    : null;
-  const viewerCode = isCurrentNuangCode(viewerVote?.nuang_code)
-    ? viewerVote.nuang_code
     : null;
   const postReplies = await readPostReplies({
     accountId,
@@ -1058,10 +1037,8 @@ export async function createServerFeedPollStatsPayload(
     totalVotes,
     viewer: {
       isAuthenticated: Boolean(accountId),
-      nuangCode: viewerCode,
-      profileName: viewerCode
-        ? (getCandidateProfileDefinition(viewerCode)?.displayName ?? null)
-        : null,
+      nuangCode: null,
+      profileName: null,
       voteOptionId: viewerVote?.option_id ?? null,
       voteOptionLabel:
         options.find((option) => option.id === viewerVote?.option_id)?.label ??
@@ -1092,9 +1069,7 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
   const ownVoteResponse = await serviceClient
     .schema("feed")
     .from("feed_poll_vote")
-    .select(
-      "id, poll_id, option_id, account_id, nuang_code, profile_name, created_at",
-    )
+    .select("id, poll_id, option_id, account_id, created_at")
     .eq("account_id", accountId)
     .is("deleted_at", null)
     .order("created_at", { ascending: false })
@@ -1145,7 +1120,7 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
     serviceClient
       .schema("feed")
       .from("feed_poll_vote")
-      .select("poll_id, option_id, account_id, nuang_code, profile_name")
+      .select("poll_id, option_id, account_id")
       .in("poll_id", pollIds)
       .is("deleted_at", null),
     postIds.length > 0
@@ -1195,14 +1170,8 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
       const selectedOption = options.find(
         (option) => option.id === ownVote.option_id,
       );
-      const selectedCode = isCurrentNuangCode(ownVote.nuang_code)
-        ? ownVote.nuang_code
-        : null;
-      const selectedProfileName = selectedCode
-        ? (getCurrentNuangProfileName(selectedCode) ??
-          getCandidateProfileDefinition(selectedCode)?.displayName ??
-          ownVote.profile_name)
-        : null;
+      const selectedCode = null;
+      const selectedProfileName = null;
 
       if (!poll) {
         return {
@@ -1224,42 +1193,10 @@ export async function createServerFeedPlaygroundRecordsPayload(): Promise<FeedPl
 
       const votes = votesByPollId.get(poll.id) ?? [];
       const totalVotes = votes.length;
-      const codeVotes = groupBy(
-        votes.filter((vote) => isCurrentNuangCode(vote.nuang_code)),
-        (vote) => String(vote.nuang_code),
-      );
-      const codePerspectives = [...codeVotes.entries()]
-        .filter(
-          ([, groupedVotes]) =>
-            groupedVotes.length >= feedCodeStatsDisplayThreshold,
-        )
-        .sort(
-          ([leftCode, leftVotes], [rightCode, rightVotes]) =>
-            rightVotes.length - leftVotes.length ||
-            leftCode.localeCompare(rightCode),
-        )
-        .map(([code, groupedVotes]) => ({
-          code,
-          name:
-            getCurrentNuangProfileName(code) ??
-            groupedVotes.find((vote) => vote.profile_name)?.profile_name ??
-            "뉴앙 코드",
-          options: options.map((option) => {
-            const voteCount = groupedVotes.filter(
-              (vote) => vote.option_id === option.id,
-            ).length;
-
-            return {
-              label: option.label,
-              ratio: Math.round((voteCount / groupedVotes.length) * 100),
-              voteCount,
-            };
-          }),
-          totalVotes: groupedVotes.length,
-        }));
+      const codePerspectives: FeedPollSummary["codePerspectives"] = [];
       const post = postById.get(poll.post_id);
       const pollSummary: FeedPollSummary = {
-        canViewCodeStats: codePerspectives.length > 0,
+        canViewCodeStats: false,
         codePerspectives,
         id: poll.id,
         options: options.map((option) => {
@@ -1368,14 +1305,14 @@ export async function createServerFeedReportSharePayload(
     return null;
   }
   const normalizedRow = normalizeFeedPostRow(row);
-  const inaccessibleOriginalReportPostIds =
-    await readInaccessibleOriginalReportPostIds({
+  const inaccessibleReportSharePostIds =
+    await readInaccessibleReportSharePostIds({
       blockedAccountIds,
       client: serviceClient,
       rows: [normalizedRow],
       viewerAccountId: accountId,
     });
-  if (inaccessibleOriginalReportPostIds.has(row.id)) return null;
+  if (inaccessibleReportSharePostIds.has(row.id)) return null;
 
   const publicProjection = readPublicProjection(row.public_projection_payload);
 
@@ -2116,7 +2053,7 @@ async function readPollSummaries({
     client
       .schema("feed")
       .from("feed_poll_vote")
-      .select("poll_id, option_id, account_id, nuang_code, profile_name")
+      .select("poll_id, option_id, account_id")
       .in("poll_id", pollIds)
       .is("deleted_at", null),
   ]);
@@ -2144,42 +2081,10 @@ async function readPollSummaries({
       ? (votes.find((vote) => vote.account_id === accountId) ?? null)
       : null;
 
-    const codeVotes = groupBy(
-      votes.filter((vote) => isCurrentNuangCode(vote.nuang_code)),
-      (vote) => String(vote.nuang_code),
-    );
-    const codePerspectives = [...codeVotes.entries()]
-      .filter(
-        ([, groupedVotes]) =>
-          groupedVotes.length >= feedCodeStatsDisplayThreshold,
-      )
-      .sort(
-        ([leftCode, leftVotes], [rightCode, rightVotes]) =>
-          rightVotes.length - leftVotes.length ||
-          leftCode.localeCompare(rightCode),
-      )
-      .map(([code, groupedVotes]) => ({
-        code,
-        name:
-          getCurrentNuangProfileName(code) ??
-          groupedVotes.find((vote) => vote.profile_name)?.profile_name ??
-          "뉴앙 코드",
-        options: options.map((option) => {
-          const voteCount = groupedVotes.filter(
-            (vote) => vote.option_id === option.id,
-          ).length;
-
-          return {
-            label: option.label,
-            ratio: Math.round((voteCount / groupedVotes.length) * 100),
-            voteCount,
-          };
-        }),
-        totalVotes: groupedVotes.length,
-      }));
+    const codePerspectives: FeedPollSummary["codePerspectives"] = [];
 
     pollByPostId.set(poll.post_id, {
-      canViewCodeStats: codePerspectives.length > 0,
+      canViewCodeStats: false,
       codePerspectives,
       id: poll.id,
       options: options.map((option) => {
@@ -2202,9 +2107,7 @@ async function readPollSummaries({
       status: poll.status,
       statsHref: `/feed/polls/${poll.id}/stats`,
       totalVotes,
-      viewerCode: isCurrentNuangCode(viewerVote?.nuang_code)
-        ? viewerVote.nuang_code
-        : null,
+      viewerCode: null,
       viewerVoteOptionId: viewerVote?.option_id ?? null,
     });
   }
@@ -2294,10 +2197,6 @@ async function readPublicProfileCardsForAccounts({
     .is("deleted_at", null)
     .order("created_at", { ascending: false });
 
-  if (response.error || !response.data) {
-    return profilesByAccountId;
-  }
-
   const [communityProfiles, operatorAccountIds] = await Promise.all([
     readCommunityProfilesForAccounts({
       accountIds: uniqueAccountIds,
@@ -2317,50 +2216,60 @@ async function readPublicProfileCardsForAccounts({
     }
   >();
 
-  for (const row of response.data as PublicProfileSnapshotPublicationRow[]) {
+  for (const row of (response.error
+    ? []
+    : (response.data ?? [])) as PublicProfileSnapshotPublicationRow[]) {
     if (latestSnapshots.has(row.account_id)) continue;
 
     const snapshot = coercePublicProfileSnapshotPayload(
       row.snapshot_payload,
       row.id,
     );
-    if (!snapshot || !isCurrentNuangCode(snapshot.profile.code)) continue;
+    if (!snapshot) continue;
 
     latestSnapshots.set(row.account_id, { row, snapshot });
   }
 
   const cards = await Promise.all(
-    [...latestSnapshots.entries()].map(
-      async ([accountId, { row, snapshot: baseSnapshot }]) => {
-        const communityProfile = communityProfiles.get(accountId) ?? null;
-        const snapshot = await mergeCommunityProfileIntoSnapshot({
-          client,
-          profile: communityProfile,
-          publicationTrace: row.result_report_id
-            ? {
-                accountId,
-                publicSnapshotId: row.id,
-                resultReportId: row.result_report_id,
-              }
-            : null,
-          snapshot: baseSnapshot,
-        });
+    uniqueAccountIds.map(async (accountId) => {
+      const communityProfile = communityProfiles.get(accountId);
+      if (!communityProfile) return null;
+      const latestSnapshot = latestSnapshots.get(accountId);
+      const snapshot = latestSnapshot
+        ? await mergeCommunityProfileIntoSnapshot({
+            client,
+            profile: communityProfile,
+            publicationTrace: latestSnapshot.row.result_report_id
+              ? {
+                  accountId,
+                  publicSnapshotId: latestSnapshot.row.id,
+                  resultReportId: latestSnapshot.row.result_report_id,
+                }
+              : null,
+            snapshot: latestSnapshot.snapshot,
+          })
+        : await createNeutralCommunityProfileSnapshot({
+            client,
+            profile: communityProfile,
+          });
+      const publicProfileId = latestSnapshot?.row.id ?? communityProfile.id;
 
-        return [
-          accountId,
-          createPublicProfileCardPayload({
-            cardId: `profile_${row.id}`,
-            communityProfileId: communityProfile?.id ?? row.id,
-            isOperator: operatorAccountIds.has(accountId),
-            snapshot,
-            status: "published",
-          }),
-        ] as const;
-      },
-    ),
+      return [
+        accountId,
+        createPublicProfileCardPayload({
+          cardId: `profile_${publicProfileId}`,
+          communityProfileId: communityProfile.id,
+          isOperator: operatorAccountIds.has(accountId),
+          snapshot,
+          status: "published",
+        }),
+      ] as const;
+    }),
   );
 
-  for (const [accountId, card] of cards) {
+  for (const entry of cards) {
+    if (!entry) continue;
+    const [accountId, card] = entry;
     profilesByAccountId.set(accountId, card);
   }
 
@@ -2397,15 +2306,16 @@ function mergePostRows({
   });
 }
 
-type OriginalReportFeedReference = {
+type ReportShareFeedReference = {
+  appliesOriginalAccessPolicy: boolean;
+  expectedOwnerAccountId: string | null;
   kind: ProfileReportKind;
   postId: string;
-  profileId: string;
-  reportKey: string;
+  profileId: string | null;
   sourceId: string;
 };
 
-async function readInaccessibleOriginalReportPostIds({
+async function readInaccessibleReportSharePostIds({
   blockedAccountIds,
   client,
   rows,
@@ -2418,7 +2328,7 @@ async function readInaccessibleOriginalReportPostIds({
 }) {
   const inaccessible = new Set<string>();
   const references = rows.flatMap((row) => {
-    const parsed = readOriginalReportFeedReference(row);
+    const parsed = readReportShareFeedReference(row);
     if (parsed === "invalid") {
       inaccessible.add(row.id);
       return [];
@@ -2435,8 +2345,19 @@ async function readInaccessibleOriginalReportPostIds({
   for (const reference of references) {
     idsByKind.get(reference.kind)?.push(reference.sourceId);
   }
-  const profileIds = [...new Set(references.map((item) => item.profileId))];
-  const sourceIds = [...new Set(references.map((item) => item.sourceId))];
+  const originalReferences = references.filter(
+    (reference) => reference.appliesOriginalAccessPolicy,
+  );
+  const profileIds = [
+    ...new Set(
+      originalReferences.flatMap((item) =>
+        item.profileId ? [item.profileId] : [],
+      ),
+    ),
+  ];
+  const originalSourceIds = [
+    ...new Set(originalReferences.map((item) => item.sourceId)),
+  ];
 
   const [
     coreRows,
@@ -2461,25 +2382,31 @@ async function readInaccessibleOriginalReportPostIds({
       ids: idsByKind.get("lab") ?? [],
       kind: "lab",
     }),
-    client
-      .schema("profile")
-      .from("profile_report_visibility")
-      .select("account_id,source_kind,source_id,visibility")
-      .in("source_id", sourceIds),
-    client
-      .schema("profile")
-      .from("community_profile")
-      .select("id,account_id")
-      .in("id", profileIds)
-      .eq("status", "active")
-      .is("deleted_at", null),
-    client
-      .schema("profile")
-      .from("profile_public_snapshot")
-      .select("id,account_id")
-      .in("id", profileIds)
-      .eq("status", "active")
-      .is("deleted_at", null),
+    originalSourceIds.length > 0
+      ? client
+          .schema("profile")
+          .from("profile_report_visibility")
+          .select("account_id,source_kind,source_id,visibility")
+          .in("source_id", originalSourceIds)
+      : Promise.resolve({ data: [], error: null }),
+    profileIds.length > 0
+      ? client
+          .schema("profile")
+          .from("community_profile")
+          .select("id,account_id")
+          .in("id", profileIds)
+          .eq("status", "active")
+          .is("deleted_at", null)
+      : Promise.resolve({ data: [], error: null }),
+    profileIds.length > 0
+      ? client
+          .schema("profile")
+          .from("profile_public_snapshot")
+          .select("id,account_id")
+          .in("id", profileIds)
+          .eq("status", "active")
+          .is("deleted_at", null)
+      : Promise.resolve({ data: [], error: null }),
   ]);
 
   const sourceOwnerByKey = new Map<string, string>();
@@ -2512,26 +2439,58 @@ async function readInaccessibleOriginalReportPostIds({
     }
   }
 
+  const corePublicationBySourceId = new Map<string, boolean>();
+  const uniqueCoreReferences = [
+    ...new Map(
+      references
+        .filter((reference) => reference.kind === "core")
+        .map((reference) => [reference.sourceId, reference]),
+    ).values(),
+  ];
+  await Promise.all(
+    uniqueCoreReferences.map(async (reference) => {
+      const ownerAccountId = sourceOwnerByKey.get(`core:${reference.sourceId}`);
+      if (!ownerAccountId) {
+        corePublicationBySourceId.set(reference.sourceId, false);
+        return;
+      }
+      const publication = await readCoreResultPublicationDecision({
+        client,
+        ownerAccountId,
+        resultReportId: reference.sourceId,
+      });
+      corePublicationBySourceId.set(reference.sourceId, publication.eligible);
+    }),
+  );
+
   for (const reference of references) {
     const ownerAccountId = sourceOwnerByKey.get(
       `${reference.kind}:${reference.sourceId}`,
     );
-    const profileOwnerAccountId = profileOwnerById.get(reference.profileId);
-    const visibility = ownerAccountId
-      ? visibilityByKey.get(
-          `${ownerAccountId}:${reference.kind}:${reference.sourceId}`,
-        )
+    const profileOwnerAccountId = reference.profileId
+      ? profileOwnerById.get(reference.profileId)
       : null;
+    const visibility =
+      reference.appliesOriginalAccessPolicy && ownerAccountId
+        ? visibilityByKey.get(
+            `${ownerAccountId}:${reference.kind}:${reference.sourceId}`,
+          )
+        : null;
     const isPrivateForViewer =
       visibility === "private" && ownerAccountId !== viewerAccountId;
 
     if (
       failedKinds.has(reference.kind) ||
-      Boolean(visibilityRows.error) ||
       !ownerAccountId ||
-      profileOwnerAccountId !== ownerAccountId ||
+      (reference.expectedOwnerAccountId !== null &&
+        reference.expectedOwnerAccountId !== ownerAccountId) ||
       blockedAccountIds.has(ownerAccountId) ||
-      isPrivateForViewer
+      (reference.kind === "core" &&
+        corePublicationBySourceId.get(reference.sourceId) !== true) ||
+      (reference.appliesOriginalAccessPolicy &&
+        (Boolean(visibilityRows.error) ||
+          profileOwnerAccountId !== ownerAccountId ||
+          isPrivateForViewer))
     ) {
       inaccessible.add(reference.postId);
     }
@@ -2580,51 +2539,143 @@ async function readOriginalSourceOwners({
   };
 }
 
-function readOriginalReportFeedReference(
+function readReportShareFeedReference(
   row: FeedPostRow,
-): OriginalReportFeedReference | "invalid" | null {
+): ReportShareFeedReference | "invalid" | null {
   if (row.source !== "report_share") return null;
   const projection = readPublicProjection(row.public_projection_payload);
   const projected = projection.reportShare;
   const attachments = Array.isArray(row.attachment_payload)
     ? row.attachment_payload
     : [];
-  const attachment = attachments.find((value) => {
-    if (!value || typeof value !== "object") return false;
-    return (value as { type?: unknown }).type === "original_report";
-  }) as { id?: unknown; profileId?: unknown } | undefined;
-  const reportKey =
-    typeof projected?.reportKey === "string"
-      ? projected.reportKey
-      : typeof attachment?.id === "string"
-        ? attachment.id
-        : null;
-  const profileId =
-    typeof projected?.profileId === "string"
-      ? projected.profileId
-      : typeof attachment?.profileId === "string"
-        ? attachment.profileId
-        : null;
-  const parsedKey = reportKey ? parseProfileReportKey(reportKey) : null;
-  const hasOriginalSignal = Boolean(attachment || projected?.reportKey);
-  if (!hasOriginalSignal) return null;
+  const originalAttachments = attachments.filter(
+    (value) =>
+      value &&
+      typeof value === "object" &&
+      (value as { type?: unknown }).type === "original_report",
+  ) as Array<{ id?: unknown; profileId?: unknown }>;
+  const resultAttachments = attachments.filter(
+    (value) =>
+      value &&
+      typeof value === "object" &&
+      (value as { type?: unknown }).type === "result_summary",
+  ) as Array<{ id?: unknown }>;
   if (
-    !reportKey ||
-    !profileId ||
-    !uuidPattern.test(profileId) ||
-    !parsedKey ||
-    row.source_id !== reportKey
+    originalAttachments.length > 1 ||
+    resultAttachments.length > 1 ||
+    (originalAttachments.length === 1 && resultAttachments.length === 1)
   ) {
     return "invalid";
   }
 
+  const attachment = originalAttachments[0];
+  const projectedReportKey = projected?.reportKey;
+  const attachmentReportKey = attachment?.id;
+  const projectedProfileId = projected?.profileId;
+  const attachmentProfileId = attachment?.profileId;
+  const hasOriginalSignal = Boolean(attachment || projectedReportKey);
+  if (hasOriginalSignal) {
+    if (
+      (typeof projectedReportKey === "string" &&
+        typeof attachmentReportKey === "string" &&
+        projectedReportKey !== attachmentReportKey) ||
+      (typeof projectedProfileId === "string" &&
+        typeof attachmentProfileId === "string" &&
+        projectedProfileId !== attachmentProfileId)
+    ) {
+      return "invalid";
+    }
+    const reportKey =
+      typeof projectedReportKey === "string"
+        ? projectedReportKey
+        : typeof attachmentReportKey === "string"
+          ? attachmentReportKey
+          : null;
+    const profileId =
+      typeof projectedProfileId === "string"
+        ? projectedProfileId
+        : typeof attachmentProfileId === "string"
+          ? attachmentProfileId
+          : null;
+    const parsedKey = reportKey ? parseProfileReportKey(reportKey) : null;
+    if (
+      !reportKey ||
+      !profileId ||
+      !uuidPattern.test(profileId) ||
+      !parsedKey ||
+      row.source_id !== reportKey ||
+      (projected?.reportType && projected.reportType !== parsedKey.kind)
+    ) {
+      return "invalid";
+    }
+
+    return {
+      appliesOriginalAccessPolicy: true,
+      expectedOwnerAccountId: null,
+      kind: parsedKey.kind,
+      postId: row.id,
+      profileId,
+      sourceId: parsedKey.sourceId,
+    };
+  }
+
+  const resultSummary = resultAttachments[0];
+  if (resultSummary) {
+    if (
+      typeof resultSummary.id !== "string" ||
+      !uuidPattern.test(resultSummary.id) ||
+      (row.source_id !== null && row.source_id !== resultSummary.id) ||
+      projected?.reportKey ||
+      (projected?.reportType && projected.reportType !== "core")
+    ) {
+      return "invalid";
+    }
+    return {
+      appliesOriginalAccessPolicy: false,
+      expectedOwnerAccountId: row.author_account_id,
+      kind: "core",
+      postId: row.id,
+      profileId: null,
+      sourceId: resultSummary.id,
+    };
+  }
+
+  if (projected?.reportType === "topic" || projected?.reportType === "lab") {
+    return null;
+  }
+  if (!projected) return "invalid";
+  const sourceId = readProjectedCoreResultId({
+    reportKey: projected.reportKey,
+    sourceId: row.source_id,
+  });
+  if (!sourceId) return "invalid";
+
   return {
-    kind: parsedKey.kind,
+    appliesOriginalAccessPolicy: false,
+    expectedOwnerAccountId: row.author_account_id,
+    kind: "core",
     postId: row.id,
-    profileId,
-    reportKey,
-    sourceId: parsedKey.sourceId,
+    profileId: null,
+    sourceId,
   };
+}
+
+function readProjectedCoreResultId({
+  reportKey,
+  sourceId,
+}: {
+  reportKey: unknown;
+  sourceId: string | null;
+}) {
+  if (typeof sourceId === "string" && uuidPattern.test(sourceId)) {
+    return sourceId;
+  }
+  const parsedSource =
+    typeof sourceId === "string" ? parseProfileReportKey(sourceId) : null;
+  if (parsedSource?.kind === "core") return parsedSource.sourceId;
+  const parsedReportKey =
+    typeof reportKey === "string" ? parseProfileReportKey(reportKey) : null;
+  return parsedReportKey?.kind === "core" ? parsedReportKey.sourceId : null;
 }
 
 function mapPostRowToFeedItem(
@@ -2890,19 +2941,23 @@ function parseReportShareProjection(
     return null;
   }
 
-  const reportShare = value as {
-    assessmentKind?: unknown;
-    assessmentTitle?: unknown;
-    completedAt?: unknown;
-    domains?: unknown;
-    profileId?: unknown;
-    profileCode?: unknown;
-    profileName?: unknown;
-    reportKey?: unknown;
-    reportType?: unknown;
-    resultLabel?: unknown;
-    summary?: unknown;
-  };
+  const reportShare = sanitizeNonCoreReportShareProjection(
+    value as {
+      assessmentKind?: unknown;
+      assessmentTitle?: unknown;
+      completedAt?: unknown;
+      domains?: unknown;
+      profileId?: unknown;
+      profileCode?: unknown;
+      profileName?: unknown;
+      reportKey?: unknown;
+      reportType?: unknown;
+      resultLabel?: unknown;
+      summary?: unknown;
+    },
+  );
+  const isNonCoreReport =
+    reportShare.reportType === "topic" || reportShare.reportType === "lab";
 
   if (
     typeof reportShare.profileCode !== "string" ||
@@ -2955,9 +3010,10 @@ function parseReportShareProjection(
     ...(typeof reportShare.profileId === "string"
       ? { profileId: reportShare.profileId }
       : {}),
-    profileName:
-      getCurrentNuangProfileName(reportShare.profileCode) ??
-      reportShare.profileName,
+    profileName: isNonCoreReport
+      ? reportShare.profileName
+      : (getCurrentNuangProfileName(reportShare.profileCode) ??
+        reportShare.profileName),
     ...(typeof reportShare.reportKey === "string"
       ? { reportKey: reportShare.reportKey }
       : {}),

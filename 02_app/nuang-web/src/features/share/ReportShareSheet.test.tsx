@@ -1,5 +1,10 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  legacyCoreContainmentPolicyReleaseId,
+  legacyCorePublicDenyReason,
+  legacyCorePublicSharingMessage,
+} from "@/features/assessment/legacy-core-containment-policy";
 import { ReportShareSheet } from "@/features/share/ReportShareSheet";
 import {
   buildCoreReportShareContent,
@@ -517,22 +522,8 @@ describe("ReportShareSheet", () => {
     );
   });
 
-  it("resolves a core result to its persistent original report URL", async () => {
-    const url =
-      "http://localhost:3000/feed/profiles/profile-1/reports/core_11111111-1111-4111-8111-111111111111";
-    const fetchMock = vi.fn().mockResolvedValue(
-      new Response(
-        JSON.stringify({
-          ok: true,
-          persistent: true,
-          url,
-        }),
-        {
-          headers: { "content-type": "application/json" },
-          status: 200,
-        },
-      ),
-    );
+  it("fails closed with an owner-only notice for core result sharing", () => {
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
 
     render(
@@ -550,20 +541,34 @@ describe("ReportShareSheet", () => {
       />,
     );
 
-    fireEvent.click(screen.getByRole("button", { name: "링크 복사" }));
-
-    await waitFor(() => {
-      expect(fetchMock).toHaveBeenCalledWith(
-        "/api/report-share-links",
-        expect.objectContaining({
-          body: JSON.stringify({
-            reportKey: "core_11111111-1111-4111-8111-111111111111",
-          }),
-          method: "POST",
-        }),
-      );
-      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(url);
+    const dialog = screen.getByRole("dialog", {
+      name: "코어 결과 공유 제한",
     });
+    expect(dialog).toHaveAttribute(
+      "data-policy-release",
+      legacyCoreContainmentPolicyReleaseId,
+    );
+    expect(dialog).toHaveAttribute(
+      "data-public-deny-reason",
+      legacyCorePublicDenyReason,
+    );
+    expect(
+      screen.getByRole("status", { name: "코어 결과 공유 제한 안내" }),
+    ).toHaveTextContent(legacyCorePublicSharingMessage);
+    expect(
+      screen.queryByRole("button", { name: "카카오톡으로 보내기" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "링크 복사" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "다른 앱으로 공유" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "커뮤니티에 공유" }),
+    ).not.toBeInTheDocument();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(kakaoMocks.prepareImage).not.toHaveBeenCalled();
   });
 
   it("keeps a private report private when Kakao publication is cancelled", async () => {

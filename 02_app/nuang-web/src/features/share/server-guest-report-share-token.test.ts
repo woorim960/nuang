@@ -1,9 +1,15 @@
+import { createHmac } from "node:crypto";
+import { deflateRawSync } from "node:zlib";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   createGuestReportShareToken,
   readGuestReportShareToken,
 } from "@/features/share/server-guest-report-share-token";
-import { buildTopicReportShareContent } from "@/features/share/report-share-contract";
+import {
+  buildCoreReportShareContent,
+  buildTopicReportShareContent,
+  type ReportShareContent,
+} from "@/features/share/report-share-contract";
 
 vi.mock("server-only", () => ({}));
 
@@ -62,6 +68,59 @@ describe("guest report share token", () => {
     expect(result.content.source).toEqual(content.source);
   });
 
+  it("refuses new core tokens and closes an already-issued g1 core token", () => {
+    const issuedAt = new Date("2026-08-06T00:00:00.000Z");
+    const coreContent = buildCoreReportShareContent({
+      code: "ENAKQ",
+      highlights: ["혼자 정리한 뒤 대화를 시작해요"],
+      profileName: "차분한 탐색가",
+      resultLabel: "나의 뉴앙 코드 결과",
+      summary: "생각을 충분히 정리한 뒤 움직이는 편이에요.",
+    });
+
+    expect(createGuestReportShareToken(coreContent, issuedAt)).toBeNull();
+
+    const legacyToken = createPreviouslyIssuedToken(coreContent, issuedAt);
+    expect(readGuestReportShareToken(legacyToken, issuedAt)).toEqual({
+      status: "closed",
+    });
+  });
+
+  it("removes embedded legacy code from new and already-issued topic tokens", () => {
+    const issuedAt = new Date("2026-08-06T00:00:00.000Z");
+    const topicWithEmbeddedCode: ReportShareContent = {
+      ...content,
+      code: "ENAKQ",
+      source: {
+        assessmentSlug: "comfort-style",
+        code: "ENAKQ",
+        kind: "topic",
+        scoresByScaleId: {
+          emotional_support: 45,
+          pacing_support: 70,
+          practical_support: 65,
+        },
+      },
+    };
+
+    const newToken = createGuestReportShareToken(
+      topicWithEmbeddedCode,
+      issuedAt,
+    );
+    const oldToken = createPreviouslyIssuedToken(
+      topicWithEmbeddedCode,
+      issuedAt,
+    );
+
+    for (const token of [newToken ?? "", oldToken]) {
+      const result = readGuestReportShareToken(token, issuedAt);
+      expect(result.status).toBe("active");
+      if (result.status !== "active") continue;
+      expect(result.content.code).toBeUndefined();
+      expect(result.content.source).not.toHaveProperty("code");
+    }
+  });
+
   it("rejects a modified signature and expires old links", () => {
     const issuedAt = new Date("2026-01-01T00:00:00.000Z");
     const token = createGuestReportShareToken(content, issuedAt) ?? "";
@@ -80,3 +139,25 @@ describe("guest report share token", () => {
     });
   });
 });
+
+function createPreviouslyIssuedToken(
+  tokenContent: ReportShareContent,
+  issuedAt: Date,
+) {
+  const issuedAtSeconds = Math.floor(issuedAt.getTime() / 1_000);
+  const encodedPayload = deflateRawSync(
+    Buffer.from(
+      JSON.stringify({
+        content: tokenContent,
+        expiresAt: issuedAtSeconds + 180 * 24 * 60 * 60,
+        issuedAt: issuedAtSeconds,
+        version: 1,
+      }),
+      "utf8",
+    ),
+  ).toString("base64url");
+  const signature = createHmac("sha256", "guest-share-test-pepper")
+    .update(`nuang:guest-report-share:v1:${encodedPayload}`)
+    .digest("base64url");
+  return `g1.${encodedPayload}.${signature}`;
+}

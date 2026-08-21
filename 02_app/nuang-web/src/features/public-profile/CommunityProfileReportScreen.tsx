@@ -43,10 +43,16 @@ const reasons: Array<{
 ];
 
 export function CommunityProfileReportScreen({
+  availability,
+  communityProfileId,
   displayName,
+  profileId,
   publicSnapshotId,
 }: {
+  availability: "ready" | "unavailable";
+  communityProfileId?: string;
   displayName: string;
+  profileId: string;
   publicSnapshotId: string;
 }) {
   const pathname = usePathname();
@@ -56,10 +62,10 @@ export function CommunityProfileReportScreen({
   const [reason, setReason] = useState<ReportReason | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [submitted, setSubmitted] = useState(false);
-  const profileHref = `/feed/profiles/${publicSnapshotId}`;
+  const profileHref = `/feed/profiles/${profileId}`;
 
   async function submitReport() {
-    if (!reason || pending) return;
+    if (availability === "unavailable" || !reason || pending) return;
     setPending(true);
     setError(null);
 
@@ -67,6 +73,7 @@ export function CommunityProfileReportScreen({
       const response = await fetch("/api/community/profile-safety", {
         body: JSON.stringify({
           action: "report",
+          communityProfileId,
           details: details.trim() || undefined,
           publicSnapshotId,
           reason,
@@ -111,6 +118,24 @@ export function CommunityProfileReportScreen({
             사람의 정보는 상대에게 공개하지 않아요.
           </p>
           <Link href="/feed">커뮤니티로 돌아가기</Link>
+        </section>
+      </CommunityScreenShell>
+    );
+  }
+
+  if (availability === "unavailable") {
+    return (
+      <CommunityScreenShell backHref={profileHref} title="프로필 신고">
+        <section className={styles.completeState} role="status">
+          <span aria-hidden="true">
+            <ShieldCheck size={24} />
+          </span>
+          <strong>이 프로필에서는 신고 기능을 사용할 수 없어요</strong>
+          <p>
+            검사 결과 공개 없이 사용하는 일반 프로필에는 아직 신고 기능을
+            제공하지 않아요.
+          </p>
+          <Link href={profileHref}>프로필로 돌아가기</Link>
         </section>
       </CommunityScreenShell>
     );

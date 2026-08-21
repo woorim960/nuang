@@ -39,8 +39,12 @@ describe("CoreResultReportTemplate", () => {
     expect(
       screen.getByRole("heading", { name: "내 뉴앙 코드 풀이" }),
     ).toBeInTheDocument();
-    expect(screen.getByRole("note")).toHaveTextContent(
-      /검증 중인 후보 버전.*사람 연구·집단별 공정성 검토·정량 검증.*확정 판정이 아니에요/,
+    expect(
+      screen.getByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).toHaveTextContent(
+      /참고용 · 공유 불가.*대표 뉴앙 코드로 확정되거나.*공개 프로필·공유·비교에 사용되지 않아요/,
     );
     expect(
       screen.getByRole("heading", { name: "생활 속의 나" }),
@@ -91,10 +95,17 @@ describe("CoreResultReportTemplate", () => {
 
   it("does not label a different historical scheme as the current candidate", () => {
     const model = createModel("full");
+    model.measurement.assessmentReleaseId = "NUANG-CORE-FULL-HISTORICAL-0.9";
     model.measurement.codeSchemeVersion = "NUANG-CODE-5AXIS-PROVISIONAL-0.9";
+    model.measurement.scoringReleaseId =
+      "NUANG-CORE-FULL-HISTORICAL-SCORING-0.9";
 
     render(<CoreResultReportTemplate model={model} surface="my" />);
-    expect(screen.queryByRole("note")).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).not.toBeInTheDocument();
   });
 
   it("gives a quick result a substantial code guide without precision facets", () => {
@@ -217,8 +228,11 @@ describe("CoreResultReportTemplate", () => {
     expect(within(navigation).getAllByRole("link")).toHaveLength(5);
   });
 
-  it("shares only a user-selected public overview sentence from inline actions", () => {
+  it("default-denies every share entry point for an unknown nonlegacy release", () => {
     const model = createModel("full");
+    model.measurement.assessmentReleaseId = "NUANG-CORE-ACTIVE-2.0";
+    model.measurement.codeSchemeVersion = "NUANG-CODE-UNKNOWN-2.0";
+    model.measurement.scoringReleaseId = "NUANG-SCORING-UNKNOWN-2.0";
     render(
       <CoreResultReportTemplate
         model={model}
@@ -228,21 +242,33 @@ describe("CoreResultReportTemplate", () => {
       />,
     );
 
-    fireEvent.click(
-      screen.getAllByRole("button", { name: "이 문장 공유" })[0]!,
-    );
-    const dialog = screen.getByRole("dialog", { name: "결과 공유" });
     expect(
-      within(dialog).getByText(model.result.currentProfileName),
-    ).toBeInTheDocument();
-    expect(
-      within(dialog).getAllByText(
-        /사람이 움직이게 만드는 연결력|낯선 사람 사이에 공통점/,
-      ).length,
-    ).toBeGreaterThan(0);
-    expect(
-      within(dialog).queryByText("이번 답에서 선명한 방향"),
+      screen.queryByRole("button", { name: "검사 결과 공유" }),
     ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "이 문장 공유" }),
+    ).not.toBeInTheDocument();
+  });
+
+  it("removes every share entry point from a candidate core result", () => {
+    render(
+      <CoreResultReportTemplate
+        model={createModel("full")}
+        shareEnabled
+        surface="my"
+      />,
+    );
+
+    expect(
+      screen.queryByRole("button", { name: "검사 결과 공유" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("button", { name: "이 문장 공유" }),
+    ).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole("dialog", { name: "결과 공유" }),
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("참고용 · 공유 불가")).toBeInTheDocument();
   });
 
   it("opens with a direct strength, cost, and adjustment flow", () => {

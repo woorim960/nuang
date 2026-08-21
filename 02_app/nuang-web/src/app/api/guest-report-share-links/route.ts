@@ -1,5 +1,11 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import {
+  isLegacyCoreShareContent,
+  legacyCoreContainmentPolicyReleaseId,
+  legacyCorePublicDenyReason,
+  legacyCorePublicSharingMessage,
+} from "@/features/assessment/legacy-core-containment-policy";
 import { reportShareContentSchema } from "@/features/share/report-share-contract";
 import { createGuestReportShareToken } from "@/features/share/server-guest-report-share-token";
 import { readValidatedJson } from "@/lib/api/request";
@@ -23,6 +29,18 @@ export async function POST(request: Request) {
     maxBytes: MAX_BODY_BYTES,
   });
   if (!parsed.ok) return parsed.response;
+
+  if (isLegacyCoreShareContent(parsed.data.content)) {
+    return NextResponse.json(
+      {
+        error: legacyCorePublicDenyReason,
+        message: legacyCorePublicSharingMessage,
+        ok: false,
+        policyReleaseId: legacyCoreContainmentPolicyReleaseId,
+      },
+      { status: 409 },
+    );
+  }
 
   const token = createGuestReportShareToken(parsed.data.content);
   if (!token) {

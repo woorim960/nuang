@@ -6,12 +6,14 @@ import { useEffect, useRef, useState } from "react";
 import { IntentPrefetchLink as Link } from "@/components/navigation/IntentPrefetchLink";
 import type { FeedPollSummary } from "@/features/feed/feed-seed";
 import type { FeedWriteRequest } from "@/features/feed/feed-contract";
+import { feedCodeStatsEnabled } from "@/features/feed/feed-privacy";
 import { getCurrentNuangProfileName } from "@/features/nuang-code/profile-name-resolution";
 import { cn } from "@/lib/utils/cn";
 import styles from "./FeedPollCard.module.css";
 
 type PollOption = FeedPollSummary["options"][number];
 type PollCodePerspective = FeedPollSummary["codePerspectives"][number];
+const containedCodePerspectives: PollCodePerspective[] = [];
 
 type VoteStatus =
   | { status: "idle" }
@@ -54,9 +56,12 @@ export function FeedPollCard({
   const displayTotalVotes = localVoteApplies
     ? localVote.totalVotes
     : poll.totalVotes;
-  const displayCodePerspectives = localVoteApplies
-    ? localVote.codePerspectives
-    : poll.codePerspectives;
+  const viewerCode = feedCodeStatsEnabled ? poll.viewerCode : null;
+  const displayCodePerspectives = feedCodeStatsEnabled
+    ? localVoteApplies
+      ? localVote.codePerspectives
+      : poll.codePerspectives
+    : containedCodePerspectives;
   const hasVoted = Boolean(viewerVoteOptionId);
   const showResults = hasVoted || isClosed;
   const canVote = allowVote && !isClosed && status.status !== "pending";
@@ -66,9 +71,8 @@ export function FeedPollCard({
     : null;
   const activePerspectiveCode = selectedPerspective?.code ?? null;
   const perspectiveOptions = selectedPerspective?.options ?? displayOptions;
-  const viewerPerspective = poll.viewerCode
-    ? (displayCodePerspectives.find((row) => row.code === poll.viewerCode) ??
-      null)
+  const viewerPerspective = viewerCode
+    ? (displayCodePerspectives.find((row) => row.code === viewerCode) ?? null)
     : null;
 
   useEffect(() => {
@@ -93,7 +97,7 @@ export function FeedPollCard({
         options: displayOptions,
         previousOptionId: null,
         totalVotes: displayTotalVotes,
-        viewerCode: poll.viewerCode,
+        viewerCode,
       });
 
       setStatus({ status: "pending" });
@@ -141,7 +145,7 @@ export function FeedPollCard({
     poll.id,
     poll.options,
     poll.totalVotes,
-    poll.viewerCode,
+    viewerCode,
     returnTo,
     router,
   ]);
@@ -160,7 +164,7 @@ export function FeedPollCard({
       options: displayOptions,
       previousOptionId: viewerVoteOptionId,
       totalVotes: displayTotalVotes,
-      viewerCode: poll.viewerCode,
+      viewerCode,
     });
 
     setStatus({ status: "pending" });
@@ -172,11 +176,7 @@ export function FeedPollCard({
     setPerspectiveOpen(true);
 
     try {
-      const response = await postPollVote(
-        poll.id,
-        optionId,
-        isReplacingVote,
-      );
+      const response = await postPollVote(poll.id, optionId, isReplacingVote);
 
       if (response.status === 401) {
         restoreVote(previousVote);
@@ -257,9 +257,7 @@ export function FeedPollCard({
           <span className={styles.closedBadge}>투표 마감</span>
         ) : null}
       </div>
-      <div
-        className={cn("space-y-2", variant === "home" ? "mt-4" : "mt-3")}
-      >
+      <div className={cn("space-y-2", variant === "home" ? "mt-4" : "mt-3")}>
         {displayOptions.map((option) => (
           <button
             aria-pressed={option.id === viewerVoteOptionId}
@@ -341,7 +339,7 @@ export function FeedPollCard({
       {showResults && variant === "feed" ? (
         <div className="mt-3 flex items-center justify-between gap-4 text-label font-semibold text-[var(--nu-color-text-muted)]">
           <span>총 {displayTotalVotes.toLocaleString("ko-KR")}명 참여</span>
-          {poll.canViewCodeStats ? (
+          {feedCodeStatsEnabled && poll.canViewCodeStats ? (
             <Link
               className="text-[var(--nu-color-text-strong)]"
               href={createStatsHref(poll.statsHref, variant)}
@@ -395,12 +393,12 @@ export function FeedPollCard({
                 >
                   전체
                 </button>
-                {poll.viewerCode ? (
+                {viewerCode ? (
                   <button
-                    aria-pressed={activePerspectiveCode === poll.viewerCode}
+                    aria-pressed={activePerspectiveCode === viewerCode}
                     className={styles.perspectiveTab}
                     disabled={!viewerPerspective}
-                    onClick={() => setPerspectiveCode(poll.viewerCode)}
+                    onClick={() => setPerspectiveCode(viewerCode)}
                     title={
                       viewerPerspective
                         ? undefined
@@ -408,7 +406,7 @@ export function FeedPollCard({
                     }
                     type="button"
                   >
-                    {poll.viewerCode}
+                    {viewerCode}
                     {!viewerPerspective ? " · 집계 중" : ""}
                   </button>
                 ) : null}
@@ -475,7 +473,7 @@ export function FeedPollCard({
       ) : null}
       {isClosed && variant !== "feed" ? (
         <p className={styles.closedNote}>
-          {hasVoted || poll.canViewCodeStats
+          {hasVoted || (feedCodeStatsEnabled && poll.canViewCodeStats)
             ? "마감된 최종 결과예요."
             : `마감된 최종 결과 · 총 ${displayTotalVotes.toLocaleString("ko-KR")}명 참여`}
         </p>
@@ -556,9 +554,7 @@ function createOptimisticVote({
     return {
       ...option,
       ratio:
-        nextTotalVotes > 0
-          ? Math.round((voteCount / nextTotalVotes) * 100)
-          : 0,
+        nextTotalVotes > 0 ? Math.round((voteCount / nextTotalVotes) * 100) : 0,
       viewerHasVoted: option.id === nextOptionId,
       voteCount,
     };
@@ -642,10 +638,7 @@ function createOptimisticCodePerspectives({
 
       return {
         ...option,
-        ratio:
-          totalVotes > 0
-            ? Math.round((voteCount / totalVotes) * 100)
-            : 0,
+        ratio: totalVotes > 0 ? Math.round((voteCount / totalVotes) * 100) : 0,
         voteCount,
       };
     }),

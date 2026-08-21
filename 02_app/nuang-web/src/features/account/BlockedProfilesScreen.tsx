@@ -47,7 +47,11 @@ export function BlockedProfilesScreen() {
 
     try {
       const response = await fetch("/api/community/blocks", {
-        body: JSON.stringify({ blockedAccountId: profile.blockedAccountId }),
+        body: JSON.stringify({
+          blockedAccountId: profile.blockedAccountId,
+          communityProfileId: profile.communityProfileId,
+          publicSnapshotId: profile.publicSnapshotId,
+        }),
         headers: { "content-type": "application/json" },
         method: "DELETE",
       });

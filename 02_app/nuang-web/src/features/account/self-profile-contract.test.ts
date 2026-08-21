@@ -51,21 +51,20 @@ describe("buildSelfAssessmentJourney", () => {
     ).toMatchObject({ assessmentKind: "full", resumeOrdinal: 9 });
   });
 
-  it("routes a quick completion to the deeper assessment and its report", () => {
+  it("keeps a legacy quick result as exploratory beta history", () => {
     const journey = buildSelfAssessmentJourney({
       attempts: [],
       results: [createResult("quick", "quick-report")],
     });
 
-    expect(journey).toMatchObject({
-      fullStartHref:
-        "/assessments/nu-core-full?from=first-result&backTo=%2Fmy%3Ftab%3Dreports&returnTo=%2Fmy%3Ftab%3Dreports",
+    expect(journey).toEqual({
+      assessmentKind: "quick",
       reportHref: "/results/account/quick-report?backTo=%2Fmy%3Ftab%3Dreports",
-      state: "quick_completed",
+      state: "exploratory_beta_history",
     });
   });
 
-  it("uses the full result as the representative completion", () => {
+  it("prefers a full result when choosing the exploratory beta history link", () => {
     const journey = buildSelfAssessmentJourney({
       attempts: [],
       results: [
@@ -75,8 +74,23 @@ describe("buildSelfAssessmentJourney", () => {
     });
 
     expect(journey).toEqual({
+      assessmentKind: "full",
       reportHref: "/results/account/full-report?backTo=%2Fmy%3Ftab%3Dreports",
-      state: "full_completed",
+      state: "exploratory_beta_history",
+    });
+  });
+
+  it("does not promote an unknown non-legacy release outside the empty allowlist", () => {
+    const journey = buildSelfAssessmentJourney({
+      attempts: [],
+      results: [
+        createResult("full", "unknown-report", "NUANG-CORE-ACTIVE-2.0"),
+      ],
+    });
+
+    expect(journey).toMatchObject({
+      assessmentKind: "full",
+      state: "exploratory_beta_history",
     });
   });
 
@@ -157,6 +171,9 @@ function createProgressEntry({
 function createResult(
   kind: AccountResultSummary["kind"],
   resultReportId: string,
+  assessmentReleaseId = kind === "full"
+    ? "NUANG-CORE-FULL-CANDIDATE-1.0"
+    : "NUANG-CORE-QUICK-CANDIDATE-1.0",
 ): AccountResultSummary {
   return {
     assessmentAttemptId: `${resultReportId}-attempt`,
@@ -170,5 +187,14 @@ function createResult(
     profileName: "다정한 탐험가",
     resultLabel: kind === "full" ? "현재 대표 성향" : "예비 성향",
     resultReportId,
+    versionBundle: {
+      assessmentReleaseId,
+      codeSchemeVersion: "NUANG-CODE-5AXIS-CANDIDATE-1.0",
+      scoringModelVersion: "candidate-scoring-model.v1",
+      scoringReleaseId:
+        kind === "full"
+          ? "NUANG-CORE-FULL-CANDIDATE-SCORING-1.0"
+          : "NUANG-CORE-QUICK-CANDIDATE-SCORING-1.0",
+    },
   };
 }

@@ -2,14 +2,16 @@ import "server-only";
 
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { nuangCharacterMotifs } from "@/components/character/nuang-character-assets";
-import { mergeCommunityProfileIntoSnapshot } from "@/features/account/server-community-profile";
+import {
+  createNeutralCommunityProfileSnapshot,
+  mergeCommunityProfileIntoSnapshot,
+} from "@/features/account/server-community-profile";
 import {
   normalizeCommunityProfileRow,
   type CommunityProfileRecord,
 } from "@/features/account/community-profile";
 import { readOperatorAccountIds } from "@/features/admin/server-operator-identity";
 import { readBlockedCommunityAccountIds } from "@/features/feed/server-community-social";
-import { candidateProfileNameCatalog } from "@/features/nuang-code/candidate-profile-names";
 import {
   getCurrentNuangProfileName,
   isCurrentNuangCode,
@@ -86,34 +88,17 @@ async function searchPublicProfiles({
   query: string;
   viewerAccountId: string | null;
 }): Promise<PublicProfileSearchItem[]> {
-  const matchingCodes = getMatchingCurrentCodes(query);
   const pattern = `%${query}%`;
-  const [displayNameResponse, handleResponse, codeSnapshotResponse] =
-    await Promise.all([
-      createCommunityProfileSearchQuery(client)
-        .ilike("display_name", pattern)
-        .limit(candidateReadLimit),
-      createCommunityProfileSearchQuery(client)
-        .ilike("handle", pattern.toLocaleLowerCase("ko-KR"))
-        .limit(candidateReadLimit),
-      matchingCodes.length > 0
-        ? client
-            .schema("profile")
-            .from("profile_public_snapshot")
-            .select("id,account_id,snapshot_payload")
-            .in("snapshot_payload->profile->>code", matchingCodes)
-            .eq("status", "active")
-            .is("deleted_at", null)
-            .order("created_at", { ascending: false })
-            .limit(candidateReadLimit * 2)
-        : Promise.resolve({ data: [], error: null }),
-    ]);
+  const [displayNameResponse, handleResponse] = await Promise.all([
+    createCommunityProfileSearchQuery(client)
+      .ilike("display_name", pattern)
+      .limit(candidateReadLimit),
+    createCommunityProfileSearchQuery(client)
+      .ilike("handle", pattern.toLocaleLowerCase("ko-KR"))
+      .limit(candidateReadLimit),
+  ]);
 
-  if (
-    displayNameResponse.error ||
-    handleResponse.error ||
-    codeSnapshotResponse.error
-  ) {
+  if (displayNameResponse.error || handleResponse.error) {
     throw new Error("public_profile_search_failed");
   }
 
@@ -123,37 +108,16 @@ async function searchPublicProfiles({
     ...(handleResponse.data ?? []),
   ] as CommunityProfileRow[]) {
     const profile = normalizeCommunityProfileRow(row);
-    if (profile) profilesByAccountId.set(profile.accountId, profile);
-  }
-
-  const codeMatchedAccountIds = [
-    ...new Set(
-      ((codeSnapshotResponse.data ?? []) as PublicSnapshotRow[]).map(
-        (row) => row.account_id,
-      ),
-    ),
-  ];
-  if (codeMatchedAccountIds.length > 0) {
-    const response = await client
-      .schema("profile")
-      .from("community_profile")
-      .select(communityProfileSearchSelect)
-      .in("account_id", codeMatchedAccountIds)
-      .eq("code_visibility", "public")
-      .eq("status", "active")
-      .is("deleted_at", null);
-    if (response.error) throw new Error("public_profile_search_failed");
-
-    for (const row of (response.data ?? []) as CommunityProfileRow[]) {
-      const profile = normalizeCommunityProfileRow(row);
-      if (profile) profilesByAccountId.set(profile.accountId, profile);
+    if (
+      profile &&
+      !blockedAccountIds.has(profile.accountId) &&
+      profile.accountId !== viewerAccountId
+    ) {
+      profilesByAccountId.set(profile.accountId, profile);
     }
   }
 
-  const candidateAccountIds = [...profilesByAccountId.keys()].filter(
-    (accountId) =>
-      !blockedAccountIds.has(accountId) && accountId !== viewerAccountId,
-  );
+  const candidateAccountIds = [...profilesByAccountId.keys()];
   if (candidateAccountIds.length === 0) return [];
 
   const snapshotsResponse = await client
@@ -174,19 +138,16 @@ async function searchPublicProfiles({
   }
 
   const rankedCandidates = [...profilesByAccountId.values()]
-    .map((profile) => {
+    .flatMap((profile) => {
+      const rank = getProfileSearchRank({ profile, query });
+      if (rank === null) return [];
+
       const row = latestSnapshotByAccountId.get(profile.accountId);
       const snapshot = row
         ? coercePublicProfileSnapshot(row.snapshot_payload, row.id)
         : null;
-      if (!row || !snapshot) return null;
-
-      const rank = getProfileSearchRank({ profile, query, snapshot });
-      return rank === null ? null : { profile, rank, row, snapshot };
+      return [{ profile, rank, row: row ?? null, snapshot }];
     })
-    .filter((candidate): candidate is NonNullable<typeof candidate> =>
-      Boolean(candidate),
-    )
     .sort(
       (left, right) =>
         left.rank - right.rank ||
@@ -200,13 +161,16 @@ async function searchPublicProfiles({
 
   return Promise.all(
     rankedCandidates.map(async ({ profile, row, snapshot }) => {
-      const mergedSnapshot = await mergeCommunityProfileIntoSnapshot({
-        client,
-        profile,
-        snapshot,
-      });
+      const mergedSnapshot =
+        row && snapshot
+          ? await mergeCommunityProfileIntoSnapshot({
+              client,
+              profile,
+              snapshot,
+            })
+          : await createNeutralCommunityProfileSnapshot({ client, profile });
       const profileCard = createPublicProfileCardPayload({
-        cardId: `profile_${row.id}`,
+        cardId: `profile_${row?.id ?? profile.id}`,
         communityProfileId: profile.id,
         isOperator: operatorAccountIds.has(profile.accountId),
         snapshot: mergedSnapshot,
@@ -227,52 +191,22 @@ function createCommunityProfileSearchQuery(client: SupabaseClient) {
     .is("deleted_at", null);
 }
 
-function getMatchingCurrentCodes(query: string) {
-  const normalized = query.toLocaleLowerCase("ko-KR");
-  const upperQuery = query.toUpperCase();
-
-  return Object.entries(candidateProfileNameCatalog)
-    .filter(
-      ([code, profile]) =>
-        code.includes(upperQuery) ||
-        profile.displayName.toLocaleLowerCase("ko-KR").includes(normalized) ||
-        profile.shortName.toLocaleLowerCase("ko-KR").includes(normalized),
-    )
-    .map(([code]) => code);
-}
-
 function getProfileSearchRank({
   profile,
   query,
-  snapshot,
 }: {
   profile: CommunityProfileRecord;
   query: string;
-  snapshot: PublicProfileSnapshotPayload;
 }) {
   const normalized = query.toLocaleLowerCase("ko-KR");
   const displayName = profile.displayName.toLocaleLowerCase("ko-KR");
   const handle = profile.handle.toLocaleLowerCase("ko-KR");
-  const code = snapshot.profile.code.toLocaleLowerCase("ko-KR");
-  const roleName = (
-    getCurrentNuangProfileName(snapshot.profile.code) ?? ""
-  ).toLocaleLowerCase("ko-KR");
-  const codeVisible = profile.codeVisibility === "public";
-
   if (handle === normalized) return 0;
   if (displayName === normalized) return 1;
-  if (codeVisible && code === normalized) return 2;
   if (displayName.startsWith(normalized) || handle.startsWith(normalized)) {
-    return 3;
+    return 2;
   }
-  if (codeVisible && roleName.startsWith(normalized)) return 4;
-  if (displayName.includes(normalized) || handle.includes(normalized)) return 5;
-  if (
-    codeVisible &&
-    (code.includes(normalized) || roleName.includes(normalized))
-  ) {
-    return 6;
-  }
+  if (displayName.includes(normalized) || handle.includes(normalized)) return 3;
   return null;
 }
 
@@ -286,8 +220,6 @@ function coercePublicProfileSnapshot(
   const motif = snapshot.displayProfile?.motif;
 
   if (
-    !isCurrentNuangCode(snapshot.profile?.code) ||
-    !snapshot.profile?.name ||
     !displayName ||
     !nuangCharacterMotifs.includes(motif) ||
     !Array.isArray(snapshot.publicData?.coreDomainMap) ||
@@ -298,6 +230,10 @@ function coercePublicProfileSnapshot(
 
   return {
     ...snapshot,
+    profile:
+      isCurrentNuangCode(snapshot.profile?.code) && snapshot.profile?.name
+        ? snapshot.profile
+        : { code: "-----", name: "비공개 성향" },
     displayProfile: {
       ...snapshot.displayProfile,
       profileImage:

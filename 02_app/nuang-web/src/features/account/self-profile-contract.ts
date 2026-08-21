@@ -1,5 +1,6 @@
 import type { AccountResultSummary } from "@/features/account/account-result-contract";
 import type { AccountAssessmentProgressEntry } from "@/features/assessment/account-assessment-progress-contract";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { FeedItem } from "@/features/feed/feed-seed";
 import type { PublicProfileImage } from "@/features/public-profile/profile-image";
@@ -22,6 +23,11 @@ export type SelfAssessmentJourney =
       state: "quick_completed";
     }
   | { reportHref: string; state: "full_completed" }
+  | {
+      assessmentKind: "full" | "quick";
+      reportHref: string;
+      state: "exploratory_beta_history";
+    }
   | { state: "unavailable" };
 
 export type SelfProfilePayload = {
@@ -115,7 +121,14 @@ export function buildSelfAssessmentJourney({
 
   if (!resultsAvailable) return { state: "unavailable" };
 
-  const fullResult = results.find((result) => result.kind === "full");
+  const representativeResults = results.filter((result) =>
+    canPromoteCoreResultToRepresentative({
+      assessmentReleaseId: result.versionBundle?.assessmentReleaseId,
+    }),
+  );
+  const fullResult = representativeResults.find(
+    (result) => result.kind === "full",
+  );
   if (fullResult) {
     return {
       reportHref: buildAccountCoreResultHref({
@@ -126,7 +139,9 @@ export function buildSelfAssessmentJourney({
     };
   }
 
-  const quickResult = results.find((result) => result.kind === "quick");
+  const quickResult = representativeResults.find(
+    (result) => result.kind === "quick",
+  );
   if (quickResult) {
     return {
       fullStartHref: buildPrecisionIntroHref({
@@ -139,6 +154,20 @@ export function buildSelfAssessmentJourney({
         resultReportId: quickResult.resultReportId,
       }),
       state: "quick_completed",
+    };
+  }
+
+  const exploratoryResult =
+    results.find((result) => result.kind === "full") ??
+    results.find((result) => result.kind === "quick");
+  if (exploratoryResult) {
+    return {
+      assessmentKind: exploratoryResult.kind,
+      reportHref: buildAccountCoreResultHref({
+        backHref: "/my?tab=reports",
+        resultReportId: exploratoryResult.resultReportId,
+      }),
+      state: "exploratory_beta_history",
     };
   }
 

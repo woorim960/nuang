@@ -16,6 +16,8 @@ import {
 } from "@/features/assessment/assessment-storage";
 import { candidateFullCoreAssessment } from "@/features/assessment/candidate-full-core-seed";
 import { candidateQuickCoreAssessment } from "@/features/assessment/candidate-quick-core-seed";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
+import { canPromoteCoreResultToRepresentative } from "@/features/assessment/legacy-core-containment-policy";
 import { buildPrecisionIntroHref } from "@/features/assessment/precision-entry";
 import type { LocalAssessmentAttempt } from "@/features/assessment/types";
 import {
@@ -215,6 +217,11 @@ export function AssessmentHomeCoreSection() {
         </div>
       </div>
 
+      <LegacyCoreBetaNotice
+        className={styles.legacyBetaNotice}
+        context="home"
+      />
+
       {restoredFromAnotherDevice ? (
         <p aria-live="polite" className={styles.restoreNotice} role="status">
           <CircleCheck aria-hidden="true" size={16} strokeWidth={1.9} />
@@ -348,6 +355,9 @@ export function buildCoreJourneyState(
   const latest = selectLatestCompletedCoreReport(collection);
 
   if (representative?.identity.kind === "full") {
+    const isExploratoryBeta = !canPromoteCoreResultToRepresentative({
+      assessmentReleaseId: representative.measurement.assessmentReleaseId,
+    });
     const currentCode = currentTraitProfile?.code ?? representative.result.code;
     const currentName =
       currentTraitProfile?.profileName ??
@@ -362,13 +372,15 @@ export function buildCoreJourneyState(
           localResultId: representative.identity.localResultId!,
         });
     return {
-      cta: "내 성향 결과 보기",
-      description:
-        currentTraitProfile?.source === "core_and_topics"
+      cta: isExploratoryBeta ? "탐색적 베타 결과 보기" : "내 성향 결과 보기",
+      description: isExploratoryBeta
+        ? "검사 당시 응답을 바탕으로 만든 참고용 결과예요. 대표 코드나 공개·공유·비교에는 사용되지 않아요."
+        : currentTraitProfile?.source === "core_and_topics"
           ? `${currentTraitProfile.topicCount}개의 주제 검사까지 반영해 내 성향이 더 구체적으로 자리 잡았어요.`
           : "내 뉴앙 코드와 자세한 성향 해석을 다시 볼 수 있어요.",
-      eyebrow:
-        currentTraitProfile?.source === "core_and_topics"
+      eyebrow: isExploratoryBeta
+        ? "탐색적 베타 결과"
+        : currentTraitProfile?.source === "core_and_topics"
           ? "검사할수록 선명해지는 현재 코드"
           : "정밀 성향 검사 완료",
       href,
@@ -378,21 +390,31 @@ export function buildCoreJourneyState(
         label: "정밀 검사 다시하기",
         type: "restart",
       },
-      title: `${currentCode} · ${currentName}`,
+      title: isExploratoryBeta
+        ? `${representative.result.code} · ${representative.result.currentProfileName}`
+        : `${currentCode} · ${currentName}`,
     };
   }
 
   if (representative?.identity.kind === "quick") {
+    const isExploratoryBeta = !canPromoteCoreResultToRepresentative({
+      assessmentReleaseId: representative.measurement.assessmentReleaseId,
+    });
+
     return {
       cta: "정밀 성향 검사 시작하기",
-      description: "여러 상황에서 보이는 내 모습을 더 자세히 살펴봐요.",
-      eyebrow: "첫 성향 검사 완료",
+      description: isExploratoryBeta
+        ? "첫 결과는 참고용 탐색 기록으로 보존돼요. 대표 코드나 공개·공유·비교에는 사용되지 않아요."
+        : "여러 상황에서 보이는 내 모습을 더 자세히 살펴봐요.",
+      eyebrow: isExploratoryBeta ? "탐색적 베타 결과" : "첫 성향 검사 완료",
       href: buildPrecisionIntroHref({
         backDestination: "/home",
         entrySource: "first-result",
         returnDestination: "/home",
       }),
-      title: "내 모습을 조금 더 자세히 알아볼 차례예요",
+      title: isExploratoryBeta
+        ? "이전 베타 결과에서 더 자세히 살펴볼 수 있어요"
+        : "내 모습을 조금 더 자세히 알아볼 차례예요",
     };
   }
 

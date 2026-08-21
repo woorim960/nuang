@@ -154,10 +154,11 @@ describe("LocalResultView", () => {
     ).toHaveAttribute("href", "/home");
     expectFiveCodeTabs();
     expect(
-      screen.getByRole("button", {
+      screen.queryByRole("button", {
         name: "검사 결과 공유",
       }),
-    ).toBeInTheDocument();
+    ).not.toBeInTheDocument();
+    expect(screen.getByText("참고용 · 공유 불가")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "이 결과 삭제" }),
     ).toBeInTheDocument();
@@ -271,8 +272,8 @@ describe("LocalResultView", () => {
       );
     });
     expect(
-      await screen.findByRole("button", { name: "검사 결과 공유" }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: "검사 결과 공유" }),
+    ).not.toBeInTheDocument();
     const claimCall = fetchMock.mock.calls.find(
       ([url, init]) => url === "/api/claim-result" && init?.method === "POST",
     );
@@ -334,7 +335,7 @@ describe("LocalResultView", () => {
 
     expect(
       await screen.findByText(
-        "계정에 저장하려면 현재 필수 항목을 확인해 주세요. 결과 요약은 지금도 공유할 수 있어요.",
+        "계정에 저장하려면 현재 필수 항목을 확인해 주세요. 이 베타 결과는 참고용이며 공유할 수 없어요.",
       ),
     ).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "다시 저장" })).toHaveAttribute(
@@ -453,7 +454,7 @@ describe("LocalResultView", () => {
 
       expect(
         await screen.findByText(
-          "계정 저장은 잠시 뒤 다시 시도해요. 지금도 결과 요약은 공유할 수 있어요.",
+          "계정 저장은 잠시 뒤 다시 시도해요. 이 베타 결과는 참고용이며 공유할 수 없어요.",
         ),
       ).toBeInTheDocument();
       expect(storageMock.deleteLocalAttempt).not.toHaveBeenCalled();
@@ -463,8 +464,7 @@ describe("LocalResultView", () => {
     },
   );
 
-  it("keeps summary sharing available after a temporary account-save error", async () => {
-    const user = userEvent.setup();
+  it("keeps candidate sharing unavailable after a temporary account-save error", async () => {
     storageMock.getLocalAttempt.mockResolvedValue(
       buildCompletedAttempt(candidateFullCoreAssessment),
     );
@@ -521,14 +521,12 @@ describe("LocalResultView", () => {
 
     expect(
       await screen.findByText(
-        "계정 저장은 잠시 뒤 다시 시도해요. 지금도 결과 요약은 공유할 수 있어요.",
+        "계정 저장은 잠시 뒤 다시 시도해요. 이 베타 결과는 참고용이며 공유할 수 없어요.",
       ),
     ).toBeInTheDocument();
-    await user.click(screen.getByRole("button", { name: "검사 결과 공유" }));
-
     expect(
-      await screen.findByRole("dialog", { name: "결과 공유" }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: "검사 결과 공유" }),
+    ).not.toBeInTheDocument();
     expect(
       fetchMock.mock.calls.filter(
         ([url, init]) => url === "/api/claim-result" && init?.method === "POST",
@@ -536,8 +534,7 @@ describe("LocalResultView", () => {
     ).toHaveLength(1);
   });
 
-  it("copies a generated common report share link", async () => {
-    const user = userEvent.setup();
+  it("does not request a common share link for a candidate result", async () => {
     const writeText = vi.fn().mockResolvedValue(undefined);
     Object.defineProperty(navigator, "clipboard", {
       configurable: true,
@@ -604,19 +601,16 @@ describe("LocalResultView", () => {
 
     render(<LocalResultView localResultId="local_full" />);
 
-    await user.click(
-      await screen.findByRole("button", { name: "검사 결과 공유" }),
-    );
-    await user.click(await screen.findByRole("button", { name: "링크 복사" }));
-
-    await waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith(
-        "http://localhost:3000/share/core-token",
-      );
-    });
+    expect(await screen.findByText("참고용 · 공유 불가")).toBeInTheDocument();
     expect(
-      await screen.findByText("결과 링크를 복사했어요."),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: "검사 결과 공유" }),
+    ).not.toBeInTheDocument();
+    expect(writeText).not.toHaveBeenCalled();
+    expect(
+      fetchMock.mock.calls.some(([url]) =>
+        String(url).includes("report-share-links"),
+      ),
+    ).toBe(false);
   });
 
   it("restores saved report status without exposing share management", async () => {
@@ -657,9 +651,10 @@ describe("LocalResultView", () => {
 
     render(<LocalResultView localResultId="local_full" />);
 
+    expect(await screen.findByText("참고용 · 공유 불가")).toBeInTheDocument();
     expect(
-      await screen.findByRole("button", { name: "검사 결과 공유" }),
-    ).toBeInTheDocument();
+      screen.queryByRole("button", { name: "검사 결과 공유" }),
+    ).not.toBeInTheDocument();
     expect(screen.queryByText(/활성 공유 링크/)).not.toBeInTheDocument();
     expect(screen.queryByText("공유 링크 관리")).not.toBeInTheDocument();
     expect(

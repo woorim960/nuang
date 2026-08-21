@@ -56,6 +56,10 @@
   padding-bottom: max(2rem, env(safe-area-inset-bottom));
 }
 
+.betaNotice {
+  margin-top: 1rem;
+}
+
 .hero {
   position: relative;
   display: grid;

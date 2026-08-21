@@ -54,6 +54,30 @@ describe("community profile source resolution", () => {
 
     expect(source).toBeNull();
   });
+
+  it("resolves an active stable profile without requiring a public snapshot", async () => {
+    const source = await readCommunityProfileSource({
+      client: createSourceClient({
+        profileStatus: "active",
+        snapshotMissing: true,
+      }),
+      profileId: stableProfileId,
+    });
+
+    expect(source).toMatchObject({
+      communityProfile: { accountId, id: stableProfileId },
+      snapshot: {
+        account_id: accountId,
+        id: stableProfileId,
+        snapshot_payload: {
+          profile: { code: "-----", name: "비공개 성향" },
+          publicData: { coreDomainMap: [], coreFacetSummary: [] },
+          snapshotId: stableProfileId,
+          visibility: { includedFields: ["display_profile"] },
+        },
+      },
+    });
+  });
 });
 
 type Operation = {
@@ -65,9 +89,11 @@ type Operation = {
 function createSourceClient({
   communityLookupError = false,
   profileStatus,
+  snapshotMissing = false,
 }: {
   communityLookupError?: boolean;
   profileStatus: "active" | "hidden";
+  snapshotMissing?: boolean;
 }) {
   return {
     schema(schema: string) {
@@ -137,7 +163,14 @@ function createSourceClient({
         hasFilter(operation, "eq", "account_id", accountId) ||
         hasFilter(operation, "eq", "id", legacySnapshotId)
       ) {
-        return { data: createSnapshotRow(), error: null };
+        return {
+          data:
+            snapshotMissing &&
+            hasFilter(operation, "eq", "account_id", accountId)
+              ? null
+              : createSnapshotRow(),
+          error: null,
+        };
       }
       return { data: null, error: null };
     }

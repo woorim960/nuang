@@ -89,9 +89,33 @@ describe("public profile card contract", () => {
       "ER",
     ]);
     expect(card.highlights.facetSummaryCount).toBe(2);
+    expect(card.source.communityProfileId).toBeUndefined();
     expect(card.visibility).toMatchObject({
       cardScope: "public_profile_card",
       policyVersion: profileVisibilityPolicyVersion,
+    });
+  });
+
+  it("keeps the canonical community profile id distinct from snapshot compatibility", () => {
+    const snapshot = createPublicProfileSnapshotPayload({
+      createdAt: "2026-07-04T00:00:00.000Z",
+      displayProfile: {
+        displayName: "탐험가",
+        motif: "flame",
+      },
+      result,
+      snapshotId: "11111111-1111-4111-8111-111111111111",
+    });
+
+    const card = createPublicProfileCardPayload({
+      cardId: "card_stable_profile",
+      communityProfileId: "22222222-2222-4222-8222-222222222222",
+      snapshot,
+    });
+
+    expect(card.source).toMatchObject({
+      communityProfileId: "22222222-2222-4222-8222-222222222222",
+      publicSnapshotId: "11111111-1111-4111-8111-111111111111",
     });
   });
 

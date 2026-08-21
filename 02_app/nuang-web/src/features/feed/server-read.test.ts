@@ -29,6 +29,10 @@ const feedMediaStorageMocks = vi.hoisted(() => ({
   createFeedMediaR2DeliveryUrl: vi.fn(),
 }));
 
+const publicationMocks = vi.hoisted(() => ({
+  readCoreResultPublicationDecision: vi.fn(),
+}));
+
 vi.mock("@/lib/supabase/server", () => ({
   createServerSupabaseClient: vi.fn(async () => supabaseMocks.serverClient),
 }));
@@ -40,6 +44,11 @@ vi.mock("@/lib/supabase/service", () => ({
 vi.mock("@/features/feed/feed-media-storage", () => ({
   createFeedMediaR2DeliveryUrl:
     feedMediaStorageMocks.createFeedMediaR2DeliveryUrl,
+}));
+
+vi.mock("@/features/assessment/server-core-result-publication-policy", () => ({
+  readCoreResultPublicationDecision:
+    publicationMocks.readCoreResultPublicationDecision,
 }));
 
 function createMockServerClient() {
@@ -62,6 +71,7 @@ describe("feed server read model", () => {
     supabaseMocks.serverClient = null;
     supabaseMocks.serviceClient = null;
     feedMediaStorageMocks.createFeedMediaR2DeliveryUrl.mockReset();
+    publicationMocks.readCoreResultPublicationDecision.mockReset();
     vi.clearAllMocks();
   });
 
@@ -341,7 +351,7 @@ describe("feed server read model", () => {
     ).toBe(true);
   });
 
-  it("keeps only report shares that use the current Nuang code", async () => {
+  it("hides a provenance-free projected core report share", async () => {
     supabaseMocks.serverClient = createMockServerClient();
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
@@ -350,14 +360,10 @@ describe("feed server read model", () => {
       (item) => item.id === "post-report-share",
     );
 
-    expect(reportPost?.reportShare).toMatchObject({
-      profileCode: "INGMQ",
-      profileName: "가능성을 깊이 좇는 사색가",
-    });
+    expect(reportPost).toBeUndefined();
   });
 
-  it("links a verified original report share to the owner's canonical report", async () => {
-    supabaseMocks.serverClient = createMockServerClient();
+  it("keeps a public topic report available anonymously without its contained code", async () => {
     supabaseMocks.serviceClient = createMockFeedReadClient({
       includeOriginalReportShare: true,
     });
@@ -369,10 +375,14 @@ describe("feed server read model", () => {
 
     expect(reportPost?.reportShare).toMatchObject({
       href: "/feed/profiles/55555555-5555-4555-8555-555555555555/reports/topic_44444444-4444-4444-8444-444444444444",
+      profileCode: "",
       profileId: "55555555-5555-4555-8555-555555555555",
+      profileName: "위로받을 때 필요한 것",
       reportKey: "topic_44444444-4444-4444-8444-444444444444",
       reportType: "topic",
     });
+    expect(JSON.stringify(reportPost)).not.toContain("INGMC");
+    expect(JSON.stringify(reportPost)).not.toContain("새 가능성을 찾는 탐험가");
   });
 
   it("removes an original report share when its owner makes the result private", async () => {
@@ -386,6 +396,60 @@ describe("feed server read model", () => {
 
     expect(
       payload.items.some((item) => item.id === "post-original-report-share"),
+    ).toBe(false);
+  });
+
+  it("revalidates a core report share at read time and hides a contained legacy result", async () => {
+    publicationMocks.readCoreResultPublicationDecision.mockResolvedValue({
+      eligible: false,
+      reason: "legacy_core_public_propagation_blocked",
+    });
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      includeOriginalCoreReportShare: true,
+    });
+
+    const payload = await createServerFeedReadPayload();
+
+    expect(
+      publicationMocks.readCoreResultPublicationDecision,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ownerAccountId: "account-report-owner",
+        resultReportId: "77777777-7777-4777-8777-777777777777",
+      }),
+    );
+    expect(
+      payload.items.some(
+        (item) => item.id === "post-original-core-report-share",
+      ),
+    ).toBe(false);
+  });
+
+  it("revalidates and hides an existing result-summary core share", async () => {
+    publicationMocks.readCoreResultPublicationDecision.mockResolvedValue({
+      eligible: false,
+      reason: "legacy_core_public_propagation_blocked",
+    });
+    supabaseMocks.serverClient = createMockServerClient();
+    supabaseMocks.serviceClient = createMockFeedReadClient({
+      includeResultSummaryCoreReportShare: true,
+    });
+
+    const payload = await createServerFeedReadPayload();
+
+    expect(
+      publicationMocks.readCoreResultPublicationDecision,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ownerAccountId: "account-result-owner",
+        resultReportId: "66666666-6666-4666-8666-666666666666",
+      }),
+    );
+    expect(
+      payload.items.some(
+        (item) => item.id === "post-result-summary-core-share",
+      ),
     ).toBe(false);
   });
 
@@ -426,8 +490,8 @@ describe("feed server read model", () => {
     const previewItems = await createServerHomeFeedPreviewItems();
     const itemIds = previewItems.map((item) => item.id);
 
-    expect(previewItems).toHaveLength(2);
-    expect(itemIds).toEqual(["post-own", "post-report-share"]);
+    expect(previewItems).toHaveLength(1);
+    expect(itemIds).toEqual(["post-own"]);
   });
 
   it("reads one visible post with every comment the viewer may see", async () => {
@@ -464,7 +528,7 @@ describe("feed server read model", () => {
     expect(payload?.comments).toHaveLength(2);
   });
 
-  it("shows code-level poll rows from the first coded vote", async () => {
+  it("keeps aggregate poll stats while hiding untraced code cohorts", async () => {
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedPollStatsPayload(
@@ -481,11 +545,11 @@ describe("feed server read model", () => {
         voteOptionId: null,
       },
     });
-    expect(payload?.codeRows).toHaveLength(2);
-    expect(payload?.codeRows.map((row) => row.code)).toEqual([
-      "ENAKQ",
-      "INGMC",
-    ]);
+    expect(payload?.codeRows).toEqual([]);
+    expect(payload?.viewer).toMatchObject({
+      nuangCode: null,
+      profileName: null,
+    });
   });
 
   it("prepends the requested resume poll when it is outside the regular feed page", async () => {
@@ -499,8 +563,11 @@ describe("feed server read model", () => {
     expect(payload.items[0]).toMatchObject({
       id: "22222222-2222-4222-8222-222222222222",
       poll: {
+        canViewCodeStats: false,
+        codePerspectives: [],
         id: "11111111-1111-4111-8111-111111111111",
         question: "나 혼자 여행 간다면?",
+        viewerCode: null,
       },
     });
     expect(
@@ -521,13 +588,16 @@ describe("feed server read model", () => {
         {
           canRevote: true,
           poll: {
+            canViewCodeStats: false,
+            codePerspectives: [],
             question: "나 혼자 여행 간다면?",
             totalVotes: 3,
-            viewerCode: "INGMC",
+            viewerCode: null,
             viewerVoteOptionId: "option-sea",
           },
-          selectedCode: "INGMC",
+          selectedCode: null,
           selectedOptionLabel: "바다",
+          selectedProfileName: null,
           status: "active",
           tags: ["여행", "바다"],
           topicLabel: "취향",
@@ -537,19 +607,14 @@ describe("feed server read model", () => {
     });
   });
 
-  it("normalizes feed report detail names from the current Nuang code dictionary", async () => {
+  it("hides a provenance-free projected core report detail", async () => {
     supabaseMocks.serviceClient = createMockFeedReadClient();
 
     const payload = await createServerFeedReportSharePayload(
       "33333333-3333-4333-8333-333333333333",
     );
 
-    expect(payload?.reportShare).toMatchObject({
-      href: "/feed/reports/33333333-3333-4333-8333-333333333333",
-      profileCode: "INGMC",
-      profileName: "새 가능성을 찾는 탐험가",
-    });
-    expect(JSON.stringify(payload)).not.toContain("예전 저장 이름");
+    expect(payload).toBeNull();
   });
 
   it("does not expose a private report share to another viewer", async () => {
@@ -613,7 +678,9 @@ function createMockFeedReadClient({
   blockReadFailure = false,
   hiddenPostIds = [],
   hiddenSeedKeys = [],
+  includeOriginalCoreReportShare = false,
   includeOriginalReportShare = false,
+  includeResultSummaryCoreReportShare = false,
   mediaProviderColumnMissing = false,
   mediaRows = [],
   originalReportPrivate = false,
@@ -624,7 +691,9 @@ function createMockFeedReadClient({
   blockReadFailure?: boolean;
   hiddenPostIds?: string[];
   hiddenSeedKeys?: string[];
+  includeOriginalCoreReportShare?: boolean;
   includeOriginalReportShare?: boolean;
+  includeResultSummaryCoreReportShare?: boolean;
   mediaProviderColumnMissing?: boolean;
   mediaRows?: MockFeedMediaRow[];
   originalReportPrivate?: boolean;
@@ -636,7 +705,9 @@ function createMockFeedReadClient({
     blockReadFailure,
     hiddenPostIds,
     hiddenSeedKeys,
+    includeOriginalCoreReportShare,
     includeOriginalReportShare,
+    includeResultSummaryCoreReportShare,
     mediaProviderColumnMissing,
     mediaRows,
     originalReportPrivate,
@@ -723,7 +794,9 @@ function resolveFeedReadOperation(
     blockReadFailure: boolean;
     hiddenPostIds: string[];
     hiddenSeedKeys: string[];
+    includeOriginalCoreReportShare: boolean;
     includeOriginalReportShare: boolean;
+    includeResultSummaryCoreReportShare: boolean;
     mediaProviderColumnMissing: boolean;
     mediaRows: MockFeedMediaRow[];
     originalReportPrivate: boolean;
@@ -877,6 +950,73 @@ function resolveFeedReadOperation(
 
     return {
       data: [
+        ...(options.includeResultSummaryCoreReportShare
+          ? [
+              {
+                attachment_payload: [
+                  {
+                    id: "66666666-6666-4666-8666-666666666666",
+                    type: "result_summary",
+                  },
+                ],
+                author_account_id: "account-result-owner",
+                body: "이전 코어 결과를 공유해요.",
+                created_at: "2026-07-09T07:14:00.000Z",
+                id: "post-result-summary-core-share",
+                moderation_status: "published",
+                public_projection_payload: {
+                  reportShare: {
+                    assessmentKind: "full",
+                    completedAt: "2026-07-04T00:00:00.000Z",
+                    domains: [],
+                    profileCode: "INGMC",
+                    profileName: "이전 코어 결과",
+                    reportType: "core",
+                    resultLabel: "이전 코어 성향",
+                  },
+                },
+                published_at: "2026-07-09T07:14:00.000Z",
+                source: "report_share",
+                source_id: null,
+                visibility: "public",
+              },
+            ]
+          : []),
+        ...(options.includeOriginalCoreReportShare
+          ? [
+              {
+                attachment_payload: [
+                  {
+                    id: "core_77777777-7777-4777-8777-777777777777",
+                    profileId: "88888888-8888-4888-8888-888888888888",
+                    type: "original_report",
+                  },
+                ],
+                author_account_id: "account-sharer",
+                body: "이전 코어 결과를 함께 봐요.",
+                created_at: "2026-07-09T07:13:00.000Z",
+                id: "post-original-core-report-share",
+                moderation_status: "published",
+                public_projection_payload: {
+                  reportShare: {
+                    assessmentKind: "full",
+                    completedAt: "2026-07-04T00:00:00.000Z",
+                    domains: [],
+                    profileCode: "INGMC",
+                    profileId: "88888888-8888-4888-8888-888888888888",
+                    profileName: "이전 베타 결과",
+                    reportKey: "core_77777777-7777-4777-8777-777777777777",
+                    reportType: "core",
+                    resultLabel: "이전 베타 성향",
+                  },
+                },
+                published_at: "2026-07-09T07:13:00.000Z",
+                source: "report_share",
+                source_id: "core_77777777-7777-4777-8777-777777777777",
+                visibility: "public",
+              },
+            ]
+          : []),
         ...(options.includeOriginalReportShare
           ? [
               {
@@ -1274,6 +1414,35 @@ function resolveFeedReadOperation(
   }
 
   if (
+    operation.schema === "report" &&
+    operation.table === "result_report" &&
+    (options.includeOriginalCoreReportShare ||
+      options.includeResultSummaryCoreReportShare)
+  ) {
+    return {
+      data: [
+        ...(options.includeOriginalCoreReportShare
+          ? [
+              {
+                account_id: "account-report-owner",
+                id: "77777777-7777-4777-8777-777777777777",
+              },
+            ]
+          : []),
+        ...(options.includeResultSummaryCoreReportShare
+          ? [
+              {
+                account_id: "account-result-owner",
+                id: "66666666-6666-4666-8666-666666666666",
+              },
+            ]
+          : []),
+      ],
+      error: null,
+    };
+  }
+
+  if (
     operation.schema === "assessment" &&
     operation.table === "free_topic_result" &&
     options.includeOriginalReportShare
@@ -1292,7 +1461,8 @@ function resolveFeedReadOperation(
   if (
     operation.schema === "profile" &&
     operation.table === "profile_report_visibility" &&
-    options.includeOriginalReportShare
+    (options.includeOriginalReportShare ||
+      options.includeOriginalCoreReportShare)
   ) {
     return {
       data: options.originalReportPrivate
@@ -1312,15 +1482,28 @@ function resolveFeedReadOperation(
   if (
     operation.schema === "profile" &&
     operation.table === "community_profile" &&
-    options.includeOriginalReportShare &&
+    (options.includeOriginalReportShare ||
+      options.includeOriginalCoreReportShare) &&
     hasFilterColumn(operation, "in", "id")
   ) {
     return {
       data: [
-        {
-          account_id: "account-report-owner",
-          id: "55555555-5555-4555-8555-555555555555",
-        },
+        ...(options.includeOriginalCoreReportShare
+          ? [
+              {
+                account_id: "account-report-owner",
+                id: "88888888-8888-4888-8888-888888888888",
+              },
+            ]
+          : []),
+        ...(options.includeOriginalReportShare
+          ? [
+              {
+                account_id: "account-report-owner",
+                id: "55555555-5555-4555-8555-555555555555",
+              },
+            ]
+          : []),
       ],
       error: null,
     };
@@ -1329,7 +1512,8 @@ function resolveFeedReadOperation(
   if (
     operation.schema === "profile" &&
     operation.table === "profile_public_snapshot" &&
-    options.includeOriginalReportShare &&
+    (options.includeOriginalReportShare ||
+      options.includeOriginalCoreReportShare) &&
     hasFilterColumn(operation, "in", "id")
   ) {
     return { data: [], error: null };

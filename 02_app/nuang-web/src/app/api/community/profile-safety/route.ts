@@ -37,7 +37,8 @@ export async function POST(request: Request) {
     const status =
       result.code === "profile_not_found"
         ? 404
-        : result.code === "profile_report_rate_limited"
+        : result.code === "profile_block_rate_limited" ||
+            result.code === "profile_report_rate_limited"
           ? 429
           : 409;
     return NextResponse.json(
@@ -66,8 +67,14 @@ function getSafetyActionErrorMessage(code: string) {
   if (code === "profile_report_rate_limited") {
     return "짧은 시간에 신고가 많았어요. 잠시 뒤 다시 시도해 주세요.";
   }
+  if (code === "profile_block_rate_limited") {
+    return "짧은 시간에 차단 요청이 많았어요. 잠시 뒤 다시 시도해 주세요.";
+  }
   if (code === "profile_already_reported") {
     return "이미 신고한 프로필이에요. 운영팀에서 확인하고 있어요.";
+  }
+  if (code === "profile_action_unavailable") {
+    return "이 일반 프로필에서는 아직 신고·차단 기능을 사용할 수 없어요.";
   }
   return "요청을 저장하지 못했어요. 잠시 뒤 다시 시도해 주세요.";
 }

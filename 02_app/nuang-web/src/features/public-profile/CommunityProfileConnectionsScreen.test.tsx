@@ -73,6 +73,29 @@ describe("CommunityProfileConnectionsScreen", () => {
     ).toHaveAttribute("href", "/feed");
   });
 
+  it("keeps a redacted connection visible without rendering code identity", () => {
+    render(
+      <CommunityProfileConnectionsScreen
+        activeTab="followers"
+        result={{
+          followers: [{ ...connection, code: null, profileName: null }],
+          following: [],
+          ownerDisplayName: "여름",
+          ownerPublicSnapshotId: "11111111-1111-4111-8111-111111111111",
+          state: "ready",
+        }}
+      />,
+    );
+
+    expect(
+      screen.getByRole("link", {
+        name: `${connection.displayName}님의 프로필 보기`,
+      }),
+    ).toBeInTheDocument();
+    expect(screen.queryByText(connection.code)).not.toBeInTheDocument();
+    expect(screen.queryByText(connection.profileName)).not.toBeInTheDocument();
+  });
+
   it("keeps the user on the list and retries a failed read", () => {
     render(
       <CommunityProfileConnectionsScreen

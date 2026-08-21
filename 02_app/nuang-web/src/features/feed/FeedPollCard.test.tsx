@@ -91,7 +91,7 @@ describe("FeedPollCard", () => {
     expect(screen.queryByText(/총 0명 참여/)).not.toBeInTheDocument();
   });
 
-  it("reveals a code perspective from the first coded vote", () => {
+  it("fails closed for an injected coded vote while preserving the overall result", () => {
     const poll = createPoll();
     poll.canViewCodeStats = true;
     poll.totalVotes = 1;
@@ -152,24 +152,17 @@ describe("FeedPollCard", () => {
       ),
     ).not.toBeInTheDocument();
 
-    fireEvent.click(
-      within(perspective).getByRole("button", { name: "INGMC" }),
-    );
-
-    expect(
-      within(perspective).getByText("새 가능성을 찾는 탐험가"),
-    ).toBeVisible();
     expect(within(perspective).getByText("100%")).toBeVisible();
-
-    fireEvent.click(
-      within(perspective).getByRole("button", { name: "참여 코드 1" }),
-    );
     expect(
-      within(perspective).getByRole("button", { name: "INGMC 1명" }),
+      within(perspective).getByRole("button", { name: "참여 코드 0" }),
     ).toBeVisible();
+    expect(within(perspective).queryByText("INGMC")).not.toBeInTheDocument();
+    expect(
+      within(perspective).queryByText("새 가능성을 찾는 탐험가"),
+    ).not.toBeInTheDocument();
   });
 
-  it("keeps the inline overall result visible while code groups are gathering", () => {
+  it("keeps the inline overall result visible while code identity is contained", () => {
     const poll = createPoll();
     poll.totalVotes = 2;
     poll.viewerCode = "INGMC";
@@ -188,12 +181,9 @@ describe("FeedPollCard", () => {
 
     render(<FeedPollCard poll={poll} variant="playground" />);
 
-    fireEvent.click(
-      screen.getByRole("button", { name: "결과 보기 펼치기" }),
-    );
-    expect(
-      screen.getByRole("button", { name: "INGMC · 집계 중" }),
-    ).toBeDisabled();
+    fireEvent.click(screen.getByRole("button", { name: "결과 보기 펼치기" }));
+    expect(screen.getAllByText("50%").length).toBeGreaterThan(0);
+    expect(screen.queryByText(/INGMC/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "참여 코드 0" }));
     expect(
       screen.getByText("아직 코드가 확인된 참여자가 없어요."),
@@ -334,7 +324,7 @@ describe("FeedPollCard", () => {
     ).toHaveAttribute("aria-pressed", "true");
   });
 
-  it("updates the viewer code result and participating-code result after re-voting", async () => {
+  it("updates the overall result without rebuilding a code cohort after re-voting", async () => {
     vi.stubGlobal(
       "fetch",
       vi.fn(
@@ -380,21 +370,13 @@ describe("FeedPollCard", () => {
     expect(within(perspective).getByText("33%")).toBeVisible();
     expect(within(perspective).getByText("67%")).toBeVisible();
 
-    fireEvent.click(
-      within(perspective).getByRole("button", { name: "INGMC" }),
-    );
-    expect(within(perspective).getAllByText("50%")).toHaveLength(2);
-
-    fireEvent.click(
-      within(perspective).getByRole("button", { name: "참여 코드 1" }),
-    );
     expect(
-      within(perspective).getByRole("button", { name: "INGMC 2명" }),
+      within(perspective).getByRole("button", { name: "참여 코드 0" }),
     ).toBeVisible();
-    fireEvent.click(
-      within(perspective).getByRole("button", { name: "INGMC 2명" }),
-    );
-    expect(within(perspective).getAllByText("50%")).toHaveLength(2);
+    expect(within(perspective).queryByText(/INGMC/)).not.toBeInTheDocument();
+    expect(
+      within(perspective).queryByText("새 가능성을 찾는 탐험가"),
+    ).not.toBeInTheDocument();
   });
 
   it("keeps final results visible and blocks new votes after closing", () => {
@@ -434,7 +416,7 @@ describe("FeedPollCard", () => {
     expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("keeps accumulated code statistics available after a poll closes", () => {
+  it("keeps the overall closed result while containing accumulated code statistics", () => {
     const poll = createPoll();
     poll.status = "closed";
     poll.canViewCodeStats = true;
@@ -470,8 +452,12 @@ describe("FeedPollCard", () => {
       }),
     );
     expect(
-      within(perspective).getByRole("button", { name: "참여 코드 1" }),
+      within(perspective).getByRole("button", { name: "참여 코드 0" }),
     ).toBeVisible();
+    expect(within(perspective).queryByText(/ENAKQ/)).not.toBeInTheDocument();
+    expect(
+      within(perspective).queryByText("관계를 여는 선도자"),
+    ).not.toBeInTheDocument();
   });
 });
 

@@ -64,6 +64,11 @@ describe("HomeDashboard", () => {
       screen.getByRole("link", { name: "커뮤니티 더 보기" }),
     ).toHaveAttribute("href", "/feed");
     expect(screen.getByText(/답변은 공개되지 않아요/)).toBeInTheDocument();
+    expect(
+      screen.getByRole("complementary", {
+        name: "탐색적 비검증 베타 안내",
+      }),
+    ).toHaveTextContent("참고용 · 공유 불가");
 
     expect(screen.queryByText("오늘의 메뉴")).not.toBeInTheDocument();
     expect(screen.queryByText("피드 미리보기")).not.toBeInTheDocument();
@@ -194,9 +199,7 @@ describe("HomeDashboard", () => {
 
     expect(await screen.findByText("오늘의 성향 놀이터")).toBeInTheDocument();
     expect(
-      screen.getByText(
-        "갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?",
-      ),
+      screen.getByText("갑자기 하루 여유가 생겼다면, 지금 더 끌리는 쪽은?"),
     ).toBeInTheDocument();
     expect(screen.getByText("10명 참여")).toBeInTheDocument();
     expect(screen.getByText("60%")).toBeInTheDocument();

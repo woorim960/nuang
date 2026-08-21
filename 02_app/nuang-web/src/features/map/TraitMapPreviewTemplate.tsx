@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { NuangCharacter } from "@/components/character/NuangCharacter";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
 import detailStyles from "@/features/map/EnakqTraitMapTemplate.module.css";
 import styles from "@/features/map/TraitMapPreviewTemplate.module.css";
 import {
@@ -10,8 +11,10 @@ import {
 
 export function TraitMapPreviewTemplate({
   profile,
+  showLegacyBetaNotice = false,
 }: {
   profile: CandidateProfileDefinition;
+  showLegacyBetaNotice?: boolean;
 }) {
   return (
     <article className={detailStyles.page}>
@@ -22,6 +25,13 @@ export function TraitMapPreviewTemplate({
         <span>상세 성향지도</span>
         <span aria-hidden="true" className={detailStyles.headerSpacer} />
       </header>
+
+      {showLegacyBetaNotice ? (
+        <LegacyCoreBetaNotice
+          className={detailStyles.legacyBetaNotice}
+          context="map"
+        />
+      ) : null}
 
       <section className={detailStyles.hero}>
         <div className={detailStyles.heroCopy}>

@@ -17,6 +17,8 @@ import {
   useAssessmentQuestionScroll,
 } from "@/features/assessment/AssessmentQuestionControls";
 import { CoreAssessmentQuestionSurface } from "@/features/assessment/CoreAssessmentQuestionSurface";
+import { LegacyCoreBetaNotice } from "@/features/assessment/LegacyCoreBetaNotice";
+import { isLegacyCoreAssessmentReleaseId } from "@/features/assessment/legacy-core-containment-policy";
 import {
   hasUniformCoreResponses,
   prepareAssessmentCompletion,
@@ -114,6 +116,9 @@ export function AssessmentRunner({
   const [completionState, setCompletionState] =
     useState<AssessmentCompletionViewState>("preparing");
   const activeAssessment = attempt?.assessmentSnapshot ?? assessment;
+  const isLegacyCoreBeta = isLegacyCoreAssessmentReleaseId(
+    activeAssessment.releaseId,
+  );
   const startCompletionRef = useRef(startCompletion);
   startCompletionRef.current = startCompletion;
 
@@ -284,6 +289,14 @@ export function AssessmentRunner({
         adaptiveQuestionCount={runItems.length - activeAssessment.items.length}
         isWorking={isActionSaving}
         mode={activeAssessment.mode}
+        notice={
+          isLegacyCoreBeta ? (
+            <LegacyCoreBetaNotice
+              className={styles.legacyBetaNotice}
+              context="runner"
+            />
+          ) : undefined
+        }
         onLeave={leaveCompletion}
         onReviewAnswers={() => void reviewInsufficientAnswers()}
         onRetry={() =>
@@ -878,6 +891,12 @@ export function AssessmentRunner({
             title={activeAssessment.title}
             total={activeAssessment.items.length}
           />
+          {isLegacyCoreBeta ? (
+            <LegacyCoreBetaNotice
+              className={styles.legacyBetaNotice}
+              context="runner"
+            />
+          ) : null}
           <AssessmentMidpointCheckpoint
             isSaving={isActionSaving || isPersisting}
             onContinue={() => void resolveMidpoint("completed")}
@@ -906,6 +925,14 @@ export function AssessmentRunner({
           nextDisabled={!canGoNext || isPersisting || isActionSaving}
           nextLabel={
             attempt.currentIndex === runItems.length - 1 ? "결과 보기" : "다음"
+          }
+          notice={
+            isLegacyCoreBeta ? (
+              <LegacyCoreBetaNotice
+                className={styles.legacyBetaNotice}
+                context="runner"
+              />
+            ) : undefined
           }
           onAnswer={(value) => void handleAnswer(value)}
           onClose={() => setIsExitOpen(true)}

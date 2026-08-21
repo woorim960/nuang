@@ -107,9 +107,13 @@ function ConnectionItem({
       <PublicProfileImageView image={connection.profileImage} size="md" />
       <span className={styles.itemCopy}>
         <strong>{connection.displayName}</strong>
-        <small>{connection.profileName}</small>
+        {connection.profileName ? (
+          <small>{connection.profileName}</small>
+        ) : null}
       </span>
-      <span className={styles.code}>{connection.code}</span>
+      {connection.code ? (
+        <span className={styles.code}>{connection.code}</span>
+      ) : null}
     </Link>
   );
 }
